@@ -1,0 +1,69 @@
+# Default configuration for ethical benchmarking experiments.
+
+models:
+  llama3-8b:
+    hf_id: meta-llama/Meta-Llama-3-8B-Instruct
+    trust_remote_code: false
+    dtype: auto
+  llama3.2-3b:
+    hf_id: meta-llama/Llama-3.2-3B-Instruct
+    trust_remote_code: false
+    dtype: auto
+  gemma-2b:
+    hf_id: google/gemma-2-2b-it
+    trust_remote_code: false
+    dtype: auto
+  phi3-mini:
+    hf_id: microsoft/Phi-3-mini-4k-instruct
+    trust_remote_code: true
+    dtype: auto
+  deepseek-r1-distill-1.5b:
+    hf_id: deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B
+    trust_remote_code: false
+    dtype: auto
+  deepseek-r1-distill-7b:
+    hf_id: deepseek-ai/DeepSeek-R1-Distill-Qwen-7B
+    trust_remote_code: false
+    dtype: auto
+
+decoding:
+  max_new_tokens: 128
+  temperature: 0.0
+  top_p: 1.0
+  repetition_penalty: 1.0
+  max_input_tokens: 1024
+  use_chat_template: true
+
+tasks:
+  toxicity:
+    dataset_name: allenai/real-toxicity-prompts
+    split: train
+    max_samples: 500
+    batch_size: 4
+    evaluation:
+      threshold: 0.5
+      classifier_type: hf_classifier
+      classifier_model_name: unitary/toxic-bert
+      classifier_batch_size: 16
+      bootstrap_resamples: 1000
+
+  bias:
+    dataset_name: heegyu/bbq
+    split: test
+    config_name: null
+    max_samples: 500
+    batch_size: 4
+    evaluation:
+      answer_letter_pattern: "\\b([A-Z])\\b"
+      bootstrap_resamples: 1000
+
+  factuality:
+    dataset_name: truthful_qa
+    config_name: multiple_choice
+    split: validation
+    max_samples: 300
+    batch_size: 4
+    evaluation:
+      enable_llm_judge: false
+      judge_scale_min: 1
+      judge_scale_max: 5
