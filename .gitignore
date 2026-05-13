@@ -3,3 +3,29 @@ __pycache__/
 .venv/
 .pytest_cache/
 .DS_Store
+
+# Run outputs (per-prompt + summaries)
+results/**/raw.jsonl
+results/**/summary.json
+results/**/submitted_jobs.json
+results/**/check_status.json
+results/analysis/*.json
+results/analysis/*.csv
+results/summary/*.csv
+
+# SLURM logs for any cluster variant (slurm_logs, slurm_logs_tc1, ...)
+results/slurm_logs*/
+
+# Generated SLURM artifacts under slurm/ and slurm/jobs*/
+slurm/*.json
+slurm/jobs*/*.sbatch
+slurm/jobs*/manifest.json
+slurm/jobs*/submitted_jobs.json
+
+# Editor / IDE / OS caches not relevant to this repo
+.swift-cache/
+pdfthumbs/
+
+# Generated session reports (Word/HTML exports) — keep markdown logs only
+docs/*.docx
+docs/*.html
