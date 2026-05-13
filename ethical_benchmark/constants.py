@@ -1,8 +1,4 @@
-"""Shared constants for the ethical benchmarking framework.
-
-Centralizes magic numbers and default values to improve maintainability
-and ensure consistency across modules.
-"""
+"""Shared constants for quantization safety-capability benchmarking."""
 
 # ---------------------------------------------------------------------------
 # Reproducibility
@@ -10,57 +6,33 @@ and ensure consistency across modules.
 DEFAULT_SEED: int = 42
 
 # ---------------------------------------------------------------------------
-# Model / Generation Defaults
+# Generation Defaults
 # ---------------------------------------------------------------------------
 DEFAULT_MAX_NEW_TOKENS: int = 128
 DEFAULT_TEMPERATURE: float = 0.0
 DEFAULT_TOP_P: float = 1.0
 DEFAULT_REPETITION_PENALTY: float = 1.0
 DEFAULT_MAX_INPUT_TOKENS: int = 1024
-
-# ---------------------------------------------------------------------------
-# Batch Sizes
-# ---------------------------------------------------------------------------
 DEFAULT_GENERATION_BATCH_SIZE: int = 4
-DEFAULT_CLASSIFIER_BATCH_SIZE: int = 16
 
 # ---------------------------------------------------------------------------
-# Toxicity Evaluation
+# Quantization Study Benchmarks
 # ---------------------------------------------------------------------------
-DEFAULT_TOXICITY_THRESHOLD: float = 0.5
-DEFAULT_TOXICITY_CLASSIFIER: str = "unitary/toxic-bert"
-DEFAULT_TOXICITY_BACKEND: str = "hf_classifier"
+BENCHMARK_HARMBENCH: str = "harmbench"
+BENCHMARK_XSTEST: str = "xstest"
+BENCHMARK_MMLU: str = "mmlu"
+SUPPORTED_BENCHMARKS = [BENCHMARK_HARMBENCH, BENCHMARK_XSTEST, BENCHMARK_MMLU]
 
 # ---------------------------------------------------------------------------
-# Bootstrap / Statistics
+# Default Dataset IDs
 # ---------------------------------------------------------------------------
-DEFAULT_BOOTSTRAP_RESAMPLES: int = 1000
-DEFAULT_CONFIDENCE_LEVEL: float = 0.95
+DEFAULT_HARMBENCH_DATASET: str = "walledai/HarmBench"
+DEFAULT_XSTEST_DATASET: str = "allenai/xstest-response"
+DEFAULT_MMLU_DATASET: str = "cais/mmlu"
 
 # ---------------------------------------------------------------------------
-# Dataset Defaults
+# Output File Names
 # ---------------------------------------------------------------------------
-DEFAULT_TOXICITY_DATASET: str = "allenai/real-toxicity-prompts"
-DEFAULT_BIAS_DATASET: str = "heegyu/bbq"
-DEFAULT_FACTUALITY_DATASET: str = "truthful_qa"
-DEFAULT_FACTUALITY_CONFIG: str = "multiple_choice"
-
-# ---------------------------------------------------------------------------
-# Task Sample Limits
-# ---------------------------------------------------------------------------
-DEFAULT_TOXICITY_MAX_SAMPLES: int = 500
-DEFAULT_BIAS_MAX_SAMPLES: int = 500
-DEFAULT_FACTUALITY_MAX_SAMPLES: int = 300
-
-# ---------------------------------------------------------------------------
-# LLM-as-Judge
-# ---------------------------------------------------------------------------
-DEFAULT_JUDGE_SCALE_MIN: int = 1
-DEFAULT_JUDGE_SCALE_MAX: int = 5
-
-# ---------------------------------------------------------------------------
-# Output File Formats
-# ---------------------------------------------------------------------------
-JSONL_EXTENSION: str = ".jsonl"
-JSON_EXTENSION: str = ".json"
-CSV_EXTENSION: str = ".csv"
+DEFAULT_RAW_FILENAME: str = "raw.jsonl"
+DEFAULT_SUMMARY_FILENAME: str = "summary.json"
+DEFAULT_ANALYSIS_DIRNAME: str = "analysis"

@@ -6,8 +6,48 @@ from typing import Any, Dict
 
 import pytest
 
+import ethical_benchmark.models.generation as generation_module
+import ethical_benchmark.models.loader as loader_module
 from ethical_benchmark.models.generation import DecodingConfig, set_global_seed
 from ethical_benchmark.models.loader import HFModelLoader, ModelSpec, build_model_spec
+
+
+class _FakeCuda:
+    @staticmethod
+    def is_available() -> bool:
+        return False
+
+    @staticmethod
+    def manual_seed_all(seed: int) -> None:
+        return None
+
+
+class _FakeCudnn:
+    deterministic = False
+    benchmark = True
+
+
+class _FakeBackends:
+    cudnn = _FakeCudnn()
+
+
+class _FakeTorch:
+    float16 = "float16"
+    bfloat16 = "bfloat16"
+    float32 = "float32"
+    cuda = _FakeCuda()
+    backends = _FakeBackends()
+
+    @staticmethod
+    def manual_seed(seed: int) -> None:
+        return None
+
+
+@pytest.fixture()
+def fake_torch(monkeypatch):
+    monkeypatch.setattr(loader_module, "_get_torch", lambda: _FakeTorch)
+    monkeypatch.setattr(generation_module, "_get_torch", lambda: _FakeTorch)
+    return _FakeTorch
 
 
 # =========================================================================
@@ -23,6 +63,7 @@ class TestModelSpec:
         assert spec.trust_remote_code is False
         assert spec.dtype == "auto"
         assert spec.revision is None
+        assert spec.quantized is False
 
     def test_immutability(self) -> None:
         spec = ModelSpec(alias="test", hf_id="owner/model")
@@ -50,6 +91,17 @@ class TestBuildModelSpec:
         assert spec.hf_id == "org/my-model"
         assert spec.trust_remote_code is True
         assert spec.dtype == "float16"
+        assert spec.quantized is False
+
+    def test_quantized_flag_is_propagated(self) -> None:
+        registry = {
+            "my-4bit": {
+                "hf_id": "org/my-4bit",
+                "quantized": True,
+            }
+        }
+        spec = build_model_spec("my-4bit", registry)
+        assert spec.quantized is True
 
     def test_unknown_alias_raises(self) -> None:
         with pytest.raises(KeyError, match="Unknown model alias"):
@@ -87,11 +139,11 @@ class TestDecodingConfig:
 class TestDeviceResolution:
     """Tests for HFModelLoader device resolution."""
 
-    def test_cpu_forced(self) -> None:
+    def test_cpu_forced(self, fake_torch) -> None:
         loader = HFModelLoader(device="cpu")
         assert loader._resolve_runtime_device() == "cpu"
 
-    def test_auto_resolves(self) -> None:
+    def test_auto_resolves(self, fake_torch) -> None:
         loader = HFModelLoader(device="auto")
         device = loader._resolve_runtime_device()
         assert device in ("cpu", "cuda")
@@ -105,31 +157,23 @@ class TestDeviceResolution:
 class TestDtypeResolution:
     """Tests for ``HFModelLoader._resolve_dtype``."""
 
-    def test_auto_cpu(self) -> None:
-        import torch
-
+    def test_auto_cpu(self, fake_torch) -> None:
         result = HFModelLoader._resolve_dtype("auto", "cpu")
-        assert result == torch.float32
+        assert result == fake_torch.float32
 
-    def test_explicit_float16(self) -> None:
-        import torch
-
+    def test_explicit_float16(self, fake_torch) -> None:
         result = HFModelLoader._resolve_dtype("float16", "cpu")
-        assert result == torch.float16
+        assert result == fake_torch.float16
 
-    def test_alias_fp16(self) -> None:
-        import torch
-
+    def test_alias_fp16(self, fake_torch) -> None:
         result = HFModelLoader._resolve_dtype("fp16", "cpu")
-        assert result == torch.float16
+        assert result == fake_torch.float16
 
-    def test_bfloat16(self) -> None:
-        import torch
-
+    def test_bfloat16(self, fake_torch) -> None:
         result = HFModelLoader._resolve_dtype("bfloat16", "cpu")
-        assert result == torch.bfloat16
+        assert result == fake_torch.bfloat16
 
-    def test_unsupported_raises(self) -> None:
+    def test_unsupported_raises(self, fake_torch) -> None:
         with pytest.raises(ValueError, match="Unsupported dtype"):
             HFModelLoader._resolve_dtype("int8", "cpu")
 
@@ -142,10 +186,10 @@ class TestDtypeResolution:
 class TestSetGlobalSeed:
     """Tests for ``set_global_seed``."""
 
-    def test_does_not_raise(self) -> None:
+    def test_does_not_raise(self, fake_torch) -> None:
         set_global_seed(123)  # should complete without error
 
-    def test_determinism(self) -> None:
+    def test_determinism(self, fake_torch) -> None:
         import random
 
         set_global_seed(42)

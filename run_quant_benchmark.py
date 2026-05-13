@@ -1,7 +1,4 @@
-"""Default benchmark entrypoint.
-
-This script now routes to the quantization-focused runner.
-"""
+"""Convenience entrypoint for one model x benchmark quantization run."""
 
 from ethical_benchmark.pipeline.run_quant_benchmark import main
 

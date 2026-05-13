@@ -3,14 +3,20 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from importlib import import_module
 import logging
 import random
 from typing import Any, Dict, Iterable, List
 
 import numpy as np
-import torch
 
 LOGGER = logging.getLogger(__name__)
+
+
+def _get_torch() -> Any:
+    """Imports torch lazily to avoid import-time runtime crashes."""
+
+    return import_module("torch")
 
 
 @dataclass(frozen=True)
@@ -67,6 +73,7 @@ def set_global_seed(seed: int) -> None:
         Mutates RNG state for Python, NumPy, and Torch.
     """
 
+    torch = _get_torch()
     random.seed(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)
@@ -143,6 +150,7 @@ class TextGenerator:
         }
         generation_kwargs = {k: v for k, v in generation_kwargs.items() if v is not None}
 
+        torch = _get_torch()
         with torch.no_grad():
             generated = self.model.generate(**inputs, **generation_kwargs)
 

@@ -104,10 +104,9 @@ slurm:
   cpus_per_task: 1
   mem: 10G
   time: "06:00:00"
-  log_dir: results/slurm_logs
-  # Optional TC1 bootstrap for generated sbatch scripts:
-  # work_dir: /tc1home/FYP/utan001/fyp_quant/repo
-  # setup_commands:
-  #   - module load slurm
-  #   - module load anaconda
-  #   - source activate your_env_name
+  log_dir: results/slurm_logs_tc1
+  work_dir: /tc1home/FYP/utan001/fyp_quant/repo
+  setup_commands:
+    - module load slurm
+    - module load anaconda
+    - source activate fyp-tc1

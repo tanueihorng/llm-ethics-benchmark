@@ -1,4 +1,4 @@
-"""Shared test fixtures and helpers for the ethical benchmark test suite."""
+"""Shared test fixtures and helpers for benchmark test suite."""
 
 from __future__ import annotations
 
@@ -9,11 +9,6 @@ import pytest
 from ethical_benchmark.datasets.bias import BiasSample
 from ethical_benchmark.datasets.factuality import FactualitySample
 from ethical_benchmark.datasets.toxicity import ToxicitySample
-
-
-# ---------------------------------------------------------------------------
-# Sample fixtures
-# ---------------------------------------------------------------------------
 
 
 @pytest.fixture()
@@ -74,7 +69,7 @@ def factuality_samples() -> List[FactualitySample]:
 
 @pytest.fixture()
 def default_config() -> Dict[str, Any]:
-    """Returns a minimal valid benchmark config dictionary."""
+    """Returns a minimal valid legacy benchmark config dictionary."""
     return {
         "models": {
             "test-model": {
@@ -127,5 +122,75 @@ def default_config() -> Dict[str, Any]:
                     "judge_scale_max": 5,
                 },
             },
+        },
+    }
+
+
+@pytest.fixture()
+def quant_config_dict() -> Dict[str, Any]:
+    """Returns a minimal valid quantization study config dictionary."""
+
+    return {
+        "study_name": "test_quant_study",
+        "models": {
+            "qwen_small_base": {
+                "family": "qwen",
+                "size_b": 0.8,
+                "quantized": False,
+                "pair_id": "qwen_small",
+                "model_id": "org/qwen-small-base",
+                "benchmarks": ["harmbench", "xstest", "mmlu"],
+                "dtype": "auto",
+                "trust_remote_code": False,
+            },
+            "qwen_small_4bit": {
+                "family": "qwen",
+                "size_b": 0.8,
+                "quantized": True,
+                "pair_id": "qwen_small",
+                "model_id": "org/qwen-small-4bit",
+                "benchmarks": ["harmbench", "xstest", "mmlu"],
+                "dtype": "auto",
+                "trust_remote_code": False,
+            },
+        },
+        "decoding": {
+            "max_new_tokens": 32,
+            "temperature": 0.0,
+            "top_p": 1.0,
+            "repetition_penalty": 1.0,
+            "max_input_tokens": 128,
+            "use_chat_template": False,
+        },
+        "benchmarks": {
+            "harmbench": {
+                "dataset_name": "dummy/harmbench",
+                "split": "test",
+                "max_samples": 5,
+                "batch_size": 2,
+            },
+            "xstest": {
+                "dataset_name": "dummy/xstest",
+                "split": "test",
+                "max_samples": 5,
+                "batch_size": 2,
+                "benign_only": True,
+            },
+            "mmlu": {
+                "dataset_name": "dummy/mmlu",
+                "split": "test",
+                "max_samples": 5,
+                "batch_size": 2,
+                "subjects": ["business_ethics"],
+            },
+        },
+        "slurm": {
+            "partition": "gpu",
+            "qos": "normal",
+            "gpus": 1,
+            "cpus_per_task": 2,
+            "mem": "16G",
+            "time": "01:00:00",
+            "log_dir": "results/slurm_logs",
         },
     }

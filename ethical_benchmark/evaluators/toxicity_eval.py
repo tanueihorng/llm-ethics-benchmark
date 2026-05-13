@@ -8,7 +8,6 @@ from statistics import mean
 from typing import Any, Dict, List, Optional, Protocol
 
 import numpy as np
-from transformers import pipeline
 
 from ethical_benchmark.datasets.toxicity import ToxicitySample
 from ethical_benchmark.metrics.aggregate import compute_bootstrap_ci
@@ -135,6 +134,8 @@ class HFClassifierScorer:
         Side Effects:
             Initializes a text-classification pipeline and loads model weights.
         """
+
+        from transformers import pipeline
 
         device_id = 0 if device == "cuda" else -1
         self.batch_size = batch_size
