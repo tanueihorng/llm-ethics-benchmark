@@ -1,62 +1,35 @@
 # Datasets
 
-## 1. RealToxicityPrompts
-### Source
-- Hugging Face dataset ID: `allenai/real-toxicity-prompts`
+## 1. HarmBench
+Purpose: evaluate harmful compliance under unsafe prompts.
 
-### Purpose
-Provides naturally occurring prompts with associated toxicity context for evaluating harmful continuation tendencies.
+Usage in this framework:
+- benchmark key: `harmbench`
+- output focus: harmful compliance vs safe refusal
 
-### Usage in This Framework
-- Task: toxicity
-- Default split: `train` (used as benchmark prompt set, not for model training)
-- Loader: `ethical_benchmark/datasets/toxicity.py`
+## 2. XSTest
+Purpose: evaluate over-refusal on benign prompts.
 
-## 2. BBQ (Bias Benchmark for QA)
-### Source
-- Hugging Face dataset ID (default in config): `heegyu/bbq`
+Usage in this framework:
+- benchmark key: `xstest`
+- scoring focus: refusal behavior on benign requests
 
-### Purpose
-Measures social bias in question answering across demographic dimensions.
+## 3. MMLU (Subset)
+Purpose: evaluate broad capability for safety-capability interpretation.
 
-### Usage in This Framework
-- Task: bias
-- Default split: `test`
-- Loader: `ethical_benchmark/datasets/bias.py`
+Usage in this framework:
+- benchmark key: `mmlu`
+- fixed subject subset for reproducible and tractable runs
 
-### Notes
-BBQ variants can differ in schema. The loader includes schema normalization for common field patterns (e.g., `ans0`-`ans2` vs list-based choices).
+## 4. Sampling Strategy
+- deterministic shuffle with fixed seed
+- benchmark-specific `max_samples` caps
+- consistent sampling policy across baseline and 4-bit within each pair
 
-## 3. TruthfulQA (Multiple Choice)
-### Source
-- Hugging Face dataset ID: `truthful_qa`
-- Config: `multiple_choice`
-
-### Purpose
-Evaluates tendency to produce truthful answers on known misconception-prone questions.
-
-### Usage in This Framework
-- Task: factuality
-- Default split: `validation`
-- Loader: `ethical_benchmark/datasets/factuality.py`
-
-## 4. Licensing Notes
-Dataset licensing and usage conditions may vary by source and version. Users should verify:
-
-- redistribution permissions
-- academic/commercial usage terms
-- attribution requirements
-
-before publishing benchmark outputs.
-
-## 5. Sampling Strategy
-The framework applies deterministic shuffling with a fixed seed and optional `max_samples` truncation. This supports:
-
-- reproducible subset creation
-- balanced runtime across models
-- controlled comparison under equal sample budgets
+## 5. Licensing and Access Notes
+Dataset licenses and access requirements vary by source and version. Users should verify current usage terms before publication.
 
 ## 6. Ethical Considerations
-- Toxicity datasets can include offensive language; handling requires safe storage and restricted exposure.
-- Bias benchmarks may encode demographic assumptions and cultural framing bias.
-- Factuality benchmarks are sensitive to annotation design and may not capture all truth conditions.
+- Harmful prompts may contain unsafe content and require controlled handling.
+- Refusal and safety labels are operational measurements, not absolute ethical truths.
+- Capability benchmarks can be culturally and educationally biased.

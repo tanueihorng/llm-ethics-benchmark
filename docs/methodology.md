@@ -1,52 +1,52 @@
 # Methodology
 
-## 1. End-to-End Benchmarking Pipeline
-The benchmarking workflow is implemented in `ethical_benchmark/pipeline/run_benchmark.py` and follows the sequence below:
+## 1. Experimental Design
+This study uses a matched-pair comparative design to isolate the impact of 4-bit quantization.
 
-1. Load experiment configuration from YAML.
-2. Set deterministic seeds for reproducibility.
-3. Resolve model alias and load tokenizer/model via Hugging Face.
-4. Load task dataset split (toxicity, bias, or factuality).
-5. Generate model outputs in batches under fixed decoding settings.
-6. Evaluate outputs using task-specific evaluators.
-7. Persist per-sample raw records (JSONL) and aggregate summaries (JSON + CSV).
-8. Export radar-compatible CSV for downstream visualization.
+Independent variables:
+- quantization state (baseline vs 4-bit)
+- model size (0.8B vs 4B in Qwen)
+- model family (Qwen vs Llama)
 
-## 2. Model Selection Rationale
-The framework targets open-source models below 10B parameters because:
+Dependent variables:
+- harmful compliance
+- over-refusal
+- general capability
 
-- They are feasible for single-GPU and CPU-only environments.
-- They align with edge deployment constraints.
-- They provide a realistic setting for academic comparison under bounded resources.
+## 2. Benchmark Mapping
+- Harmful compliance: HarmBench
+- Over-refusal: XSTest (benign prompts)
+- Capability: MMLU subset
 
-Supported families include LLaMA, Gemma, Phi, and DeepSeek distilled variants, with concrete aliases defined in `configs/default.yaml`.
+The capability benchmark is included to test whether apparent safety gains are genuine or artifacts of capability collapse.
 
-## 3. Prompting and Decoding Strategy
-To maintain fair comparisons, decoding parameters are controlled globally through `configs/default.yaml`:
+## 3. Pipeline Steps
+1. Load validated quantization matrix config.
+2. Select one model and one benchmark.
+3. Generate responses using fixed decoding settings.
+4. Score responses with deterministic benchmark-specific logic.
+5. Save per-response records and aggregate summary metrics.
+6. Repeat across matrix.
+7. Compute baseline-vs-quantized deltas per pair.
+8. Produce scale-sensitivity and cross-family summaries.
 
-- `temperature` (default `0.0`) for deterministic decoding.
-- `max_new_tokens` to cap output length.
-- `top_p` and `repetition_penalty` for controlled sampling behavior.
-- `use_chat_template` to apply tokenizer-native chat formatting when available.
+## 4. Prompting and Decoding Controls
+To maintain fairness, all runs use shared decoding parameters from `configs/default.yaml`:
+- fixed `temperature`
+- fixed `max_new_tokens`
+- fixed `top_p`
+- fixed `repetition_penalty`
+- deterministic seed
 
-Multiple-choice tasks (BBQ and TruthfulQA) instruct the model to return only an option letter to reduce parsing ambiguity.
+Thinking-style variability is controlled by deterministic generation settings in the core evaluation flow.
 
-## 4. Experimental Controls
-The implementation includes explicit controls for methodological rigor:
+## 5. Matched Pair Analysis
+Pair-level comparisons are computed per `pair_id`:
+- absolute delta = quantized - baseline
+- relative delta = (quantized - baseline) / baseline
 
-- **Decoding consistency:** same decoding config for all models.
-- **Split control:** evaluation uses benchmark splits only (no training).
-- **Seed control:** unified random seeding for Python, NumPy, and Torch.
-- **Resume support:** partial runs continue without re-evaluating completed samples.
-- **Auditability:** raw prompt-response-score records are persisted.
-- **Metric separation:** subjective judge metrics (if enabled) are reported separately from objective metrics.
-
-## 5. Task-Specific Execution
-### Toxicity
-Implemented end-to-end with RealToxicityPrompts loader, generation, toxicity classifier scoring, per-sample persistence, and aggregate reporting.
-
-### Social Bias
-Implemented as multiple-choice QA on BBQ with accuracy, bias gap, and demographic-axis confusion diagnostics.
-
-### Factuality
-Implemented using TruthfulQA multiple-choice with objective MC accuracy and optional subjective LLM-as-judge scoring.
+Interpretation labels are rule-based and derived from combined benchmark deltas:
+- alignment degradation
+- capability collapse masquerading as safety
+- robust preservation
+- broad degradation

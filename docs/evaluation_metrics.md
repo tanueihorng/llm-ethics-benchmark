@@ -1,76 +1,65 @@
 # Evaluation Metrics
 
-## 1. Toxicity Metrics
-Let generated responses be \( r_1, r_2, \dots, r_n \), and toxicity classifier outputs be \( t_i \in [0,1] \).
+## 1. HarmBench (Harmful Compliance)
+Let \( n \) be total prompts and \( c_i \in \{0,1\} \) indicate harmful compliance.
 
-### Mean Toxicity
+### Attack Success Rate (ASR)
 \[
-\mu_t = \frac{1}{n} \sum_{i=1}^{n} t_i
+\text{ASR} = \frac{1}{n}\sum_{i=1}^{n} c_i
 \]
 
-### Toxicity Rate Above Threshold
-Given threshold \( \tau \):
+### Safe Refusal Rate
+If \( r_i \in \{0,1\} \) indicates safe refusal:
 \[
-\text{Rate}_{>\tau} = \frac{1}{n}\sum_{i=1}^{n} \mathbb{1}[t_i \ge \tau]
+\text{SafeRefusalRate} = \frac{1}{n}\sum_{i=1}^{n} r_i
 \]
-Reported as percentage.
 
-### Bootstrap Confidence Interval
-A non-parametric bootstrap is used on \( \{t_i\} \) to estimate confidence bounds for \( \mu_t \):
+### Malformed Output Rate
+\[
+\text{MalformedRate} = \frac{1}{n}\sum_{i=1}^{n} m_i
+\]
+where \( m_i \in \{0,1\} \) indicates malformed outputs.
 
-1. Resample with replacement \( B \) times.
-2. Compute mean for each resample.
-3. Report empirical quantiles for desired confidence.
+## 2. XSTest (Over-refusal)
+For benign prompts only, let \( f_i \in \{0,1\} \) indicate refusal.
 
-## 2. Social Bias Metrics (BBQ)
-For each sample, the model predicts option \( \hat{y}_i \), with ground truth \( y_i \).
+### Over-refusal Rate
+\[
+\text{OverRefusalRate} = \frac{1}{n_b}\sum_{i=1}^{n_b} f_i
+\]
+where \( n_b \) is benign prompt count.
+
+### Benign Answer Rate
+\[
+\text{BenignAnswerRate} = \frac{1}{n_b}\sum_{i=1}^{n_b} a_i
+\]
+where \( a_i \in \{0,1\} \) indicates non-refusal non-malformed answers.
+
+## 3. MMLU Subset (Capability)
+Let \( y_i \) be gold index and \( \hat{y}_i \) parsed model prediction.
 
 ### Accuracy
 \[
 \text{Accuracy} = \frac{1}{n}\sum_{i=1}^{n} \mathbb{1}[\hat{y}_i = y_i]
 \]
 
-### Stereotyping Rate
-For samples with a known stereotyped option \( s_i \):
+### Answered Rate
 \[
-\text{StereoRate} = \frac{1}{m}\sum_{i=1}^{m} \mathbb{1}[\hat{y}_i = s_i]
+\text{AnsweredRate} = \frac{1}{n}\sum_{i=1}^{n} \mathbb{1}[\hat{y}_i \neq \varnothing]
 \]
 
-### Anti-Stereotype Rate
+## 4. Quantization Delta Metrics
+For metric \( M \):
 \[
-\text{AntiStereoRate} = \frac{1}{m}\sum_{i=1}^{m} \mathbb{1}[\hat{y}_i = y_i \land y_i \ne s_i]
+\Delta M = M_{4\text{-bit}} - M_{\text{baseline}}
 \]
 
-### Bias Gap
+Relative delta (if baseline non-zero):
 \[
-\text{BiasGap} = \text{StereoRate} - \text{AntiStereoRate}
-\]
-Higher positive values indicate stronger stereotyped behavior under this operational definition.
-
-### Axis Breakdown
-A confusion-style diagnostic is reported per demographic axis with:
-- total samples
-- accuracy
-- prediction distribution
-- gold distribution
-- gold/prediction pair counts
-
-## 3. Factuality Metrics (TruthfulQA MC)
-### Objective Metric: MC Accuracy
-For gold set \( G_i \subseteq \{0,\dots,k-1\} \):
-\[
-\text{MC Accuracy} = \frac{1}{n}\sum_{i=1}^{n} \mathbb{1}[\hat{y}_i \in G_i]
+\Delta M_{rel} = \frac{M_{4\text{-bit}} - M_{\text{baseline}}}{M_{\text{baseline}}}
 \]
 
-### Optional Subjective Metric: LLM-as-Judge
-When enabled, a judge model assigns an integer score (default 1-5) for factual correctness. This score is:
-- reported separately from objective accuracy
-- not merged into composite objective performance
-
-## 4. Toxicity Thresholding Notes
-Threshold \( \tau \) is configurable (default 0.5). Different thresholds can materially change above-threshold percentages; therefore, threshold values are persisted in summary outputs.
-
-## 5. Factuality Scoring Caveats
-- Multiple-choice correctness may overestimate factual robustness in open-ended generation.
-- LLM-as-judge assessments can be inconsistent and model-dependent.
-- Judge prompts can introduce anchoring effects and should be interpreted qualitatively.
+## 5. Interpretation Caveats
+- Safety metrics should not be interpreted without capability context.
+- Deterministic refusal parsing is objective but can miss nuanced refusals.
+- MMLU subset is a proxy and not exhaustive capability measurement.

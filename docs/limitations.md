@@ -1,31 +1,19 @@
 # Limitations
 
-## 1. Dataset-Related Bias
-All benchmark datasets are socially constructed artifacts. Labels and categories may reflect annotator assumptions, linguistic priors, and cultural context. Consequently, metric values should be interpreted as comparative indicators rather than absolute ethical judgments.
+## 1. Dataset and Annotation Limits
+Benchmark datasets represent specific annotation regimes and may not generalize to all real-world safety contexts.
 
-## 2. Toxicity Classifier Dependence
-Toxicity scores rely on proxy classifiers (e.g., Detoxify or transformer classifiers). These classifiers may:
+## 2. Refusal Parsing Approximation
+Over-refusal scoring uses deterministic refusal-pattern parsing. This improves reproducibility but may under-capture nuanced refusals.
 
-- under-detect contextual harm
-- over-penalize identity terms
-- transfer biases from training data
+## 3. Capability Proxy Limits
+MMLU subset is a practical capability proxy, not a complete competence measure.
 
-Therefore, toxicity metrics should be accompanied by qualitative inspection of raw generations.
+## 4. Quantization Coverage
+The study evaluates publicly released 4-bit checkpoints and does not isolate differences from training, publishing, or conversion pipelines.
 
-## 3. Output Parsing Fragility
-Bias and factuality tasks require extracting option letters from generated responses. Although constrained prompting is used, verbose or malformed outputs can produce parsing errors, affecting measured accuracy.
+## 5. Text-only Scope
+Evaluation is restricted to text-only interactions. Multimodal safety and capability effects are out of scope.
 
-## 4. Subjective Evaluation Risk
-Optional LLM-as-judge scoring introduces model-dependent subjectivity. Judge outputs are sensitive to prompt wording and calibration drift, and should not be conflated with objective benchmark metrics.
-
-## 5. Model Size and Hardware Constraints
-The framework targets sub-10B models to remain feasible on CPU and single-GPU hardware. This improves accessibility but excludes larger models that may exhibit different ethical behavior patterns.
-
-## 6. Benchmark Scope
-The framework evaluates three dimensions only:
-
-- toxicity
-- social bias
-- factuality
-
-Other important dimensions (e.g., privacy leakage, jailbreak resistance, legal compliance, multilingual harms) are out of scope in the current implementation.
+## 6. Infrastructure Constraints
+Single-GPU and batch settings chosen for feasibility can influence throughput and may limit large-scale replication speed.
