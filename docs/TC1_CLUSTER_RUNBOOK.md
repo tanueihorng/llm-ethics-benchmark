@@ -1,7 +1,7 @@
 # TC1 Cluster Runbook (Step-by-Step)
 ## Using This Repository on Your School GPU Cluster
 
-## 0. Approved Account Notes (From CCDS Support Email)
+## Approved Account Notes (From CCDS Support Email)
 - Cluster: `TC1`
 - TC1 IP: `10.96.189.11`
 - First login is mandatory to create your home directory.
@@ -26,25 +26,59 @@ It is designed to be a checklist-style document you can follow during actual exp
   - walltime limits,
   - GPU constraints.
 
-Important policy assumption from TC1 guide:
-- Do not run heavy training/inference directly on the head/login node.
-- Use SLURM job submission (`sbatch`) for benchmark execution.
+## 3. TC1 Cluster Policy (verified against the TC1 user guide, Dec 2025)
 
-## 3. One-Time Setup on TC1
-## 3.1 SSH to TC1
+The following policies are enforced by the cluster operator and shape every
+step in this runbook. They are not optional.
+
+**Forbidden on the head node (CCDS-TC1):**
+- Running any user code that consumes meaningful CPU/RAM. The guide states:
+  *"DO NOT execute your coding on TC1 Head Node ... will be terminated with
+  no prior notification. Repeated offenders will be banned from TC1."* (p.16)
+- Running `nvidia-smi`, `nvcc --version`, or any GPU/CUDA verification — the
+  GPU cards live on the compute nodes (TC1N01–07), not on the head node. (p.3, p.11)
+- Using `srun` for real workloads. Use `sbatch` only: *"all users are advised
+  to use the command 'sbatch' for job submission. Then exit from the session,
+  access later to see the result."* (p.19)
+
+**Allowed on the head node (explicitly demonstrated in the user guide):**
+- SSH sessions, script editing (`vi`/`nano`/`ne`), file transfers (SFTP).
+- Conda environment management: `module load anaconda`, `conda create`,
+  `conda install`, `pip install`. (p.7–9)
+- Hugging Face downloads — same activity category as `pip install`. Used by
+  this study's pre-cache step (see §4.6 below).
+- SLURM administration: `squeue`, `scontrol`, `sacct`, `MyTCinfo`,
+  `MyJobHistory`, `seff`, `TC1RunningJob`.
+
+**Resource limits (QoS "normal"):**
+- 1 GPU per job, up to 20 CPU cores and 64 GB RAM total across all jobs.
+- 2 concurrent jobs per user (MaxJobsPU).
+- 6-hour walltime per job (MaxWall). Extensions to 8/12/24/48h available on
+  request to `ccdsgpu-tc@ntu.edu.sg` with justification.
+- 100 GB minimum storage quota; this project was approved for ~300 GB.
+  Confirm actual quota with `MyTCinfo` on first login.
+
+**Other rules:**
+- No backups. You are responsible for your own data.
+- Do not access any directory other than your home and assigned shared folder.
+- Account revoked after 3 months of inactivity. First login activates the
+  account; subsequent inactivity is measured from your last job submission.
+
+## 4. One-Time Setup on TC1
+## 4.1 SSH to TC1
 ```bash
 ssh <YOUR_TC1_USERNAME>@10.96.189.11
 ```
 
 If this is your first login, do this immediately so the home directory is created and the account is marked active.
 
-## 3.2 Create project workspace on cluster storage
+## 4.2 Create project workspace on cluster storage
 ```bash
 mkdir -p ~/fyp_quant
 cd ~/fyp_quant
 ```
 
-## 3.3 Get repository onto TC1
+## 4.3 Get repository onto TC1
 Option A: clone from remote git origin
 ```bash
 git clone <YOUR_REPO_URL> repo
@@ -58,7 +92,7 @@ ssh <YOUR_TC1_USERNAME>@10.96.189.11
 cd ~/fyp_quant/repo
 ```
 
-## 3.4 Prepare Python environment
+## 4.4 Prepare Python environment
 ```bash
 python -m venv .venv
 source .venv/bin/activate
@@ -74,13 +108,70 @@ source activate <YOUR_ENV_NAME>
 pip install -r requirements.txt
 ```
 
-## 3.5 Quick local sanity check on login node (very small only)
-Run only a tiny smoke test to verify setup, then stop using login node for inference:
+## 4.5 Do NOT smoke-test on the head node
+
+Earlier versions of this runbook suggested a quick CPU-only smoke test on the
+login node. This is now revised: per the TC1 user guide (p.16), running user
+code on the head node is forbidden and may result in account termination.
+All validation, including the initial smoke test, must go through `sbatch`.
+See §4.7 below for the proper smoke-validation procedure.
+
+## 4.6 Pre-cache datasets and model weights (head node, one-time)
+
+This study runs in strict offline mode on the compute nodes (which may not have
+outbound internet). Cache everything on the head node first.
+
 ```bash
-python fyp_cli.py smoke --max_samples 5 --device cpu
+# Confirm your QoS and quota assignment
+MyTCinfo
+
+# Activate the conda env
+module load anaconda
+source activate fyp-tc1
+cd /tc1home/FYP/utan001/fyp_quant/repo
+
+# One-time HF authentication (required for the gated Llama-3.2-3B repo)
+huggingface-cli login   # paste your HF token; saved to ~/.cache/huggingface/token
+
+# Pre-cache datasets (HarmBench, XSTest, 6 MMLU subjects) + model weights
+# (Qwen 2B, Qwen 4B, Llama 3.2 3B). ~20 GB total, ~15-30 minutes.
+python scripts/prefetch_tc1.py
+# Equivalently: make prefetch CONFIG=configs/tc1.yaml
 ```
 
-## 4. Configure TC1 SLURM Parameters
+The pre-cache step is policy-compliant because it performs only HTTP file
+transfer — equivalent to the `pip install` / `conda install` activities that
+the TC1 user guide explicitly demonstrates on the head node (p.7–9). It does
+not run any user code that consumes CPU or memory.
+
+After this completes, every SLURM job runs with `HF_HUB_OFFLINE=1`,
+`HF_DATASETS_OFFLINE=1`, and `TRANSFORMERS_OFFLINE=1` exported (these are
+baked into the generated sbatch files via `configs/tc1.yaml`'s
+`setup_commands`). Any cache miss inside a job will then fail immediately
+with a clear error rather than hang waiting on network.
+
+## 4.7 Smoke-validate on a compute node (via sbatch, not srun)
+
+Before submitting the full 6-job matrix, run one small sbatch to verify the
+offline-cache path on a real GPU:
+
+```bash
+# On the head node, regenerate the smoke sbatch
+make cluster-smoke CONFIG=configs/tc1.yaml
+
+# Submit it
+sbatch slurm/jobs_tc1_smoke/qwen_2b_base__harmbench.sbatch
+
+# Check the queue, then come back later for the output
+squeue -u utan001
+seff <jobid>    # after completion: shows CPU and memory efficiency
+```
+
+A clean smoke run will produce `results/qwen_2b_base/harmbench/summary.json`
+containing an `attack_success_rate`. If that file exists and is well-formed,
+the full matrix is safe to launch.
+
+## 5. Configure TC1 SLURM Parameters
 `configs/default.yaml` is now prefilled with the TC1 sample script defaults:
 
 - `partition: UGGPU-TC1`
@@ -115,7 +206,7 @@ Adjust `work_dir` and `source activate ...` to match your actual cluster folder 
 
 If the latest TC1 guide for your cohort specifies different values, replace this block accordingly before large runs.
 
-## 5. Easiest CLI Workflow (Recommended)
+## 6. Easiest CLI Workflow (Recommended)
 This repository now includes a unified CLI for easier operations:
 
 - `python fyp_cli.py smoke`
@@ -140,31 +231,33 @@ make matrix DEVICE=cuda SEED=42
 make cluster-generate DEVICE=cuda JOBS_DIR=slurm/jobs
 ```
 
-## 6. Generate SLURM Jobs (Model x Benchmark)
+## 7. Generate SLURM Jobs (Model x Benchmark)
 From repository root:
 ```bash
 python fyp_cli.py cluster-generate \
   --config configs/default.yaml \
   --results_dir results \
-  --jobs_dir slurm/jobs
+  --jobs_dir slurm/jobs \
+  --group_by model \
+  --script run_quant_matrix.py
 ```
 
 This creates:
-- one `.sbatch` per model-benchmark combination,
+- one `.sbatch` per model alias, with the loaded model reused across benchmarks,
 - `slurm/jobs/manifest.json`.
 
 Expected job count for current matrix:
-- 6 models x 3 benchmarks = 18 jobs.
+- 6 model jobs. Each job runs that model across its configured benchmarks.
 
-## 7. Validate Jobs Before Submission
-## 7.1 Dry run submit
+## 8. Validate Jobs Before Submission
+## 8.1 Dry run submit
 ```bash
 python fyp_cli.py cluster-submit --jobs_dir slurm/jobs --dry_run
 ```
 
-## 7.2 Inspect one generated script
+## 8.2 Inspect one generated script
 ```bash
-sed -n '1,200p' slurm/jobs/qwen_0_8b_bf16__harmbench.sbatch
+sed -n '1,200p' slurm/jobs/qwen_2b_base__matrix.sbatch
 ```
 
 Confirm:
@@ -172,15 +265,15 @@ Confirm:
 - memory/time,
 - command path and arguments.
 
-## 8. Submit Jobs
+## 9. Submit Jobs
 ```bash
 python fyp_cli.py cluster-submit --jobs_dir slurm/jobs
 ```
 
 This writes `slurm/jobs/submitted_jobs.json` with `job_id` records.
 
-## 9. Monitor Progress
-## 9.1 Check queue status + output completeness
+## 10. Monitor Progress
+## 10.1 Check queue status + output completeness
 ```bash
 python fyp_cli.py cluster-check \
   --config configs/default.yaml \
@@ -191,7 +284,7 @@ python fyp_cli.py cluster-check \
 Produces report file:
 - `slurm/check_status.json`
 
-## 9.2 If `squeue` is unavailable in your shell
+## 10.2 If `squeue` is unavailable in your shell
 ```bash
 python fyp_cli.py cluster-check \
   --config configs/default.yaml \
@@ -200,7 +293,7 @@ python fyp_cli.py cluster-check \
   --skip_squeue
 ```
 
-## 10. Resume and Recovery Strategy
+## 11. Resume and Recovery Strategy
 If runs fail or timeout:
 
 1. Fix SLURM resource settings (`time`, `mem`, etc.) in config.
@@ -211,12 +304,12 @@ If runs fail or timeout:
 For a clean rerun of one combination:
 ```bash
 python fyp_cli.py run \
-  --model qwen_0_8b_bf16 \
+  --model qwen_2b_base \
   --benchmark harmbench \
   --force_restart
 ```
 
-## 11. Faster Matrix Execution Notes
+## 12. Faster Matrix Execution Notes
 The matrix runner is now optimized to reuse one loaded model across multiple benchmarks per model by default.
 
 Equivalent command:
@@ -229,7 +322,7 @@ If you need legacy behavior (load model each run), disable reuse:
 python run_quant_matrix.py --no-reuse_loaded_model
 ```
 
-## 12. Post-Run Analysis on TC1
+## 13. Post-Run Analysis on TC1
 After benchmark summaries are generated:
 ```bash
 python fyp_cli.py analyze \
@@ -243,33 +336,33 @@ Key outputs:
 - `results/analysis/pair_interpretations.csv`
 - `results/analysis/quantization_analysis_summary.json`
 
-## 13. Move Results Back to Local Machine
+## 14. Move Results Back to Local Machine
 From local machine:
 ```bash
 scp -r <YOUR_TC1_USERNAME>@10.96.189.11:~/fyp_quant/repo/results ./results_tc1
 ```
 
-## 14. Recommended Experiment Order
+## 15. Recommended Experiment Order
 1. smoke test (`max_samples <= 20`)
 2. one full model across all 3 benchmarks
 3. full matrix (18 jobs)
 4. analysis export
 5. rerun any missing combinations only
 
-## 15. Troubleshooting
-## 15.1 Jobs submit but no outputs
+## 16. Troubleshooting
+## 16.1 Jobs submit but no outputs
 - Check SLURM logs in `results/slurm_logs`.
 - Verify Python environment activation inside sbatch script if required by your TC1 environment.
 
-## 15.2 Out-of-memory or timeout
+## 16.2 Out-of-memory or timeout
 - Increase `mem` and/or `time`.
 - Reduce benchmark `batch_size` in config.
 - For quick debug, reduce `max_samples`.
 
-## 15.3 Missing Hugging Face model access
+## 16.3 Missing Hugging Face model access
 - Ensure credentials are configured on cluster if model requires gated access.
 
-## 16. Reproducibility Notes for FYP Write-Up
+## 17. Reproducibility Notes for FYP Write-Up
 Always report:
 - exact config file used,
 - seed value,
@@ -278,7 +371,7 @@ Always report:
 - SLURM resource settings,
 - date/time and cluster environment summary.
 
-## 17. Minimal Command Cheat Sheet
+## 18. Minimal Command Cheat Sheet
 ```bash
 # Generate jobs
 python fyp_cli.py cluster-generate

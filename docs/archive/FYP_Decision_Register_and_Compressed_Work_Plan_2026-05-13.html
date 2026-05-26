@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>FYP Decision Register and Compressed Work Plan - 13 May 2026</title>
+<style>
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Aptos", "Calibri", Arial, sans-serif;
+    color: #1f2937;
+    line-height: 1.45;
+    margin: 38px;
+    max-width: 980px;
+  }
+  h1 {
+    color: #0f172a;
+    font-size: 28px;
+    margin: 0 0 8px;
+    border-bottom: 4px solid #2563eb;
+    padding-bottom: 10px;
+  }
+  h2 {
+    color: #111827;
+    font-size: 20px;
+    margin-top: 28px;
+    border-bottom: 1px solid #cbd5e1;
+    padding-bottom: 5px;
+  }
+  h3 {
+    color: #111827;
+    font-size: 16px;
+    margin-top: 20px;
+  }
+  p {
+    margin: 8px 0;
+  }
+  .meta {
+    color: #475569;
+    font-size: 12px;
+    margin: 2px 0;
+  }
+  .box {
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin: 14px 0;
+    background: #f8fafc;
+  }
+  .critical {
+    background: #fef2f2;
+    border-color: #fecaca;
+  }
+  .good {
+    background: #ecfdf5;
+    border-color: #bbf7d0;
+  }
+  .warning {
+    background: #fff7ed;
+    border-color: #fed7aa;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 18px;
+    font-size: 12px;
+  }
+  th {
+    background: #e2e8f0;
+    color: #0f172a;
+    font-weight: 700;
+  }
+  th, td {
+    border: 1px solid #cbd5e1;
+    padding: 8px 9px;
+    text-align: left;
+    vertical-align: top;
+  }
+  .small {
+    font-size: 11px;
+    color: #475569;
+  }
+  .status-high {
+    background: #fee2e2;
+    color: #7f1d1d;
+    font-weight: 700;
+  }
+  .status-med {
+    background: #fef3c7;
+    color: #78350f;
+    font-weight: 700;
+  }
+  .status-low {
+    background: #dcfce7;
+    color: #14532d;
+    font-weight: 700;
+  }
+  .bar-wrap {
+    height: 16px;
+    width: 100%;
+    background: #e5e7eb;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .bar {
+    height: 16px;
+    background: #2563eb;
+  }
+  .bar-red {
+    background: #dc2626;
+  }
+  .bar-amber {
+    background: #d97706;
+  }
+  .bar-green {
+    background: #16a34a;
+  }
+  .pill {
+    display: inline-block;
+    padding: 2px 7px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    border: 1px solid #cbd5e1;
+    background: #f8fafc;
+  }
+  code {
+    font-family: "Menlo", "Consolas", monospace;
+    background: #f1f5f9;
+    padding: 1px 4px;
+    border-radius: 4px;
+  }
+</style>
+</head>
+<body>
+<h1>FYP Decision Register and Compressed Work Plan</h1>
+<p class="meta"><strong>Project:</strong> Safety-Capability Trade-offs in 4-Bit Quantized Small Language Models</p>
+<p class="meta"><strong>Date:</strong> 13 May 2026</p>
+<p class="meta"><strong>Prepared for:</strong> scope alignment, supervisor discussion, and internship-constrained execution planning</p>
+<p class="meta"><strong>Local repo:</strong> /Users/tanueihorng/fyp_quant</p>
+
+<div class="box critical">
+  <p><strong>Bottom line:</strong> the project direction is strong and mostly aligned with the current repository, but the remaining decisions are now critical because the available weekly capacity is small. With a DBS internship, gym commitments, and about 8 FYP hours per week, the project should be run as a tightly controlled execution plan, not an open-ended exploration.</p>
+  <p><strong>Recommended operating rule:</strong> use TC1 for all final experiment numbers. Use the MacBook only for coding, tests, documentation, and very small smoke checks.</p>
+</div>
+
+<h2>1. Current Alignment Snapshot</h2>
+<p>The latest proposal text is directionally aligned with the repository. The repo already supports the core structure: six models, three benchmark dimensions, matched baseline-versus-4-bit comparisons, Qwen scale sensitivity, and Llama cross-family comparison.</p>
+
+<table>
+  <tr>
+    <th>Area</th>
+    <th>Proposal claim</th>
+    <th>Repo state</th>
+    <th>Alignment</th>
+  </tr>
+  <tr>
+    <td>Core research direction</td>
+    <td>Safety-capability trade-offs under 4-bit quantization.</td>
+    <td>README and pipeline are quantization-focused.</td>
+    <td class="status-low">Aligned</td>
+  </tr>
+  <tr>
+    <td>Model set</td>
+    <td>Four Qwen models plus two Llama models.</td>
+    <td><code>configs/default.yaml</code> contains the same six model aliases.</td>
+    <td class="status-low">Aligned</td>
+  </tr>
+  <tr>
+    <td>Benchmarks</td>
+    <td>HarmBench or JailbreakBench, XSTest, MMLU.</td>
+    <td>Repo implements HarmBench, XSTest, and MMLU only.</td>
+    <td class="status-med">Needs wording decision</td>
+  </tr>
+  <tr>
+    <td>Harmful compliance scoring</td>
+    <td>Harmful compliance will be measured.</td>
+    <td>Current HarmBench scorer uses deterministic refusal heuristics, not LLM-as-judge.</td>
+    <td class="status-high">Decision needed</td>
+  </tr>
+  <tr>
+    <td>Baseline precision</td>
+    <td>Text-only BF16 baseline.</td>
+    <td>Config currently uses <code>dtype: auto</code> for all models.</td>
+    <td class="status-high">Code mismatch</td>
+  </tr>
+  <tr>
+    <td>Thinking mode</td>
+    <td>Thinking mode disabled.</td>
+    <td>Generation code applies chat template but does not explicitly pass <code>enable_thinking=False</code>.</td>
+    <td class="status-high">Code mismatch</td>
+  </tr>
+  <tr>
+    <td>Final hardware environment</td>
+    <td>Controlled benchmarking setup.</td>
+    <td>TC1 path exists; MacBook M2 8GB is not suitable for final full matrix or judge runs.</td>
+    <td class="status-med">Policy decision needed</td>
+  </tr>
+</table>
+
+<h2>2. Decision Register</h2>
+<p>This section lists the choices that should be locked before large experiment runs. These are the places where method, code, and compute capacity can diverge if not handled deliberately.</p>
+
+<table>
+  <tr>
+    <th>ID</th>
+    <th>Decision</th>
+    <th>Current repo position</th>
+    <th>Recommendation</th>
+    <th>Why it matters</th>
+    <th>Latest safe decision date</th>
+  </tr>
+  <tr>
+    <td>D1</td>
+    <td>Use HarmBench only, or add JailbreakBench?</td>
+    <td>HarmBench only. No JailbreakBench plugin exists.</td>
+    <td><strong>Use HarmBench only.</strong> Remove "or JailbreakBench" from the proposal unless there is explicit time to implement a second harmful-prompt benchmark.</td>
+    <td>Adding JailbreakBench increases implementation, validation, and report burden.</td>
+    <td>19 May 2026</td>
+  </tr>
+  <tr>
+    <td>D2</td>
+    <td>Use LLM-as-judge for HarmBench?</td>
+    <td>Current HarmBench scoring is heuristic: malformed check plus refusal-pattern detection.</td>
+    <td><strong>Use LlamaGuard-style judging for final HarmBench if TC1 is stable.</strong> Keep heuristic scoring as a fallback or ablation.</td>
+    <td>LLM judge makes harmful compliance classification more defensible, but adds implementation and compute.</td>
+    <td>24 May 2026</td>
+  </tr>
+  <tr>
+    <td>D3</td>
+    <td>Should XSTest use an LLM judge?</td>
+    <td>Deterministic refusal parser.</td>
+    <td><strong>No.</strong> Keep deterministic parsing for XSTest.</td>
+    <td>XSTest is specifically about false refusal on benign prompts; deterministic refusal parsing is cheap, reproducible, and adequate for a first controlled study.</td>
+    <td>19 May 2026</td>
+  </tr>
+  <tr>
+    <td>D4</td>
+    <td>Should MMLU use an LLM judge?</td>
+    <td>Exact multiple-choice parser.</td>
+    <td><strong>No.</strong> Keep exact answer matching.</td>
+    <td>MMLU has gold labels. A judge would add noise and compute without improving the metric.</td>
+    <td>19 May 2026</td>
+  </tr>
+  <tr>
+    <td>D5</td>
+    <td>Baseline precision policy.</td>
+    <td><code>dtype: auto</code>, which resolves differently by device.</td>
+    <td><strong>Use explicit dtype for final runs.</strong> Prefer <code>bf16</code> for Qwen baselines if TC1 supports it, and document any exception.</td>
+    <td>Without this, "baseline" differs by hardware and can weaken the quantization comparison.</td>
+    <td>24 May 2026</td>
+  </tr>
+  <tr>
+    <td>D6</td>
+    <td>Thinking mode control.</td>
+    <td>Not explicitly controlled in generation code.</td>
+    <td><strong>Add explicit config support.</strong> Pass <code>enable_thinking=False</code> where supported by tokenizer chat templates.</td>
+    <td>Thinking output can change length, formatting, refusal behavior, and parser reliability.</td>
+    <td>24 May 2026</td>
+  </tr>
+  <tr>
+    <td>D7</td>
+    <td>Keep Llama as main result or secondary result?</td>
+    <td>Llama pair is in the default matrix and README.</td>
+    <td><strong>Tier the scope.</strong> Qwen four-model scale study is must-have. Llama pair is cross-family extension if TC1 access and time are healthy.</td>
+    <td>RQ5 depends on Llama, but the August report can still be meaningful with Qwen preliminary findings if time compresses.</td>
+    <td>31 May 2026</td>
+  </tr>
+  <tr>
+    <td>D8</td>
+    <td>Use MacBook results in final tables?</td>
+    <td>Repo is CUDA-oriented for quantized loading.</td>
+    <td><strong>No.</strong> Use Mac only for development and small smoke checks. Use TC1 for final numbers.</td>
+    <td>Different devices can change dtype, kernels, quantization backend, speed, and reproducibility.</td>
+    <td>Immediate</td>
+  </tr>
+  <tr>
+    <td>D9</td>
+    <td>Hugging Face gated access.</td>
+    <td>HarmBench access may require authentication on TC1.</td>
+    <td><strong>Resolve early.</strong> Authenticate TC1 and verify dataset/model access before any large run.</td>
+    <td>This can block the primary safety benchmark entirely.</td>
+    <td>24 May 2026</td>
+  </tr>
+  <tr>
+    <td>D10</td>
+    <td>TC1 GPU stack.</td>
+    <td>Previous notes reported CUDA-driver mismatch risk.</td>
+    <td><strong>Verify with a SLURM CUDA smoke job before experiments.</strong> Do not start large matrix runs until this is clean.</td>
+    <td>CPU fallback can make runs too slow and inconsistent with the intended environment.</td>
+    <td>31 May 2026</td>
+  </tr>
+</table>
+
+<h2>3. Compute and Workload Impact</h2>
+<p>The biggest risk is not the idea. The idea is solid. The risk is unmanaged experiment volume under a small weekly time budget.</p>
+
+<h3>3.1 Current matrix size</h3>
+<table>
+  <tr>
+    <th>Scenario</th>
+    <th>Models</th>
+    <th>Prompt count per model</th>
+    <th>Total generation calls</th>
+    <th>Extra judge calls if HarmBench judge is used</th>
+  </tr>
+  <tr>
+    <td>Full current repo matrix</td>
+    <td>6</td>
+    <td>400 HarmBench + 400 XSTest + 300 MMLU = 1100</td>
+    <td>6600</td>
+    <td>2400</td>
+  </tr>
+  <tr>
+    <td>Qwen-only current sample sizes</td>
+    <td>4</td>
+    <td>1100</td>
+    <td>4400</td>
+    <td>1600</td>
+  </tr>
+  <tr>
+    <td>Recommended preliminary-report matrix</td>
+    <td>4 Qwen models, Llama optional</td>
+    <td>200 HarmBench + 250 XSTest + 200 MMLU = 650</td>
+    <td>2600 for Qwen</td>
+    <td>800 for Qwen</td>
+  </tr>
+</table>
+
+<h3>3.2 Hardware judgement</h3>
+<table>
+  <tr>
+    <th>Environment</th>
+    <th>Use for final runs?</th>
+    <th>Suitable work</th>
+    <th>Not suitable work</th>
+  </tr>
+  <tr>
+    <td>MacBook M2, 8GB RAM</td>
+    <td class="status-high">No</td>
+    <td>Code edits, tests, docs, dataset schema checks, tiny CPU smoke runs.</td>
+    <td>4-bit CUDA path, 4B/3B final runs, LlamaGuard 7B/8B judging, final benchmark numbers.</td>
+  </tr>
+  <tr>
+    <td>TC1 GPU cluster</td>
+    <td class="status-low">Yes</td>
+    <td>All final model generations, quantized runs, HarmBench judge runs, reproducible result collection.</td>
+    <td>Large experiments before CUDA, environment, and HF access are verified.</td>
+  </tr>
+</table>
+
+<h3>3.3 Workload budget</h3>
+<p>From 13 May 2026 to 24 August 2026 is about 14.5 weeks. At 8 hours per week, the maximum nominal capacity is about 116 hours. After internship fatigue, gym, debugging drag, and buffer, a safer planning capacity is about 90 to 95 focused hours.</p>
+
+<table>
+  <tr>
+    <th>Workstream</th>
+    <th>Estimated hours</th>
+    <th>Pressure</th>
+    <th>Visual load</th>
+  </tr>
+  <tr>
+    <td>Decision lock and repo-method alignment</td>
+    <td>12-16</td>
+    <td class="status-high">High</td>
+    <td><div class="bar-wrap"><div class="bar bar-red" style="width:80%"></div></div></td>
+  </tr>
+  <tr>
+    <td>TC1 environment, HF access, CUDA smoke tests</td>
+    <td>10-14</td>
+    <td class="status-high">High</td>
+    <td><div class="bar-wrap"><div class="bar bar-red" style="width:70%"></div></div></td>
+  </tr>
+  <tr>
+    <td>Generation runs and reruns</td>
+    <td>12-20 active supervision hours</td>
+    <td class="status-med">Medium-high</td>
+    <td><div class="bar-wrap"><div class="bar bar-amber" style="width:75%"></div></div></td>
+  </tr>
+  <tr>
+    <td>HarmBench LLM judge implementation and judging</td>
+    <td>10-16</td>
+    <td class="status-med">Medium-high</td>
+    <td><div class="bar-wrap"><div class="bar bar-amber" style="width:65%"></div></div></td>
+  </tr>
+  <tr>
+    <td>Analysis, charts, result interpretation</td>
+    <td>12-16</td>
+    <td class="status-med">Medium</td>
+    <td><div class="bar-wrap"><div class="bar" style="width:60%"></div></div></td>
+  </tr>
+  <tr>
+    <td>Preliminary report writing</td>
+    <td>25-35</td>
+    <td class="status-high">High</td>
+    <td><div class="bar-wrap"><div class="bar bar-red" style="width:90%"></div></div></td>
+  </tr>
+  <tr>
+    <td>Buffer</td>
+    <td>10-15</td>
+    <td class="status-low">Necessary</td>
+    <td><div class="bar-wrap"><div class="bar bar-green" style="width:45%"></div></div></td>
+  </tr>
+</table>
+
+<div class="box warning">
+  <p><strong>Planning implication:</strong> a full six-model matrix plus LLM judge is possible only if TC1 setup stabilizes quickly. The safer plan is to make the four-model Qwen study the guaranteed core, then add the Llama pair once Qwen data and preliminary analysis are already safe.</p>
+</div>
+
+<h2>4. Recommended Scope Tiers</h2>
+<table>
+  <tr>
+    <th>Tier</th>
+    <th>Scope</th>
+    <th>Purpose</th>
+    <th>Decision rule</th>
+  </tr>
+  <tr>
+    <td><span class="pill">Must-have</span></td>
+    <td>Qwen 0.8B baseline, Qwen 0.8B 4-bit, Qwen 4B baseline, Qwen 4B 4-bit across HarmBench, XSTest, and MMLU.</td>
+    <td>Answers RQ1-RQ4 and supports the main thesis contribution.</td>
+    <td>Do this first. Do not risk this for Llama.</td>
+  </tr>
+  <tr>
+    <td><span class="pill">Strongly preferred</span></td>
+    <td>HarmBench LLM judge for Qwen HarmBench outputs, with heuristic scoring retained for comparison.</td>
+    <td>Makes harmful compliance classification more defensible.</td>
+    <td>Do this if TC1 judge run is feasible by mid-June.</td>
+  </tr>
+  <tr>
+    <td><span class="pill">Extension</span></td>
+    <td>Llama 3.2 3B baseline vs 4-bit pair.</td>
+    <td>Answers RQ5 on cross-family consistency.</td>
+    <td>Run only after Qwen matrix is complete and analyzed.</td>
+  </tr>
+  <tr>
+    <td><span class="pill">Drop first</span></td>
+    <td>JailbreakBench, extra benchmarks, larger MMLU coverage, repeated seeds.</td>
+    <td>Additional robustness checks.</td>
+    <td>Do not add before the preliminary report.</td>
+  </tr>
+</table>
+
+<h2>5. Week-by-Week Plan</h2>
+<p>This plan assumes about 8 focused FYP hours per week. It protects weekday energy during the DBS internship by keeping weekday sessions short and moving heavier work to weekends.</p>
+
+<table>
+  <tr>
+    <th>Week</th>
+    <th>Dates</th>
+    <th>Main goal</th>
+    <th>Concrete outputs</th>
+    <th>Hours</th>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td>13-19 May</td>
+    <td>Lock scope and decisions.</td>
+    <td>Final decision on HarmBench-only, LLM judge policy, Qwen-first scope, TC1-only final results.</td>
+    <td>8</td>
+  </tr>
+  <tr>
+    <td>1</td>
+    <td>20-26 May</td>
+    <td>Align repo to methodology.</td>
+    <td>Explicit BF16/full-precision policy, thinking-mode flag, report-aligned config, docs updated.</td>
+    <td>8</td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td>27 May-2 Jun</td>
+    <td>Stabilize TC1.</td>
+    <td>HF auth verified, CUDA smoke job passes, tiny Qwen smoke run completes.</td>
+    <td>8</td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td>3-9 Jun</td>
+    <td>Run Qwen 0.8B pair.</td>
+    <td>Qwen 0.8B baseline and 4-bit outputs for HarmBench, XSTest, MMLU.</td>
+    <td>8</td>
+  </tr>
+  <tr>
+    <td>4</td>
+    <td>10-16 Jun</td>
+    <td>Run Qwen 4B pair.</td>
+    <td>Qwen 4B baseline and 4-bit outputs for HarmBench, XSTest, MMLU.</td>
+    <td>8</td>
+  </tr>
+  <tr>
+    <td>5</td>
+    <td>17-23 Jun</td>
+    <td>Add HarmBench judge stage.</td>
+    <td>LlamaGuard-style scorer or approved fallback; judged Qwen HarmBench output format designed and tested.</td>
+    <td>8</td>
+  </tr>
+  <tr>
+    <td>6</td>
+    <td>24-30 Jun</td>
+    <td>Complete Qwen judged safety results.</td>
+    <td>Qwen HarmBench judge labels, ASR table, parser failure count, manual audit sample started.</td>
+    <td>8</td>
+  </tr>
+  <tr>
+    <td>7</td>
+    <td>1-7 Jul</td>
+    <td>Run Llama pair if safe.</td>
+    <td>Llama pair outputs, or written decision to move Llama to optional/limitations section.</td>
+    <td>8</td>
+  </tr>
+  <tr>
+    <td>8</td>
+    <td>8-14 Jul</td>
+    <td>Freeze preliminary dataset.</td>
+    <td>All must-have outputs present; missing-run checklist closed; raw data backed up.</td>
+    <td>8</td>
+  </tr>
+  <tr>
+    <td>9</td>
+    <td>15-21 Jul</td>
+    <td>Analysis pass 1.</td>
+    <td>Pairwise delta tables, Qwen scale-sensitivity analysis, first charts.</td>
+    <td>8</td>
+  </tr>
+  <tr>
+    <td>10</td>
+    <td>22-28 Jul</td>
+    <td>Interpretation pass.</td>
+    <td>Result narratives: harmful compliance, over-refusal, capability, safety-capability relationship.</td>
+    <td>8</td>
+  </tr>
+  <tr>
+    <td>11</td>
+    <td>29 Jul-4 Aug</td>
+    <td>Preliminary report draft.</td>
+    <td>Introduction, related work skeleton, methodology, experiment setup, preliminary results draft.</td>
+    <td>8</td>
+  </tr>
+  <tr>
+    <td>12</td>
+    <td>5-11 Aug</td>
+    <td>Supervisor-ready draft.</td>
+    <td>Complete preliminary findings document with tables/charts and limitations.</td>
+    <td>8</td>
+  </tr>
+  <tr>
+    <td>13</td>
+    <td>12-18 Aug</td>
+    <td>Revision buffer.</td>
+    <td>Supervisor feedback integrated; unclear claims softened or supported.</td>
+    <td>8</td>
+  </tr>
+  <tr>
+    <td>14</td>
+    <td>19-24 Aug</td>
+    <td>Submission buffer.</td>
+    <td>Final preliminary report package ready for submission/review.</td>
+    <td>6-8</td>
+  </tr>
+</table>
+
+<h2>6. Weekly Routine During Internship</h2>
+<p>This schedule assumes DBS internship work is the main weekday energy drain. The purpose is to keep FYP moving without making every evening feel like punishment.</p>
+
+<table>
+  <tr>
+    <th>Day</th>
+    <th>FYP block</th>
+    <th>Best task type</th>
+    <th>Notes</th>
+  </tr>
+  <tr>
+    <td>Monday</td>
+    <td>1 hour</td>
+    <td>Planning, checklist update, report notes.</td>
+    <td>Low-friction start. No heavy debugging.</td>
+  </tr>
+  <tr>
+    <td>Tuesday</td>
+    <td>1 hour</td>
+    <td>Small code edit or test fix.</td>
+    <td>Good for contained tasks such as config or parser changes.</td>
+  </tr>
+  <tr>
+    <td>Wednesday</td>
+    <td>0 to 30 minutes optional</td>
+    <td>Read one paper section or check TC1 job status.</td>
+    <td>Protect gym/recovery. Do not schedule critical work here.</td>
+  </tr>
+  <tr>
+    <td>Thursday</td>
+    <td>1.5 hours</td>
+    <td>Implementation or experiment setup.</td>
+    <td>Best weekday deep work slot.</td>
+  </tr>
+  <tr>
+    <td>Friday</td>
+    <td>1 hour</td>
+    <td>TC1 monitoring, result download, notes.</td>
+    <td>Prepare weekend work by removing ambiguity.</td>
+  </tr>
+  <tr>
+    <td>Saturday</td>
+    <td>2 hours</td>
+    <td>Main deep work: runs, analysis, charts.</td>
+    <td>Most important block of the week.</td>
+  </tr>
+  <tr>
+    <td>Sunday</td>
+    <td>1.5 to 2 hours</td>
+    <td>Writing and interpretation.</td>
+    <td>Convert work into report text every week.</td>
+  </tr>
+</table>
+
+<div class="box good">
+  <p><strong>Weekly target:</strong> 8 hours total. Treat writing as part of the experiment, not something saved for the end. Every week should leave behind either a code artifact, a run artifact, or a report artifact.</p>
+</div>
+
+<h2>7. Urgency Map</h2>
+<table>
+  <tr>
+    <th>Workstream</th>
+    <th>May</th>
+    <th>June</th>
+    <th>July</th>
+    <th>August</th>
+    <th>Risk if delayed</th>
+  </tr>
+  <tr>
+    <td>Scope and methodology decisions</td>
+    <td class="status-high">Critical</td>
+    <td class="status-med">Late</td>
+    <td class="status-high">Danger</td>
+    <td class="status-high">Too late</td>
+    <td>May cause reruns or inconsistent report claims.</td>
+  </tr>
+  <tr>
+    <td>TC1 environment and access</td>
+    <td class="status-high">Critical</td>
+    <td class="status-high">Critical</td>
+    <td class="status-med">Late</td>
+    <td class="status-high">Too late</td>
+    <td>No reliable final results.</td>
+  </tr>
+  <tr>
+    <td>Qwen data collection</td>
+    <td class="status-med">Prepare</td>
+    <td class="status-high">Critical</td>
+    <td class="status-med">Finish</td>
+    <td class="status-high">Too late</td>
+    <td>No preliminary findings.</td>
+  </tr>
+  <tr>
+    <td>Llama extension</td>
+    <td class="status-low">Optional</td>
+    <td class="status-med">Prepare</td>
+    <td class="status-med">Run if safe</td>
+    <td class="status-high">Drop if late</td>
+    <td>RQ5 becomes weaker, but core Qwen thesis survives.</td>
+  </tr>
+  <tr>
+    <td>Analysis and charts</td>
+    <td class="status-low">Not yet</td>
+    <td class="status-med">Skeleton</td>
+    <td class="status-high">Critical</td>
+    <td class="status-high">Critical</td>
+    <td>Results exist but cannot be explained.</td>
+  </tr>
+  <tr>
+    <td>Preliminary report writing</td>
+    <td class="status-med">Start notes</td>
+    <td class="status-med">Methods draft</td>
+    <td class="status-high">Critical</td>
+    <td class="status-high">Critical</td>
+    <td>Rush writing causes weak framing and avoidable mistakes.</td>
+  </tr>
+</table>
+
+<h2>8. Practical Next Actions</h2>
+<table>
+  <tr>
+    <th>Priority</th>
+    <th>Task</th>
+    <th>Expected output</th>
+    <th>Estimated hours</th>
+  </tr>
+  <tr>
+    <td>1</td>
+    <td>Revise proposal wording to say HarmBench, not HarmBench or JailbreakBench.</td>
+    <td>Proposal and repo scope match.</td>
+    <td>0.5</td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td>Lock HarmBench scoring strategy: heuristic only, or LlamaGuard judge for final ASR.</td>
+    <td>Decision recorded in methodology.</td>
+    <td>1</td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td>Update config precision policy.</td>
+    <td>Explicit baseline dtype or explicitly documented full-precision policy.</td>
+    <td>1-2</td>
+  </tr>
+  <tr>
+    <td>4</td>
+    <td>Add explicit thinking-mode control.</td>
+    <td>Config field and generation behavior tested.</td>
+    <td>2-4</td>
+  </tr>
+  <tr>
+    <td>5</td>
+    <td>Verify TC1 CUDA and Hugging Face access.</td>
+    <td>One clean smoke run that proves the final environment path works.</td>
+    <td>4-8</td>
+  </tr>
+  <tr>
+    <td>6</td>
+    <td>Create a report-aligned reduced preliminary config.</td>
+    <td>Qwen-first sample sizes suitable for August preliminary findings.</td>
+    <td>1-2</td>
+  </tr>
+  <tr>
+    <td>7</td>
+    <td>Start weekly report log.</td>
+    <td>Running notes file with decisions, run IDs, failures, and observations.</td>
+    <td>1</td>
+  </tr>
+</table>
+
+<h2>9. Risk Controls</h2>
+<table>
+  <tr>
+    <th>Risk</th>
+    <th>Likelihood</th>
+    <th>Impact</th>
+    <th>Control</th>
+  </tr>
+  <tr>
+    <td>TC1 or CUDA setup takes longer than expected.</td>
+    <td>Medium</td>
+    <td>High</td>
+    <td>Do CUDA and HF access checks before any large run. Keep Qwen 0.8B as the first smoke path.</td>
+  </tr>
+  <tr>
+    <td>HarmBench gated access blocks runs.</td>
+    <td>Medium</td>
+    <td>High</td>
+    <td>Authenticate early and verify dataset access on TC1 by Week 2.</td>
+  </tr>
+  <tr>
+    <td>LLM judge adds too much overhead.</td>
+    <td>Medium</td>
+    <td>Medium</td>
+    <td>Run judge only for HarmBench. Keep heuristic scoring as fallback. Judge Qwen first, Llama later.</td>
+  </tr>
+  <tr>
+    <td>Full six-model scope becomes too large.</td>
+    <td>High</td>
+    <td>Medium</td>
+    <td>Guarantee Qwen scale study first. Move Llama to secondary/extension if needed.</td>
+  </tr>
+  <tr>
+    <td>Report writing starts too late.</td>
+    <td>High</td>
+    <td>High</td>
+    <td>Write every Sunday. Maintain method and result notes while experiments run.</td>
+  </tr>
+</table>
+
+<h2>10. Recommended Methodology Statement</h2>
+<p>The following wording is currently the cleanest version for the project, assuming the LLM judge is adopted for HarmBench:</p>
+
+<div class="box">
+  <p>This study evaluates harmful compliance, over-refusal, and general capability across matched baseline and 4-bit quantized small language model pairs. HarmBench is used for harmful compliance, XSTest for benign over-refusal, and an MMLU subset for general capability. All final experiments are run in a controlled TC1 environment using fixed prompts, decoding settings, and output schemas. HarmBench responses are scored using a fixed safety classifier such as LlamaGuard, while XSTest and MMLU use deterministic scoring. The Qwen 0.8B and 4B pairs form the primary scale-sensitivity study, and the Llama 3.2 3B pair is used as a secondary cross-family comparison where compute permits.</p>
+</div>
+
+<p>If the LLM judge is not adopted, replace the HarmBench sentence with:</p>
+
+<div class="box">
+  <p>HarmBench and XSTest responses are scored using deterministic refusal and malformed-output parsing, with the limitations of heuristic safety classification explicitly discussed.</p>
+</div>
+
+<h2>11. Final Recommendation</h2>
+<p>The project is still feasible, but the feasibility depends on discipline. The strongest path is to stop expanding scope, lock the remaining methodology decisions in May, run TC1 smoke tests immediately, collect Qwen results first, and write continuously. The Llama pair and any additional benchmark should be treated as an extension, not as something that can jeopardize the core Qwen results.</p>
+
+<p>The August preliminary report should aim to contain at least: a locked methodology, working pipeline, Qwen preliminary results, pairwise delta tables, early safety-capability interpretation, and a clear statement of remaining work.</p>
+
+<p class="small">Prepared from local repository inspection on 13 May 2026. This document intentionally focuses on decision-making and execution planning rather than final experimental conclusions.</p>
+</body>
+</html>

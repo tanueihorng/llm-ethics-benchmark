@@ -8,7 +8,7 @@ import pytest
 
 import ethical_benchmark.models.generation as generation_module
 import ethical_benchmark.models.loader as loader_module
-from ethical_benchmark.models.generation import DecodingConfig, set_global_seed
+from ethical_benchmark.models.generation import DecodingConfig, TextGenerator, set_global_seed
 from ethical_benchmark.models.loader import HFModelLoader, ModelSpec, build_model_spec
 
 
@@ -197,3 +197,58 @@ class TestSetGlobalSeed:
         set_global_seed(42)
         b = random.random()
         assert a == b
+
+
+class _FakeModel:
+    device = "cpu"
+
+
+class _ThinkingAwareTokenizer:
+    pad_token_id = 0
+    pad_token = "<pad>"
+    eos_token = "</s>"
+
+    def __init__(self) -> None:
+        self.eos_token_id = 1
+        self.kwargs: Dict[str, Any] | None = None
+        self.padding_side = "right"
+
+    def apply_chat_template(self, messages: list, **kwargs: Any) -> str:
+        self.kwargs = kwargs
+        return messages[0]["content"]
+
+
+class _LegacyTokenizer(_ThinkingAwareTokenizer):
+    def apply_chat_template(self, messages: list, **kwargs: Any) -> str:
+        if "enable_thinking" in kwargs:
+            raise TypeError("unexpected keyword argument 'enable_thinking'")
+        self.kwargs = kwargs
+        return messages[0]["content"]
+
+
+class TestPromptFormatting:
+    def test_disables_thinking_when_template_supports_it(self) -> None:
+        tokenizer = _ThinkingAwareTokenizer()
+        generator = TextGenerator(
+            model=_FakeModel(),
+            tokenizer=tokenizer,
+            device="cpu",
+            config=DecodingConfig(),
+        )
+
+        assert generator._format_prompt("hello") == "hello"
+        assert tokenizer.kwargs is not None
+        assert tokenizer.kwargs["enable_thinking"] is False
+
+    def test_falls_back_for_legacy_chat_templates(self) -> None:
+        tokenizer = _LegacyTokenizer()
+        generator = TextGenerator(
+            model=_FakeModel(),
+            tokenizer=tokenizer,
+            device="cpu",
+            config=DecodingConfig(),
+        )
+
+        assert generator._format_prompt("hello") == "hello"
+        assert tokenizer.kwargs is not None
+        assert "enable_thinking" not in tokenizer.kwargs

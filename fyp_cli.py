@@ -6,6 +6,7 @@ import argparse
 import json
 import logging
 from pathlib import Path
+from typing import Any
 
 from ethical_benchmark.analysis.compare_quant_pairs import (
     build_pairwise_report,
@@ -31,21 +32,34 @@ def _setup_logging(level: str) -> None:
     )
 
 
-def _add_common_options(parser: argparse.ArgumentParser) -> None:
+def _add_common_options(parser: argparse.ArgumentParser, *, with_defaults: bool = True) -> None:
     """Adds common options shared across root parser and subcommands.
 
     Args:
         parser: Target argument parser.
+        with_defaults: When True, sets concrete defaults (use for the root
+            parser). When False, uses ``argparse.SUPPRESS`` so the subparser
+            does not overwrite a value already set by the root parser when
+            the flag is omitted after the subcommand name.
 
     Side Effects:
         Mutates parser option definitions.
     """
 
-    parser.add_argument("--config", default="configs/default.yaml", help="Path to quantization config")
-    parser.add_argument("--results_dir", default="results", help="Results root directory")
+    if with_defaults:
+        config_default: Any = "configs/default.yaml"
+        results_default: Any = "results"
+        log_default: Any = "INFO"
+    else:
+        config_default = argparse.SUPPRESS
+        results_default = argparse.SUPPRESS
+        log_default = argparse.SUPPRESS
+
+    parser.add_argument("--config", default=config_default, help="Path to quantization config")
+    parser.add_argument("--results_dir", default=results_default, help="Results root directory")
     parser.add_argument(
         "--log_level",
-        default="INFO",
+        default=log_default,
         choices=["DEBUG", "INFO", "WARNING", "ERROR"],
         help="Logging verbosity",
     )
@@ -71,8 +85,8 @@ def parse_args() -> argparse.Namespace:
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     smoke = subparsers.add_parser("smoke", help="Run quick smoke benchmark")
-    _add_common_options(smoke)
-    smoke.add_argument("--model", "-m", default="qwen_0_8b_bf16")
+    _add_common_options(smoke, with_defaults=False)
+    smoke.add_argument("--model", "-m", default="qwen_2b_base")
     smoke.add_argument("--benchmark", "-b", default="harmbench", choices=["harmbench", "xstest", "mmlu"])
     smoke.add_argument("--max_samples", "-n", type=int, default=20)
     smoke.add_argument("--batch_size", type=int, default=2)
@@ -80,7 +94,7 @@ def parse_args() -> argparse.Namespace:
     smoke.add_argument("--device", "-d", default="auto", choices=["auto", "cpu", "cuda"])
 
     run_one = subparsers.add_parser("run", help="Run one model x benchmark")
-    _add_common_options(run_one)
+    _add_common_options(run_one, with_defaults=False)
     run_one.add_argument("--model", "-m", required=True)
     run_one.add_argument("--benchmark", "-b", required=True, choices=["harmbench", "xstest", "mmlu"])
     run_one.add_argument("--max_samples", "-n", type=int, default=None)
@@ -92,7 +106,7 @@ def parse_args() -> argparse.Namespace:
     run_one.add_argument("--force_restart", action="store_true")
 
     matrix = subparsers.add_parser("matrix", help="Run full or filtered matrix")
-    _add_common_options(matrix)
+    _add_common_options(matrix, with_defaults=False)
     matrix.add_argument("--model", "-m", action="append", default=None)
     matrix.add_argument("--benchmark", "-b", action="append", choices=["harmbench", "xstest", "mmlu"])
     matrix.add_argument("--max_samples", "-n", type=int, default=None)
@@ -106,25 +120,31 @@ def parse_args() -> argparse.Namespace:
     matrix.set_defaults(resume=True, reuse_loaded_model=True)
 
     analyze = subparsers.add_parser("analyze", help="Run pairwise quantization analysis")
-    _add_common_options(analyze)
+    _add_common_options(analyze, with_defaults=False)
     analyze.add_argument("--output_dir", "-o", default="results/analysis")
 
     cluster_gen = subparsers.add_parser("cluster-generate", help="Generate SLURM scripts")
-    _add_common_options(cluster_gen)
+    _add_common_options(cluster_gen, with_defaults=False)
     cluster_gen.add_argument("--jobs_dir", "-j", default="slurm/jobs")
     cluster_gen.add_argument("--python_bin", default="python")
-    cluster_gen.add_argument("--script", default="run_quant_benchmark.py")
+    cluster_gen.add_argument("--script", default=None)
+    cluster_gen.add_argument(
+        "--group_by",
+        default="benchmark",
+        choices=["benchmark", "model"],
+        help="Generate one job per benchmark or one model-reuse job per model",
+    )
     cluster_gen.add_argument("--seed", "-s", type=int, default=42)
     cluster_gen.add_argument("--device", "-d", default="auto", choices=["auto", "cpu", "cuda"])
     cluster_gen.add_argument("--max_samples", "-n", type=int, default=None)
 
     cluster_submit = subparsers.add_parser("cluster-submit", help="Submit generated SLURM scripts")
-    _add_common_options(cluster_submit)
+    _add_common_options(cluster_submit, with_defaults=False)
     cluster_submit.add_argument("--jobs_dir", "-j", default="slurm/jobs")
     cluster_submit.add_argument("--dry_run", action="store_true")
 
     cluster_check = subparsers.add_parser("cluster-check", help="Check cluster run status")
-    _add_common_options(cluster_check)
+    _add_common_options(cluster_check, with_defaults=False)
     cluster_check.add_argument("--jobs_dir", "-j", default="slurm/jobs")
     cluster_check.add_argument("--output_json", "-o", default="slurm/check_status.json")
     cluster_check.add_argument("--skip_squeue", action="store_true")
@@ -243,16 +263,20 @@ def main() -> None:
         return
 
     if args.command == "cluster-generate":
+        script = args.script or (
+            "run_quant_matrix.py" if args.group_by == "model" else "run_quant_benchmark.py"
+        )
         manifest = generate_job_scripts(
             config=config,
             config_path=config_path,
             results_dir=results_dir,
             jobs_dir=Path(args.jobs_dir),
             python_bin=args.python_bin,
-            script=args.script,
+            script=script,
             seed=args.seed,
             device=args.device,
             max_samples=args.max_samples,
+            group_by=args.group_by,
         )
         LOGGER.info("Generated %d job scripts.", len(manifest))
         return

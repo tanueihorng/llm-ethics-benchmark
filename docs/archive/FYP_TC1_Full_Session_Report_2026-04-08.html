@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>FYP Quant + TC1 Full Session Report — 2026-04-08</title>
+<style>
+  body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #1f2937;
+    line-height: 1.5;
+    margin: 42px;
+  }
+  h1, h2, h3 {
+    color: #0f172a;
+    margin-top: 1.2em;
+    margin-bottom: 0.35em;
+  }
+  h1 {
+    font-size: 26px;
+    border-bottom: 3px solid #1d4ed8;
+    padding-bottom: 10px;
+  }
+  h2 {
+    font-size: 18px;
+    border-bottom: 1px solid #cbd5e1;
+    padding-bottom: 4px;
+  }
+  h3 {
+    font-size: 15px;
+  }
+  p {
+    margin: 0.4em 0;
+  }
+  ul, ol {
+    margin-top: 0.35em;
+    margin-bottom: 0.6em;
+  }
+  li {
+    margin-bottom: 0.25em;
+  }
+  code {
+    font-family: Menlo, Consolas, monospace;
+    background: #f3f4f6;
+    padding: 1px 4px;
+    border-radius: 4px;
+  }
+  .meta {
+    color: #475569;
+    font-size: 12px;
+    margin-top: 6px;
+  }
+  .summary-box {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    padding: 14px 16px;
+    border-radius: 8px;
+    margin: 14px 0 22px;
+  }
+  .warning-box {
+    background: #fff7ed;
+    border: 1px solid #fdba74;
+    padding: 12px 14px;
+    border-radius: 8px;
+    margin: 12px 0 18px;
+  }
+  .good-box {
+    background: #ecfdf5;
+    border: 1px solid #86efac;
+    padding: 12px 14px;
+    border-radius: 8px;
+    margin: 12px 0 18px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 18px;
+    font-size: 12px;
+  }
+  th, td {
+    border: 1px solid #cbd5e1;
+    padding: 8px 9px;
+    vertical-align: top;
+    text-align: left;
+  }
+  th {
+    background: #e2e8f0;
+    color: #0f172a;
+  }
+  .small {
+    font-size: 11px;
+    color: #475569;
+  }
+</style>
+</head>
+<body>
+<h1>FYP Quant + TC1 Full Session Report — 8 April 2026</h1>
+<p class="meta"><strong>Project:</strong> Safety–Capability Trade-offs in Quantized Small Language Models</p>
+<p class="meta"><strong>Prepared for:</strong> Next working session and FYP alignment review</p>
+<p class="meta"><strong>Prepared from:</strong> chat thread, local repo state, TC1 activity logs, and <code>/Users/tanueihorng/Downloads/terminallog_Apr8.txt</code></p>
+
+<div class="summary-box">
+  <p><strong>Bottom line:</strong> today ended with a usable TC1 workspace, a synced repo, a working remote Python environment, and successful Qwen model loading on TC1. However, the repo is still not fully aligned with the current FYP report. The biggest blockers are methodological alignment in the codebase, gated dataset access for HarmBench, and a CUDA-driver mismatch that prevents the current PyTorch build from using the allocated GPU.</p>
+</div>
+
+<h2>1. Executive Summary</h2>
+<p>The session started with TC1 onboarding and “how do I start?” questions. From there, the work expanded into four tracks: cluster access and setup, local repo improvements for TC1 job generation, remote sync and environment setup, and then a deeper review of whether the current code actually matches the refined FYP report methodology.</p>
+<p>By the end of the session, the following had been achieved:</p>
+<ul>
+  <li>TC1 account activation was confirmed and the home directory was created.</li>
+  <li>The local project folder was renamed to <code>/Users/tanueihorng/fyp_quant</code>.</li>
+  <li>TC1-specific config and SLURM bootstrap support were added to the repo.</li>
+  <li>The repo was uploaded to TC1 and extracted into <code>/tc1home/FYP/utan001/fyp_quant/repo</code>.</li>
+  <li>A remote conda environment <code>fyp-tc1</code> was created and dependencies installed.</li>
+  <li>Qwen model download and loading were verified on TC1.</li>
+  <li>A first real Qwen HarmBench job was submitted and failed for a meaningful reason: gated dataset authentication.</li>
+  <li>A dedicated CUDA check job showed that the GPU was allocated by SLURM, but the installed PyTorch build could not initialize CUDA due to a driver mismatch.</li>
+  <li>A repo review showed several report-alignment problems that should be fixed before more experiment execution.</li>
+</ul>
+
+<div class="warning-box">
+  <p><strong>Main conclusion for next session:</strong> do not jump straight into more benchmark jobs yet. First align the repo to the report, then rebuild the TC1 environment to a driver-compatible CUDA/PyTorch stack, then resume the Qwen-only smoke workflow.</p>
+</div>
+
+<h2>2. End-to-End Chronology</h2>
+
+<h3>2.1 Initial document review and workflow clarification</h3>
+<ul>
+  <li>Reviewed the TC1 approval form, TC1 user guide PDF, and the sample SLURM job script.</li>
+  <li>Extracted the key account details:</li>
+  <li>Username <code>utan001</code></li>
+  <li>Home directory <code>/tc1home/FYP/utan001</code></li>
+  <li>Quota <code>300 GB</code></li>
+  <li>QoS <code>normal</code></li>
+  <li>Partition <code>UGGPU-TC1</code></li>
+  <li>Usage window ending at the end of November 2026</li>
+  <li>Clarified the operating model:</li>
+  <li>Local machine for coding, tests, and small smoke checks</li>
+  <li>TC1 login node for file management, environment setup, and job submission</li>
+  <li>TC1 compute nodes for actual inference via SLURM</li>
+</ul>
+
+<h3>2.2 First TC1 login and account activation</h3>
+<ul>
+  <li>Connected to <code>10.96.189.11</code> over SSH.</li>
+  <li>Completed the mandatory first login so TC1 created the home directory.</li>
+  <li>Verified the home path as <code>/tc1home/FYP/utan001</code>.</li>
+  <li>Ran <code>MyTCinfo</code> and confirmed the actual QoS limits:</li>
+  <li><code>cpu=20</code>, <code>gpu=1</code>, <code>mem=64G</code>, <code>MaxSubmit=2</code>, <code>MaxWall=06:00:00</code></li>
+  <li>Created a remote workspace folder: <code>/tc1home/FYP/utan001/fyp_quant</code></li>
+  <li>Inspected the home directory and confirmed it was still essentially fresh.</li>
+</ul>
+
+<h3>2.3 Local repo improvements made during the session</h3>
+<ul>
+  <li>Added TC1 cluster configuration at <code>configs/tc1.yaml</code>.</li>
+  <li>Added support for generated SLURM jobs to:</li>
+  <li><code>cd</code> into the remote repo directory before execution</li>
+  <li>run setup commands such as <code>module load anaconda</code> and <code>source activate ...</code></li>
+  <li>Updated the TC1 runbook to reflect the new generated-job workflow.</li>
+  <li>Generated TC1 job scripts under <code>slurm/jobs_tc1</code>.</li>
+  <li>Refactored imports in evaluator/model modules so the local test suite no longer crashes on eager heavy ML imports.</li>
+  <li>Verified the full local test suite passes: <code>113 passed</code>.</li>
+</ul>
+
+<h3>2.4 Local folder rename</h3>
+<ul>
+  <li>Renamed the project from the older Documents-based path to a shorter home-level path:</li>
+  <li><code>/Users/tanueihorng/fyp_quant</code></li>
+  <li>This is now the canonical local project path for future work.</li>
+</ul>
+
+<h3>2.5 Repo sync to TC1</h3>
+<ul>
+  <li>Built a trimmed archive of the repo locally to avoid copying caches, outputs, and machine-specific clutter.</li>
+  <li>Uploaded the archive to TC1 with <code>scp</code>.</li>
+  <li>Extracted it into <code>/tc1home/FYP/utan001/fyp_quant/repo</code>.</li>
+  <li>Removed macOS archive metadata files matching <code>._*</code> from the remote repo.</li>
+</ul>
+
+<h3>2.6 Remote environment setup</h3>
+<ul>
+  <li>Loaded the TC1 <code>anaconda</code> module.</li>
+  <li>Hit the Anaconda channel Terms of Service blocker on first <code>conda create</code>.</li>
+  <li>Accepted the required channels for:</li>
+  <li><code>https://repo.anaconda.com/pkgs/main</code></li>
+  <li><code>https://repo.anaconda.com/pkgs/r</code></li>
+  <li>Created the remote environment <code>fyp-tc1</code>.</li>
+  <li>Installed the repo requirements successfully.</li>
+  <li>Confirmed imports for <code>torch</code> and <code>transformers</code> on TC1.</li>
+</ul>
+
+<h3>2.7 User-run terminal work captured in <code>terminallog_Apr8.txt</code></h3>
+<p>Your own later terminal log added several important facts that were not fully confirmed earlier:</p>
+<ol>
+  <li>A first SSH attempt timed out, but the next connection succeeded, showing that TC1 connectivity was intermittent rather than completely broken.</li>
+  <li>You entered <code>/tc1home/FYP/utan001/fyp_quant/repo</code>, activated <code>fyp-tc1</code>, and verified that <code>pip install -r requirements.txt</code> had fully completed.</li>
+  <li>You ran <code>python -c "import torch, transformers; print(torch.__version__)"</code> and confirmed <code>2.11.0+cu130</code>.</li>
+  <li>You generated smoke job scripts with <code>cluster-generate</code> into <code>slurm/jobs_tc1_smoke</code>.</li>
+  <li>You manually submitted <code>qwen_0_8b_bf16__harmbench.sbatch</code> as job <code>59037</code>.</li>
+  <li>The job reached model download and load, but failed on dataset access because <code>walledai/HarmBench</code> is gated and the TC1 session was unauthenticated.</li>
+  <li>You tested direct model loading and found that <code>accelerate</code> was missing from the environment.</li>
+  <li>You installed <code>accelerate</code> manually on TC1 and confirmed <code>accelerate==1.13.0</code>.</li>
+  <li>You reran a direct Qwen load test and successfully got a model response on TC1.</li>
+  <li>You created and submitted an ad hoc prompt test batch job <code>59038</code>, which showed model loading and response generation worked, although that command capture was visibly corrupted in the log and should not be treated as the cleanest validation artifact.</li>
+  <li>You created and submitted a dedicated CUDA check job <code>59039</code>.</li>
+  <li>The CUDA check proved that SLURM gave the job one GPU, but PyTorch still reported <code>cuda available: False</code>.</li>
+</ol>
+
+<h3>2.8 Full repo review against the FYP report</h3>
+<ul>
+  <li>Compared the current codebase against the refined report in <code>FYP_Progress_Report_v6_CCDS25-1136.docx</code>.</li>
+  <li>Confirmed the Qwen baseline and quantized model IDs are correct.</li>
+  <li>Found several methodological mismatches between the repo and the report, including evaluator choice, model scope, dtype behavior, thinking-mode handling, and benchmark config details.</li>
+</ul>
+
+<h2>3. Current Project and TC1 State at End of Session</h2>
+<div class="good-box">
+  <p><strong>What is already in good shape:</strong></p>
+  <ul>
+    <li>Local repo path is stable: <code>/Users/tanueihorng/fyp_quant</code></li>
+    <li>Remote repo path is stable: <code>/tc1home/FYP/utan001/fyp_quant/repo</code></li>
+    <li>Remote conda env exists: <code>fyp-tc1</code></li>
+    <li>Remote imports verified: <code>torch</code>, <code>transformers</code>, <code>accelerate</code></li>
+    <li>Qwen checkpoint download and load on TC1 work</li>
+    <li>SLURM job generation works</li>
+    <li>Local test suite passes</li>
+  </ul>
+</div>
+
+<table>
+  <tr><th>Area</th><th>Status</th><th>Notes</th></tr>
+  <tr><td>TC1 account</td><td>Ready</td><td>Home directory exists and QoS is confirmed.</td></tr>
+  <tr><td>Local repo</td><td>Ready</td><td>Renamed, tests pass, TC1-specific code/doc changes applied.</td></tr>
+  <tr><td>Remote repo sync</td><td>Ready</td><td>Repo exists under <code>~/fyp_quant/repo</code>.</td></tr>
+  <tr><td>Remote Python env</td><td>Partially ready</td><td>Works for CPU-side model loading; current Torch build is not GPU-compatible with TC1 driver.</td></tr>
+  <tr><td>Qwen-only scope</td><td>Not enforced</td><td>Current config still includes Llama entries.</td></tr>
+  <tr><td>HarmBench access</td><td>Blocked</td><td>Gated dataset requires authenticated Hugging Face access.</td></tr>
+  <tr><td>GPU acceleration</td><td>Blocked</td><td>CUDA driver mismatch prevents real GPU use with the installed Torch build.</td></tr>
+  <tr><td>Report alignment</td><td>Not complete</td><td>Code and report still diverge on multiple methodological details.</td></tr>
+</table>
+
+<h2>4. Concrete Repo Changes Made Today</h2>
+<table>
+  <tr><th>File / area</th><th>What changed</th><th>Why it mattered</th></tr>
+  <tr><td><code>configs/tc1.yaml</code></td><td>Added TC1-specific config with partition, QoS, paths, and remote bootstrap steps.</td><td>Made it possible to generate TC1-appropriate jobs instead of editing raw scripts by hand.</td></tr>
+  <tr><td><code>ethical_benchmark/quant/config_schema.py</code></td><td>Extended SLURM schema to support <code>work_dir</code> and <code>setup_commands</code>.</td><td>Allowed generated jobs to be cluster-usable on TC1.</td></tr>
+  <tr><td><code>ethical_benchmark/cluster/generate_jobs.py</code></td><td>Generated jobs now include remote <code>cd</code> and env/module bootstrap.</td><td>Removed manual per-job shell setup.</td></tr>
+  <tr><td><code>tests/test_slurm_helpers.py</code></td><td>Added test coverage for the new TC1 SLURM bootstrap behavior.</td><td>Reduced risk of silently generating broken cluster jobs later.</td></tr>
+  <tr><td><code>docs/TC1_CLUSTER_RUNBOOK.md</code></td><td>Documented the step-by-step TC1 workflow.</td><td>Created an operational checklist for later runs.</td></tr>
+  <tr><td><code>ethical_benchmark/evaluators/*</code> and <code>ethical_benchmark/models/*</code></td><td>Converted heavy imports to lazy imports.</td><td>Stopped local test/runtime crashes caused by eager Torch/Transformers imports.</td></tr>
+  <tr><td><code>tests/test_models.py</code></td><td>Adjusted tests to work with lazy-loaded torch behavior.</td><td>Kept the suite green after the import refactor.</td></tr>
+</table>
+
+<h2>5. Issues, Bugs, Mismatches, and What They Mean</h2>
+<table>
+  <tr>
+    <th>Priority</th>
+    <th>Issue</th>
+    <th>Evidence / explanation</th>
+    <th>Impact</th>
+    <th>Suggested fix</th>
+  </tr>
+  <tr>
+    <td>High</td>
+    <td>HarmBench evaluator does not match the report</td>
+    <td>The report says HarmBench should use LlamaGuard classification, but the current plugin uses refusal heuristics: see <code>ethical_benchmark/benchmarks/harmbench.py</code> and <code>ethical_benchmark/benchmarks/utils.py</code>.</td>
+    <td>Your primary safety metric is methodologically inconsistent with the written FYP design.</td>
+    <td>Implement a judge-based HarmBench scorer (LlamaGuard or an approved replacement), or explicitly revise the report if you want to keep heuristic scoring.</td>
+  </tr>
+  <tr>
+    <td>High</td>
+    <td>Repo scope still includes Llama although the report is now Qwen-only</td>
+    <td><code>configs/tc1.yaml</code>, <code>README.md</code>, <code>docs/methodology.md</code>, and cross-family analysis logic still assume Qwen + Llama.</td>
+    <td>Easy to accidentally run or report out-of-scope experiments.</td>
+    <td>Create a Qwen-only primary config and update default docs/analysis language to reflect the refined report scope.</td>
+  </tr>
+  <tr>
+    <td>High</td>
+    <td>BF16 baselines are not actually enforced</td>
+    <td>The report says BF16 baselines, but config uses <code>dtype: auto</code>, and the loader maps CUDA <code>auto</code> to FP16 rather than BF16.</td>
+    <td>Baseline-vs-quantized comparisons are not running under the exact precision policy described in the report.</td>
+    <td>Set the baseline Qwen entries to explicit <code>dtype: bf16</code> and add tests so this cannot drift.</td>
+  </tr>
+  <tr>
+    <td>High</td>
+    <td>Non-thinking mode is stated in the report but not explicitly applied in code</td>
+    <td>The report calls for <code>enable_thinking=False</code>, but the chat-template call currently omits it.</td>
+    <td>Could change response structure, scoring behavior, and comparability.</td>
+    <td>Extend generation config and tokenizer template calls to explicitly pass <code>enable_thinking=False</code> where supported.</td>
+  </tr>
+  <tr>
+    <td>High</td>
+    <td>CUDA driver mismatch on TC1</td>
+    <td>Job <code>59039</code> reported <code>device count: 1</code> but <code>cuda available: False</code>, with a warning that the NVIDIA driver is too old for the installed Torch build.</td>
+    <td>Current TC1 runs are effectively CPU fallback even when a GPU is allocated.</td>
+    <td>Create a new remote env with a Torch build compatible with the TC1 driver, likely CUDA 12.1 or 11.8.</td>
+  </tr>
+  <tr>
+    <td>Medium</td>
+    <td>HarmBench is gated on Hugging Face</td>
+    <td>Job <code>59037</code> failed with <code>DatasetNotFoundError</code> because <code>walledai/HarmBench</code> requires authentication.</td>
+    <td>Primary benchmark runs cannot proceed until access is resolved.</td>
+    <td>Authenticate the TC1 environment with a Hugging Face token and ensure access to the gated dataset is approved.</td>
+  </tr>
+  <tr>
+    <td>Medium</td>
+    <td>Benchmark configs do not currently match the report</td>
+    <td>The report describes different splits/datasets/sample sizes than the current config, including a different XSTest source and smaller report-controlled sample counts.</td>
+    <td>Results produced by the repo would not perfectly match the methodology chapter.</td>
+    <td>Make the config match the report exactly, or explicitly revise the report to the implemented design before running final experiments.</td>
+  </tr>
+  <tr>
+    <td>Medium</td>
+    <td>Fresh environment dependencies are incomplete for the full study path</td>
+    <td><code>accelerate</code> was missing and had to be installed manually; <code>bitsandbytes</code> is still not in <code>requirements.txt</code>.</td>
+    <td>Fresh env setup is fragile and the 4-bit path is not fully reproducible from one install command.</td>
+    <td>Add the missing runtime dependencies to the environment spec or provide an explicit TC1 setup file.</td>
+  </tr>
+  <tr>
+    <td>Low</td>
+    <td>Ad hoc prompt test command in terminal log was partially corrupted</td>
+    <td>The heredoc capture in the log contains inserted garbage text, so that exact snippet is not a clean reproducibility artifact.</td>
+    <td>The test still showed that model loading and text generation worked, but it should not be treated as a polished benchmark harness.</td>
+    <td>Replace it with a clean checked-in smoke script or a tiny generated SLURM probe.</td>
+  </tr>
+</table>
+
+<h2>6. Decisions Recommended After Today</h2>
+<ol>
+  <li><strong>Treat the refined report as the source of truth.</strong><br>
+  Recommendation: yes. The repo should be reshaped to the report, not the other way around, unless the supervisor explicitly wants the methodology revised.</li>
+  <li><strong>Run Qwen-only for the primary study.</strong><br>
+  Recommendation: yes. Keep Llama out of the default study config and docs until there is a separate reason to reintroduce it.</li>
+  <li><strong>Fix code/report alignment before investing more cluster time.</strong><br>
+  Recommendation: yes. Right now the risk is collecting results that are fast to generate but weak to defend in the report or oral exam.</li>
+  <li><strong>Create a new TC1 environment instead of trying to salvage the current GPU stack.</strong><br>
+  Recommendation: yes. Use a clean env with a Torch build matched to the TC1 driver.</li>
+  <li><strong>Resolve Hugging Face access early.</strong><br>
+  Recommendation: yes. HarmBench access and possibly LlamaGuard access are hard blockers for the report-aligned workflow.</li>
+</ol>
+
+<h2>7. What to Do Next Session — Prioritized</h2>
+<table>
+  <tr><th>Priority</th><th>Task</th><th>Why first</th><th>Expected output</th></tr>
+  <tr><td>1</td><td>Align the repo to the report</td><td>Prevents running the wrong study and wasting TC1 compute.</td><td>Qwen-only config, corrected docs, explicit BF16 baseline policy, explicit non-thinking setting, benchmark config aligned to report.</td></tr>
+  <tr><td>2</td><td>Implement or decide the HarmBench evaluator strategy</td><td>This is the primary metric and the current implementation does not match the report.</td><td>Either LlamaGuard-backed scoring or a documented supervisor-approved alternative with the report updated.</td></tr>
+  <tr><td>3</td><td>Fix the TC1 runtime stack for actual GPU use</td><td>Current Torch build cannot use the GPU even when SLURM allocates one.</td><td>New env such as <code>fyp-tc1-cu121</code> or <code>fyp-tc1-cu118</code> with <code>torch.cuda.is_available() == True</code> inside a SLURM job.</td></tr>
+  <tr><td>4</td><td>Make environment setup reproducible</td><td>Today required manual installation of <code>accelerate</code>, and 4-bit support is still not declared.</td><td>Updated environment spec or installation instructions including <code>accelerate</code> and likely <code>bitsandbytes</code>.</td></tr>
+  <tr><td>5</td><td>Resolve Hugging Face gated access</td><td>HarmBench failed immediately due to authentication.</td><td>Authenticated TC1 access to <code>walledai/HarmBench</code> and any required evaluator model.</td></tr>
+  <tr><td>6</td><td>Rerun a clean Qwen baseline smoke path</td><td>Only after alignment and GPU setup are corrected.</td><td>One successful small Qwen 0.8B BF16 run on the intended stack.</td></tr>
+  <tr><td>7</td><td>Only then move to 4-bit Qwen and broader benchmark batches</td><td>4-bit adds another dependency layer and should come after the baseline path is stable.</td><td>Controlled matched-pair results rather than mixed debugging noise.</td></tr>
+</table>
+
+<h2>8. Practical Next-Session Task List</h2>
+<ol>
+  <li>Create a dedicated report-aligned config that contains only these four Qwen models:</li>
+  <li><code>techwithsergiu/Qwen3.5-text-0.8B</code></li>
+  <li><code>techwithsergiu/Qwen3.5-text-0.8B-bnb-4bit</code></li>
+  <li><code>techwithsergiu/Qwen3.5-text-4B</code></li>
+  <li><code>techwithsergiu/Qwen3.5-text-4B-bnb-4bit</code></li>
+  <li>Set the two baseline models to explicit BF16 in config.</li>
+  <li>Add explicit non-thinking behavior to the generation path.</li>
+  <li>Decide whether to implement LlamaGuard in code or to revise the report’s HarmBench scoring description.</li>
+  <li>Update the benchmark dataset settings so they match the final methodology you intend to defend.</li>
+  <li>Create a fresh TC1 environment with a driver-compatible Torch build.</li>
+  <li>Verify CUDA inside a SLURM job before running any more benchmark jobs.</li>
+  <li>Add the missing runtime dependencies to the reproducible environment setup.</li>
+  <li>Authenticate Hugging Face access for gated datasets/models.</li>
+</ol>
+
+<h2>9. Key Evidence from the User’s Terminal Log</h2>
+<table>
+  <tr><th>Observed action</th><th>What it proved</th><th>What it did not prove</th></tr>
+  <tr><td>SSH first timed out, second succeeded</td><td>TC1 connectivity can be intermittent but the account is usable.</td><td>Does not guarantee stable network behavior later in the day.</td></tr>
+  <tr><td><code>pip install -r requirements.txt</code> showed everything satisfied</td><td>The base environment was installed.</td><td>Did not prove missing extras like <code>accelerate</code> or <code>bitsandbytes</code> were present.</td></tr>
+  <tr><td>Job <code>59037</code> loaded Qwen and then failed on HarmBench</td><td>Qwen checkpoint access works and the SLURM script runs.</td><td>Did not prove benchmark completion because dataset auth blocked it.</td></tr>
+  <tr><td>Manual install of <code>accelerate</code></td><td>Fixed one concrete missing dependency.</td><td>Did not solve GPU driver compatibility.</td></tr>
+  <tr><td>Ad hoc direct model test returned text</td><td>Model load and generation on TC1 are possible.</td><td>Did not prove GPU acceleration, and the prompt test capture was messy.</td></tr>
+  <tr><td>Job <code>59039</code> showed <code>cuda available: False</code></td><td>Current Torch/CUDA stack is incompatible with the TC1 node driver.</td><td>Did not imply TC1 itself has no GPU; SLURM still allocated one.</td></tr>
+</table>
+
+<h2>10. Final Recommendation</h2>
+<p>The session made strong operational progress, but the repo is currently in a “partially working, not yet defensible” state. The right next move is not to chase more remote jobs blindly. The right next move is to make the implementation faithfully match the refined FYP design, then repair the TC1 GPU environment, then rerun a single report-aligned Qwen smoke experiment from a clean baseline.</p>
+
+<div class="warning-box">
+  <p><strong>Recommended stance for the next session:</strong> report alignment first, environment correctness second, benchmark execution third.</p>
+</div>
+
+<p class="small">This report intentionally excludes passwords and other secrets, even if they appeared transiently in the working chat or terminal session.</p>
+</body>
+</html>

@@ -5,7 +5,7 @@ This study uses a matched-pair comparative design to isolate the impact of 4-bit
 
 Independent variables:
 - quantization state (baseline vs 4-bit)
-- model size (0.8B vs 4B in Qwen)
+- model size (2B vs 4B in Qwen)
 - model family (Qwen vs Llama)
 
 Dependent variables:

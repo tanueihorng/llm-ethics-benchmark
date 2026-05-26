@@ -29,7 +29,13 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--results_dir", default="results", help="Result root directory")
     parser.add_argument("--jobs_dir", default="slurm/jobs", help="Directory for generated sbatch files")
     parser.add_argument("--python_bin", default="python", help="Python executable used in sbatch command")
-    parser.add_argument("--script", default="run_quant_benchmark.py", help="Benchmark runner script path")
+    parser.add_argument("--script", default=None, help="Benchmark runner script path")
+    parser.add_argument(
+        "--group_by",
+        default="benchmark",
+        choices=["benchmark", "model"],
+        help="Generate one job per model-benchmark or one model-reuse job per model",
+    )
     parser.add_argument("--seed", type=int, default=42, help="Seed to pass to all jobs")
     parser.add_argument("--device", default="auto", choices=["auto", "cpu", "cuda"], help="Device policy")
     parser.add_argument("--max_samples", type=int, default=None, help="Optional sample cap override")
@@ -126,6 +132,7 @@ def generate_job_scripts(
     seed: int,
     device: str,
     max_samples: int | None,
+    group_by: str = "benchmark",
 ) -> List[Dict[str, Any]]:
     """Generates sbatch files for all model x benchmark combinations.
 
@@ -139,6 +146,8 @@ def generate_job_scripts(
         seed: Random seed.
         device: Device policy.
         max_samples: Optional max sample override.
+        group_by: ``benchmark`` for one job per model x benchmark, or ``model``
+            for one matrix job per model alias.
 
     Returns:
         Job manifest rows.
@@ -164,6 +173,52 @@ def generate_job_scripts(
         resolved_script = str(script_path)
 
     manifest: List[Dict[str, Any]] = []
+    if group_by not in {"benchmark", "model"}:
+        raise ValueError("group_by must be either 'benchmark' or 'model'.")
+
+    if group_by == "model":
+        for model_alias in config.models:
+            job_key = f"{model_alias}__matrix".replace("/", "_").replace(".", "_")
+            sbatch_path = jobs_dir / f"{job_key}.sbatch"
+            stdout_log = str(log_dir / f"{job_key}.out")
+            stderr_log = str(log_dir / f"{job_key}.err")
+
+            cmd_parts = [
+                shlex.quote(python_bin),
+                shlex.quote(resolved_script),
+                "--config", shlex.quote(str(config_path)),
+                "--model", shlex.quote(model_alias),
+                "--output_dir", shlex.quote(str(results_dir)),
+                "--seed", str(int(seed)),
+                "--device", shlex.quote(device),
+            ]
+            if max_samples is not None:
+                cmd_parts.extend(["--max_samples", str(int(max_samples))])
+
+            command = " ".join(cmd_parts)
+            text = _sbatch_text(
+                config=config,
+                job_name=job_key[:120],
+                output_log=stdout_log,
+                error_log=stderr_log,
+                command=command,
+            )
+            sbatch_path.write_text(text, encoding="utf-8")
+
+            manifest.append(
+                {
+                    "job_key": job_key,
+                    "model_alias": model_alias,
+                    "benchmark": None,
+                    "sbatch_path": str(sbatch_path),
+                    "stdout_log": stdout_log,
+                    "stderr_log": stderr_log,
+                }
+            )
+        manifest_path = jobs_dir / "manifest.json"
+        manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+        return manifest
+
     for model_alias, model_entry in config.models.items():
         for benchmark in model_entry.benchmarks:
             job_key = f"{model_alias}__{benchmark}".replace("/", "_").replace(".", "_")
@@ -221,16 +276,20 @@ def main() -> None:
     setup_logging(args.log_level)
 
     config = load_quant_config(args.config)
+    script = args.script or (
+        "run_quant_matrix.py" if args.group_by == "model" else "run_quant_benchmark.py"
+    )
     manifest = generate_job_scripts(
         config=config,
         config_path=Path(args.config),
         results_dir=Path(args.results_dir),
         jobs_dir=Path(args.jobs_dir),
         python_bin=args.python_bin,
-        script=args.script,
+        script=script,
         seed=args.seed,
         device=args.device,
         max_samples=args.max_samples,
+        group_by=args.group_by,
     )
     LOGGER.info("Generated %d SLURM job scripts in %s", len(manifest), args.jobs_dir)
 

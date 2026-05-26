@@ -1,8 +1,8 @@
-# CLAUDE.md
+# AGENTS.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Cross-agent instructions for any coding agent (Codex, Claude Code, Cursor, Aider, etc.) working on this repository.
 
-> **Sister file:** `AGENTS.md` exists for other coding agents (Codex, Cursor, Aider, etc.). `CLAUDE.md` and `AGENTS.md` must be kept identical (copy edits across both). If you change one, change the other in the same commit.
+> **Sister file:** `CLAUDE.md` exists for Claude Code, which auto-loads it. `CLAUDE.md` and `AGENTS.md` must be kept identical (copy edits across both). If you change one, change the other in the same commit.
 
 ---
 
@@ -46,11 +46,11 @@ If the change requires text edits in the report (not just regeneration), edit `s
 
 After regenerating, log the regeneration in PROJECT_LOG.md (one changelog line: "regenerated FYP report to reflect <change>").
 
-## Keeping CLAUDE.md and AGENTS.md in sync
+## Keeping AGENTS.md and CLAUDE.md in sync
 
-`CLAUDE.md` and `AGENTS.md` are intentional duplicates because different coding agents read different files. If you edit one, edit the other in the same commit. The content below the "Project Overview" header is identical between the two; only the opening pointer differs.
+`AGENTS.md` and `CLAUDE.md` are intentional duplicates because different coding agents read different files. If you edit one, edit the other in the same commit. The content below the "Project Overview" header is identical between the two; only the opening pointer differs.
 
-A pre-commit reminder (not enforced mechanically — just discipline): `diff CLAUDE.md AGENTS.md` should show only the agent-name lines in the header. If it shows anything else, sync them.
+A pre-commit reminder (not enforced mechanically — just discipline): `diff AGENTS.md CLAUDE.md` should show only the agent-name lines in the header. If it shows anything else, sync them.
 
 ---
 

@@ -19,11 +19,11 @@ The guide focuses on the repository's current scope:
 ## 2. Study Scope Encoded in the Repository
 The repository operationalizes a controlled quantization study where each baseline model is compared against its 4-bit counterpart. The current matrix includes:
 
-- Qwen 0.8B baseline vs Qwen 0.8B 4-bit,
+- Qwen 2B baseline vs Qwen 2B on-the-fly 4-bit,
 - Qwen 4B baseline vs Qwen 4B 4-bit,
-- Llama 3.2 3B baseline vs Llama 3.2 3B 4-bit.
+- Llama 3.2 3B baseline vs Llama 3.2 3B on-the-fly 4-bit.
 
-The study does **not** design quantization algorithms. It evaluates publicly available checkpoints under fixed evaluation conditions.
+The study does **not** design quantization algorithms. It evaluates fixed model checkpoints under controlled full-precision vs BitsAndBytes NF4 loading conditions.
 
 ## 3. Repository Structure and Responsibilities
 ### 3.1 Core execution modules
@@ -113,15 +113,15 @@ Run a small execution to verify environment and output structure.
 ```bash
 python run_quant_benchmark.py \
   --config configs/default.yaml \
-  --model qwen_0_8b_bf16 \
+  --model qwen_2b_base \
   --benchmark harmbench \
   --max_samples 20 \
   --output_dir results
 ```
 
 Expected artifacts:
-- `results/qwen_0_8b_bf16/harmbench/raw.jsonl`
-- `results/qwen_0_8b_bf16/harmbench/summary.json`
+- `results/qwen_2b_base/harmbench/raw.jsonl`
+- `results/qwen_2b_base/harmbench/summary.json`
 - `results/summary/harmbench_runs.csv`
 
 ## 6.2 Stage B: full matrix execution

@@ -26,6 +26,9 @@ slurm/jobs*/submitted_jobs.json
 .swift-cache/
 pdfthumbs/
 
-# Generated session reports (Word/HTML exports) — keep markdown logs only
-docs/*.docx
-docs/*.html
+# Word lock files (created by Word when a doc is open)
+~$*.docx
+~$*.html
+
+# Note: we DO commit .docx and .html under docs/ — the FYP report is a
+# deliverable and docs/archive/ history is preserved in git.

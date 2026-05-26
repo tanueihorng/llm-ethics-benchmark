@@ -34,6 +34,32 @@ def test_generate_jobs_count(tmp_path: Path, quant_config_dict: dict) -> None:
     assert (jobs_dir / "manifest.json").exists()
 
 
+def test_generate_jobs_group_by_model_reuses_matrix_runner(
+    tmp_path: Path, quant_config_dict: dict
+) -> None:
+    config = QuantizationConfig.model_validate(quant_config_dict)
+    jobs_dir = tmp_path / "jobs"
+
+    manifest = generate_job_scripts(
+        config=config,
+        config_path=tmp_path / "config.yaml",
+        results_dir=tmp_path / "results",
+        jobs_dir=jobs_dir,
+        python_bin="python",
+        script="run_quant_matrix.py",
+        seed=42,
+        device="cpu",
+        max_samples=5,
+        group_by="model",
+    )
+
+    assert len(manifest) == len(config.models)
+    body = Path(manifest[0]["sbatch_path"]).read_text(encoding="utf-8")
+    assert "run_quant_matrix.py" in body
+    assert "--model" in body
+    assert "--benchmark" not in body
+
+
 def test_submit_all_dry_run(tmp_path: Path, quant_config_dict: dict) -> None:
     config = QuantizationConfig.model_validate(quant_config_dict)
     jobs_dir = tmp_path / "jobs"

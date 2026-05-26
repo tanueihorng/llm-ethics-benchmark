@@ -1,5 +1,7 @@
 # Safety-Capability Trade-offs in 4-Bit Quantized Small Language Models
 
+> **Coding agents:** read [`AGENTS.md`](AGENTS.md) (or [`CLAUDE.md`](CLAUDE.md) — they are duplicates) for the working conventions, then [`docs/PROJECT_LOG.md`](docs/PROJECT_LOG.md) for current state.
+
 ## Project Overview
 This repository implements a research-grade benchmarking framework for a focused quantization study:
 
@@ -10,6 +12,11 @@ This repository implements a research-grade benchmarking framework for a focused
 The core objective is to compare baseline and 4-bit checkpoints as matched pairs, then analyze whether observed safety changes reflect true alignment shifts or capability degradation.
 
 ## Documentation
+
+> **Start here:** [`docs/PROJECT_LOG.md`](docs/PROJECT_LOG.md) — single source of truth for current status, open tasks, decisions, and the changelog. Update this file whenever something changes; everything else listed below is permanent reference material that does not track day-to-day state.
+
+**Permanent reference material:**
+- Current FYP interim report: `docs/FYP_Report_2026-05-24.docx`
 - Full FYP operational guide: `docs/FYP_REPO_GUIDE.md`
 - TC1 cluster step-by-step runbook: `docs/TC1_CLUSTER_RUNBOOK.md`
 - Quick start guide: `docs/USER_GUIDE.md`
@@ -18,6 +25,8 @@ The core objective is to compare baseline and 4-bit checkpoints as matched pairs
 - Dataset notes: `docs/datasets.md`
 - Limitations: `docs/limitations.md`
 - Extensibility: `docs/extensibility.md`
+
+**Archived (superseded; kept for traceability):** `docs/archive/`
 
 ## Study Focus
 The framework is explicitly scoped to the following research questions:
@@ -78,12 +87,9 @@ Legacy toxicity/bias/factuality modules are retained as non-default paths for ba
 ## Model Matrix
 Configured in `configs/default.yaml`:
 
-- `techwithsergiu/Qwen3.5-text-0.8B` (baseline)
-- `techwithsergiu/Qwen3.5-text-0.8B-bnb-4bit` (4-bit)
-- `techwithsergiu/Qwen3.5-text-4B` (baseline)
-- `techwithsergiu/Qwen3.5-text-4B-bnb-4bit` (4-bit)
-- `meta-llama/Llama-3.2-3B-Instruct` (baseline)
-- `unsloth/Llama-3.2-3B-Instruct-bnb-4bit` (4-bit)
+- `techwithsergiu/Qwen3.5-text-2B` (baseline and on-the-fly BNB NF4 4-bit)
+- `techwithsergiu/Qwen3.5-text-4B` (baseline and on-the-fly BNB NF4 4-bit)
+- `meta-llama/Llama-3.2-3B-Instruct` (baseline and on-the-fly BNB NF4 4-bit)
 
 Each model entry includes `family`, `size_b`, `quantized`, `pair_id`, and benchmark coverage.
 
@@ -106,7 +112,7 @@ Each model entry includes `family`, `size_b`, `quantized`, `pair_id`, and benchm
 
 - baseline vs 4-bit deltas per `pair_id`
 - absolute and relative deltas
-- Qwen scale sensitivity (0.8B vs 4B delta magnitudes)
+- Qwen compact-scale sensitivity (2B vs 4B delta magnitudes)
 - cross-family sign consistency (Qwen vs Llama)
 - interpretation labels:
   - `alignment_degradation`
@@ -126,7 +132,7 @@ pip install -r requirements.txt
 ```bash
 python run_quant_benchmark.py \
   --config configs/default.yaml \
-  --model qwen_0_8b_bf16 \
+  --model qwen_2b_base \
   --benchmark harmbench \
   --output_dir results
 ```
@@ -190,7 +196,7 @@ Results are organized by model and benchmark to simplify matched comparisons:
 
 ```text
 results/
-  qwen_0_8b_bf16/
+  qwen_2b_base/
     harmbench/
       raw.jsonl
       summary.json
@@ -200,10 +206,10 @@ results/
     mmlu/
       raw.jsonl
       summary.json
-  qwen_0_8b_4bit/
-  qwen_4b_bf16/
+  qwen_2b_4bit/
+  qwen_4b_base/
   qwen_4b_4bit/
-  llama_3_2_3b_bf16/
+  llama_3_2_3b_base/
   llama_3_2_3b_4bit/
   summary/
     harmbench_runs.csv
@@ -226,9 +232,9 @@ results/
 ## Sample Summary Table
 | Pair | Benchmark | Baseline | 4-bit | Delta |
 |---|---|---:|---:|---:|
-| qwen_0_8b | HarmBench ASR | 0.31 | 0.38 | +0.07 |
-| qwen_0_8b | XSTest over-refusal | 0.12 | 0.19 | +0.07 |
-| qwen_0_8b | MMLU accuracy | 0.44 | 0.36 | -0.08 |
+| qwen_2b | HarmBench ASR | 0.31 | 0.38 | +0.07 |
+| qwen_2b | XSTest over-refusal | 0.12 | 0.19 | +0.07 |
+| qwen_2b | MMLU accuracy | 0.44 | 0.36 | -0.08 |
 
 ## Documentation
 - `docs/methodology.md`

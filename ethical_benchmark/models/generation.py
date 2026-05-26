@@ -179,7 +179,17 @@ class TextGenerator:
                     [{"role": "user", "content": prompt}],
                     tokenize=False,
                     add_generation_prompt=True,
+                    enable_thinking=False,
                 )
+            except TypeError:
+                try:
+                    return self.tokenizer.apply_chat_template(
+                        [{"role": "user", "content": prompt}],
+                        tokenize=False,
+                        add_generation_prompt=True,
+                    )
+                except Exception as exc:  # pragma: no cover
+                    LOGGER.debug("Chat template failed; using raw prompt. Error: %s", exc)
             except Exception as exc:  # pragma: no cover
                 LOGGER.debug("Chat template failed; using raw prompt. Error: %s", exc)
         return prompt

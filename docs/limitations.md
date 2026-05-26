@@ -10,7 +10,7 @@ Over-refusal scoring uses deterministic refusal-pattern parsing. This improves r
 MMLU subset is a practical capability proxy, not a complete competence measure.
 
 ## 4. Quantization Coverage
-The study evaluates publicly released 4-bit checkpoints and does not isolate differences from training, publishing, or conversion pipelines.
+The study evaluates one runtime quantization path, BitsAndBytes NF4 4-bit loading, and does not compare alternative algorithms such as GPTQ, AWQ, or GGUF quantization.
 
 ## 5. Text-only Scope
 Evaluation is restricted to text-only interactions. Multimodal safety and capability effects are out of scope.

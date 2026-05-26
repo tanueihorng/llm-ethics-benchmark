@@ -142,7 +142,8 @@ def check_status(config_path: Path, results_dir: Path, jobs_dir: Path, skip_sque
     submission_lookup = {row.get("job_key"): row for row in submissions}
     for row in expected_runs:
         job_key = f"{row['model_alias']}__{row['benchmark']}".replace("/", "_").replace(".", "_")
-        submission = submission_lookup.get(job_key)
+        matrix_job_key = f"{row['model_alias']}__matrix".replace("/", "_").replace(".", "_")
+        submission = submission_lookup.get(job_key) or submission_lookup.get(matrix_job_key)
         if submission:
             job_id = submission.get("job_id")
             row["job_id"] = job_id

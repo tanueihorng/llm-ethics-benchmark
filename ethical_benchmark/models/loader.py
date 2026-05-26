@@ -23,8 +23,11 @@ def _get_transformer_classes() -> Tuple[Any, Any]:
     return transformers.AutoModelForCausalLM, transformers.AutoTokenizer
 
 
-def _build_bnb_4bit_config() -> Any:
+def _build_bnb_4bit_config(compute_dtype: Any) -> Any:
     """Builds a BitsAndBytesConfig for nf4 4-bit loading.
+
+    Args:
+        compute_dtype: Torch dtype used for 4-bit compute.
 
     Returns:
         ``transformers.BitsAndBytesConfig`` instance.
@@ -34,10 +37,9 @@ def _build_bnb_4bit_config() -> Any:
     """
 
     transformers = import_module("transformers")
-    torch = _get_torch()
     return transformers.BitsAndBytesConfig(
         load_in_4bit=True,
-        bnb_4bit_compute_dtype=torch.float16,
+        bnb_4bit_compute_dtype=compute_dtype,
         bnb_4bit_quant_type="nf4",
         bnb_4bit_use_double_quant=True,
     )
@@ -141,7 +143,7 @@ class HFModelLoader:
                     f"Model '{spec.alias}' is marked quantized=true but runtime device is "
                     f"'{runtime_device}'. 4-bit bitsandbytes loading requires CUDA."
                 )
-            model_kwargs["quantization_config"] = _build_bnb_4bit_config()
+            model_kwargs["quantization_config"] = _build_bnb_4bit_config(torch_dtype)
             LOGGER.info("Loading '%s' with bitsandbytes 4-bit (nf4) quantization.", spec.alias)
 
         model = AutoModelForCausalLM.from_pretrained(spec.hf_id, **model_kwargs)
