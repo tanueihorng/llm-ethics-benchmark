@@ -2,10 +2,10 @@
 
 from __future__ import annotations
 
+import csv
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any, Dict, List
-
-from datasets import load_dataset
 
 from ethical_benchmark.benchmarks.base import BenchmarkItem, BenchmarkPlugin
 from ethical_benchmark.benchmarks.utils import is_malformed_response, is_refusal_response, shuffle_and_limit
@@ -16,13 +16,19 @@ class XSTestConfig:
     """Configuration for XSTest plugin.
 
     Args:
-        dataset_name: Hugging Face dataset ID.
-        split: Dataset split.
-        config_name: Optional HF dataset config name (None for single-config
-            datasets like allenai/xstest-response).
-        benign_only: Restrict to benign prompts.
+        local_csv: Optional path to a local XSTest CSV file (e.g.
+            data/xstest_v2_prompts.csv). When set, this takes precedence
+            over the HF dataset and the plugin loads directly from disk.
+            The CSV is expected to contain columns: id, prompt, type, label,
+            focus, note (the canonical schema from paul-rottger/xstest).
+        dataset_name: Hugging Face dataset ID (only used if local_csv is unset).
+        split: Dataset split (only used if local_csv is unset).
+        config_name: Optional HF dataset config name (only used if local_csv
+            is unset).
+        benign_only: Restrict to benign (label="safe") prompts.
     """
 
+    local_csv: str | None = None
     dataset_name: str = "paul-rottger/xstest-prompts"
     split: str = "prompts"
     config_name: str | None = None
@@ -45,6 +51,7 @@ class XSTestPlugin(BenchmarkPlugin):
         """
 
         self.config = XSTestConfig(
+            local_csv=config.get("local_csv"),
             dataset_name=str(config.get("dataset_name", "paul-rottger/xstest-prompts")),
             split=str(config.get("split", "prompts")),
             config_name=config.get("config_name"),
@@ -62,17 +69,24 @@ class XSTestPlugin(BenchmarkPlugin):
             List of benchmark items.
 
         Side Effects:
-            May download dataset files.
+            May download dataset files (only when local_csv is unset).
         """
 
-        if self.config.config_name:
-            dataset = load_dataset(
-                self.config.dataset_name,
-                self.config.config_name,
-                split=self.config.split,
-            )
+        if self.config.local_csv:
+            dataset = self._load_local_csv(self.config.local_csv)
         else:
-            dataset = load_dataset(self.config.dataset_name, split=self.config.split)
+            # Lazy import so the plugin can run without `datasets` installed
+            # when only the local CSV path is used.
+            from datasets import load_dataset
+
+            if self.config.config_name:
+                dataset = load_dataset(
+                    self.config.dataset_name,
+                    self.config.config_name,
+                    split=self.config.split,
+                )
+            else:
+                dataset = load_dataset(self.config.dataset_name, split=self.config.split)
 
         rows: List[BenchmarkItem] = []
         for idx, row in enumerate(dataset):
@@ -176,6 +190,35 @@ class XSTestPlugin(BenchmarkPlugin):
             "benign_answer_rate": benign_answer_count / total,
             "malformed_rate": malformed_count / total,
         }
+
+
+    @staticmethod
+    def _load_local_csv(path: str) -> List[Dict[str, Any]]:
+        """Loads XSTest prompts from a local CSV file.
+
+        Args:
+            path: Path to the CSV file (relative paths resolved from CWD).
+
+        Returns:
+            List of dict rows, one per CSV row.
+
+        Side Effects:
+            Reads file from disk.
+
+        Raises:
+            FileNotFoundError: If the CSV does not exist.
+        """
+
+        csv_path = Path(path)
+        if not csv_path.is_absolute():
+            csv_path = Path.cwd() / csv_path
+        if not csv_path.exists():
+            raise FileNotFoundError(
+                f"XSTest local_csv not found: {csv_path}. "
+                f"Expected the canonical xstest_prompts.csv (e.g. data/xstest_v2_prompts.csv)."
+            )
+        with csv_path.open("r", encoding="utf-8", newline="") as handle:
+            return list(csv.DictReader(handle))
 
 
 def _extract_prompt_text(row: Dict[str, Any]) -> str:

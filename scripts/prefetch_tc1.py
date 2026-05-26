@@ -59,6 +59,10 @@ def _collect_dataset_targets(config: dict) -> List[Tuple[str, str, List[str] | N
     targets: List[Tuple[str, str, List[str] | None, str | None]] = []
     benchmarks = config.get("benchmarks", {})
     for name, bench in benchmarks.items():
+        # Skip benchmarks that load from a local CSV (e.g. XSTest); no HF fetch needed.
+        if bench.get("local_csv"):
+            LOGGER.info("Skipping HF prefetch for benchmark %s (uses local_csv).", name)
+            continue
         dataset_name = str(bench.get("dataset_name", "")).strip()
         split = str(bench.get("split", "train")).strip()
         if not dataset_name:

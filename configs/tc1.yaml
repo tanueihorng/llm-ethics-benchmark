@@ -78,11 +78,13 @@ benchmarks:
     batch_size: 4
 
   xstest:
-    # Canonical XSTest prompts from the original paper (Röttger et al., 2023).
-    # Ungated, 250 prompts: 200 safe + 50 unsafe. We filter to benign_only=true
-    # to score over-refusal on the 200 safe prompts.
-    dataset_name: paul-rottger/xstest-prompts
-    split: prompts
+    # Canonical XSTest v2 prompts (Röttger et al., NAACL 2024), bundled
+    # locally as a CSV under data/ to eliminate the HF dataset dependency.
+    # The CSV is 450 rows = 250 safe + 200 unsafe; we filter benign_only=true
+    # to score over-refusal on the 250 safe prompts.
+    dataset_name: paul-rottger/xstest-prompts   # not used when local_csv is set; kept for traceability
+    local_csv: data/xstest_v2_prompts.csv
+    split: prompts                              # ignored for local_csv path
     max_samples: 400
     batch_size: 4
     benign_only: true
