@@ -16,7 +16,7 @@ The core objective is to compare baseline and 4-bit checkpoints as matched pairs
 > **Start here:** [`docs/PROJECT_LOG.md`](docs/PROJECT_LOG.md) — single source of truth for current status, open tasks, decisions, and the changelog. Update this file whenever something changes; everything else listed below is permanent reference material that does not track day-to-day state.
 
 **Permanent reference material:**
-- Current FYP interim report: `docs/FYP_Report_2026-05-24.docx`
+- Current FYP interim report: `docs/FYP_Report_2026-05-27.docx`
 - Full FYP operational guide: `docs/FYP_REPO_GUIDE.md`
 - TC1 cluster step-by-step runbook: `docs/TC1_CLUSTER_RUNBOOK.md`
 - Quick start guide: `docs/USER_GUIDE.md`

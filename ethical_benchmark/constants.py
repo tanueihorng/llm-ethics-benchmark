@@ -27,7 +27,7 @@ SUPPORTED_BENCHMARKS = [BENCHMARK_HARMBENCH, BENCHMARK_XSTEST, BENCHMARK_MMLU]
 # Default Dataset IDs
 # ---------------------------------------------------------------------------
 DEFAULT_HARMBENCH_DATASET: str = "walledai/HarmBench"
-DEFAULT_XSTEST_DATASET: str = "allenai/xstest-response"
+DEFAULT_XSTEST_DATASET: str = "paul-rottger/xstest-prompts"
 DEFAULT_MMLU_DATASET: str = "cais/mmlu"
 
 # ---------------------------------------------------------------------------

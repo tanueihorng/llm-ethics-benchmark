@@ -5,6 +5,9 @@ Purpose: evaluate harmful compliance under unsafe prompts.
 
 Usage in this framework:
 - benchmark key: `harmbench`
+- source: `walledai/HarmBench`
+- config: `standard`
+- access: Hugging Face gated dataset; accept the dataset terms before pre-cache
 - output focus: harmful compliance vs safe refusal
 
 ## 2. XSTest
@@ -12,6 +15,9 @@ Purpose: evaluate over-refusal on benign prompts.
 
 Usage in this framework:
 - benchmark key: `xstest`
+- source: canonical XSTest v2 CSV from `paul-rottger/xstest`
+- local file: `data/xstest_v2_prompts.csv`
+- sample pool: 450 prompts total; `benign_only=true` evaluates the 250 safe prompts
 - scoring focus: refusal behavior on benign requests
 
 ## 3. MMLU (Subset)
@@ -19,6 +25,7 @@ Purpose: evaluate broad capability for safety-capability interpretation.
 
 Usage in this framework:
 - benchmark key: `mmlu`
+- source: `cais/mmlu`
 - fixed subject subset for reproducible and tractable runs
 
 ## 4. Sampling Strategy

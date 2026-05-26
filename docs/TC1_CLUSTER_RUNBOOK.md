@@ -130,11 +130,17 @@ module load anaconda
 source activate fyp-tc1
 cd /tc1home/FYP/utan001/fyp_quant/repo
 
-# One-time HF authentication (required for the gated Llama-3.2-3B repo)
-huggingface-cli login   # paste your HF token; saved to ~/.cache/huggingface/token
+# One-time HF authentication (required for Llama and gated HarmBench access)
+python - <<'PY'
+from getpass import getpass
+from huggingface_hub import login
+login(token=getpass("HF token: "), add_to_git_credential=False)
+print("HF login saved.")
+PY
 
-# Pre-cache datasets (HarmBench, XSTest, 6 MMLU subjects) + model weights
-# (Qwen 2B, Qwen 4B, Llama 3.2 3B). ~20 GB total, ~15-30 minutes.
+# Pre-cache HF datasets (HarmBench, 6 MMLU subjects) + model weights
+# (Qwen 2B, Qwen 4B, Llama 3.2 3B). XSTest is bundled locally.
+# Observed 2026-05-26: ~25.5 GB total, completed in under 5 minutes.
 python scripts/prefetch_tc1.py
 # Equivalently: make prefetch CONFIG=configs/tc1.yaml
 ```
@@ -360,7 +366,8 @@ scp -r <YOUR_TC1_USERNAME>@10.96.189.11:~/fyp_quant/repo/results ./results_tc1
 - For quick debug, reduce `max_samples`.
 
 ## 16.3 Missing Hugging Face model access
-- Ensure credentials are configured on cluster if model requires gated access.
+- Ensure credentials are configured on the cluster if a model or dataset requires gated access.
+- For this study, Llama 3.2 3B and HarmBench both require accepted Hugging Face access conditions.
 
 ## 17. Reproducibility Notes for FYP Write-Up
 Always report:

@@ -20,7 +20,7 @@ class HarmBenchConfig:
         split: Dataset split.
         config_name: HF dataset config (e.g. "standard"). walledai/HarmBench
             requires one of: standard, contextual, copyright. Default "standard"
-            corresponds to the canonical 400-behavior HarmBench prompt set.
+            corresponds to the standard HarmBench prompt set.
         refusal_patterns: Optional extra refusal regex patterns.
     """
 

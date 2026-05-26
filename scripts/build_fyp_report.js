@@ -1,5 +1,5 @@
 // FYP Report builder — Word document via docx-js
-// Output: /Users/tanueihorng/fyp_quant/docs/FYP_Report_2026-05-23.docx
+// Output: /Users/tanueihorng/fyp_quant/docs/FYP_Report_2026-05-27.docx
 
 const fs = require("fs");
 const {
@@ -420,14 +420,14 @@ const ch3 = [
   buildTable(
     ["Dimension", "Benchmark (source)", "Primary metric", "Sampling"],
     [
-      ["Harmful compliance", "HarmBench (walledai/HarmBench)", "Attack Success Rate (ASR)", "400 prompts"],
-      ["Over-refusal", "XSTest (allenai/xstest-response, benign-only)", "Over-refusal rate", "400 benign prompts"],
+      ["Harmful compliance", "HarmBench (walledai/HarmBench, standard)", "Attack Success Rate (ASR)", "200 prompts"],
+      ["Over-refusal", "XSTest (local canonical CSV, benign-only)", "Over-refusal rate", "250 benign prompts"],
       ["General capability", "MMLU (cais/mmlu, 6-subject subset)", "Accuracy", "300 questions total"],
     ],
     [1900, 3260, 2300, 1900],
   ),
   P("Table 3.2  Benchmark selection, primary metrics, and sample budgets. Sampling is deterministic and seed-controlled.", { size: 18 }),
-  PJ("HarmBench is selected as the harmful-compliance benchmark because it is the most widely adopted adversarial-prompt collection in contemporary safety research and provides a stable definition of attack success. The walledai release on Hugging Face is used. XSTest is the canonical over-refusal benchmark; the benign-only subset of the allenai/xstest-response dataset is used to measure how often the model refuses prompts that should not be refused. MMLU is used as the general-capability anchor."),
+  PJ("HarmBench is selected as the harmful-compliance benchmark because it is the most widely adopted adversarial-prompt collection in contemporary safety research and provides a stable definition of attack success. The walledai release on Hugging Face is used with the standard config. XSTest is the canonical over-refusal benchmark; this repository bundles the canonical XSTest v2 prompts CSV from paul-rottger/xstest and evaluates the benign-only subset to measure how often the model refuses prompts that should not be refused. MMLU is used as the general-capability anchor."),
   PJ("To keep MMLU tractable within the per-job walltime on TC1, a six-subject subset is used: business_ethics, clinical_knowledge, college_biology, high_school_world_history, high_school_macroeconomics, and human_aging. These subjects span ethics, sciences, humanities, social sciences, and applied knowledge, and are deliberately chosen to cover heterogeneous reasoning demands without exhausting the time budget. The total sample cap of 300 questions is distributed evenly across the six subjects."),
 
   H2("3.5 Scoring: Deterministic Refusal Detection"),
@@ -631,17 +631,21 @@ const ch5 = [
   PJ("The guide also recommends sbatch over srun for all real job submission: \"Avoid using the command 'srun' to submit job ... all users are advised to use the command 'sbatch' for job submission. Then exit from the session, access later to see the result.\" This study therefore submits every job, including the initial smoke validation, via sbatch."),
 
   H2("5.4 Hugging Face Access and Gating"),
-  PJ("The Qwen pairs draw from open-access checkpoints under the techwithsergiu namespace and require no authentication. The Llama pair, by contrast, uses meta-llama/Llama-3.2-3B-Instruct, which is gated under the Meta Llama community license. Access requires a Hugging Face account to have accepted the relevant model license and a personal access token to be available on TC1. The token is registered once on the head node via huggingface-cli login, which writes to ~/.cache/huggingface/token; subsequent SLURM jobs inherit this token through the shared home directory mount."),
+  PJ("The Qwen pairs draw from open-access checkpoints under the techwithsergiu namespace and require no authentication. The Llama pair uses meta-llama/Llama-3.2-3B-Instruct, which is gated under the Meta Llama community license, and HarmBench currently also requires accepted Hugging Face dataset access conditions. Access is handled by logging into Hugging Face once on the TC1 head node with a read-scoped personal access token. As of 2026-05-26, token registration and gated-access acceptance have been verified by a successful full pre-cache of both Llama 3.2 3B and HarmBench."),
 
   H2("5.5 Offline-Mode Strategy and Pre-Cache"),
   PJ("Because the compute nodes may not have outbound internet access, and because runtime downloads risk burning the six-hour walltime budget on slow Hugging Face mirrors, this study adopts a strict offline-mode strategy. All datasets and model weights are pre-cached on the head node before any SLURM job is submitted. SLURM jobs then run with HF_HUB_OFFLINE=1, HF_DATASETS_OFFLINE=1, and TRANSFORMERS_OFFLINE=1 exported in the sbatch setup_commands block, ensuring that any cache miss fails immediately with a clear error rather than hanging on a network attempt."),
-  PJ("The repository provides a helper script (scripts/prefetch_tc1.py) that reads the configured benchmarks and models from configs/tc1.yaml and triggers the necessary downloads. It is invoked once, on the head node, after the conda environment is activated and huggingface-cli login has registered the user's HF token:"),
+  PJ("The repository provides a helper script (scripts/prefetch_tc1.py) that reads the configured benchmarks and models from configs/tc1.yaml and triggers the necessary downloads. It is invoked once, on the head node, after the conda environment is activated and a Hugging Face token has been registered with huggingface_hub.login:"),
   ...Code(`module load anaconda
 source activate fyp-tc1
 cd /tc1home/FYP/utan001/fyp_quant/repo
-huggingface-cli login                # one-time, for Llama gating
+python - <<'PY'                      # one-time HF login
+from getpass import getpass
+from huggingface_hub import login
+login(token=getpass("HF token: "), add_to_git_credential=False)
+PY
 python scripts/prefetch_tc1.py       # or: make prefetch CONFIG=configs/tc1.yaml`),
-  PJ("The pre-cache step retrieves three datasets (HarmBench, XSTest, and the six MMLU subjects, approximately ten megabytes total) and three model repositories (Qwen 2B, Qwen 4B, Llama 3.2 3B, totalling approximately twenty gigabytes). The downloads themselves are pure HTTP file transfers with negligible CPU and memory cost, and are therefore consistent with the head-node activities explicitly demonstrated in the TC1 user guide (page 7–9, where conda install and pip install are shown executing on the head node)."),
+  PJ("The pre-cache step retrieves HarmBench, the six MMLU subjects, and three model repositories (Qwen 2B, Qwen 4B, Llama 3.2 3B). XSTest is not fetched from Hugging Face because the canonical CSV is bundled in the repository as data/xstest_v2_prompts.csv. The observed TC1 pre-cache completed successfully on 2026-05-26 at 22:40 UTC+8, caching approximately 25.5 GB in ~/.cache/huggingface/hub: Llama 3.2 3B (12.9 GB), Qwen 2B (3.92 GB), and Qwen 4B (8.68 GB), plus small dataset files. The downloads themselves are pure HTTP file transfers with negligible CPU and memory cost, and are therefore consistent with the head-node activities explicitly demonstrated in the TC1 user guide (page 7–9, where conda install and pip install are shown executing on the head node)."),
 
   H2("5.6 Run Plan"),
   PJ("With group_by=model, the framework emits six sbatch files — one per model alias. Each script runs the full three-benchmark suite for its model with the model loaded only once, exploiting the matrix runner's reuse_loaded_model=True default. The six scripts are:"),
@@ -738,9 +742,9 @@ const ch8 = [
     "Text-only, English-only scope. Multilingual and multimodal behavioural effects of quantization are out of scope.",
     "Greedy decoding only. Temperature 0.0 is used throughout, eliminating within-condition stochastic variance from the analysis and precluding direct measurement of sample-to-sample variability.",
     "Hardware and walltime constraints. Each TC1 job is allocated a single GPU, ten gigabytes of host memory, and six hours of walltime. Sample budgets and batch sizes are sized to fit comfortably within these constraints.",
-    "Sample-size-driven confidence intervals. With 400 prompts per safety benchmark, binomial-proportion confidence intervals are approximately ±5 percentage points wide; small deltas may not be statistically separable from zero.",
+    "Sample-size-driven confidence intervals. With 200 HarmBench prompts and 250 benign XSTest prompts, binomial-proportion confidence intervals are wider than large leaderboard settings; small deltas may not be statistically separable from zero.",
     "Qwen baseline provenance. The Qwen baselines are text-only derivatives of a multimodal Qwen series. While both members of each pair inherit the same derivation, claims about \"quantization effects on Qwen\" are most safely interpreted as claims about quantization effects on these specific text-extracted derivatives.",
-    "Llama gated access. The Llama 3.2 3B pair depends on accepted gating on Hugging Face and a valid token available to the TC1 environment. Without this, the cross-family component of the study cannot run.",
+    "Gated-access dependency. The Llama 3.2 3B pair and HarmBench dataset depend on accepted Hugging Face access conditions and a valid token available to the TC1 environment. This precondition has been satisfied for the current run, but future reproductions must repeat the access setup.",
   ]),
 ];
 
@@ -767,7 +771,7 @@ const ch10 = [
   H1("Chapter 10 — Conclusion"),
   PJ("This Final Year Project investigates safety–capability trade-offs in four-bit quantized compact language models, focusing on a research question that institutional benchmarks have not directly answered: when a small instruction-tuned model is quantized for on-device deployment, do observed changes in safety behaviour reflect a true shift in alignment or a side-effect of degraded general capability?"),
   PJ("The methodological contribution is a controlled matched-pair design in which baseline and four-bit pair members are loaded from identical baseline weights, with NF4 quantization applied on the fly. This design eliminates publisher- and pipeline-asymmetry as confounds and provides the strongest practical isolation of quantization as the experimental variable. The engineering contribution is an open, reproducible benchmarking framework comprising the matched-pair pipeline, three benchmark plugins, the pairwise analysis layer with rule-based interpretation labels, full SLURM orchestration for the NTU TC1 cluster with resumable per-model matrix jobs, and a verification suite of 122 automated tests. The analytical contribution is the interpretation layer itself, which formalises the alignment-versus-capability disambiguation as a rule-based decision procedure over combined safety and capability deltas."),
-  PJ("The framework is complete, validated, and ready for cluster submission. Three pairs (Qwen 2B, Qwen 4B, and Llama 3.2 3B) are configured, six sbatch files have been generated, and the only remaining preconditions are confirmation of Hugging Face gating for the Llama pair and submission of the six jobs to TC1. The expected output is a set of pairwise deltas and interpretation labels that directly answer the five research questions, and a documented empirical baseline for future quantization-safety work in the compact-model regime."),
+  PJ("The framework is complete, validated, and ready for cluster execution. Three pairs (Qwen 2B, Qwen 4B, and Llama 3.2 3B) are configured, six sbatch files have been generated, Hugging Face gated access has been verified, and all required datasets and model weights have been pre-cached on TC1. The next operational step is a short smoke sbatch to validate offline GPU execution before submitting the full six-job matrix. The expected output is a set of pairwise deltas and interpretation labels that directly answer the five research questions, and a documented empirical baseline for future quantization-safety work in the compact-model regime."),
 ];
 
 // ------------------------------------------------------------
@@ -870,13 +874,15 @@ decoding:
 benchmarks:
   harmbench:
     dataset_name: walledai/HarmBench
+    config_name: standard
     split: train
     max_samples: 400
     batch_size: 4
 
   xstest:
-    dataset_name: allenai/xstest-response
-    split: test
+    dataset_name: paul-rottger/xstest-prompts
+    local_csv: data/xstest_v2_prompts.csv
+    split: prompts
     max_samples: 400
     batch_size: 4
     benign_only: true
@@ -1060,7 +1066,7 @@ const appendixE = [
     ├── limitations.md
     ├── extensibility.md
     ├── TC1_CLUSTER_RUNBOOK.md
-    └── FYP_Report_2026-05-23.docx   (this document)`),
+    └── FYP_Report_2026-05-27.docx   (this document)`),
 ];
 
 const appendixG = [
@@ -1069,7 +1075,9 @@ const appendixG = [
   buildTable(
     ["When (UTC+8)", "Version", "Change to the report"],
     [
-      ["2026-05-24 01:50", "FYP_Report_2026-05-24.docx (current)", "Fixed numbered-list numbering. All five numbered lists (Ch 1.5 Contributions, Ch 2.5 Research Gaps, Ch 8 Limitations, Ch 9 Future Work, References) were sharing one global counter and continued incrementing across chapters (Ch 8 started at 10, Ch 9 at 19, References at 25). Each list now correctly restarts at 1. Implementation: per-list `numlist<N>` numbering references in the builder."],
+      ["2026-05-27 00:41", "FYP_Report_2026-05-27.docx (current)", "Rolled the generated report artifact forward to the current checkpoint date. The former 2026-05-24 report is archived for traceability; active documentation now points to the 2026-05-27 docx."],
+      ["2026-05-27 00:34", "FYP_Report_2026-05-27.docx", "Updated the experimental-setup status after TC1 pre-cache completion. Corrected XSTest source text to the bundled canonical CSV, recorded that HarmBench/Llama gated access has been verified, updated observed cache sizes, and clarified that the next operational step is the smoke sbatch."],
+      ["2026-05-24 01:50", "FYP_Report_2026-05-24.docx", "Fixed numbered-list numbering. All five numbered lists (Ch 1.5 Contributions, Ch 2.5 Research Gaps, Ch 8 Limitations, Ch 9 Future Work, References) were sharing one global counter and continued incrementing across chapters (Ch 8 started at 10, Ch 9 at 19, References at 25). Each list now correctly restarts at 1. Implementation: per-list `numlist<N>` numbering references in the builder."],
       ["2026-05-24 01:20", "FYP_Report_2026-05-24.docx", "Added this Document Revision History appendix (Appendix G). No content changes to other chapters."],
       ["2026-05-24 00:55", "FYP_Report_2026-05-24.docx", "Strengthened cover page: bolded student name and document date (26pt); added supervisor email; running header on every page now shows project code + author on the left and report type + date on the right."],
       ["2026-05-24 00:15", "FYP_Report_2026-05-24.docx", "Rewrote Chapter 5 to incorporate the TC1 user-guide policy review. Added §5.3 (Cluster Usage Policy and Workflow Constraints) and §5.5 (Offline-Mode Strategy and Pre-Cache). Expanded Table 5.1 with full QoS limits (CPU/memory/GPU). Updated Appendix A and Appendix B to show the new HF_*_OFFLINE env vars in the sbatch setup_commands."],
@@ -1232,7 +1240,7 @@ const doc = new Document({
   }],
 });
 
-const OUTPUT = "/Users/tanueihorng/fyp_quant/docs/FYP_Report_2026-05-24.docx";
+const OUTPUT = "/Users/tanueihorng/fyp_quant/docs/FYP_Report_2026-05-27.docx";
 Packer.toBuffer(doc).then(buf => {
   fs.writeFileSync(OUTPUT, buf);
   console.log("WROTE: " + OUTPUT);

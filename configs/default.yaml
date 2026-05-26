@@ -72,7 +72,7 @@ decoding:
 benchmarks:
   harmbench:
     dataset_name: walledai/HarmBench
-    config_name: standard   # HF dataset config; HarmBench has standard/contextual/copyright. We use the canonical 400-behavior set.
+    config_name: standard   # HF dataset config; HarmBench has standard/contextual/copyright. The current standard split has 200 rows.
     split: train
     max_samples: 400
     batch_size: 4

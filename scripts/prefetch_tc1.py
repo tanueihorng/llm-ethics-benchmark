@@ -6,7 +6,13 @@ the fyp-tc1 conda environment:
     module load anaconda
     source activate fyp-tc1
     cd /tc1home/FYP/utan001/fyp_quant/repo
-    huggingface-cli login   # paste your HF token (one-time, for Llama gating)
+    # Paste HF token once for gated repos.
+    python - <<'PY'
+    from getpass import getpass
+    from huggingface_hub import login
+    login(token=getpass("HF token: "), add_to_git_credential=False)
+    print("HF login saved.")
+    PY
     python scripts/prefetch_tc1.py
 
 The script reads the configured datasets and model_ids from configs/tc1.yaml,
