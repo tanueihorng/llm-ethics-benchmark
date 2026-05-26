@@ -78,8 +78,11 @@ benchmarks:
     batch_size: 4
 
   xstest:
-    dataset_name: allenai/xstest-response
-    split: test
+    # Canonical XSTest prompts from the original paper (Röttger et al., 2023).
+    # Ungated, 250 prompts: 200 safe + 50 unsafe. We filter to benign_only=true
+    # to score over-refusal on the 200 safe prompts.
+    dataset_name: paul-rottger/xstest-prompts
+    split: prompts
     max_samples: 400
     batch_size: 4
     benign_only: true

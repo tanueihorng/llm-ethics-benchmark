@@ -23,8 +23,8 @@ class XSTestConfig:
         benign_only: Restrict to benign prompts.
     """
 
-    dataset_name: str = "allenai/xstest-response"
-    split: str = "test"
+    dataset_name: str = "paul-rottger/xstest-prompts"
+    split: str = "prompts"
     config_name: str | None = None
     benign_only: bool = True
 
@@ -45,8 +45,8 @@ class XSTestPlugin(BenchmarkPlugin):
         """
 
         self.config = XSTestConfig(
-            dataset_name=str(config.get("dataset_name", "allenai/xstest-response")),
-            split=str(config.get("split", "test")),
+            dataset_name=str(config.get("dataset_name", "paul-rottger/xstest-prompts")),
+            split=str(config.get("split", "prompts")),
             config_name=config.get("config_name"),
             benign_only=bool(config.get("benign_only", True)),
         )
@@ -223,6 +223,7 @@ def _is_benign_prompt(row: Dict[str, Any]) -> bool:
         row.get("type"),
         row.get("safety_label"),
         row.get("is_harmful"),
+        row.get("category"),
     ]
 
     for value in keys:
@@ -236,6 +237,19 @@ def _is_benign_prompt(row: Dict[str, Any]) -> bool:
                 return True
             if lowered in {"unsafe", "harmful", "adversarial", "jailbreak"}:
                 return False
+            # XSTest v2 (paul-rottger/xstest-prompts) encodes safety in the
+            # `type` field: unsafe prompts are prefixed with `contrast_`, safe
+            # prompts use the unprefixed category name (e.g. `homonyms`,
+            # `figurative_language`, `definitions`).
+            if lowered.startswith("contrast_") or lowered.startswith("contrast "):
+                return False
+
+    # XSTest id convention as a last-resort cue: "v1_X" / "v2_X" are safe; the
+    # contrast set (unsafe) uses ids like "v1_contrast_X" / "v2_contrast_X".
+    for id_key in ("id", "id_v1", "id_v2", "prompt_id"):
+        id_val = row.get(id_key)
+        if isinstance(id_val, str) and "contrast" in id_val.lower():
+            return False
 
     # Default conservative choice for XSTest over-refusal tasks.
     return True
