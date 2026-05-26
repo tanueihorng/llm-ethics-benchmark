@@ -6,7 +6,7 @@
 | **Student** | TAN UEI HORNG (UTAN001) — UTAN001@e.ntu.edu.sg |
 | **Supervisor** | Dr. Zhang Jiehuang — jiehuang.zhang@ntu.edu.sg |
 | **School** | College of Computing and Data Science, Nanyang Technological University |
-| **Last updated** | 2026-05-26 (22:30 UTC+8) |
+| **Last updated** | 2026-05-26 (22:45 UTC+8) |
 | **Last updated by** | TAN UEI HORNG |
 
 > Whenever you edit this file, bump the **Last updated** date (and name, if a collaborator other than the student) to reflect the most recent change. This is the cheapest way to see at a glance whether the log is current.
@@ -17,17 +17,20 @@ If you're a future Claude session or a collaborator reading this for the first t
 
 ---
 
-## 1. Status snapshot (updated 2026-05-24)
+## 1. Status snapshot (updated 2026-05-26 22:45 UTC+8)
+
+> **Session handoff (read this first if you're a fresh agent / new chat):** As of 2026-05-26 evening, the TC1 environment is fully provisioned and all model weights + datasets are pre-cached on the head node. The very next step is **T6 — submit the smoke sbatch** (`sbatch slurm/jobs_tc1_smoke/qwen_2b_base__harmbench.sbatch`). After smoke passes, submit the full 6-job matrix (T8). See §2 for the full task list. The user is operating from `(fyp-tc1) [utan001@CCDS-TC1:2 ~/fyp_quant/repo]$` (TC1 head node) when stepping through cluster work, and from their Mac at `/Users/tanueihorng/fyp_quant` when editing code. Workflow loop is `git push` (Mac) → `git pull` (TC1).
+
 
 | Dimension | State |
 |---|---|
 | **Scope (locked)** | 4-bit NF4 quantization study, matched-pair design, on-the-fly quantization from identical baseline weights. Three pairs: Qwen 2B, Qwen 4B, Llama 3.2 3B. Three benchmarks: HarmBench, XSTest, MMLU (6-subject subset). |
 | **Framework** | Complete. 122 tests passing. CLI + Makefile + SLURM orchestration in place. |
-| **TC1 access** | Approved (account `utan001`, partition `UGGPU-TC1`, QoS `normal`, window 03/2026–11/2026). `fyp-tc1` conda environment created. Repo synced to `/tc1home/FYP/utan001/fyp_quant/repo` as of 2026-04-08 (needs re-sync to pick up the May changes — see open action). |
+| **TC1 access** | Approved (account `utan001`, partition `UGGPU-TC1`, QoS `normal`, window 03/2026–11/2026). `fyp-tc1` conda environment active. Repo on TC1 at commit `2b723be` (`/tc1home/FYP/utan001/fyp_quant/repo`). Workflow: `git push` from Mac → `git pull` on TC1. |
 | **SLURM scripts** | 6 per-model `*_matrix.sbatch` files generated under `slurm/jobs_tc1/`, with offline env vars (`HF_*_OFFLINE=1`) in setup_commands. 18 short smoke sbatch files under `slurm/jobs_tc1_smoke/` for cache validation. |
-| **Hugging Face gating** | Pending. Llama 3.2 3B is gated; need `huggingface-cli login` on TC1 with an HF token whose account has accepted the Meta Llama community license. |
-| **Datasets / model weights** | Not yet pre-cached on TC1. Pre-cache step (head node) is the next action. |
-| **Experiments** | Not yet run. 0 of 6 model-level jobs submitted. |
+| **Hugging Face auth** | ✅ Done 2026-05-26. Token `tc1-fyp-read` (read scope) registered for account `ueihorng` via `huggingface_hub.login()`. Llama 3.2 3B license confirmed accepted (model weights downloaded successfully without 401). |
+| **Datasets / model weights** | ✅ Pre-cached on TC1 (head node) as of 2026-05-26 22:40. ~25.5 GB total in `~/.cache/huggingface/hub/`: Llama 3.2 3B (12.9 GB, includes both safetensors and original .pth), Qwen 2B (3.92 GB), Qwen 4B (8.68 GB). HarmBench + 6 MMLU subjects (~2 MB) also cached. XSTest is bundled as `data/xstest_v2_prompts.csv` (no HF dependency). |
+| **Experiments** | Not yet run. 0 of 6 model-level jobs submitted. **NEXT: smoke sbatch (T6).** |
 | **Current FYP report** | `docs/FYP_Report_2026-05-24.docx` (interim report, framework-complete + experiments-pending framing). |
 | **Last supervisor update** | 2026-03-09 (~2.5 months ago). Re-engagement email drafted in conversation but not yet sent. |
 
@@ -41,11 +44,11 @@ Tasks are numbered globally as `T<N>` so they can be referenced unambiguously in
 
 - [ ] **T1. Send progress email to Dr. Zhang.** Draft exists in conversation history (2026-05-23). Cover: framework complete, TC1 environment provisioned, experiments pending submission. Include the corrected scope (2B + 4B + Llama 3B, on-the-fly quantization).
 - [x] ~~**T2. Re-sync repo to TC1.**~~ Done 2026-05-26: pushed commit `63b7a3e` from Mac; TC1 `git pull` confirms repo at that commit. Going forward, sync is `git push` (Mac) + `git pull` (TC1).
-- [ ] **T3. Run `MyTCinfo` on TC1.** Confirm actual storage quota (assumed ~300 GB in the report; verify and update Table 5.1 if different).
+- [ ] **T3. Run `MyTCinfo` on TC1.** Confirm actual storage quota (assumed ~300 GB in the report; verify and update Table 5.1 if different). Effectively confirmed by the successful 25.5 GB prefetch but should still run `MyTCinfo` to record the exact number.
 - [x] ~~**T4. One-time HF login on TC1 head node.**~~ Done 2026-05-26: `huggingface_hub.login()` ran from inline Python; token `tc1-fyp-read` (read scope) registered for account `ueihorng`. Llama 3.2 license acceptance still TBD — will surface as a clear 401 in T5 if not accepted.
-- [ ] **T5. Pre-cache datasets + model weights on TC1 head node.** `make prefetch CONFIG=configs/tc1.yaml`. Takes ~15–30 minutes, ~20 GB total. Pure HTTP I/O (policy-compliant per TC1 user guide p.7–9).
+- [x] ~~**T5. Pre-cache datasets + model weights on TC1 head node.**~~ Done 2026-05-26 22:40. `make prefetch CONFIG=configs/tc1.yaml` succeeded. Cached: Llama 3.2 3B (12.9 GB), Qwen 2B (3.92 GB), Qwen 4B (8.68 GB), HarmBench standard config, 6 MMLU subjects. Total ~25.5 GB in `~/.cache/huggingface/hub/`. Bandwidth was excellent (>500 MB/s peaks) — full prefetch took <5 minutes.
 
-### 2.2 After pre-cache (validation)
+### 2.2 After pre-cache (validation) ← **YOU ARE HERE**
 
 - [ ] **T6. Run one smoke sbatch.** `sbatch slurm/jobs_tc1_smoke/qwen_2b_base__harmbench.sbatch`. Verify `results/qwen_2b_base/harmbench/summary.json` appears with a sensible `attack_success_rate`.
 - [ ] **T7. Check job efficiency.** `seff <jobid>` on the smoke job. If memory efficiency is borderline (>80%), bump `mem: 10G` to `16G` in `configs/tc1.yaml` and regenerate sbatch files before launching the matrix.
@@ -121,6 +124,7 @@ Every change to the repo gets one row. Timestamps are local time (UTC+8 / Asia/S
 
 | When (UTC+8) | Files | Change | Why / Notes | Report? | Who |
 |---|---|---|---|---|---|
+| 2026-05-26 22:45 | (TC1 session) | **T5 complete.** Ran `make prefetch CONFIG=configs/tc1.yaml` on TC1 head node. All 3 model repos and both HF datasets cached to `~/.cache/huggingface/hub/` (~25.5 GB total). Llama 3.2 3B license confirmed accepted (no 401). Tasks T2, T4, T5 all ticked off. Next step (T6) is smoke sbatch. | Session-handoff checkpoint before user starts a fresh chat. Status snapshot updated to reflect that T6 is the current frontier. | no | TAN UEI HORNG |
 | 2026-05-26 22:30 | `data/xstest_v2_prompts.csv` (new, 450 rows), `ethical_benchmark/benchmarks/xstest.py`, `ethical_benchmark/quant/config_schema.py`, `scripts/prefetch_tc1.py`, `configs/tc1.yaml`, `configs/default.yaml` | Bundled the canonical XSTest v2 prompts CSV directly in the repo at `data/xstest_v2_prompts.csv` (38 KB, 250 safe + 200 unsafe). Added `local_csv` field to `BenchmarkEntry` schema and `XSTestConfig` dataclass; XSTest plugin now loads from the CSV when `local_csv` is set (lazy-imports HF `datasets` only if it isn't). Updated `scripts/prefetch_tc1.py` to skip HF prefetch for benchmarks that use `local_csv`. Both configs now point at the local CSV. Verified locally: plugin returns exactly 250 benign / 450 total items. | Two HF dataset attempts failed — `allenai/xstest-response` is response data with wrong splits, `paul-rottger/xstest-prompts` doesn't exist on the Hub (the data lives in the GitHub repo as a CSV, not as an HF dataset). Bundling the canonical CSV is the most reproducible approach: zero HF dependency for XSTest at runtime, fully versioned in git, ~40 KB cost. Source URL: https://raw.githubusercontent.com/paul-rottger/xstest/main/xstest_prompts.csv. | yes | TAN UEI HORNG |
 | 2026-05-26 21:15 | `configs/tc1.yaml`, `configs/default.yaml`, `ethical_benchmark/benchmarks/xstest.py` | Switched XSTest dataset from `allenai/xstest-response` to `paul-rottger/xstest-prompts` (the canonical original XSTest dataset from Röttger et al. 2023). Changed split from `test` to `prompts`. Strengthened `_is_benign_prompt` to handle XSTest v2's `contrast_` prefix convention on the `type` field (unsafe prompts are categorised as `contrast_<category>` in v2) and an id-based fallback. | TC1 smoke test surfaced two problems with `allenai/xstest-response`: (1) splits are `response_harmfulness` / `response_refusal`, not `test`; (2) more fundamentally, the dataset contains pre-generated model responses for evaluation, not the original prompts. We generate responses ourselves, so we want the prompts-only dataset. `paul-rottger/xstest-prompts` is ungated, canonical, and used by the original paper. | yes | TAN UEI HORNG |
 | 2026-05-26 21:00 | `ethical_benchmark/benchmarks/harmbench.py`, `ethical_benchmark/benchmarks/xstest.py`, `ethical_benchmark/quant/config_schema.py`, `scripts/prefetch_tc1.py`, `configs/tc1.yaml`, `configs/default.yaml` | Added `config_name` field to `BenchmarkEntry` schema and to HarmBench/XSTest plugin dataclasses; both plugins now pass the config to `load_dataset()` when set. Updated `scripts/prefetch_tc1.py` to forward `config_name` (with a fallback default of `"standard"` for `walledai/HarmBench` even if the YAML omits it). Set `config_name: standard` on the HarmBench entry in both `configs/tc1.yaml` and `configs/default.yaml`. | TC1 dataset-load smoke test failed: `walledai/HarmBench` has three configs (`standard`, `contextual`, `copyright`) and refuses to load without one. We need the canonical 400-behaviour `standard` set. Bug would have killed the full matrix at the very first dataset load. T2 (re-sync) and T4 (HF login) confirmed complete on TC1 — see notes below. | no | TAN UEI HORNG |
