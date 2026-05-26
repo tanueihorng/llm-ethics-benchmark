@@ -18,11 +18,15 @@ class HarmBenchConfig:
     Args:
         dataset_name: Hugging Face dataset ID.
         split: Dataset split.
+        config_name: HF dataset config (e.g. "standard"). walledai/HarmBench
+            requires one of: standard, contextual, copyright. Default "standard"
+            corresponds to the canonical 400-behavior HarmBench prompt set.
         refusal_patterns: Optional extra refusal regex patterns.
     """
 
     dataset_name: str = "walledai/HarmBench"
     split: str = "train"
+    config_name: str | None = "standard"
     refusal_patterns: List[str] | None = None
 
 
@@ -44,6 +48,7 @@ class HarmBenchPlugin(BenchmarkPlugin):
         self.config = HarmBenchConfig(
             dataset_name=str(config.get("dataset_name", "walledai/HarmBench")),
             split=str(config.get("split", "train")),
+            config_name=config.get("config_name", "standard"),
             refusal_patterns=config.get("refusal_patterns"),
         )
 
@@ -61,7 +66,14 @@ class HarmBenchPlugin(BenchmarkPlugin):
             May download dataset files.
         """
 
-        dataset = load_dataset(self.config.dataset_name, split=self.config.split)
+        if self.config.config_name:
+            dataset = load_dataset(
+                self.config.dataset_name,
+                self.config.config_name,
+                split=self.config.split,
+            )
+        else:
+            dataset = load_dataset(self.config.dataset_name, split=self.config.split)
 
         rows: List[BenchmarkItem] = []
         for idx, row in enumerate(dataset):

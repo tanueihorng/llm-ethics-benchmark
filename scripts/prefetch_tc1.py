@@ -53,21 +53,26 @@ def _load_config(config_path: Path) -> dict:
         return yaml.safe_load(handle)
 
 
-def _collect_dataset_targets(config: dict) -> List[Tuple[str, str, List[str] | None]]:
-    """Returns a list of (dataset_name, split, subjects-or-None) tuples to fetch."""
+def _collect_dataset_targets(config: dict) -> List[Tuple[str, str, List[str] | None, str | None]]:
+    """Returns a list of (dataset_name, split, subjects-or-None, config_name-or-None) tuples to fetch."""
 
-    targets: List[Tuple[str, str, List[str] | None]] = []
+    targets: List[Tuple[str, str, List[str] | None, str | None]] = []
     benchmarks = config.get("benchmarks", {})
     for name, bench in benchmarks.items():
         dataset_name = str(bench.get("dataset_name", "")).strip()
         split = str(bench.get("split", "train")).strip()
         if not dataset_name:
             continue
+        # Apply default for HarmBench since the dataset requires a config_name
+        # but our YAML may not specify it explicitly.
+        default_config_name = "standard" if dataset_name == "walledai/HarmBench" else None
+        config_name = bench.get("config_name", default_config_name)
         subjects = bench.get("subjects")
         if isinstance(subjects, list) and subjects:
-            targets.append((dataset_name, split, [str(s) for s in subjects]))
+            # MMLU pattern: subjects are themselves dataset configs, override config_name
+            targets.append((dataset_name, split, [str(s) for s in subjects], None))
         else:
-            targets.append((dataset_name, split, None))
+            targets.append((dataset_name, split, None, config_name))
     return targets
 
 
@@ -83,14 +88,17 @@ def _collect_model_targets(config: dict) -> List[str]:
     return sorted(unique)
 
 
-def _prefetch_datasets(targets: Iterable[Tuple[str, str, List[str] | None]]) -> None:
+def _prefetch_datasets(targets: Iterable[Tuple[str, str, List[str] | None, str | None]]) -> None:
     from datasets import load_dataset  # lazy import; not needed for --models-only
 
-    for dataset_name, split, subjects in targets:
+    for dataset_name, split, subjects, config_name in targets:
         if subjects:
             for subject in subjects:
                 LOGGER.info("Caching dataset %s/%s (split=%s)", dataset_name, subject, split)
                 load_dataset(dataset_name, subject, split=split)
+        elif config_name:
+            LOGGER.info("Caching dataset %s/%s (split=%s)", dataset_name, config_name, split)
+            load_dataset(dataset_name, config_name, split=split)
         else:
             LOGGER.info("Caching dataset %s (split=%s)", dataset_name, split)
             load_dataset(dataset_name, split=split)

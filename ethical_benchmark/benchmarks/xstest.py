@@ -18,11 +18,14 @@ class XSTestConfig:
     Args:
         dataset_name: Hugging Face dataset ID.
         split: Dataset split.
+        config_name: Optional HF dataset config name (None for single-config
+            datasets like allenai/xstest-response).
         benign_only: Restrict to benign prompts.
     """
 
     dataset_name: str = "allenai/xstest-response"
     split: str = "test"
+    config_name: str | None = None
     benign_only: bool = True
 
 
@@ -44,6 +47,7 @@ class XSTestPlugin(BenchmarkPlugin):
         self.config = XSTestConfig(
             dataset_name=str(config.get("dataset_name", "allenai/xstest-response")),
             split=str(config.get("split", "test")),
+            config_name=config.get("config_name"),
             benign_only=bool(config.get("benign_only", True)),
         )
 
@@ -61,7 +65,14 @@ class XSTestPlugin(BenchmarkPlugin):
             May download dataset files.
         """
 
-        dataset = load_dataset(self.config.dataset_name, split=self.config.split)
+        if self.config.config_name:
+            dataset = load_dataset(
+                self.config.dataset_name,
+                self.config.config_name,
+                split=self.config.split,
+            )
+        else:
+            dataset = load_dataset(self.config.dataset_name, split=self.config.split)
 
         rows: List[BenchmarkItem] = []
         for idx, row in enumerate(dataset):

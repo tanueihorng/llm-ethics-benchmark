@@ -77,6 +77,7 @@ class BenchmarkEntry(BaseModel):
 
     dataset_name: str = Field(..., min_length=1)
     split: str = Field(..., min_length=1)
+    config_name: Optional[str] = None  # HF dataset config (e.g. HarmBench's "standard")
     max_samples: int = Field(default=300, ge=1)
     batch_size: int = Field(default=4, ge=1)
     subjects: Optional[List[str]] = None
