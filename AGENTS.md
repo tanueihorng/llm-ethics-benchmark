@@ -177,8 +177,8 @@ Key constraint enforced by schema: each `pair_id` must have ≥1 baseline + ≥1
 
 | pair_id | Baseline alias | 4-bit alias | model_id (shared) |
 |---------|----------------|-------------|-------------------|
-| qwen_2b | qwen_2b_base | qwen_2b_4bit | techwithsergiu/Qwen3.5-text-2B |
-| qwen_4b | qwen_4b_base | qwen_4b_4bit | techwithsergiu/Qwen3.5-text-4B |
+| qwen_2b | qwen_2b_base | qwen_2b_4bit | Qwen/Qwen3-1.7B |
+| qwen_4b | qwen_4b_base | qwen_4b_4bit | Qwen/Qwen3-4B |
 | llama_3_2_3b | llama_3_2_3b_base | llama_3_2_3b_4bit | meta-llama/Llama-3.2-3B-Instruct |
 
 Both members of every pair share the same `model_id`; quantization is applied on the fly via `BitsAndBytesConfig` at load time. All models use `dtype: auto` (resolves to float16 on CUDA, float32 on CPU) and `temperature: 0.0` (greedy decoding for determinism). The compute dtype for 4-bit loading follows the resolved model dtype.

@@ -6,7 +6,7 @@
 | **Student** | TAN UEI HORNG (UTAN001) — UTAN001@e.ntu.edu.sg |
 | **Supervisor** | Dr. Zhang Jiehuang — jiehuang.zhang@ntu.edu.sg |
 | **School** | College of Computing and Data Science, Nanyang Technological University |
-| **Last updated** | 2026-05-27 (15:10 UTC+8) |
+| **Last updated** | 2026-05-27 (15:40 UTC+8) |
 | **Last updated by** | Claude |
 
 > Whenever you edit this file, bump the **Last updated** date (and name, if a collaborator other than the student) to reflect the most recent change. This is the cheapest way to see at a glance whether the log is current.
@@ -70,7 +70,7 @@ Tasks are numbered globally as `T<N>` so they can be referenced unambiguously in
 ### 2.5 Backlog / nice-to-have (not blocking)
 
 - [ ] **T16.** Commit the current changes (configs/tc1.yaml, scripts/prefetch_tc1.py, Makefile additions, regenerated sbatch files, CLI fix, test fixture update, runbook revision, FYP report) as a coherent git commit.
-- [ ] **T17.** Consider migrating from `techwithsergiu/Qwen3.5-text-*` baselines to official `Qwen/Qwen2.5-*-Instruct` baselines with on-the-fly quantization. Stronger external validity. Trade-off: not the same exact weights you've been planning around.
+- [x] ~~**T17.**~~ Migrated from `techwithsergiu/Qwen3.5-text-*` to `Qwen/Qwen3-1.7B` + `Qwen/Qwen3-4B`. Forced by `CUDNN_STATUS_NOT_INITIALIZED` on TC1 (hybrid arch dependency); official Qwen3 is a better fit anyway (see D7).
 - [ ] **T18.** Add a multi-seed (T=0.7) sensitivity arm for one pair, to provide an independent variance estimate. Future-work item; not required for the interim report.
 - [ ] **T19.** Stochastic-decoding sensitivity, multi-method quantization (GPTQ/AWQ/GGUF), 0.5B/7B scale extension — all listed in Chapter 9 of the FYP report as future work; track here when scoped.
 
@@ -116,6 +116,12 @@ Decisions are numbered globally as `D<N>` for cross-reference (e.g. "see D3"). E
 
 **Rationale:** User explicitly stated they would use multiple coding agents (Codex + Claude). Different agents auto-load different files, so a single canonical file would only be read by one of them. Duplication with a sync discipline is more reliable than tooling. For the report: handing a stale docx to the supervisor undermines the deliverable; making `make report` a one-second rebuild removes the friction of keeping it current. Source-of-truth is the JS builder; the docx is an artifact and should never be hand-edited.
 
+### D7. 2026-05-27 — Switch Qwen pairs from techwithsergiu to official Qwen3 models
+
+**Decision:** Replace `techwithsergiu/Qwen3.5-text-2B` and `techwithsergiu/Qwen3.5-text-4B` with `Qwen/Qwen3-1.7B` and `Qwen/Qwen3-4B` respectively. Pair IDs, model aliases, and output directory paths remain unchanged.
+
+**Rationale:** The `techwithsergiu` models are third-party uploads with a hybrid linear-attention/SSM architecture that requires `causal-conv1d` and `flash-linear-attention` as runtime dependencies. Without those libraries, the fallback PyTorch `conv1d` path raises `CUDNN_STATUS_NOT_INITIALIZED` on TC1's V100 during the very first inference call. Official Qwen3 models are standard GQA transformers with no extra library requirements, are widely tested, and are from the same Qwen family. Qwen3-1.7B (≈1.7 B) and Qwen3-4B (≈4 B) preserve the intended scale comparison. Additionally, our existing `enable_thinking=False` chat-template flag was written specifically for Qwen3's thinking mode, making these models an ideal fit for the pipeline.
+
 ---
 
 ## 4. Changelog (one row per change; newest first)
@@ -124,6 +130,7 @@ Every change to the repo gets one row. Timestamps are local time (UTC+8 / Asia/S
 
 | When (UTC+8) | Files | Change | Why / Notes | Report? | Who |
 |---|---|---|---|---|---|
+| 2026-05-27 15:40 | `configs/tc1.yaml`, `configs/default.yaml`, `CLAUDE.md`, `AGENTS.md`, `scripts/build_fyp_report.js`, `docs/FYP_Report_2026-05-27.docx` | Switched Qwen model pairs from `techwithsergiu/Qwen3.5-text-2B/4B` → `Qwen/Qwen3-1.7B` and `Qwen/Qwen3-4B`. Updated `size_b` (2.0→1.7 for the 1.7B pair). Updated all references in CLAUDE.md, AGENTS.md, and the FYP report builder (abstract, model table, §5.4, §7.2 external validity, YAML appendix). Rebuilt docx. | `techwithsergiu/Qwen3.5-text-2B` is a third-party hybrid linear-attention/SSM model requiring `causal-conv1d` and `flash-linear-attention` libraries; without them its fallback `conv1d` raises `CUDNN_STATUS_NOT_INITIALIZED` on the V100. Official Qwen3 models are standard transformers with no extra dependencies. See D7. | yes | Claude |
 | 2026-05-27 15:10 | `slurm/jobs_tc1/*.sbatch` (6 files), `slurm/jobs_tc1_smoke/*.sbatch` (18 files), `slurm/cuda_check.sbatch` (new) | Fixed relative `#SBATCH --output/--error` paths → absolute paths (`/tc1home/FYP/utan001/fyp_quant/repo/results/slurm_logs_tc1/`) in all 24 sbatch files. Added `slurm/cuda_check.sbatch` with inline Python (no `/tmp` dependency). | Previous session revealed two bugs: (1) `/tmp/check_cuda.py` written on the head node is invisible to compute nodes (`/tmp` is local per-node); (2) relative log paths in `#SBATCH --output` resolve from submission CWD, not from the `cd` inside the script — jobs submitted from `~` wrote logs to `~/results/slurm_logs_tc1/` instead of the repo. | no | Claude |
 | 2026-05-27 00:55 | `docs/PROJECT_LOG.md`, `docs/FYP_Report_2026-05-27.docx` (regenerated) | Validated Codex's 00:34 and 00:41 changes end-to-end: (1) 122 tests still pass; (2) `diff AGENTS.md CLAUDE.md` shows only the intentional 24-line header difference; (3) `make report` rebuilds the new docx cleanly (51790 B, 859 paragraphs, all validations passed); (4) archive copy of the 2026-05-24 report is present at `docs/archive/FYP_Report_2026-05-24.docx`; (5) all references to the old docx path (`README.md`, `AGENTS.md`, `CLAUDE.md`, `PROJECT_LOG.md`, `scripts/build_fyp_report.js`) consistently point at the new 2026-05-27 file; (6) renumbered sections (Ch 3.4, 5.4, 5.5, 8, 10, Appendix A, E, G) all reflect the corrected dataset story (HarmBench 200, XSTest local CSV 250, HF login via inline Python, observed cache ~25.5 GB). Final regeneration brings the docx in sync with the very latest log row. | Independent validation pass before user starts a fresh chat session. No corrections needed to Codex's work — everything is consistent and correct. | yes | Claude |
 | 2026-05-27 00:41 | `scripts/build_fyp_report.js`, `README.md`, `AGENTS.md`, `CLAUDE.md`, `docs/PROJECT_LOG.md`, `docs/FYP_Report_2026-05-27.docx`, `docs/archive/FYP_Report_2026-05-24.docx` | Rolled the generated FYP report artifact forward from `FYP_Report_2026-05-24.docx` to `FYP_Report_2026-05-27.docx`; updated active references and report revision history; archived the 2026-05-24 report for traceability. | User asked why the report name was not changed to today's date after report-worthy 2026-05-27 updates. | yes | Codex |

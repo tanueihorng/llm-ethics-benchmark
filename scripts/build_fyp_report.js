@@ -268,7 +268,7 @@ const cover = [
 const abstract = [
   H1NoBreak("Abstract"),
   PJ("Compact instruction-tuned language models in the one-to-four-billion-parameter range are increasingly deployed on edge devices and consumer hardware, where four-bit quantization has become the de facto compression method for fitting them into available memory. However, quantization is not behaviourally neutral: emerging evidence suggests it can alter safety alignment, refusal calibration, and general capability in non-trivial ways. Existing large-scale ethical benchmarking efforts, such as TrustLLM, DecodingTrust, and SafetyBench, primarily evaluate full-precision mid-to-large models and do not systematically address how compression interacts with safety in the compact-deployment regime."),
-  PJ("This work designs and implements a research-grade benchmarking framework to study safety–capability trade-offs in four-bit quantized compact language models. The study adopts a matched-pair experimental design in which baseline and four-bit variants are loaded from the same underlying weights, differing only by the application of on-the-fly BitsAndBytes NF4 quantization at load time. This design choice eliminates publisher- and pipeline-asymmetry as confounds, isolating quantization itself as the sole experimental variable. Three model pairs are evaluated: Qwen3.5-text-2B, Qwen3.5-text-4B, and Llama-3.2-3B-Instruct as a cross-family robustness check."),
+  PJ("This work designs and implements a research-grade benchmarking framework to study safety–capability trade-offs in four-bit quantized compact language models. The study adopts a matched-pair experimental design in which baseline and four-bit variants are loaded from the same underlying weights, differing only by the application of on-the-fly BitsAndBytes NF4 quantization at load time. This design choice eliminates publisher- and pipeline-asymmetry as confounds, isolating quantization itself as the sole experimental variable. Three model pairs are evaluated: Qwen3-1.7B, Qwen3-4B, and Llama-3.2-3B-Instruct as a cross-family robustness check."),
   PJ("Each pair is scored on three complementary benchmarks: HarmBench (harmful compliance, measured as Attack Success Rate), XSTest (over-refusal on benign prompts), and a curated MMLU subset (general capability). A deterministic, regex-based scoring pipeline ensures reproducibility and removes judge-model variance. Pairwise deltas are combined through a rule-based interpretation layer that distinguishes genuine alignment shifts from capability collapse masquerading as safety. The benchmarking framework, three benchmark plugins, cluster job orchestration for the NTU TC1 GPU cluster, and a verification suite of 122 tests are complete; experimental runs are pending submission. This document records the full design, implementation, intended analysis, and limitations of the study."),
 ];
 
@@ -395,14 +395,14 @@ const ch3 = [
   PJ("The independent variables are quantization state (baseline versus four-bit), model scale (two billion versus four billion parameters within the Qwen family), and model family (Qwen versus Llama). The dependent variables are harmful compliance, over-refusal on benign prompts, and general capability, each measured by a corresponding benchmark."),
 
   H2("3.2 Model Selection"),
-  PJ("Three model pairs are evaluated. The Qwen pairs at two billion and four billion parameters serve as the primary within-family comparison and provide both a quantization axis and a scale axis. The Llama 3.2 3B pair sits between them by parameter count and serves as a cross-family robustness check. Table 3.1 summarises the model matrix."),
+  PJ("Three model pairs are evaluated. The Qwen pairs at 1.7 billion and four billion parameters serve as the primary within-family comparison and provide both a quantization axis and a scale axis. The Llama 3.2 3B pair sits between them by parameter count and serves as a cross-family robustness check. Table 3.1 summarises the model matrix."),
   buildTable(
     ["Pair ID", "Role", "Model alias", "Hugging Face model_id", "Family", "Size"],
     [
-      ["qwen_2b", "Primary (BF/FP16)", "qwen_2b_base", "techwithsergiu/Qwen3.5-text-2B", "Qwen", "2 B"],
-      ["qwen_2b", "Primary (4-bit)", "qwen_2b_4bit", "techwithsergiu/Qwen3.5-text-2B", "Qwen", "2 B"],
-      ["qwen_4b", "Primary (BF/FP16)", "qwen_4b_base", "techwithsergiu/Qwen3.5-text-4B", "Qwen", "4 B"],
-      ["qwen_4b", "Primary (4-bit)", "qwen_4b_4bit", "techwithsergiu/Qwen3.5-text-4B", "Qwen", "4 B"],
+      ["qwen_2b", "Primary (BF/FP16)", "qwen_2b_base", "Qwen/Qwen3-1.7B", "Qwen", "1.7 B"],
+      ["qwen_2b", "Primary (4-bit)", "qwen_2b_4bit", "Qwen/Qwen3-1.7B", "Qwen", "1.7 B"],
+      ["qwen_4b", "Primary (BF/FP16)", "qwen_4b_base", "Qwen/Qwen3-4B", "Qwen", "4 B"],
+      ["qwen_4b", "Primary (4-bit)", "qwen_4b_4bit", "Qwen/Qwen3-4B", "Qwen", "4 B"],
       ["llama_3_2_3b", "Cross-family (BF/FP16)", "llama_3_2_3b_base", "meta-llama/Llama-3.2-3B-Instruct", "Llama", "3 B"],
       ["llama_3_2_3b", "Cross-family (4-bit)", "llama_3_2_3b_4bit", "meta-llama/Llama-3.2-3B-Instruct", "Llama", "3 B"],
     ],
@@ -631,7 +631,7 @@ const ch5 = [
   PJ("The guide also recommends sbatch over srun for all real job submission: \"Avoid using the command 'srun' to submit job ... all users are advised to use the command 'sbatch' for job submission. Then exit from the session, access later to see the result.\" This study therefore submits every job, including the initial smoke validation, via sbatch."),
 
   H2("5.4 Hugging Face Access and Gating"),
-  PJ("The Qwen pairs draw from open-access checkpoints under the techwithsergiu namespace and require no authentication. The Llama pair uses meta-llama/Llama-3.2-3B-Instruct, which is gated under the Meta Llama community license, and HarmBench currently also requires accepted Hugging Face dataset access conditions. Access is handled by logging into Hugging Face once on the TC1 head node with a read-scoped personal access token. As of 2026-05-26, token registration and gated-access acceptance have been verified by a successful full pre-cache of both Llama 3.2 3B and HarmBench."),
+  PJ("The Qwen pairs draw from open-access official Qwen3 checkpoints (Qwen/Qwen3-1.7B and Qwen/Qwen3-4B) and require no authentication. The Llama pair uses meta-llama/Llama-3.2-3B-Instruct, which is gated under the Meta Llama community license, and HarmBench currently also requires accepted Hugging Face dataset access conditions. Access is handled by logging into Hugging Face once on the TC1 head node with a read-scoped personal access token. As of 2026-05-26, token registration and gated-access acceptance have been verified by a successful full pre-cache of both Llama 3.2 3B and HarmBench."),
 
   H2("5.5 Offline-Mode Strategy and Pre-Cache"),
   PJ("Because the compute nodes may not have outbound internet access, and because runtime downloads risk burning the six-hour walltime budget on slow Hugging Face mirrors, this study adopts a strict offline-mode strategy. All datasets and model weights are pre-cached on the head node before any SLURM job is submitted. SLURM jobs then run with HF_HUB_OFFLINE=1, HF_DATASETS_OFFLINE=1, and TRANSFORMERS_OFFLINE=1 exported in the sbatch setup_commands block, ensuring that any cache miss fails immediately with a clear error rather than hanging on a network attempt."),
@@ -717,7 +717,7 @@ const ch7 = [
   PJ("Internal validity is the strongest property of the present design. The matched-pair structure, combined with on-the-fly NF4 quantization from identical baseline weights, isolates quantization as the sole experimental variable. There is no plausible alternative explanation for an observed delta beyond the quantization step itself, the act of loading the same checkpoint twice, or measurement noise. Deterministic decoding eliminates within-condition variance from generation, and deterministic regex-based scoring eliminates judge-model variance from evaluation. The resume logic prevents partial-run contamination: every reported metric is computed from a complete raw.jsonl that contains exactly the configured number of prompts."),
 
   H2("7.2 External Validity"),
-  PJ("External validity is bounded by three explicit design choices. First, findings are bounded to BitsAndBytes NF4 quantization. Alternative methods such as GPTQ, AWQ, and the GGUF family used by llama.cpp may produce different effects, both quantitatively and qualitatively; the present study does not claim to characterise those methods. Second, the techwithsergiu Qwen baselines are text-only derivatives of a multimodal Qwen series produced by removing the visual tower. Results therefore describe quantization behaviour on that specific weight provenance and may not transfer perfectly to the official Qwen 2.5 or Qwen 3 instruction checkpoints that are more commonly deployed in production. Third, the study is restricted to English-language, text-only interactions; multilingual and multimodal effects are out of scope."),
+  PJ("External validity is bounded by three explicit design choices. First, findings are bounded to BitsAndBytes NF4 quantization. Alternative methods such as GPTQ, AWQ, and the GGUF family used by llama.cpp may produce different effects, both quantitatively and qualitatively; the present study does not claim to characterise those methods. Second, the Qwen3 baselines (Qwen3-1.7B and Qwen3-4B) are instruction-tuned dense models from the official Alibaba Qwen3 release; results describe quantization behaviour on this specific model family and may not transfer directly to other architectures or training regimes. Third, the study is restricted to English-language, text-only interactions; multilingual and multimodal effects are out of scope."),
 
   H2("7.3 Construct Validity"),
   PJ("Each benchmark operationalises its dimension in a specific way. HarmBench captures one curated definition of \"harmful compliance\" against a particular set of adversarial prompts; other operationalisations exist and may yield different absolute numbers. XSTest captures over-refusal against a specific distribution of benign-but-suspicious prompts. The MMLU subset, even with diverse subject coverage, is a partial capability proxy and does not measure all reasoning capacities relevant to deployment (such as code generation, long-context reasoning, or tool use). These construct boundaries are common in safety evaluation but should be borne in mind when interpreting the results."),
@@ -805,20 +805,20 @@ const tc1Yaml = `study_name: safety_capability_tradeoff_4bit_slm
 models:
   qwen_2b_base:
     family: qwen
-    size_b: 2.0
+    size_b: 1.7
     quantized: false
     pair_id: qwen_2b
-    model_id: techwithsergiu/Qwen3.5-text-2B
+    model_id: Qwen/Qwen3-1.7B
     trust_remote_code: false
     dtype: auto
     benchmarks: [harmbench, xstest, mmlu]
 
   qwen_2b_4bit:
     family: qwen
-    size_b: 2.0
+    size_b: 1.7
     quantized: true
     pair_id: qwen_2b
-    model_id: techwithsergiu/Qwen3.5-text-2B
+    model_id: Qwen/Qwen3-1.7B
     trust_remote_code: false
     dtype: auto
     benchmarks: [harmbench, xstest, mmlu]
@@ -828,7 +828,7 @@ models:
     size_b: 4.0
     quantized: false
     pair_id: qwen_4b
-    model_id: techwithsergiu/Qwen3.5-text-4B
+    model_id: Qwen/Qwen3-4B
     trust_remote_code: false
     dtype: auto
     benchmarks: [harmbench, xstest, mmlu]
@@ -838,7 +838,7 @@ models:
     size_b: 4.0
     quantized: true
     pair_id: qwen_4b
-    model_id: techwithsergiu/Qwen3.5-text-4B
+    model_id: Qwen/Qwen3-4B
     trust_remote_code: false
     dtype: auto
     benchmarks: [harmbench, xstest, mmlu]
