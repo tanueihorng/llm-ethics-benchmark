@@ -6,7 +6,7 @@
 | **Student** | TAN UEI HORNG (UTAN001) — UTAN001@e.ntu.edu.sg |
 | **Supervisor** | Dr. Zhang Jiehuang — jiehuang.zhang@ntu.edu.sg |
 | **School** | College of Computing and Data Science, Nanyang Technological University |
-| **Last updated** | 2026-05-27 (18:30 UTC+8) |
+| **Last updated** | 2026-05-27 (19:00 UTC+8) |
 | **Last updated by** | Claude |
 
 > Whenever you edit this file, bump the **Last updated** date (and name, if a collaborator other than the student) to reflect the most recent change. This is the cheapest way to see at a glance whether the log is current.
@@ -17,9 +17,9 @@ If you're a future Claude session or a collaborator reading this for the first t
 
 ---
 
-## 1. Status snapshot (updated 2026-05-27 18:30 UTC+8)
+## 1. Status snapshot (updated 2026-05-27 19:00 UTC+8)
 
-> **Session handoff (read this first if you're a fresh agent / new chat):** As of 2026-05-27 18:30 UTC+8, the Qwen 2B pair is **complete** (jobs 60976 + 60977, all 6 summary files verified). Qwen 4B pair has been submitted (jobs TBD — user to paste job IDs). Llama pair is still pending. Key results so far: qwen_2b_base ASR=0.775, qwen_2b_4bit ASR=0.655 (Δ=−0.120); base XSTest OR=0.032, 4bit OR=0.016 (Δ=−0.016); base MMLU=0.620, 4bit MMLU=0.533 (Δ=−0.087). All documented in Chapter 6 of the FYP report. Continue to use direct `sbatch` (see D8). Next step: monitor Qwen 4B jobs with `squeue -u utan001`; when done, submit `llama_3_2_3b_base__matrix.sbatch` + `llama_3_2_3b_4bit__matrix.sbatch`; then run `make analyze CONFIG=configs/tc1.yaml`. Latest Mac commit pushed; TC1 needs `git pull --ff-only` to receive report update.
+> **Session handoff (read this first if you're a fresh agent / new chat):** As of 2026-05-27 19:00 UTC+8: Qwen 2B complete, Qwen 4B base complete (job 60978), Qwen 4B 4-bit running (job 60979, ~25-35 min total), Llama pending. **Immediate next steps:** (1) Wait for job 60979 to clear — `squeue -u utan001`. (2) Paste `seff 60979` + all three `results/qwen_4b_4bit/*/summary.json` for doc update. (3) Submit Llama pair: `sbatch slurm/jobs_tc1/llama_3_2_3b_base__matrix.sbatch` + `sbatch slurm/jobs_tc1/llama_3_2_3b_4bit__matrix.sbatch`. (4) When all 6 done: `ls results/*/*/summary.json` (expect 18 files) then `make analyze CONFIG=configs/tc1.yaml`. (5) Populate remaining Table 6.1 cells + run final `make report`. Use direct `sbatch` only (see D8). Latest commit on Mac: pushed. TC1 needs `git pull --ff-only`.
 
 
 | Dimension | State |
@@ -30,8 +30,8 @@ If you're a future Claude session or a collaborator reading this for the first t
 | **SLURM scripts** | 6 per-model `*_matrix.sbatch` files under `slurm/jobs_tc1/`, 18 smoke sbatch files under `slurm/jobs_tc1_smoke/`, and `slurm/cuda_check.sbatch`. All log paths are now **absolute** — safe to `sbatch` from any directory. Always submit from the repo root (`cd /tc1home/FYP/utan001/fyp_quant/repo`) for consistency. |
 | **Hugging Face auth** | ✅ Done 2026-05-26. Token `tc1-fyp-read` (read scope) registered for account `ueihorng` via `huggingface_hub.login()`. Llama 3.2 3B license confirmed accepted (model weights downloaded successfully without 401). |
 | **Datasets / model weights** | ✅ Pre-cached on TC1 (head node). Current required model repos are cached as of 2026-05-27 15:37: Qwen3-1.7B (4.08 GB), Qwen3-4B (8.06 GB), and Llama 3.2 3B (12.9 GB). HarmBench + 6 MMLU subjects are cached. XSTest is bundled as `data/xstest_v2_prompts.csv` (no HF dependency). |
-| **Experiments** | **2 of 3 pairs submitted; 1 of 3 complete.** Qwen 2B pair done: jobs 60976 (qwen_2b_base, 10m06s, 2.47 GB) and 60977 (qwen_2b_4bit, 26m00s, 4.82 GB), all 6 summary files verified. Preliminary results: ASR 0.775→0.655 (Δ=−0.120), XSTest OR 0.032→0.016 (Δ=−0.016), MMLU 0.620→0.533 (Δ=−0.087). Pattern: likely capability-collapse-masquerading-as-safety. Qwen 4B pair submitted; Llama pair pending. **NEXT: monitor Qwen 4B → submit Llama → run `make analyze`.** |
-| **Current FYP report** | `docs/FYP_Report_2026-05-27.docx` — Chapter 6 populated with Qwen 2B actuals; §6.6 preliminary analysis written; abstract and conclusion updated. |
+| **Experiments** | **3 of 6 jobs done; 1 running; 2 pending.** Qwen 2B pair: jobs 60976 (10m06s, 2.47 GB) + 60977 (26m00s, 4.82 GB) — DONE. Qwen 4B base: job 60978 (11m35s, 7.75 GB) — DONE. Qwen 4B 4-bit: job 60979 — RUNNING. Llama pair: not yet submitted. Key data so far: Qwen 2B ASR 0.775→0.655 (Δ=−0.120), OR 0.032→0.016 (Δ=−0.016), MMLU 0.620→0.533 (Δ=−0.087). Qwen 4B base: ASR=0.860, OR=0.016, MMLU=0.747. **NEXT: wait 60979 → submit Llama → verify 18 summaries → `make analyze`.** |
+| **Current FYP report** | `docs/FYP_Report_2026-05-27.docx` (56121 bytes) — Ch6 populated with Qwen 2B actuals + Qwen 4B base values; §6.2 scale analysis; §6.6 Qwen 2B observations; §6.7 baseline scale comparison. |
 | **Last supervisor update** | 2026-03-09 (~2.5 months ago). Re-engagement email drafted in conversation but not yet sent. |
 
 ---
@@ -55,7 +55,7 @@ Tasks are numbered globally as `T<N>` so they can be referenced unambiguously in
 
 ### 2.3 After smoke passes (run the matrix) ← **YOU ARE HERE**
 
-- [ ] **T8. Submit the 6-job matrix.** In progress — 4 of 6 jobs submitted. Qwen 2B pair complete: jobs 60976 (qwen_2b_base, 10m) and 60977 (qwen_2b_4bit, 26m), both COMPLETED, all 6 summary files verified. Qwen 4B pair submitted (monitor with `squeue -u utan001`). Llama pair pending — submit after Qwen 4B clears.
+- [ ] **T8. Submit the 6-job matrix.** In progress — 5 of 6 jobs submitted. Done: 60976 (qwen_2b_base), 60977 (qwen_2b_4bit), 60978 (qwen_4b_base). Running: 60979 (qwen_4b_4bit). Pending: Llama pair (submit after 60979 clears). When 60979 done, submit `llama_3_2_3b_base__matrix.sbatch` + `llama_3_2_3b_4bit__matrix.sbatch`.
 - [ ] **T9. Monitor.** `squeue -u utan001`, `MyJobHistory`, `seff <jobid>` after each completes.
 - [ ] **T10. Run analysis.** `make analyze CONFIG=configs/tc1.yaml` to compute pairwise deltas and interpretation labels. Outputs to `results/analysis/`.
 
