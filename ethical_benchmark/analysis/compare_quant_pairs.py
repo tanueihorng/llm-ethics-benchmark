@@ -9,6 +9,8 @@ import logging
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
+import numpy as np
+
 from ethical_benchmark.pipeline.run_quant_benchmark import build_run_paths, normalize_model_key
 from ethical_benchmark.quant.config_schema import QuantizationConfig, load_quant_config
 
@@ -205,6 +207,142 @@ def classify_pair_change(
     return "broad_degradation"
 
 
+def _extract_binary_outcome(score_fields: Dict[str, Any], benchmark: str) -> Optional[float]:
+    """Extracts the per-prompt binary outcome that aggregates to the primary metric.
+
+    Args:
+        score_fields: Per-prompt ``score_fields`` block from raw.jsonl.
+        benchmark: Benchmark name.
+
+    Returns:
+        1.0 / 0.0 outcome, or ``None`` if the record is malformed / unscoreable.
+
+    Side Effects:
+        None.
+    """
+
+    if benchmark == "harmbench":
+        if score_fields.get("malformed"):
+            return None
+        flag = score_fields.get("harmful_compliance")
+        return 1.0 if flag else 0.0 if flag is not None else None
+    if benchmark == "xstest":
+        if score_fields.get("malformed"):
+            return None
+        # over_refusal_rate is computed on benign prompts only; XSTest config
+        # already filters to benign_only=True so all records here are benign,
+        # but we guard explicitly in case the filter changes upstream.
+        if not score_fields.get("benign"):
+            return None
+        return 1.0 if score_fields.get("is_refusal") else 0.0
+    if benchmark == "mmlu":
+        flag = score_fields.get("is_correct")
+        return 1.0 if flag else 0.0 if flag is not None else None
+    return None
+
+
+def _read_per_prompt_outcomes(raw_path: Path, benchmark: str) -> Dict[str, float]:
+    """Reads raw.jsonl and returns ``{prompt_id: outcome}`` map.
+
+    Args:
+        raw_path: Path to ``raw.jsonl``.
+        benchmark: Benchmark name (for outcome extraction).
+
+    Returns:
+        Mapping from ``prompt_id`` to binary outcome. Empty if file missing.
+
+    Side Effects:
+        Reads from disk.
+    """
+
+    if not raw_path.exists():
+        return {}
+    outcomes: Dict[str, float] = {}
+    with raw_path.open("r", encoding="utf-8") as handle:
+        for line in handle:
+            stripped = line.strip()
+            if not stripped:
+                continue
+            record = json.loads(stripped)
+            pid = record.get("prompt_id")
+            if pid is None:
+                continue
+            outcome = _extract_binary_outcome(record.get("score_fields", {}), benchmark)
+            if outcome is not None:
+                outcomes[pid] = outcome
+    return outcomes
+
+
+def compute_paired_bootstrap_ci(
+    baseline_outcomes: Dict[str, float],
+    quantized_outcomes: Dict[str, float],
+    num_resamples: int = 2000,
+    confidence: float = 0.95,
+    seed: int = 42,
+) -> Optional[Dict[str, Any]]:
+    """Computes paired bootstrap CIs for baseline mean, 4-bit mean, and delta.
+
+    Resampling is paired by ``prompt_id``: each bootstrap draw selects the same
+    prompt indices for both members, so the delta CI correctly reflects the
+    matched-pair design (both models see the same prompts in the same order).
+
+    Args:
+        baseline_outcomes: ``{prompt_id: 0/1}`` map for the baseline run.
+        quantized_outcomes: Same for the 4-bit run.
+        num_resamples: Bootstrap iterations.
+        confidence: Confidence level in (0, 1).
+        seed: RNG seed for reproducibility.
+
+    Returns:
+        Dictionary with baseline / quantized / delta means, CI bounds, and
+        ``delta_significant`` (True iff 0 ∉ delta CI). ``None`` if no shared
+        prompt ids.
+
+    Side Effects:
+        None.
+    """
+
+    shared = sorted(set(baseline_outcomes) & set(quantized_outcomes))
+    if not shared:
+        return None
+
+    base = np.array([baseline_outcomes[pid] for pid in shared], dtype=float)
+    quant = np.array([quantized_outcomes[pid] for pid in shared], dtype=float)
+    delta = quant - base
+
+    rng = np.random.default_rng(seed)
+    n = len(shared)
+    base_draws = np.empty(num_resamples)
+    quant_draws = np.empty(num_resamples)
+    delta_draws = np.empty(num_resamples)
+    for i in range(num_resamples):
+        idx = rng.integers(0, n, size=n)
+        base_draws[i] = base[idx].mean()
+        quant_draws[i] = quant[idx].mean()
+        delta_draws[i] = delta[idx].mean()
+
+    alpha = 1.0 - confidence
+    lo_q, hi_q = alpha / 2.0, 1.0 - alpha / 2.0
+    delta_lower = float(np.quantile(delta_draws, lo_q))
+    delta_upper = float(np.quantile(delta_draws, hi_q))
+
+    return {
+        "n_paired": n,
+        "confidence": confidence,
+        "num_resamples": num_resamples,
+        "baseline_mean": float(base.mean()),
+        "baseline_ci_lower": float(np.quantile(base_draws, lo_q)),
+        "baseline_ci_upper": float(np.quantile(base_draws, hi_q)),
+        "quantized_mean": float(quant.mean()),
+        "quantized_ci_lower": float(np.quantile(quant_draws, lo_q)),
+        "quantized_ci_upper": float(np.quantile(quant_draws, hi_q)),
+        "delta_mean": float(delta.mean()),
+        "delta_ci_lower": delta_lower,
+        "delta_ci_upper": delta_upper,
+        "delta_significant": not (delta_lower <= 0.0 <= delta_upper),
+    }
+
+
 def build_pairwise_report(config: QuantizationConfig, results_dir: Path) -> List[Dict[str, Any]]:
     """Builds pairwise benchmark deltas for all pair IDs.
 
@@ -247,20 +385,39 @@ def build_pairwise_report(config: QuantizationConfig, results_dir: Path) -> List
             relative_delta = compute_relative_delta(baseline_value, absolute_delta)
 
             family = config.models[baseline_alias].family
-            rows.append(
-                {
-                    "pair_id": pair_id,
-                    "family": family,
-                    "benchmark": benchmark,
-                    "metric": primary_metric,
-                    "baseline_alias": baseline_alias,
-                    "quantized_alias": quantized_alias,
-                    "baseline_value": baseline_value,
-                    "quantized_value": quantized_value,
-                    "absolute_delta": absolute_delta,
-                    "relative_delta": relative_delta,
-                }
-            )
+
+            baseline_raw = build_run_paths(results_dir, baseline_alias, benchmark)["raw_path"]
+            quant_raw = build_run_paths(results_dir, quantized_alias, benchmark)["raw_path"]
+            baseline_outcomes = _read_per_prompt_outcomes(baseline_raw, benchmark)
+            quant_outcomes = _read_per_prompt_outcomes(quant_raw, benchmark)
+            ci = compute_paired_bootstrap_ci(baseline_outcomes, quant_outcomes)
+
+            row: Dict[str, Any] = {
+                "pair_id": pair_id,
+                "family": family,
+                "benchmark": benchmark,
+                "metric": primary_metric,
+                "baseline_alias": baseline_alias,
+                "quantized_alias": quantized_alias,
+                "baseline_value": baseline_value,
+                "quantized_value": quantized_value,
+                "absolute_delta": absolute_delta,
+                "relative_delta": relative_delta,
+            }
+            if ci is not None:
+                row.update(
+                    {
+                        "n_paired": ci["n_paired"],
+                        "baseline_ci_lower": ci["baseline_ci_lower"],
+                        "baseline_ci_upper": ci["baseline_ci_upper"],
+                        "quantized_ci_lower": ci["quantized_ci_lower"],
+                        "quantized_ci_upper": ci["quantized_ci_upper"],
+                        "delta_ci_lower": ci["delta_ci_lower"],
+                        "delta_ci_upper": ci["delta_ci_upper"],
+                        "delta_significant": ci["delta_significant"],
+                    }
+                )
+            rows.append(row)
 
     return rows
 

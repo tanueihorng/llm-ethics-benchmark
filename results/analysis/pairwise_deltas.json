@@ -9,7 +9,15 @@
     "baseline_value": 0.95,
     "quantized_value": 0.98,
     "absolute_delta": 0.030000000000000027,
-    "relative_delta": 0.03157894736842108
+    "relative_delta": 0.03157894736842108,
+    "n_paired": 200,
+    "baseline_ci_lower": 0.915,
+    "baseline_ci_upper": 0.98,
+    "quantized_ci_lower": 0.96,
+    "quantized_ci_upper": 0.995,
+    "delta_ci_lower": 0.0,
+    "delta_ci_upper": 0.065,
+    "delta_significant": false
   },
   {
     "pair_id": "llama_3_2_3b",
@@ -21,7 +29,15 @@
     "baseline_value": 0.0,
     "quantized_value": 0.0,
     "absolute_delta": 0.0,
-    "relative_delta": null
+    "relative_delta": null,
+    "n_paired": 250,
+    "baseline_ci_lower": 0.0,
+    "baseline_ci_upper": 0.0,
+    "quantized_ci_lower": 0.0,
+    "quantized_ci_upper": 0.0,
+    "delta_ci_lower": 0.0,
+    "delta_ci_upper": 0.0,
+    "delta_significant": false
   },
   {
     "pair_id": "llama_3_2_3b",
@@ -33,7 +49,15 @@
     "baseline_value": 0.61,
     "quantized_value": 0.5666666666666667,
     "absolute_delta": -0.043333333333333335,
-    "relative_delta": -0.07103825136612023
+    "relative_delta": -0.07103825136612023,
+    "n_paired": 300,
+    "baseline_ci_lower": 0.5533333333333333,
+    "baseline_ci_upper": 0.6633333333333333,
+    "quantized_ci_lower": 0.51,
+    "quantized_ci_upper": 0.6233333333333333,
+    "delta_ci_lower": -0.08,
+    "delta_ci_upper": -0.006666666666666667,
+    "delta_significant": true
   },
   {
     "pair_id": "qwen_2b",
@@ -45,7 +69,15 @@
     "baseline_value": 0.775,
     "quantized_value": 0.655,
     "absolute_delta": -0.12,
-    "relative_delta": -0.15483870967741933
+    "relative_delta": -0.15483870967741933,
+    "n_paired": 200,
+    "baseline_ci_lower": 0.715,
+    "baseline_ci_upper": 0.83,
+    "quantized_ci_lower": 0.59,
+    "quantized_ci_upper": 0.72,
+    "delta_ci_lower": -0.19,
+    "delta_ci_upper": -0.05,
+    "delta_significant": true
   },
   {
     "pair_id": "qwen_2b",
@@ -57,7 +89,15 @@
     "baseline_value": 0.032,
     "quantized_value": 0.016,
     "absolute_delta": -0.016,
-    "relative_delta": -0.5
+    "relative_delta": -0.5,
+    "n_paired": 250,
+    "baseline_ci_lower": 0.012,
+    "baseline_ci_upper": 0.056,
+    "quantized_ci_lower": 0.004,
+    "quantized_ci_upper": 0.032,
+    "delta_ci_lower": -0.04,
+    "delta_ci_upper": 0.004,
+    "delta_significant": false
   },
   {
     "pair_id": "qwen_2b",
@@ -69,7 +109,15 @@
     "baseline_value": 0.62,
     "quantized_value": 0.5333333333333333,
     "absolute_delta": -0.08666666666666667,
-    "relative_delta": -0.13978494623655915
+    "relative_delta": -0.13978494623655915,
+    "n_paired": 300,
+    "baseline_ci_lower": 0.5633333333333334,
+    "baseline_ci_upper": 0.6733333333333333,
+    "quantized_ci_lower": 0.47333333333333333,
+    "quantized_ci_upper": 0.59,
+    "delta_ci_lower": -0.13666666666666666,
+    "delta_ci_upper": -0.03666666666666667,
+    "delta_significant": true
   },
   {
     "pair_id": "qwen_4b",
@@ -81,7 +129,15 @@
     "baseline_value": 0.86,
     "quantized_value": 0.815,
     "absolute_delta": -0.04500000000000004,
-    "relative_delta": -0.05232558139534888
+    "relative_delta": -0.05232558139534888,
+    "n_paired": 200,
+    "baseline_ci_lower": 0.8098750000000002,
+    "baseline_ci_upper": 0.905,
+    "quantized_ci_lower": 0.76,
+    "quantized_ci_upper": 0.865,
+    "delta_ci_lower": -0.1,
+    "delta_ci_upper": 0.005,
+    "delta_significant": false
   },
   {
     "pair_id": "qwen_4b",
@@ -93,7 +149,15 @@
     "baseline_value": 0.016,
     "quantized_value": 0.016,
     "absolute_delta": 0.0,
-    "relative_delta": 0.0
+    "relative_delta": 0.0,
+    "n_paired": 250,
+    "baseline_ci_lower": 0.004,
+    "baseline_ci_upper": 0.032,
+    "quantized_ci_lower": 0.004,
+    "quantized_ci_upper": 0.032,
+    "delta_ci_lower": -0.012,
+    "delta_ci_upper": 0.012,
+    "delta_significant": false
   },
   {
     "pair_id": "qwen_4b",
@@ -105,6 +169,14 @@
     "baseline_value": 0.7466666666666667,
     "quantized_value": 0.7433333333333333,
     "absolute_delta": -0.0033333333333334103,
-    "relative_delta": -0.004464285714285817
+    "relative_delta": -0.004464285714285817,
+    "n_paired": 300,
+    "baseline_ci_lower": 0.6966666666666667,
+    "baseline_ci_upper": 0.7966666666666666,
+    "quantized_ci_lower": 0.6933333333333334,
+    "quantized_ci_upper": 0.7933333333333333,
+    "delta_ci_lower": -0.04,
+    "delta_ci_upper": 0.03333333333333333,
+    "delta_significant": false
   }
 ]

@@ -6,9 +6,11 @@ import json
 from pathlib import Path
 
 from ethical_benchmark.analysis.compare_quant_pairs import (
+    _extract_binary_outcome,
     build_pairwise_report,
     classify_pair_change,
     compute_cross_family_consistency,
+    compute_paired_bootstrap_ci,
     compute_relative_delta,
     compute_scale_sensitivity,
     summarize_pair_labels,
@@ -55,6 +57,44 @@ def test_classify_pair_change_incomplete_when_any_delta_missing() -> None:
     assert classify_pair_change(0.0, None, 0.0) == "incomplete"
     assert classify_pair_change(0.0, 0.0, None) == "incomplete"
     assert classify_pair_change(None, None, None) == "incomplete"
+
+
+def test_extract_binary_outcome() -> None:
+    assert _extract_binary_outcome({"harmful_compliance": True, "malformed": False}, "harmbench") == 1.0
+    assert _extract_binary_outcome({"harmful_compliance": False, "malformed": False}, "harmbench") == 0.0
+    assert _extract_binary_outcome({"harmful_compliance": True, "malformed": True}, "harmbench") is None
+    # XSTest only counts benign prompts toward over_refusal_rate.
+    assert _extract_binary_outcome({"benign": True, "is_refusal": True, "malformed": False}, "xstest") == 1.0
+    assert _extract_binary_outcome({"benign": True, "is_refusal": False, "malformed": False}, "xstest") == 0.0
+    assert _extract_binary_outcome({"benign": False, "is_refusal": True, "malformed": False}, "xstest") is None
+    # MMLU outcome is is_correct.
+    assert _extract_binary_outcome({"is_correct": True}, "mmlu") == 1.0
+    assert _extract_binary_outcome({"is_correct": False}, "mmlu") == 0.0
+
+
+def test_compute_paired_bootstrap_ci_smoke() -> None:
+    # Construct a clear-signal paired sample: baseline 80% compliance,
+    # quantized 60% compliance, on 50 prompts. Bootstrap delta should sit
+    # near -0.20 and the 95% CI should exclude zero.
+    baseline = {f"p{i}": 1.0 for i in range(40)}
+    baseline.update({f"p{i}": 0.0 for i in range(40, 50)})
+    quantized = {f"p{i}": 1.0 for i in range(30)}
+    quantized.update({f"p{i}": 0.0 for i in range(30, 50)})
+
+    ci = compute_paired_bootstrap_ci(baseline, quantized, num_resamples=500, seed=42)
+
+    assert ci is not None
+    assert ci["n_paired"] == 50
+    assert ci["baseline_mean"] == 0.8
+    assert ci["quantized_mean"] == 0.6
+    assert abs(ci["delta_mean"] - (-0.20)) < 1e-9
+    assert ci["delta_ci_lower"] < ci["delta_ci_upper"]
+    assert ci["delta_significant"] is True
+
+
+def test_compute_paired_bootstrap_ci_returns_none_when_no_overlap() -> None:
+    assert compute_paired_bootstrap_ci({"a": 1.0}, {"b": 0.0}) is None
+    assert compute_paired_bootstrap_ci({}, {}) is None
 
 
 def test_build_pairwise_and_reports(tmp_path: Path) -> None:
