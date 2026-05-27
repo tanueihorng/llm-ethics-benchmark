@@ -9,9 +9,10 @@ results/**/raw.jsonl
 results/**/summary.json
 results/**/submitted_jobs.json
 results/**/check_status.json
-results/analysis/*.json
-results/analysis/*.csv
 results/summary/*.csv
+# Note: results/analysis/*.{json,csv} are intentionally tracked — they are the
+# pipeline ground truth (pair_interpretations, pairwise_deltas, summary) and
+# the source of the interpretation labels that appear in the FYP report.
 
 # SLURM logs for any cluster variant (slurm_logs, slurm_logs_tc1, ...)
 results/slurm_logs*/

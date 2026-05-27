@@ -1,0 +1,110 @@
+[
+  {
+    "pair_id": "llama_3_2_3b",
+    "family": "llama",
+    "benchmark": "harmbench",
+    "metric": "attack_success_rate",
+    "baseline_alias": "llama_3_2_3b_base",
+    "quantized_alias": "llama_3_2_3b_4bit",
+    "baseline_value": 0.95,
+    "quantized_value": 0.98,
+    "absolute_delta": 0.030000000000000027,
+    "relative_delta": 0.03157894736842108
+  },
+  {
+    "pair_id": "llama_3_2_3b",
+    "family": "llama",
+    "benchmark": "xstest",
+    "metric": "over_refusal_rate",
+    "baseline_alias": "llama_3_2_3b_base",
+    "quantized_alias": "llama_3_2_3b_4bit",
+    "baseline_value": 0.0,
+    "quantized_value": 0.0,
+    "absolute_delta": 0.0,
+    "relative_delta": null
+  },
+  {
+    "pair_id": "llama_3_2_3b",
+    "family": "llama",
+    "benchmark": "mmlu",
+    "metric": "accuracy",
+    "baseline_alias": "llama_3_2_3b_base",
+    "quantized_alias": "llama_3_2_3b_4bit",
+    "baseline_value": 0.61,
+    "quantized_value": 0.5666666666666667,
+    "absolute_delta": -0.043333333333333335,
+    "relative_delta": -0.07103825136612023
+  },
+  {
+    "pair_id": "qwen_2b",
+    "family": "qwen",
+    "benchmark": "harmbench",
+    "metric": "attack_success_rate",
+    "baseline_alias": "qwen_2b_base",
+    "quantized_alias": "qwen_2b_4bit",
+    "baseline_value": 0.775,
+    "quantized_value": 0.655,
+    "absolute_delta": -0.12,
+    "relative_delta": -0.15483870967741933
+  },
+  {
+    "pair_id": "qwen_2b",
+    "family": "qwen",
+    "benchmark": "xstest",
+    "metric": "over_refusal_rate",
+    "baseline_alias": "qwen_2b_base",
+    "quantized_alias": "qwen_2b_4bit",
+    "baseline_value": 0.032,
+    "quantized_value": 0.016,
+    "absolute_delta": -0.016,
+    "relative_delta": -0.5
+  },
+  {
+    "pair_id": "qwen_2b",
+    "family": "qwen",
+    "benchmark": "mmlu",
+    "metric": "accuracy",
+    "baseline_alias": "qwen_2b_base",
+    "quantized_alias": "qwen_2b_4bit",
+    "baseline_value": 0.62,
+    "quantized_value": 0.5333333333333333,
+    "absolute_delta": -0.08666666666666667,
+    "relative_delta": -0.13978494623655915
+  },
+  {
+    "pair_id": "qwen_4b",
+    "family": "qwen",
+    "benchmark": "harmbench",
+    "metric": "attack_success_rate",
+    "baseline_alias": "qwen_4b_base",
+    "quantized_alias": "qwen_4b_4bit",
+    "baseline_value": 0.86,
+    "quantized_value": 0.815,
+    "absolute_delta": -0.04500000000000004,
+    "relative_delta": -0.05232558139534888
+  },
+  {
+    "pair_id": "qwen_4b",
+    "family": "qwen",
+    "benchmark": "xstest",
+    "metric": "over_refusal_rate",
+    "baseline_alias": "qwen_4b_base",
+    "quantized_alias": "qwen_4b_4bit",
+    "baseline_value": 0.016,
+    "quantized_value": 0.016,
+    "absolute_delta": 0.0,
+    "relative_delta": 0.0
+  },
+  {
+    "pair_id": "qwen_4b",
+    "family": "qwen",
+    "benchmark": "mmlu",
+    "metric": "accuracy",
+    "baseline_alias": "qwen_4b_base",
+    "quantized_alias": "qwen_4b_4bit",
+    "baseline_value": 0.7466666666666667,
+    "quantized_value": 0.7433333333333333,
+    "absolute_delta": -0.0033333333333334103,
+    "relative_delta": -0.004464285714285817
+  }
+]

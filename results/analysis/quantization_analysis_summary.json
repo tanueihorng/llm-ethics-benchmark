@@ -1,0 +1,55 @@
+{
+  "pairwise_count": 9,
+  "label_count": 3,
+  "scale_sensitivity": {
+    "available": true,
+    "small_pair_id": "qwen_2b",
+    "large_pair_id": "qwen_4b",
+    "harmbench_delta_magnitude_small": 0.12,
+    "harmbench_delta_magnitude_large": 0.04500000000000004,
+    "xstest_delta_magnitude_small": 0.016,
+    "xstest_delta_magnitude_large": 0.0,
+    "mmlu_delta_magnitude_small": 0.08666666666666667,
+    "mmlu_delta_magnitude_large": 0.0033333333333334103,
+    "smaller_more_sensitive_harmbench": true,
+    "smaller_more_sensitive_xstest": true,
+    "smaller_more_sensitive_mmlu": true
+  },
+  "cross_family": {
+    "family_mean_deltas": {
+      "llama": {
+        "harmbench_asr_delta": 0.030000000000000027,
+        "xstest_over_refusal_delta": 0.0,
+        "mmlu_accuracy_delta": -0.043333333333333335
+      },
+      "qwen": {
+        "harmbench_asr_delta": -0.08250000000000002,
+        "xstest_over_refusal_delta": -0.008,
+        "mmlu_accuracy_delta": -0.04500000000000004
+      }
+    },
+    "pairwise_sign_consistency": {
+      "harmbench_asr_delta": {
+        "base_family": "llama",
+        "other_family": "qwen",
+        "base_mean_delta": 0.030000000000000027,
+        "other_mean_delta": -0.08250000000000002,
+        "sign_consistent": false
+      },
+      "xstest_over_refusal_delta": {
+        "base_family": "llama",
+        "other_family": "qwen",
+        "base_mean_delta": 0.0,
+        "other_mean_delta": -0.008,
+        "sign_consistent": false
+      },
+      "mmlu_accuracy_delta": {
+        "base_family": "llama",
+        "other_family": "qwen",
+        "base_mean_delta": -0.043333333333333335,
+        "other_mean_delta": -0.04500000000000004,
+        "sign_consistent": true
+      }
+    }
+  }
+}
