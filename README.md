@@ -156,9 +156,9 @@ python fyp_cli.py analyze
 make smoke
 make matrix DEVICE=cuda
 make analyze
-make cluster-generate
-make cluster-submit
-make cluster-check
+make cluster-generate   # regenerate sbatch scripts (Mac only)
+make cluster-check      # poll squeue for job status
+# Note: do NOT use make cluster-submit on TC1 — use direct sbatch instead (see SLURM Workflow below)
 ```
 
 ### 3) Pairwise analysis
@@ -169,26 +169,30 @@ python compare_quant_pairs.py \
   --output_dir results/analysis
 ```
 
-## SLURM Workflow
-### Generate sbatch scripts
-```bash
-python generate_slurm_jobs.py \
-  --config configs/default.yaml \
-  --results_dir results \
-  --jobs_dir slurm/jobs
-```
+## SLURM Workflow (TC1)
+Active sbatch scripts live in `slurm/jobs_tc1/` (matrix) and `slurm/jobs_tc1_smoke/` (5-sample smoke).
+These are tracked in git — `git pull` on TC1 is sufficient to get them.
 
-### Submit jobs
+### Submit jobs (TC1 head node)
+`make cluster-submit` is **not suitable for TC1**: it reads `manifest.json` (gitignored, absent after
+`git pull`) and runs Python on the head node (TC1 policy forbids user code there). Use direct `sbatch`:
 ```bash
-python submit_slurm_jobs.py --jobs_dir slurm/jobs
+# Submit 2 at a time (MaxJobsPU=2 QoS limit)
+sbatch slurm/jobs_tc1/qwen_2b_base__matrix.sbatch
+sbatch slurm/jobs_tc1/qwen_2b_4bit__matrix.sbatch
+squeue -u utan001   # wait for both to finish, then next pair
+sbatch slurm/jobs_tc1/qwen_4b_base__matrix.sbatch
+sbatch slurm/jobs_tc1/qwen_4b_4bit__matrix.sbatch
+squeue -u utan001
+sbatch slurm/jobs_tc1/llama_3_2_3b_base__matrix.sbatch
+sbatch slurm/jobs_tc1/llama_3_2_3b_4bit__matrix.sbatch
 ```
 
 ### Check run status
 ```bash
-python check_slurm_runs.py \
-  --config configs/default.yaml \
-  --results_dir results \
-  --jobs_dir slurm/jobs
+squeue -u utan001
+seff <JOBID>
+ls results/*/*/summary.json
 ```
 
 ## Output Structure

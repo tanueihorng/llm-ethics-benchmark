@@ -212,91 +212,84 @@ Adjust `work_dir` and `source activate ...` to match your actual cluster folder 
 
 If the latest TC1 guide for your cohort specifies different values, replace this block accordingly before large runs.
 
-## 6. Easiest CLI Workflow (Recommended)
-This repository now includes a unified CLI for easier operations:
+## 6. CLI and Makefile Workflow
 
-- `python fyp_cli.py smoke`
-- `python fyp_cli.py run ...`
-- `python fyp_cli.py matrix ...`
-- `python fyp_cli.py analyze ...`
-- `python fyp_cli.py cluster-generate ...`
-- `python fyp_cli.py cluster-submit ...`
-- `python fyp_cli.py cluster-check ...`
+**Mac (local dev only):** The CLI and Makefile commands below run Python and are only used on the Mac.
+They must not be run on the TC1 head node (policy forbids user code there).
 
-For even less typing, use the `Makefile` shortcuts:
-- `make smoke`
-- `make matrix`
-- `make analyze`
-- `make cluster-generate`
-- `make cluster-submit`
-- `make cluster-check`
+- `python fyp_cli.py smoke` / `make smoke`
+- `python fyp_cli.py run ...` / `make run`
+- `python fyp_cli.py matrix ...` / `make matrix`
+- `python fyp_cli.py analyze ...` / `make analyze`
+- `python fyp_cli.py cluster-generate ...` / `make cluster-generate` — regenerates sbatch files
+- `python fyp_cli.py cluster-check ...` / `make cluster-check` — polls squeue
+
+**`cluster-submit` / `make cluster-submit` cannot be used on TC1.** It reads `manifest.json` from
+the jobs directory (gitignored, absent after `git pull`) and runs Python (head-node policy violation).
+Use direct `sbatch` on TC1 instead — see §9.
 
 Example with overrides:
 ```bash
 make matrix DEVICE=cuda SEED=42
-make cluster-generate DEVICE=cuda JOBS_DIR=slurm/jobs
+make cluster-generate CONFIG=configs/tc1.yaml JOBS_DIR=slurm/jobs_tc1
 ```
 
-## 7. Generate SLURM Jobs (Model x Benchmark)
-From repository root:
+## 7. Generate SLURM Jobs (Mac only)
+Run on Mac to regenerate sbatch files after config changes, then `git push`:
 ```bash
-python fyp_cli.py cluster-generate \
-  --config configs/default.yaml \
-  --results_dir results \
-  --jobs_dir slurm/jobs \
-  --group_by model \
-  --script run_quant_matrix.py
+make cluster-generate CONFIG=configs/tc1.yaml
 ```
 
-This creates:
-- one `.sbatch` per model alias, with the loaded model reused across benchmarks,
-- `slurm/jobs/manifest.json`.
+This writes sbatch files to `slurm/jobs_tc1/` (6 matrix jobs) and `slurm/jobs_tc1_smoke/` (18 smoke jobs).
+These files are tracked in git — TC1 receives them via `git pull`. Do not run `cluster-generate` on TC1.
 
 Expected job count for current matrix:
-- 6 model jobs. Each job runs that model across its configured benchmarks.
+- 6 model jobs (`slurm/jobs_tc1/`). Each job loads one model and runs all three benchmarks sequentially.
 
 ## 8. Validate Jobs Before Submission
-## 8.1 Dry run submit
+## 8.1 Inspect a generated script (TC1 head node)
 ```bash
-python fyp_cli.py cluster-submit --jobs_dir slurm/jobs --dry_run
-```
-
-## 8.2 Inspect one generated script
-```bash
-sed -n '1,200p' slurm/jobs/qwen_2b_base__matrix.sbatch
+cat slurm/jobs_tc1/qwen_2b_base__matrix.sbatch
 ```
 
 Confirm:
-- partition/qos/account values,
-- memory/time,
-- command path and arguments.
+- `#SBATCH --output/--error` paths are absolute (under `/tc1home/FYP/utan001/fyp_quant/repo/results/slurm_logs_tc1/`)
+- partition/qos/mem/time values
+- `HF_HUB_OFFLINE=1` is exported in setup_commands
 
-## 9. Submit Jobs
+## 9. Submit Jobs (TC1 head node — direct sbatch)
+`make cluster-submit` cannot be used on TC1 (see §6). Submit sbatch files directly.
+MaxJobsPU=2, so submit in pairs and wait between pairs:
 ```bash
-python fyp_cli.py cluster-submit --jobs_dir slurm/jobs
-```
+mkdir -p results/slurm_logs_tc1   # ensure log dir exists first
 
-This writes `slurm/jobs/submitted_jobs.json` with `job_id` records.
+sbatch slurm/jobs_tc1/qwen_2b_base__matrix.sbatch
+sbatch slurm/jobs_tc1/qwen_2b_4bit__matrix.sbatch
+squeue -u utan001                  # wait for both to finish
+
+sbatch slurm/jobs_tc1/qwen_4b_base__matrix.sbatch
+sbatch slurm/jobs_tc1/qwen_4b_4bit__matrix.sbatch
+squeue -u utan001
+
+sbatch slurm/jobs_tc1/llama_3_2_3b_base__matrix.sbatch
+sbatch slurm/jobs_tc1/llama_3_2_3b_4bit__matrix.sbatch
+```
 
 ## 10. Monitor Progress
-## 10.1 Check queue status + output completeness
+## 10.1 Check queue status (TC1 head node)
 ```bash
-python fyp_cli.py cluster-check \
-  --config configs/default.yaml \
-  --results_dir results \
-  --jobs_dir slurm/jobs
+squeue -u utan001
 ```
 
-Produces report file:
-- `slurm/check_status.json`
-
-## 10.2 If `squeue` is unavailable in your shell
+## 10.2 Check job efficiency after completion
 ```bash
-python fyp_cli.py cluster-check \
-  --config configs/default.yaml \
-  --results_dir results \
-  --jobs_dir slurm/jobs \
-  --skip_squeue
+seff <JOBID>
+```
+
+## 10.3 Verify output files exist
+```bash
+ls results/*/*/summary.json
+cat results/slurm_logs_tc1/<model>__matrix.err   # check for errors
 ```
 
 ## 11. Resume and Recovery Strategy
@@ -380,27 +373,22 @@ Always report:
 
 ## 18. Minimal Command Cheat Sheet
 ```bash
-# Generate jobs
-python fyp_cli.py cluster-generate
+# On Mac — regenerate sbatch files after config changes, then git push
+make cluster-generate CONFIG=configs/tc1.yaml
 
-# Dry-run submit
-python fyp_cli.py cluster-submit --dry_run
+# On TC1 head node — pull latest, ensure log dir, submit in pairs
+git pull --ff-only
+mkdir -p results/slurm_logs_tc1
+sbatch slurm/jobs_tc1/qwen_2b_base__matrix.sbatch
+sbatch slurm/jobs_tc1/qwen_2b_4bit__matrix.sbatch
+squeue -u utan001   # wait, then next pair...
 
-# Submit
-python fyp_cli.py cluster-submit
+# Monitor
+squeue -u utan001
+seff <JOBID>
+ls results/*/*/summary.json
 
-# Status
-python fyp_cli.py cluster-check
-
-# Analyze after completion
-python fyp_cli.py analyze
-```
-
-Equivalent `make` shortcuts:
-```bash
-make cluster-generate
-make cluster-dry
-make cluster-submit
-make cluster-check
+# Analyze after all jobs complete (Mac or TC1 head node via python)
+make analyze CONFIG=configs/tc1.yaml
 make analyze
 ```
