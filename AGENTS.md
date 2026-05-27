@@ -101,10 +101,11 @@ make cluster-check CONFIG=configs/tc1.yaml    # Poll squeue for job status
 **Job submission on TC1 — use direct `sbatch`, not `make cluster-submit`:**
 `make cluster-submit` reads `manifest.json` from the jobs directory, which is gitignored and therefore absent on TC1 after `git pull`. It also runs Python on the head node, which TC1 policy forbids. Submit jobs directly:
 ```bash
-# From /tc1home/FYP/utan001/fyp_quant/repo — submit 2 at a time (MaxJobsPU=2)
+# From /tc1home/FYP/utan001/fyp_quant/repo.
+# TC1 currently allows one running GPU job; a second job can queue with QOSMaxGRESPerUser.
 sbatch slurm/jobs_tc1/qwen_2b_base__matrix.sbatch
 sbatch slurm/jobs_tc1/qwen_2b_4bit__matrix.sbatch
-# wait for both to finish, then:
+# wait for both to finish (60977 may remain pending until 60976 clears), then:
 sbatch slurm/jobs_tc1/qwen_4b_base__matrix.sbatch
 sbatch slurm/jobs_tc1/qwen_4b_4bit__matrix.sbatch
 # wait, then:
@@ -218,6 +219,6 @@ The TC1 user guide imposes strict rules. The full citations are in `docs/TC1_CLU
 - **No user code on the head node** (CCDS-TC1). All compute via `sbatch`. Forbidden: running Python scripts, `nvidia-smi`, `nvcc --version`. Allowed: package installs, file transfers, HuggingFace downloads, SLURM admin commands.
 - **Use `sbatch`, not `srun`**, for any real workload. Even smoke validation is a short sbatch job, not an interactive srun session.
 - **Offline mode** on compute nodes: jobs export `HF_HUB_OFFLINE=1`, `HF_DATASETS_OFFLINE=1`, `TRANSFORMERS_OFFLINE=1`. Pre-cache via `make prefetch` on the head node first.
-- **QoS limits**: 1 GPU per job, 6h walltime, MaxJobsPU=2, 64 GB RAM cap across all user jobs (per-job sbatch requests 10 GB).
+- **QoS limits**: 1 GPU per job, 6h walltime, MaxJobsPU=2, 64 GB RAM cap across all user jobs (per-job sbatch requests 10 GB). Observed on 2026-05-27: only one GPU job runs at a time; the second job waits with `QOSMaxGRESPerUser`.
 
 When generating or modifying sbatch files, always preserve the bootstrap block (`cd work_dir`, `module load ...`, `source activate fyp-tc1`, `export HF_*_OFFLINE=1`).

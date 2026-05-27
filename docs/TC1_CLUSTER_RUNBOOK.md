@@ -52,7 +52,9 @@ step in this runbook. They are not optional.
 
 **Resource limits (QoS "normal"):**
 - 1 GPU per job, up to 20 CPU cores and 64 GB RAM total across all jobs.
-- 2 concurrent jobs per user (MaxJobsPU).
+- 2 submitted/runnable jobs per user (MaxJobsPU), but observed effective GPU
+  concurrency is one running job at a time: a second GPU job waits with
+  `QOSMaxGRESPerUser`.
 - 6-hour walltime per job (MaxWall). Extensions to 8/12/24/48h available on
   request to `ccdsgpu-tc@ntu.edu.sg` with justification.
 - 100 GB minimum storage quota; this project was approved for ~300 GB.
@@ -259,7 +261,8 @@ Confirm:
 
 ## 9. Submit Jobs (TC1 head node — direct sbatch)
 `make cluster-submit` cannot be used on TC1 (see §6). Submit sbatch files directly.
-MaxJobsPU=2, so submit in pairs and wait between pairs:
+Submit only the current model pair; TC1 starts one GPU job and may hold the second
+pending with `QOSMaxGRESPerUser` until the first clears:
 ```bash
 mkdir -p results/slurm_logs_tc1   # ensure log dir exists first
 
@@ -344,7 +347,7 @@ scp -r <YOUR_TC1_USERNAME>@10.96.189.11:~/fyp_quant/repo/results ./results_tc1
 ## 15. Recommended Experiment Order
 1. smoke test (`max_samples <= 20`)
 2. one full model across all 3 benchmarks
-3. full matrix (18 jobs)
+3. full matrix (6 model jobs, one running GPU job at a time)
 4. analysis export
 5. rerun any missing combinations only
 

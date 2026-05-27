@@ -177,7 +177,8 @@ These are tracked in git — `git pull` on TC1 is sufficient to get them.
 `make cluster-submit` is **not suitable for TC1**: it reads `manifest.json` (gitignored, absent after
 `git pull`) and runs Python on the head node (TC1 policy forbids user code there). Use direct `sbatch`:
 ```bash
-# Submit 2 at a time (MaxJobsPU=2 QoS limit)
+# Submit the current pair only. TC1 currently runs one GPU job at a time;
+# the second job can queue with QOSMaxGRESPerUser until the first clears.
 sbatch slurm/jobs_tc1/qwen_2b_base__matrix.sbatch
 sbatch slurm/jobs_tc1/qwen_2b_4bit__matrix.sbatch
 squeue -u utan001   # wait for both to finish, then next pair

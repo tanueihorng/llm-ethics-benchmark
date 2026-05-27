@@ -6,7 +6,7 @@
 | **Student** | TAN UEI HORNG (UTAN001) — UTAN001@e.ntu.edu.sg |
 | **Supervisor** | Dr. Zhang Jiehuang — jiehuang.zhang@ntu.edu.sg |
 | **School** | College of Computing and Data Science, Nanyang Technological University |
-| **Last updated** | 2026-05-27 (17:00 UTC+8) |
+| **Last updated** | 2026-05-27 (18:30 UTC+8) |
 | **Last updated by** | Claude |
 
 > Whenever you edit this file, bump the **Last updated** date (and name, if a collaborator other than the student) to reflect the most recent change. This is the cheapest way to see at a glance whether the log is current.
@@ -17,21 +17,21 @@ If you're a future Claude session or a collaborator reading this for the first t
 
 ---
 
-## 1. Status snapshot (updated 2026-05-27 17:30 UTC+8)
+## 1. Status snapshot (updated 2026-05-27 18:30 UTC+8)
 
-> **Session handoff (read this first if you're a fresh agent / new chat):** As of 2026-05-27 17:30 UTC+8, the TC1 environment is fully provisioned, current official Qwen3 + Llama weights and datasets are pre-cached, and the CUDA + qwen_2b_base/HarmBench smoke path has passed via sbatch. The very next step is **T8 — submit the 6-job full matrix** using direct `sbatch` (see D8 — do NOT use `make cluster-submit`, it requires a gitignored manifest.json and runs Python on the head node). Submit 2 at a time: `sbatch slurm/jobs_tc1/qwen_2b_base__matrix.sbatch` + `sbatch slurm/jobs_tc1/qwen_2b_4bit__matrix.sbatch`, wait, then Qwen 4B pair, then Llama pair. Always run `git pull --ff-only` first (latest commit: `fc0736b`). See §2 for the full task list. The user is operating from `(fyp-tc1) [utan001@CCDS-TC1:0 ~/fyp_quant/repo]$` (TC1 head node) when stepping through cluster work, and from their Mac at `/Users/tanueihorng/fyp_quant` when editing code. Workflow loop is `git push` (Mac) → `git pull` (TC1).
+> **Session handoff (read this first if you're a fresh agent / new chat):** As of 2026-05-27 18:30 UTC+8, the Qwen 2B pair is **complete** (jobs 60976 + 60977, all 6 summary files verified). Qwen 4B pair has been submitted (jobs TBD — user to paste job IDs). Llama pair is still pending. Key results so far: qwen_2b_base ASR=0.775, qwen_2b_4bit ASR=0.655 (Δ=−0.120); base XSTest OR=0.032, 4bit OR=0.016 (Δ=−0.016); base MMLU=0.620, 4bit MMLU=0.533 (Δ=−0.087). All documented in Chapter 6 of the FYP report. Continue to use direct `sbatch` (see D8). Next step: monitor Qwen 4B jobs with `squeue -u utan001`; when done, submit `llama_3_2_3b_base__matrix.sbatch` + `llama_3_2_3b_4bit__matrix.sbatch`; then run `make analyze CONFIG=configs/tc1.yaml`. Latest Mac commit pushed; TC1 needs `git pull --ff-only` to receive report update.
 
 
 | Dimension | State |
 |---|---|
 | **Scope (locked)** | 4-bit NF4 quantization study, matched-pair design, on-the-fly quantization from identical baseline weights. Three pairs: Qwen 2B-class, Qwen 4B, Llama 3.2 3B. Three benchmarks: HarmBench, XSTest, MMLU (6-subject subset). |
 | **Framework** | Complete. 122 tests passing. CLI + Makefile + SLURM orchestration in place. |
-| **TC1 access** | Approved (account `utan001`, partition `UGGPU-TC1`, QoS `normal`, window 03/2026–11/2026). `fyp-tc1` conda environment active. Repo on TC1 needs `git pull --ff-only` to reach latest commit `fc0736b` (`/tc1home/FYP/utan001/fyp_quant/repo`). Workflow: `git push` from Mac → `git pull` on TC1. |
+| **TC1 access** | Approved (account `utan001`, partition `UGGPU-TC1`, QoS `normal`, window 03/2026–11/2026). `fyp-tc1` conda environment active. TC1 repo needs `git pull --ff-only` to receive latest report edits (`/tc1home/FYP/utan001/fyp_quant/repo`). Workflow: `git push` from Mac → `git pull` on TC1. |
 | **SLURM scripts** | 6 per-model `*_matrix.sbatch` files under `slurm/jobs_tc1/`, 18 smoke sbatch files under `slurm/jobs_tc1_smoke/`, and `slurm/cuda_check.sbatch`. All log paths are now **absolute** — safe to `sbatch` from any directory. Always submit from the repo root (`cd /tc1home/FYP/utan001/fyp_quant/repo`) for consistency. |
 | **Hugging Face auth** | ✅ Done 2026-05-26. Token `tc1-fyp-read` (read scope) registered for account `ueihorng` via `huggingface_hub.login()`. Llama 3.2 3B license confirmed accepted (model weights downloaded successfully without 401). |
 | **Datasets / model weights** | ✅ Pre-cached on TC1 (head node). Current required model repos are cached as of 2026-05-27 15:37: Qwen3-1.7B (4.08 GB), Qwen3-4B (8.06 GB), and Llama 3.2 3B (12.9 GB). HarmBench + 6 MMLU subjects are cached. XSTest is bundled as `data/xstest_v2_prompts.csv` (no HF dependency). |
-| **Experiments** | CUDA check passed on a V100. T6 smoke sbatch passed: job `60975` (`qwen_2b_base`/HarmBench, 5 prompts) completed in 33s, wrote `summary.json`, reported `runtime_device: cuda`, `attack_success_rate: 0.6`, and `malformed_rate: 0.0`. 0 of 6 full matrix jobs submitted. **NEXT: full matrix (T8).** |
-| **Current FYP report** | `docs/FYP_Report_2026-05-27.docx` (interim report, framework-complete + experiments-pending framing). |
+| **Experiments** | **2 of 3 pairs submitted; 1 of 3 complete.** Qwen 2B pair done: jobs 60976 (qwen_2b_base, 10m06s, 2.47 GB) and 60977 (qwen_2b_4bit, 26m00s, 4.82 GB), all 6 summary files verified. Preliminary results: ASR 0.775→0.655 (Δ=−0.120), XSTest OR 0.032→0.016 (Δ=−0.016), MMLU 0.620→0.533 (Δ=−0.087). Pattern: likely capability-collapse-masquerading-as-safety. Qwen 4B pair submitted; Llama pair pending. **NEXT: monitor Qwen 4B → submit Llama → run `make analyze`.** |
+| **Current FYP report** | `docs/FYP_Report_2026-05-27.docx` — Chapter 6 populated with Qwen 2B actuals; §6.6 preliminary analysis written; abstract and conclusion updated. |
 | **Last supervisor update** | 2026-03-09 (~2.5 months ago). Re-engagement email drafted in conversation but not yet sent. |
 
 ---
@@ -55,7 +55,7 @@ Tasks are numbered globally as `T<N>` so they can be referenced unambiguously in
 
 ### 2.3 After smoke passes (run the matrix) ← **YOU ARE HERE**
 
-- [ ] **T8. Submit the 6-job matrix.** Use direct `sbatch` (not `make cluster-submit` — see D8). Submit 2 at a time (MaxJobsPU=2): `sbatch slurm/jobs_tc1/qwen_2b_base__matrix.sbatch` + `sbatch slurm/jobs_tc1/qwen_2b_4bit__matrix.sbatch`, wait, then the Qwen 4B pair, then Llama.
+- [ ] **T8. Submit the 6-job matrix.** In progress — 4 of 6 jobs submitted. Qwen 2B pair complete: jobs 60976 (qwen_2b_base, 10m) and 60977 (qwen_2b_4bit, 26m), both COMPLETED, all 6 summary files verified. Qwen 4B pair submitted (monitor with `squeue -u utan001`). Llama pair pending — submit after Qwen 4B clears.
 - [ ] **T9. Monitor.** `squeue -u utan001`, `MyJobHistory`, `seff <jobid>` after each completes.
 - [ ] **T10. Run analysis.** `make analyze CONFIG=configs/tc1.yaml` to compute pairwise deltas and interpretation labels. Outputs to `results/analysis/`.
 
@@ -122,6 +122,12 @@ Decisions are numbered globally as `D<N>` for cross-reference (e.g. "see D3"). E
 
 **Rationale:** `make cluster-submit` calls `submit_jobs.py`, which opens `manifest.json` from the jobs directory as its first action. `manifest.json` is gitignored and absent on TC1 after `git pull`, so the command fails immediately with a file-not-found error. Additionally, `make cluster-submit` runs Python on the head node, which TC1 policy explicitly forbids. Direct `sbatch` avoids both issues: it is a SLURM admin command (explicitly permitted on the head node) and requires no generated metadata files.
 
+### D9. 2026-05-27 — TC1 effective GPU concurrency is one running job
+
+**Decision:** Treat the full matrix as a one-running-GPU-job-at-a-time execution, even though a second job can be submitted and held pending by SLURM. Submit the next model pair only after the current pair has cleared.
+
+**Rationale:** The first matrix submission on 2026-05-27 queued two Qwen 2B-class jobs. SLURM started job `60976` (`qwen_2b_base__matrix`) but held job `60977` (`qwen_2b_4bit__matrix`) pending with reason `QOSMaxGRESPerUser`. This shows the practical limiter is GPU GRES per user, not just the MaxJobsPU count. Keeping only the current pair in the queue avoids piling up pending jobs and makes monitoring simpler.
+
 ### D7. 2026-05-27 — Switch Qwen pairs from techwithsergiu to official Qwen3 models
 
 **Decision:** Replace `techwithsergiu/Qwen3.5-text-2B` and `techwithsergiu/Qwen3.5-text-4B` with `Qwen/Qwen3-1.7B` and `Qwen/Qwen3-4B` respectively. Pair IDs, model aliases, and output directory paths remain unchanged.
@@ -136,6 +142,8 @@ Every change to the repo gets one row. Timestamps are local time (UTC+8 / Asia/S
 
 | When (UTC+8) | Files | Change | Why / Notes | Report? | Who |
 |---|---|---|---|---|---|
+| 2026-05-27 18:30 | `scripts/build_fyp_report.js`, `docs/FYP_Report_2026-05-27.docx`, `docs/PROJECT_LOG.md` | Populated Chapter 6 with Qwen 2B pair results (jobs 60976 + 60977). Renamed ch6 from "Intended Results and Analysis Plan" to "Results and Analysis". Updated Table 6.1 with actuals: qwen_2b ASR 0.775→0.655 (Δ=−0.120), XSTest OR 0.032→0.016 (Δ=−0.016), MMLU 0.620→0.533 (Δ=−0.087). Added §6.6 Preliminary Observations with capability-collapse analysis and MMLU subject-level breakdown. Updated abstract and ch10 conclusion. Added revision history row. Rebuilt docx (55327 bytes). Updated PROJECT_LOG status snapshot + T8 progress. | User request: document Qwen 2B results and tabulate in the word document before Qwen 4B runs complete. | yes | Claude |
+| 2026-05-27 17:31 | `docs/PROJECT_LOG.md`, `AGENTS.md`, `CLAUDE.md`, `README.md`, `docs/TC1_CLUSTER_RUNBOOK.md`, `scripts/build_fyp_report.js`, `docs/FYP_Report_2026-05-27.docx` | Recorded start of T8 full matrix: submitted `qwen_2b_base__matrix` as job `60976` and `qwen_2b_4bit__matrix` as job `60977`. Updated run-plan docs from "2 running jobs / pair concurrency" to "one running GPU job; second job may queue with `QOSMaxGRESPerUser`". Added D9 and refreshed report/runbook wording. | TC1 `squeue` showed `60976` running while `60977` stayed pending with reason `QOSMaxGRESPerUser`, proving the effective running-GPU concurrency is 1 for this account. | yes | Codex |
 | 2026-05-27 17:00 | `docs/PROJECT_LOG.md`, `README.md`, `docs/TC1_CLUSTER_RUNBOOK.md` | Stale-reference sweep across all docs. (1) PROJECT_LOG §1 handoff block: replaced `make cluster-submit` with direct `sbatch` sequence + updated commit hash to `28ecb92`. (2) TC1 access row: updated stale commit hash. (3) README Fast shortcuts + SLURM Workflow sections: removed `make cluster-submit`, replaced legacy `generate_slurm_jobs.py`/`submit_slurm_jobs.py` scripts with current `slurm/jobs_tc1/` sbatch approach. (4) TC1_CLUSTER_RUNBOOK §6/§7/§8/§9/§10/§18: replaced all `cluster-submit`, `slurm/jobs/`, and legacy script references with correct direct-sbatch workflow. | Codex flagged four stale reference locations. | no | Claude |
 | 2026-05-27 16:45 | `CLAUDE.md`, `AGENTS.md`, `docs/PROJECT_LOG.md` | Corrected T8 command: `make cluster-submit` → direct `sbatch`. Updated CLAUDE.md/AGENTS.md SLURM section to document why `make cluster-submit` cannot be used on TC1 (reads gitignored `manifest.json`; runs Python on head node). Added D8 decision. | Codex flagged that `make cluster-submit` depends on `manifest.json` which is gitignored and won't exist on TC1 after `git pull`. | no | Claude |
 | 2026-05-27 16:30 | `README.md`, `.gitignore`, `docs/PROJECT_LOG.md` | Repo hygiene: committed Codex's uncommitted README.md fix (techwithsergiu → Qwen3 model IDs). Deleted 18 legacy sbatch files from `slurm/jobs/` (old pre-TC1-restructure artifacts: dropped `qwen_0_8b_*` and old `*_bf16` naming). Added `slurm/jobs/*.sbatch` to `.gitignore` to prevent them reappearing; active jobs live in `slurm/jobs_tc1/` and `slurm/jobs_tc1_smoke/` (tracked). | Flagged by Codex: working tree was not clean. | no | Claude |

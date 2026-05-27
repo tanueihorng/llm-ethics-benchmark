@@ -269,7 +269,7 @@ const abstract = [
   H1NoBreak("Abstract"),
   PJ("Compact instruction-tuned language models in the one-to-four-billion-parameter range are increasingly deployed on edge devices and consumer hardware, where four-bit quantization has become the de facto compression method for fitting them into available memory. However, quantization is not behaviourally neutral: emerging evidence suggests it can alter safety alignment, refusal calibration, and general capability in non-trivial ways. Existing large-scale ethical benchmarking efforts, such as TrustLLM, DecodingTrust, and SafetyBench, primarily evaluate full-precision mid-to-large models and do not systematically address how compression interacts with safety in the compact-deployment regime."),
   PJ("This work designs and implements a research-grade benchmarking framework to study safety–capability trade-offs in four-bit quantized compact language models. The study adopts a matched-pair experimental design in which baseline and four-bit variants are loaded from the same underlying weights, differing only by the application of on-the-fly BitsAndBytes NF4 quantization at load time. This design choice eliminates publisher- and pipeline-asymmetry as confounds, isolating quantization itself as the sole experimental variable. Three model pairs are evaluated: Qwen3-1.7B, Qwen3-4B, and Llama-3.2-3B-Instruct as a cross-family robustness check."),
-  PJ("Each pair is scored on three complementary benchmarks: HarmBench (harmful compliance, measured as Attack Success Rate), XSTest (over-refusal on benign prompts), and a curated MMLU subset (general capability). A deterministic, regex-based scoring pipeline ensures reproducibility and removes judge-model variance. Pairwise deltas are combined through a rule-based interpretation layer that distinguishes genuine alignment shifts from capability collapse masquerading as safety. The benchmarking framework, three benchmark plugins, cluster job orchestration for the NTU TC1 GPU cluster, and a verification suite of 122 tests are complete; experimental runs are pending submission. This document records the full design, implementation, intended analysis, and limitations of the study."),
+  PJ("Each pair is scored on three complementary benchmarks: HarmBench (harmful compliance, measured as Attack Success Rate), XSTest (over-refusal on benign prompts), and a curated MMLU subset (general capability). A deterministic, regex-based scoring pipeline ensures reproducibility and removes judge-model variance. Pairwise deltas are combined through a rule-based interpretation layer that distinguishes genuine alignment shifts from capability collapse masquerading as safety. The benchmarking framework, three benchmark plugins, cluster job orchestration for the NTU TC1 GPU cluster, and a verification suite of 122 tests are complete; experimental runs are in progress. The Qwen 2B pair (Qwen3-1.7B baseline versus NF4 4-bit) completed on 2026-05-27, with preliminary results showing decreased harmful compliance (HarmBench ASR: 0.775 → 0.655), decreased over-refusal (XSTest: 0.032 → 0.016), and decreased capability (MMLU accuracy: 0.620 → 0.533) under quantization — a pattern suggestive of capability collapse rather than genuine alignment improvement. This document records the full design, implementation, preliminary results, and limitations of the study."),
 ];
 
 // ------------------------------------------------------------
@@ -291,7 +291,7 @@ const lof = [
   P("Table 5.1  TC1 cluster hardware and policy parameters.", { after: 60 }),
   P("Table 5.2  Software environment versions on TC1.", { after: 60 }),
   P("Code listing 5.1  Head-node pre-cache invocation (scripts/prefetch_tc1.py).", { after: 60 }),
-  P("Table 6.1  Per-pair reporting schema.", { after: 60 }),
+  P("Table 6.1  Per-pair results (Qwen 2B populated; Qwen 4B and Llama pending).", { after: 60 }),
   P("Table D.1  Distribution of automated tests across modules.", { after: 60 }),
 ];
 
@@ -583,7 +583,7 @@ const ch5 = [
   H1("Chapter 5 — Experimental Setup"),
 
   H2("5.1 Hardware and Cluster Environment"),
-  PJ("All experiments are run on the NTU TC1 GPU cluster, a shared facility operated by the College of Computing and Data Science for undergraduate and postgraduate research workloads. Account access was approved in March 2026 under QoS \"normal\" with the parameters listed in Table 5.1. The compute partition consists of seven nodes (TC1N01–TC1N07), each equipped with three NVIDIA Tesla V100 PCIe 32 GB GPU cards, giving twenty-one GPUs across the partition; user-level concurrency is capped at two simultaneous jobs by the MaxJobsPU policy."),
+  PJ("All experiments are run on the NTU TC1 GPU cluster, a shared facility operated by the College of Computing and Data Science for undergraduate and postgraduate research workloads. Account access was approved in March 2026 under QoS \"normal\" with the parameters listed in Table 5.1. The compute partition consists of seven nodes (TC1N01–TC1N07), each equipped with three NVIDIA Tesla V100 PCIe 32 GB GPU cards, giving twenty-one GPUs across the partition. Although MaxJobsPU permits two submitted jobs, the first production submission showed an effective one-running-GPU-job limit: the second GPU job waited with reason QOSMaxGRESPerUser until the first released its GPU."),
   buildTable(
     ["Parameter", "Value"],
     [
@@ -598,7 +598,8 @@ const ch5 = [
       ["QoS memory limit per user", "64 GB total"],
       ["Per-job sbatch allocation (this study)", "1 GPU, 1 CPU, 10 GB RAM"],
       ["Maximum walltime per job (default QoS)", "06:00:00"],
-      ["MaxJobsPU (concurrent jobs per user)", "2"],
+      ["MaxJobsPU (submitted jobs per user)", "2"],
+      ["Observed running-GPU concurrency", "1 running job; second waits with QOSMaxGRESPerUser"],
       ["Storage quota (verify via MyTCinfo)", "approx. 300 GB; confirm on first login"],
       ["Account window", "March 2026 – November 2026"],
       ["Backup policy", "None (user-managed backups)"],
@@ -660,28 +661,28 @@ python scripts/prefetch_tc1.py       # or: make prefetch CONFIG=configs/tc1.yaml
   Bullet("llama_3_2_3b_base__matrix.sbatch"),
   Bullet("llama_3_2_3b_4bit__matrix.sbatch"),
   PJ("Before submitting the full matrix, a single short smoke sbatch is submitted (five prompts, qwen_2b_base on HarmBench) to verify that the offline-cache path works end-to-end on a real compute node. Per the user guide's guidance to prefer sbatch over srun, this smoke verification is performed as a regular SLURM job rather than an interactive session. On 2026-05-27, smoke job 60975 completed successfully on TC1 in 33 seconds, produced a clean summary.json with runtime_device=cuda and malformed_rate=0.0, and therefore cleared the full six-job matrix for submission."),
-  PJ("With MaxJobsPU=2 enforced by the cluster policy, the six jobs are processed in three sequential pairs in the worst case, yielding an expected end-to-end wall time of approximately one to two days assuming each job completes well within the six-hour budget. The six-hour walltime is intentionally generous; the completed smoke run confirms the CUDA/offline-cache path on a Tesla V100 32 GB, and the per-model matrix is expected to fit comfortably within the walltime. Memory and CPU utilisation are recorded after each job using the seff and MyJobHistory commands to inform any subsequent right-sizing of the sbatch resource requests."),
+  PJ("The first production matrix submission was made on 2026-05-27 with the Qwen 2B-class pair: job 60976 (qwen_2b_base__matrix) began running while job 60977 (qwen_2b_4bit__matrix) remained pending with reason QOSMaxGRESPerUser. This establishes the practical scheduling rule for the remainder of the study: submit only the current model pair and expect one job to run while the paired job waits; submit the next pair only after the current pair has cleared. Under this effective one-GPU concurrency, the six model jobs run serially or near-serially, still within the study plan because each job has an independent six-hour walltime allocation. Memory and CPU utilisation are recorded after each job using the seff and MyJobHistory commands to inform any subsequent right-sizing of the sbatch resource requests."),
 
   H2("5.7 Reproducibility Notes"),
   PJ("All runs share the same global seed (42), deterministic dataset shuffling, and deterministic decoding. The exact commit hash of the framework at the time of the final result run will be recorded in the final report and will accompany the result tables. Per-prompt records are persisted to raw.jsonl with full metadata, so the entire study can be re-executed (or selectively rerun) from any future repository checkout."),
 ];
 
 // ------------------------------------------------------------
-// Chapter 6 — Intended Results and Analysis Plan
+// Chapter 6 — Results and Analysis
 // ------------------------------------------------------------
 const ch6 = [
-  H1("Chapter 6 — Intended Results and Analysis Plan"),
+  H1("Chapter 6 — Results and Analysis"),
 
-  PJ("Experimental runs are pending submission on TC1 at the time of this interim report. This chapter documents the analysis plan and the structure into which the results will be slotted once the runs complete."),
+  PJ("Experimental runs are in progress on the NTU TC1 GPU cluster. The Qwen 2B-class pair (Qwen3-1.7B baseline versus NF4 4-bit) completed successfully on 2026-05-27 (SLURM jobs 60976 and 60977). The Qwen 4B and Llama 3.2 3B pairs are pending submission and will populate the remaining rows in Table 6.1 upon completion. Bootstrap 95% confidence intervals and formal interpretation labels will be computed by the analysis pipeline (compare_quant_pairs.py) after all six model jobs finish. Preliminary observations for the completed Qwen 2B pair are recorded in §6.6."),
 
-  H2("6.1 Reporting Schema"),
-  PJ("For each of the three pairs, the final report will present a single results table summarising baseline and four-bit metric values, their absolute and relative deltas, and the interpretation label. The schema is shown in Table 6.1."),
+  H2("6.1 Results Table"),
+  PJ("Table 6.1 records the per-pair benchmark results. Qwen 2B values are the actual outputs from TC1. Remaining rows will be filled in once the corresponding jobs complete."),
   buildTable(
-    ["Pair", "Metric", "Baseline (95% CI)", "4-bit (95% CI)", "ΔAbsolute", "ΔRelative"],
+    ["Pair", "Metric", "Baseline", "4-bit", "ΔAbsolute", "ΔRelative"],
     [
-      ["qwen_2b", "HarmBench ASR", "(pending)", "(pending)", "(pending)", "(pending)"],
-      ["qwen_2b", "XSTest over-refusal", "(pending)", "(pending)", "(pending)", "(pending)"],
-      ["qwen_2b", "MMLU accuracy", "(pending)", "(pending)", "(pending)", "(pending)"],
+      ["qwen_2b", "HarmBench ASR", "0.775", "0.655", "−0.120", "−15.5%"],
+      ["qwen_2b", "XSTest over-refusal", "0.032", "0.016", "−0.016", "−50.0%"],
+      ["qwen_2b", "MMLU accuracy", "0.620", "0.533", "−0.087", "−14.0%"],
       ["qwen_4b", "HarmBench ASR", "(pending)", "(pending)", "(pending)", "(pending)"],
       ["qwen_4b", "XSTest over-refusal", "(pending)", "(pending)", "(pending)", "(pending)"],
       ["qwen_4b", "MMLU accuracy", "(pending)", "(pending)", "(pending)", "(pending)"],
@@ -691,10 +692,10 @@ const ch6 = [
     ],
     [1600, 1900, 1700, 1700, 1230, 1230],
   ),
-  P("Table 6.1  Per-pair reporting schema. The (pending) cells will be populated by the TC1 runs.", { size: 18 }),
+  P("Table 6.1  Per-pair results. Qwen 2B values are from TC1 jobs 60976 (qwen_2b_base) and 60977 (qwen_2b_4bit), seed 42, 2026-05-27. Bootstrap 95% CIs will be added by the analysis pipeline after all pairs complete.", { size: 18 }),
 
   H2("6.2 Within-Family Scale Analysis (RQ4)"),
-  PJ("RQ4 asks whether the magnitude of the quantization effect differs between two-billion and four-billion parameter Qwen models. The within-family scale analysis will compare the three deltas (ΔASR, Δover-refusal, ΔMMLU) computed for the qwen_2b pair against those computed for the qwen_4b pair. Two specific patterns are expected to be observable. If the smaller model is more sensitive to compression, the absolute magnitude of its deltas should be systematically larger across the three axes. If the deltas are comparable, the conclusion will be that within this regime (two to four billion parameters), quantization effects are scale-invariant."),
+  PJ("RQ4 asks whether the magnitude of the quantization effect differs between two-billion and four-billion parameter Qwen models. The within-family scale analysis will compare the three deltas (ΔASR, Δover-refusal, ΔMMLU) computed for the qwen_2b pair against those computed for the qwen_4b pair. Two specific patterns are expected to be observable. If the smaller model is more sensitive to compression, the absolute magnitude of its deltas should be systematically larger across the three axes. If the deltas are comparable, the conclusion will be that within this regime (two to four billion parameters), quantization effects are scale-invariant. Qwen 2B deltas (Table 6.1) will serve as the reference when the Qwen 4B results arrive."),
 
   H2("6.3 Cross-Family Replication (RQ5)"),
   PJ("RQ5 asks whether the Qwen pattern replicates qualitatively in Llama 3.2 3B. The cross-family analysis examines two properties: sign consistency (do the Llama deltas have the same sign as the Qwen deltas across all three benchmarks?) and approximate magnitude (are the Llama deltas similar in scale, smaller, or larger?). Because the two families differ in tokenizer, training data, and alignment recipe, this comparison is descriptive: it can rule out or support cross-family generalisation of the within-Qwen findings but cannot make strong causal claims about quantization-family interactions."),
@@ -708,7 +709,14 @@ const ch6 = [
   PJ("This decomposition is the principal mechanism through which the study addresses the central research question."),
 
   H2("6.5 Statistical Caveats"),
-  PJ("Three statistical limitations should be borne in mind when interpreting the eventual results. First, with 400 samples per safety benchmark, the bootstrap 95% confidence interval on a binomial-proportion metric such as ASR is approximately ±5 percentage points; small deltas may not be statistically distinguishable from zero. Second, decoding is deterministic at temperature 0.0, so the only source of variance reflected in the confidence intervals is prompt sampling — there is no within-condition stochastic variance. Third, the MMLU subset comprises 300 questions distributed across six subjects; subject-level accuracy estimates are correspondingly noisy and are not reported as primary statistics. A planned future-work item proposes re-running a subset of pairs at temperature 0.7 with multiple seeds to provide an independent estimate of stochastic variance."),
+  PJ("Three statistical limitations should be borne in mind when interpreting the results. First, with 200 HarmBench prompts and 250 benign XSTest prompts, the bootstrap 95% confidence interval on a binomial-proportion metric such as ASR is approximately ±5 percentage points; small deltas may not be statistically distinguishable from zero. Second, decoding is deterministic at temperature 0.0, so the only source of variance reflected in the confidence intervals is prompt sampling — there is no within-condition stochastic variance. Third, the MMLU subset comprises 300 questions distributed across six subjects; subject-level accuracy estimates are correspondingly noisy and are not reported as primary statistics."),
+
+  H2("6.6 Preliminary Observations: Qwen 2B Pair"),
+  PJ("The Qwen 2B pair produced the following first-pass observations. Formal interpretation labels and bootstrap confidence intervals will be computed by the analysis pipeline after all pairs complete."),
+  PJ("HarmBench ASR dropped by 12.0 percentage points under quantization (0.775 → 0.655, −15.5% relative). At face value this appears as a safety improvement: the 4-bit model complied with fewer harmful prompts. However, MMLU accuracy also fell by 8.7 percentage points (0.620 → 0.533, −14.0% relative), a capability decline spanning five of the six evaluated subjects. The simultaneous drop in both harmful compliance and general accuracy is consistent with the capability-collapse-masquerading-as-safety hypothesis: the model became less capable overall, reducing its ability to produce coherent harmful outputs alongside its ability to answer factual questions correctly."),
+  PJ("The XSTest over-refusal rate declined by 1.6 percentage points (0.032 → 0.016, −50.0% relative). This is an unusual accompaniment to a capability-collapse pattern. If reduced ASR were driven solely by increased over-refusal — the model refusing all prompts indiscriminately — XSTest over-refusal would be expected to rise. Its decline instead suggests the 4-bit model produces more compliant responses on benign prompts, consistent with a reduction in pattern-triggered refusal behaviour rather than an increase in genuine safety alignment. Taken together, the three deltas point toward broad capability degradation that manifests differently across benchmark types: the model complies less with complex harmful instructions, also refuses fewer benign prompts, and answers fewer factual questions correctly."),
+  PJ("Subject-level MMLU breakdown supports this reading. Accuracy declined in five of six subjects: high school macroeconomics (0.596 → 0.479, −11.7 pp), business ethics (0.680 → 0.560, −12.0 pp), clinical knowledge (0.729 → 0.563, −16.7 pp), college biology (0.576 → 0.515, −6.1 pp), and high school world history (0.643 → 0.571, −7.1 pp). A small gain in human ageing (0.523 → 0.568, +4.6 pp) is within the noise range expected for a 44-sample subject subset. The overall accuracy decline of 8.7 percentage points substantially exceeds the estimated ±5 pp confidence interval width and is unlikely to be attributable to sampling noise alone."),
+  PJ("Formal interpretation labels and confidence intervals across all three pairs will be reported upon completion of the full matrix and execution of the analysis pipeline."),
 ];
 
 // ------------------------------------------------------------
@@ -775,7 +783,7 @@ const ch10 = [
   H1("Chapter 10 — Conclusion"),
   PJ("This Final Year Project investigates safety–capability trade-offs in four-bit quantized compact language models, focusing on a research question that institutional benchmarks have not directly answered: when a small instruction-tuned model is quantized for on-device deployment, do observed changes in safety behaviour reflect a true shift in alignment or a side-effect of degraded general capability?"),
   PJ("The methodological contribution is a controlled matched-pair design in which baseline and four-bit pair members are loaded from identical baseline weights, with NF4 quantization applied on the fly. This design eliminates publisher- and pipeline-asymmetry as confounds and provides the strongest practical isolation of quantization as the experimental variable. The engineering contribution is an open, reproducible benchmarking framework comprising the matched-pair pipeline, three benchmark plugins, the pairwise analysis layer with rule-based interpretation labels, full SLURM orchestration for the NTU TC1 cluster with resumable per-model matrix jobs, and a verification suite of 122 automated tests. The analytical contribution is the interpretation layer itself, which formalises the alignment-versus-capability disambiguation as a rule-based decision procedure over combined safety and capability deltas."),
-  PJ("The framework is complete, validated, and ready for full cluster execution. Three pairs (Qwen 2B-class, Qwen 4B, and Llama 3.2 3B) are configured, six sbatch files have been generated, Hugging Face gated access has been verified, all required datasets and model weights have been pre-cached on TC1, and the qwen_2b_base/HarmBench smoke sbatch has completed successfully on CUDA. The next operational step is submitting the full six-job matrix. The expected output is a set of pairwise deltas and interpretation labels that directly answer the five research questions, and a documented empirical baseline for future quantization-safety work in the compact-model regime."),
+  PJ("The framework is complete and cluster execution is in progress. Six sbatch files have been generated, Hugging Face gated access has been verified, all required datasets and model weights have been pre-cached on TC1, and the full matrix submission has begun. The Qwen 2B pair (Qwen3-1.7B baseline versus NF4 4-bit) has completed, providing the first empirical data point: MMLU accuracy declined by 8.7 percentage points under quantization, while HarmBench ASR fell by 12.0 points and XSTest over-refusal halved. This preliminary pattern is consistent with capability collapse rather than a genuine alignment shift, and directly illustrates the disambiguation challenge that motivates the study. The Qwen 4B and Llama 3.2 3B pairs are pending; once all six jobs complete, the analysis pipeline will assign formal interpretation labels and compute bootstrap confidence intervals, producing a complete set of pairwise deltas that directly answer the five research questions and establish a documented empirical baseline for future quantization-safety work in the compact-model regime."),
 ];
 
 // ------------------------------------------------------------
@@ -1079,7 +1087,9 @@ const appendixG = [
   buildTable(
     ["When (UTC+8)", "Version", "Change to the report"],
     [
-      ["2026-05-27 15:43", "FYP_Report_2026-05-27.docx (current)", "Recorded that the current Qwen3/Llama pre-cache completed on TC1 and that smoke job 60975 successfully validated the CUDA/offline-cache path. Updated Chapter 5 and Chapter 10 so the next operational step is the full six-job matrix, not the smoke job."],
+      ["2026-05-27 18:30", "FYP_Report_2026-05-27.docx (current)", "Populated Chapter 6 with actual Qwen 2B results (jobs 60976 and 60977). Renamed chapter from 'Intended Results and Analysis Plan' to 'Results and Analysis'. Added §6.6 Preliminary Observations with per-metric analysis, capability-collapse interpretation, and MMLU subject breakdown. Updated Table 6.1 with Qwen 2B point estimates. Updated Abstract and Chapter 10 conclusion to reflect work-in-progress status and preliminary finding."],
+      ["2026-05-27 17:31", "FYP_Report_2026-05-27.docx", "Recorded the first production matrix submission: job 60976 started and job 60977 waited with QOSMaxGRESPerUser. Updated Chapter 5 to describe the effective one-running-GPU-job scheduling rule."],
+      ["2026-05-27 15:43", "FYP_Report_2026-05-27.docx", "Recorded that the current Qwen3/Llama pre-cache completed on TC1 and that smoke job 60975 successfully validated the CUDA/offline-cache path. Updated Chapter 5 and Chapter 10 so the next operational step is the full six-job matrix, not the smoke job."],
       ["2026-05-27 15:40", "FYP_Report_2026-05-27.docx", "Switched the Qwen model pairs from third-party techwithsergiu Qwen3.5-text derivatives to official Qwen3 checkpoints (Qwen/Qwen3-1.7B and Qwen/Qwen3-4B), updating the model table, setup text, limitations, and YAML appendix."],
       ["2026-05-27 00:41", "FYP_Report_2026-05-27.docx", "Rolled the generated report artifact forward to the current checkpoint date. The former 2026-05-24 report is archived for traceability; active documentation now points to the 2026-05-27 docx."],
       ["2026-05-27 00:34", "FYP_Report_2026-05-27.docx", "Updated the experimental-setup status after TC1 pre-cache completion. Corrected XSTest source text to the bundled canonical CSV, recorded that HarmBench/Llama gated access has been verified, updated observed cache sizes, and clarified that the next operational step is the smoke sbatch."],
