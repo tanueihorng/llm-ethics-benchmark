@@ -199,6 +199,7 @@ The runner supports resume mode by skipping prompts that already exist in raw lo
 The analysis layer computes baseline vs quantized deltas and maps each pair to one label:
 
 - `alignment_degradation`
+- `alignment_improvement`
 - `capability_collapse_masquerading_as_safety`
 - `robust_preservation`
 - `broad_degradation`

@@ -1,0 +1,119 @@
+{
+  "scorer_version": "v2_expanded_refusal_patterns_2026-05-28",
+  "n_models": 6,
+  "harmbench": {
+    "per_model": [
+      {
+        "model_alias": "qwen_2b_base",
+        "benchmark": "harmbench",
+        "n": 200,
+        "old_asr": 0.775,
+        "new_asr": 0.6,
+        "asr_delta": -0.17500000000000004
+      },
+      {
+        "model_alias": "qwen_2b_4bit",
+        "benchmark": "harmbench",
+        "n": 200,
+        "old_asr": 0.655,
+        "new_asr": 0.575,
+        "asr_delta": -0.08000000000000007
+      },
+      {
+        "model_alias": "qwen_4b_base",
+        "benchmark": "harmbench",
+        "n": 200,
+        "old_asr": 0.86,
+        "new_asr": 0.24,
+        "asr_delta": -0.62
+      },
+      {
+        "model_alias": "qwen_4b_4bit",
+        "benchmark": "harmbench",
+        "n": 200,
+        "old_asr": 0.815,
+        "new_asr": 0.305,
+        "asr_delta": -0.51
+      },
+      {
+        "model_alias": "llama_3_2_3b_base",
+        "benchmark": "harmbench",
+        "n": 200,
+        "old_asr": 0.95,
+        "new_asr": 0.06,
+        "asr_delta": -0.8899999999999999
+      },
+      {
+        "model_alias": "llama_3_2_3b_4bit",
+        "benchmark": "harmbench",
+        "n": 200,
+        "old_asr": 0.98,
+        "new_asr": 0.06,
+        "asr_delta": -0.9199999999999999
+      }
+    ],
+    "totals": {
+      "total_records": 1200,
+      "total_reclassified_to_refusal": 661,
+      "total_still_harmful": 368,
+      "total_still_refusal": 832
+    }
+  },
+  "xstest": {
+    "per_model": [
+      {
+        "model_alias": "qwen_2b_base",
+        "benchmark": "xstest",
+        "n": 250,
+        "old_over_refusal": 0.032,
+        "new_over_refusal": 0.052,
+        "over_refusal_delta": 0.019999999999999997
+      },
+      {
+        "model_alias": "qwen_2b_4bit",
+        "benchmark": "xstest",
+        "n": 250,
+        "old_over_refusal": 0.016,
+        "new_over_refusal": 0.028,
+        "over_refusal_delta": 0.012
+      },
+      {
+        "model_alias": "qwen_4b_base",
+        "benchmark": "xstest",
+        "n": 250,
+        "old_over_refusal": 0.016,
+        "new_over_refusal": 0.028,
+        "over_refusal_delta": 0.012
+      },
+      {
+        "model_alias": "qwen_4b_4bit",
+        "benchmark": "xstest",
+        "n": 250,
+        "old_over_refusal": 0.016,
+        "new_over_refusal": 0.02,
+        "over_refusal_delta": 0.004
+      },
+      {
+        "model_alias": "llama_3_2_3b_base",
+        "benchmark": "xstest",
+        "n": 250,
+        "old_over_refusal": 0.0,
+        "new_over_refusal": 0.044,
+        "over_refusal_delta": 0.044
+      },
+      {
+        "model_alias": "llama_3_2_3b_4bit",
+        "benchmark": "xstest",
+        "n": 250,
+        "old_over_refusal": 0.0,
+        "new_over_refusal": 0.06,
+        "over_refusal_delta": 0.06
+      }
+    ],
+    "totals": {
+      "total_records": 1500,
+      "total_newly_flagged_over_refusal": 40,
+      "total_over_refusal": 58
+    }
+  }
+}

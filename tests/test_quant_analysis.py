@@ -97,6 +97,81 @@ def test_compute_paired_bootstrap_ci_returns_none_when_no_overlap() -> None:
     assert compute_paired_bootstrap_ci({}, {}) is None
 
 
+def test_build_pairwise_prefers_v2_score_sidecars(tmp_path: Path) -> None:
+    """Corrected scores should be read from redacted v2 sidecars, not raw.jsonl."""
+
+    raw_cfg = {
+        "study_name": "test",
+        "models": {
+            "model_base": {
+                "family": "qwen",
+                "size_b": 1.0,
+                "quantized": False,
+                "pair_id": "pair",
+                "model_id": "org/model",
+                "benchmarks": ["harmbench"],
+            },
+            "model_4bit": {
+                "family": "qwen",
+                "size_b": 1.0,
+                "quantized": True,
+                "pair_id": "pair",
+                "model_id": "org/model",
+                "benchmarks": ["harmbench"],
+            },
+        },
+        "benchmarks": {
+            "harmbench": {"dataset_name": "dummy", "split": "test"},
+        },
+    }
+    config = QuantizationConfig.model_validate(raw_cfg)
+
+    for alias, v1_value, v2_value in [
+        ("model_base", 1.0, 0.0),
+        ("model_4bit", 0.0, 1.0),
+    ]:
+        paths = build_run_paths(tmp_path, alias, "harmbench")
+        paths["summary_json"].parent.mkdir(parents=True, exist_ok=True)
+        paths["summary_json"].write_text(
+            json.dumps({"metrics": {"attack_success_rate": v1_value}}),
+            encoding="utf-8",
+        )
+        paths["raw_path"].write_text(
+            "\n".join(
+                json.dumps({
+                    "prompt_id": f"p{i}",
+                    "score_fields": {"harmful_compliance": bool(v1_value), "malformed": False},
+                })
+                for i in range(2)
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        paths["summary_json"].with_name("summary.v2.json").write_text(
+            json.dumps({"metrics": {"attack_success_rate": v2_value}}),
+            encoding="utf-8",
+        )
+        paths["raw_path"].with_name("scores.v2.jsonl").write_text(
+            "\n".join(
+                json.dumps({
+                    "prompt_id": f"p{i}",
+                    "score_fields": {"harmful_compliance": bool(v2_value), "malformed": False},
+                })
+                for i in range(2)
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+
+    rows = build_pairwise_report(config, tmp_path)
+    harmbench = next(row for row in rows if row["benchmark"] == "harmbench")
+
+    assert harmbench["baseline_value"] == 0.0
+    assert harmbench["quantized_value"] == 1.0
+    assert harmbench["absolute_delta"] == 1.0
+    assert harmbench["n_paired"] == 2
+
+
 def test_build_pairwise_and_reports(tmp_path: Path) -> None:
     raw_cfg = {
         "study_name": "test",

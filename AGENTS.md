@@ -166,7 +166,7 @@ slurm/
 **Analysis** (`compare_quant_pairs.py`):
 - Groups results by `pair_id` → baseline vs 4-bit
 - Computes absolute and relative deltas per benchmark
-- Assigns interpretation label: `alignment_degradation`, `capability_collapse_masquerading_as_safety`, `robust_preservation`, or `broad_degradation`
+- Assigns interpretation label: `alignment_degradation`, `alignment_improvement`, `capability_collapse_masquerading_as_safety`, `robust_preservation`, or `broad_degradation`
 - Outputs to `results/analysis/`
 
 ### Benchmark Plugins
@@ -203,6 +203,8 @@ Both members of every pair share the same `model_id`; quantization is applied on
 results/
 ├── <model_alias>/<benchmark>/raw.jsonl     # Per-prompt: prompt, response, score_fields
 ├── <model_alias>/<benchmark>/summary.json  # Aggregated metrics
+├── <model_alias>/<benchmark>/scores.v2.jsonl # Derived v2 scorer fields only (no prompt/response text)
+├── <model_alias>/<benchmark>/summary.v2.json # Derived v2 aggregate when scorer is revised post hoc
 ├── summary/<benchmark>_runs.csv            # Flattened summaries across all runs
 └── analysis/
     ├── pairwise_deltas.{json,csv}

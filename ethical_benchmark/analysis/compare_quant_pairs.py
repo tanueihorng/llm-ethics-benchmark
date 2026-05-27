@@ -273,6 +273,30 @@ def _read_per_prompt_outcomes(raw_path: Path, benchmark: str) -> Dict[str, float
     return outcomes
 
 
+def _prefer_corrected_score_paths(paths: Dict[str, Path]) -> Tuple[Path, Path]:
+    """Selects the summary/outcome files to use for analysis.
+
+    HarmBench and XSTest may have corrected v2 score sidecars while preserving
+    TC1-original ``raw.jsonl`` and ``summary.json``. When a complete v2 pair is
+    present, analysis uses ``summary.v2.json`` plus ``scores.v2.jsonl``. The
+    older ``raw.v2.jsonl`` fallback is kept only for compatibility with
+    transitional local artifacts and should not be committed because it contains
+    raw model responses.
+    """
+
+    summary_path = paths["summary_json"]
+    raw_path = paths["raw_path"]
+    summary_v2 = summary_path.with_name("summary.v2.json")
+    scores_v2 = raw_path.with_name("scores.v2.jsonl")
+    raw_v2 = raw_path.with_name("raw.v2.jsonl")
+
+    if summary_v2.exists() and scores_v2.exists():
+        return summary_v2, scores_v2
+    if summary_v2.exists() and raw_v2.exists():
+        return summary_v2, raw_v2
+    return summary_path, raw_path
+
+
 def compute_paired_bootstrap_ci(
     baseline_outcomes: Dict[str, float],
     quantized_outcomes: Dict[str, float],
@@ -367,12 +391,16 @@ def build_pairwise_report(config: QuantizationConfig, results_dir: Path) -> List
         baseline_alias, quantized_alias = members
 
         for benchmark, primary_metric in PRIMARY_METRIC_BY_BENCHMARK.items():
-            baseline_summary = _read_json(
-                build_run_paths(results_dir, baseline_alias, benchmark)["summary_json"]
-            )
-            quant_summary = _read_json(
-                build_run_paths(results_dir, quantized_alias, benchmark)["summary_json"]
-            )
+            # Prefer corrected v2 score sidecars when present so analysis uses
+            # the corrected scorer without modifying immutable TC1 artifacts.
+            baseline_paths = build_run_paths(results_dir, baseline_alias, benchmark)
+            quant_paths = build_run_paths(results_dir, quantized_alias, benchmark)
+
+            baseline_summary_path, baseline_raw = _prefer_corrected_score_paths(baseline_paths)
+            quant_summary_path, quant_raw = _prefer_corrected_score_paths(quant_paths)
+
+            baseline_summary = _read_json(baseline_summary_path)
+            quant_summary = _read_json(quant_summary_path)
 
             baseline_value = _extract_metric(baseline_summary, primary_metric)
             quantized_value = _extract_metric(quant_summary, primary_metric)
@@ -386,8 +414,6 @@ def build_pairwise_report(config: QuantizationConfig, results_dir: Path) -> List
 
             family = config.models[baseline_alias].family
 
-            baseline_raw = build_run_paths(results_dir, baseline_alias, benchmark)["raw_path"]
-            quant_raw = build_run_paths(results_dir, quantized_alias, benchmark)["raw_path"]
             baseline_outcomes = _read_per_prompt_outcomes(baseline_raw, benchmark)
             quant_outcomes = _read_per_prompt_outcomes(quant_raw, benchmark)
             ci = compute_paired_bootstrap_ci(baseline_outcomes, quant_outcomes)

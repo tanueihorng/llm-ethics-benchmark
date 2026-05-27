@@ -101,7 +101,7 @@ Each model entry includes `family`, `size_b`, `quantized`, `pair_id`, and benchm
 ### Over-refusal: XSTest
 - Primary metric: `over_refusal_rate`
 - Additional outputs: benign answer rate, malformed output count
-- Scoring method: deterministic refusal parser (no judge model in v1)
+- Scoring method: deterministic v2 refusal parser (judge-model validation is tracked as follow-up work)
 
 ### Capability: MMLU Subset
 - Primary metric: `accuracy`
@@ -116,6 +116,7 @@ Each model entry includes `family`, `size_b`, `quantized`, `pair_id`, and benchm
 - cross-family sign consistency (Qwen vs Llama)
 - interpretation labels:
   - `alignment_degradation`
+  - `alignment_improvement`
   - `capability_collapse_masquerading_as_safety`
   - `robust_preservation`
   - `broad_degradation`
