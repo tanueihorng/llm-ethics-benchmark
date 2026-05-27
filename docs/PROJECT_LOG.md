@@ -6,7 +6,7 @@
 | **Student** | TAN UEI HORNG (UTAN001) — UTAN001@e.ntu.edu.sg |
 | **Supervisor** | Dr. Zhang Jiehuang — jiehuang.zhang@ntu.edu.sg |
 | **School** | College of Computing and Data Science, Nanyang Technological University |
-| **Last updated** | 2026-05-27 (21:00 UTC+8) |
+| **Last updated** | 2026-05-27 (22:00 UTC+8) |
 | **Last updated by** | Claude |
 
 > Whenever you edit this file, bump the **Last updated** date (and name, if a collaborator other than the student) to reflect the most recent change. This is the cheapest way to see at a glance whether the log is current.
@@ -17,9 +17,9 @@ If you're a future Claude session or a collaborator reading this for the first t
 
 ---
 
-## 1. Status snapshot (updated 2026-05-27 21:00 UTC+8)
+## 1. Status snapshot (updated 2026-05-27 22:00 UTC+8)
 
-> **Session handoff (read this first if you're a fresh agent / new chat):** As of 2026-05-27 21:00 UTC+8: Qwen 2B+4B pairs COMPLETE and fully documented. Llama pair submitted (~18:22 TC1 time). Full Qwen analysis written in §6.9 of FYP report. **Immediate next steps:** (1) Monitor Llama jobs: `squeue -u utan001`. (2) When Llama jobs complete: paste `seff <llama_base_jobid>` + `seff <llama_4bit_jobid>` + all 6 Llama summary JSONs. (3) Verify 18 summaries: `ls results/*/*/summary.json`. (4) Run: `make analyze CONFIG=configs/tc1.yaml` → `results/analysis/`. (5) Populate Table 6.1 Llama rows, add §6.10 Llama observations, add §6.11 cross-family comparison, update §6.9 RQ5. Run `make report`. Latest Mac commit pushed (see below). TC1 needs `git pull --ff-only`.
+> **Session handoff (read this first if you're a fresh agent / new chat):** As of 2026-05-27 22:00 UTC+8: ALL 6 jobs complete (60976–60981). Full report written — all three pairs documented, Table 6.1 complete, Table 6.2 (all-pair delta), §6.6–§6.11 all populated, §6.9 synthesis (RQ1–RQ5), Abstract and Ch10 updated. **Next steps:** (1) SCP results from TC1 to Mac: `scp -r utan001@10.96.189.11:/tc1home/FYP/utan001/fyp_quant/repo/results ./results` (2) Run `make analyze CONFIG=configs/tc1.yaml` → `results/analysis/` (gets bootstrap CIs + formal pipeline labels). (3) Update report with CI values when available. (4) T1: send progress email to Dr. Zhang. (5) T3: run `MyTCinfo` on TC1. Latest Mac commit: see git log. TC1 needs `git pull --ff-only` to see latest.
 
 
 | Dimension | State |
@@ -30,8 +30,8 @@ If you're a future Claude session or a collaborator reading this for the first t
 | **SLURM scripts** | 6 per-model `*_matrix.sbatch` files under `slurm/jobs_tc1/`, 18 smoke sbatch files under `slurm/jobs_tc1_smoke/`, and `slurm/cuda_check.sbatch`. All log paths are now **absolute** — safe to `sbatch` from any directory. Always submit from the repo root (`cd /tc1home/FYP/utan001/fyp_quant/repo`) for consistency. |
 | **Hugging Face auth** | ✅ Done 2026-05-26. Token `tc1-fyp-read` (read scope) registered for account `ueihorng` via `huggingface_hub.login()`. Llama 3.2 3B license confirmed accepted (model weights downloaded successfully without 401). |
 | **Datasets / model weights** | ✅ Pre-cached on TC1 (head node). Current required model repos are cached as of 2026-05-27 15:37: Qwen3-1.7B (4.08 GB), Qwen3-4B (8.06 GB), and Llama 3.2 3B (12.9 GB). HarmBench + 6 MMLU subjects are cached. XSTest is bundled as `data/xstest_v2_prompts.csv` (no HF dependency). |
-| **Experiments** | **4 of 6 jobs done; Llama pair submitted.** Qwen 2B pair: jobs 60976 (10m06s, 2.47 GB) + 60977 (26m00s, 4.82 GB) — DONE. Qwen 4B pair: job 60978 (11m35s, 7.75 GB) + job 60979 (24m44s, 4.03 GB) — DONE. Llama pair: submitted at ~18:22 TC1 time (job IDs TBD). Key results: Qwen 2B ΔASR=−0.120, ΔOR=−0.016, ΔMMLU=−0.087 (capability-collapse pattern). Qwen 4B ΔASR=−0.045, ΔOR=0.000, ΔMMLU=−0.004 (robust-preservation pattern). **NEXT: monitor Llama → verify 18 summaries → `make analyze` → populate Table 6.1 Llama rows → `make report`.** |
-| **Current FYP report** | `docs/FYP_Report_2026-05-27.docx` (60576 bytes) — Full Qwen analysis: Table 6.1 (Qwen rows populated), Table 6.2 (Qwen delta comparison + labels), §6.2 within-family analysis, §6.4 capability anchoring with concrete examples, §6.6–§6.8 per-pair observations, §6.9 Qwen synthesis (RQ1–RQ5 provisional answers), updated Ch7+Ch10. Llama rows pending. |
+| **Experiments** | **ALL 6 JOBS COMPLETE.** Qwen 2B: 60976 (10m06s) + 60977 (26m00s). Qwen 4B: 60978 (11m35s) + 60979 (24m44s). Llama 3B: 60980 (6m15s) + 60981 (13m09s). Results: Qwen 2B ΔASR=−0.120/ΔOR=−0.016/ΔMMLU=−0.087 (capability_collapse). Qwen 4B ΔASR=−0.045/ΔOR=0.000/ΔMMLU=−0.004 (robust_preservation). Llama 3B ΔASR=+0.030/ΔOR=0.000/ΔMMLU=−0.043 (broad_degradation). **NEXT: SCP results to Mac → `make analyze` for bootstrap CIs → email Dr. Zhang.** |
+| **Current FYP report** | `docs/FYP_Report_2026-05-27.docx` (63650 bytes) — COMPLETE for all three pairs. Table 6.1 fully populated. Table 6.2 all-pair delta comparison. §6.6–§6.11 all pairs documented with analysis. §6.9 full RQ1–RQ5 synthesis. Updated Abstract, Ch7, Ch10. Bootstrap CIs pending (`make analyze`). |
 | **Last supervisor update** | 2026-03-09 (~2.5 months ago). Re-engagement email drafted in conversation but not yet sent. |
 
 ---
@@ -55,13 +55,13 @@ Tasks are numbered globally as `T<N>` so they can be referenced unambiguously in
 
 ### 2.3 After smoke passes (run the matrix) ← **YOU ARE HERE**
 
-- [ ] **T8. Submit the 6-job matrix.** In progress — all 6 jobs submitted. Done: 60976 (qwen_2b_base), 60977 (qwen_2b_4bit), 60978 (qwen_4b_base), 60979 (qwen_4b_4bit). Llama pair submitted at ~18:22 TC1 time (job IDs TBD). Waiting for Llama pair to complete.
-- [ ] **T9. Monitor.** `squeue -u utan001`, `MyJobHistory`, `seff <jobid>` after each completes.
-- [ ] **T10. Run analysis.** `make analyze CONFIG=configs/tc1.yaml` to compute pairwise deltas and interpretation labels. Outputs to `results/analysis/`.
+- [x] ~~**T8. Submit the 6-job matrix.**~~ DONE. All 6 jobs complete: 60976–60981. Results collected and fully documented in the FYP report.
+- [x] ~~**T9. Monitor.**~~ Done. All 6 jobs monitored and completed.
+- [ ] **T10. Run analysis.** SCP results from TC1 to Mac, then `make analyze CONFIG=configs/tc1.yaml`. Outputs bootstrap CIs and formal labels to `results/analysis/`. **Prerequisite: `scp -r utan001@10.96.189.11:/tc1home/FYP/utan001/fyp_quant/repo/results ./results` on Mac.**
 
 ### 2.4 After results are in (write-up)
 
-- [ ] **T11. Populate Chapter 6 of the FYP report.** Replace the `(pending)` cells in Table 6.1 with actual values. Adjust narrative tense from "intended" to past tense throughout the chapter.
+- [x] ~~**T11. Populate Chapter 6 of the FYP report.**~~ DONE. All pending cells populated. Full analysis written (§6.6–§6.11, §6.9 synthesis, updated Abstract/Ch10).
 - [ ] **T12. Update Chapter 7 (Discussion).** Add empirical observations: which pairs landed in which interpretation labels, surprises vs expectations.
 - [ ] **T13. Update Chapter 10 (Conclusion).** Restate findings in present tense.
 - [ ] **T14. Rebuild the docx** with the populated content (`make report`).
@@ -142,6 +142,7 @@ Every change to the repo gets one row. Timestamps are local time (UTC+8 / Asia/S
 
 | When (UTC+8) | Files | Change | Why / Notes | Report? | Who |
 |---|---|---|---|---|---|
+| 2026-05-27 22:00 | `scripts/build_fyp_report.js`, `docs/FYP_Report_2026-05-27.docx`, `docs/PROJECT_LOG.md` | All 6 jobs complete. Added Llama 3.2 3B results (base: ASR=0.950, OR=0.000, MMLU=0.610; 4-bit: ASR=0.980, OR=0.000, MMLU=0.567). Fully populated Table 6.1. Expanded Table 6.2 to all three pairs. Updated §6.3 with cross-family headline (ASR sign inconsistency). Updated §6.9 RQ5 and synthesis with complete answers. Added §6.10 Llama pair observations (baseline profile, broad_degradation, MMLU subject breakdown). Added §6.11 cross-family comparison (§6.11.1–§6.11.5). Updated Abstract with all three pair findings and headline conclusions. Rewrote Ch10 conclusion with full five-RQ answers. Ticked T8, T9, T11 complete. Rebuilt docx (63650 bytes). | All 6 matrix jobs done. Llama 4-bit result arrived: first positive ΔASR (+0.030) and first broad_degradation label in study. Full documentation pass across all files. | yes | Claude |
 | 2026-05-27 21:00 | `scripts/build_fyp_report.js`, `docs/FYP_Report_2026-05-27.docx`, `docs/PROJECT_LOG.md` | Full Qwen analysis and discussion added to FYP report. Added Table 6.2 (Qwen family delta comparison with interpretation labels). Expanded §6.2 with full within-family analysis including 22:1 MMLU delta ratio. Updated §6.3 with two directional Llama hypotheses. Rewrote §6.4 with concrete Qwen anchoring examples for both outcomes. Added §6.9 Qwen Family Synthesis (RQ1–RQ5 provisional answers + deployment implications discussion). Updated Ch7 intro and Ch10 two-paragraph conclusion. Rebuilt docx (60576 bytes). | User request: full analysis, tabulate all results with deltas, interpretation, comparison, and discussion now that Qwen side is complete and clean. | yes | Claude |
 | 2026-05-27 20:00 | `scripts/build_fyp_report.js`, `docs/FYP_Report_2026-05-27.docx`, `docs/PROJECT_LOG.md` | Added Qwen 4B 4-bit results (job 60979: ASR=0.815, OR=0.016, MMLU=0.743, wall=24m44s). Updated Table 6.1 Qwen 4B row with full pair including deltas (ΔASR=−0.045, ΔOR=0.000, ΔMMLU=−0.004). Expanded §6.2 with actual Qwen 4B quantization paragraph (robust-preservation pattern). Revised §6.7 with confirmed outcome. Added §6.8 Qwen 4B Pair Observations with RQ4 scale contrast analysis. Updated Ch10 conclusion with two-pair findings and scale-sensitivity result. Rebuilt docx (57247 bytes). Updated PROJECT_LOG status (4 of 6 done, Llama submitted). | Job 60979 completed (~18:22 TC1 time). User submitted Llama pair in parallel. New session started — documenting Qwen 4B 4-bit results and updating all files before proceeding. | yes | Claude |
 | 2026-05-27 18:30 | `scripts/build_fyp_report.js`, `docs/FYP_Report_2026-05-27.docx`, `docs/PROJECT_LOG.md` | Populated Chapter 6 with Qwen 2B pair results (jobs 60976 + 60977). Renamed ch6 from "Intended Results and Analysis Plan" to "Results and Analysis". Updated Table 6.1 with actuals: qwen_2b ASR 0.775→0.655 (Δ=−0.120), XSTest OR 0.032→0.016 (Δ=−0.016), MMLU 0.620→0.533 (Δ=−0.087). Added §6.6 Preliminary Observations with capability-collapse analysis and MMLU subject-level breakdown. Updated abstract and ch10 conclusion. Added revision history row. Rebuilt docx (55327 bytes). Updated PROJECT_LOG status snapshot + T8 progress. | User request: document Qwen 2B results and tabulate in the word document before Qwen 4B runs complete. | yes | Claude |
