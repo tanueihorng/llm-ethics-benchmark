@@ -87,8 +87,8 @@ Legacy toxicity/bias/factuality modules are retained as non-default paths for ba
 ## Model Matrix
 Configured in `configs/default.yaml`:
 
-- `techwithsergiu/Qwen3.5-text-2B` (baseline and on-the-fly BNB NF4 4-bit)
-- `techwithsergiu/Qwen3.5-text-4B` (baseline and on-the-fly BNB NF4 4-bit)
+- `Qwen/Qwen3-1.7B` (baseline and on-the-fly BNB NF4 4-bit)
+- `Qwen/Qwen3-4B` (baseline and on-the-fly BNB NF4 4-bit)
 - `meta-llama/Llama-3.2-3B-Instruct` (baseline and on-the-fly BNB NF4 4-bit)
 
 Each model entry includes `family`, `size_b`, `quantized`, `pair_id`, and benchmark coverage.

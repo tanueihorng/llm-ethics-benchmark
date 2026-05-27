@@ -16,10 +16,13 @@ results/summary/*.csv
 # SLURM logs for any cluster variant (slurm_logs, slurm_logs_tc1, ...)
 results/slurm_logs*/
 
-# Generated SLURM artifacts under slurm/ and slurm/jobs*/
+# Generated SLURM artifacts
 slurm/*.json
 slurm/jobs*/manifest.json
 slurm/jobs*/submitted_jobs.json
+# slurm/jobs/ is the legacy job directory (pre-TC1 restructure); ignore its sbatch files.
+# Active jobs live in slurm/jobs_tc1/ and slurm/jobs_tc1_smoke/ (tracked in git).
+slurm/jobs/*.sbatch
 
 # Editor / IDE / OS caches not relevant to this repo
 .swift-cache/
