@@ -252,12 +252,12 @@ const cover = [
   }),
   new Paragraph({
     alignment: AlignmentType.CENTER,
-    children: [new TextRun({ text: "Document date:  24 May 2026", font: FONT, size: 26, bold: true })],
+    children: [new TextRun({ text: "Document date:  27 May 2026", font: FONT, size: 26, bold: true })],
     spacing: { after: 100 },
   }),
   new Paragraph({
     alignment: AlignmentType.CENTER,
-    children: [new TextRun({ text: "Revision: incorporates TC1 user-guide policy review", font: FONT, size: 20, italics: true, color: "555555" })],
+    children: [new TextRun({ text: "Revision: incorporates v2 scorer correction and immutable sidecar handoff", font: FONT, size: 20, italics: true, color: "555555" })],
   }),
   new Paragraph({ children: [new PageBreak()] }),
 ];
@@ -815,7 +815,7 @@ const ch7 = [
   PJ("Each benchmark operationalises its dimension in a specific way. HarmBench captures one curated definition of \"harmful compliance\" against a particular set of adversarial prompts; other operationalisations exist and may yield different absolute numbers. XSTest captures over-refusal against a specific distribution of benign-but-suspicious prompts. The MMLU subset, even with diverse subject coverage, is a partial capability proxy and does not measure all reasoning capacities relevant to deployment (such as code generation, long-context reasoning, or tool use). These construct boundaries are common in safety evaluation but should be borne in mind when interpreting the results."),
 
   H2("7.4 Refusal Parser Trade-offs"),
-  PJ("The deterministic regex-based refusal parser was selected for reproducibility and transparency, and against the alternative of using a separate judge LLM. The trade-off is sensitivity. The parser may miss nuanced refusals — for example, a model that pivots to a related but non-harmful topic, or that produces a euphemistic refusal that does not match any of the configured patterns. The parser is therefore more conservative in its refusal estimates than a judge-LLM would likely be. The Future Work chapter proposes a sensitivity check in which a subset of responses is independently scored by a judge LLM and the resulting rates are compared against the deterministic parser as an additional validity check."),
+  PJ("The deterministic regex-based refusal parser was selected for reproducibility and transparency, and against the alternative of using a separate judge LLM. The trade-off is sensitivity. The parser may miss nuanced refusals — for example, a model that pivots to a related but non-harmful topic, or that produces a euphemistic refusal that does not match any of the configured patterns. The parser is therefore more conservative in its refusal estimates than a judge-LLM would likely be. After the v1→v2 correction, this limitation is handled through two safeguards: immutable raw outputs with derived score sidecars, and a planned judge-model validation pass that will produce separate judge sidecars rather than overwriting the current v2 results."),
 
   H2("7.5 Cross-Family Comparison Caveat"),
   PJ("The Qwen-versus-Llama comparison should be read as descriptive only. Qwen and Llama differ in tokenizer, pre-training corpus, instruction-tuning recipe, and safety-alignment methodology. Differences in their quantization deltas could plausibly reflect any combination of these factors, not just family identity. The cross-family component of the study therefore provides a useful robustness check on the within-Qwen findings but does not support causal claims about quantization–family interactions."),
@@ -851,7 +851,7 @@ const ch9 = [
     "Stochastic-decoding sensitivity arm. Re-run a representative subset of pairs at temperature 0.7 with three to five distinct seeds to obtain an independent estimate of within-condition variance. This would meaningfully strengthen the statistical claims of the primary study.",
     "Expanded scale axis. Once primary results are in hand, extend the Qwen sweep to include a 0.5-billion or 7-billion parameter point, broadening the scale axis used in the RQ4 analysis.",
     "Multilingual extension. Replicate the matched-pair design in Chinese (where Qwen is natively strong) and one low-resource language, to test whether quantization-induced safety changes are language-dependent.",
-    "Judge-LLM sensitivity check. Re-score a stratified sample of responses with an independent judge LLM (or an ensemble) and compare the resulting refusal rates against the deterministic parser's estimates.",
+    "Judge-LLM sensitivity check. Re-score saved responses with an independent judge LLM (HarmBench's official classifier, LlamaGuard, or a strict-schema API judge) and compare the resulting refusal/compliance rates against the deterministic v2 parser. This must be implemented as a derived validation layer with separate judge sidecars and redacted diagnostics, not by modifying raw.jsonl, summary.json, scores.v2.jsonl, or summary.v2.json.",
     "Safety-preserving quantization. Investigate emerging \"safety-preserving\" quantization methods that explicitly seek to mitigate alignment degradation under PTQ, and compare them against the vanilla NF4 baseline studied here.",
   ]),
 ];
@@ -1168,6 +1168,7 @@ const appendixG = [
   buildTable(
     ["When (UTC+8)", "Version", "Change to the report"],
     [
+      ["2026-05-27 23:54", "FYP_Report_2026-05-27.docx (current)", "Added Appendix H as a fresh-session handoff after the v2 scorer incident. The appendix documents the v1 failure mode, the v2 parser correction, the later immutable-sidecar correction, the verification evidence, and the next-step contract for judge-model validation. Updated cover revision text and Future Work wording to make clear that LlamaGuard/API judge scoring is a derived validation layer rather than a replacement for v2 or a mutation of raw outputs. Documented that any local incomplete judge skeleton should not be committed until T20 is implemented end-to-end."],
       ["2026-05-28 12:00", "FYP_Report_2026-05-27.docx (current)", "T13 — Refusal classifier revision v1 → v2. The v1 deterministic regex parser missed canonical modern refusal templates (\"I can't fulfill this request\", \"I cannot provide\", \"I'm unable to assist\", curly-apostrophe variants), systematically misclassifying clear refusals as harmful compliance. Replaced with a comprehensive pattern set (forty-plus regexes; apostrophe normalisation; verb-family coverage). Added rescore script (`scripts/rescore_harmbench.py`) that re-evaluates all existing raw.jsonl files without re-running inference; emits redacted IDs-only diagnostic CSVs and an aggregate JSON. The final workflow preserves TC1-original `raw.jsonl`/`summary.json` files and stores corrected scores in derived `scores.v2.jsonl` + `summary.v2.json` sidecars. Headline impact: Qwen 4B ΔASR flipped sign from −0.045 (v1) to +0.065 (v2), with CI now excluding zero — the study's most robust empirical finding; Qwen 1.7B ΔASR collapsed from −0.120 (v1) to −0.025 (v2, within noise); Llama ΔASR moved from +0.030 (v1) to exactly 0.000 (v2). Two of three interpretation labels changed (Qwen 4B → alignment_degradation; Llama → broad_degradation). Re-ran `make analyze` for updated bootstrap CIs. All affected text rewritten throughout the report: Abstract, Table 6.1, Table 6.2, §6.1, §6.1.1 (new — scorer revision history), §6.3, §6.4, §6.5, §6.6, §6.7, §6.8, §6.9 (all five RQ answers), §6.10, §6.11 (all subsections), Ch10. Thesis reframed around the framework as the durable contribution. Test suite grew to 163 with refusal-pattern regression tests and v2 sidecar-selection coverage. T12 entry from 2026-05-28 01:00 superseded by this update."],
       ["2026-05-28 01:00", "FYP_Report_2026-05-27.docx (superseded by v2 scorer revision)", "T12 — Incorporated paired bootstrap 95% confidence intervals throughout the results chapter. Pipeline extended (`compare_quant_pairs.py` adds `compute_paired_bootstrap_ci` and emits CI bounds + significance flag per benchmark in `pairwise_deltas.{json,csv}`). Table 6.1 redesigned with \"Δ (95% CI)\" and \"Sig?\" columns. §6.1 introduces the bootstrap method and lists significance status of each delta. §6.5 Statistical Caveats updated with observed CI widths. §6.6 (Qwen 2B, both deltas significant), §6.8 (Qwen 4B, hedged — ΔASR borderline non-significant), §6.10 (Llama, ΔMMLU significant, ΔASR borderline) rewritten with inline CI annotations. RQ1–RQ3 in §6.9 expanded with significance language. §6.11.2, §6.11.3, §6.11.4 cross-family subsections updated. Ch10 conclusion rewritten with full significance reporting. Test suite grew to 126 (added 3 new tests: outcome extraction, bootstrap CI smoke, no-overlap guard). Pipeline output `results/analysis/pairwise_deltas.json` now contains CI fields."],
       ["2026-05-28 00:30", "FYP_Report_2026-05-27.docx", "Extended interpretation taxonomy with alignment_improvement (mirror of alignment_degradation): fires when ΔASR ≤ −0.02 with capability and over-refusal preserved. Reclassified Qwen 4B from broad_degradation → alignment_improvement, properly capturing the desirable capability-preserving harmful-compliance reduction. Updated Table 3.4 (five labels), §3.6 intro, §6.4 (now five canonical outcomes), §6.8 (Qwen 4B reading rewritten as genuine safety win), RQ4 synthesis, §6.11.5 (full safety spectrum), Ch10, Abstract. Pipeline output (`make analyze`) re-run after code change."],
@@ -1220,6 +1221,40 @@ const appendixF = [
   ),
 ];
 
+const appendixH = [
+  H1("Appendix H — Scorer Incident and Future-Session Handoff"),
+  PJ("This appendix is included so that a future agent or fresh chat session can continue the work without relying on conversation memory. It records the critical scorer incident, the corrected artifact contract, and the next safe continuation point. The authoritative operational source remains `docs/PROJECT_LOG.md`; this appendix mirrors the same information in the Word deliverable."),
+
+  H2("H.1 What went wrong in v1"),
+  PJ("The original HarmBench and XSTest scorer used a narrow deterministic refusal parser with only fourteen regex patterns. During post-hoc review, it became clear that the parser missed common modern instruction-model refusal templates, including straight- and curly-apostrophe variants of phrases such as \"I can't fulfil this request\", \"I cannot provide\", and \"I'm unable to assist\". Those responses were clear refusals, but v1 counted them as harmful compliance on HarmBench or benign answers on XSTest. This was a scoring error, not a target-model generation error: the six TC1 jobs had already completed, and the saved model outputs did not change."),
+  PJ("The consequence was material. Under v1, the report could have supported an overly optimistic interpretation of NF4 quantization, especially for Qwen 4B. Under the corrected v2 scorer, Qwen 4B changes from a point-estimate safety improvement to a statistically significant alignment_degradation result: ΔASR = +0.065 with 95% CI [+0.025, +0.110]. Qwen 1.7B's apparent ASR reduction shrinks to a non-significant −0.025, and Llama 3.2 3B's ΔASR becomes exactly 0.000. MMLU values are unchanged because MMLU scoring does not use the refusal parser."),
+
+  H2("H.2 How the correction was made"),
+  PJ("The v2 correction expanded `ethical_benchmark/benchmarks/utils.py` with broader refusal-pattern coverage, punctuation normalisation, and a diagnostic helper that reports the matched refusal-pattern name. Regression tests were added for canonical refusal strings, negative controls, and curly-apostrophe handling. The analysis pipeline was then re-run from saved outputs; no target-model inference was re-run on TC1. This was appropriate because the flaw was in the scoring layer, not in model execution."),
+  PJ("A first implementation rescored `raw.jsonl` and `summary.json` in place. That approach was rejected during Codex audit because the original TC1 outputs are the evidence trail and should remain immutable. The final solution preserves `raw.jsonl` and `summary.json` as original v1 artifacts, and stores corrected v2 scoring in sidecars: `scores.v2.jsonl` contains prompt IDs and score_fields only, with no prompt or response text, and `summary.v2.json` contains corrected aggregates. `compare_quant_pairs.py` now prefers complete v2 sidecars when they exist and falls back to original summaries otherwise."),
+
+  H2("H.3 Current artifact contract"),
+  buildTable(
+    ["Artifact", "Status", "Rule for future work"],
+    [
+      ["raw.jsonl", "TC1-original saved generations and original score fields", "Do not modify, redact, duplicate into new raw files, or print prompt/response content during audits."],
+      ["summary.json", "Original aggregate summary from the initial run", "Do not overwrite during post-hoc scoring corrections."],
+      ["scores.v2.jsonl", "Derived v2 score fields only; no prompt/response text", "Authoritative corrected scorer sidecar for HarmBench/XSTest analysis."],
+      ["summary.v2.json", "Derived v2 aggregate summary", "Used by `make analyze` through sidecar preference logic."],
+      ["rescore_diagnostics_*.csv", "Redacted diagnostics with IDs, labels, lengths, and matched-pattern names", "Safe to inspect; must remain free of raw prompt/response text."],
+      ["scores.judge.<judge>.jsonl", "Future judge-model sidecar, not yet implemented", "Write only if T20 is implemented; keep separate from v2 sidecars."],
+    ],
+    [1900, 3200, 4700],
+  ),
+
+  H2("H.4 Verification already completed"),
+  PJ("The corrected workflow was verified in four ways. First, the full test suite passed with 163 tests, including new v2 refusal-parser regression tests and a sidecar-selection test for the analysis layer. Second, `make analyze` reproduced the current v2 headline numbers from sidecars. Third, the rescore script was checked to leave all original `raw.jsonl` and `summary.json` hashes unchanged. Fourth, diagnostic outputs were checked for redaction: they contain IDs, old/new labels, response length, malformed/refusal flags, and matched pattern names, but no raw prompt or response text."),
+
+  H2("H.5 Where the next session should continue"),
+  PJ("The next methodological improvement is T20: judge-model validation. This should be treated as a sensitivity check rather than a replacement for the current report scorer. Acceptable options include HarmBench's official classifier, LlamaGuard, or an API judge with strict JSON output. Whichever option is chosen, the implementation must write separate judge sidecars and redacted diagnostics; it must not mutate raw outputs, v2 sidecars, or the current report numbers unless a later documented decision explicitly promotes judge scoring as the primary metric."),
+  PJ("Operationally, a future TC1 session should first run `git pull --ff-only` in `/tc1home/FYP/utan001/fyp_quant/repo` to receive commit `aa451dc` or later. Do not run judge Python code on the TC1 head node; submit judge scoring through `sbatch`. If an API judge is used from the Mac instead of TC1, preserve the same artifact contract and log token/cost assumptions separately. If the judge refuses or fails to classify a benchmark prompt/response pair, record that as a judge-status field such as invalid, refused, or error, and keep the raw text out of logs. If a local untracked `ethical_benchmark/judges/__init__.py` skeleton is present, treat it as incomplete T20 scaffolding: complete the missing validation module in the same change or remove the skeleton before committing."),
+];
+
 // ------------------------------------------------------------
 // Assemble document
 // ------------------------------------------------------------
@@ -1246,6 +1281,7 @@ const body = [
   ...appendixE,
   ...appendixF,
   ...appendixG,
+  ...appendixH,
 ];
 
 const doc = new Document({

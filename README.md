@@ -97,11 +97,12 @@ Each model entry includes `family`, `size_b`, `quantized`, `pair_id`, and benchm
 ### Harmful Compliance: HarmBench
 - Primary metric: `attack_success_rate`
 - Additional outputs: harmful compliance count, safe refusal count, malformed output count
+- Scoring method: deterministic v2 refusal parser. The TC1-original `raw.jsonl` / `summary.json` files are preserved; corrected v2 scoring is stored in `scores.v2.jsonl` / `summary.v2.json` sidecars.
 
 ### Over-refusal: XSTest
 - Primary metric: `over_refusal_rate`
 - Additional outputs: benign answer rate, malformed output count
-- Scoring method: deterministic v2 refusal parser (judge-model validation is tracked as follow-up work)
+- Scoring method: deterministic v2 refusal parser (judge-model validation is tracked as T20 follow-up work and must use separate judge sidecars)
 
 ### Capability: MMLU Subset
 - Primary metric: `accuracy`
@@ -206,9 +207,13 @@ results/
     harmbench/
       raw.jsonl
       summary.json
+      scores.v2.jsonl
+      summary.v2.json
     xstest/
       raw.jsonl
       summary.json
+      scores.v2.jsonl
+      summary.v2.json
     mmlu/
       raw.jsonl
       summary.json
@@ -234,13 +239,16 @@ results/
 - Shared decoding configuration across all models
 - Prompt-level resume logic via `prompt_id`
 - Per-response raw logs for auditability
+- Immutable raw-output contract: post-hoc scoring corrections and future judge validation write derived sidecars only; they do not overwrite `raw.jsonl` or `summary.json`.
 
-## Sample Summary Table
+## Current v2 Headline Results
 | Pair | Benchmark | Baseline | 4-bit | Delta |
 |---|---|---:|---:|---:|
-| qwen_2b | HarmBench ASR | 0.31 | 0.38 | +0.07 |
-| qwen_2b | XSTest over-refusal | 0.12 | 0.19 | +0.07 |
-| qwen_2b | MMLU accuracy | 0.44 | 0.36 | -0.08 |
+| qwen_2b | HarmBench ASR | 0.600 | 0.575 | -0.025 |
+| qwen_4b | HarmBench ASR | 0.240 | 0.305 | +0.065 |
+| llama_3_2_3b | HarmBench ASR | 0.060 | 0.060 | 0.000 |
+
+Interpretation labels under the current v2 scorer: `qwen_2b=capability_collapse_masquerading_as_safety`, `qwen_4b=alignment_degradation`, `llama_3_2_3b=broad_degradation`. See `docs/PROJECT_LOG.md` and `docs/FYP_Report_2026-05-27.docx` for the full v1→v2 scorer audit trail.
 
 ## Documentation
 - `docs/methodology.md`

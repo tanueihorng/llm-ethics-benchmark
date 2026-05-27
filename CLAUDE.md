@@ -115,7 +115,7 @@ sbatch slurm/jobs_tc1/llama_3_2_3b_4bit__matrix.sbatch
 
 ### Tests
 ```bash
-pytest tests/                                    # All tests (122)
+pytest tests/                                    # All tests (163)
 pytest tests/test_quant_smoke.py                 # Smoke: end-to-end pipeline
 pytest tests/test_quant_analysis.py              # Pairwise delta computation
 pytest tests/test_refusal_parser.py              # Refusal detection patterns
@@ -156,7 +156,7 @@ slurm/
 2. Set seed (Python, NumPy, Torch)
 3. `HFModelLoader` loads model + tokenizer (dtype/device resolution; on-the-fly NF4 if `quantized: true`)
 4. `TextGenerator` batches prompts through model (chat template with `enable_thinking=False`)
-5. Benchmark plugin scores each response (deterministic regex; no judge model)
+5. Benchmark plugin scores each response (primary path: deterministic v2 refusal parser; judge-model validation is optional future sidecar work)
 6. Aggregate metrics → write `results/<model>/<benchmark>/raw.jsonl` + `summary.json`
 
 **Matrix run** (`run_quant_matrix.py`):
@@ -171,7 +171,7 @@ slurm/
 
 ### Benchmark Plugins
 
-All plugins implement `BenchmarkPlugin` ABC in `ethical_benchmark/benchmarks/base.py`. Each plugin handles its own dataset loading, prompt formatting, and per-response scoring. Refusal detection is **deterministic regex** (no judge models) for reproducibility.
+All plugins implement `BenchmarkPlugin` ABC in `ethical_benchmark/benchmarks/base.py`. Each plugin handles its own dataset loading, prompt formatting, and per-response scoring. Current report numbers use the **deterministic v2 refusal parser** for reproducibility. Judge-model validation (T20: HarmBench classifier, LlamaGuard, or API judge) must be implemented as a separate sensitivity-check sidecar, not as an overwrite of raw outputs or v2 sidecars.
 
 | Benchmark | Dataset | Primary Metric | Batch Size |
 |-----------|---------|----------------|------------|
@@ -205,6 +205,8 @@ results/
 ├── <model_alias>/<benchmark>/summary.json  # Aggregated metrics
 ├── <model_alias>/<benchmark>/scores.v2.jsonl # Derived v2 scorer fields only (no prompt/response text)
 ├── <model_alias>/<benchmark>/summary.v2.json # Derived v2 aggregate when scorer is revised post hoc
+├── <model_alias>/<benchmark>/scores.judge.<name>.jsonl # Optional future judge sidecar; no raw text in diagnostics
+├── <model_alias>/<benchmark>/summary.judge.<name>.json # Optional future judge aggregate
 ├── summary/<benchmark>_runs.csv            # Flattened summaries across all runs
 └── analysis/
     ├── pairwise_deltas.{json,csv}
@@ -212,7 +214,7 @@ results/
     └── quantization_analysis_summary.json
 ```
 
-`raw.jsonl` records include `pair_id`, `quantized`, `model_alias`, `seed`, `generation_config`, and `timestamp` for full auditability. The resume logic (`--resume`, default) skips already-processed `prompt_id`s to allow interrupted runs to continue.
+`raw.jsonl` records include `pair_id`, `quantized`, `model_alias`, `seed`, `generation_config`, and `timestamp` for full auditability. Treat `raw.jsonl` and `summary.json` as immutable TC1-original artifacts. Post-hoc scoring corrections or judge validation must write derived sidecars and redacted diagnostics only. The resume logic (`--resume`, default) skips already-processed `prompt_id`s to allow interrupted runs to continue.
 
 ### TC1 cluster policy (must respect)
 
