@@ -18,7 +18,6 @@ results/slurm_logs*/
 
 # Generated SLURM artifacts under slurm/ and slurm/jobs*/
 slurm/*.json
-slurm/jobs*/*.sbatch
 slurm/jobs*/manifest.json
 slurm/jobs*/submitted_jobs.json
 

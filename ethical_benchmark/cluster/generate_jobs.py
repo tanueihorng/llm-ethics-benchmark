@@ -159,6 +159,11 @@ def generate_job_scripts(
     jobs_dir.mkdir(parents=True, exist_ok=True)
 
     log_dir = Path(config.slurm.log_dir)
+    # Anchor a relative log_dir under work_dir so #SBATCH --output/--error are
+    # absolute — SLURM resolves these from the submission CWD, not from the cd
+    # inside the script, so a relative path breaks when sbatch is run from ~.
+    if not log_dir.is_absolute() and config.slurm.work_dir:
+        log_dir = Path(config.slurm.work_dir) / log_dir
     # Note: don't mkdir here — the path may live under a cluster-side FS that
     # doesn't exist on the submission machine. The sbatch prologue creates it.
 
