@@ -6,7 +6,7 @@
 | **Student** | TAN UEI HORNG (UTAN001) — UTAN001@e.ntu.edu.sg |
 | **Supervisor** | Dr. Zhang Jiehuang — jiehuang.zhang@ntu.edu.sg |
 | **School** | College of Computing and Data Science, Nanyang Technological University |
-| **Last updated** | 2026-05-27 (16:30 UTC+8) |
+| **Last updated** | 2026-05-27 (16:45 UTC+8) |
 | **Last updated by** | Claude |
 
 > Whenever you edit this file, bump the **Last updated** date (and name, if a collaborator other than the student) to reflect the most recent change. This is the cheapest way to see at a glance whether the log is current.
@@ -55,7 +55,7 @@ Tasks are numbered globally as `T<N>` so they can be referenced unambiguously in
 
 ### 2.3 After smoke passes (run the matrix) ← **YOU ARE HERE**
 
-- [ ] **T8. Submit the 6-job matrix.** `make cluster-submit CONFIG=configs/tc1.yaml JOBS_DIR=slurm/jobs_tc1`. With MaxJobsPU=2, expect 3 sequential pairs.
+- [ ] **T8. Submit the 6-job matrix.** Use direct `sbatch` (not `make cluster-submit` — see D8). Submit 2 at a time (MaxJobsPU=2): `sbatch slurm/jobs_tc1/qwen_2b_base__matrix.sbatch` + `sbatch slurm/jobs_tc1/qwen_2b_4bit__matrix.sbatch`, wait, then the Qwen 4B pair, then Llama.
 - [ ] **T9. Monitor.** `squeue -u utan001`, `MyJobHistory`, `seff <jobid>` after each completes.
 - [ ] **T10. Run analysis.** `make analyze CONFIG=configs/tc1.yaml` to compute pairwise deltas and interpretation labels. Outputs to `results/analysis/`.
 
@@ -116,6 +116,12 @@ Decisions are numbered globally as `D<N>` for cross-reference (e.g. "see D3"). E
 
 **Rationale:** User explicitly stated they would use multiple coding agents (Codex + Claude). Different agents auto-load different files, so a single canonical file would only be read by one of them. Duplication with a sync discipline is more reliable than tooling. For the report: handing a stale docx to the supervisor undermines the deliverable; making `make report` a one-second rebuild removes the friction of keeping it current. Source-of-truth is the JS builder; the docx is an artifact and should never be hand-edited.
 
+### D8. 2026-05-27 — Submit matrix jobs via direct sbatch, not make cluster-submit
+
+**Decision:** On TC1, submit sbatch files with direct `sbatch slurm/jobs_tc1/<name>.sbatch` commands, not via `make cluster-submit`.
+
+**Rationale:** `make cluster-submit` calls `submit_jobs.py`, which opens `manifest.json` from the jobs directory as its first action. `manifest.json` is gitignored and absent on TC1 after `git pull`, so the command fails immediately with a file-not-found error. Additionally, `make cluster-submit` runs Python on the head node, which TC1 policy explicitly forbids. Direct `sbatch` avoids both issues: it is a SLURM admin command (explicitly permitted on the head node) and requires no generated metadata files.
+
 ### D7. 2026-05-27 — Switch Qwen pairs from techwithsergiu to official Qwen3 models
 
 **Decision:** Replace `techwithsergiu/Qwen3.5-text-2B` and `techwithsergiu/Qwen3.5-text-4B` with `Qwen/Qwen3-1.7B` and `Qwen/Qwen3-4B` respectively. Pair IDs, model aliases, and output directory paths remain unchanged.
@@ -130,6 +136,7 @@ Every change to the repo gets one row. Timestamps are local time (UTC+8 / Asia/S
 
 | When (UTC+8) | Files | Change | Why / Notes | Report? | Who |
 |---|---|---|---|---|---|
+| 2026-05-27 16:45 | `CLAUDE.md`, `AGENTS.md`, `docs/PROJECT_LOG.md` | Corrected T8 command: `make cluster-submit` → direct `sbatch`. Updated CLAUDE.md/AGENTS.md SLURM section to document why `make cluster-submit` cannot be used on TC1 (reads gitignored `manifest.json`; runs Python on head node). Added D8 decision. | Codex flagged that `make cluster-submit` depends on `manifest.json` which is gitignored and won't exist on TC1 after `git pull`. | no | Claude |
 | 2026-05-27 16:30 | `README.md`, `.gitignore`, `docs/PROJECT_LOG.md` | Repo hygiene: committed Codex's uncommitted README.md fix (techwithsergiu → Qwen3 model IDs). Deleted 18 legacy sbatch files from `slurm/jobs/` (old pre-TC1-restructure artifacts: dropped `qwen_0_8b_*` and old `*_bf16` naming). Added `slurm/jobs/*.sbatch` to `.gitignore` to prevent them reappearing; active jobs live in `slurm/jobs_tc1/` and `slurm/jobs_tc1_smoke/` (tracked). | Flagged by Codex: working tree was not clean. | no | Claude |
 | 2026-05-27 16:15 | `scripts/build_fyp_report.js`, `docs/FYP_Report_2026-05-27.docx`, `docs/PROJECT_LOG.md` | Added two paragraphs to the FYP report: (1) §3.2 Model Selection — explains the initial consideration of techwithsergiu models, the `CUDNN_STATUS_NOT_INITIALIZED` error (hybrid SSM architecture + missing `causal-conv1d`), and why official Qwen3 was chosen instead; (2) §5.4.1 Infrastructure Validation — documents the two sbatch path bugs (relative `#SBATCH --output` paths; `/tmp` not shared across nodes), the fixes, and the successful smoke-job result (job 60975). Rebuilt docx (53316 bytes). | User request: document the trigger event (CUDNN error) and model switch in the Word doc so the supervisor has the full picture. | yes | Claude |
 | 2026-05-27 15:43 | `docs/PROJECT_LOG.md`, `scripts/build_fyp_report.js`, `docs/FYP_Report_2026-05-27.docx`, `README.md` | Recorded successful TC1 validation after the official Qwen3 switch. Marked T6 and T7 complete, updated the status snapshot from "smoke pending" to "full matrix next", refreshed report text around pre-cache/run-plan/conclusion, and corrected README's model matrix to official Qwen3 IDs. | User ran `python scripts/prefetch_tc1.py --config configs/tc1.yaml`, then smoke job `60975`; the job completed cleanly on CUDA and produced `results/qwen_2b_base/harmbench/summary.json`. This clears T8 full-matrix submission. | yes | Codex |

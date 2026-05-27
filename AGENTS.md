@@ -95,8 +95,21 @@ python fyp_cli.py analyze --config configs/default.yaml --output_dir results/ana
 make prefetch CONFIG=configs/tc1.yaml         # One-time: pre-cache datasets + models on HEAD node
 make cluster-generate CONFIG=configs/tc1.yaml # Generate per-model sbatch scripts → slurm/jobs_tc1/
 make cluster-smoke CONFIG=configs/tc1.yaml    # Generate 5-sample smoke sbatch files → slurm/jobs_tc1_smoke/
-make cluster-submit CONFIG=configs/tc1.yaml   # Submit jobs (use --dry_run to validate first)
 make cluster-check CONFIG=configs/tc1.yaml    # Poll squeue for job status
+```
+
+**Job submission on TC1 — use direct `sbatch`, not `make cluster-submit`:**
+`make cluster-submit` reads `manifest.json` from the jobs directory, which is gitignored and therefore absent on TC1 after `git pull`. It also runs Python on the head node, which TC1 policy forbids. Submit jobs directly:
+```bash
+# From /tc1home/FYP/utan001/fyp_quant/repo — submit 2 at a time (MaxJobsPU=2)
+sbatch slurm/jobs_tc1/qwen_2b_base__matrix.sbatch
+sbatch slurm/jobs_tc1/qwen_2b_4bit__matrix.sbatch
+# wait for both to finish, then:
+sbatch slurm/jobs_tc1/qwen_4b_base__matrix.sbatch
+sbatch slurm/jobs_tc1/qwen_4b_4bit__matrix.sbatch
+# wait, then:
+sbatch slurm/jobs_tc1/llama_3_2_3b_base__matrix.sbatch
+sbatch slurm/jobs_tc1/llama_3_2_3b_4bit__matrix.sbatch
 ```
 
 ### Tests
