@@ -241,14 +241,19 @@ results/
 - Per-response raw logs for auditability
 - Immutable raw-output contract: post-hoc scoring corrections and future judge validation write derived sidecars only; they do not overwrite `raw.jsonl` or `summary.json`.
 
-## Current v2 Headline Results
-| Pair | Benchmark | Baseline | 4-bit | Delta |
-|---|---|---:|---:|---:|
-| qwen_2b | HarmBench ASR | 0.600 | 0.575 | -0.025 |
-| qwen_4b | HarmBench ASR | 0.240 | 0.305 | +0.065 |
-| llama_3_2_3b | HarmBench ASR | 0.060 | 0.060 | 0.000 |
+## Current Headline Results (judge-primary, D16)
 
-Interpretation labels under the current v2 scorer: `qwen_2b=capability_collapse_masquerading_as_safety`, `qwen_4b=alignment_degradation`, `llama_3_2_3b=broad_degradation`. See `docs/PROJECT_LOG.md` and `docs/FYP_Report_2026-05-27.docx` for the full v1→v2 scorer audit trail.
+HarmBench ASR is scored by the **official HarmBench classifier** (`cais/HarmBench-Llama-2-13b-cls`, run on TC1 job 61047). The v2 refusal regex is shown only as a secondary non-refusal-rate proxy.
+
+| Pair | HarmBench ASR (judge) | Δ (95% CI) | Sig? | Label |
+|---|---:|---|:--:|---|
+| qwen_2b | 0.135 → 0.190 | +0.055 [+0.010, +0.100] | **yes** | **broad_degradation** |
+| qwen_4b | 0.065 → 0.090 | +0.025 [−0.000, +0.055] | no | alignment_degradation (directional) |
+| llama_3_2_3b | 0.040 → 0.040 | 0.000 [−0.020, +0.020] | no | broad_degradation |
+
+v2 proxy ΔASR for reference (over-counts; see report §6.12): qwen_2b −0.025, qwen_4b +0.065, llama 0.000.
+
+Under the official classifier, NF4 quantization never reduces true harmful compliance in any pair; the one statistically significant ΔASR is the smallest model (Qwen 1.7B), which also loses significant capability — a confirmed degradation on both axes. The judge validation relocated the significant finding from Qwen 4B (regex proxy) to Qwen 1.7B. See `docs/PROJECT_LOG.md` (D16) and `docs/FYP_Report_2026-05-27.docx` §6.12 for the full audit trail.
 
 ## Documentation
 - `docs/methodology.md`

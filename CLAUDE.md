@@ -113,17 +113,17 @@ sbatch slurm/jobs_tc1/llama_3_2_3b_base__matrix.sbatch
 sbatch slurm/jobs_tc1/llama_3_2_3b_4bit__matrix.sbatch
 ```
 
-### Judge-model validation (T20, HarmBench classifier) — derived sensitivity check
+### Judge-model validation (T20, HarmBench classifier) — COMPLETE (D16)
+The HarmBench judge validation has already run on TC1 (job 61047, fp16, 32 GB V100, n=200×6, 0 parse errors) and its results are committed: the official classifier is the **primary** HarmBench scorer, the redacted `scores.judge.harmbench_cls.*` sidecars + `results/analysis/judge_agreement.{json,csv}` are in the repo, and report §6.12 carries the results. **You do not need to re-run it.** Only re-run if you are revalidating or extending (e.g. adding a second independent judge). The full pipeline, for reference:
 ```bash
-# On TC1 HEAD node (one-time): pull, then cache the 13B classifier offline.
+# On TC1 HEAD node (only if re-running / extending):
 git -C /tc1home/FYP/utan001/fyp_quant/repo pull --ff-only
-python scripts/prefetch_tc1.py --config configs/tc1.yaml --judge
-# Submit the judge job (offline GPU; 13B in fp16 full precision; conservative batch size 4; 8bit fallback only if fp16 still OOMs):
-sbatch slurm/judge_validation.sbatch
-# After it finishes, SCP scores.judge.* / summary.judge.* back to the Mac, then (no GPU):
-python scripts/judge_agreement.py        # → results/analysis/judge_agreement.{json,csv}
+python scripts/prefetch_tc1.py --config configs/tc1.yaml --judge   # cache the 13B classifier offline
+sbatch slurm/judge_validation.sbatch                               # fp16, batch 4, 8bit fallback only if OOM
+# Back on the Mac (no GPU): SCP scores.judge.* / summary.judge.* back, then:
+python scripts/judge_agreement.py        # → results/analysis/judge_agreement.{json,csv}, then make report
 ```
-Judge outputs are redacted sidecars (`scores.judge.harmbench_cls.jsonl`, `summary.judge.harmbench_cls.json`); raw outputs and v2 sidecars are never modified. Then populate report §6.12 with the agreement numbers and `make report`.
+Judge outputs are redacted sidecars (IDs + booleans only); raw outputs and v2 sidecars are never modified. The Llama-2 judge tokenizer needs `sentencepiece`/`protobuf`/`tiktoken` (pinned in requirements.txt).
 
 ### Tests
 ```bash
