@@ -218,8 +218,8 @@ results/
 ├── <model_alias>/<benchmark>/summary.json  # Aggregated metrics
 ├── <model_alias>/<benchmark>/scores.v2.jsonl # Derived v2 scorer fields only (no prompt/response text)
 ├── <model_alias>/<benchmark>/summary.v2.json # Derived v2 aggregate when scorer is revised post hoc
-├── <model_alias>/<benchmark>/scores.judge.<name>.jsonl # Optional future judge sidecar; no raw text in diagnostics
-├── <model_alias>/<benchmark>/summary.judge.<name>.json # Optional future judge aggregate
+├── <model_alias>/harmbench/scores.judge.harmbench_cls.jsonl # PRIMARY HarmBench scorer (D16); committed, redacted (IDs+booleans)
+├── <model_alias>/harmbench/summary.judge.harmbench_cls.json # PRIMARY HarmBench ASR aggregate + GPU/precision metadata
 ├── summary/<benchmark>_runs.csv            # Flattened summaries across all runs
 └── analysis/
     ├── pairwise_deltas.{json,csv}
