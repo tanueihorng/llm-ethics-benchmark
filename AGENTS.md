@@ -169,7 +169,7 @@ slurm/
 2. Set seed (Python, NumPy, Torch)
 3. `HFModelLoader` loads model + tokenizer (dtype/device resolution; on-the-fly NF4 if `quantized: true`)
 4. `TextGenerator` batches prompts through model (chat template with `enable_thinking=False`)
-5. Benchmark plugin scores each response (primary path: deterministic v2 refusal parser; T20 HarmBench judge validation is a code-complete derived sidecar workflow, TC1 run pending)
+5. Benchmark plugin scores each response. HarmBench ASR primary scorer is the **official HarmBench classifier** (judge; D16, run on TC1 job 61047); XSTest over-refusal uses the deterministic v2 refusal parser; MMLU uses exact-match. The v2 regex is retained as a secondary HarmBench non-refusal-rate proxy.
 6. Aggregate metrics → write `results/<model>/<benchmark>/raw.jsonl` + `summary.json`
 
 **Matrix run** (`run_quant_matrix.py`):
@@ -184,7 +184,7 @@ slurm/
 
 ### Benchmark Plugins
 
-All plugins implement `BenchmarkPlugin` ABC in `ethical_benchmark/benchmarks/base.py`. Each plugin handles its own dataset loading, prompt formatting, and per-response scoring. Current report numbers use the **deterministic v2 refusal parser** for reproducibility. Judge-model validation (T20) is **code-complete** (`ethical_benchmark/judges/`): the official HarmBench classifier `cais/HarmBench-Llama-2-13b-cls` runs as a derived sensitivity check via `scripts/run_judge_validation.py` (TC1 sbatch: `slurm/judge_validation.sbatch`) and writes redacted `scores.judge.<name>.jsonl` + `summary.judge.<name>.json` sidecars — never overwriting raw outputs or v2 sidecars. `scripts/judge_agreement.py` (no GPU) reports agreement %, Cohen's κ, and per-pair label stability vs the v2 scorer. The judge validates the **harmbench** benchmark only. The TC1 classifier run is still pending; report §6.12 carries the methodology and a results placeholder.
+All plugins implement `BenchmarkPlugin` ABC in `ethical_benchmark/benchmarks/base.py`. Each plugin handles its own dataset loading, prompt formatting, and per-response scoring. **HarmBench ASR is scored by the official HarmBench classifier (`cais/HarmBench-Llama-2-13b-cls`) as the primary scorer — decision D16, run on TC1 (job 61047, fp16, 32 GB V100).** The deterministic v2 refusal regex is retained as a secondary HarmBench non-refusal-rate proxy. The judge run found the regex over-counts ASR (agreement: Qwen κ≈0.19–0.37, Llama κ≈0.69–0.79), which relocated the study's only significant ΔASR from Qwen 4B (proxy) to Qwen 1.7B (judge). Judge artifacts: redacted `scores.judge.<name>.jsonl` + `summary.judge.<name>.json` sidecars (IDs + booleans only) and `results/analysis/judge_agreement.{json,csv}`; raw outputs and v2 sidecars are never modified. To re-run or extend: `scripts/run_judge_validation.py` (TC1 sbatch `slurm/judge_validation.sbatch`), then `scripts/judge_agreement.py` (no GPU). Scope: the judge covers **harmbench** only; XSTest over-refusal stays v2-scored. Report §6.12 carries the full agreement results. Future work (optional): a second independent judge (LlamaGuard / API) to cross-check the HarmBench classifier.
 
 | Benchmark | Dataset | Primary Metric | Batch Size |
 |-----------|---------|----------------|------------|

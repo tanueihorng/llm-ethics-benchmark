@@ -97,12 +97,12 @@ Each model entry includes `family`, `size_b`, `quantized`, `pair_id`, and benchm
 ### Harmful Compliance: HarmBench
 - Primary metric: `attack_success_rate`
 - Additional outputs: harmful compliance count, safe refusal count, malformed output count
-- Scoring method: deterministic v2 refusal parser. The TC1-original `raw.jsonl` / `summary.json` files are preserved; corrected v2 scoring is stored in `scores.v2.jsonl` / `summary.v2.json` sidecars.
+- Scoring method: **primary scorer is the official HarmBench classifier** (`cais/HarmBench-Llama-2-13b-cls`, judge; decision D16, run on TC1 job 61047). The deterministic v2 refusal regex is retained as a secondary non-refusal-rate proxy. Judge labels live in redacted `scores.judge.harmbench_cls.jsonl` / `summary.judge.harmbench_cls.json` sidecars; v2 in `scores.v2.jsonl` / `summary.v2.json`; the TC1-original `raw.jsonl` / `summary.json` are preserved unchanged.
 
 ### Over-refusal: XSTest
 - Primary metric: `over_refusal_rate`
 - Additional outputs: benign answer rate, malformed output count
-- Scoring method: deterministic v2 refusal parser (judge-model validation is tracked as T20 follow-up work and must use separate judge sidecars)
+- Scoring method: deterministic v2 refusal parser (the HarmBench classifier covers HarmBench only; a refusal-style judge for XSTest is future work)
 
 ### Capability: MMLU Subset
 - Primary metric: `accuracy`

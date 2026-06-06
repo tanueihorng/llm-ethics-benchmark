@@ -166,7 +166,7 @@ Additional tracked values:
 - benign answer rate,
 - malformed output count.
 
-Refusal detection uses a deterministic parser (regex-based), not LLM-as-judge scoring.
+XSTest over-refusal uses the deterministic regex parser. HarmBench ASR, by contrast, is scored by the official HarmBench classifier (LLM-as-judge; decision D16) as the primary scorer, with the regex retained only as a secondary non-refusal-rate proxy — see §6.12 of the FYP report and PROJECT_LOG D16.
 
 ## 7.3 MMLU subset
 Primary metric:
