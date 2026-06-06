@@ -113,9 +113,22 @@ sbatch slurm/jobs_tc1/llama_3_2_3b_base__matrix.sbatch
 sbatch slurm/jobs_tc1/llama_3_2_3b_4bit__matrix.sbatch
 ```
 
+### Judge-model validation (T20, HarmBench classifier) — derived sensitivity check
+```bash
+# On TC1 HEAD node (one-time): pull, then cache the 13B classifier offline.
+git -C /tc1home/FYP/utan001/fyp_quant/repo pull --ff-only
+python scripts/prefetch_tc1.py --config configs/tc1.yaml --judge
+# Submit the judge job (offline GPU; 13B in fp16 full precision; conservative batch size 4; 8bit fallback only if fp16 still OOMs):
+sbatch slurm/judge_validation.sbatch
+# After it finishes, SCP scores.judge.* / summary.judge.* back to the Mac, then (no GPU):
+python scripts/judge_agreement.py        # → results/analysis/judge_agreement.{json,csv}
+```
+Judge outputs are redacted sidecars (`scores.judge.harmbench_cls.jsonl`, `summary.judge.harmbench_cls.json`); raw outputs and v2 sidecars are never modified. Then populate report §6.12 with the agreement numbers and `make report`.
+
 ### Tests
 ```bash
-pytest tests/                                    # All tests (163)
+pytest tests/                                    # All tests (176)
+pytest tests/test_judge_validation.py            # Judge layer (stub backend, redaction)
 pytest tests/test_quant_smoke.py                 # Smoke: end-to-end pipeline
 pytest tests/test_quant_analysis.py              # Pairwise delta computation
 pytest tests/test_refusal_parser.py              # Refusal detection patterns
@@ -156,7 +169,7 @@ slurm/
 2. Set seed (Python, NumPy, Torch)
 3. `HFModelLoader` loads model + tokenizer (dtype/device resolution; on-the-fly NF4 if `quantized: true`)
 4. `TextGenerator` batches prompts through model (chat template with `enable_thinking=False`)
-5. Benchmark plugin scores each response (primary path: deterministic v2 refusal parser; judge-model validation is optional future sidecar work)
+5. Benchmark plugin scores each response (primary path: deterministic v2 refusal parser; T20 HarmBench judge validation is a code-complete derived sidecar workflow, TC1 run pending)
 6. Aggregate metrics → write `results/<model>/<benchmark>/raw.jsonl` + `summary.json`
 
 **Matrix run** (`run_quant_matrix.py`):
@@ -171,7 +184,7 @@ slurm/
 
 ### Benchmark Plugins
 
-All plugins implement `BenchmarkPlugin` ABC in `ethical_benchmark/benchmarks/base.py`. Each plugin handles its own dataset loading, prompt formatting, and per-response scoring. Current report numbers use the **deterministic v2 refusal parser** for reproducibility. Judge-model validation (T20: HarmBench classifier, LlamaGuard, or API judge) must be implemented as a separate sensitivity-check sidecar, not as an overwrite of raw outputs or v2 sidecars.
+All plugins implement `BenchmarkPlugin` ABC in `ethical_benchmark/benchmarks/base.py`. Each plugin handles its own dataset loading, prompt formatting, and per-response scoring. Current report numbers use the **deterministic v2 refusal parser** for reproducibility. Judge-model validation (T20) is **code-complete** (`ethical_benchmark/judges/`): the official HarmBench classifier `cais/HarmBench-Llama-2-13b-cls` runs as a derived sensitivity check via `scripts/run_judge_validation.py` (TC1 sbatch: `slurm/judge_validation.sbatch`) and writes redacted `scores.judge.<name>.jsonl` + `summary.judge.<name>.json` sidecars — never overwriting raw outputs or v2 sidecars. `scripts/judge_agreement.py` (no GPU) reports agreement %, Cohen's κ, and per-pair label stability vs the v2 scorer. The judge validates the **harmbench** benchmark only. The TC1 classifier run is still pending; report §6.12 carries the methodology and a results placeholder.
 
 | Benchmark | Dataset | Primary Metric | Batch Size |
 |-----------|---------|----------------|------------|

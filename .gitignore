@@ -29,6 +29,7 @@ slurm/jobs/*.sbatch
 # Editor / IDE / OS caches not relevant to this repo
 .swift-cache/
 pdfthumbs/
+terminal_log*.txt
 
 # Word lock files (created by Word when a doc is open)
 ~$*.docx

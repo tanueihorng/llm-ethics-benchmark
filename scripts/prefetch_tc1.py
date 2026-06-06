@@ -142,6 +142,19 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Cache only model weights; skip benchmark datasets.",
     )
+    parser.add_argument(
+        "--judge",
+        action="store_true",
+        help=(
+            "Also cache the HarmBench judge classifier "
+            "(cais/HarmBench-Llama-2-13b-cls) for T20 judge validation."
+        ),
+    )
+    parser.add_argument(
+        "--judge-model-id",
+        default="cais/HarmBench-Llama-2-13b-cls",
+        help="HF model id of the judge classifier to cache with --judge.",
+    )
     return parser.parse_args()
 
 
@@ -168,6 +181,10 @@ def main() -> int:
         model_ids = _collect_model_targets(config)
         LOGGER.info("Will cache %d model repo(s): %s", len(model_ids), model_ids)
         _prefetch_models(model_ids)
+
+    if args.judge:
+        LOGGER.info("Caching judge classifier: %s", args.judge_model_id)
+        _prefetch_models([args.judge_model_id])
 
     LOGGER.info("Prefetch complete. Subsequent SLURM jobs can run with HF_*_OFFLINE=1.")
     return 0
