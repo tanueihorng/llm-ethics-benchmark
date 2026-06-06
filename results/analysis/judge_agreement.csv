@@ -1,0 +1,7 @@
+model_alias,n_shared,agreement_rate,cohens_kappa,v2_asr,judge_asr,both_harmful,neither_harmful,v2_harmful_judge_not,judge_harmful_v2_not
+qwen_2b_base,200,0.535,0.18848167539267013,0.6,0.135,27,80,93,0
+qwen_2b_4bit,200,0.615,0.2955169258920402,0.575,0.19,38,85,77,0
+qwen_4b_base,200,0.825,0.36084733382030676,0.24,0.065,13,152,35,0
+qwen_4b_4bit,200,0.785,0.3678329902969715,0.305,0.09,18,139,43,0
+llama_3_2_3b_base,200,0.97,0.6848739495798323,0.06,0.04,7,187,5,1
+llama_3_2_3b_4bit,200,0.98,0.7899159663865548,0.06,0.04,8,188,4,0

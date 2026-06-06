@@ -110,6 +110,20 @@ source activate <YOUR_ENV_NAME>
 pip install -r requirements.txt
 ```
 
+**Judge-validation tokenizer dependencies (T20 / D16).** The official HarmBench
+judge classifier `cais/HarmBench-Llama-2-13b-cls` is a Llama-2 model and loads a
+SentencePiece tokenizer, which needs `sentencepiece` + `protobuf` (and
+`tiktoken` as a fallback path). These are now pinned in `requirements.txt`, so a
+fresh `pip install -r requirements.txt` covers them. If you are extending an
+existing env that predates this, install them explicitly on the head node
+before submitting the judge job (package installs are head-node-allowed):
+```bash
+pip install sentencepiece protobuf tiktoken
+python -c "import sentencepiece, google.protobuf, tiktoken; print('judge tokenizer deps OK')"
+```
+Two early judge jobs (61045, 61046) failed at tokenizer construction before
+these were installed — this is why they are documented here.
+
 ## 4.5 Do NOT smoke-test on the head node
 
 Earlier versions of this runbook suggested a quick CPU-only smoke test on the

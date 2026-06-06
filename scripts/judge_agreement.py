@@ -28,7 +28,10 @@ ROOT = Path(__file__).resolve().parent.parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from ethical_benchmark.analysis.compare_quant_pairs import classify_pair_change  # noqa: E402
+from ethical_benchmark.analysis.compare_quant_pairs import (  # noqa: E402
+    classify_pair_change,
+    compute_paired_bootstrap_ci,
+)
 
 MODEL_ALIASES = [
     "qwen_2b_base",
@@ -67,6 +70,25 @@ def _load_jsonl_flag(path: Path, flag_key: str) -> Dict[str, Optional[bool]]:
                 out[pid] = bool((val or {}).get("harmful_compliance", False))
             else:
                 out[pid] = None
+    return out
+
+
+def _load_judge_outcomes(model_dir: Path, judge_name: str) -> Dict[str, float]:
+    """Reads judge_harmful per prompt as 0/1 from scores.judge.<name>.jsonl."""
+
+    path = model_dir / f"scores.judge.{judge_name}.jsonl"
+    out: Dict[str, float] = {}
+    if not path.exists():
+        return out
+    with path.open("r", encoding="utf-8") as handle:
+        for line in handle:
+            line = line.strip()
+            if not line:
+                continue
+            rec = json.loads(line)
+            jh = rec.get("judge_harmful")
+            if isinstance(jh, bool):
+                out[str(rec.get("prompt_id"))] = 1.0 if jh else 0.0
     return out
 
 
@@ -189,12 +211,25 @@ def main() -> int:
         or_delta = v2_deltas.get((pair_id, "xstest"))
         mmlu_delta = v2_deltas.get((pair_id, "mmlu"))
 
+        # Paired bootstrap CI on the judge HarmBench delta (same 2000-resample,
+        # seed-42 procedure used for the v2 deltas), so the judge-primary
+        # HarmBench finding carries the same statistical apparatus as v2.
+        base_outcomes = _load_judge_outcomes(results_dir / base_alias / args.benchmark, args.judge_name)
+        quant_outcomes = _load_judge_outcomes(results_dir / quant_alias / args.benchmark, args.judge_name)
+        ci = compute_paired_bootstrap_ci(base_outcomes, quant_outcomes)
+        judge_ci_lo = ci["delta_ci_lower"] if ci else None
+        judge_ci_hi = ci["delta_ci_upper"] if ci else None
+        judge_sig = ci["delta_significant"] if ci else None
+
         v2_label = classify_pair_change(v2_harm_delta, or_delta, mmlu_delta)
         judge_label = classify_pair_change(judge_delta, or_delta, mmlu_delta)
         per_pair.append({
             "pair_id": pair_id,
             "v2_harm_delta": v2_harm_delta,
             "judge_harm_delta": judge_delta,
+            "judge_harm_delta_ci_lower": judge_ci_lo,
+            "judge_harm_delta_ci_upper": judge_ci_hi,
+            "judge_harm_delta_significant": judge_sig,
             "over_refusal_delta": or_delta,
             "mmlu_delta": mmlu_delta,
             "v2_label": v2_label,
@@ -242,14 +277,17 @@ def main() -> int:
         print(f"{alias:<22} {c['n_shared']:>4} {_f(c['agreement_rate']):>7} "
               f"{_f(c['cohens_kappa']):>7} {_f(c['v2_asr']):>8} {_f(c['judge_asr']):>10}")
     print()
-    print("Per-pair label stability (judge ASR vs v2 ASR; OR/MMLU held at v2):")
-    print(f"{'pair_id':<14} {'v2 Δ':>8} {'judge Δ':>8}  {'v2 label':<38} {'judge label':<38} changed")
-    print("-" * 84)
+    print("Per-pair judge HarmBench deltas with paired-bootstrap 95% CIs, and label vs v2:")
+    print(f"{'pair_id':<14} {'judge Δ':>8} {'95% CI':>20} {'sig?':>5}  {'judge label':<38} {'(v2 label)'}")
+    print("-" * 100)
     for p in per_pair:
         def _d(x: Optional[float]) -> str:
             return f"{x:+.3f}" if isinstance(x, float) else "  n/a"
-        print(f"{p['pair_id']:<14} {_d(p['v2_harm_delta']):>8} {_d(p['judge_harm_delta']):>8}  "
-              f"{p['v2_label']:<38} {p['judge_label']:<38} {p['label_changed']}")
+        lo, hi = p.get("judge_harm_delta_ci_lower"), p.get("judge_harm_delta_ci_upper")
+        ci_s = f"[{lo:+.3f}, {hi:+.3f}]" if isinstance(lo, float) and isinstance(hi, float) else "n/a"
+        sig = p.get("judge_harm_delta_significant")
+        print(f"{p['pair_id']:<14} {_d(p['judge_harm_delta']):>8} {ci_s:>20} {str(sig):>5}  "
+              f"{p['judge_label']:<38} ({p['v2_label']})")
     print()
     print(f"Wrote {analysis_dir / 'judge_agreement.json'}")
     print(f"Wrote {csv_path}")
