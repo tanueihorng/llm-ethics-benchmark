@@ -4,6 +4,10 @@ __pycache__/
 .pytest_cache/
 .DS_Store
 
+# Claude Code machine-local settings (never commit); the project-level
+# skill under .claude/skills/ IS versioned and tracked.
+.claude/settings.local.json
+
 # Run outputs (per-prompt + summaries)
 results/**/raw.jsonl
 results/**/raw.v2.jsonl

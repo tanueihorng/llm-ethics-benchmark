@@ -10,6 +10,8 @@ Cross-agent instructions for any coding agent (Codex, Claude Code, Cursor, Aider
 
 Before doing anything else: **read `docs/PROJECT_LOG.md`**. It is the only file that authoritatively records current status, open tasks, decisions, and the changelog. Every other markdown/docx in the repo is either permanent reference material or archived history; none of them track current state.
 
+For a short next-session bridge, read `docs/HANDOFF.md` after `docs/PROJECT_LOG.md`. The handoff is intentionally secondary: verify important claims from the repo, tests, Git, and sidecars before acting.
+
 **You must update `docs/PROJECT_LOG.md` whenever you make a change to the repo.** Specifically:
 - **Every change writes one new row to the §4 changelog table** (append at the top, newest-first). Columns: `When (UTC+8) | Files | Change | Why / Notes | Report? | Who`. Timestamp format: `YYYY-MM-DD HH:MM` local time. `Files` lists actual paths touched. `Why / Notes` captures the rationale or the user request. `Report?` = `yes` if `make report` was run, `no` otherwise. `Who` is your agent name (e.g. "Claude", "Codex") or the human author.
 - **When you edit PROJECT_LOG.md, bump the §1 metadata table**: update `Last updated` to today and `Last updated by` to your name.
