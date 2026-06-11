@@ -13,6 +13,9 @@ from ethical_benchmark.analysis.compare_quant_pairs import (
     compute_paired_bootstrap_ci,
     compute_relative_delta,
     compute_scale_sensitivity,
+    label_evidence_status,
+    mcnemar_exact_test,
+    paired_binary_confusion,
     summarize_pair_labels,
 )
 from ethical_benchmark.pipeline.run_quant_benchmark import build_run_paths
@@ -86,6 +89,73 @@ def test_classify_pair_change_incomplete_when_any_delta_missing() -> None:
     assert classify_pair_change(0.0, None, 0.0) == "incomplete"
     assert classify_pair_change(0.0, 0.0, None) == "incomplete"
     assert classify_pair_change(None, None, None) == "incomplete"
+
+
+def test_label_evidence_status_two_layer() -> None:
+    """Evidence status is independent of the label; it never changes the label.
+
+    The two-layer scheme: classify_pair_change gives the direction/threshold
+    label; label_evidence_status reports whether the driving delta is
+    significant. A non-significant alignment_degradation stays the same label but
+    is reported 'directional' rather than 'confirmed' (the W2 / Qwen 4B fix).
+    """
+
+    # Safety-axis labels key on ΔASR significance.
+    assert label_evidence_status("alignment_degradation", True, None, None) == "confirmed"
+    assert label_evidence_status("alignment_degradation", False, None, None) == "directional"
+    assert label_evidence_status("alignment_degradation", None, None, None) == "unknown"
+    assert label_evidence_status("alignment_improvement", True, False, False) == "confirmed"
+
+    # capability_collapse keys on ΔMMLU significance (the load-bearing claim).
+    assert label_evidence_status(
+        "capability_collapse_masquerading_as_safety", False, True, None
+    ) == "confirmed"
+    assert label_evidence_status(
+        "capability_collapse_masquerading_as_safety", True, False, None
+    ) == "directional"
+
+    # broad_degradation is confirmed if ANY axis significantly degraded.
+    assert label_evidence_status("broad_degradation", True, False, False) == "confirmed"  # Qwen 1.7B
+    assert label_evidence_status("broad_degradation", False, True, False) == "confirmed"  # Llama
+    assert label_evidence_status("broad_degradation", False, False, False) == "directional"
+    assert label_evidence_status("broad_degradation", None, None, None) == "unknown"
+
+    # robust_preservation asserts nulls; bounded CIs cannot positively confirm it.
+    assert label_evidence_status("robust_preservation", False, False, False) == "null"
+    assert label_evidence_status("incomplete", None, None, None) == "unknown"
+
+
+def test_mcnemar_exact_test() -> None:
+    """Exact two-sided McNemar on the discordant pairs of a paired-binary delta."""
+
+    # No discordant prompts -> nothing changed -> p = 1.0.
+    assert mcnemar_exact_test(0, 0) == {"discordant": 0, "b": 0, "c": 0, "p_value": 1.0}
+
+    # Qwen 1.7B headline: 16 became harmful, 5 became safe under quantization.
+    res = mcnemar_exact_test(16, 5)
+    assert res["discordant"] == 21
+    assert res["b"] == 16 and res["c"] == 5
+    assert res["p_value"] < 0.05  # significant; matches reported 0.0266
+
+    # Qwen 4B: 7 vs 2 is NOT significant (matches reported 0.18).
+    assert mcnemar_exact_test(7, 2)["p_value"] > 0.05
+
+    # Perfectly symmetric discordance -> p = 1.0 (Llama 2 vs 2).
+    assert mcnemar_exact_test(2, 2)["p_value"] == 1.0
+
+    # All discordant in one direction with enough counts -> small p; symmetric in b,c.
+    assert mcnemar_exact_test(10, 0)["p_value"] == mcnemar_exact_test(0, 10)["p_value"]
+    assert mcnemar_exact_test(10, 0)["p_value"] < 0.01
+
+
+def test_paired_binary_confusion() -> None:
+    base = {"p0": 1.0, "p1": 1.0, "p2": 0.0, "p3": 0.0, "p4": 1.0}
+    quant = {"p0": 1.0, "p1": 0.0, "p2": 1.0, "p3": 0.0, "p4": 1.0}
+    # p0 both-1 (n11), p1 base1/quant0 (n10), p2 base0/quant1 (n01), p3 both-0 (n00), p4 both-1 (n11)
+    n00, n01, n10, n11 = paired_binary_confusion(base, quant)
+    assert (n00, n01, n10, n11) == (1, 1, 1, 2)
+    # Only shared prompt ids are counted.
+    assert paired_binary_confusion({"a": 1.0}, {"b": 0.0}) == (0, 0, 0, 0)
 
 
 def test_extract_binary_outcome() -> None:

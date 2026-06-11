@@ -1,0 +1,155 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net" modified="2026-06-09T00:00:00+08:00" agent="Codex" version="24.7.17" type="device">
+  <diagram id="fyp-integrated-agentic-stack" name="Integrated Agentic Stack">
+    <mxGraphModel dx="2560" dy="1820" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2560" pageHeight="1820" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell parent="0" id="1" />
+        <mxCell value="fyp_quant Integrated Agentic Research Stack&lt;br&gt;&lt;font style='font-size: 16px'&gt;Folder hierarchy + agent harness + multi-agent roles + benchmark/evidence pipeline&lt;/font&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;fillColor=#12355B;strokeColor=#12355B;fontColor=#FFFFFF;fontFamily=Inter;fontSize=28;fontStyle=1;spacingLeft=24;spacingTop=20;" vertex="1" parent="1" id="title">
+          <mxGeometry x="40" y="30" width="2480" height="112" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Repository Folder Hierarchy&lt;/b&gt;&lt;br&gt;What lives where in fyp_quant/" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;fontColor=#0F172A;fontFamily=Inter;fontSize=18;align=left;verticalAlign=top;spacingLeft=24;spacingTop=20;" vertex="1" parent="1" id="section-1">
+          <mxGeometry x="60" y="220" width="650" height="1180" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Agent Harness Control Plane&lt;/b&gt;&lt;br&gt;How every fresh coding session is scoped, constrained, checked, and handed off" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;fontColor=#0F172A;fontFamily=Inter;fontSize=18;align=left;verticalAlign=top;spacingLeft=24;spacingTop=20;" vertex="1" parent="1" id="section-2">
+          <mxGeometry x="750" y="220" width="1040" height="760" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Context-Isolated Multi-Agent Team&lt;/b&gt;&lt;br&gt;Project subagents and skills keep review context small" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;fontColor=#0F172A;fontFamily=Inter;fontSize=18;align=left;verticalAlign=top;spacingLeft=24;spacingTop=20;" vertex="1" parent="1" id="section-3">
+          <mxGeometry x="1830" y="220" width="670" height="760" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Research Execution + Evidence Contract&lt;/b&gt;&lt;br&gt;The benchmark pipeline runs below the harness; raw evidence stays protected" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;fontColor=#0F172A;fontFamily=Inter;fontSize=18;align=left;verticalAlign=top;spacingLeft=24;spacingTop=20;" vertex="1" parent="1" id="section-4">
+          <mxGeometry x="750" y="1165" width="1750" height="350" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;1. Session Entry&lt;/b&gt;&lt;br&gt;Human asks Codex / Claude / Cursor&lt;br&gt;Start from repo, not chat memory&lt;br&gt;Use task intent + current git state" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#EEF6FF;strokeColor=#2F80C5;fontColor=#102033;fontFamily=Inter;fontSize=13;align=left;verticalAlign=top;spacingLeft=16;spacingTop=12;shadow=1;" vertex="1" parent="1" id="entry">
+          <mxGeometry x="800" y="335" width="295" height="145" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;2. Orientation Kernel&lt;/b&gt;&lt;br&gt;Durable law + live state&lt;br&gt;AGENTS.md / CLAUDE.md&lt;br&gt;docs/PROJECT_LOG.md&lt;br&gt;agent-status" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#64748B;fontColor=#102033;fontFamily=Inter;fontSize=13;align=left;verticalAlign=top;spacingLeft=16;spacingTop=12;shadow=1;" vertex="1" parent="1" id="orientation">
+          <mxGeometry x="1130" y="335" width="295" height="145" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;3. Task Router&lt;/b&gt;&lt;br&gt;Small startup packet&lt;br&gt;agent-start --task &amp;lt;T&amp;gt;&lt;br&gt;docs/agent_tasks/&lt;br&gt;recommended subagent" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#F2FAF5;strokeColor=#2C9A67;fontColor=#102033;fontFamily=Inter;fontSize=13;align=left;verticalAlign=top;spacingLeft=16;spacingTop=12;shadow=1;" vertex="1" parent="1" id="router">
+          <mxGeometry x="1460" y="335" width="280" height="145" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;4. Context Isolation&lt;/b&gt;&lt;br&gt;Pull only relevant context&lt;br&gt;.agents/skills/&lt;br&gt;.codex/agents/&lt;br&gt;task-named files only" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#F7F0FF;strokeColor=#8A63C8;fontColor=#102033;fontFamily=Inter;fontSize=13;align=left;verticalAlign=top;spacingLeft=16;spacingTop=12;shadow=1;" vertex="1" parent="1" id="context">
+          <mxGeometry x="800" y="545" width="295" height="145" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;5. Guardrails&lt;/b&gt;&lt;br&gt;Rules become checks&lt;br&gt;artifact_policy.yaml&lt;br&gt;Codex hooks&lt;br&gt;GitHub Actions" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#FFF5E8;strokeColor=#C6812D;fontColor=#102033;fontFamily=Inter;fontSize=13;align=left;verticalAlign=top;spacingLeft=16;spacingTop=12;shadow=1;" vertex="1" parent="1" id="guardrails">
+          <mxGeometry x="1130" y="545" width="295" height="145" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;6. Verification Gate&lt;/b&gt;&lt;br&gt;Finish with evidence&lt;br&gt;make agent-check&lt;br&gt;harness_eval&lt;br&gt;pytest: 186" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#EFFAFB;strokeColor=#2494A3;fontColor=#102033;fontFamily=Inter;fontSize=13;align=left;verticalAlign=top;spacingLeft=16;spacingTop=12;shadow=1;" vertex="1" parent="1" id="verify">
+          <mxGeometry x="1460" y="545" width="280" height="145" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;7. Recovery Layer&lt;/b&gt;&lt;br&gt;Next agent resumes safely&lt;br&gt;docs/HANDOFF.md&lt;br&gt;AGENT_DASHBOARD.md&lt;br&gt;TC1 checklist" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#FFF0F3;strokeColor=#C85C74;fontColor=#102033;fontFamily=Inter;fontSize=13;align=left;verticalAlign=top;spacingLeft=16;spacingTop=12;shadow=1;" vertex="1" parent="1" id="handoff">
+          <mxGeometry x="985" y="755" width="370" height="145" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Main Codex Session&lt;/b&gt;&lt;br&gt;Plans, edits, verifies, logs&lt;br&gt;owns final changes&lt;br&gt;updates PROJECT_LOG&lt;br&gt;runs finish gate" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#EEF6FF;strokeColor=#2F80C5;fontColor=#102033;fontFamily=Inter;fontSize=13;align=left;verticalAlign=top;spacingLeft=16;spacingTop=12;shadow=1;" vertex="1" parent="1" id="main-agent">
+          <mxGeometry x="2030" y="350" width="280" height="145" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;fyp-report-auditor&lt;/b&gt;&lt;br&gt;Report/log consistency&lt;br&gt;judge-primary claims&lt;br&gt;stale text&lt;br&gt;report freshness" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#64748B;fontColor=#102033;fontFamily=Inter;fontSize=13;align=left;verticalAlign=top;spacingLeft=16;spacingTop=12;shadow=1;" vertex="1" parent="1" id="report-auditor">
+          <mxGeometry x="1870" y="545" width="260" height="135" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;fyp-artifact-guardian&lt;/b&gt;&lt;br&gt;Evidence-chain audit&lt;br&gt;raw immutability&lt;br&gt;redaction leaks&lt;br&gt;artifact policy" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#FFF5E8;strokeColor=#C6812D;fontColor=#102033;fontFamily=Inter;fontSize=13;align=left;verticalAlign=top;spacingLeft=16;spacingTop=12;shadow=1;" vertex="1" parent="1" id="artifact-guardian">
+          <mxGeometry x="2170" y="545" width="260" height="135" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;fyp-tc1-ops&lt;/b&gt;&lt;br&gt;Cluster workflow safety&lt;br&gt;sbatch-only&lt;br&gt;offline env vars&lt;br&gt;SLURM scripts" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#EFFAFB;strokeColor=#2494A3;fontColor=#102033;fontFamily=Inter;fontSize=13;align=left;verticalAlign=top;spacingLeft=16;spacingTop=12;shadow=1;" vertex="1" parent="1" id="tc1-ops">
+          <mxGeometry x="1870" y="720" width="260" height="135" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;fyp-judge-reviewer&lt;/b&gt;&lt;br&gt;Scoring validation&lt;br&gt;judge sidecars&lt;br&gt;agreement analysis&lt;br&gt;second judge" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#F7F0FF;strokeColor=#8A63C8;fontColor=#102033;fontFamily=Inter;fontSize=13;align=left;verticalAlign=top;spacingLeft=16;spacingTop=12;shadow=1;" vertex="1" parent="1" id="judge-reviewer">
+          <mxGeometry x="2170" y="720" width="260" height="135" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;fyp-meetup-story&lt;/b&gt;&lt;br&gt;Human explanation&lt;br&gt;USP narrative&lt;br&gt;demo + memory" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#F2FAF5;strokeColor=#2C9A67;fontColor=#102033;fontFamily=Inter;fontSize=13;align=left;verticalAlign=top;spacingLeft=16;spacingTop=12;shadow=1;" vertex="1" parent="1" id="meetup-story">
+          <mxGeometry x="2030" y="875" width="280" height="95" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Config + Data&lt;/b&gt;&lt;br&gt;Study inputs&lt;br&gt;configs/*.yaml&lt;br&gt;XSTest CSV&lt;br&gt;HF cached datasets" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#FFF5E8;strokeColor=#C6812D;fontColor=#102033;fontFamily=Inter;fontSize=13;align=left;verticalAlign=top;spacingLeft=16;spacingTop=12;shadow=1;" vertex="1" parent="1" id="configs">
+          <mxGeometry x="800" y="1295" width="230" height="135" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Model Loading&lt;/b&gt;&lt;br&gt;Matched baseline / NF4&lt;br&gt;HFModelLoader&lt;br&gt;BitsAndBytesConfig&lt;br&gt;dtype/device" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#EEF6FF;strokeColor=#2F80C5;fontColor=#102033;fontFamily=Inter;fontSize=13;align=left;verticalAlign=top;spacingLeft=16;spacingTop=12;shadow=1;" vertex="1" parent="1" id="loader">
+          <mxGeometry x="1060" y="1295" width="230" height="135" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Benchmarks&lt;/b&gt;&lt;br&gt;Plugins score outputs&lt;br&gt;HarmBench&lt;br&gt;XSTest&lt;br&gt;MMLU subset" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#F2FAF5;strokeColor=#2C9A67;fontColor=#102033;fontFamily=Inter;fontSize=13;align=left;verticalAlign=top;spacingLeft=16;spacingTop=12;shadow=1;" vertex="1" parent="1" id="benchmarks">
+          <mxGeometry x="1320" y="1295" width="230" height="135" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Raw Artifacts&lt;/b&gt;&lt;br&gt;TC1-original evidence&lt;br&gt;raw.jsonl&lt;br&gt;summary.json&lt;br&gt;immutable manifest" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#FFF0F3;strokeColor=#C85C74;fontColor=#102033;fontFamily=Inter;fontSize=13;align=left;verticalAlign=top;spacingLeft=16;spacingTop=12;shadow=1;" vertex="1" parent="1" id="artifacts">
+          <mxGeometry x="1580" y="1295" width="230" height="135" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Derived Scoring&lt;/b&gt;&lt;br&gt;No overwrites&lt;br&gt;scores.v2.*&lt;br&gt;scores.judge.*&lt;br&gt;redacted only" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#F7F0FF;strokeColor=#8A63C8;fontColor=#102033;fontFamily=Inter;fontSize=13;align=left;verticalAlign=top;spacingLeft=16;spacingTop=12;shadow=1;" vertex="1" parent="1" id="sidecars">
+          <mxGeometry x="1840" y="1295" width="230" height="135" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Analysis + Report&lt;/b&gt;&lt;br&gt;Defensible output&lt;br&gt;pairwise deltas&lt;br&gt;judge agreement&lt;br&gt;FYP report" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#EFFAFB;strokeColor=#2494A3;fontColor=#102033;fontFamily=Inter;fontSize=13;align=left;verticalAlign=top;spacingLeft=16;spacingTop=12;shadow=1;" vertex="1" parent="1" id="analysis">
+          <mxGeometry x="2100" y="1295" width="230" height="135" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;fyp_quant/&lt;/b&gt;&lt;br&gt;&lt;b&gt;Agent OS&lt;/b&gt;: AGENTS, PROJECT_LOG, handoff, tasks, skills, subagents, hooks, CI&lt;br&gt;&lt;b&gt;Research Core&lt;/b&gt;: benchmarks, models, pipeline, analysis, judges, cluster, quant, metrics&lt;br&gt;&lt;b&gt;Inputs + Execution&lt;/b&gt;: configs, data, slurm, scripts, fyp_cli.py, Makefile&lt;br&gt;&lt;b&gt;Evidence + Deliverables&lt;/b&gt;: raw artifacts, sidecars, analysis, report, visuals" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#0F3B66;fontColor=#0F172A;fontFamily=Inter;fontSize=16;align=left;verticalAlign=top;spacingLeft=18;spacingTop=18;shadow=1;" vertex="1" parent="1" id="folder-tree">
+          <mxGeometry x="92" y="328" width="586" height="990" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;make agent-check&lt;/b&gt;&lt;br&gt;agent-doc-sync, project-log-update, immutable-artifacts, redaction, stale-text, report-freshness, git-diff-check, pytest" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;fillColor=#0F172A;strokeColor=#0F172A;fontColor=#DDEBFF;fontFamily=Inter;fontSize=15;spacingLeft=20;spacingTop=15;" vertex="1" parent="1" id="agent-check">
+          <mxGeometry x="800" y="910" width="940" height="160" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Repo-Scoped Skills&lt;/b&gt;&lt;br&gt;fyp-report-audit, fyp-second-judge, fyp-meetup-brief, fyp-harness-maintenance" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#CBD5E1;fontColor=#0F172A;fontFamily=Inter;fontSize=15;spacingLeft=20;spacingTop=15;" vertex="1" parent="1" id="skills">
+          <mxGeometry x="1870" y="998" width="590" height="150" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Core USP&lt;/b&gt;&lt;br&gt;Memory is not magic; make the repo remember. The repo scopes agents, protects evidence, verifies claims, and makes each session recoverable." style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;fillColor=#0F172A;strokeColor=#0F172A;fontColor=#DDEBFF;fontFamily=Inter;fontSize=17;spacingLeft=24;spacingTop=18;" vertex="1" parent="1" id="usp-band">
+          <mxGeometry x="60" y="1595" width="2440" height="175" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="entry" target="orientation" id="edge-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="orientation" target="router" id="edge-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="entry" target="context" id="edge-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="orientation" target="guardrails" id="edge-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="router" target="verify" id="edge-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="context" target="guardrails" id="edge-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="guardrails" target="verify" id="edge-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="guardrails" target="handoff" id="edge-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="verify" target="handoff" id="edge-9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="main-agent" target="report-auditor" id="edge-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="main-agent" target="artifact-guardian" id="edge-11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="report-auditor" target="tc1-ops" id="edge-12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="artifact-guardian" target="judge-reviewer" id="edge-13">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="tc1-ops" target="meetup-story" id="edge-14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="judge-reviewer" target="meetup-story" id="edge-15">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="configs" target="loader" id="edge-16">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="loader" target="benchmarks" id="edge-17">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="benchmarks" target="artifacts" id="edge-18">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="artifacts" target="sidecars" id="edge-19">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="sidecars" target="analysis" id="edge-20">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -18,6 +18,14 @@ from ethical_benchmark.analysis.compare_quant_pairs import (
 from ethical_benchmark.cluster.check_runs import check_status
 from ethical_benchmark.cluster.generate_jobs import generate_job_scripts
 from ethical_benchmark.cluster.submit_jobs import submit_all
+from ethical_benchmark.harness import (
+    build_agent_start_packet,
+    build_agent_status,
+    dump_status_json,
+    format_agent_start_packet,
+    format_agent_status,
+    load_policy,
+)
 from ethical_benchmark.pipeline.run_quant_benchmark import execute_quant_benchmark
 from ethical_benchmark.pipeline.run_quant_matrix import run_quant_matrix
 from ethical_benchmark.quant.config_schema import load_quant_config
@@ -148,6 +156,16 @@ def parse_args() -> argparse.Namespace:
     cluster_check.add_argument("--jobs_dir", "-j", default="slurm/jobs")
     cluster_check.add_argument("--output_json", "-o", default="slurm/check_status.json")
     cluster_check.add_argument("--skip_squeue", action="store_true")
+
+    agent_status = subparsers.add_parser("agent-status", help="Print live agent harness status")
+    _add_common_options(agent_status, with_defaults=False)
+    agent_status.add_argument("--json", action="store_true", help="Emit machine-readable JSON")
+
+    agent_start = subparsers.add_parser("agent-start", help="Print a task-specific agent startup packet")
+    _add_common_options(agent_start, with_defaults=False)
+    agent_start.add_argument("--task", help="Task packet key or alias, e.g. T21 or harness-maintenance")
+    agent_start.add_argument("--agent", help="Custom subagent name or alias, e.g. fyp-report-auditor")
+    agent_start.add_argument("--json", action="store_true", help="Emit machine-readable JSON")
 
     return parser.parse_args()
 
@@ -299,6 +317,18 @@ def main() -> None:
         LOGGER.info(
             "Status: %d/%d completed.", report["num_completed"], report["num_expected_runs"]
         )
+        return
+
+    if args.command == "agent-status":
+        policy = load_policy(Path.cwd())
+        status = build_agent_status(Path.cwd(), policy)
+        print(dump_status_json(status) if args.json else format_agent_status(status))
+        return
+
+    if args.command == "agent-start":
+        policy = load_policy(Path.cwd())
+        packet = build_agent_start_packet(Path.cwd(), task=args.task, agent=args.agent, policy=policy)
+        print(json.dumps(packet, indent=2) if args.json else format_agent_start_packet(packet))
         return
 
 

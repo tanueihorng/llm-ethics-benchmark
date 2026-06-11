@@ -11,8 +11,11 @@ BATCH_SIZE ?=
 ANALYSIS_DIR ?= results/analysis
 GROUP_BY ?= model
 SCRIPT ?= run_quant_matrix.py
+PYTEST_ARGS ?= -q
+TASK ?=
+AGENT ?=
 
-.PHONY: smoke run matrix analyze prefetch report cluster-generate cluster-submit cluster-dry cluster-check cluster-all cluster-smoke
+.PHONY: smoke run matrix analyze prefetch report architecture-diagram cluster-generate cluster-submit cluster-dry cluster-check cluster-all cluster-smoke agent-start agent-status agent-check agent-manifest agent-handoff agent-dashboard agent-tc1-checklist harness-eval
 
 smoke:
 	$(PYTHON) fyp_cli.py --config $(CONFIG) --results_dir $(RESULTS_DIR) smoke -m $(MODEL) -b $(BENCHMARK) -s $(SEED) -d $(DEVICE) $(if $(MAX_SAMPLES),-n $(MAX_SAMPLES),)
@@ -25,6 +28,30 @@ matrix:
 
 analyze:
 	$(PYTHON) fyp_cli.py --config $(CONFIG) --results_dir $(RESULTS_DIR) analyze -o $(ANALYSIS_DIR)
+
+agent-status:
+	$(PYTHON) fyp_cli.py agent-status
+
+agent-start:
+	$(PYTHON) fyp_cli.py agent-start $(if $(TASK),--task $(TASK),) $(if $(AGENT),--agent $(AGENT),)
+
+agent-check:
+	$(PYTHON) scripts/agent_check.py --pytest-args $(PYTEST_ARGS)
+
+agent-manifest:
+	$(PYTHON) scripts/agent_check.py --write-immutable-manifest
+
+agent-handoff:
+	$(PYTHON) scripts/generate_handoff.py
+
+agent-dashboard:
+	$(PYTHON) scripts/generate_agent_dashboard.py
+
+agent-tc1-checklist:
+	$(PYTHON) scripts/generate_tc1_checklist.py
+
+harness-eval:
+	$(PYTHON) scripts/harness_eval.py
 
 cluster-generate:
 	$(PYTHON) fyp_cli.py --config $(CONFIG) --results_dir $(RESULTS_DIR) cluster-generate -j $(JOBS_DIR) -s $(SEED) -d $(DEVICE) --group_by $(GROUP_BY) --script $(SCRIPT) $(if $(MAX_SAMPLES),-n $(MAX_SAMPLES),)
@@ -53,6 +80,12 @@ prefetch:
 # Requires docx-js installed globally: npm install -g docx
 report:
 	NODE_PATH=$$(npm root -g) node scripts/build_fyp_report.js
+
+architecture-diagram:
+	$(PYTHON) scripts/generate_architecture_diagram.py
+	$(PYTHON) scripts/generate_repo_hierarchy_diagram.py
+	$(PYTHON) scripts/generate_agent_harness_architecture_diagram.py
+	$(PYTHON) scripts/generate_integrated_architecture_diagram.py
 
 # Generate small per-(model,benchmark) smoke sbatch files (5 samples each)
 # for verifying the offline-cache path on a real compute node before

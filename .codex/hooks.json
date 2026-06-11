@@ -1,0 +1,42 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash|apply_patch|Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 \"$(git rev-parse --show-toplevel)/.codex/hooks/guard_artifact_paths.py\"",
+            "timeout": 10,
+            "statusMessage": "Checking artifact guardrails"
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "manual|auto",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 \"$(git rev-parse --show-toplevel)/.codex/hooks/pre_compact_handoff.py\"",
+            "timeout": 60,
+            "statusMessage": "Refreshing handoff before compaction"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 \"$(git rev-parse --show-toplevel)/.codex/hooks/stop_agent_check.py\"",
+            "timeout": 90,
+            "statusMessage": "Running lightweight agent harness check"
+          }
+        ]
+      }
+    ]
+  }
+}

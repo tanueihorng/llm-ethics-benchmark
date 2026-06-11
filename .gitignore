@@ -19,6 +19,11 @@ results/summary/*.csv
 # pipeline ground truth (pair_interpretations, pairwise_deltas, summary) and
 # the source of the interpretation labels that appear in the FYP report.
 
+# T18 multi-seed sensitivity arm: raw generations (contain harmful prompt/
+# response text) and judge sidecars stay local. Only the redacted aggregate
+# results/analysis/sensitivity_multiseed.{json,csv} is committed.
+results_sensitivity/
+
 # SLURM logs for any cluster variant (slurm_logs, slurm_logs_tc1, ...)
 results/slurm_logs*/
 

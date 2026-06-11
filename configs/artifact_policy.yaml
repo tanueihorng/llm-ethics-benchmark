@@ -1,0 +1,102 @@
+version: 1
+description: >
+  Machine-readable agent harness policy for fyp_quant. The policy encodes
+  artifact immutability, stale-text scans, redaction scans, and report-worthy
+  file patterns so agents can verify the repo instead of relying only on prose.
+
+immutable_manifest: results/raw_artifact_manifest.sha256
+
+immutable_artifacts:
+  - results/*/*/raw.jsonl
+  - results/*/*/summary.json
+
+immutable_exclude:
+  - results/analysis/*
+  - results/summary/*
+
+allowed_derived_artifacts:
+  - results/*/*/scores.v2.jsonl
+  - results/*/*/summary.v2.json
+  - results/*/harmbench/scores.judge.*.jsonl
+  - results/*/harmbench/summary.judge.*.json
+  - results/analysis/*.json
+  - results/analysis/*.csv
+
+redaction:
+  scan_paths:
+    - docs/HANDOFF.md
+    - docs/AGENT_DASHBOARD.md
+    - docs/TC1_AGENT_CHECKLIST.md
+    - docs/CODEX_MEETUP_BRIEF.md
+    - docs/HARNESS_SELF_EVAL.md
+    - docs/AGENTIC_WORKFLOW.md
+    - docs/architecture/*.md
+    - docs/architecture/*.svg
+    - docs/architecture/*.drawio
+    - docs/architecture/*.png
+    - docs/agent_tasks/*.md
+    - .agents/skills/**/*.md
+    - .claude/skills/**/*.md
+    - .codex/agents/*.toml
+    - .codex/hooks/*.py
+  exclude:
+    - docs/archive/*
+  patterns:
+    - 'SENSITIVE BEHAVIOR TEXT'
+    - 'SENSITIVE MODEL RESPONSE'
+    - '"prompt_text"\s*:'
+    - '"response"\s*:'
+    - '"generation"\s*:'
+    - '"behavior"\s*:'
+
+stale_text:
+  scan_paths:
+    - AGENTS.md
+    - CLAUDE.md
+    - README.md
+    - docs/HANDOFF.md
+    - docs/AGENT_DASHBOARD.md
+    - docs/TC1_AGENT_CHECKLIST.md
+    - docs/CODEX_MEETUP_BRIEF.md
+    - docs/AGENTIC_WORKFLOW.md
+    - docs/architecture/*.md
+    - docs/architecture/*.svg
+    - docs/architecture/*.drawio
+    - docs/agent_tasks/*.md
+    - .agents/skills/**/*.md
+    - .codex/agents/*.toml
+    - .codex/hooks/*.py
+    - scripts/*.py
+  exclude:
+    - docs/archive/*
+  patterns:
+    - 'RESULTS PENDING'
+    - 'pending judge'
+    - 'v2 primary'
+    - 'NEXT:\s*push'
+    - 'push the latest'
+    - 'judge validation still needs to run'
+
+report_worthy:
+  changed_file_patterns:
+    - configs/default.yaml
+    - configs/tc1.yaml
+    - ethical_benchmark/analysis/compare_quant_pairs.py
+    - ethical_benchmark/benchmarks/*.py
+    - ethical_benchmark/judges/*.py
+    - ethical_benchmark/models/*.py
+    - ethical_benchmark/pipeline/run_quant_benchmark.py
+    - ethical_benchmark/pipeline/run_quant_matrix.py
+    - scripts/build_fyp_report.js
+    - scripts/judge_agreement.py
+    - scripts/run_judge_validation.py
+    - scripts/rescore_harmbench.py
+    - results/analysis/*.json
+    - results/analysis/*.csv
+  required_changed_patterns:
+    - docs/FYP_Report_*.docx
+    - scripts/build_fyp_report.js
+
+agent_status:
+  expected_judge_sidecars: 6
+  expected_test_count_note: 186

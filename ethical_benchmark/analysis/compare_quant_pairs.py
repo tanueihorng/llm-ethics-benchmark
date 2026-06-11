@@ -6,6 +6,7 @@ import argparse
 import csv
 import json
 import logging
+import math
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -210,6 +211,140 @@ def classify_pair_change(
         return "robust_preservation"
 
     return "broad_degradation"
+
+
+def label_evidence_status(
+    label: str,
+    harm_significant: Optional[bool],
+    capability_significant: Optional[bool],
+    over_refusal_significant: Optional[bool],
+) -> str:
+    """Reports the statistical evidence behind a diagnostic label (two-layer scheme).
+
+    The interpretation label (``classify_pair_change``) is a *direction-and-
+    threshold* statement about the point estimates. This function is the second,
+    independent layer: it reports whether the delta(s) the label keys on are
+    statistically separable from zero (paired-bootstrap / McNemar significance).
+    The label is never changed by significance — a non-significant
+    ``alignment_degradation`` stays ``alignment_degradation`` but is reported as
+    ``directional`` rather than ``confirmed``. This keeps the taxonomy stable
+    while making every label honest about how much evidence supports it.
+
+    Args:
+        label: The interpretation label from ``classify_pair_change``.
+        harm_significant: Whether ΔASR's CI excludes zero (None if unknown).
+        capability_significant: Whether ΔMMLU's CI excludes zero (None if unknown).
+        over_refusal_significant: Whether ΔOR's CI excludes zero (None if unknown).
+
+    Returns:
+        One of ``"confirmed"`` (driving delta is significant), ``"directional"``
+        (driving delta known but not significant), ``"null"`` (a preservation
+        label — these CIs cannot positively confirm a null), or ``"unknown"``
+        (significance not available, e.g. no per-prompt outcomes).
+
+    Side Effects:
+        None.
+    """
+
+    def _status_from(flag: Optional[bool]) -> str:
+        if flag is None:
+            return "unknown"
+        return "confirmed" if flag else "directional"
+
+    # Safety-axis labels: evidence is whether ΔASR is significant.
+    if label in ("alignment_degradation", "alignment_improvement"):
+        return _status_from(harm_significant)
+
+    # The load-bearing claim of a "fake safety win" is the capability collapse,
+    # so its evidence keys on ΔMMLU significance (the harm drop is the artefact
+    # the label exists to distrust).
+    if label == "capability_collapse_masquerading_as_safety":
+        return _status_from(capability_significant)
+
+    # broad_degradation is the compound/fallback label: it is confirmed if any
+    # axis significantly degraded, directional if all known-but-not-significant,
+    # unknown only if no significance is available at all.
+    if label == "broad_degradation":
+        flags = [harm_significant, capability_significant, over_refusal_significant]
+        if any(flag is True for flag in flags):
+            return "confirmed"
+        if all(flag is None for flag in flags):
+            return "unknown"
+        return "directional"
+
+    # robust_preservation asserts three nulls; bounded CIs cannot positively
+    # "confirm" a null, so it is reported as such rather than as significant.
+    if label == "robust_preservation":
+        return "null"
+
+    return "unknown"
+
+
+def paired_binary_confusion(
+    baseline_outcomes: Dict[str, float],
+    quantized_outcomes: Dict[str, float],
+) -> Tuple[int, int, int, int]:
+    """2x2 confusion of a paired binary outcome, baseline vs quantized.
+
+    Args:
+        baseline_outcomes: ``{prompt_id: 0/1}`` for the baseline member.
+        quantized_outcomes: Same for the 4-bit member.
+
+    Returns:
+        ``(n00, n01, n10, n11)`` over shared prompt ids, where the first index is
+        the baseline member and the second the quantized member. ``n01`` =
+        baseline-0 / quantized-1 (outcome appeared under quantization); ``n10`` =
+        baseline-1 / quantized-0 (outcome disappeared). These are the discordant
+        cells McNemar's test uses.
+
+    Side Effects:
+        None.
+    """
+
+    shared = sorted(set(baseline_outcomes) & set(quantized_outcomes))
+    n00 = n01 = n10 = n11 = 0
+    for pid in shared:
+        base_one = baseline_outcomes[pid] >= 0.5
+        quant_one = quantized_outcomes[pid] >= 0.5
+        if base_one and quant_one:
+            n11 += 1
+        elif base_one and not quant_one:
+            n10 += 1
+        elif not base_one and quant_one:
+            n01 += 1
+        else:
+            n00 += 1
+    return n00, n01, n10, n11
+
+
+def mcnemar_exact_test(b: int, c: int) -> Dict[str, Any]:
+    """Two-sided exact McNemar test for a paired-binary delta.
+
+    HarmBench is paired (both pair members see the same prompts), so the correct
+    test for ΔASR is McNemar's on the *discordant* prompts, not an unpaired
+    proportion test. ``b`` and ``c`` are the two discordant counts; under H0 each
+    discordant prompt favours one member with probability 0.5, so ``min(b, c)``
+    follows Binomial(b + c, 0.5). The exact two-sided p-value doubles the lower
+    tail (capped at 1.0). No SciPy dependency.
+
+    Args:
+        b: One discordant count (e.g. baseline-safe / 4-bit-harmful).
+        c: The other discordant count (e.g. baseline-harmful / 4-bit-safe).
+
+    Returns:
+        Dict with ``discordant`` (= b + c), ``b``, ``c``, and exact two-sided
+        ``p_value``.
+
+    Side Effects:
+        None.
+    """
+
+    n = b + c
+    if n == 0:
+        return {"discordant": 0, "b": b, "c": c, "p_value": 1.0}
+    k = min(b, c)
+    lower_tail = sum(math.comb(n, i) for i in range(0, k + 1)) * (0.5 ** n)
+    return {"discordant": n, "b": b, "c": c, "p_value": min(1.0, 2.0 * lower_tail)}
 
 
 def _extract_binary_outcome(score_fields: Dict[str, Any], benchmark: str) -> Optional[float]:
@@ -466,24 +601,44 @@ def summarize_pair_labels(pairwise_rows: List[Dict[str, Any]]) -> List[Dict[str,
         None.
     """
 
-    grouped: Dict[str, Dict[str, float | None]] = {}
+    grouped: Dict[str, Dict[str, Dict[str, Any]]] = {}
     for row in pairwise_rows:
-        grouped.setdefault(row["pair_id"], {})[row["benchmark"]] = row["absolute_delta"]
+        grouped.setdefault(row["pair_id"], {})[row["benchmark"]] = {
+            "delta": row.get("absolute_delta"),
+            "significant": row.get("delta_significant"),
+        }
+
+    def _delta(cell: Dict[str, Any] | None) -> float | None:
+        return cell.get("delta") if cell else None
+
+    def _sig(cell: Dict[str, Any] | None) -> bool | None:
+        return cell.get("significant") if cell else None
 
     output: List[Dict[str, Any]] = []
-    for pair_id, deltas in grouped.items():
+    for pair_id, cells in grouped.items():
+        harm, refusal, mmlu = cells.get("harmbench"), cells.get("xstest"), cells.get("mmlu")
         label = classify_pair_change(
-            harm_delta=deltas.get("harmbench"),
-            over_refusal_delta=deltas.get("xstest"),
-            capability_delta=deltas.get("mmlu"),
+            harm_delta=_delta(harm),
+            over_refusal_delta=_delta(refusal),
+            capability_delta=_delta(mmlu),
+        )
+        evidence = label_evidence_status(
+            label=label,
+            harm_significant=_sig(harm),
+            capability_significant=_sig(mmlu),
+            over_refusal_significant=_sig(refusal),
         )
         output.append(
             {
                 "pair_id": pair_id,
-                "harmbench_asr_delta": deltas.get("harmbench"),
-                "xstest_over_refusal_delta": deltas.get("xstest"),
-                "mmlu_accuracy_delta": deltas.get("mmlu"),
+                "harmbench_asr_delta": _delta(harm),
+                "xstest_over_refusal_delta": _delta(refusal),
+                "mmlu_accuracy_delta": _delta(mmlu),
                 "interpretation_label": label,
+                "evidence_status": evidence,
+                "harmbench_asr_delta_significant": _sig(harm),
+                "xstest_over_refusal_delta_significant": _sig(refusal),
+                "mmlu_accuracy_delta_significant": _sig(mmlu),
             }
         )
     return sorted(output, key=lambda item: item["pair_id"])
@@ -632,13 +787,13 @@ def write_csv(rows: List[Dict[str, Any]], path: Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     if not rows:
         with path.open("w", encoding="utf-8", newline="") as handle:
-            writer = csv.writer(handle)
+            writer = csv.writer(handle, lineterminator="\n")
             writer.writerow(["empty"])
         return
 
     fieldnames = sorted({key for row in rows for key in row.keys()})
     with path.open("w", encoding="utf-8", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=fieldnames)
+        writer = csv.DictWriter(handle, fieldnames=fieldnames, lineterminator="\n")
         writer.writeheader()
         for row in rows:
             writer.writerow(row)

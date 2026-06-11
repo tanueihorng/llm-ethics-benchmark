@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net" modified="2026-06-08T23:45:00+08:00" agent="Codex" version="24.7.17" type="device">
+  <diagram id="fyp-agent-harness" name="Agent Harness Architecture">
+    <mxGraphModel dx="1920" dy="1320" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1320" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell parent="0" id="1" />
+        <mxCell value="fyp_quant Agent Harness Architecture&lt;br&gt;&lt;font style='font-size: 16px'&gt;How a fresh coding agent is oriented, scoped, isolated, checked, and handed off&lt;/font&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;fillColor=#12355B;strokeColor=#12355B;fontColor=#FFFFFF;fontFamily=Inter;fontSize=28;fontStyle=1;spacingLeft=24;spacingTop=20;" vertex="1" parent="1" id="title">
+          <mxGeometry x="40" y="30" width="1840" height="92" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Human goal enters Codex / Claude / Cursor&lt;/b&gt;&lt;br&gt;The repo supplies durable memory, task scope, and finish gates" style="rounded=1;arcSize=50;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;fontColor=#0F172A;fontFamily=Inter;fontSize=16;align=center;verticalAlign=middle;shadow=1;" vertex="1" parent="1" id="entry">
+          <mxGeometry x="520" y="165" width="880" height="82" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Repo-Native Agent Harness Control Plane&lt;/b&gt;&lt;br&gt;Thin startup context; task-specific packets and skills are pulled only when needed" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;fontColor=#0F172A;fontFamily=Inter;fontSize=18;align=left;verticalAlign=top;spacingLeft=26;spacingTop=18;" vertex="1" parent="1" id="panel">
+          <mxGeometry x="80" y="295" width="1760" height="570" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;What the Harness Protects&lt;/b&gt;&lt;br&gt;Evidence, scoring changes, deliverables, and next-session state are inspectable in the repo." style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#CBD5E1;fontColor=#0F172A;fontFamily=Inter;fontSize=18;align=left;verticalAlign=top;spacingLeft=26;spacingTop=18;" vertex="1" parent="1" id="protected">
+          <mxGeometry x="80" y="920" width="1760" height="250" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;1. Orientation Kernel&lt;/b&gt;&lt;br&gt;Always-loaded law and live state&lt;br&gt;AGENTS.md / CLAUDE.md&lt;br&gt;docs/PROJECT_LOG.md&lt;br&gt;agent-status snapshot" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#EEF6FF;strokeColor=#2F80C5;fontColor=#102033;fontFamily=Inter;fontSize=14;align=left;verticalAlign=top;spacingLeft=18;spacingTop=14;shadow=1;" vertex="1" parent="1" id="orientation">
+          <mxGeometry x="130" y="380" width="520" height="185" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;2. Task Router&lt;/b&gt;&lt;br&gt;Bounded startup for one job&lt;br&gt;fyp_cli.py agent-start&lt;br&gt;docs/agent_tasks/&lt;br&gt;recommended subagent" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#F2FAF5;strokeColor=#2C9A67;fontColor=#102033;fontFamily=Inter;fontSize=14;align=left;verticalAlign=top;spacingLeft=18;spacingTop=14;shadow=1;" vertex="1" parent="1" id="routing">
+          <mxGeometry x="700" y="380" width="520" height="185" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;3. Context Isolation&lt;/b&gt;&lt;br&gt;Small context on purpose&lt;br&gt;.agents/skills/&lt;br&gt;.codex/agents/&lt;br&gt;only files named in packet" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#F7F0FF;strokeColor=#8A63C8;fontColor=#102033;fontFamily=Inter;fontSize=14;align=left;verticalAlign=top;spacingLeft=18;spacingTop=14;shadow=1;" vertex="1" parent="1" id="isolation">
+          <mxGeometry x="1270" y="380" width="520" height="185" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;4. Guardrail Contract&lt;/b&gt;&lt;br&gt;Rules become machine checks&lt;br&gt;configs/artifact_policy.yaml&lt;br&gt;Codex hooks + GitHub Action&lt;br&gt;raw artifact manifest" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#FFF5E8;strokeColor=#C6812D;fontColor=#102033;fontFamily=Inter;fontSize=14;align=left;verticalAlign=top;spacingLeft=18;spacingTop=14;shadow=1;" vertex="1" parent="1" id="guardrails">
+          <mxGeometry x="130" y="635" width="520" height="185" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;5. Verification Gate&lt;/b&gt;&lt;br&gt;Finish with evidence&lt;br&gt;make agent-check&lt;br&gt;harness_eval + pytest&lt;br&gt;stale text / redaction scans" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#EFFAFB;strokeColor=#2494A3;fontColor=#102033;fontFamily=Inter;fontSize=14;align=left;verticalAlign=top;spacingLeft=18;spacingTop=14;shadow=1;" vertex="1" parent="1" id="verification">
+          <mxGeometry x="700" y="635" width="520" height="185" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;6. Recovery Layer&lt;/b&gt;&lt;br&gt;Next session resumes cleanly&lt;br&gt;docs/HANDOFF.md&lt;br&gt;docs/AGENT_DASHBOARD.md&lt;br&gt;docs/TC1_AGENT_CHECKLIST.md" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#FFF0F3;strokeColor=#C85C74;fontColor=#102033;fontFamily=Inter;fontSize=14;align=left;verticalAlign=top;spacingLeft=18;spacingTop=14;shadow=1;" vertex="1" parent="1" id="recovery">
+          <mxGeometry x="1270" y="635" width="520" height="185" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Evidence Protected&lt;/b&gt;&lt;br&gt;raw artifacts stay fixed&lt;br&gt;raw.jsonl&lt;br&gt;summary.json&lt;br&gt;hash manifest" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2F80C5;fontColor=#102033;fontFamily=Inter;fontSize=14;align=left;verticalAlign=top;spacingLeft=18;spacingTop=14;shadow=1;" vertex="1" parent="1" id="evidence">
+          <mxGeometry x="120" y="990" width="405" height="165" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Derived Sidecars&lt;/b&gt;&lt;br&gt;post-hoc scoring is auditable&lt;br&gt;scores.v2.*&lt;br&gt;scores.judge.*&lt;br&gt;redacted outputs" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#8A63C8;fontColor=#102033;fontFamily=Inter;fontSize=14;align=left;verticalAlign=top;spacingLeft=18;spacingTop=14;shadow=1;" vertex="1" parent="1" id="sidecars">
+          <mxGeometry x="555" y="990" width="405" height="165" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Report + Analysis&lt;/b&gt;&lt;br&gt;deliverables remain reproducible&lt;br&gt;build_fyp_report.js&lt;br&gt;results/analysis/&lt;br&gt;architecture visuals" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2C9A67;fontColor=#102033;fontFamily=Inter;fontSize=14;align=left;verticalAlign=top;spacingLeft=18;spacingTop=14;shadow=1;" vertex="1" parent="1" id="deliverables">
+          <mxGeometry x="990" y="990" width="405" height="165" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Meetup USP&lt;/b&gt;&lt;br&gt;repo memory beats chat memory&lt;br&gt;repo remembers&lt;br&gt;agents verify&lt;br&gt;human keeps authority" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#C6812D;fontColor=#102033;fontFamily=Inter;fontSize=14;align=left;verticalAlign=top;spacingLeft=18;spacingTop=14;shadow=1;" vertex="1" parent="1" id="usp">
+          <mxGeometry x="1425" y="990" width="405" height="165" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="orientation" target="routing" id="edge-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="routing" target="isolation" id="edge-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="orientation" target="guardrails" id="edge-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="routing" target="verification" id="edge-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="isolation" target="recovery" id="edge-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="guardrails" target="verification" id="edge-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="verification" target="recovery" id="edge-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=4;endArrow=block;endFill=1;" edge="1" parent="1" source="entry" target="panel" id="flow-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;strokeWidth=4;endArrow=block;endFill=1;" edge="1" parent="1" source="panel" target="protected" id="flow-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Talk track&lt;/b&gt;&lt;br&gt;The agent starts from durable repo state, agent-start loads a small task packet, subagents isolate audits, and make agent-check creates evidence before handoff." style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;fillColor=#0F172A;strokeColor=#0F172A;fontColor=#DDEBFF;fontFamily=Inter;fontSize=15;spacingLeft=24;spacingTop=18;" vertex="1" parent="1" id="talk-track">
+          <mxGeometry x="80" y="1185" width="1760" height="86" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

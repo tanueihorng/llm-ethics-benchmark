@@ -129,7 +129,7 @@ Judge outputs are redacted sidecars (IDs + booleans only); raw outputs and v2 si
 
 ### Tests
 ```bash
-pytest tests/                                    # All tests (176)
+pytest tests/                                    # All tests (186)
 pytest tests/test_judge_validation.py            # Judge layer (stub backend, redaction)
 pytest tests/test_quant_smoke.py                 # Smoke: end-to-end pipeline
 pytest tests/test_quant_analysis.py              # Pairwise delta computation
@@ -137,6 +137,21 @@ pytest tests/test_refusal_parser.py              # Refusal detection patterns
 pytest tests/test_slurm_helpers.py               # SLURM script generation
 pytest tests/test_matrix_reuse.py                # Model reuse logic
 ```
+
+### Agent Harness
+```bash
+python fyp_cli.py agent-status      # Live repo status for a fresh agent/session
+python fyp_cli.py agent-start --task T21 --agent fyp-report-auditor  # Small task-specific startup packet
+make agent-check                    # Full harness gate: docs sync, log discipline, artifacts, stale text, pytest
+make harness-eval                   # Focused tests that prove the harness catches bad states
+make agent-handoff                  # Regenerate docs/HANDOFF.md from live state
+make agent-dashboard                # Regenerate docs/AGENT_DASHBOARD.md
+make agent-tc1-checklist            # Regenerate docs/TC1_AGENT_CHECKLIST.md
+```
+
+`configs/artifact_policy.yaml` is the machine-readable contract for immutable artifacts, stale-text scans, privacy/redaction scans, and report-worthy file patterns. If a future agent changes harness behavior, update the policy/tests and log the decision in `docs/PROJECT_LOG.md`.
+
+Repo-scoped skills live under `.agents/skills/`; use them for task-specific workflows instead of expanding always-loaded instructions. Project-scoped Codex subagents live under `.codex/agents/` and should be used for context-isolated audits (report auditor, artifact guardian, TC1 ops, judge reviewer, meetup story). Project hooks live under `.codex/hooks.json` + `.codex/hooks/`; they require Codex hook trust review and are a lightweight reminder/refresh layer, not a replacement for `make agent-check`. See `docs/AGENTIC_WORKFLOW.md`.
 
 ---
 

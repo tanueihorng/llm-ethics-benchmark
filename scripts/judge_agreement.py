@@ -31,6 +31,9 @@ if str(ROOT) not in sys.path:
 from ethical_benchmark.analysis.compare_quant_pairs import (  # noqa: E402
     classify_pair_change,
     compute_paired_bootstrap_ci,
+    label_evidence_status,
+    mcnemar_exact_test,
+    paired_binary_confusion,
 )
 
 MODEL_ALIASES = [
@@ -194,9 +197,11 @@ def main() -> int:
     # v2 OR/MMLU deltas come from the already-computed pairwise_deltas.json.
     pairwise_path = analysis_dir / "pairwise_deltas.json"
     v2_deltas: Dict[Tuple[str, str], float] = {}
+    v2_sig: Dict[Tuple[str, str], Optional[bool]] = {}
     if pairwise_path.exists():
         for row in json.loads(pairwise_path.read_text(encoding="utf-8")):
             v2_deltas[(row["pair_id"], row["benchmark"])] = row["absolute_delta"]
+            v2_sig[(row["pair_id"], row["benchmark"])] = row.get("delta_significant")
 
     per_pair: List[Dict[str, Any]] = []
     for pair_id, (base_alias, quant_alias) in PAIRS.items():
@@ -221,8 +226,27 @@ def main() -> int:
         judge_ci_hi = ci["delta_ci_upper"] if ci else None
         judge_sig = ci["delta_significant"] if ci else None
 
+        # McNemar's exact test: the textbook-correct test for a paired-binary
+        # ΔASR. Reports exactly how many prompts flipped each way so the reader
+        # sees what the headline effect rests on (effect-size transparency).
+        # n01 = base safe / 4-bit harmful (became harmful under quantization);
+        # n10 = base harmful / 4-bit safe (became safe).
+        _, n01, n10, _ = paired_binary_confusion(base_outcomes, quant_outcomes)
+        mcnemar = mcnemar_exact_test(n01, n10)
+
+        mmlu_sig = v2_sig.get((pair_id, "mmlu"))
+        or_sig = v2_sig.get((pair_id, "xstest"))
+
         v2_label = classify_pair_change(v2_harm_delta, or_delta, mmlu_delta)
         judge_label = classify_pair_change(judge_delta, or_delta, mmlu_delta)
+        # Two-layer scheme: the label is the direction/threshold reading; the
+        # evidence status reports whether the delta(s) it keys on are significant.
+        evidence_status = label_evidence_status(
+            label=judge_label,
+            harm_significant=judge_sig,
+            capability_significant=mmlu_sig,
+            over_refusal_significant=or_sig,
+        )
         per_pair.append({
             "pair_id": pair_id,
             "v2_harm_delta": v2_harm_delta,
@@ -230,10 +254,17 @@ def main() -> int:
             "judge_harm_delta_ci_lower": judge_ci_lo,
             "judge_harm_delta_ci_upper": judge_ci_hi,
             "judge_harm_delta_significant": judge_sig,
+            "mcnemar_discordant": mcnemar["discordant"],
+            "mcnemar_b_base_to_harmful": mcnemar["b"],
+            "mcnemar_c_harmful_to_safe": mcnemar["c"],
+            "mcnemar_p_value": mcnemar["p_value"],
             "over_refusal_delta": or_delta,
+            "over_refusal_delta_significant": or_sig,
             "mmlu_delta": mmlu_delta,
+            "mmlu_delta_significant": mmlu_sig,
             "v2_label": v2_label,
             "judge_label": judge_label,
+            "evidence_status": evidence_status,
             "label_changed": v2_label != judge_label,
         })
 
@@ -250,7 +281,7 @@ def main() -> int:
     # Redacted CSV (per model).
     csv_path = analysis_dir / "judge_agreement.csv"
     with csv_path.open("w", encoding="utf-8", newline="") as handle:
-        writer = csv.writer(handle)
+        writer = csv.writer(handle, lineterminator="\n")
         writer.writerow([
             "model_alias", "n_shared", "agreement_rate", "cohens_kappa",
             "v2_asr", "judge_asr", "both_harmful", "neither_harmful",
@@ -278,8 +309,8 @@ def main() -> int:
               f"{_f(c['cohens_kappa']):>7} {_f(c['v2_asr']):>8} {_f(c['judge_asr']):>10}")
     print()
     print("Per-pair judge HarmBench deltas with paired-bootstrap 95% CIs, and label vs v2:")
-    print(f"{'pair_id':<14} {'judge Δ':>8} {'95% CI':>20} {'sig?':>5}  {'judge label':<38} {'(v2 label)'}")
-    print("-" * 100)
+    print(f"{'pair_id':<14} {'judge Δ':>8} {'95% CI':>20} {'sig?':>5}  {'judge label':<32} {'evidence':<12} {'(v2 label)'}")
+    print("-" * 116)
     for p in per_pair:
         def _d(x: Optional[float]) -> str:
             return f"{x:+.3f}" if isinstance(x, float) else "  n/a"
@@ -287,7 +318,16 @@ def main() -> int:
         ci_s = f"[{lo:+.3f}, {hi:+.3f}]" if isinstance(lo, float) and isinstance(hi, float) else "n/a"
         sig = p.get("judge_harm_delta_significant")
         print(f"{p['pair_id']:<14} {_d(p['judge_harm_delta']):>8} {ci_s:>20} {str(sig):>5}  "
-              f"{p['judge_label']:<38} ({p['v2_label']})")
+              f"{p['judge_label']:<32} {p['evidence_status']:<12} ({p['v2_label']})")
+    print()
+    print("McNemar exact test on the paired HarmBench delta (what the effect rests on):")
+    print(f"{'pair_id':<14} {'+harmful':>9} {'-harmful':>9} {'discordant':>11} {'exact p':>9}")
+    print("-" * 60)
+    for p in per_pair:
+        pv = p.get("mcnemar_p_value")
+        pv_s = f"{pv:.4f}" if isinstance(pv, float) else "n/a"
+        print(f"{p['pair_id']:<14} {p.get('mcnemar_b_base_to_harmful', 0):>9} "
+              f"{p.get('mcnemar_c_harmful_to_safe', 0):>9} {p.get('mcnemar_discordant', 0):>11} {pv_s:>9}")
     print()
     print(f"Wrote {analysis_dir / 'judge_agreement.json'}")
     print(f"Wrote {csv_path}")

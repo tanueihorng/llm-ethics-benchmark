@@ -1,0 +1,128 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1320" viewBox="0 0 1800 1320">
+<defs>
+<linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%"><stop offset="0%" stop-color="#0F3B66"/><stop offset="55%" stop-color="#0B5E6F"/><stop offset="100%" stop-color="#513C80"/></linearGradient>
+<marker id="arrow_1F7A5A" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M2,2 L10,6 L2,10 Z" fill="#1F7A5A"/></marker>
+<marker id="arrow_28966F" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M2,2 L10,6 L2,10 Z" fill="#28966F"/></marker>
+<marker id="arrow_3178C6" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M2,2 L10,6 L2,10 Z" fill="#3178C6"/></marker>
+<marker id="arrow_8D68C7" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M2,2 L10,6 L2,10 Z" fill="#8D68C7"/></marker>
+<marker id="arrow_C2842E" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M2,2 L10,6 L2,10 Z" fill="#C2842E"/></marker>
+</defs>
+<rect x="0" y="0" width="1800" height="1320" fill="#F8FAFC"/>
+<rect x="0" y="0" width="1800" height="126" fill="url(#headerGrad)"/>
+<text x="62" y="58" font-family="Inter, Arial, sans-serif" font-size="40" font-weight="800" fill="#FFFFFF">fyp_quant Repository Hierarchy</text>
+<text x="64" y="92" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="500" fill="#DDEBFF">Top-down map: what each folder/file group does and how the repo hangs together</text>
+<text x="1510" y="52" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700" fill="#DDEBFF">Folder-first view</text>
+<text x="1510" y="80" font-family="Inter, Arial, sans-serif" font-size="14" fill="#BFD7FF">Editable source: .drawio</text>
+<path d="M 900 290 C 900 330, 265 330, 265 370" fill="none" stroke="#3178C6" stroke-width="3" marker-end="url(#arrow_3178C6)" opacity="0.85"/>
+<path d="M 900 290 C 900 330, 700 330, 700 370" fill="none" stroke="#28966F" stroke-width="3" marker-end="url(#arrow_28966F)" opacity="0.85"/>
+<path d="M 900 290 C 900 330, 1135 330, 1135 370" fill="none" stroke="#C2842E" stroke-width="3" marker-end="url(#arrow_C2842E)" opacity="0.85"/>
+<path d="M 900 290 C 900 330, 1552 330, 1552 370" fill="none" stroke="#8D68C7" stroke-width="3" marker-end="url(#arrow_8D68C7)" opacity="0.85"/>
+<path d="M 265 620 C 265 665, 265 665, 265 710" fill="none" stroke="#3178C6" stroke-width="3" marker-end="url(#arrow_3178C6)" opacity="0.85"/>
+<path d="M 700 620 C 700 665, 700 665, 700 710" fill="none" stroke="#28966F" stroke-width="3" marker-end="url(#arrow_28966F)" opacity="0.85"/>
+<path d="M 1135 620 C 1135 665, 1135 665, 1135 710" fill="none" stroke="#C2842E" stroke-width="3" marker-end="url(#arrow_C2842E)" opacity="0.85"/>
+<path d="M 1552 620 C 1552 665, 1552 665, 1552 710" fill="none" stroke="#8D68C7" stroke-width="3" marker-end="url(#arrow_8D68C7)" opacity="0.85"/>
+<path d="M 700 960 C 700 835, 1135 835, 1135 710" fill="none" stroke="#1F7A5A" stroke-width="3" marker-end="url(#arrow_1F7A5A)" opacity="0.85"/>
+<path d="M 1135 960 C 1135 835, 1552 835, 1552 710" fill="none" stroke="#1F7A5A" stroke-width="3" marker-end="url(#arrow_1F7A5A)" opacity="0.85"/>
+<rect x="606" y="158" width="600" height="140" rx="24" fill="#0F172A" opacity="0.09"/>
+
+<rect x="600" y="150" width="600" height="140" rx="24" fill="#0F3B66" stroke="#0F3B66" stroke-width="2.2"/>
+<text x="628" y="192" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="800" fill="#FFFFFF">fyp_quant/</text>
+<text x="628" y="222" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#DDEBFF">Repo-native FYP research operating system</text>
+<text x="628" y="257" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="500" fill="#EAF5FF">- Four major areas below</text>
+<rect x="76" y="378" width="390" height="250" rx="24" fill="#0F172A" opacity="0.09"/>
+<path d="M 94 360 H 198 L 220 382 H 94 Z" fill="#3178C6" opacity="0.18" stroke="#3178C6" stroke-width="1.5"/>
+<rect x="70" y="370" width="390" height="250" rx="24" fill="#EEF5FF" stroke="#3178C6" stroke-width="2.2"/>
+<text x="98" y="412" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="800" fill="#0F172A">Agent Operating System</text>
+<text x="98" y="442" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#475569">How Codex/Claude know what to do</text>
+<text x="98" y="477" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#334155">- AGENTS.md + CLAUDE.md</text>
+<text x="98" y="499" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#334155">- docs/PROJECT_LOG.md</text>
+<text x="98" y="521" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#334155">- docs/HANDOFF.md + dashboard</text>
+<text x="98" y="543" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#334155">- .agents/skills/ + .codex/agents/ + hooks</text>
+<text x="98" y="565" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#334155">- make agent-check + CI</text>
+<rect x="511" y="378" width="390" height="250" rx="24" fill="#0F172A" opacity="0.09"/>
+<path d="M 529 360 H 633 L 655 382 H 529 Z" fill="#28966F" opacity="0.18" stroke="#28966F" stroke-width="1.5"/>
+<rect x="505" y="370" width="390" height="250" rx="24" fill="#EFFAF6" stroke="#28966F" stroke-width="2.2"/>
+<text x="533" y="412" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="800" fill="#0F172A">Research Core</text>
+<text x="533" y="442" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#475569">The Python framework that runs the study</text>
+<text x="533" y="477" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#334155">- ethical_benchmark/benchmarks</text>
+<text x="533" y="499" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#334155">- ethical_benchmark/models</text>
+<text x="533" y="521" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#334155">- ethical_benchmark/pipeline</text>
+<text x="533" y="543" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#334155">- ethical_benchmark/analysis</text>
+<text x="533" y="565" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#334155">- ethical_benchmark/judges</text>
+<text x="533" y="587" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#334155">- ethical_benchmark/cluster</text>
+<rect x="946" y="378" width="390" height="250" rx="24" fill="#0F172A" opacity="0.09"/>
+<path d="M 964 360 H 1068 L 1090 382 H 964 Z" fill="#C2842E" opacity="0.18" stroke="#C2842E" stroke-width="1.5"/>
+<rect x="940" y="370" width="390" height="250" rx="24" fill="#FFF6E8" stroke="#C2842E" stroke-width="2.2"/>
+<text x="968" y="412" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="800" fill="#0F172A">Inputs + Execution</text>
+<text x="968" y="442" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#475569">Config, data, SLURM, and commands</text>
+<text x="968" y="477" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#334155">- configs/default.yaml + tc1.yaml</text>
+<text x="968" y="499" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#334155">- data/xstest_v2_prompts.csv</text>
+<text x="968" y="521" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#334155">- slurm/jobs_tc1* + judge sbatch</text>
+<text x="968" y="543" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#334155">- scripts/prefetch_tc1.py</text>
+<text x="968" y="565" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#334155">- fyp_cli.py + Makefile</text>
+<rect x="1381" y="378" width="355" height="250" rx="24" fill="#0F172A" opacity="0.09"/>
+<path d="M 1399 360 H 1503 L 1525 382 H 1399 Z" fill="#8D68C7" opacity="0.18" stroke="#8D68C7" stroke-width="1.5"/>
+<rect x="1375" y="370" width="355" height="250" rx="24" fill="#F7F0FF" stroke="#8D68C7" stroke-width="2.2"/>
+<text x="1403" y="412" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="800" fill="#0F172A">Evidence + Deliverables</text>
+<text x="1403" y="442" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#475569">What is produced and defended</text>
+<text x="1403" y="477" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#334155">- results/*/*/raw.jsonl</text>
+<text x="1403" y="499" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#334155">- results/*/*/summary.json</text>
+<text x="1403" y="521" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#334155">- scores.v2 + scores.judge sidecars</text>
+<text x="1403" y="543" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#334155">- results/analysis/*</text>
+<text x="1403" y="565" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#334155">- docs/FYP_Report_*.docx</text>
+<text x="1403" y="587" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#334155">- docs/architecture/*</text>
+<rect x="76" y="718" width="390" height="250" rx="24" fill="#0F172A" opacity="0.09"/>
+<path d="M 94 700 H 198 L 220 722 H 94 Z" fill="#3178C6" opacity="0.18" stroke="#3178C6" stroke-width="1.5"/>
+<rect x="70" y="710" width="390" height="250" rx="24" fill="#FFFFFF" stroke="#3178C6" stroke-width="2.2"/>
+<text x="98" y="752" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="800" fill="#0F172A">Agent Files</text>
+<text x="98" y="782" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#475569">Small context, reusable work packets</text>
+<text x="98" y="817" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#334155">- docs/agent_tasks/</text>
+<text x="98" y="839" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#334155">- .agents/skills/</text>
+<text x="98" y="861" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#334155">- .codex/agents/</text>
+<text x="98" y="883" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#334155">- .codex/hooks/</text>
+<text x="98" y="905" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#334155">- .github/workflows/</text>
+<rect x="511" y="718" width="390" height="250" rx="24" fill="#0F172A" opacity="0.09"/>
+<path d="M 529 700 H 633 L 655 722 H 529 Z" fill="#28966F" opacity="0.18" stroke="#28966F" stroke-width="1.5"/>
+<rect x="505" y="710" width="390" height="250" rx="24" fill="#FFFFFF" stroke="#28966F" stroke-width="2.2"/>
+<text x="533" y="752" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="800" fill="#0F172A">Core Modules</text>
+<text x="533" y="782" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#475569">Separation of concerns inside ethical_benchmark/</text>
+<text x="533" y="817" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#334155">- benchmarks: HarmBench / XSTest / MMLU</text>
+<text x="533" y="839" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#334155">- models: HF loading + generation</text>
+<text x="533" y="861" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#334155">- pipeline: run + matrix orchestration</text>
+<text x="533" y="883" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#334155">- analysis: deltas + labels</text>
+<text x="533" y="905" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#334155">- judges: HarmBench classifier validation</text>
+<text x="533" y="927" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#334155">- cluster: SLURM helpers</text>
+<rect x="946" y="718" width="390" height="250" rx="24" fill="#0F172A" opacity="0.09"/>
+<path d="M 964 700 H 1068 L 1090 722 H 964 Z" fill="#C2842E" opacity="0.18" stroke="#C2842E" stroke-width="1.5"/>
+<rect x="940" y="710" width="390" height="250" rx="24" fill="#FFFFFF" stroke="#C2842E" stroke-width="2.2"/>
+<text x="968" y="752" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="800" fill="#0F172A">Execution Files</text>
+<text x="968" y="782" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#475569">Where runs are configured and launched</text>
+<text x="968" y="817" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#334155">- configs/: model pairs + TC1 policy</text>
+<text x="968" y="839" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#334155">- slurm/: tracked sbatch scripts</text>
+<text x="968" y="861" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#334155">- scripts/: prefetch, judge, report,</text>
+<text x="968" y="883" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#334155">diagrams</text>
+<text x="968" y="905" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#334155">- Makefile: short commands</text>
+<text x="968" y="927" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#334155">- fyp_cli.py: unified CLI</text>
+<rect x="1381" y="718" width="355" height="250" rx="24" fill="#0F172A" opacity="0.09"/>
+<path d="M 1399 700 H 1503 L 1525 722 H 1399 Z" fill="#8D68C7" opacity="0.18" stroke="#8D68C7" stroke-width="1.5"/>
+<rect x="1375" y="710" width="355" height="250" rx="24" fill="#FFFFFF" stroke="#8D68C7" stroke-width="2.2"/>
+<text x="1403" y="752" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="800" fill="#0F172A">Artifact Contract</text>
+<text x="1403" y="782" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#475569">The rule that protects scientific integrity</text>
+<text x="1403" y="817" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#334155">- Raw TC1 outputs are immutable</text>
+<text x="1403" y="839" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#334155">- Revisions use derived sidecars</text>
+<text x="1403" y="861" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#334155">- Judge sidecars are redacted</text>
+<text x="1403" y="883" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#334155">- PROJECT_LOG records decisions</text>
+<text x="1403" y="905" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="500" fill="#334155">- Report is generated from source</text>
+<rect x="70" y="1025" width="1660" height="150" rx="24" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="2"/>
+<text x="102" y="1064" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="800" fill="#0F172A">How to read this</text>
+<text x="355" y="1052" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="500" fill="#334155">1. Start at fyp_quant/: the repo is both a research benchmark and an agent operating system.</text>
+<text x="355" y="1080" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="500" fill="#334155">2. The middle row shows the four big jobs: agent control, research code, execution setup, and evidence/reporting.</text>
+<text x="355" y="1108" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="500" fill="#334155">3. The lower row shows the concrete folders/files a new agent or human should inspect.</text>
+<text x="355" y="1136" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="500" fill="#334155">4. The green links mean verification/control: checks connect the agent harness back to the evidence contract.</text>
+<rect x="70" y="1205" width="1660" height="1" fill="#CBD5E1"/>
+<circle cx="82" cy="1227" r="6" fill="#3178C6"/><text x="98" y="1232" font-family="Inter, Arial, sans-serif" font-size="13" fill="#334155">Agent harness</text>
+<circle cx="230" cy="1227" r="6" fill="#28966F"/><text x="246" y="1232" font-family="Inter, Arial, sans-serif" font-size="13" fill="#334155">Research framework</text>
+<circle cx="420" cy="1227" r="6" fill="#C2842E"/><text x="436" y="1232" font-family="Inter, Arial, sans-serif" font-size="13" fill="#334155">Execution setup</text>
+<circle cx="585" cy="1227" r="6" fill="#8D68C7"/><text x="601" y="1232" font-family="Inter, Arial, sans-serif" font-size="13" fill="#334155">Evidence and deliverables</text>
+<circle cx="805" cy="1227" r="6" fill="#1F7A5A"/><text x="821" y="1232" font-family="Inter, Arial, sans-serif" font-size="13" fill="#334155">Verification/control link</text>
+</svg>

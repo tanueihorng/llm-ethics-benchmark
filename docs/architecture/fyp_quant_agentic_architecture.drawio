@@ -1,0 +1,143 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net" modified="2026-06-08T18:00:00+08:00" agent="Codex" version="24.7.17" type="device">
+  <diagram id="fyp-agentic-architecture" name="Architecture Overview">
+    <mxGraphModel dx="1800" dy="1120" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1240" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell parent="0" id="1" />
+        <mxCell value="fyp_quant: Agentic Research Harness Architecture&lt;br&gt;&lt;font style='font-size: 16px'&gt;Repo-native memory, isolated subagents, verified evidence, and report generation&lt;/font&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;fillColor=#0F3B66;strokeColor=#0F3B66;fontColor=#FFFFFF;fontFamily=Inter;fontSize=28;fontStyle=1;spacingLeft=24;spacingTop=20;" vertex="1" parent="1" id="title">
+          <mxGeometry x="40" y="30" width="1720" height="88" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Human + Agent Entry&lt;/b&gt;&lt;br&gt;&lt;font color='#475569'&gt;How work enters the repo&lt;/font&gt;" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#EEF5FF;strokeColor=#7AA7D9;fontFamily=Inter;fontSize=14;fontColor=#102033;align=left;verticalAlign=top;spacingLeft=16;spacingTop=12;shadow=1;" vertex="1" parent="1" id="section-1">
+          <mxGeometry x="60" y="160" width="380" height="830" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Repo Memory + Control Plane&lt;/b&gt;&lt;br&gt;&lt;font color='#475569'&gt;Small context, strong rules&lt;/font&gt;" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#EFFAF6;strokeColor=#69B99A;fontFamily=Inter;fontSize=14;fontColor=#102033;align=left;verticalAlign=top;spacingLeft=16;spacingTop=12;shadow=1;" vertex="1" parent="1" id="section-2">
+          <mxGeometry x="480" y="160" width="420" height="830" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Research Execution Pipeline&lt;/b&gt;&lt;br&gt;&lt;font color='#475569'&gt;What the benchmark runs&lt;/font&gt;" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#FFF6E8;strokeColor=#D7A75D;fontFamily=Inter;fontSize=14;fontColor=#102033;align=left;verticalAlign=top;spacingLeft=16;spacingTop=12;shadow=1;" vertex="1" parent="1" id="section-3">
+          <mxGeometry x="940" y="160" width="420" height="830" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Evidence + Reporting&lt;/b&gt;&lt;br&gt;&lt;font color='#475569'&gt;What becomes defensible output&lt;/font&gt;" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#F7F0FF;strokeColor=#A88AD8;fontFamily=Inter;fontSize=14;fontColor=#102033;align=left;verticalAlign=top;spacingLeft=16;spacingTop=12;shadow=1;" vertex="1" parent="1" id="section-4">
+          <mxGeometry x="1400" y="160" width="340" height="830" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Human researcher&lt;/b&gt;&lt;br&gt;Defines goal&lt;br&gt;Handles VPN/MFA/auth&lt;br&gt;Approves risky choices" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#3178C6;fontFamily=Inter;fontSize=14;fontColor=#102033;align=left;verticalAlign=top;spacingLeft=16;spacingTop=12;shadow=1;" vertex="1" parent="1" id="human">
+          <mxGeometry x="90" y="235" width="320" height="118" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Agent surfaces&lt;/b&gt;&lt;br&gt;Codex / Claude / Cursor&lt;br&gt;AGENTS.md + PROJECT_LOG&lt;br&gt;Ask repo for live state" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#3178C6;fontFamily=Inter;fontSize=14;fontColor=#102033;align=left;verticalAlign=top;spacingLeft=16;spacingTop=12;shadow=1;" vertex="1" parent="1" id="agents">
+          <mxGeometry x="90" y="382" width="320" height="128" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;CLI + Makefile&lt;/b&gt;&lt;br&gt;fyp_cli.py&lt;br&gt;make agent-check&lt;br&gt;report / analyze / cluster" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#3178C6;fontFamily=Inter;fontSize=14;fontColor=#102033;align=left;verticalAlign=top;spacingLeft=16;spacingTop=12;shadow=1;" vertex="1" parent="1" id="cli">
+          <mxGeometry x="90" y="540" width="320" height="128" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Task-specific startup&lt;/b&gt;&lt;br&gt;agent-status&lt;br&gt;agent-start --task --agent&lt;br&gt;No giant prompt" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#3178C6;fontFamily=Inter;fontSize=14;fontColor=#102033;align=left;verticalAlign=top;spacingLeft=16;spacingTop=12;shadow=1;" vertex="1" parent="1" id="startup">
+          <mxGeometry x="90" y="700" width="320" height="128" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Single source of truth&lt;/b&gt;&lt;br&gt;docs/PROJECT_LOG.md&lt;br&gt;Decisions + open actions&lt;br&gt;Changelog for each change" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#28966F;fontFamily=Inter;fontSize=14;fontColor=#102033;align=left;verticalAlign=top;spacingLeft=16;spacingTop=12;shadow=1;" vertex="1" parent="1" id="truth">
+          <mxGeometry x="510" y="235" width="360" height="118" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;On-demand context&lt;/b&gt;&lt;br&gt;docs/agent_tasks/*&lt;br&gt;.agents/skills/*&lt;br&gt;Load only relevant packet" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#28966F;fontFamily=Inter;fontSize=14;fontColor=#102033;align=left;verticalAlign=top;spacingLeft=16;spacingTop=12;shadow=1;" vertex="1" parent="1" id="context">
+          <mxGeometry x="510" y="382" width="360" height="118" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Context isolation&lt;/b&gt;&lt;br&gt;.codex/agents/*&lt;br&gt;Report / artifact / TC1 / judge&lt;br&gt;Findings to main agent" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#28966F;fontFamily=Inter;fontSize=14;fontColor=#102033;align=left;verticalAlign=top;spacingLeft=16;spacingTop=12;shadow=1;" vertex="1" parent="1" id="subagents">
+          <mxGeometry x="510" y="528" width="360" height="130" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Hooks + CI&lt;/b&gt;&lt;br&gt;.codex/hooks.json&lt;br&gt;.github/workflows/agent-harness.yml&lt;br&gt;Warnings + lightweight checks" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#28966F;fontFamily=Inter;fontSize=14;fontColor=#102033;align=left;verticalAlign=top;spacingLeft=16;spacingTop=12;shadow=1;" vertex="1" parent="1" id="hooks">
+          <mxGeometry x="510" y="688" width="360" height="130" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Finish gate&lt;/b&gt;&lt;br&gt;make agent-check&lt;br&gt;186 tests&lt;br&gt;Redaction + artifact checks" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#E6FFF5;strokeColor=#1F7A5A;fontFamily=Inter;fontSize=14;fontColor=#102033;align=left;verticalAlign=top;spacingLeft=16;spacingTop=12;shadow=1;" vertex="1" parent="1" id="gate">
+          <mxGeometry x="510" y="848" width="360" height="118" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Experiment config&lt;/b&gt;&lt;br&gt;configs/default.yaml&lt;br&gt;configs/tc1.yaml&lt;br&gt;Matched baseline vs NF4" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#C2842E;fontFamily=Inter;fontSize=14;fontColor=#102033;align=left;verticalAlign=top;spacingLeft=16;spacingTop=12;shadow=1;" vertex="1" parent="1" id="configs">
+          <mxGeometry x="970" y="235" width="360" height="118" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Model load + generation&lt;/b&gt;&lt;br&gt;HFModelLoader&lt;br&gt;BitsAndBytes NF4&lt;br&gt;Greedy decoding" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#C2842E;fontFamily=Inter;fontSize=14;fontColor=#102033;align=left;verticalAlign=top;spacingLeft=16;spacingTop=12;shadow=1;" vertex="1" parent="1" id="loader">
+          <mxGeometry x="970" y="382" width="360" height="118" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Benchmark plugins&lt;/b&gt;&lt;br&gt;HarmBench&lt;br&gt;XSTest&lt;br&gt;MMLU subset" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#C2842E;fontFamily=Inter;fontSize=14;fontColor=#102033;align=left;verticalAlign=top;spacingLeft=16;spacingTop=12;shadow=1;" vertex="1" parent="1" id="benchmarks">
+          <mxGeometry x="970" y="528" width="360" height="118" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Pipeline orchestration&lt;/b&gt;&lt;br&gt;run_quant_benchmark.py&lt;br&gt;run_quant_matrix.py&lt;br&gt;Model reuse" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#C2842E;fontFamily=Inter;fontSize=14;fontColor=#102033;align=left;verticalAlign=top;spacingLeft=16;spacingTop=12;shadow=1;" vertex="1" parent="1" id="pipeline">
+          <mxGeometry x="970" y="674" width="360" height="118" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;TC1 SLURM execution&lt;/b&gt;&lt;br&gt;Prefetch on head node&lt;br&gt;Compute via sbatch&lt;br&gt;Offline HF env vars" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#FFF9EA;strokeColor=#C2842E;fontFamily=Inter;fontSize=14;fontColor=#102033;align=left;verticalAlign=top;spacingLeft=16;spacingTop=12;shadow=1;" vertex="1" parent="1" id="tc1">
+          <mxGeometry x="970" y="840" width="360" height="126" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Immutable raw evidence&lt;/b&gt;&lt;br&gt;results/*/*/raw.jsonl&lt;br&gt;results/*/*/summary.json&lt;br&gt;Hash manifest" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#8D68C7;fontFamily=Inter;fontSize=14;fontColor=#102033;align=left;verticalAlign=top;spacingLeft=16;spacingTop=12;shadow=1;" vertex="1" parent="1" id="raw">
+          <mxGeometry x="1430" y="235" width="280" height="130" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Derived scoring sidecars&lt;/b&gt;&lt;br&gt;scores.v2.jsonl&lt;br&gt;scores.judge.*&lt;br&gt;Redacted IDs + booleans" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#8D68C7;fontFamily=Inter;fontSize=14;fontColor=#102033;align=left;verticalAlign=top;spacingLeft=16;spacingTop=12;shadow=1;" vertex="1" parent="1" id="sidecars">
+          <mxGeometry x="1430" y="398" width="280" height="130" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Analysis outputs&lt;/b&gt;&lt;br&gt;pairwise deltas&lt;br&gt;judge agreement&lt;br&gt;interpretation labels" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#8D68C7;fontFamily=Inter;fontSize=14;fontColor=#102033;align=left;verticalAlign=top;spacingLeft=16;spacingTop=12;shadow=1;" vertex="1" parent="1" id="analysis">
+          <mxGeometry x="1430" y="560" width="280" height="122" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Report builder&lt;/b&gt;&lt;br&gt;build_fyp_report.js&lt;br&gt;make report&lt;br&gt;FYP_Report.docx" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#8D68C7;fontFamily=Inter;fontSize=14;fontColor=#102033;align=left;verticalAlign=top;spacingLeft=16;spacingTop=12;shadow=1;" vertex="1" parent="1" id="report">
+          <mxGeometry x="1430" y="710" width="280" height="130" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Presentation artifacts&lt;/b&gt;&lt;br&gt;Meetup brief&lt;br&gt;Architecture SVG&lt;br&gt;Dashboard / handoff" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#F3EAFE;strokeColor=#8D68C7;fontFamily=Inter;fontSize=14;fontColor=#102033;align=left;verticalAlign=top;spacingLeft=16;spacingTop=12;shadow=1;" vertex="1" parent="1" id="present">
+          <mxGeometry x="1430" y="852" width="280" height="114" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#3178C6;strokeWidth=3;fontColor=#3178C6;fontStyle=1;endArrow=block;endFill=1;" edge="1" parent="1" source="human" target="agents" id="edge-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#3178C6;strokeWidth=3;fontColor=#3178C6;fontStyle=1;endArrow=block;endFill=1;" edge="1" parent="1" source="agents" target="cli" id="edge-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#3178C6;strokeWidth=3;fontColor=#3178C6;fontStyle=1;endArrow=block;endFill=1;" edge="1" parent="1" source="cli" target="startup" id="edge-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#3178C6;strokeWidth=3;fontColor=#3178C6;fontStyle=1;endArrow=block;endFill=1;" edge="1" parent="1" source="startup" target="truth" id="edge-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#28966F;strokeWidth=3;fontColor=#28966F;fontStyle=1;endArrow=block;endFill=1;" edge="1" parent="1" source="truth" target="context" id="edge-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#28966F;strokeWidth=3;fontColor=#28966F;fontStyle=1;endArrow=block;endFill=1;" edge="1" parent="1" source="context" target="subagents" id="edge-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#28966F;strokeWidth=3;fontColor=#28966F;fontStyle=1;endArrow=block;endFill=1;" edge="1" parent="1" source="subagents" target="hooks" id="edge-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#28966F;strokeWidth=3;fontColor=#28966F;fontStyle=1;endArrow=block;endFill=1;" edge="1" parent="1" source="hooks" target="gate" id="edge-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#C2842E;strokeWidth=3;fontColor=#C2842E;fontStyle=1;endArrow=block;endFill=1;" edge="1" parent="1" source="configs" target="loader" id="edge-9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#C2842E;strokeWidth=3;fontColor=#C2842E;fontStyle=1;endArrow=block;endFill=1;" edge="1" parent="1" source="loader" target="benchmarks" id="edge-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#C2842E;strokeWidth=3;fontColor=#C2842E;fontStyle=1;endArrow=block;endFill=1;" edge="1" parent="1" source="benchmarks" target="pipeline" id="edge-11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#C2842E;strokeWidth=3;fontColor=#C2842E;fontStyle=1;endArrow=block;endFill=1;" edge="1" parent="1" source="pipeline" target="tc1" id="edge-12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#C2842E;strokeWidth=3;fontColor=#C2842E;fontStyle=1;endArrow=block;endFill=1;" edge="1" parent="1" source="tc1" target="raw" id="edge-13">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#8D68C7;strokeWidth=3;fontColor=#8D68C7;fontStyle=1;endArrow=block;endFill=1;" edge="1" parent="1" source="raw" target="sidecars" id="edge-14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#8D68C7;strokeWidth=3;fontColor=#8D68C7;fontStyle=1;endArrow=block;endFill=1;" edge="1" parent="1" source="sidecars" target="analysis" id="edge-15">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#8D68C7;strokeWidth=3;fontColor=#8D68C7;fontStyle=1;endArrow=block;endFill=1;" edge="1" parent="1" source="analysis" target="report" id="edge-16">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#8D68C7;strokeWidth=3;fontColor=#8D68C7;fontStyle=1;endArrow=block;endFill=1;" edge="1" parent="1" source="report" target="present" id="edge-17">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1F7A5A;strokeWidth=3;fontColor=#1F7A5A;fontStyle=1;endArrow=block;endFill=1;" edge="1" parent="1" source="gate" target="truth" id="edge-18">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1F7A5A;strokeWidth=3;fontColor=#1F7A5A;fontStyle=1;endArrow=block;endFill=1;" edge="1" parent="1" source="gate" target="report" id="edge-19">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Guardrail Contract&lt;/b&gt;&lt;br&gt;Raw TC1 artifacts are immutable. Revised scoring writes derived sidecars only.&lt;br&gt;Handoffs are redacted. PROJECT_LOG records decisions and every repo change.&lt;br&gt;make agent-check is the final gate: docs sync, artifact hashes, stale text, redaction, diff check, pytest." style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;fillColor=#FFF1F2;strokeColor=#E06B78;fontColor=#7F1D1D;fontFamily=Inter;fontSize=15;fontStyle=0;spacingLeft=22;spacingTop=15;shadow=1;" vertex="1" parent="1" id="guardrails">
+          <mxGeometry x="60" y="1028" width="1680" height="118" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

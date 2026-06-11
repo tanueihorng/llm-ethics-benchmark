@@ -1,0 +1,122 @@
+study_name: safety_capability_tradeoff_4bit_slm_sensitivity
+
+# T18 multi-seed / stochastic-decoding sensitivity arm (HarmBench only).
+#
+# Purpose: the main study (configs/tc1.yaml) runs at temperature 0.0 (greedy),
+# so its bootstrap/McNemar intervals capture prompt-sampling variance only — not
+# generation variance. This config re-runs HarmBench under realistic stochastic
+# decoding (temperature 0.7, Qwen3's recommended non-thinking setting) so the
+# same prompts are scored across several seeds, giving an independent estimate of
+# how stable the quantization ΔASR is across decodes. Reported as a SEPARATE
+# robustness layer; it does not replace or get cross-compared with the greedy
+# main results.
+#
+# Fairness: within each pair, baseline and 4-bit are run at the IDENTICAL
+# temperature and the IDENTICAL seed set, so each per-seed ΔASR is a clean
+# matched-pair contrast. HarmBench has 200 rows and max_samples >= 200, so every
+# seed scores the same 200-prompt SET; only the generation (sampling) varies.
+#
+# Execution: one generation sbatch per model loops over seeds writing to
+# results_sensitivity/seed<N>/...; a per-seed judge sbatch then scores those
+# generations with the official HarmBench classifier (so the metric matches the
+# judge-primary headline). See slurm/jobs_tc1_sensitivity/ and
+# scripts/sensitivity_analysis.py.
+
+models:
+  qwen_2b_base:
+    family: qwen
+    size_b: 1.7
+    quantized: false
+    pair_id: qwen_2b
+    model_id: Qwen/Qwen3-1.7B
+    trust_remote_code: false
+    dtype: auto
+    benchmarks: [harmbench]
+
+  qwen_2b_4bit:
+    family: qwen
+    size_b: 1.7
+    quantized: true
+    pair_id: qwen_2b
+    model_id: Qwen/Qwen3-1.7B
+    trust_remote_code: false
+    dtype: auto
+    benchmarks: [harmbench]
+
+  qwen_4b_base:
+    family: qwen
+    size_b: 4.0
+    quantized: false
+    pair_id: qwen_4b
+    model_id: Qwen/Qwen3-4B
+    trust_remote_code: false
+    dtype: auto
+    benchmarks: [harmbench]
+
+  qwen_4b_4bit:
+    family: qwen
+    size_b: 4.0
+    quantized: true
+    pair_id: qwen_4b
+    model_id: Qwen/Qwen3-4B
+    trust_remote_code: false
+    dtype: auto
+    benchmarks: [harmbench]
+
+  llama_3_2_3b_base:
+    family: llama
+    size_b: 3.0
+    quantized: false
+    pair_id: llama_3_2_3b
+    model_id: meta-llama/Llama-3.2-3B-Instruct
+    trust_remote_code: false
+    dtype: auto
+    benchmarks: [harmbench]
+
+  llama_3_2_3b_4bit:
+    family: llama
+    size_b: 3.0
+    quantized: true
+    pair_id: llama_3_2_3b
+    model_id: meta-llama/Llama-3.2-3B-Instruct
+    trust_remote_code: false
+    dtype: auto
+    benchmarks: [harmbench]
+
+# Stochastic decoding. temperature > 0.0 sets do_sample=True in the generator
+# (ethical_benchmark/models/generation.py), so different --seed values produce
+# different samples. 0.7 / 0.8 is Qwen3's recommended non-thinking setting,
+# applied uniformly to all pairs.
+decoding:
+  max_new_tokens: 128
+  temperature: 0.7
+  top_p: 0.8
+  repetition_penalty: 1.0
+  max_input_tokens: 1024
+  use_chat_template: true
+
+benchmarks:
+  harmbench:
+    dataset_name: walledai/HarmBench
+    config_name: standard
+    split: train
+    max_samples: 400   # dataset has 200 rows; >=200 means every seed scores the same 200-prompt set
+    batch_size: 4
+
+slurm:
+  partition: UGGPU-TC1
+  qos: normal
+  account:
+  gpus: 1
+  cpus_per_task: 1
+  mem: 10G
+  time: "06:00:00"
+  log_dir: results/slurm_logs_tc1
+  work_dir: /tc1home/FYP/utan001/fyp_quant/repo
+  setup_commands:
+    - module load slurm
+    - module load anaconda
+    - source activate fyp-tc1
+    - export HF_HUB_OFFLINE=1
+    - export HF_DATASETS_OFFLINE=1
+    - export TRANSFORMERS_OFFLINE=1

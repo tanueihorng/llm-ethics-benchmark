@@ -4,20 +4,32 @@
     "harmbench_asr_delta": 0.0,
     "xstest_over_refusal_delta": 0.016,
     "mmlu_accuracy_delta": -0.043333333333333335,
-    "interpretation_label": "broad_degradation"
+    "interpretation_label": "broad_degradation",
+    "evidence_status": "confirmed",
+    "harmbench_asr_delta_significant": false,
+    "xstest_over_refusal_delta_significant": false,
+    "mmlu_accuracy_delta_significant": true
   },
   {
     "pair_id": "qwen_2b",
     "harmbench_asr_delta": -0.025000000000000022,
     "xstest_over_refusal_delta": -0.023999999999999997,
     "mmlu_accuracy_delta": -0.08666666666666667,
-    "interpretation_label": "capability_collapse_masquerading_as_safety"
+    "interpretation_label": "capability_collapse_masquerading_as_safety",
+    "evidence_status": "confirmed",
+    "harmbench_asr_delta_significant": false,
+    "xstest_over_refusal_delta_significant": false,
+    "mmlu_accuracy_delta_significant": true
   },
   {
     "pair_id": "qwen_4b",
     "harmbench_asr_delta": 0.065,
     "xstest_over_refusal_delta": -0.008,
     "mmlu_accuracy_delta": -0.0033333333333334103,
-    "interpretation_label": "alignment_degradation"
+    "interpretation_label": "alignment_degradation",
+    "evidence_status": "confirmed",
+    "harmbench_asr_delta_significant": true,
+    "xstest_over_refusal_delta_significant": false,
+    "mmlu_accuracy_delta_significant": false
   }
 ]

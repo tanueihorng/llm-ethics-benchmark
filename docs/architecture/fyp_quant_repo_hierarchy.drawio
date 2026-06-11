@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net" modified="2026-06-08T18:20:00+08:00" agent="Codex" version="24.7.17" type="device">
+  <diagram id="fyp-repo-hierarchy" name="Repo Hierarchy">
+    <mxGraphModel dx="1800" dy="1320" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1320" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell parent="0" id="1" />
+        <mxCell value="fyp_quant Repository Hierarchy&lt;br&gt;&lt;font style='font-size: 16px'&gt;Top-down map of folders, files, and responsibilities&lt;/font&gt;" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;fillColor=#0F3B66;strokeColor=#0F3B66;fontColor=#FFFFFF;fontFamily=Inter;fontSize=28;fontStyle=1;spacingLeft=24;spacingTop=20;" vertex="1" parent="1" id="title">
+          <mxGeometry x="40" y="30" width="1720" height="88" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;fyp_quant/&lt;/b&gt;&lt;br&gt;Repo-native FYP research operating system&lt;br&gt;Four major areas below" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#0F3B66;strokeColor=#0F3B66;fontColor=#FFFFFF;fontFamily=Inter;fontSize=14;align=left;verticalAlign=top;spacingLeft=18;spacingTop=14;shadow=1;" vertex="1" parent="1" id="root">
+          <mxGeometry x="600" y="150" width="600" height="140" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Agent Operating System&lt;/b&gt;&lt;br&gt;How Codex/Claude know what to do&lt;br&gt;AGENTS.md + CLAUDE.md&lt;br&gt;docs/PROJECT_LOG.md&lt;br&gt;docs/HANDOFF.md + dashboard&lt;br&gt;.agents/skills/ + .codex/agents/ + hooks&lt;br&gt;make agent-check + CI" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#EEF5FF;strokeColor=#3178C6;fontColor=#102033;fontFamily=Inter;fontSize=14;align=left;verticalAlign=top;spacingLeft=18;spacingTop=14;shadow=1;" vertex="1" parent="1" id="agent_os">
+          <mxGeometry x="70" y="370" width="390" height="250" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Research Core&lt;/b&gt;&lt;br&gt;The Python framework that runs the study&lt;br&gt;ethical_benchmark/benchmarks&lt;br&gt;ethical_benchmark/models&lt;br&gt;ethical_benchmark/pipeline&lt;br&gt;ethical_benchmark/analysis&lt;br&gt;ethical_benchmark/judges&lt;br&gt;ethical_benchmark/cluster" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#EFFAF6;strokeColor=#28966F;fontColor=#102033;fontFamily=Inter;fontSize=14;align=left;verticalAlign=top;spacingLeft=18;spacingTop=14;shadow=1;" vertex="1" parent="1" id="research_core">
+          <mxGeometry x="505" y="370" width="390" height="250" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Inputs + Execution&lt;/b&gt;&lt;br&gt;Config, data, SLURM, and commands&lt;br&gt;configs/default.yaml + tc1.yaml&lt;br&gt;data/xstest_v2_prompts.csv&lt;br&gt;slurm/jobs_tc1* + judge sbatch&lt;br&gt;scripts/prefetch_tc1.py&lt;br&gt;fyp_cli.py + Makefile" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#FFF6E8;strokeColor=#C2842E;fontColor=#102033;fontFamily=Inter;fontSize=14;align=left;verticalAlign=top;spacingLeft=18;spacingTop=14;shadow=1;" vertex="1" parent="1" id="inputs_execution">
+          <mxGeometry x="940" y="370" width="390" height="250" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Evidence + Deliverables&lt;/b&gt;&lt;br&gt;What is produced and defended&lt;br&gt;results/*/*/raw.jsonl&lt;br&gt;results/*/*/summary.json&lt;br&gt;scores.v2 + scores.judge sidecars&lt;br&gt;results/analysis/*&lt;br&gt;docs/FYP_Report_*.docx&lt;br&gt;docs/architecture/*" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#F7F0FF;strokeColor=#8D68C7;fontColor=#102033;fontFamily=Inter;fontSize=14;align=left;verticalAlign=top;spacingLeft=18;spacingTop=14;shadow=1;" vertex="1" parent="1" id="evidence">
+          <mxGeometry x="1375" y="370" width="355" height="250" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Agent Files&lt;/b&gt;&lt;br&gt;Small context, reusable work packets&lt;br&gt;docs/agent_tasks/&lt;br&gt;.agents/skills/&lt;br&gt;.codex/agents/&lt;br&gt;.codex/hooks/&lt;br&gt;.github/workflows/" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#3178C6;fontColor=#102033;fontFamily=Inter;fontSize=14;align=left;verticalAlign=top;spacingLeft=18;spacingTop=14;shadow=1;" vertex="1" parent="1" id="agent_files">
+          <mxGeometry x="70" y="710" width="390" height="250" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Core Modules&lt;/b&gt;&lt;br&gt;Separation of concerns inside ethical_benchmark/&lt;br&gt;benchmarks: HarmBench / XSTest / MMLU&lt;br&gt;models: HF loading + generation&lt;br&gt;pipeline: run + matrix orchestration&lt;br&gt;analysis: deltas + labels&lt;br&gt;judges: HarmBench classifier validation&lt;br&gt;cluster: SLURM helpers" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#28966F;fontColor=#102033;fontFamily=Inter;fontSize=14;align=left;verticalAlign=top;spacingLeft=18;spacingTop=14;shadow=1;" vertex="1" parent="1" id="core_modules">
+          <mxGeometry x="505" y="710" width="390" height="250" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Execution Files&lt;/b&gt;&lt;br&gt;Where runs are configured and launched&lt;br&gt;configs/: model pairs + TC1 policy&lt;br&gt;slurm/: tracked sbatch scripts&lt;br&gt;scripts/: prefetch, judge, report, diagrams&lt;br&gt;Makefile: short commands&lt;br&gt;fyp_cli.py: unified CLI" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#C2842E;fontColor=#102033;fontFamily=Inter;fontSize=14;align=left;verticalAlign=top;spacingLeft=18;spacingTop=14;shadow=1;" vertex="1" parent="1" id="execution_files">
+          <mxGeometry x="940" y="710" width="390" height="250" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;Artifact Contract&lt;/b&gt;&lt;br&gt;The rule that protects scientific integrity&lt;br&gt;Raw TC1 outputs are immutable&lt;br&gt;Revisions use derived sidecars&lt;br&gt;Judge sidecars are redacted&lt;br&gt;PROJECT_LOG records decisions&lt;br&gt;Report is generated from source" style="rounded=1;arcSize=12;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#8D68C7;fontColor=#102033;fontFamily=Inter;fontSize=14;align=left;verticalAlign=top;spacingLeft=18;spacingTop=14;shadow=1;" vertex="1" parent="1" id="artifact_contract">
+          <mxGeometry x="1375" y="710" width="355" height="250" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#3178C6;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="root" target="agent_os" id="edge-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#28966F;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="root" target="research_core" id="edge-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#C2842E;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="root" target="inputs_execution" id="edge-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#8D68C7;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="root" target="evidence" id="edge-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#3178C6;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="agent_os" target="agent_files" id="edge-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#28966F;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="research_core" target="core_modules" id="edge-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#C2842E;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="inputs_execution" target="execution_files" id="edge-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#8D68C7;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="evidence" target="artifact_contract" id="edge-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1F7A5A;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="core_modules" target="execution_files" id="edge-9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1F7A5A;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="execution_files" target="artifact_contract" id="edge-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell value="&lt;b&gt;How to read this&lt;/b&gt;&lt;br&gt;Start at fyp_quant/. The middle row shows the four big responsibilities. The lower row shows concrete folders/files. Green links are verification/control." style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;fillColor=#F1F5F9;strokeColor=#CBD5E1;fontColor=#334155;fontFamily=Inter;fontSize=15;spacingLeft=22;spacingTop=18;shadow=1;" vertex="1" parent="1" id="read-order">
+          <mxGeometry x="70" y="1025" width="1660" height="150" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

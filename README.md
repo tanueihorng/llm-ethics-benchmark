@@ -17,6 +17,10 @@ The core objective is to compare baseline and 4-bit checkpoints as matched pairs
 
 **Permanent reference material:**
 - Current FYP interim report: `docs/FYP_Report_2026-05-27.docx`
+- Integrated agentic stack poster: `docs/architecture/fyp_quant_integrated_agentic_stack.svg`
+- Visual repo hierarchy: `docs/architecture/fyp_quant_repo_hierarchy.svg`
+- Visual agent harness architecture: `docs/architecture/fyp_quant_agent_harness_architecture.svg`
+- Visual agentic architecture: `docs/architecture/fyp_quant_agentic_architecture.svg`
 - Full FYP operational guide: `docs/FYP_REPO_GUIDE.md`
 - TC1 cluster step-by-step runbook: `docs/TC1_CLUSTER_RUNBOOK.md`
 - Quick start guide: `docs/USER_GUIDE.md`
@@ -162,6 +166,32 @@ make cluster-generate   # regenerate sbatch scripts (Mac only)
 make cluster-check      # poll squeue for job status
 # Note: do NOT use make cluster-submit on TC1 — use direct sbatch instead (see SLURM Workflow below)
 ```
+
+### Agent harness commands
+```bash
+python fyp_cli.py agent-start --task T21 --agent fyp-report-auditor
+python fyp_cli.py agent-status
+make agent-check
+make harness-eval
+make agent-handoff
+make agent-dashboard
+make agent-tc1-checklist
+```
+
+The agent harness turns repo rules into checks: `configs/artifact_policy.yaml`
+declares immutable raw artifacts, allowed sidecars, stale-text scans, redaction
+scans, and report-worthy file patterns. `docs/agent_tasks/` holds bounded task
+packets for future agents, and generated files such as `docs/HANDOFF.md`,
+`docs/AGENT_DASHBOARD.md`, and `docs/TC1_AGENT_CHECKLIST.md` provide fresh
+session recovery without replacing `docs/PROJECT_LOG.md`.
+
+Agentic workflow helpers:
+- Repo skills: `.agents/skills/`
+- Codex custom subagents: `.codex/agents/`
+- Codex hooks: `.codex/hooks.json` and `.codex/hooks/`
+- Usage guide: `docs/AGENTIC_WORKFLOW.md`
+- Integrated architecture poster: `docs/architecture/fyp_quant_integrated_agentic_stack.svg`
+- Harness architecture visual: `docs/architecture/fyp_quant_agent_harness_architecture.svg`
 
 ### 3) Pairwise analysis
 ```bash
