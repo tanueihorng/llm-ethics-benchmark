@@ -180,6 +180,27 @@ def test_agent_harness_catches_immutable_artifact_mutation(tmp_path: Path) -> No
     assert _result_by_name(results, "immutable-artifacts").status == "fail"
 
 
+def test_agent_harness_immutable_tolerates_absent_artifacts(tmp_path: Path) -> None:
+    """Absent immutable artifacts (gitignored / fresh CI checkout) must not fail.
+
+    The raw artifacts are gitignored, so a fresh clone or CI checkout simply does
+    not have them. Absence is not a mutation, so the check passes — it only fails
+    on a present-but-changed or unmanifested artifact (see the mutation test
+    above). Regression guard for the Agent Harness CI workflow, which previously
+    failed by design on every push because the files it verifies cannot exist in
+    CI.
+    """
+    repo = _init_harness_repo(tmp_path)
+    (repo / "results/model/harmbench/raw.jsonl").unlink()
+    (repo / "results/model/harmbench/summary.json").unlink()
+
+    results = run_agent_checks(repo, include_pytest=False, include_diff_check=False)
+
+    immutable = _result_by_name(results, "immutable-artifacts")
+    assert immutable.ok
+    assert immutable.status == "pass"
+
+
 def test_agent_status_and_renderers_are_redaction_safe(tmp_path: Path) -> None:
     repo = _init_harness_repo(tmp_path)
 

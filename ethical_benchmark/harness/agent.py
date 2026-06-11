@@ -257,15 +257,43 @@ def check_immutable_artifacts(repo_root: Path, policy: dict[str, Any]) -> CheckR
     missing = sorted(path for path in expected if path not in current)
     changed = sorted(path for path, digest in expected.items() if current.get(path) != digest and path in current)
     extra = sorted(path for path in current if path not in expected)
-    if missing or changed or extra:
+
+    # Real immutability violations are a *mutated* artifact (present but the hash
+    # differs) or an *unmanifested* new raw artifact (present but not listed).
+    # These always fail. An *absent* artifact is not a mutation: the immutable
+    # files are gitignored, so a fresh checkout (CI, a clean clone) simply does
+    # not have them — failing on absence would make the harness CI fail by
+    # design. Absence is therefore tolerated; only present-and-wrong fails.
+    if changed or extra:
         details = [f"changed: {path}" for path in changed]
-        details += [f"missing: {path}" for path in missing]
         details += [f"unmanifested: {path}" for path in extra]
+        details += [f"missing: {path}" for path in missing]
         return CheckResult(
             "immutable-artifacts",
             "fail",
             "Immutable raw artifacts do not match the hash manifest.",
             details[:40],
+        )
+
+    verified = len(expected) - len(missing)
+    if missing and verified == 0:
+        # No immutable artifacts checked out at all — the expected state in CI
+        # and any fresh clone. Nothing to verify, nothing mutated.
+        return CheckResult(
+            "immutable-artifacts",
+            "pass",
+            f"Immutable artifacts not checked out ({len(missing)} gitignored files absent — "
+            "expected in CI / fresh clone); nothing to verify.",
+        )
+    if missing:
+        # Some present and verified, some absent — flag the absences (e.g. a
+        # local deletion) without blocking the gate.
+        return CheckResult(
+            "immutable-artifacts",
+            "warn",
+            f"Immutable artifact manifest matches {verified} present files; "
+            f"{len(missing)} manifest files are absent on disk.",
+            [f"absent: {path}" for path in missing[:40]],
         )
     return CheckResult(
         "immutable-artifacts",
