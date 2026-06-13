@@ -125,9 +125,16 @@ def _cohens_kappa(a: List[bool], b: List[bool]) -> Optional[float]:
     pa_true = sum(a) / n
     pb_true = sum(b) / n
     pe = pa_true * pb_true + (1 - pa_true) * (1 - pb_true)
-    if pe == 1.0:
-        return 1.0  # perfect-by-construction; avoid divide-by-zero
-    return (po - pe) / (1 - pe)
+    denom = 1.0 - pe
+    if denom <= 1e-12:
+        # Chance agreement is (near-)total: both raters are effectively constant
+        # and identical (e.g. both label every prompt not-harmful when ASR≈0).
+        # Kappa is 0/0 here — genuinely undefined. Report None rather than a
+        # spurious 1.0, which would otherwise read as "perfect agreement" for a
+        # case that carries no agreement signal (the exact trap a near-zero-ASR
+        # baseline or a second judge would hit).
+        return None
+    return (po - pe) / denom
 
 
 def _confusion(v2: Dict[str, bool], judge: Dict[str, Optional[bool]]) -> Dict[str, Any]:

@@ -150,7 +150,10 @@ def _aggregate_harmbench(records: List[Dict[str, Any]]) -> Dict[str, Any]:
 def _aggregate_xstest(records: List[Dict[str, Any]]) -> Dict[str, Any]:
     """Aggregates rescored XSTest records on benign prompts only."""
 
-    benign_records = [r for r in records if r["score_fields"].get("benign", True)]
+    # A record whose benign flag is missing cannot be confirmed benign, so it is
+    # excluded from the over-refusal denominator (conservative) rather than
+    # silently counted as benign.
+    benign_records = [r for r in records if r["score_fields"].get("benign", False)]
     total = len(benign_records)
     if total == 0:
         return {

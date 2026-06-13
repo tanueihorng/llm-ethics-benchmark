@@ -252,3 +252,39 @@ class TestPromptFormatting:
         assert generator._format_prompt("hello") == "hello"
         assert tokenizer.kwargs is not None
         assert "enable_thinking" not in tokenizer.kwargs
+
+
+# =========================================================================
+# Quantization-active guard (refuse fp16-mislabelled-as-4bit)
+# =========================================================================
+
+
+class _FakeModel:
+    """Minimal stand-in carrying whichever quantization signals a test sets."""
+
+    def __init__(self, **attrs: Any) -> None:
+        for key, value in attrs.items():
+            setattr(self, key, value)
+
+
+class TestQuantizationActive:
+    """`_quantization_active` must detect any of the version-dependent signals."""
+
+    def test_is_loaded_in_4bit(self) -> None:
+        assert loader_module._quantization_active(_FakeModel(is_loaded_in_4bit=True)) is True
+
+    def test_is_quantized(self) -> None:
+        assert loader_module._quantization_active(_FakeModel(is_quantized=True)) is True
+
+    def test_hf_quantizer_present(self) -> None:
+        assert loader_module._quantization_active(_FakeModel(hf_quantizer=object())) is True
+
+    def test_no_signal_is_false(self) -> None:
+        # A plain fp16 model exposes none of the signals -> not quantized.
+        assert loader_module._quantization_active(_FakeModel()) is False
+        assert (
+            loader_module._quantization_active(
+                _FakeModel(is_loaded_in_4bit=False, is_quantized=False, hf_quantizer=None)
+            )
+            is False
+        )

@@ -45,6 +45,32 @@ def _build_bnb_4bit_config(compute_dtype: Any) -> Any:
     )
 
 
+def _quantization_active(model: Any) -> bool:
+    """Reports whether a loaded model shows any sign of active quantization.
+
+    Robust across transformers versions: older builds expose
+    ``is_loaded_in_4bit``; newer ones surface ``is_quantized`` and/or an
+    ``hf_quantizer`` attribute. Used to refuse a run where a checkpoint marked
+    ``quantized=true`` silently loaded in full precision (which would mislabel
+    fp16 results as 4-bit and corrupt the baseline-vs-4bit comparison).
+
+    Args:
+        model: A loaded Hugging Face model.
+
+    Returns:
+        ``True`` if any quantization signal is present.
+
+    Side Effects:
+        None.
+    """
+
+    return (
+        bool(getattr(model, "is_loaded_in_4bit", False))
+        or bool(getattr(model, "is_quantized", False))
+        or getattr(model, "hf_quantizer", None) is not None
+    )
+
+
 @dataclass(frozen=True)
 class ModelSpec:
     """Specification for loading a model from Hugging Face.
@@ -148,11 +174,16 @@ class HFModelLoader:
 
         model = AutoModelForCausalLM.from_pretrained(spec.hf_id, **model_kwargs)
 
-        if spec.quantized and not getattr(model, "is_loaded_in_4bit", False):
-            LOGGER.warning(
-                "Model '%s' requested 4-bit but is_loaded_in_4bit is False after load. "
-                "Verify the checkpoint and bitsandbytes installation.",
-                spec.alias,
+        if spec.quantized and not _quantization_active(model):
+            # Refuse to proceed if quantization did not actually engage: a model
+            # that silently loaded in fp16 but is recorded as quantized=True would
+            # contaminate the entire baseline-vs-4bit comparison.
+            raise RuntimeError(
+                f"Model '{spec.alias}' requested 4-bit quantization but no "
+                f"quantization is active after load (is_loaded_in_4bit / "
+                f"is_quantized / hf_quantizer all absent). Refusing to proceed: "
+                f"results would be fp16 mislabelled as 4-bit. Check the "
+                f"checkpoint and the bitsandbytes installation."
             )
 
         if runtime_device == "cpu":

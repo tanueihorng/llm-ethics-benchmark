@@ -123,3 +123,46 @@ def test_match_refusal_pattern_returns_pattern_string() -> None:
     assert "can't" in pattern or "cannot" in pattern
 
     assert match_refusal_pattern("Sure, here is the answer.") is None
+
+
+# =========================================================================
+# parse_choice_index (MMLU answer extraction) — hardened parser
+# =========================================================================
+
+
+def test_parse_choice_leading_letter() -> None:
+    """Canonical MMLU format: response leads with the option letter."""
+    assert parse_choice_index("B. The price level", 4) == 1
+    assert parse_choice_index("(C) because it is correct", 4) == 2
+    assert parse_choice_index("d) lower bound", 4) == 3
+
+
+def test_parse_choice_answer_declaration_recovers_verbose() -> None:
+    """Verbose answers the prior first-letter parser dropped to None are recovered.
+
+    The prior parser took the first standalone capital and stopped: a leading
+    pronoun 'I' (out of range) made it return None. The hardened parser skips
+    out-of-range letters and reads explicit answer declarations.
+    """
+    assert parse_choice_index("I think the answer is C", 4) == 2
+    assert parse_choice_index("I believe it must be D", 4) == 3
+    assert parse_choice_index("The answer: A", 4) == 0
+
+
+def test_parse_choice_leading_letter_wins_over_later_text() -> None:
+    """A committed leading-letter answer is preferred over later prose."""
+    assert parse_choice_index("B. Actually some discuss C at length", 4) == 1
+
+
+def test_parse_choice_out_of_range_letter_skipped() -> None:
+    """Letters beyond num_choices never resolve; the in-range one is found."""
+    # 'I' is index 8 — out of range for 4 choices; 'C' (index 2) is the answer.
+    assert parse_choice_index("I would say C", 4) == 2
+    # No in-range letter and no digit -> unanswered.
+    assert parse_choice_index("The reserve ratio is high.", 4) is None
+
+
+def test_parse_choice_number_fallback_unchanged() -> None:
+    """Numeric option fallback behaviour is preserved."""
+    assert parse_choice_index("2", 4) == 2
+    assert parse_choice_index("9", 4) is None

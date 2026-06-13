@@ -225,15 +225,43 @@ def parse_choice_index(response: str, num_choices: int) -> int | None:
         None.
     """
 
-    text = response.strip().upper()
+    upper = response.strip().upper()
 
-    letter_match = re.search(r"\b([A-Z])\b", text)
-    if letter_match:
-        idx = ord(letter_match.group(1)) - ord("A")
-        if 0 <= idx < num_choices:
+    def _in_range(letter: str) -> int | None:
+        idx = ord(letter) - ord("A")
+        return idx if 0 <= idx < num_choices else None
+
+    # 1. Canonical MMLU answer format: the response leads with the option letter
+    #    ("B.", "B)", "(C)", "D -"). This is what the studied models emit, so it
+    #    stays the primary path and matches the prior parser on every response the
+    #    prior parser already answered.
+    lead = re.match(r"\(?\s*([A-Z])\b", upper)
+    if lead:
+        idx = _in_range(lead.group(1))
+        if idx is not None:
             return idx
 
-    number_match = re.search(r"\b(\d+)\b", text)
+    # 2. Explicit answer declaration anywhere ("answer is C", "answer: C",
+    #    "the correct answer (C)"). Take the LAST such mention — chatty models
+    #    often restate after reasoning. Recovers verbose answers the prior parser
+    #    dropped to None.
+    for letter in reversed(re.findall(r"ANSWER\s*(?:IS|:|=)?\s*\(?\s*([A-Z])\b", upper)):
+        idx = _in_range(letter)
+        if idx is not None:
+            return idx
+
+    # 3. First *in-range* standalone capital anywhere. Unlike the prior parser,
+    #    this scans past out-of-range letters instead of giving up on the first
+    #    one — so "I think the answer is C" no longer parses to None because of
+    #    the leading pronoun "I" (out of range).
+    for match in re.finditer(r"\b([A-Z])\b", upper):
+        idx = _in_range(match.group(1))
+        if idx is not None:
+            return idx
+
+    # 4. Numeric fallback (0-indexed option number), unchanged from the prior
+    #    parser to avoid altering established behaviour on numeric responses.
+    number_match = re.search(r"\b(\d+)\b", upper)
     if number_match:
         idx = int(number_match.group(1))
         if 0 <= idx < num_choices:
