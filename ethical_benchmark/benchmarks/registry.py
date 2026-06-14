@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from typing import Any, Dict
 
+from ethical_benchmark.benchmarks.arc import ARCChallengePlugin
 from ethical_benchmark.benchmarks.base import BenchmarkPlugin
 from ethical_benchmark.benchmarks.harmbench import HarmBenchPlugin
 from ethical_benchmark.benchmarks.mmlu import MMLUPlugin
@@ -34,5 +35,7 @@ def build_benchmark_plugin(name: str, config: Dict[str, Any]) -> BenchmarkPlugin
         return XSTestPlugin(config)
     if normalized == "mmlu":
         return MMLUPlugin(config)
+    if normalized == "arc":
+        return ARCChallengePlugin(config)
 
     raise ValueError(f"Unsupported benchmark '{name}'.")

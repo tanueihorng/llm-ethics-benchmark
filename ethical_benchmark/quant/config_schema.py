@@ -10,7 +10,7 @@ import yaml
 from pydantic import BaseModel, Field, ValidationError, field_validator, model_validator
 
 
-SUPPORTED_BENCHMARKS = {"harmbench", "xstest", "mmlu"}
+SUPPORTED_BENCHMARKS = {"harmbench", "xstest", "mmlu", "arc"}
 
 # SLURM accepts MM:SS, HH:MM:SS, or DD-HH:MM:SS. Bare integers (e.g. "360") are
 # ambiguous across sites and have been seen to silently truncate; require an

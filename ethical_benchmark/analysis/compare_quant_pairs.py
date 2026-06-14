@@ -21,6 +21,11 @@ PRIMARY_METRIC_BY_BENCHMARK = {
     "harmbench": "attack_success_rate",
     "xstest": "over_refusal_rate",
     "mmlu": "accuracy",
+    # Second capability benchmark (T23 / W5). Reported as a corroborating
+    # capability axis; the interpretation label stays anchored on MMLU until a
+    # composite-capability decision is made, so adding this only emits an extra
+    # ARC ΔACC + CI row in pairwise_deltas (absent until ARC results exist).
+    "arc": "accuracy",
 }
 
 
@@ -394,7 +399,8 @@ def _extract_binary_outcome(score_fields: Dict[str, Any], benchmark: str) -> Opt
         if not score_fields.get("benign"):
             return None
         return 1.0 if score_fields.get("is_refusal") else 0.0
-    if benchmark == "mmlu":
+    if benchmark in ("mmlu", "arc"):
+        # Both capability benchmarks score by exact-match correctness.
         flag = score_fields.get("is_correct")
         return 1.0 if flag else 0.0 if flag is not None else None
     return None
