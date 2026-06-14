@@ -1,0 +1,77 @@
+{
+  "sensitivity_root": "results_sensitivity",
+  "per_pair": [
+    {
+      "pair_id": "qwen_2b",
+      "seeds_used": [
+        "seed1",
+        "seed2",
+        "seed3",
+        "seed4",
+        "seed5"
+      ],
+      "v2_delta": {
+        "n_seeds": 5,
+        "mean": 2.2204460492503132e-17,
+        "sd": 0.027156951228000523,
+        "min": -0.039999999999999925,
+        "max": 0.025000000000000022,
+        "sign_consistent": false
+      },
+      "judge_delta": {
+        "n_seeds": 5,
+        "mean": 0.024000000000000007,
+        "sd": 0.028151376520518488,
+        "min": -0.009999999999999981,
+        "max": 0.05500000000000001,
+        "sign_consistent": false
+      },
+      "greedy_judge_delta": 0.05499999999999999,
+      "greedy_in_multiseed_range": true
+    },
+    {
+      "pair_id": "qwen_4b",
+      "seeds_used": [],
+      "v2_delta": {
+        "n_seeds": 0,
+        "mean": null,
+        "sd": null,
+        "min": null,
+        "max": null,
+        "sign_consistent": null
+      },
+      "judge_delta": {
+        "n_seeds": 0,
+        "mean": null,
+        "sd": null,
+        "min": null,
+        "max": null,
+        "sign_consistent": null
+      },
+      "greedy_judge_delta": 0.024999999999999994,
+      "greedy_in_multiseed_range": null
+    },
+    {
+      "pair_id": "llama_3_2_3b",
+      "seeds_used": [],
+      "v2_delta": {
+        "n_seeds": 0,
+        "mean": null,
+        "sd": null,
+        "min": null,
+        "max": null,
+        "sign_consistent": null
+      },
+      "judge_delta": {
+        "n_seeds": 0,
+        "mean": null,
+        "sd": null,
+        "min": null,
+        "max": null,
+        "sign_consistent": null
+      },
+      "greedy_judge_delta": 0.0,
+      "greedy_in_multiseed_range": null
+    }
+  ]
+}
