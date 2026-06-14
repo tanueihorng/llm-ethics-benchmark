@@ -16,7 +16,7 @@ The core objective is to compare baseline and 4-bit checkpoints as matched pairs
 > **Start here:** [`docs/PROJECT_LOG.md`](docs/PROJECT_LOG.md) — single source of truth for current status, open tasks, decisions, and the changelog. Update this file whenever something changes; everything else listed below is permanent reference material that does not track day-to-day state.
 
 **Permanent reference material:**
-- Current FYP interim report: `docs/FYP_Report_2026-05-27.docx`
+- Current FYP interim report: `docs/FYP_Report_2026-06-14.docx`
 - Integrated agentic stack poster: `docs/architecture/fyp_quant_integrated_agentic_stack.svg`
 - Visual repo hierarchy: `docs/architecture/fyp_quant_repo_hierarchy.svg`
 - Visual agent harness architecture: `docs/architecture/fyp_quant_agent_harness_architecture.svg`
@@ -283,7 +283,7 @@ HarmBench ASR is scored by the **official HarmBench classifier** (`cais/HarmBenc
 
 v2 proxy ΔASR for reference (over-counts; see report §6.12): qwen_2b −0.025, qwen_4b +0.065, llama 0.000.
 
-Under the official classifier, NF4 quantization never reduces true harmful compliance in any pair; the one statistically significant ΔASR is the smallest model (Qwen 1.7B), which also loses significant capability — a confirmed degradation on both axes. The judge validation relocated the significant finding from Qwen 4B (regex proxy) to Qwen 1.7B. See `docs/PROJECT_LOG.md` (D16) and `docs/FYP_Report_2026-05-27.docx` §6.12 for the full audit trail.
+Under the official classifier, NF4 quantization never reduces true harmful compliance in any pair; the one statistically significant ΔASR is the smallest model (Qwen 1.7B), which also loses significant capability — a confirmed degradation on both axes. The judge validation relocated the significant finding from Qwen 4B (regex proxy) to Qwen 1.7B; a second independent judge (gpt-4o) and a multi-seed sensitivity arm both corroborate the Qwen 1.7B direction while showing the effect is modest and borderline-significant. See `docs/PROJECT_LOG.md` (D16/D23/D26) and `docs/FYP_Report_2026-06-14.docx` §6.12 for the full audit trail.
 
 ## Documentation
 - `docs/methodology.md`

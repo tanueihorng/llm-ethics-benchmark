@@ -1,5 +1,5 @@
 // FYP Report builder — Word document via docx-js
-// Output: /Users/tanueihorng/fyp_quant/docs/FYP_Report_2026-05-27.docx
+// Output: /Users/tanueihorng/fyp_quant/docs/FYP_Report_2026-06-14.docx
 
 const fs = require("fs");
 const {
@@ -1205,7 +1205,7 @@ const appendixE = [
     ├── limitations.md
     ├── extensibility.md
     ├── TC1_CLUSTER_RUNBOOK.md
-    └── FYP_Report_2026-05-27.docx   (this document)`),
+    └── FYP_Report_2026-06-14.docx   (this document)`),
 ];
 
 const appendixG = [
@@ -1214,7 +1214,8 @@ const appendixG = [
   buildTable(
     ["When (UTC+8)", "Version", "Change to the report"],
     [
-      ["2026-06-06 16:25", "FYP_Report_2026-05-27.docx (current)", "Added a repo-native next-session handoff at docs/HANDOFF.md so Codex, Claude Code, and future agents can recover from the same file instead of relying on pasted chat context. Appendix H §H.5 now points future work to that shared handoff and removes the stale post-push D16 instruction, because D16 is already on origin/main. No result numbers changed."],
+      ["2026-06-14 15:45", "FYP_Report_2026-06-14.docx (current)", "Renamed the artifact to today's date and rolled in the day's robustness work. T18 multi-seed sensitivity (§6.6.1): the Qwen 1.7B ΔASR is decode-dependent — mean +0.024 across five seeds vs the +0.055 greedy headline, not sign-consistent — so the headline is the upper end of a range, tempered not overturned. T21: §6.6.2 per-category judge ASR breakdown (the +0.055 is broad-based, rising in 5/6 harm categories), §7.6 deployment implications, §7.7 positioning against prior work, and verified citations replacing the earlier placeholders. T22 (§6.12 Result 4): a second independent judge (gpt-4o, same rubric) agrees with the primary classifier at κ 0.69–0.94 and reproduces the Qwen 1.7B increase in direction (+0.045 vs +0.055), borderline on significance (McNemar p=0.122) — W3 substantially resolved. No headline label changed; these strengthen how the findings are evidenced."],
+      ["2026-06-06 16:25", "FYP_Report_2026-05-27.docx", "Added a repo-native next-session handoff at docs/HANDOFF.md so Codex, Claude Code, and future agents can recover from the same file instead of relying on pasted chat context. Appendix H §H.5 now points future work to that shared handoff and removes the stale post-push D16 instruction, because D16 is already on origin/main. No result numbers changed."],
       ["2026-06-06 16:00", "FYP_Report_2026-05-27.docx", "Doc-consistency follow-ups to the D16 judge-primary promotion. Rewrote Chapter 7 §7.1 (scoring determinism now describes the judge classifier, not regex-eliminates-judge-variance) and §7.4 (renamed \"Scorer Choice and Remaining Validity Threat\" — judge is primary, remaining threat is the absence of a second independent judge). Rewrote Appendix H §H.2–§H.5 to the post-judge state (the v2 Qwen 4B figure flagged as superseded; judge sidecars are the committed primary scorer; next steps are push/T1/T3/T15 plus an optional second judge, not a pending judge run). Updated the cover-page revision line to the judge-primary D16 wording. No numbers changed; this is a consistency pass so the .docx no longer contains pre-judge framing."],
       ["2026-06-06 15:00", "FYP_Report_2026-05-27.docx", "T20 results + D16: official HarmBench classifier promoted to PRIMARY HarmBench scorer; v2 regex demoted to a secondary non-refusal-rate proxy. The judge ran in fp16 on a 32 GB V100 (job 61047, n=200×6, 0 parse errors). Validation showed the regex over-counts ASR unevenly by family (judge vs v2 agreement: Qwen κ≈0.19–0.37, Llama κ≈0.69–0.79), and the choice of scorer changed the conclusion: the one significant ΔASR moved from Qwen 4B (proxy) to Qwen 1.7B (judge, +0.055 CI [+0.010,+0.100]). Refined the interpretation rule so alignment_degradation requires capability preserved; Qwen 1.7B (judge) is now broad_degradation (significant ASR up + significant MMLU down). Rewrote Table 6.1 (judge primary + v2 proxy rows), Table 6.2, new Table 6.3 (per-model agreement/κ), §6.1/6.1.1/6.3/6.5/6.6/6.7/6.8/6.9(all RQ)/6.10/6.11/6.12 (full results, no longer a placeholder), Abstract, Ch10. Headline relocated to Qwen 1.7B dual degradation; Qwen 4B is now directional-only. Test suite 176→178."],
       ["2026-06-06 12:00", "FYP_Report_2026-05-27.docx", "T20 refinement — judge runs in full precision (float16) by default, not NF4. Quantizing the judge classifier would confound the validation it is meant to provide, so §6.12 now states the judge is loaded in fp16; the job logs and records the exact GPU and precision used, and falls back to 8-bit (reported explicitly) only if the 13B classifier does not fit in fp16 on the available GPU. Test suite grew to 176 (added judge-precision resolution and VRAM-estimate tests). Appendix D judge-test row updated."],
@@ -1433,7 +1434,7 @@ const doc = new Document({
   }],
 });
 
-const OUTPUT = "/Users/tanueihorng/fyp_quant/docs/FYP_Report_2026-05-27.docx";
+const OUTPUT = "/Users/tanueihorng/fyp_quant/docs/FYP_Report_2026-06-14.docx";
 Packer.toBuffer(doc).then(buf => {
   fs.writeFileSync(OUTPUT, buf);
   console.log("WROTE: " + OUTPUT);

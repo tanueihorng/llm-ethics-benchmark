@@ -26,7 +26,7 @@ When in doubt: write it down in PROJECT_LOG.md.
 
 ## Update the FYP report on "report-worthy" changes
 
-The current FYP interim report (`docs/FYP_Report_2026-05-27.docx`) is generated from `scripts/build_fyp_report.js` (a docx-js build script). After making a change that affects the report's content, regenerate the docx:
+The current FYP interim report (`docs/FYP_Report_2026-06-14.docx`) is generated from `scripts/build_fyp_report.js` (a docx-js build script). After making a change that affects the report's content, regenerate the docx:
 
 ```bash
 make report

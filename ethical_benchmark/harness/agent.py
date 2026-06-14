@@ -643,7 +643,13 @@ def build_agent_status(repo_root: Path, policy: dict[str, Any] | None = None) ->
         "repo_root": str(repo_root),
         "git": _git_status(repo_root),
         "project_log": _project_log_status(repo_root),
-        "report": _file_info(repo_root / "docs/FYP_Report_2026-05-27.docx", repo_root),
+        "report": _file_info(
+            max(
+                repo_root.glob("docs/FYP_Report_*.docx"),
+                default=repo_root / "docs/FYP_Report_2026-06-14.docx",
+            ),
+            repo_root,
+        ),
         "handoff": _file_info(repo_root / "docs/HANDOFF.md", repo_root),
         "dashboard": _file_info(repo_root / "docs/AGENT_DASHBOARD.md", repo_root),
         "immutable_manifest": _file_info(

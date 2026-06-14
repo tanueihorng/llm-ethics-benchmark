@@ -7,7 +7,7 @@ Make the judge-vs-v2 disagreement the analytical center of Chapter 6/7 without c
 ## Likely Files
 
 - `scripts/build_fyp_report.js`
-- `docs/FYP_Report_2026-05-27.docx`
+- `docs/FYP_Report_2026-06-14.docx`
 - `docs/PROJECT_LOG.md`
 - `results/analysis/judge_agreement.{json,csv}`
 - `results/analysis/pairwise_deltas.{json,csv}`
