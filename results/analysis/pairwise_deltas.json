@@ -60,6 +60,26 @@
     "delta_significant": true
   },
   {
+    "pair_id": "llama_3_2_3b",
+    "family": "llama",
+    "benchmark": "arc",
+    "metric": "accuracy",
+    "baseline_alias": "llama_3_2_3b_base",
+    "quantized_alias": "llama_3_2_3b_4bit",
+    "baseline_value": 0.726962457337884,
+    "quantized_value": 0.6988054607508533,
+    "absolute_delta": -0.028156996587030747,
+    "relative_delta": -0.03873239436619722,
+    "n_paired": 1172,
+    "baseline_ci_lower": 0.7005119453924915,
+    "baseline_ci_upper": 0.7525597269624573,
+    "quantized_ci_lower": 0.6715017064846417,
+    "quantized_ci_upper": 0.7261092150170648,
+    "delta_ci_lower": -0.04522184300341297,
+    "delta_ci_upper": -0.00938566552901024,
+    "delta_significant": true
+  },
+  {
     "pair_id": "qwen_2b",
     "family": "qwen",
     "benchmark": "harmbench",
@@ -120,6 +140,26 @@
     "delta_significant": true
   },
   {
+    "pair_id": "qwen_2b",
+    "family": "qwen",
+    "benchmark": "arc",
+    "metric": "accuracy",
+    "baseline_alias": "qwen_2b_base",
+    "quantized_alias": "qwen_2b_4bit",
+    "baseline_value": 0.7192832764505119,
+    "quantized_value": 0.7064846416382252,
+    "absolute_delta": -0.012798634812286713,
+    "relative_delta": -0.017793594306049855,
+    "n_paired": 1172,
+    "baseline_ci_lower": 0.6928327645051194,
+    "baseline_ci_upper": 0.7440273037542662,
+    "quantized_ci_lower": 0.6800341296928327,
+    "quantized_ci_upper": 0.7312286689419796,
+    "delta_ci_lower": -0.03583617747440273,
+    "delta_ci_upper": 0.011092150170648464,
+    "delta_significant": false
+  },
+  {
     "pair_id": "qwen_4b",
     "family": "qwen",
     "benchmark": "harmbench",
@@ -178,5 +218,25 @@
     "delta_ci_lower": -0.04,
     "delta_ci_upper": 0.03333333333333333,
     "delta_significant": false
+  },
+  {
+    "pair_id": "qwen_4b",
+    "family": "qwen",
+    "benchmark": "arc",
+    "metric": "accuracy",
+    "baseline_alias": "qwen_4b_base",
+    "quantized_alias": "qwen_4b_4bit",
+    "baseline_value": 0.8745733788395904,
+    "quantized_value": 0.8532423208191127,
+    "absolute_delta": -0.021331058020477744,
+    "relative_delta": -0.024390243902438945,
+    "n_paired": 1172,
+    "baseline_ci_lower": 0.85580204778157,
+    "baseline_ci_upper": 0.893344709897611,
+    "quantized_ci_lower": 0.8327645051194539,
+    "quantized_ci_upper": 0.8728668941979523,
+    "delta_ci_lower": -0.03668941979522184,
+    "delta_ci_upper": -0.006825938566552901,
+    "delta_significant": true
   }
 ]

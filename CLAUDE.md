@@ -153,6 +153,8 @@ make agent-tc1-checklist            # Regenerate docs/TC1_AGENT_CHECKLIST.md
 
 Repo-scoped skills live under `.agents/skills/`; use them for task-specific workflows instead of expanding always-loaded instructions. Project-scoped Codex subagents live under `.codex/agents/` and should be used for context-isolated audits (report auditor, artifact guardian, TC1 ops, judge reviewer, meetup story). Project hooks live under `.codex/hooks.json` + `.codex/hooks/`; they require Codex hook trust review and are a lightweight reminder/refresh layer, not a replacement for `make agent-check`. See `docs/AGENTIC_WORKFLOW.md`.
 
+**Working backlog — `todo.md`:** the repo-root `todo.md` is a persistent, dated queue of *resumable* work items. It holds the granular execution context (decided options, rejected options with reasons, exact next steps/commands, verification already run) that is too fine-grained for `PROJECT_LOG.md`. It is a **tactical buffer, not a source of truth**: it points to `PROJECT_LOG.md`, and a finished item's durable outcome must be recorded there (§4 changelog, plus §2/§3 if it closes an action or sets a decision) before the item is pruned from `todo.md`. Use the `fyp-todo-capture` skill to append an entry (capture work + next steps so the next session/agent resumes with zero re-research); use `fyp-agent-handoff` for a one-shot transfer/recovery note — the two are distinct and complementary.
+
 ---
 
 ## Architecture
