@@ -7,52 +7,48 @@
 
 ---
 
-## ACTIVE: extend the study with 2 new model pairs (small-model deployment / cross-family generality)
+## [2026-06-15] ACTIVE: T26 — RUN Mistral-7B + Phi-4-mini on TC1 (local integration DONE + pushed; run pending)
 
-**Why:** turn the study from 3 models / 2 families into 5 pairs / 4 families
-(Qwen, Llama, Microsoft, Mistral), strengthening RQ5 cross-family generality and
-deployment relevance. NF4 on-the-fly, same rigorous protocol. Runs on the TC1
-V100 (no kernel issues for these two).
+**Source of truth:** `docs/PROJECT_LOG.md` — D30 + §4 row (2026-06-14 23:45). This entry is only the "how to resume the RUN" buffer.
 
-### Decided models (feasibility FINAL-VERIFIED via fresh HF-page re-read, 2026-06-14)
-> Both GO on the exact stack (transformers 5.5.0 + AutoModelForCausalLM + AutoTokenizer + NF4 + V100). **The only new code is the `attn_implementation` loader field** (Phi needs `eager`); Mistral drops straight in.
-| Model | Size | pair_id | Loads | Special handling |
-|---|---|---|---|---|
-| `microsoft/Phi-4-mini-instruct` | 3.8B | `phi4_mini` | `AutoModelForCausalLM`, std `AutoTokenizer`, has chat_template | **`trust_remote_code: true`** + **`attn_implementation: "eager"`** (V100 has no flash-attn). MIT, ungated. |
-| `mistralai/Mistral-7B-Instruct-v0.3` | 7.2B | `mistral_7b` | `AutoModelForCausalLM`, std `AutoTokenizer`, chat_template | none — drops straight in. Apache-2.0, ungated. 7B = upper edge of "small" (note in limitations). |
+**Status:** ALL local code/config/test/sbatch/report/doc work is DONE, committed **`60c0acc`**, pushed to branch **`t26-add-mistral-phi-pairs`** (NOT merged to main). 246 tests pass; `make agent-check` 8/8 green; adversarial 5-reviewer+verify pass = SHIP. The 4 new TC1 jobs + the new-pairs judge run are the only things left. Existing 3-pair results & setup are byte-unchanged.
 
-- Both text-only; both `pad_token` = None → already handled by loader (`pad_token = eos_token`).
-- **TC1 env is ready:** `transformers 5.5.0`, `bitsandbytes 0.49.2`, `accelerate 1.13.0` — clears every version floor (Phi ≥4.49). **No upgrade needed.**
+**Why:** 3 pairs/2 families → 5 pairs/4 families (add `mistral_7b`, `phi4_mini`) for cross-family generality (RQ5) + small-model deployment. IDENTICAL methodology to the old 3 (NF4, greedy, seed 42, 4 benchmarks incl. ARC, HarmBench classifier as PRIMARY ASR).
 
-### Rejected candidates (do NOT re-litigate)
-- `google/gemma-3-4b-it` — **multimodal**, needs `Gemma3ForConditionalGeneration`, not `AutoModelForCausalLM`. Blocked.
-- `mistralai/Ministral-3-3B-Instruct-2512` — multimodal + non-standard `MistralCommonBackend` tokenizer + bleeding-edge deps + FP8. Blocked (worse than Gemma).
-- `google/gemma-3-1b-it` — works (text-only) but gated + only 1B; deprioritised.
-- AWQ quantization — **AutoAWQ GEMM kernels require sm_75+; the V100 is sm_70 → cannot run.** GGUF/GPTQ are feasible but are the separate quant-variant axis (large engineering lift).
+**Decided (don't re-litigate):**
+- **gpt-4o 2nd judge → YES** on both new pairs (full W3 parity). Runs LOCALLY on the Mac (needs internet/`OPENAI_API_KEY`), NOT on TC1 (offline).
+- **Mistral-7B 6h/10G fit → decide at smoke time** (measure, then bump `slurm.time` only if it times out).
+- **cross-family → all-pairs matrix** (done; `compute_cross_family_consistency`).
+- **v2 refusal proxy → KEEP and run on the new pairs.** It is the flawed-baseline FOIL that proves the judge-validation contribution (§6.12 / Table 6.3 κ), not a metric we trust. User asked whether to delete it (even from the old 3) → decided NO: deleting removes the evidence for the study's headline methodological finding ("the regex over-counts; the judge relocated the significant result"). Per-family κ on the new pairs is itself a finding. Optional later: demote its prominence in tables (presentation only), never delete.
+- **attn_implementation validator** → added, fail-loud (`eager`/`sdpa`/`flash_attention_2` only).
 
-### Next steps (ordered, concrete)
+**Rejected (don't re-litigate):**
+- Gemma-3-4b / Ministral-3-3b — multimodal, not `AutoModelForCausalLM`.
+- AWQ — V100 sm_70 can't run AutoAWQ GEMM kernels.
+- **Multi-seed sensitivity for the new pairs up front** — it was only ever run on Qwen 1.7B (the headline pair); Qwen 4B + Llama are greedy-only. **RULE:** run multi-seed on a new pair ONLY IF its results make it a headline (significant/borderline ΔASR), mirroring why Qwen 1.7B got it. `tc1_sensitivity.yaml` stays at its current pairs (do not add the new pairs now).
 
-**LOCAL WORK DONE 2026-06-14 (D30) — all of steps 1–4 + tests + report/docs landed; 246 tests pass.**
-1. ✅ **Loader:** `attn_implementation` field added to `ModelEntry` (+fail-loud validator) → threaded through `ModelSpec` + `model_kwargs` (truthiness-guarded) + both pipeline constructors + `build_model_spec`. Tests added (injected-when-set / omitted-when-None).
-2. ✅ **Configs:** 4 entries in `configs/tc1.yaml` + `configs/default.yaml`. New `tests/test_quant_config_schema.py` validates 10 models / 5 pairs / 4 families + flags.
-3. ✅ **Prefetch:** no edit needed — `scripts/prefetch_tc1.py` reads model_ids from the config generically (auto-caches the 2 new ones).
-4. ✅ **sbatch:** 4 matrix + 4 harmbench-smoke sbatch templated byte-consistent from the committed files (did NOT use `make cluster-generate` — the live generator drifted to absolute log paths and would have rewritten the old 6). Plus `slurm/judge_validation_newpairs.sbatch` (scores only the 4 new aliases). Judge/analysis scripts + cross-family function updated. Report (additive "run pending") + CLAUDE/AGENTS/README + PROJECT_LOG (D30) done.
+**Verification already done (don't repeat):** configs load → 10 models/5 pairs/4 families + correct per-family flags; loader injects `attn_implementation` only when set (omitted-when-None test); 246 tests + `make agent-check` 8/8; 4 matrix + 4 smoke sbatch are byte-consistent with the committed `qwen_2b_base` templates (alias-only diff); `judge_validation_newpairs.sbatch` targets only the 4 new aliases; existing config entries + NF4/decode/seed/chat-template code byte-unchanged; immutable artifacts not reopened.
 
-**REMAINING — TC1 (user runs; commands in CLAUDE.md/README TC1 block):**
-5. **On TC1 (head node):** `git pull --ff-only`; **Mistral-7B is HF-gated → re-run the HF token login FIRST**; `make prefetch CONFIG=configs/tc1.yaml`; then **5-sample smoke per new model** (`slurm/jobs_tc1_smoke/{mistral_7b_base,phi4_mini_base}__harmbench.sbatch`) — confirm load on transformers 5.x, native chat template (not raw-prompt fallback), Phi loads with eager — BEFORE the full matrix; then `sbatch` the 4 matrix jobs (Mistral first, pair-by-pair). **Mistral 7.2B vs 6h/10G: decide any resource bump at smoke time (user decision).**
-6. **Judge (PRIMARY ASR for new pairs):** `sbatch slurm/judge_validation_newpairs.sbatch` (fp16).
-7. **After results land (SCP back):** `make analyze` + `scripts/{judge_agreement,judge_pairwise_agreement,harmbench_category_breakdown,mmlu_subject_breakdown,rescore_harmbench}.py` + **gpt-4o second judge** (`run_judge_validation.py --backend api_judge --models mistral_7b_* phi4_mini_*` — user chose full W3 parity). Then fold REAL numbers into `scripts/build_fyp_report.js` (Tables 6.1/6.2/6.3, §6.11 all-pairs cross-family, §6.4.1 ARC) + `make report`; update PROJECT_LOG D-decision (run results) + changelog; `make agent-check`. Verify `git diff results/analysis/` shows old pairs' **numbers** unchanged. **Expected (not a bug):** `quantization_analysis_summary.json`'s `cross_family` section will restructure from the old flat metric-keyed shape to the new `<famA>__vs__<famB>` all-pairs shape (+ a new `overall_sign_consistency` key) — the existing qwen-vs-llama leaf values are byte-identical, only the JSON shape changes (D30 rewrite).
+**Next steps — RUN (TC1 head node; identical copy-paste guide in CLAUDE.md / README):**
+0. PRE-FLIGHT (browser): accept the Mistral-7B-Instruct-v0.3 license on huggingface.co under account `ueihorng` (gated). Phi-4-mini = MIT/ungated.
+1. `cd /tc1home/FYP/utan001/fyp_quant/repo && git fetch origin && git checkout t26-add-mistral-phi-pairs && git pull --ff-only origin t26-add-mistral-phi-pairs` (expect `60c0acc`).
+2. `huggingface-cli login` (re-login harmless; needed for the gated Mistral download).
+3. `make prefetch CONFIG=configs/tc1.yaml` (fetches the 2 new model_ids; judge classifier already cached from job 61047).
+4. **Smoke (gate):** `sbatch slurm/jobs_tc1_smoke/mistral_7b_base__harmbench.sbatch` + `…/phi4_mini_base__harmbench.sbatch`. Verify `.err` clean + `summary.json` has metrics + a response looks coherent (`head -c 600 results/<m>/harmbench/raw.jsonl`). STOP if Phi errors on eager/trust_remote_code or anything OOMs.
+5. **Matrix Mistral:** `sbatch slurm/jobs_tc1/mistral_7b_base__matrix.sbatch` + `…/mistral_7b_4bit__matrix.sbatch`. Wait both `COMPLETED` (`squeue -u utan001`; `seff <jobid>` — watch the 6h walltime on the 7.2B base).
+6. **Matrix Phi:** `sbatch slurm/jobs_tc1/phi4_mini_base__matrix.sbatch` + `…/phi4_mini_4bit__matrix.sbatch`.
+7. **Judge (PRIMARY ASR):** after ALL 4 matrix jobs COMPLETE → `sbatch slurm/judge_validation_newpairs.sbatch` (fp16; scores ONLY the 4 new aliases → old-6 sidecars untouched). Must run AFTER the matrix (reads `raw.jsonl`; crashes if absent).
 
-### Watch items / guardrails
-- Smoke-test on transformers **5.x** (a major version; neither card explicitly notes 5.x).
-- Record `transformers==5.5.0` + `bitsandbytes==0.49.2` in methodology for reproducibility; if the original 6 models were run on 4.x, note it (within-pair deltas stay valid).
-- `raw.jsonl`/`summary.json` are immutable; redaction rules apply; PROJECT_LOG discipline per AGENTS.md.
+**Next steps — POST-RUN (Mac, after SCP back; ping Claude to drive this):**
+8. `rsync` the 4 new `results/{mistral_7b_base,mistral_7b_4bit,phi4_mini_base,phi4_mini_4bit}/` dirs back from TC1.
+9. `make analyze` + `python scripts/{judge_agreement,judge_pairwise_agreement,harmbench_category_breakdown,mmlu_subject_breakdown,rescore_harmbench}.py`.
+10. gpt-4o 2nd judge (local, needs `OPENAI_API_KEY` from `~/.zshrc`): `python scripts/run_judge_validation.py --backend api_judge --models mistral_7b_base mistral_7b_4bit phi4_mini_base phi4_mini_4bit`, then `python scripts/judge_pairwise_agreement.py`.
+11. Fold REAL numbers into `scripts/build_fyp_report.js` (Tables 6.1/6.2/6.3, §6.11 cross-family, §6.4.1 ARC, Abstract, RQ5/Ch10) → `make report`. Add PROJECT_LOG run-results D-decision + §4 row. `python scripts/agent_check.py --write-immutable-manifest` (ADD new raw hashes, never overwrite). `make agent-check`. Then merge branch → main.
 
-### Ready-to-paste config entries
-```yaml
-  phi4_mini_base:   {family: phi,    size_b: 3.8, quantized: false, pair_id: phi4_mini, model_id: microsoft/Phi-4-mini-instruct,      trust_remote_code: true,  attn_implementation: eager, dtype: auto, benchmarks: [harmbench, xstest, mmlu]}
-  phi4_mini_4bit:   {family: phi,    size_b: 3.8, quantized: true,  pair_id: phi4_mini, model_id: microsoft/Phi-4-mini-instruct,      trust_remote_code: true,  attn_implementation: eager, dtype: auto, benchmarks: [harmbench, xstest, mmlu]}
-  mistral_7b_base:  {family: mistral, size_b: 7.2, quantized: false, pair_id: mistral_7b, model_id: mistralai/Mistral-7B-Instruct-v0.3, trust_remote_code: false, dtype: auto, benchmarks: [harmbench, xstest, mmlu]}
-  mistral_7b_4bit:  {family: mistral, size_b: 7.2, quantized: true,  pair_id: mistral_7b, model_id: mistralai/Mistral-7B-Instruct-v0.3, trust_remote_code: false, dtype: auto, benchmarks: [harmbench, xstest, mmlu]}
-```
-(Expand to the block form used by existing entries when pasting.)
+**Watch items / guardrails:**
+- **Mistral 7.2B vs 6h walltime / 10G mem** — the binding risk. If `TIMEOUT`, bump `slurm.time` (+ regenerate, or hand-edit the 2 mistral sbatch) — decoding/seed/NF4/n unaffected, so fairness holds.
+- **Phi-4-mini** eager + trust_remote_code only exercise on the V100 — the smoke is the gate.
+- **Mistral HF-gated** → license + login before prefetch (offline compute nodes fail closed).
+- **Judge AFTER matrix** (`run_judge_validation` FileNotFoundError on missing `raw.jsonl`).
+- **DON'T touch:** old `raw.jsonl`/`summary.json`/`scores.*` sidecars (immutable TC1 originals); `tc1_sensitivity.yaml` (separate D23 study, stays as-is); no raw HarmBench prompt/response text in any doc.
+- **Expected non-bug:** post-run `make analyze` restructures `quantization_analysis_summary.json`'s `cross_family` section to the all-pairs shape (`<famA>__vs__<famB>` + `overall_sign_consistency`); the existing qwen-vs-llama leaf numbers are byte-identical.
