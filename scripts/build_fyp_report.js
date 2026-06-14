@@ -340,8 +340,8 @@ const ch1 = [
     "A controlled matched-pair study design that isolates quantization as the sole experimental variable. Both members of every pair are loaded from the same underlying model_id; the only difference is whether on-the-fly NF4 quantization is applied during the from_pretrained call. This eliminates publisher-asymmetry and conversion-pipeline asymmetry — two confounds that affect most published comparisons of quantized and full-precision checkpoints.",
     "An open, reproducible benchmarking framework consisting of approximately 2,800 lines of production Python and approximately 1,800 lines of automated tests. The framework provides deterministic regex-based refusal scoring, configurable per-benchmark sampling, batched generation with chat-template application, and full per-prompt audit logging.",
     "A rule-based interpretation layer that combines harmful-compliance, over-refusal, and capability deltas into one of six diagnostic labels: alignment degradation, alignment improvement, capability collapse masquerading as safety, over-refusal regression, robust preservation, or broad degradation. This layer formalises the alignment-versus-capability disambiguation in code.",
-    "SLURM cluster orchestration for the NTU TC1 GPU cluster, including resumable per-model matrix jobs that load each model only once and execute all three benchmarks sequentially. Resume granularity is per-prompt, so jobs that exhaust walltime can be re-submitted without redundant computation.",
-    "A verification suite of 178 automated tests across twelve test files, covering schema validation, dataset loaders, the refusal parser (with comprehensive regression tests for the v2 expanded patterns), SLURM job generation, matrix reuse behaviour, analysis logic, v2 score-sidecar selection, and the judge-model validation layer (stub-backend tests, redaction enforcement, and an official-template regression check).",
+    "SLURM cluster orchestration for the NTU TC1 GPU cluster, including resumable per-model matrix jobs that load each model only once and execute all configured benchmarks sequentially. Resume granularity is per-prompt, so jobs that exhaust walltime can be re-submitted without redundant computation.",
+    "A verification suite of 223 automated tests across eighteen test files, covering schema validation, dataset loaders, the refusal parser (with comprehensive regression tests for the v2 expanded patterns), SLURM job generation, matrix reuse behaviour, analysis logic, v2 score-sidecar selection, and the judge-model validation layer (stub-backend tests, redaction enforcement, and an official-template regression check).",
   ]),
 
   H2("1.6 Report Structure"),
@@ -417,18 +417,19 @@ const ch3 = [
   PJ("The choice of NF4 over alternative PTQ methods such as GPTQ and AWQ is deliberate. NF4 is the dominant on-the-fly quantization format in the open-source ecosystem, is supported natively by transformers without an offline calibration pass, and applies symmetrically to any model that can be loaded with from_pretrained. This applicability symmetry is required by the matched-pair design: the quantization step must be applicable to exactly the same weights as the baseline, without an intermediate calibration corpus that would itself become a confound."),
 
   H2("3.4 Benchmark Selection and Mapping"),
-  PJ("Three benchmarks are used. Each measures one of the three dimensions required to disambiguate alignment shifts from capability collapse."),
+  PJ("Four benchmarks are used across the three dimensions required to disambiguate alignment shifts from capability collapse. The capability dimension is measured by two complementary benchmarks — MMLU (the primary anchor) and ARC-Challenge (a structurally different second capability benchmark, added as T23) — so that the alignment-versus-capability disambiguation does not rest on a single capability proxy."),
   buildTable(
     ["Dimension", "Benchmark (source)", "Primary metric", "Sampling"],
     [
       ["Harmful compliance", "HarmBench (walledai/HarmBench, standard)", "Attack Success Rate (ASR)", "200 prompts"],
       ["Over-refusal", "XSTest (local canonical CSV, benign-only)", "Over-refusal rate", "250 benign prompts"],
-      ["General capability", "MMLU (cais/mmlu, 6-subject subset)", "Accuracy", "300 questions total"],
+      ["General capability (anchor)", "MMLU (cais/mmlu, 6-subject subset)", "Accuracy", "300 questions total"],
+      ["General capability (2nd)", "ARC-Challenge (allenai/ai2_arc)", "Accuracy", "1,172 questions"],
     ],
     [1900, 3260, 2300, 1900],
   ),
-  P("Table 3.2  Benchmark selection, primary metrics, and sample budgets. Sampling is deterministic and seed-controlled.", { size: 18 }),
-  PJ("HarmBench is selected as the harmful-compliance benchmark because it is the most widely adopted adversarial-prompt collection in contemporary safety research and provides a stable definition of attack success. The walledai release on Hugging Face is used with the standard config. XSTest is the canonical over-refusal benchmark; this repository bundles the canonical XSTest v2 prompts CSV from paul-rottger/xstest and evaluates the benign-only subset to measure how often the model refuses prompts that should not be refused. MMLU is used as the general-capability anchor."),
+  P("Table 3.2  Benchmark selection, primary metrics, and sample budgets. Sampling is deterministic and seed-controlled. Capability is a two-benchmark composite (MMLU + ARC-Challenge).", { size: 18 }),
+  PJ("HarmBench is selected as the harmful-compliance benchmark because it is the most widely adopted adversarial-prompt collection in contemporary safety research and provides a stable definition of attack success. The walledai release on Hugging Face is used with the standard config. XSTest is the canonical over-refusal benchmark; this repository bundles the canonical XSTest v2 prompts CSV from paul-rottger/xstest and evaluates the benign-only subset to measure how often the model refuses prompts that should not be refused. MMLU is used as the primary general-capability anchor, with ARC-Challenge (allenai/ai2_arc; ~1,172 grade-school science questions designed to resist retrieval shortcuts; identical exact-match scoring to MMLU) added as a structurally different second capability benchmark, so capability is reported as a two-benchmark composite (see §6.4.1). Interpretation labels remain anchored on MMLU, with ARC as a corroborating axis."),
   PJ("To keep MMLU tractable within the per-job walltime on TC1, a six-subject subset is used: business_ethics, clinical_knowledge, college_biology, high_school_world_history, high_school_macroeconomics, and human_aging. These subjects span ethics, sciences, humanities, social sciences, and applied knowledge, and are deliberately chosen to cover heterogeneous reasoning demands without exhausting the time budget. The total sample cap of 300 questions is distributed evenly across the six subjects."),
 
   H2("3.5 Scoring: Deterministic Refusal Detection"),
@@ -552,7 +553,7 @@ write_json(summary, summary_path)`),
   PJ("The granularity of the resume mechanism is the (model, benchmark, prompt_id) triple. Three concrete recovery scenarios are worth stating explicitly. If a job is killed during XSTest for qwen_2b_4bit, HarmBench (whose raw.jsonl is complete) is skipped entirely on the next submission; XSTest (whose raw.jsonl is partial) is resumed at the next unprocessed prompt; MMLU (whose raw.jsonl does not yet exist) runs from scratch. If a model fails to load (a deterministic OOM, for example), the entire model's benchmark suite is lost for that job; the operator can re-submit with --model and --benchmark filters to chunk the workload differently."),
 
   H2("4.8 SLURM Job Generation"),
-  PJ("Cluster orchestration is handled by ethical_benchmark/cluster/generate_jobs.py. The generator reads the loaded configuration's slurm section and emits one sbatch file per scheduling unit. A --group_by flag controls the granularity: with group_by=benchmark, one sbatch is generated per (model, benchmark) pair (eighteen scripts for the six-model, three-benchmark matrix); with group_by=model (the default for TC1), one sbatch is generated per model alias, and that script invokes run_quant_matrix.py so the model is loaded only once."),
+  PJ("Cluster orchestration is handled by ethical_benchmark/cluster/generate_jobs.py. The generator reads the loaded configuration's slurm section and emits one sbatch file per scheduling unit. A --group_by flag controls the granularity: with group_by=benchmark, one sbatch is generated per (model, benchmark) pair (twenty-four scripts for the six-model, four-benchmark matrix); with group_by=model (the default for TC1), one sbatch is generated per model alias, and that script invokes run_quant_matrix.py so the model is loaded only once."),
   PJ("Each generated sbatch contains the standard SBATCH directives (partition UGGPU-TC1, qos normal, gres gpu:1, cpus-per-task 1, mem 10G, time 06:00:00), output and error log paths, a set -euo pipefail line, a cd into the configured work_dir, a mkdir -p of the log directory, the configured setup_commands (module load slurm, module load anaconda, source activate fyp-tc1), and finally the python invocation with the model alias and configuration path passed in. Six sbatch files are produced for the present configuration, one per model alias."),
 
   H2("4.9 Output Artifacts"),
@@ -560,7 +561,7 @@ write_json(summary, summary_path)`),
   PJ("The analysis stage produces results/analysis/pairwise_deltas.json and .csv (one row per (pair_id, benchmark, metric) with absolute and relative deltas), results/analysis/pair_interpretations.csv (one row per pair with the interpretation label and the three component deltas), and results/analysis/quantization_analysis_summary.json (high-level study-wide summary)."),
 
   H2("4.10 Testing"),
-  PJ("The repository ships with a verification suite of 178 automated tests across twelve test files. The full distribution is recorded in Appendix D. Coverage areas include the dataset and benchmark loaders, the legacy evaluators (retained for backward compatibility), model loader specifics including dtype resolution and quantized-flag propagation, the prompt-formatting logic with explicit tests for enable_thinking handling, the matrix-reuse behaviour (verifying that reuse_loaded_model=True loads each model only once), the analysis module's pairwise delta computation, bootstrap CI logic, and v2 score-sidecar selection, the per-prompt schema validator, the resume-helper functions, the refusal-parser regex correctness (including regression tests for the v2 expanded patterns and curly-apostrophe handling), the judge-model validation layer (stub-backend scoring, sidecar redaction enforcement, ASR aggregation, raw-immutability, and an official-template regression check), and the SLURM job generator including the per-benchmark and per-model grouping modes. All 178 tests pass on the current commit."),
+  PJ("The repository ships with a verification suite of 223 automated tests across eighteen test files. The full distribution is recorded in Appendix D. Coverage areas include the dataset and benchmark loaders, the legacy evaluators (retained for backward compatibility), model loader specifics including dtype resolution and quantized-flag propagation, the prompt-formatting logic with explicit tests for enable_thinking handling, the matrix-reuse behaviour (verifying that reuse_loaded_model=True loads each model only once), the analysis module's pairwise delta computation, bootstrap CI logic, and v2 score-sidecar selection, the per-prompt schema validator, the resume-helper functions, the refusal-parser regex correctness (including regression tests for the v2 expanded patterns and curly-apostrophe handling), the judge-model validation layer (stub-backend scoring, sidecar redaction enforcement, ASR aggregation, raw-immutability, and an official-template regression check), and the SLURM job generator including the per-benchmark and per-model grouping modes. All 223 tests pass on the current commit."),
 
   H2("4.11 CLI and Operational Interface"),
   PJ("The unified CLI fyp_cli.py exposes seven subcommands, summarised in Table 4.2. Each subcommand accepts the common options --config, --results_dir, and --log_level, plus a small number of subcommand-specific arguments. The Makefile provides convenient targets that wrap these invocations."),
@@ -625,7 +626,7 @@ const ch5 = [
       ["datasets", "(installed via requirements.txt)"],
       ["huggingface_hub", "(installed via requirements.txt)"],
       ["numpy", "(installed via requirements.txt)"],
-      ["pytest", "(installed via requirements.txt; 178 tests passing)"],
+      ["pytest", "(installed via requirements.txt; 223 tests passing)"],
     ],
     [4200, 5160],
   ),
@@ -654,10 +655,10 @@ from huggingface_hub import login
 login(token=getpass("HF token: "), add_to_git_credential=False)
 PY
 python scripts/prefetch_tc1.py       # or: make prefetch CONFIG=configs/tc1.yaml`),
-  PJ("The pre-cache step retrieves HarmBench, the six MMLU subjects, and three model repositories (Qwen3-1.7B, Qwen3-4B, Llama 3.2 3B). XSTest is not fetched from Hugging Face because the canonical CSV is bundled in the repository as data/xstest_v2_prompts.csv. The current TC1 pre-cache completed successfully on 2026-05-27 at 15:37 UTC+8, caching the required current model repositories in ~/.cache/huggingface/hub: Qwen3-1.7B (4.08 GB), Qwen3-4B (8.06 GB), and Llama 3.2 3B (12.9 GB), plus small dataset files. The downloads themselves are pure HTTP file transfers with negligible CPU and memory cost, and are therefore consistent with the head-node activities explicitly demonstrated in the TC1 user guide (page 7–9, where conda install and pip install are shown executing on the head node)."),
+  PJ("The pre-cache step retrieves HarmBench, the six MMLU subjects, ARC-Challenge (allenai/ai2_arc, added as the second capability benchmark), and three model repositories (Qwen3-1.7B, Qwen3-4B, Llama 3.2 3B). XSTest is not fetched from Hugging Face because the canonical CSV is bundled in the repository as data/xstest_v2_prompts.csv. The current TC1 pre-cache completed successfully on 2026-05-27 at 15:37 UTC+8, caching the required current model repositories in ~/.cache/huggingface/hub: Qwen3-1.7B (4.08 GB), Qwen3-4B (8.06 GB), and Llama 3.2 3B (12.9 GB), plus small dataset files. The downloads themselves are pure HTTP file transfers with negligible CPU and memory cost, and are therefore consistent with the head-node activities explicitly demonstrated in the TC1 user guide (page 7–9, where conda install and pip install are shown executing on the head node)."),
 
   H2("5.6 Run Plan"),
-  PJ("With group_by=model, the framework emits six sbatch files — one per model alias. Each script runs the full three-benchmark suite for its model with the model loaded only once, exploiting the matrix runner's reuse_loaded_model=True default. The six scripts are:"),
+  PJ("With group_by=model, the framework emits six sbatch files — one per model alias. Each script runs the full configured benchmark suite for its model with the model loaded only once, exploiting the matrix runner's reuse_loaded_model=True default. (The initial matrix run covered the three core benchmarks; ARC-Challenge was added later as the second capability benchmark and run on all six models via a parallel per-model job set, slurm/jobs_tc1_arc/ — see §6.4.1.) The six scripts are:"),
   Bullet("qwen_2b_base__matrix.sbatch"),
   Bullet("qwen_2b_4bit__matrix.sbatch"),
   Bullet("qwen_4b_base__matrix.sbatch"),
@@ -677,7 +678,7 @@ python scripts/prefetch_tc1.py       # or: make prefetch CONFIG=configs/tc1.yaml
 const ch6 = [
   H1("Chapter 6 — Results and Analysis"),
 
-  PJ("All six experimental runs completed successfully on the NTU TC1 GPU cluster on 2026-05-27 (SLURM jobs 60976–60981). Three matched pairs were evaluated: Qwen3-1.7B (jobs 60976/60977), Qwen3-4B (jobs 60978/60979), and Llama 3.2 3B-Instruct (jobs 60980/60981). Each job ran all three benchmarks sequentially with the model loaded once. The results are presented in Table 6.1 (per-pair raw metrics) and Table 6.2 (quantization deltas and interpretation labels). Detailed per-pair observations are in §6.6 (Qwen 2B), §6.8 (Qwen 4B), and §6.10 (Llama 3.2 3B). The within-family scale analysis (RQ4) is in §6.2 and §6.9. The cross-family comparison (RQ5) is in §6.11."),
+  PJ("All six experimental runs completed successfully on the NTU TC1 GPU cluster on 2026-05-27 (SLURM jobs 60976–60981). Three matched pairs were evaluated: Qwen3-1.7B (jobs 60976/60977), Qwen3-4B (jobs 60978/60979), and Llama 3.2 3B-Instruct (jobs 60980/60981). Each job ran all three core benchmarks sequentially with the model loaded once; ARC-Challenge (the second capability benchmark) was added afterwards and run on all six models in a separate per-model job set (§6.4.1). The results are presented in Table 6.1 (per-pair raw metrics) and Table 6.2 (quantization deltas and interpretation labels). Detailed per-pair observations are in §6.6 (Qwen 2B), §6.8 (Qwen 4B), and §6.10 (Llama 3.2 3B). The within-family scale analysis (RQ4) is in §6.2 and §6.9. The cross-family comparison (RQ5) is in §6.11."),
 
   H2("6.1 Results Table"),
   PJ("Table 6.1 records the per-pair benchmark results for all three model pairs together with bootstrap 95% confidence intervals on the deltas. HarmBench Attack Success Rate is reported under the official HarmBench classifier (the primary scorer; see §6.1.1 and §6.12), with the v2 refusal regex shown beneath each pair as a secondary non-refusal-rate proxy. XSTest over-refusal and MMLU accuracy are unchanged (the HarmBench classifier judges HarmBench behaviours only). Confidence intervals are computed by a paired bootstrap over the matched prompt set (2 000 resamples, seed 42); both members of every pair see the same prompts in the same order, so each bootstrap draw resamples prompt indices and recomputes the delta directly. A delta is marked statistically significant when its 95% CI excludes zero."),
@@ -723,8 +724,8 @@ const ch6 = [
   ),
   P("Table 6.2  All-pair quantization deltas, interpretation labels, and evidence status. Δ = 4-bit − baseline. HarmBench ΔASR (judge) is the primary scorer; the v2 proxy row is shown for transparency. ★ marks deltas whose paired-bootstrap 95% CI excludes zero. The McNemar row is the exact two-sided paired-binary test on the judge ΔASR (independent of the bootstrap). Under the judge, three deltas are significant: Qwen 1.7B ΔASR (also McNemar p = 0.027), Qwen 1.7B ΔMMLU, and Llama ΔMMLU. The two-layer evidence status reports each label's statistical support separately from the label itself (§3.8): Qwen 4B keeps the alignment_degradation label by point estimate but is flagged directional because its ΔASR CI touches zero (McNemar p = 0.18) — it is not a statistically confirmed regression. Labels are judge-primary (D16).", { size: 18 }),
   PJ("Table 6.2 reveals a striking scale effect on capability. Under the same NF4 quantization procedure, the 1.7B model experiences large capability degradation — MMLU drops 8.7 percentage points (relative decline of 14.0%, CI excludes zero) — while the 4B model is essentially unaffected — MMLU moves by only 0.3 percentage points, well within sampling noise. The MMLU delta ratio (8.7 pp versus 0.3 pp) is approximately 29:1, making scale the single largest predictor of capability preservation under quantization observed in this study. This 29:1 ratio is, however, specific to MMLU: the ARC-Challenge second capability benchmark (§6.4.1) does not reproduce it — there the 4B pair loses marginally more than the 1.7B pair — so scale-as-predictor-of-capability-preservation should be read as an MMLU-specific result rather than a benchmark-independent law."),
-  PJ("The full-precision baselines reveal that within the Qwen family the larger model is both more capable and more refusal-calibrated. Qwen3-1.7B's baseline HarmBench ASR is 0.600 while Qwen3-4B's is 0.240, so scaling from 1.7B to 4B reduces baseline harmful compliance by 36 percentage points. MMLU accuracy simultaneously rises from 0.620 to 0.747 (+12.7 pp), confirming the capability gain is genuine, and XSTest over-refusal falls from 0.052 to 0.028, indicating fewer false refusals on benign prompts. The 4B baseline therefore dominates the 1.7B baseline on every dimension under the v2 scorer. This larger-is-safer-and-more-capable pattern is itself a useful empirical finding and motivates the matched-pair design: quantization effects must be interpreted against a baseline that already varies substantially by scale within the same family."),
-  PJ("The most important comparison is on the post-quantization side. The 1.7B pair produces a small, non-significant ΔASR of −0.025 with a large, significant ΔMMLU of −0.087 — exactly the capability_collapse_masquerading_as_safety pattern (large capability loss, ASR within noise; the rule fires on the conjunction of the two thresholds even though the ASR direction is not significant on its own). The 4B pair produces an opposite and statistically robust pattern: ΔMMLU is within tolerance, while ΔASR increases by 6.5 percentage points (CI [+0.025, +0.110]). Without the MMLU anchor, both results might be ambiguously interpreted; with the anchor, the diagnostic separation is clean. This contrast is the methodological payoff of the capability-anchored design."),
+  PJ("The full-precision baselines reveal that within the Qwen family the larger model is both more capable and more refusal-calibrated. Under the primary (judge) scorer, Qwen3-1.7B's baseline HarmBench ASR is 0.135 while Qwen3-4B's is 0.065, so scaling from 1.7B to 4B reduces genuine baseline harmful compliance by 7.0 percentage points. MMLU accuracy simultaneously rises from 0.620 to 0.747 (+12.7 pp), confirming the capability gain is genuine, and XSTest over-refusal falls from 0.052 to 0.028, indicating fewer false refusals on benign prompts. The 4B baseline therefore dominates the 1.7B baseline on every dimension. (Under the demoted v2 non-refusal proxy the baseline ASR gap looks far larger — 0.600 versus 0.240 — but that reflects the proxy's over-counting; the genuine harmful-compliance gap is the 7.0 pp judge figure, see §6.12.) This larger-is-safer-and-more-capable pattern is itself a useful empirical finding and motivates the matched-pair design: quantization effects must be interpreted against a baseline that already varies substantially by scale within the same family."),
+  PJ("The most important comparison is on the post-quantization side, read under the primary (judge) scorer. The 1.7B pair worsens on both axes — judge ΔASR +5.5 pp (CI [+0.010, +0.100], significant; McNemar p = 0.027) together with a significant ΔMMLU of −8.7 pp — the broad_degradation pattern. The 4B pair shows the contrasting profile the anchor exists to separate: capability is preserved (ΔMMLU −0.3 pp, within tolerance) while the judge ΔASR is positive but not significant (+2.5 pp, CI [−0.000, +0.055]) — alignment_degradation at the point-estimate level, carried as directional. Without the MMLU anchor the 4B safety nudge could be mistaken for a capability artefact and the 1.7B capability loss could be read as the whole story; with the anchor, each pair's two axes are interpreted jointly. This is the methodological payoff of the capability-anchored design. (The demoted v2 proxy paints a different and misleading picture here — a −2.5 pp 1.7B ΔASR and a +6.5 pp 4B ΔASR; §6.12 explains why those are regex over-counting artefacts and the judge values above are authoritative.)"),
 
   H2("6.3 Cross-Family Replication (RQ5)"),
   PJ("RQ5 asks whether the Qwen pattern replicates qualitatively in Llama 3.2 3B. The cross-family analysis examines two properties: sign consistency (do the Llama deltas have the same sign as the Qwen deltas?) and approximate magnitude (are the Llama deltas similar in scale?). The full cross-family comparison is in §6.11; this section provides a high-level orientation."),
@@ -844,7 +845,7 @@ const ch6 = [
 const ch7 = [
   H1("Chapter 7 — Discussion and Threats to Validity"),
 
-  PJ("The Qwen family results (§6.9) provide initial empirical grounding for the threats discussed in this chapter. The qwen_2b capability-collapse finding and the qwen_4b alignment-degradation finding are used below as concrete examples where relevant."),
+  PJ("The Qwen family results (§6.9) provide initial empirical grounding for the threats discussed in this chapter. The Qwen 1.7B broad_degradation finding (significant ΔASR and ΔMMLU under the judge) and the Qwen 4B directional alignment_degradation finding are used below as concrete examples where relevant."),
 
   H2("7.1 Internal Validity"),
   PJ("Internal validity is the strongest property of the present design. The matched-pair structure, combined with on-the-fly NF4 quantization from identical baseline weights, isolates quantization as the sole experimental variable. There is no plausible alternative explanation for an observed delta beyond the quantization step itself, the act of loading the same checkpoint twice, or measurement noise. Deterministic decoding (temperature 0.0) eliminates within-condition variance from generation. Scoring is also deterministic: MMLU uses exact match, XSTest over-refusal uses the regex parser, and the primary HarmBench scorer — the official HarmBench classifier — is run with greedy decoding (max_new_tokens = 1) in full precision, producing reproducible labels (job 61047 returned zero parse errors over 1 200 generations). The resume logic prevents partial-run contamination: every reported metric is computed from a complete raw.jsonl with exactly the configured number of prompts. All six target-model runs completed under the same conditions, hardware, and software stack."),
@@ -911,7 +912,7 @@ const ch9 = [
 const ch10 = [
   H1("Chapter 10 — Conclusion"),
   PJ("This Final Year Project investigates safety–capability trade-offs in four-bit quantized compact language models, focusing on a research question that institutional benchmarks have not directly answered: when a small instruction-tuned model is quantized for on-device deployment, do observed changes in safety behaviour reflect a true shift in alignment or a side-effect of degraded general capability?"),
-  PJ("The methodological contribution is a controlled matched-pair design in which baseline and four-bit pair members are loaded from identical baseline weights, with NF4 quantization applied on the fly. This design eliminates publisher- and pipeline-asymmetry as confounds and provides the strongest practical isolation of quantization as the experimental variable. The engineering contribution is an open, reproducible benchmarking framework comprising the matched-pair pipeline, three benchmark plugins, the pairwise analysis layer with rule-based interpretation labels and paired bootstrap 95% confidence intervals, full SLURM orchestration for the NTU TC1 cluster with resumable per-model matrix jobs, and a verification suite of 178 automated tests. The analytical contribution is the interpretation layer itself — the capability-anchored, statistically-grounded, multi-benchmark framework — which formalises the alignment-versus-capability disambiguation as a rule-based decision procedure over combined safety and capability deltas and which is the durable contribution of this study independent of any specific empirical outcome."),
+  PJ("The methodological contribution is a controlled matched-pair design in which baseline and four-bit pair members are loaded from identical baseline weights, with NF4 quantization applied on the fly. This design eliminates publisher- and pipeline-asymmetry as confounds and provides the strongest practical isolation of quantization as the experimental variable. The engineering contribution is an open, reproducible benchmarking framework comprising the matched-pair pipeline, three benchmark plugins, the pairwise analysis layer with rule-based interpretation labels and paired bootstrap 95% confidence intervals, full SLURM orchestration for the NTU TC1 cluster with resumable per-model matrix jobs, and a verification suite of 223 automated tests. The analytical contribution is the interpretation layer itself — the capability-anchored, statistically-grounded, multi-benchmark framework — which formalises the alignment-versus-capability disambiguation as a rule-based decision procedure over combined safety and capability deltas and which is the durable contribution of this study independent of any specific empirical outcome."),
   PJ("All six experimental runs completed on the NTU TC1 GPU cluster on 2026-05-27 (SLURM jobs 60976–60981); HarmBench ASR was validated and re-scored with the official HarmBench classifier (full precision) on 2026-06-06 (job 61047). Under the official classifier the three pairs produce three diagnostic profiles. The Qwen3-1.7B pair (broad_degradation): HarmBench ASR rises significantly (+0.055, CI [+0.010, +0.100]) and MMLU falls significantly (−0.087, CI [−0.137, −0.037]) — the smallest model degrades on both axes, the confirmed worst case and the most consequential deployment finding. The Qwen3-4B pair (alignment_degradation, directional): ΔASR is positive but not significant (+0.025, CI touches zero) with capability preserved — a suggestive, unconfirmed safety worsening. The Llama 3.2 3B pair (broad_degradation): ΔASR ≈ 0 (CI [−0.020, +0.020]) with significant capability loss (−0.043) — its strong baseline safety calibration (judge ASR = 0.040) is preserved at a capability cost. A central methodological result is that the judge validation overturned the regex proxy: the v2 scorer over-counts harmful compliance (it equates non-refusal with success), and adopting the benchmark's own classifier relocated the study's one significant safety regression from Qwen 4B (proxy) to Qwen 1.7B (official). Together the three pairs span distinct diagnostic categories, and none shows reduced harmful compliance under quantization."),
   PJ("Taken together, the results answer all five research questions. Under the official HarmBench classifier, NF4 quantization never reduces genuine harmful compliance, and the one statistically significant move is an increase in the smallest model (RQ1): Qwen 1.7B ΔASR = +0.055 (CI excludes zero); Qwen 4B +0.025 and Llama 0.000 are within noise. The data refute the optimistic claim that quantization is safety-neutral or improving. NF4 quantization does not increase over-refusal in any evaluated model (RQ2) — a robust null. NF4 quantization significantly degrades capability in the Qwen 1.7B and Llama 3B models but not in the Qwen 4B model (RQ3). Smaller Qwen models are more sensitive on both axes: the 1.7B pair suffers a confirmed dual degradation (broad_degradation) while the 4B pair preserves capability and shows only a directional safety nudge (RQ4). Cross-family, all ΔASR point estimates are ≥ 0, over-refusal is uniformly null, and capability loss is directionally consistent where significant (RQ5). A central methodological result is that validating the framework against the benchmark's own classifier corrected a refusal-counting artefact in the regex proxy and relocated the one significant safety regression from Qwen 4B to Qwen 1.7B. The framework itself — capability-anchored, statistically grounded, multi-benchmark, and self-correcting under judge validation — is the durable contribution; the specific empirical numbers are subordinate to it."),
 ];
@@ -953,7 +954,7 @@ models:
     model_id: Qwen/Qwen3-1.7B
     trust_remote_code: false
     dtype: auto
-    benchmarks: [harmbench, xstest, mmlu]
+    benchmarks: [harmbench, xstest, mmlu, arc]
 
   qwen_2b_4bit:
     family: qwen
@@ -963,7 +964,7 @@ models:
     model_id: Qwen/Qwen3-1.7B
     trust_remote_code: false
     dtype: auto
-    benchmarks: [harmbench, xstest, mmlu]
+    benchmarks: [harmbench, xstest, mmlu, arc]
 
   qwen_4b_base:
     family: qwen
@@ -973,7 +974,7 @@ models:
     model_id: Qwen/Qwen3-4B
     trust_remote_code: false
     dtype: auto
-    benchmarks: [harmbench, xstest, mmlu]
+    benchmarks: [harmbench, xstest, mmlu, arc]
 
   qwen_4b_4bit:
     family: qwen
@@ -983,7 +984,7 @@ models:
     model_id: Qwen/Qwen3-4B
     trust_remote_code: false
     dtype: auto
-    benchmarks: [harmbench, xstest, mmlu]
+    benchmarks: [harmbench, xstest, mmlu, arc]
 
   llama_3_2_3b_base:
     family: llama
@@ -993,7 +994,7 @@ models:
     model_id: meta-llama/Llama-3.2-3B-Instruct
     trust_remote_code: false
     dtype: auto
-    benchmarks: [harmbench, xstest, mmlu]
+    benchmarks: [harmbench, xstest, mmlu, arc]
 
   llama_3_2_3b_4bit:
     family: llama
@@ -1003,7 +1004,7 @@ models:
     model_id: meta-llama/Llama-3.2-3B-Instruct
     trust_remote_code: false
     dtype: auto
-    benchmarks: [harmbench, xstest, mmlu]
+    benchmarks: [harmbench, xstest, mmlu, arc]
 
 decoding:
   max_new_tokens: 128
@@ -1041,6 +1042,13 @@ benchmarks:
       - high_school_world_history
       - high_school_macroeconomics
       - human_aging
+
+  arc:
+    dataset_name: allenai/ai2_arc
+    config_name: ARC-Challenge
+    split: test
+    max_samples: 1200
+    batch_size: 4
 
 slurm:
   partition: UGGPU-TC1
@@ -1153,24 +1161,29 @@ const appendixC = [
 
 const appendixD = [
   H1("Appendix D — Test Inventory"),
-  PJ("The verification suite comprises 178 automated tests across twelve test files. The distribution is summarised in Table D.1; the test files are located under tests/ in the repository."),
+  PJ("The verification suite comprises 223 automated tests across eighteen test files. The distribution is summarised in Table D.1; the test files are located under tests/ in the repository."),
   buildTable(
     ["Test file", "Test count", "Coverage area"],
     [
       ["test_datasets.py", "27", "Dataset loaders (toxicity, bias, factuality); type coercion helpers."],
+      ["test_models.py", "22", "ModelSpec, device and dtype resolution, prompt formatting (incl. enable_thinking)."],
       ["test_evaluators.py", "21", "Legacy evaluator parsing and aggregation."],
-      ["test_judge_validation.py", "13", "Judge-model validation: stub-backend scoring, sidecar redaction enforcement, ASR aggregation, raw-immutability, idempotency, the official-template byte-for-byte regression check, and judge-precision resolution (fp16/8bit/4bit + VRAM estimates)."],
-      ["test_matrix_reuse.py", "2", "Matrix runner reuse_loaded_model behaviour."],
       ["test_metrics_and_config.py", "20", "Bootstrap CI, JSONL/CSV round-trip, schema validation."],
-      ["test_models.py", "18", "ModelSpec, device and dtype resolution, prompt formatting (incl. enable_thinking)."],
+      ["test_quant_analysis.py", "16", "Pairwise delta computation, interpretation labels (six-label taxonomy), McNemar exact test, bootstrap CI logic, v2 sidecar selection, ARC capability axis."],
+      ["test_judge_validation.py", "13", "Judge-model validation: stub-backend scoring, sidecar redaction enforcement, ASR aggregation, raw-immutability, idempotency, the official-template regression check, judge-precision resolution."],
       ["test_pipeline.py", "12", "Batched generation and orchestration helpers."],
-      ["test_quant_analysis.py", "11", "Pairwise delta computation, interpretation labels, bootstrap CI logic, and v2 score-sidecar selection."],
-      ["test_quant_pipeline_utils.py", "4", "Record schema validation, resume helpers."],
-      ["test_quant_smoke.py", "2", "End-to-end pipeline smoke test on a stub."],
-      ["test_refusal_parser.py", "40", "v1 sanity tests plus v2 regression tests: 26 canonical refusal templates, 6 negative controls, curly-apostrophe handling, and the diagnostic match_refusal_pattern helper."],
+      ["test_agent_harness.py", "9", "Agent harness: AGENTS/CLAUDE sync, project-log discipline, immutable-artifact tolerance, stale-text/redaction scans, agent-start packet."],
       ["test_slurm_helpers.py", "8", "Generated sbatch contents and per-benchmark/per-model grouping."],
-      ["(other small fixtures)", "—", "Conftest fixtures, shared mocks."],
-      ["Total", "178", "All passing on the current commit."],
+      ["test_xstest_benign.py", "6", "XSTest benign classification and schema-drift guarding."],
+      ["test_arc.py", "5", "ARC-Challenge plugin: schema parse, gold-index (letter/numeric), scoring, aggregate, registry."],
+      ["test_judge_agreement.py", "5", "Judge-vs-v2 agreement, Cohen's kappa (incl. degenerate case), confusion."],
+      ["test_quant_pipeline_utils.py", "4", "Record schema validation, resume helpers."],
+      ["test_judge_pairwise.py", "3", "API-judge yes/no/unparseable mapping (faked client), judge-vs-judge kappa, null-row skip."],
+      ["test_sensitivity.py", "3", "Multi-seed sensitivity config + aggregator (summarise_deltas) and sbatch generator."],
+      ["test_matrix_reuse.py", "2", "Matrix runner reuse_loaded_model behaviour."],
+      ["test_quant_smoke.py", "2", "End-to-end pipeline smoke test on a stub."],
+      ["test_refusal_parser.py", "45", "v1 sanity tests plus v2 regression tests: canonical refusal templates, negative controls, curly-apostrophe handling, the diagnostic match_refusal_pattern helper."],
+      ["Total", "223", "Eighteen files; all passing on the current commit."],
     ],
     [3000, 1200, 5160],
   ),
@@ -1199,7 +1212,7 @@ const appendixE = [
 │   ├── analysis/compare_quant_pairs.py
 │   ├── cluster/{generate_jobs.py, submit_jobs.py, check_runs.py}
 │   └── metrics/
-├── tests/                    (178 tests across 12 files)
+├── tests/                    (223 tests across 18 files)
 ├── slurm/jobs_tc1/           (generated sbatch files)
 ├── results/                  (raw.jsonl, summary.json, v2 score sidecars, analysis outputs)
 └── docs/
@@ -1305,7 +1318,7 @@ const appendixH = [
   ),
 
   H2("H.4 Verification completed"),
-  PJ("The workflow was verified in five ways. First, the full test suite passes with 178 tests, including v2 refusal-parser regression tests, the analysis sidecar-selection test, the capability-guard test for the refined interpretation rule, and judge-validation tests for redaction, raw immutability, idempotency, ASR aggregation, the official HarmBench classifier prompt template, and judge-precision resolution. Second, the judge job (61047) ran in full precision on a 32 GB V100 and classified all 1 200 generations with zero parse errors. Third, `scripts/judge_agreement.py` reproduces the judge-vs-v2 agreement and the judge-primary pair labels deterministically from the committed sidecars. Fourth, the original `raw.jsonl` and `summary.json` files were confirmed unchanged by every post-hoc step (rescore and judge). Fifth, all judge sidecars were checked for redaction: they contain prompt IDs, boolean labels, and run metadata only — no prompt, behaviour, or response text."),
+  PJ("The workflow was verified in five ways. First, the full test suite passes with 223 tests, including v2 refusal-parser regression tests, the analysis sidecar-selection test, the capability-guard test for the refined interpretation rule, and judge-validation tests for redaction, raw immutability, idempotency, ASR aggregation, the official HarmBench classifier prompt template, and judge-precision resolution. Second, the judge job (61047) ran in full precision on a 32 GB V100 and classified all 1 200 generations with zero parse errors. Third, `scripts/judge_agreement.py` reproduces the judge-vs-v2 agreement and the judge-primary pair labels deterministically from the committed sidecars. Fourth, the original `raw.jsonl` and `summary.json` files were confirmed unchanged by every post-hoc step (rescore and judge). Fifth, all judge sidecars were checked for redaction: they contain prompt IDs, boolean labels, and run metadata only — no prompt, behaviour, or response text."),
 
   H2("H.5 Where the next session should continue"),
   PJ("The HarmBench judge validation is complete (job 61047) and the official classifier is the primary HarmBench scorer (decision D16); §6.12 carries the results. There is no pending scoring work. Future agents should start from the repo-native handoff in `docs/HANDOFF.md`, then verify live Git state with `git status -sb`. The remaining non-technical items are: send the supervisor progress note (T1); record the exact storage quota via `MyTCinfo` (T3, hardware already confirmed as a 32 GB Tesla V100); and prepare the final submission (T15)."),
