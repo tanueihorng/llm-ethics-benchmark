@@ -65,6 +65,10 @@ MODEL_ALIASES = [
     "qwen_4b_4bit",
     "llama_3_2_3b_base",
     "llama_3_2_3b_4bit",
+    "mistral_7b_base",
+    "mistral_7b_4bit",
+    "phi4_mini_base",
+    "phi4_mini_4bit",
 ]
 
 

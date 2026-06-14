@@ -94,8 +94,12 @@ Configured in `configs/default.yaml`:
 - `Qwen/Qwen3-1.7B` (baseline and on-the-fly BNB NF4 4-bit)
 - `Qwen/Qwen3-4B` (baseline and on-the-fly BNB NF4 4-bit)
 - `meta-llama/Llama-3.2-3B-Instruct` (baseline and on-the-fly BNB NF4 4-bit)
+- `mistralai/Mistral-7B-Instruct-v0.3` ⏳ (baseline and on-the-fly BNB NF4 4-bit)
+- `microsoft/Phi-4-mini-instruct` ⏳ (baseline and on-the-fly BNB NF4 4-bit; `trust_remote_code` + `attn_implementation: eager`)
 
-Each model entry includes `family`, `size_b`, `quantized`, `pair_id`, and benchmark coverage.
+⏳ = T26 cross-family extension (config/loader/sbatch/judge/tests complete, TC1 run pending; results not yet in the report).
+
+Each model entry includes `family`, `size_b`, `quantized`, `pair_id`, and benchmark coverage, plus an optional `attn_implementation`.
 
 ## Benchmarks and Metrics
 ### Harmful Compliance: HarmBench
@@ -219,6 +223,13 @@ sbatch slurm/jobs_tc1/qwen_4b_4bit__matrix.sbatch
 squeue -u utan001
 sbatch slurm/jobs_tc1/llama_3_2_3b_base__matrix.sbatch
 sbatch slurm/jobs_tc1/llama_3_2_3b_4bit__matrix.sbatch
+# T26 extension (run after the originals; smoke first, Mistral is HF-gated):
+squeue -u utan001
+sbatch slurm/jobs_tc1/mistral_7b_base__matrix.sbatch
+sbatch slurm/jobs_tc1/mistral_7b_4bit__matrix.sbatch
+squeue -u utan001
+sbatch slurm/jobs_tc1/phi4_mini_base__matrix.sbatch
+sbatch slurm/jobs_tc1/phi4_mini_4bit__matrix.sbatch
 ```
 
 ### Check run status

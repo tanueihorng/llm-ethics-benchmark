@@ -98,5 +98,7 @@ report_worthy:
     - scripts/build_fyp_report.js
 
 agent_status:
+  # expected_judge_sidecars stays 6 until the T26 new-pairs judge run lands on TC1
+  # (the 4 new scores.judge.harmbench_cls.* sidecars do not exist yet).
   expected_judge_sidecars: 6
-  expected_test_count_note: 186
+  expected_test_count_note: 246

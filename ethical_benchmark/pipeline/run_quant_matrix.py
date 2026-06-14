@@ -249,6 +249,7 @@ def run_quant_matrix(
             revision=model_entry.revision,
             dtype=model_entry.dtype,
             quantized=model_entry.quantized,
+            attn_implementation=model_entry.attn_implementation,
         )
 
         model_loader = HFModelLoaderCls(device=device)

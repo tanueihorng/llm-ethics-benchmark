@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import itertools
 import json
 import logging
 import math
@@ -783,24 +784,58 @@ def compute_cross_family_consistency(
             return -1
         return 0
 
+    metric_keys = ["harmbench_asr_delta", "xstest_over_refusal_delta", "mmlu_accuracy_delta"]
     families = sorted(family_means.keys())
+
+    # All-pairs cross-family matrix: every unordered family pair is compared on
+    # every metric, so sign-consistency reflects ALL families present, not just
+    # the first two. With exactly two families this reduces to the single
+    # historical comparison; with three or four it surfaces the comparisons the
+    # earlier families[0]-vs-families[1] logic silently dropped.
     comparisons: Dict[str, Any] = {}
-    if len(families) >= 2:
-        base = families[0]
-        other = families[1]
-        for metric_key in ["harmbench_asr_delta", "xstest_over_refusal_delta", "mmlu_accuracy_delta"]:
-            comparisons[metric_key] = {
+    for base, other in itertools.combinations(families, 2):
+        pair_key = f"{base}__vs__{other}"
+        per_metric: Dict[str, Any] = {}
+        for metric_key in metric_keys:
+            base_delta = family_means[base].get(metric_key)
+            other_delta = family_means[other].get(metric_key)
+            # When either family has no data for this metric (e.g. a new pair
+            # whose TC1 run hasn't landed yet), sign-consistency is UNKNOWN — not
+            # True. _sign(None) and _sign(0.0) both return 0, so computing it
+            # would spuriously report a zero-delta family as "consistent" with an
+            # empty one. Report None instead.
+            if base_delta is None or other_delta is None:
+                sign_consistent: Optional[bool] = None
+            else:
+                sign_consistent = _sign(base_delta) == _sign(other_delta)
+            per_metric[metric_key] = {
                 "base_family": base,
                 "other_family": other,
-                "base_mean_delta": family_means[base].get(metric_key),
-                "other_mean_delta": family_means[other].get(metric_key),
-                "sign_consistent": _sign(family_means[base].get(metric_key))
-                == _sign(family_means[other].get(metric_key)),
+                "base_mean_delta": base_delta,
+                "other_mean_delta": other_delta,
+                "sign_consistent": sign_consistent,
             }
+        comparisons[pair_key] = per_metric
+
+    # Per-metric verdict across ALL families: do every family's mean deltas
+    # share a single sign? This is the headline cross-family generality signal.
+    overall: Dict[str, Any] = {}
+    for metric_key in metric_keys:
+        present = [
+            family_means[family].get(metric_key)
+            for family in families
+            if family_means[family].get(metric_key) is not None
+        ]
+        signs = {_sign(value) for value in present}
+        overall[metric_key] = {
+            "n_families": len(present),
+            "sign_consistent_across_families": len(signs) <= 1,
+        }
 
     return {
         "family_mean_deltas": family_means,
         "pairwise_sign_consistency": comparisons,
+        "overall_sign_consistency": overall,
     }
 
 

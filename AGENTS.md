@@ -58,7 +58,7 @@ A pre-commit reminder (not enforced mechanically — just discipline): `diff AGE
 
 ## Project Overview
 
-**fyp_quant** is a research benchmarking framework that studies safety-capability trade-offs in 4-bit quantized small language models (2B–4B primary Qwen scale range). It compares **baseline vs on-the-fly 4-bit loading pairs** across three dimensions:
+**fyp_quant** is a research benchmarking framework that studies safety-capability trade-offs in 4-bit quantized small language models (≈2–7B; Qwen/Llama pairs evaluated, Mistral-7B + Phi-4-mini pairs configured and pending the T26 run — see Model Pairs). It compares **baseline vs on-the-fly 4-bit loading pairs** across three dimensions:
 
 - **HarmBench** — harmful compliance under unsafe prompts (Attack Success Rate)
 - **XSTest** — over-refusal on benign prompts (Over-Refusal Rate)
@@ -80,7 +80,7 @@ pip install -r requirements.txt
 ```bash
 make smoke              # One model × one benchmark, 20 samples (fast sanity check)
 make run                # One model × one benchmark, full samples
-make matrix DEVICE=cuda # All 6 models × 3 benchmarks (18 runs)
+make matrix DEVICE=cuda # All configured models × benchmarks (10 models × 4 benchmarks once T26 runs; 6×4 evaluated so far)
 make analyze            # Compute pairwise deltas and interpretations
 make report             # Regenerate the FYP interim report docx
 ```
@@ -115,6 +115,25 @@ sbatch slurm/jobs_tc1/llama_3_2_3b_base__matrix.sbatch
 sbatch slurm/jobs_tc1/llama_3_2_3b_4bit__matrix.sbatch
 ```
 
+**T26 new pairs (`mistral_7b`, `phi4_mini`) — run after the originals; smoke first.** Same methodology (NF4, greedy, seed 42, four benchmarks, HarmBench classifier as primary ASR). Mistral-7B (7.2B) is the largest model yet — watch the 6h walltime / 10G mem; decide any resource bump at smoke time.
+```bash
+# 1) Prefetch the 2 new model_ids. Mistral-7B-Instruct-v0.3 is HF-GATED → re-run the
+#    HF token login on the head node FIRST, then:  make prefetch CONFIG=configs/tc1.yaml
+# 2) Smoke each new model (5 samples) BEFORE the full matrix — confirm it loads, uses
+#    the native chat template (NOT the raw-prompt fallback), and that Phi loads with eager:
+sbatch slurm/jobs_tc1_smoke/mistral_7b_base__harmbench.sbatch
+sbatch slurm/jobs_tc1_smoke/phi4_mini_base__harmbench.sbatch
+# 3) Then the full matrix, pair-by-pair (Mistral first):
+sbatch slurm/jobs_tc1/mistral_7b_base__matrix.sbatch
+sbatch slurm/jobs_tc1/mistral_7b_4bit__matrix.sbatch
+# wait, then:
+sbatch slurm/jobs_tc1/phi4_mini_base__matrix.sbatch
+sbatch slurm/jobs_tc1/phi4_mini_4bit__matrix.sbatch
+# 4) PRIMARY ASR for the new pairs (judge, fp16). This sbatch scores ONLY the new aliases,
+#    so the committed old-6 judge sidecars are never reopened (zero drift):
+sbatch slurm/judge_validation_newpairs.sbatch
+```
+
 ### Judge-model validation (T20, HarmBench classifier) — COMPLETE (D16)
 The HarmBench judge validation has already run on TC1 (job 61047, fp16, 32 GB V100, n=200×6, 0 parse errors) and its results are committed: the official classifier is the **primary** HarmBench scorer, the redacted `scores.judge.harmbench_cls.*` sidecars + `results/analysis/judge_agreement.{json,csv}` are in the repo, and report §6.12 carries the results. **You do not need to re-run it.** Only re-run if you are revalidating or extending (e.g. adding a second independent judge). The full pipeline, for reference:
 ```bash
@@ -129,7 +148,7 @@ Judge outputs are redacted sidecars (IDs + booleans only); raw outputs and v2 si
 
 ### Tests
 ```bash
-pytest tests/                                    # All tests (223)
+pytest tests/                                    # All tests (246)
 pytest tests/test_judge_validation.py            # Judge layer (stub backend, redaction)
 pytest tests/test_quant_smoke.py                 # Smoke: end-to-end pipeline
 pytest tests/test_quant_analysis.py              # Pairwise delta computation
@@ -226,6 +245,10 @@ Key constraint enforced by schema: each `pair_id` must have ≥1 baseline + ≥1
 | qwen_2b | qwen_2b_base | qwen_2b_4bit | Qwen/Qwen3-1.7B |
 | qwen_4b | qwen_4b_base | qwen_4b_4bit | Qwen/Qwen3-4B |
 | llama_3_2_3b | llama_3_2_3b_base | llama_3_2_3b_4bit | meta-llama/Llama-3.2-3B-Instruct |
+| mistral_7b ⏳ | mistral_7b_base | mistral_7b_4bit | mistralai/Mistral-7B-Instruct-v0.3 |
+| phi4_mini ⏳ | phi4_mini_base | phi4_mini_4bit | microsoft/Phi-4-mini-instruct |
+
+⏳ = T26 cross-family extension: config/loader/sbatch/judge/tests complete, TC1 run pending. Phi-4-mini sets `trust_remote_code: true` + `attn_implementation: eager` (V100 has no flash-attn) on **both** members; Mistral sets neither. Their numbers are not yet in the report's Chapter 6 (the run is still to come).
 
 Both members of every pair share the same `model_id`; quantization is applied on the fly via `BitsAndBytesConfig` at load time. All models use `dtype: auto` (resolves to float16 on CUDA, float32 on CPU) and `temperature: 0.0` (greedy decoding for determinism). The compute dtype for 4-bit loading follows the resolved model dtype.
 

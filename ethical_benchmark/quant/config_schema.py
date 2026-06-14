@@ -50,6 +50,7 @@ class ModelEntry(BaseModel):
     trust_remote_code: bool = Field(default=False)
     dtype: str = Field(default="auto")
     revision: Optional[str] = Field(default=None)
+    attn_implementation: Optional[str] = Field(default=None)
 
     @field_validator("benchmarks")
     @classmethod
@@ -69,6 +70,24 @@ class ModelEntry(BaseModel):
         normalized = value.strip().lower()
         if normalized not in allowed:
             raise ValueError(f"dtype must be one of {sorted(allowed)}, got '{value}'.")
+        return normalized
+
+    @field_validator("attn_implementation")
+    @classmethod
+    def _validate_attn_implementation(cls, value: Optional[str]) -> Optional[str]:
+        # Fail loud on a typo: a misspelled attn backend would otherwise be
+        # passed straight to from_pretrained and either crash opaquely or
+        # silently fall back, breaking cross-model comparability. Restricted to
+        # the backends transformers actually accepts here (Phi-4-mini needs
+        # 'eager' on the V100, which has no flash-attn kernels).
+        if value is None:
+            return None
+        allowed = {"eager", "sdpa", "flash_attention_2"}
+        normalized = value.strip().lower()
+        if normalized not in allowed:
+            raise ValueError(
+                f"attn_implementation must be one of {sorted(allowed)} (or omitted), got '{value}'."
+            )
         return normalized
 
 

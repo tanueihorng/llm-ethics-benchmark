@@ -31,15 +31,17 @@ V100 (no kernel issues for these two).
 - AWQ quantization — **AutoAWQ GEMM kernels require sm_75+; the V100 is sm_70 → cannot run.** GGUF/GPTQ are feasible but are the separate quant-variant axis (large engineering lift).
 
 ### Next steps (ordered, concrete)
-1. **Loader:** add optional `attn_implementation: Optional[str]` field to `ModelEntry`
-   (`ethical_benchmark/quant/config_schema.py`) → thread through `ModelSpec`
-   (`ethical_benchmark/models/loader.py`) → set in `model_kwargs` only when present.
-   Add a unit test (eager set vs unset).
-2. **Configs:** add the 4 entries below to `configs/tc1.yaml` and `configs/default.yaml`.
-3. **Prefetch:** add the 2 model_ids to `scripts/prefetch_tc1.py` targets.
-4. **sbatch:** `make cluster-generate CONFIG=configs/tc1.yaml` → new per-model sbatch.
-5. **On TC1 (head node):** `git pull --ff-only`; prefetch the 2 models; then **5-sample smoke per new base model** (confirm load on transformers 5.x; Phi needs eager + trust_remote_code) before the full matrix; then `sbatch` the 4 new jobs.
-6. **After results land (SCP back):** `make analyze`; this is results-worthy → edit `scripts/build_fyp_report.js` (Table 6.1/6.2, cross-family §) + `make report`; add PROJECT_LOG.md D-decision + changelog row; run `make agent-check`.
+
+**LOCAL WORK DONE 2026-06-14 (D30) — all of steps 1–4 + tests + report/docs landed; 246 tests pass.**
+1. ✅ **Loader:** `attn_implementation` field added to `ModelEntry` (+fail-loud validator) → threaded through `ModelSpec` + `model_kwargs` (truthiness-guarded) + both pipeline constructors + `build_model_spec`. Tests added (injected-when-set / omitted-when-None).
+2. ✅ **Configs:** 4 entries in `configs/tc1.yaml` + `configs/default.yaml`. New `tests/test_quant_config_schema.py` validates 10 models / 5 pairs / 4 families + flags.
+3. ✅ **Prefetch:** no edit needed — `scripts/prefetch_tc1.py` reads model_ids from the config generically (auto-caches the 2 new ones).
+4. ✅ **sbatch:** 4 matrix + 4 harmbench-smoke sbatch templated byte-consistent from the committed files (did NOT use `make cluster-generate` — the live generator drifted to absolute log paths and would have rewritten the old 6). Plus `slurm/judge_validation_newpairs.sbatch` (scores only the 4 new aliases). Judge/analysis scripts + cross-family function updated. Report (additive "run pending") + CLAUDE/AGENTS/README + PROJECT_LOG (D30) done.
+
+**REMAINING — TC1 (user runs; commands in CLAUDE.md/README TC1 block):**
+5. **On TC1 (head node):** `git pull --ff-only`; **Mistral-7B is HF-gated → re-run the HF token login FIRST**; `make prefetch CONFIG=configs/tc1.yaml`; then **5-sample smoke per new model** (`slurm/jobs_tc1_smoke/{mistral_7b_base,phi4_mini_base}__harmbench.sbatch`) — confirm load on transformers 5.x, native chat template (not raw-prompt fallback), Phi loads with eager — BEFORE the full matrix; then `sbatch` the 4 matrix jobs (Mistral first, pair-by-pair). **Mistral 7.2B vs 6h/10G: decide any resource bump at smoke time (user decision).**
+6. **Judge (PRIMARY ASR for new pairs):** `sbatch slurm/judge_validation_newpairs.sbatch` (fp16).
+7. **After results land (SCP back):** `make analyze` + `scripts/{judge_agreement,judge_pairwise_agreement,harmbench_category_breakdown,mmlu_subject_breakdown,rescore_harmbench}.py` + **gpt-4o second judge** (`run_judge_validation.py --backend api_judge --models mistral_7b_* phi4_mini_*` — user chose full W3 parity). Then fold REAL numbers into `scripts/build_fyp_report.js` (Tables 6.1/6.2/6.3, §6.11 all-pairs cross-family, §6.4.1 ARC) + `make report`; update PROJECT_LOG D-decision (run results) + changelog; `make agent-check`. Verify `git diff results/analysis/` shows old pairs' **numbers** unchanged. **Expected (not a bug):** `quantization_analysis_summary.json`'s `cross_family` section will restructure from the old flat metric-keyed shape to the new `<famA>__vs__<famB>` all-pairs shape (+ a new `overall_sign_consistency` key) — the existing qwen-vs-llama leaf values are byte-identical, only the JSON shape changes (D30 rewrite).
 
 ### Watch items / guardrails
 - Smoke-test on transformers **5.x** (a major version; neither card explicitly notes 5.x).

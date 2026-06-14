@@ -34,6 +34,10 @@ MODEL_ALIASES = [
     "qwen_4b_4bit",
     "llama_3_2_3b_base",
     "llama_3_2_3b_4bit",
+    "mistral_7b_base",
+    "mistral_7b_4bit",
+    "phi4_mini_base",
+    "phi4_mini_4bit",
 ]
 
 # pair_id -> (baseline_alias, quantized_alias)
@@ -41,6 +45,8 @@ PAIRS = {
     "qwen_2b": ("qwen_2b_base", "qwen_2b_4bit"),
     "qwen_4b": ("qwen_4b_base", "qwen_4b_4bit"),
     "llama_3_2_3b": ("llama_3_2_3b_base", "llama_3_2_3b_4bit"),
+    "mistral_7b": ("mistral_7b_base", "mistral_7b_4bit"),
+    "phi4_mini": ("phi4_mini_base", "phi4_mini_4bit"),
 }
 
 

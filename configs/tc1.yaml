@@ -61,6 +61,48 @@ models:
     dtype: auto
     benchmarks: [harmbench, xstest, mmlu, arc]
 
+  mistral_7b_base:
+    family: mistral
+    size_b: 7.2
+    quantized: false
+    pair_id: mistral_7b
+    model_id: mistralai/Mistral-7B-Instruct-v0.3
+    trust_remote_code: false
+    dtype: auto
+    benchmarks: [harmbench, xstest, mmlu, arc]
+
+  mistral_7b_4bit:
+    family: mistral
+    size_b: 7.2
+    quantized: true
+    pair_id: mistral_7b
+    model_id: mistralai/Mistral-7B-Instruct-v0.3
+    trust_remote_code: false
+    dtype: auto
+    benchmarks: [harmbench, xstest, mmlu, arc]
+
+  phi4_mini_base:
+    family: phi
+    size_b: 3.8
+    quantized: false
+    pair_id: phi4_mini
+    model_id: microsoft/Phi-4-mini-instruct
+    trust_remote_code: true
+    attn_implementation: eager
+    dtype: auto
+    benchmarks: [harmbench, xstest, mmlu, arc]
+
+  phi4_mini_4bit:
+    family: phi
+    size_b: 3.8
+    quantized: true
+    pair_id: phi4_mini
+    model_id: microsoft/Phi-4-mini-instruct
+    trust_remote_code: true
+    attn_implementation: eager
+    dtype: auto
+    benchmarks: [harmbench, xstest, mmlu, arc]
+
 decoding:
   max_new_tokens: 128
   temperature: 0.0

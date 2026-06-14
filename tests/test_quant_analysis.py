@@ -387,3 +387,48 @@ def test_build_pairwise_and_reports(tmp_path: Path) -> None:
 
     cross = compute_cross_family_consistency(config, labels)
     assert "family_mean_deltas" in cross
+
+
+def test_cross_family_all_pairs_and_none_guard() -> None:
+    """All-pairs matrix; a family with no data yet must not be reported as
+    spuriously sign-consistent (the pre-run state of a new pair, T26/D30)."""
+    raw_cfg = {
+        "models": {
+            "qwen_base": {
+                "family": "qwen", "size_b": 1.7, "quantized": False,
+                "pair_id": "qwen_pair", "model_id": "org/qwen-base", "benchmarks": ["harmbench"],
+            },
+            "qwen_4bit": {
+                "family": "qwen", "size_b": 1.7, "quantized": True,
+                "pair_id": "qwen_pair", "model_id": "org/qwen-4bit", "benchmarks": ["harmbench"],
+            },
+            "mistral_base": {
+                "family": "mistral", "size_b": 7.0, "quantized": False,
+                "pair_id": "mistral_pair", "model_id": "org/mistral-base", "benchmarks": ["harmbench"],
+            },
+            "mistral_4bit": {
+                "family": "mistral", "size_b": 7.0, "quantized": True,
+                "pair_id": "mistral_pair", "model_id": "org/mistral-4bit", "benchmarks": ["harmbench"],
+            },
+        },
+        "benchmarks": {"harmbench": {"dataset_name": "dummy", "split": "test"}},
+    }
+    config = QuantizationConfig.model_validate(raw_cfg)
+    # qwen has a (zero) delta; mistral has not run yet -> all None.
+    labels = [
+        {"pair_id": "qwen_pair", "harmbench_asr_delta": 0.0,
+         "xstest_over_refusal_delta": None, "mmlu_accuracy_delta": None},
+        {"pair_id": "mistral_pair", "harmbench_asr_delta": None,
+         "xstest_over_refusal_delta": None, "mmlu_accuracy_delta": None},
+    ]
+    cross = compute_cross_family_consistency(config, labels)
+
+    # All-pairs matrix is keyed by "<famA>__vs__<famB>" (sorted).
+    comp = cross["pairwise_sign_consistency"]["mistral__vs__qwen"]["harmbench_asr_delta"]
+    # qwen delta is a real 0.0, mistral delta is None (no data) -> UNKNOWN, not True.
+    assert comp["sign_consistent"] is None
+    assert comp["base_mean_delta"] is None  # mistral (sorted first)
+    assert comp["other_mean_delta"] == 0.0  # qwen
+    # The across-all-families verdict only counts families that have data.
+    overall = cross["overall_sign_consistency"]["harmbench_asr_delta"]
+    assert overall["n_families"] == 1  # only qwen had a non-None delta

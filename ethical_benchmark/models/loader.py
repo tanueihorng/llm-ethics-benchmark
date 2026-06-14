@@ -82,6 +82,10 @@ class ModelSpec:
         revision: Optional model revision.
         dtype: Preferred precision. One of ``auto``, ``float16``, ``bfloat16``, ``float32``.
         quantized: When True, load the checkpoint in 4-bit via bitsandbytes nf4.
+        attn_implementation: Optional attention backend passed to
+            ``from_pretrained`` (e.g. ``eager`` for Phi-4-mini on a V100). When
+            None the kwarg is omitted entirely, leaving the load call identical
+            to the existing models.
     """
 
     alias: str
@@ -90,6 +94,7 @@ class ModelSpec:
     revision: Optional[str] = None
     dtype: str = "auto"
     quantized: bool = False
+    attn_implementation: Optional[str] = None
 
 
 class HFModelLoader:
@@ -171,6 +176,15 @@ class HFModelLoader:
                 )
             model_kwargs["quantization_config"] = _build_bnb_4bit_config(torch_dtype)
             LOGGER.info("Loading '%s' with bitsandbytes 4-bit (nf4) quantization.", spec.alias)
+
+        # Only inject attn_implementation when explicitly set. When None, the
+        # kwarg is omitted so the from_pretrained call for the existing models
+        # (Qwen/Llama/Mistral) is byte-identical to before this field existed.
+        if spec.attn_implementation:
+            model_kwargs["attn_implementation"] = spec.attn_implementation
+            LOGGER.info(
+                "Loading '%s' with attn_implementation='%s'.", spec.alias, spec.attn_implementation
+            )
 
         model = AutoModelForCausalLM.from_pretrained(spec.hf_id, **model_kwargs)
 
@@ -271,4 +285,5 @@ def build_model_spec(alias: str, registry: Dict[str, Dict[str, Any]]) -> ModelSp
         revision=entry.get("revision"),
         dtype=entry.get("dtype", "auto"),
         quantized=bool(entry.get("quantized", False)),
+        attn_implementation=entry.get("attn_implementation"),
     )

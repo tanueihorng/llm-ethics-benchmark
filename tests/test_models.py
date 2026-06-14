@@ -288,3 +288,99 @@ class TestQuantizationActive:
             )
             is False
         )
+
+
+# =========================================================================
+# attn_implementation threading (T26: Phi-4-mini needs eager on the V100)
+# =========================================================================
+
+
+class _LoadedFakeModel:
+    """A loaded model with NO quantization signals (plain fp16/fp32 path)."""
+
+    def to(self, device: str) -> "_LoadedFakeModel":
+        return self
+
+    def eval(self) -> "_LoadedFakeModel":
+        return self
+
+
+class _FakeTokenizerInstance:
+    pad_token = "<pad>"
+    eos_token = "</s>"
+
+
+class _FakeAutoTokenizer:
+    @staticmethod
+    def from_pretrained(hf_id: str, **kwargs: Any) -> _FakeTokenizerInstance:
+        return _FakeTokenizerInstance()
+
+
+class _CapturingAutoModel:
+    """Captures the kwargs HFModelLoader passes to from_pretrained."""
+
+    captured_kwargs: Dict[str, Any] = {}
+    captured_hf_id: str | None = None
+
+    @classmethod
+    def from_pretrained(cls, hf_id: str, **kwargs: Any) -> _LoadedFakeModel:
+        cls.captured_hf_id = hf_id
+        cls.captured_kwargs = dict(kwargs)
+        return _LoadedFakeModel()
+
+
+class TestModelSpecAttnImplementation:
+    """`ModelSpec.attn_implementation` field behaviour."""
+
+    def test_defaults_to_none(self) -> None:
+        spec = ModelSpec(alias="t", hf_id="o/m")
+        assert spec.attn_implementation is None
+
+    def test_is_settable(self) -> None:
+        spec = ModelSpec(alias="t", hf_id="o/m", attn_implementation="eager")
+        assert spec.attn_implementation == "eager"
+
+    def test_build_model_spec_propagates(self) -> None:
+        registry = {"phi": {"hf_id": "microsoft/Phi-4-mini-instruct", "attn_implementation": "eager"}}
+        assert build_model_spec("phi", registry).attn_implementation == "eager"
+
+    def test_build_model_spec_defaults_none(self) -> None:
+        assert build_model_spec("m", {"m": {"hf_id": "x"}}).attn_implementation is None
+
+
+class TestAttnImplementationLoading:
+    """The load path must inject attn_implementation only when set.
+
+    This is the guard that keeps the *existing* models' from_pretrained call
+    byte-identical to before the field existed (fairness invariant), while
+    letting Phi-4-mini request the eager backend on the V100.
+    """
+
+    def _patch(self, monkeypatch) -> None:
+        _CapturingAutoModel.captured_kwargs = {}
+        _CapturingAutoModel.captured_hf_id = None
+        monkeypatch.setattr(
+            loader_module,
+            "_get_transformer_classes",
+            lambda: (_CapturingAutoModel, _FakeAutoTokenizer),
+        )
+
+    def test_injected_when_set(self, fake_torch, monkeypatch) -> None:
+        self._patch(monkeypatch)
+        loader = HFModelLoader(device="cpu")
+        spec = ModelSpec(
+            alias="phi4_mini_base",
+            hf_id="microsoft/Phi-4-mini-instruct",
+            attn_implementation="eager",
+        )
+        loader.load(spec)
+        assert _CapturingAutoModel.captured_kwargs.get("attn_implementation") == "eager"
+
+    def test_omitted_when_none(self, fake_torch, monkeypatch) -> None:
+        self._patch(monkeypatch)
+        loader = HFModelLoader(device="cpu")
+        spec = ModelSpec(alias="qwen_2b_base", hf_id="Qwen/Qwen3-1.7B")  # no attn field
+        loader.load(spec)
+        # The key must be entirely ABSENT, not None — proves the existing
+        # models' load call is unchanged by this feature.
+        assert "attn_implementation" not in _CapturingAutoModel.captured_kwargs
