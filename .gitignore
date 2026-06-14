@@ -46,3 +46,6 @@ terminal_log*.txt
 
 # Note: we DO commit .docx and .html under docs/ — the FYP report is a
 # deliverable and docs/archive/ history is preserved in git.
+
+# Supervisor correspondence drafts — keep local, never commit
+docs/email_*.md

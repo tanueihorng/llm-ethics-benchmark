@@ -29,7 +29,7 @@ The study is complete, judge-validated, and now multi-seed-robustness-checked. T
 - **Uncommitted on the Mac** (working tree only — `git status -sb`):
   - `M scripts/build_fyp_report.js`, `M docs/FYP_Report_2026-05-27.docx`, `M docs/PROJECT_LOG.md`
   - `?? results/analysis/sensitivity_multiseed.{json,csv}` (redacted — should be committed)
-  - `?? docs/email_drZhang_2026-06-13.md` (T1 draft; user is refining)
+  - **Note:** the T18 bundle above was committed + pushed in `fa6ca63`; the email removal in the next commit. `docs/email_*.md` is now **gitignored** (supervisor correspondence stays local-only, never committed) — the 06-13 draft lives on disk for sending but is not in version control.
 - Decisions **D23** added to §3; **T18 ticked** `[x]` in §2; **T24** added (audit nit); §1 metadata bumped.
 - Pre-existing untracked presentation artifacts (not from this session, referenced in earlier changelog rows): `.claude/launch.json`, `.claude/skills/html-diagram/`, `docs/Codex_Meetup_Agent_Harness_Report.{docx,html}`, `docs/fyp_architecture.html` — need an intentionality decision (commit vs gitignore).
 
@@ -54,7 +54,7 @@ python scripts/judge_agreement.py                 # regenerates judge headline +
 ## Next Actions (ordered)
 
 1. **Commit + push this session's T18 work** (when the user asks): `scripts/build_fyp_report.js`, `docs/FYP_Report_2026-05-27.docx`, `docs/PROJECT_LOG.md`, `docs/HANDOFF.md`, and the redacted `results/analysis/sensitivity_multiseed.{json,csv}`. Decide separately on the untracked presentation artifacts + email draft. Branch off `main` if not already on a feature branch.
-2. **T1 — send the supervisor email.** Draft at `docs/email_drZhang_2026-06-13.md` (results-in-hand follow-up to the 2026-05-23 email, which was already sent). User is refining the wording.
+2. **T1 — send the supervisor email.** Draft at `docs/email_drZhang_2026-06-13.md` (results-in-hand follow-up to the 2026-05-23 email, which was already sent). **This file is gitignored on purpose — local-only, do not commit it.** User is refining the wording.
 3. **T15 — submit the interim report** (T18 is now folded in).
 4. **T3 — run `MyTCinfo` on TC1** (storage quota; non-blocking).
 5. Optional/later: **T24** (sensitivity_analysis.py provenance nit — do before any full-matrix T18 extension), full-matrix T18 (Qwen 4B + Llama), **T22** (second independent judge), **T19/T23** (more scale points / second capability benchmark).
