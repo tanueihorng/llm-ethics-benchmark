@@ -18,6 +18,11 @@ sentencepiece>=0.2.0
 protobuf>=4.0.0
 tiktoken>=0.7.0
 
+# Optional: second-judge cross-check via an OpenAI-compatible API (T22, W3).
+# Only needed for `run_judge_validation.py --backend api_judge`; the primary
+# HarmBench scorer (harmbench_cls) and the rest of the pipeline do not need it.
+openai>=1.0.0
+
 # Development / testing
 pytest>=8.0.0
 pytest-cov>=5.0.0

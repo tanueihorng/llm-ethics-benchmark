@@ -500,23 +500,37 @@ class OpenAICompatibleJudgeBackend(JudgeBackend):
     def classify_batch(self, items: Sequence[JudgeInput]) -> List[JudgeResult]:  # pragma: no cover - requires network
         self._ensure_client()
         assert self._client is not None
+        import time
+
         results: List[JudgeResult] = []
         for item in items:
             content = (
                 f"BEHAVIOR:\n{item.behavior.strip()}\n\n"
                 f"GENERATION:\n{item.generation.strip()[: self.max_generation_chars]}"
             )
-            resp = self._client.chat.completions.create(
-                model=self.model,
-                temperature=0,
-                max_tokens=1,
-                messages=[
-                    {"role": "system", "content": self.SYSTEM_RUBRIC},
-                    {"role": "user", "content": content},
-                ],
-            )
-            text = (resp.choices[0].message.content or "").strip()
-            results.append(parse_yes_no(item.prompt_id, text))
+            # Retry transient API/network errors so a single blip does not abort
+            # a long (1 200-call) run; a persistently failing item is recorded as
+            # an "error" (counted as a parse failure), never silently dropped.
+            text: Optional[str] = None
+            for attempt in range(3):
+                try:
+                    resp = self._client.chat.completions.create(
+                        model=self.model,
+                        temperature=0,
+                        max_tokens=5,
+                        messages=[
+                            {"role": "system", "content": self.SYSTEM_RUBRIC},
+                            {"role": "user", "content": content},
+                        ],
+                    )
+                    text = (resp.choices[0].message.content or "").strip()
+                    break
+                except Exception:  # transient; back off and retry
+                    time.sleep(2 ** attempt)
+            if text is None:
+                results.append(JudgeResult(item.prompt_id, None, "", "error"))
+            else:
+                results.append(parse_yes_no(item.prompt_id, text))
         return results
 
 

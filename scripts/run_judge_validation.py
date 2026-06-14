@@ -33,6 +33,7 @@ if str(ROOT) not in sys.path:
 from ethical_benchmark.judges.validation import (  # noqa: E402
     HarmBenchJudgeBackend,
     LlamaGuardJudgeBackend,
+    OpenAICompatibleJudgeBackend,
     run_judge_validation,
 )
 
@@ -49,13 +50,14 @@ DEFAULT_MODELS = [
 _DEFAULT_MODEL_ID_BY_BACKEND = {
     "harmbench_cls": "cais/HarmBench-Llama-2-13b-cls",
     "llamaguard": "meta-llama/Llama-Guard-3-8B",
+    "api_judge": "gpt-4o",
 }
 
 
 def _build_backend(args: argparse.Namespace):
     # Resolve the model id per backend: only override the backend default when
     # the user explicitly passed --model-id (otherwise --model-id's own default
-    # of the HarmBench classifier would wrongly be applied to LlamaGuard).
+    # of the HarmBench classifier would wrongly be applied to the other backends).
     model_id = args.model_id or _DEFAULT_MODEL_ID_BY_BACKEND[args.backend]
     if args.backend == "harmbench_cls":
         return HarmBenchJudgeBackend(
@@ -71,6 +73,18 @@ def _build_backend(args: argparse.Namespace):
             precision=args.precision,
             batch_size=args.batch_size,
         )
+    if args.backend == "api_judge":
+        # API judge (T22): runs locally, no GPU. The OpenAI SDK reads the key
+        # from the OPENAI_API_KEY environment variable when api_key is None, so
+        # the secret never passes through argv or this process's source.
+        # NOTE: this backend SENDS the benchmark prompt + model response to an
+        # external API (egress) — a deliberate decision (see D25); never the
+        # report's primary scorer (that is harmbench_cls, D16).
+        return OpenAICompatibleJudgeBackend(
+            model=model_id,
+            base_url=args.base_url,
+            api_key=None,
+        )
     raise ValueError(f"Unknown backend: {args.backend}")
 
 
@@ -81,11 +95,16 @@ def main() -> int:
     parser.add_argument("--benchmark", default="harmbench",
                         help="HarmBench classifier only supports 'harmbench'.")
     parser.add_argument("--backend", default="harmbench_cls",
-                        choices=["harmbench_cls", "llamaguard"])
+                        choices=["harmbench_cls", "llamaguard", "api_judge"])
     parser.add_argument("--model-id", default=None,
-                        help="HF model id for the judge backend. Defaults per backend: "
+                        help="Model id for the judge backend. Defaults per backend: "
                              "cais/HarmBench-Llama-2-13b-cls (harmbench_cls), "
-                             "meta-llama/Llama-Guard-3-8B (llamaguard).")
+                             "meta-llama/Llama-Guard-3-8B (llamaguard), "
+                             "gpt-4o (api_judge — an API model name, not an HF id).")
+    parser.add_argument("--base-url", default=None,
+                        help="Optional OpenAI-compatible base URL for --backend api_judge "
+                             "(e.g. a non-OpenAI endpoint). Defaults to the OpenAI API. "
+                             "The API key is read from OPENAI_API_KEY, never from argv.")
     parser.add_argument("--device", default="cuda")
     parser.add_argument("--precision", default="fp16", choices=["fp16", "8bit", "4bit"],
                         help="Judge precision. Default fp16 (full precision — the judge's "
@@ -104,7 +123,7 @@ def main() -> int:
     backend = _build_backend(args)
 
     print("=" * 72)
-    resolved_model_id = getattr(backend, "model_id", args.model_id)
+    resolved_model_id = getattr(backend, "model_id", None) or getattr(backend, "model", args.model_id)
     print(f"Judge validation — backend={args.backend} model_id={resolved_model_id}")
     print(f"benchmark={args.benchmark}  precision={args.precision}  batch_size={args.batch_size}")
     print("=" * 72)
@@ -126,7 +145,8 @@ def main() -> int:
 
     print("-" * 72)
     print("Wrote scores.judge.<name>.jsonl + summary.judge.<name>.json per model.")
-    print("Run scripts/judge_agreement.py (no GPU) to compare against the v2 scorer.")
+    print("Compare two judges with scripts/judge_pairwise_agreement.py (no GPU);")
+    print("or against the v2 scorer with scripts/judge_agreement.py.")
     return 0
 
 
