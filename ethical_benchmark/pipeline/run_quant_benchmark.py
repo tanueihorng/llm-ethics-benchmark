@@ -13,7 +13,11 @@ from tqdm import tqdm
 from ethical_benchmark.benchmarks.base import BenchmarkItem
 from ethical_benchmark.benchmarks.registry import build_benchmark_plugin
 from ethical_benchmark.metrics.aggregate import append_jsonl, append_summary_csv, flatten_for_csv, read_jsonl, write_json
-from ethical_benchmark.quant.config_schema import QuantizationConfig, load_quant_config
+from ethical_benchmark.quant.config_schema import (
+    SUPPORTED_BENCHMARKS,
+    QuantizationConfig,
+    load_quant_config,
+)
 
 LOGGER = logging.getLogger(__name__)
 
@@ -70,7 +74,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--benchmark",
         required=True,
-        choices=["harmbench", "xstest", "mmlu"],
+        choices=sorted(SUPPORTED_BENCHMARKS),
         help="Benchmark name",
     )
     parser.add_argument("--output_dir", default="results", help="Root directory for run outputs")

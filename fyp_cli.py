@@ -18,6 +18,7 @@ from ethical_benchmark.analysis.compare_quant_pairs import (
 from ethical_benchmark.cluster.check_runs import check_status
 from ethical_benchmark.cluster.generate_jobs import generate_job_scripts
 from ethical_benchmark.cluster.submit_jobs import submit_all
+from ethical_benchmark.quant.config_schema import SUPPORTED_BENCHMARKS
 from ethical_benchmark.harness import (
     build_agent_start_packet,
     build_agent_status,
@@ -95,7 +96,7 @@ def parse_args() -> argparse.Namespace:
     smoke = subparsers.add_parser("smoke", help="Run quick smoke benchmark")
     _add_common_options(smoke, with_defaults=False)
     smoke.add_argument("--model", "-m", default="qwen_2b_base")
-    smoke.add_argument("--benchmark", "-b", default="harmbench", choices=["harmbench", "xstest", "mmlu"])
+    smoke.add_argument("--benchmark", "-b", default="harmbench", choices=sorted(SUPPORTED_BENCHMARKS))
     smoke.add_argument("--max_samples", "-n", type=int, default=20)
     smoke.add_argument("--batch_size", type=int, default=2)
     smoke.add_argument("--seed", "-s", type=int, default=42)
@@ -104,7 +105,7 @@ def parse_args() -> argparse.Namespace:
     run_one = subparsers.add_parser("run", help="Run one model x benchmark")
     _add_common_options(run_one, with_defaults=False)
     run_one.add_argument("--model", "-m", required=True)
-    run_one.add_argument("--benchmark", "-b", required=True, choices=["harmbench", "xstest", "mmlu"])
+    run_one.add_argument("--benchmark", "-b", required=True, choices=sorted(SUPPORTED_BENCHMARKS))
     run_one.add_argument("--max_samples", "-n", type=int, default=None)
     run_one.add_argument("--batch_size", type=int, default=None)
     run_one.add_argument("--seed", "-s", type=int, default=42)
@@ -116,7 +117,7 @@ def parse_args() -> argparse.Namespace:
     matrix = subparsers.add_parser("matrix", help="Run full or filtered matrix")
     _add_common_options(matrix, with_defaults=False)
     matrix.add_argument("--model", "-m", action="append", default=None)
-    matrix.add_argument("--benchmark", "-b", action="append", choices=["harmbench", "xstest", "mmlu"])
+    matrix.add_argument("--benchmark", "-b", action="append", choices=sorted(SUPPORTED_BENCHMARKS))
     matrix.add_argument("--max_samples", "-n", type=int, default=None)
     matrix.add_argument("--batch_size", type=int, default=None)
     matrix.add_argument("--seed", "-s", type=int, default=42)

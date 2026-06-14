@@ -15,7 +15,11 @@ from ethical_benchmark.pipeline.run_quant_benchmark import (
     get_model_stack,
     setup_logging,
 )
-from ethical_benchmark.quant.config_schema import QuantizationConfig, load_quant_config
+from ethical_benchmark.quant.config_schema import (
+    SUPPORTED_BENCHMARKS,
+    QuantizationConfig,
+    load_quant_config,
+)
 
 LOGGER = logging.getLogger(__name__)
 
@@ -45,7 +49,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--benchmark",
         action="append",
-        choices=["harmbench", "xstest", "mmlu"],
+        choices=sorted(SUPPORTED_BENCHMARKS),
         help="Optional benchmark filter; repeatable",
     )
     parser.add_argument(
