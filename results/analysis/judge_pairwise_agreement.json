@@ -1,0 +1,90 @@
+{
+  "judge_a": "harmbench_cls",
+  "judge_b": "api_judge",
+  "benchmark": "harmbench",
+  "per_model": [
+    {
+      "model_alias": "qwen_2b_base",
+      "n_shared": 200,
+      "agreement_rate": 0.94,
+      "cohens_kappa": 0.7259648321534594,
+      "harmbench_cls_asr": 0.135,
+      "api_judge_asr": 0.115
+    },
+    {
+      "model_alias": "qwen_2b_4bit",
+      "n_shared": 200,
+      "agreement_rate": 0.92,
+      "cohens_kappa": 0.7233748271092671,
+      "harmbench_cls_asr": 0.19,
+      "api_judge_asr": 0.16
+    },
+    {
+      "model_alias": "qwen_4b_base",
+      "n_shared": 200,
+      "agreement_rate": 0.97,
+      "cohens_kappa": 0.7341603898980946,
+      "harmbench_cls_asr": 0.065,
+      "api_judge_asr": 0.055
+    },
+    {
+      "model_alias": "qwen_4b_4bit",
+      "n_shared": 200,
+      "agreement_rate": 0.955,
+      "cohens_kappa": 0.6859734822051634,
+      "harmbench_cls_asr": 0.09,
+      "api_judge_asr": 0.065
+    },
+    {
+      "model_alias": "llama_3_2_3b_base",
+      "n_shared": 200,
+      "agreement_rate": 0.98,
+      "cohens_kappa": 0.739583333333333,
+      "harmbench_cls_asr": 0.04,
+      "api_judge_asr": 0.04
+    },
+    {
+      "model_alias": "llama_3_2_3b_4bit",
+      "n_shared": 200,
+      "agreement_rate": 0.995,
+      "cohens_kappa": 0.9385749385749386,
+      "harmbench_cls_asr": 0.04,
+      "api_judge_asr": 0.045
+    }
+  ],
+  "per_pair": [
+    {
+      "pair_id": "qwen_2b",
+      "harmbench_cls_delta": 0.05499999999999999,
+      "harmbench_cls_significant": true,
+      "harmbench_cls_mcnemar_p": 0.02660369873046875,
+      "api_judge_delta": 0.045,
+      "api_judge_significant": false,
+      "api_judge_mcnemar_p": 0.12207812070846558,
+      "sign_agree": true,
+      "significance_agree": false
+    },
+    {
+      "pair_id": "qwen_4b",
+      "harmbench_cls_delta": 0.024999999999999994,
+      "harmbench_cls_significant": false,
+      "harmbench_cls_mcnemar_p": 0.1796875,
+      "api_judge_delta": 0.010000000000000002,
+      "api_judge_significant": false,
+      "api_judge_mcnemar_p": 0.7744140625,
+      "sign_agree": true,
+      "significance_agree": true
+    },
+    {
+      "pair_id": "llama_3_2_3b",
+      "harmbench_cls_delta": 0.0,
+      "harmbench_cls_significant": false,
+      "harmbench_cls_mcnemar_p": 1.0,
+      "api_judge_delta": 0.0049999999999999975,
+      "api_judge_significant": false,
+      "api_judge_mcnemar_p": 1.0,
+      "sign_agree": false,
+      "significance_agree": true
+    }
+  ]
+}

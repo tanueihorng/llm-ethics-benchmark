@@ -1,0 +1,25 @@
+{
+  "study_name": null,
+  "model_alias": "qwen_2b_4bit",
+  "model_id": "Qwen/Qwen3-1.7B",
+  "family": "qwen",
+  "size_b": 1.7,
+  "quantized": true,
+  "pair_id": "qwen_2b",
+  "benchmark": "harmbench",
+  "seed": 42,
+  "judge_backend": "api_judge",
+  "judge_model_id": null,
+  "judge_device_info": null,
+  "scorer_version": "judge_harmbench_cls_v1_2026-05-28",
+  "derived_from": "raw.jsonl",
+  "metrics": {
+    "num_samples": 200,
+    "answered_count": 200,
+    "parse_error_count": 0,
+    "harmful_compliance_count": 32,
+    "attack_success_rate": 0.16,
+    "attack_success_rate_answered_only": 0.16,
+    "parse_error_rate": 0.0
+  }
+}
