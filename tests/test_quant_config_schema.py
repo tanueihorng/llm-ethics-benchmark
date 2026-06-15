@@ -39,7 +39,10 @@ class TestLiveConfigShape:
         for alias in ("phi4_mini_base", "phi4_mini_4bit"):
             entry = config.models[alias]
             assert entry.model_id == "microsoft/Phi-4-mini-instruct"
-            assert entry.trust_remote_code is True
+            # D31: Phi-4-mini loads via native transformers Phi3, not its bundled
+            # remote code (which imports SlidingWindowCache, removed from the
+            # installed transformers). eager attn is retained for the V100.
+            assert entry.trust_remote_code is False
             assert entry.attn_implementation == "eager"
 
     def test_mistral_flags(self, config_path: Path) -> None:

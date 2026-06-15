@@ -87,7 +87,7 @@ models:
     quantized: false
     pair_id: phi4_mini
     model_id: microsoft/Phi-4-mini-instruct
-    trust_remote_code: true
+    trust_remote_code: false
     attn_implementation: eager
     dtype: auto
     benchmarks: [harmbench, xstest, mmlu, arc]
@@ -98,7 +98,7 @@ models:
     quantized: true
     pair_id: phi4_mini
     model_id: microsoft/Phi-4-mini-instruct
-    trust_remote_code: true
+    trust_remote_code: false
     attn_implementation: eager
     dtype: auto
     benchmarks: [harmbench, xstest, mmlu, arc]

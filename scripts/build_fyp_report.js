@@ -899,7 +899,7 @@ const ch9 = [
     "Multi-method quantization comparison. Extend the matrix to include GPTQ, AWQ, and GGUF quantization paths on the same baselines, allowing direct comparison of how different PTQ algorithms perturb safety and capability.",
     "Stochastic-decoding sensitivity arm (partially completed). The load-bearing Qwen 1.7B pair has now been re-run at temperature 0.7 (top-p 0.8) across five seeds and scored by the official classifier (§6.6.1); the result tempered the headline (mean ΔASR +0.024 versus +0.055 greedy, not sign-consistent across seeds). Extending the same symmetric arm to the Qwen 4B and Llama pairs, and raising the seed count, would complete the within-condition variance estimate across the full matrix.",
     "Composite-capability interpretation rule (second benchmark now run). ARC-Challenge has been run on all six models (§6.4.1) and corroborated the direction of capability loss while showing the MMLU magnitudes are partly benchmark-specific — notably the Qwen 1.7B drop (−8.7 pp MMLU vs −1.3 pp ARC, n.s.) and the within-Qwen scale ratio (≈29:1 on MMLU, not reproduced on ARC). The interpretation labels currently stay MMLU-anchored with ARC as a corroborating axis; formalising a composite-capability rule (e.g. requiring agreement across benchmarks before assigning a capability-driven label) is the natural next step. Adding further capability benchmarks (e.g. GSM8K for math reasoning, HellaSwag for commonsense) would broaden the composite.",
-    "Cross-family and scale extension (infrastructure complete; TC1 run pending). Two further matched pairs have been fully implemented and are queued for the cluster run: mistral_7b (mistralai/Mistral-7B-Instruct-v0.3) and phi4_mini (microsoft/Phi-4-mini-instruct), taking the study to five pairs across four families (Qwen, Llama, Mistral, Phi) and adding a seven-billion-parameter point at the upper edge of the compact-deployment regime. Both pairs use the identical methodology — on-the-fly NF4 with the same BitsAndBytesConfig, greedy decoding, the same four benchmarks at the same sample counts, seed 42, and the official HarmBench classifier as the primary ASR scorer — so the comparison stays matched. The only new loader capability is an optional attn_implementation field (Phi-4-mini requires the eager attention backend on the V100, which has no flash-attention kernels) together with trust_remote_code for Phi; both are now covered by the configuration schema, the loader, the per-model SLURM job set, the judge-validation scripts, and the 246-test verification suite. Results will be folded into Tables 6.1–6.3, the cross-family analysis (§6.11, which now compares all family pairs rather than the first two), and the ARC capability axis (§6.4.1) once the run completes.",
+    "Cross-family and scale extension (infrastructure complete; TC1 run pending). Two further matched pairs have been fully implemented and are queued for the cluster run: mistral_7b (mistralai/Mistral-7B-Instruct-v0.3) and phi4_mini (microsoft/Phi-4-mini-instruct), taking the study to five pairs across four families (Qwen, Llama, Mistral, Phi) and adding a seven-billion-parameter point at the upper edge of the compact-deployment regime. Both pairs use the identical methodology — on-the-fly NF4 with the same BitsAndBytesConfig, greedy decoding, the same four benchmarks at the same sample counts, seed 42, and the official HarmBench classifier as the primary ASR scorer — so the comparison stays matched. The only new loader capability is an optional attn_implementation field (Phi-4-mini uses the eager attention backend on the V100, which has no flash-attention kernels); it is now covered by the configuration schema, the loader, the per-model SLURM job set, the judge-validation scripts, and the 246-test verification suite. Phi-4-mini loads through transformers' native Phi3 implementation rather than its bundled remote code, keeping its load path consistent with every other model in the study. Results will be folded into Tables 6.1–6.3, the cross-family analysis (§6.11, which now compares all family pairs rather than the first two), and the ARC capability axis (§6.4.1) once the run completes.",
     "Multilingual extension. Replicate the matched-pair design in Chinese (where Qwen is natively strong) and one low-resource language, to test whether quantization-induced safety changes are language-dependent.",
     "Fully-independent open-weight second judge. The primary HarmBench classifier has now been cross-checked against a second frontier judge (gpt-4o, same rubric), which agreed strongly (κ 0.69–0.94) and reproduced the finding's direction (§6.12, Result 4) — substantially resolving the single-judge threat. Two complementary extensions remain: (i) re-run the cross-check with an open-weight guard model (e.g. LlamaGuard, via the already-wired --backend llamaguard on TC1) so the confirmation does not depend on a versioned API model and is fully reproducible; and (ii) add a refusal-style judge for XSTest over-refusal, which the HarmBench classifier does not score. Both are derived validation layers writing separate redacted sidecars, never modifying raw.jsonl, summary.json, or existing sidecars.",
     "Safety-preserving quantization. Investigate emerging \"safety-preserving\" quantization methods that explicitly seek to mitigate alignment degradation under PTQ, and compare them against the vanilla NF4 baseline studied here.",
@@ -1007,8 +1007,8 @@ models:
     benchmarks: [harmbench, xstest, mmlu, arc]
 
   # Planned cross-family extension (infrastructure complete; TC1 run pending).
-  # See Chapter 9. Phi-4-mini requires trust_remote_code and the eager attention
-  # backend (the V100 has no flash-attention kernels); Mistral drops straight in.
+  # See Chapter 9. Phi-4-mini uses the eager attention backend (the V100 has no
+  # flash-attention kernels) and loads via native transformers Phi3; Mistral drops straight in.
   mistral_7b_base:
     family: mistral
     size_b: 7.2
@@ -1035,7 +1035,7 @@ models:
     quantized: false
     pair_id: phi4_mini
     model_id: microsoft/Phi-4-mini-instruct
-    trust_remote_code: true
+    trust_remote_code: false
     attn_implementation: eager
     dtype: auto
     benchmarks: [harmbench, xstest, mmlu, arc]
@@ -1046,7 +1046,7 @@ models:
     quantized: true
     pair_id: phi4_mini
     model_id: microsoft/Phi-4-mini-instruct
-    trust_remote_code: true
+    trust_remote_code: false
     attn_implementation: eager
     dtype: auto
     benchmarks: [harmbench, xstest, mmlu, arc]

@@ -248,7 +248,7 @@ Key constraint enforced by schema: each `pair_id` must have ≥1 baseline + ≥1
 | mistral_7b ⏳ | mistral_7b_base | mistral_7b_4bit | mistralai/Mistral-7B-Instruct-v0.3 |
 | phi4_mini ⏳ | phi4_mini_base | phi4_mini_4bit | microsoft/Phi-4-mini-instruct |
 
-⏳ = T26 cross-family extension: config/loader/sbatch/judge/tests complete, TC1 run pending. Phi-4-mini sets `trust_remote_code: true` + `attn_implementation: eager` (V100 has no flash-attn) on **both** members; Mistral sets neither. Their numbers are not yet in the report's Chapter 6 (the run is still to come).
+⏳ = T26 cross-family extension: config/loader/sbatch/judge/tests complete, TC1 run pending. Phi-4-mini sets `attn_implementation: eager` (V100 has no flash-attn) on **both** members and loads via transformers' native Phi3 implementation (`trust_remote_code: false`, like every other model — its bundled remote code is stale against the installed transformers; D31); Mistral sets neither flag. Their numbers are not yet in the report's Chapter 6 (the run is still to come).
 
 Both members of every pair share the same `model_id`; quantization is applied on the fly via `BitsAndBytesConfig` at load time. All models use `dtype: auto` (resolves to float16 on CUDA, float32 on CPU) and `temperature: 0.0` (greedy decoding for determinism). The compute dtype for 4-bit loading follows the resolved model dtype.
 
