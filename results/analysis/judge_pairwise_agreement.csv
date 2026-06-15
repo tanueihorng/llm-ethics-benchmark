@@ -2,3 +2,5 @@ pair_id,harmbench_cls_delta,harmbench_cls_significant,api_judge_delta,api_judge_
 qwen_2b,0.05499999999999999,True,0.045,False,True,False
 qwen_4b,0.024999999999999994,False,0.010000000000000002,False,True,True
 llama_3_2_3b,0.0,False,0.0049999999999999975,False,False,True
+mistral_7b,-0.040000000000000036,False,-0.030000000000000027,False,True,True
+phi4_mini,0.0,False,0.0050000000000000044,False,False,True

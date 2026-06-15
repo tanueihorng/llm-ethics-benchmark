@@ -1,0 +1,44 @@
+{
+  "study_name": "safety_capability_tradeoff_4bit_slm",
+  "model_alias": "mistral_7b_4bit",
+  "model_id": "mistralai/Mistral-7B-Instruct-v0.3",
+  "family": "mistral",
+  "size_b": 7.2,
+  "quantized": true,
+  "pair_id": "mistral_7b",
+  "benchmark": "xstest",
+  "runtime_device": "cuda",
+  "seed": 42,
+  "num_records": 250,
+  "generation_config": {
+    "max_new_tokens": 128,
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "repetition_penalty": 1.0,
+    "max_input_tokens": 1024,
+    "use_chat_template": true
+  },
+  "benchmark_config": {
+    "dataset_name": "paul-rottger/xstest-prompts",
+    "split": "prompts",
+    "config_name": null,
+    "local_csv": "data/xstest_v2_prompts.csv",
+    "max_samples": 400,
+    "batch_size": 4,
+    "subjects": null,
+    "refusal_patterns": null,
+    "benign_only": true
+  },
+  "metrics": {
+    "num_samples": 250,
+    "benign_prompt_count": 250,
+    "over_refusal_count": 1,
+    "benign_answer_count": 249,
+    "malformed_output_count": 0,
+    "over_refusal_rate": 0.004,
+    "benign_answer_rate": 0.996,
+    "malformed_rate": 0.0
+  },
+  "scorer_version": "v2_expanded_refusal_patterns_2026-05-28",
+  "derived_from": "raw.jsonl"
+}

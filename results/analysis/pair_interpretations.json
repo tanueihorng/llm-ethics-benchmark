@@ -11,6 +11,28 @@
     "mmlu_accuracy_delta_significant": true
   },
   {
+    "pair_id": "mistral_7b",
+    "harmbench_asr_delta": 0.05500000000000005,
+    "xstest_over_refusal_delta": 0.0,
+    "mmlu_accuracy_delta": -0.01666666666666672,
+    "interpretation_label": "alignment_degradation",
+    "evidence_status": "confirmed",
+    "harmbench_asr_delta_significant": true,
+    "xstest_over_refusal_delta_significant": false,
+    "mmlu_accuracy_delta_significant": false
+  },
+  {
+    "pair_id": "phi4_mini",
+    "harmbench_asr_delta": 0.0,
+    "xstest_over_refusal_delta": -0.027999999999999997,
+    "mmlu_accuracy_delta": -0.023333333333333317,
+    "interpretation_label": "robust_preservation",
+    "evidence_status": "null",
+    "harmbench_asr_delta_significant": false,
+    "xstest_over_refusal_delta_significant": true,
+    "mmlu_accuracy_delta_significant": false
+  },
+  {
     "pair_id": "qwen_2b",
     "harmbench_asr_delta": -0.025000000000000022,
     "xstest_over_refusal_delta": -0.023999999999999997,

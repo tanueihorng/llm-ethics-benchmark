@@ -50,6 +50,38 @@
       "cohens_kappa": 0.9385749385749386,
       "harmbench_cls_asr": 0.04,
       "api_judge_asr": 0.045
+    },
+    {
+      "model_alias": "mistral_7b_base",
+      "n_shared": 200,
+      "agreement_rate": 0.81,
+      "cohens_kappa": 0.5987752085313063,
+      "harmbench_cls_asr": 0.385,
+      "api_judge_asr": 0.385
+    },
+    {
+      "model_alias": "mistral_7b_4bit",
+      "n_shared": 200,
+      "agreement_rate": 0.83,
+      "cohens_kappa": 0.6264146797055268,
+      "harmbench_cls_asr": 0.345,
+      "api_judge_asr": 0.355
+    },
+    {
+      "model_alias": "phi4_mini_base",
+      "n_shared": 200,
+      "agreement_rate": 0.98,
+      "cohens_kappa": 0.7895844292477643,
+      "harmbench_cls_asr": 0.055,
+      "api_judge_asr": 0.045
+    },
+    {
+      "model_alias": "phi4_mini_4bit",
+      "n_shared": 200,
+      "agreement_rate": 0.995,
+      "cohens_kappa": 0.949748743718593,
+      "harmbench_cls_asr": 0.055,
+      "api_judge_asr": 0.05
     }
   ],
   "per_pair": [
@@ -81,6 +113,28 @@
       "harmbench_cls_significant": false,
       "harmbench_cls_mcnemar_p": 1.0,
       "api_judge_delta": 0.0049999999999999975,
+      "api_judge_significant": false,
+      "api_judge_mcnemar_p": 1.0,
+      "sign_agree": false,
+      "significance_agree": true
+    },
+    {
+      "pair_id": "mistral_7b",
+      "harmbench_cls_delta": -0.040000000000000036,
+      "harmbench_cls_significant": false,
+      "harmbench_cls_mcnemar_p": 0.31232680747326924,
+      "api_judge_delta": -0.030000000000000027,
+      "api_judge_significant": false,
+      "api_judge_mcnemar_p": 0.417692190836533,
+      "sign_agree": true,
+      "significance_agree": true
+    },
+    {
+      "pair_id": "phi4_mini",
+      "harmbench_cls_delta": 0.0,
+      "harmbench_cls_significant": false,
+      "harmbench_cls_mcnemar_p": 1.0,
+      "api_judge_delta": 0.0050000000000000044,
       "api_judge_significant": false,
       "api_judge_mcnemar_p": 1.0,
       "sign_agree": false,

@@ -191,6 +191,134 @@
         "total": 48,
         "accuracy": 0.5833333333333334
       }
+    },
+    "mistral_7b_base": {
+      "high_school_world_history": {
+        "correct": 42,
+        "total": 56,
+        "accuracy": 0.75
+      },
+      "human_aging": {
+        "correct": 28,
+        "total": 44,
+        "accuracy": 0.6363636363636364
+      },
+      "high_school_macroeconomics": {
+        "correct": 50,
+        "total": 94,
+        "accuracy": 0.5319148936170213
+      },
+      "college_biology": {
+        "correct": 20,
+        "total": 33,
+        "accuracy": 0.6060606060606061
+      },
+      "business_ethics": {
+        "correct": 17,
+        "total": 25,
+        "accuracy": 0.68
+      },
+      "clinical_knowledge": {
+        "correct": 32,
+        "total": 48,
+        "accuracy": 0.6666666666666666
+      }
+    },
+    "mistral_7b_4bit": {
+      "high_school_world_history": {
+        "correct": 44,
+        "total": 56,
+        "accuracy": 0.7857142857142857
+      },
+      "human_aging": {
+        "correct": 28,
+        "total": 44,
+        "accuracy": 0.6363636363636364
+      },
+      "high_school_macroeconomics": {
+        "correct": 48,
+        "total": 94,
+        "accuracy": 0.5106382978723404
+      },
+      "college_biology": {
+        "correct": 20,
+        "total": 33,
+        "accuracy": 0.6060606060606061
+      },
+      "business_ethics": {
+        "correct": 16,
+        "total": 25,
+        "accuracy": 0.64
+      },
+      "clinical_knowledge": {
+        "correct": 28,
+        "total": 48,
+        "accuracy": 0.5833333333333334
+      }
+    },
+    "phi4_mini_base": {
+      "high_school_world_history": {
+        "correct": 46,
+        "total": 56,
+        "accuracy": 0.8214285714285714
+      },
+      "human_aging": {
+        "correct": 28,
+        "total": 44,
+        "accuracy": 0.6363636363636364
+      },
+      "high_school_macroeconomics": {
+        "correct": 60,
+        "total": 94,
+        "accuracy": 0.6382978723404256
+      },
+      "college_biology": {
+        "correct": 23,
+        "total": 33,
+        "accuracy": 0.696969696969697
+      },
+      "business_ethics": {
+        "correct": 12,
+        "total": 25,
+        "accuracy": 0.48
+      },
+      "clinical_knowledge": {
+        "correct": 41,
+        "total": 48,
+        "accuracy": 0.8541666666666666
+      }
+    },
+    "phi4_mini_4bit": {
+      "high_school_world_history": {
+        "correct": 43,
+        "total": 56,
+        "accuracy": 0.7678571428571429
+      },
+      "human_aging": {
+        "correct": 27,
+        "total": 44,
+        "accuracy": 0.6136363636363636
+      },
+      "high_school_macroeconomics": {
+        "correct": 60,
+        "total": 94,
+        "accuracy": 0.6382978723404256
+      },
+      "college_biology": {
+        "correct": 22,
+        "total": 33,
+        "accuracy": 0.6666666666666666
+      },
+      "business_ethics": {
+        "correct": 12,
+        "total": 25,
+        "accuracy": 0.48
+      },
+      "clinical_knowledge": {
+        "correct": 39,
+        "total": 48,
+        "accuracy": 0.8125
+      }
     }
   },
   "per_pair_subject_deltas": [
@@ -332,6 +460,102 @@
     },
     {
       "pair_id": "llama_3_2_3b",
+      "subject": "human_aging",
+      "n": 44,
+      "baseline_accuracy": 0.6363636363636364,
+      "quantized_accuracy": 0.6136363636363636,
+      "accuracy_delta": -0.022727272727272707
+    },
+    {
+      "pair_id": "mistral_7b",
+      "subject": "business_ethics",
+      "n": 25,
+      "baseline_accuracy": 0.68,
+      "quantized_accuracy": 0.64,
+      "accuracy_delta": -0.040000000000000036
+    },
+    {
+      "pair_id": "mistral_7b",
+      "subject": "clinical_knowledge",
+      "n": 48,
+      "baseline_accuracy": 0.6666666666666666,
+      "quantized_accuracy": 0.5833333333333334,
+      "accuracy_delta": -0.08333333333333326
+    },
+    {
+      "pair_id": "mistral_7b",
+      "subject": "college_biology",
+      "n": 33,
+      "baseline_accuracy": 0.6060606060606061,
+      "quantized_accuracy": 0.6060606060606061,
+      "accuracy_delta": 0.0
+    },
+    {
+      "pair_id": "mistral_7b",
+      "subject": "high_school_macroeconomics",
+      "n": 94,
+      "baseline_accuracy": 0.5319148936170213,
+      "quantized_accuracy": 0.5106382978723404,
+      "accuracy_delta": -0.021276595744680882
+    },
+    {
+      "pair_id": "mistral_7b",
+      "subject": "high_school_world_history",
+      "n": 56,
+      "baseline_accuracy": 0.75,
+      "quantized_accuracy": 0.7857142857142857,
+      "accuracy_delta": 0.0357142857142857
+    },
+    {
+      "pair_id": "mistral_7b",
+      "subject": "human_aging",
+      "n": 44,
+      "baseline_accuracy": 0.6363636363636364,
+      "quantized_accuracy": 0.6363636363636364,
+      "accuracy_delta": 0.0
+    },
+    {
+      "pair_id": "phi4_mini",
+      "subject": "business_ethics",
+      "n": 25,
+      "baseline_accuracy": 0.48,
+      "quantized_accuracy": 0.48,
+      "accuracy_delta": 0.0
+    },
+    {
+      "pair_id": "phi4_mini",
+      "subject": "clinical_knowledge",
+      "n": 48,
+      "baseline_accuracy": 0.8541666666666666,
+      "quantized_accuracy": 0.8125,
+      "accuracy_delta": -0.04166666666666663
+    },
+    {
+      "pair_id": "phi4_mini",
+      "subject": "college_biology",
+      "n": 33,
+      "baseline_accuracy": 0.696969696969697,
+      "quantized_accuracy": 0.6666666666666666,
+      "accuracy_delta": -0.030303030303030387
+    },
+    {
+      "pair_id": "phi4_mini",
+      "subject": "high_school_macroeconomics",
+      "n": 94,
+      "baseline_accuracy": 0.6382978723404256,
+      "quantized_accuracy": 0.6382978723404256,
+      "accuracy_delta": 0.0
+    },
+    {
+      "pair_id": "phi4_mini",
+      "subject": "high_school_world_history",
+      "n": 56,
+      "baseline_accuracy": 0.8214285714285714,
+      "quantized_accuracy": 0.7678571428571429,
+      "accuracy_delta": -0.05357142857142849
+    },
+    {
+      "pair_id": "phi4_mini",
       "subject": "human_aging",
       "n": 44,
       "baseline_accuracy": 0.6363636363636364,

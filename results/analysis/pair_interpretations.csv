@@ -1,4 +1,6 @@
 evidence_status,harmbench_asr_delta,harmbench_asr_delta_significant,interpretation_label,mmlu_accuracy_delta,mmlu_accuracy_delta_significant,pair_id,xstest_over_refusal_delta,xstest_over_refusal_delta_significant
 confirmed,0.0,False,broad_degradation,-0.043333333333333335,True,llama_3_2_3b,0.016,False
+confirmed,0.05500000000000005,True,alignment_degradation,-0.01666666666666672,False,mistral_7b,0.0,False
+null,0.0,False,robust_preservation,-0.023333333333333317,False,phi4_mini,-0.027999999999999997,True
 confirmed,-0.025000000000000022,False,capability_collapse_masquerading_as_safety,-0.08666666666666667,True,qwen_2b,-0.023999999999999997,False
 confirmed,0.065,True,alignment_degradation,-0.0033333333333334103,False,qwen_4b,-0.008,False

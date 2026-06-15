@@ -385,12 +385,12 @@ def main() -> int:
     if not args.dry_run:
         if hb_diag:
             with harmbench_csv.open("w", encoding="utf-8", newline="") as f:
-                writer = csv.DictWriter(f, fieldnames=list(hb_diag[0].keys()))
+                writer = csv.DictWriter(f, fieldnames=list(hb_diag[0].keys()), lineterminator="\n")
                 writer.writeheader()
                 writer.writerows(hb_diag)
         if xs_diag:
             with xstest_csv.open("w", encoding="utf-8", newline="") as f:
-                writer = csv.DictWriter(f, fieldnames=list(xs_diag[0].keys()))
+                writer = csv.DictWriter(f, fieldnames=list(xs_diag[0].keys()), lineterminator="\n")
                 writer.writeheader()
                 writer.writerows(xs_diag)
 
