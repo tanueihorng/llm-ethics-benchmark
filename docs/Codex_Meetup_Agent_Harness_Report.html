@@ -1,0 +1,958 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Building a Repo-Native Agent Harness — Codex Meetup Report</title>
+<style>
+  :root{
+    --ink:#15181e; --ink-soft:#3a414d; --muted:#6b7480; --faint:#9aa3af;
+    --bg:#f7f6f3; --paper:#ffffff; --line:#e6e3dc; --line-soft:#efece5;
+    --codex:#10a37f; --codex-deep:#0c7d61; --codex-wash:#e7f6f1;
+    --claude:#d97757; --claude-deep:#bd5d3f; --claude-wash:#fbeee7;
+    --indigo:#4f46e5; --indigo-wash:#ecebfb;
+    --amber:#d98b14; --amber-wash:#fbf1dd;
+    --slate:#334155; --rose:#e11d62;
+    --radius:14px; --shadow:0 1px 2px rgba(16,20,30,.04),0 8px 28px rgba(16,20,30,.06);
+    --mono:"SF Mono",ui-monospace,"JetBrains Mono",Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+    font-size:16px;line-height:1.62;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:980px;margin:0 auto;padding:0 26px 120px;}
+
+  /* ---------- cover ---------- */
+  .cover{position:relative;margin:0 -26px 0;padding:74px 56px 60px;color:#fff;overflow:hidden;
+    background:radial-gradient(1200px 500px at 12% -10%,#1e6f5c 0%,transparent 60%),
+               radial-gradient(900px 500px at 100% 0%,#7a3a25 0%,transparent 55%),
+               linear-gradient(135deg,#11141a 0%,#1a2330 55%,#16110e 100%);}
+  .cover .kicker{font-size:12.5px;letter-spacing:.22em;text-transform:uppercase;
+    color:#9fe7d2;font-weight:600;margin:0 0 18px;}
+  .cover h1{font-size:42px;line-height:1.08;margin:0 0 16px;font-weight:740;letter-spacing:-.018em;max-width:18ch;}
+  .cover h1 em{font-style:normal;color:#ffd9c6;}
+  .cover p.sub{font-size:17.5px;color:#d7dce4;max-width:62ch;margin:0 0 30px;line-height:1.55;}
+  .cover .meta{display:flex;flex-wrap:wrap;gap:10px;}
+  .cover .pill{font-size:12.5px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.06);
+    padding:6px 12px;border-radius:999px;color:#eef1f5;backdrop-filter:blur(4px);}
+  .cover .pill b{color:#fff;font-weight:650;}
+
+  /* ---------- toc ---------- */
+  .toc{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
+    padding:22px 26px;margin:30px 0 8px;box-shadow:var(--shadow);}
+  .toc h4{margin:0 0 14px;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);}
+  .toc ol{margin:0;padding:0;list-style:none;counter-reset:t;
+    display:grid;grid-template-columns:1fr 1fr;gap:4px 34px;}
+  .toc li{counter-increment:t;padding:5px 0;border-bottom:1px dashed var(--line-soft);}
+  .toc li a{color:var(--ink-soft);text-decoration:none;font-size:14.5px;display:flex;gap:12px;align-items:baseline;}
+  .toc li a:hover{color:var(--codex-deep);}
+  .toc li a::before{content:counter(t,decimal-leading-zero);font-family:var(--mono);font-size:12px;
+    color:var(--faint);font-weight:600;min-width:22px;}
+
+  /* ---------- sections ---------- */
+  section{margin:54px 0 0;scroll-margin-top:20px;}
+  .sec-head{display:flex;align-items:center;gap:14px;margin:0 0 6px;}
+  .sec-num{font-family:var(--mono);font-size:13px;font-weight:700;color:#fff;background:var(--ink);
+    width:34px;height:34px;border-radius:9px;display:grid;place-items:center;flex:none;}
+  h2{font-size:27px;letter-spacing:-.015em;margin:0;font-weight:720;line-height:1.15;}
+  .sec-lead{color:var(--muted);font-size:16px;margin:8px 0 22px;max-width:74ch;}
+  h3{font-size:19px;margin:34px 0 8px;font-weight:680;letter-spacing:-.01em;}
+  h4.mini{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:26px 0 8px;}
+  p{margin:0 0 14px;}
+  a{color:var(--codex-deep);}
+  strong{font-weight:660;color:var(--ink);}
+  code{font-family:var(--mono);font-size:.86em;background:#f0eee8;border:1px solid var(--line);
+    padding:1px 6px;border-radius:6px;color:#324;}
+  ul,ol{margin:0 0 16px;padding-left:22px;}
+  li{margin:6px 0;}
+  hr.soft{border:none;border-top:1px solid var(--line);margin:40px 0;}
+
+  /* cards / callouts */
+  .grid{display:grid;gap:16px;}
+  .g2{grid-template-columns:1fr 1fr;}
+  .g3{grid-template-columns:1fr 1fr 1fr;}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
+    padding:18px 20px;box-shadow:var(--shadow);}
+  .card h5{margin:0 0 6px;font-size:15.5px;font-weight:680;}
+  .card p{font-size:14.5px;color:var(--ink-soft);margin:0;}
+  .card .ic{font-size:20px;margin-bottom:8px;display:block;}
+
+  .callout{border:1px solid var(--line);border-left-width:4px;border-radius:12px;padding:16px 20px;margin:20px 0;
+    background:var(--paper);font-size:15px;}
+  .callout .lab{font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;font-weight:700;margin-bottom:6px;display:block;}
+  .callout.codex{border-left-color:var(--codex);background:var(--codex-wash);}
+  .callout.codex .lab{color:var(--codex-deep);}
+  .callout.claude{border-left-color:var(--claude);background:var(--claude-wash);}
+  .callout.claude .lab{color:var(--claude-deep);}
+  .callout.key{border-left-color:var(--indigo);background:var(--indigo-wash);}
+  .callout.key .lab{color:var(--indigo);}
+  .callout.tip{border-left-color:var(--amber);background:var(--amber-wash);}
+  .callout.tip .lab{color:#9a6207;}
+
+  /* figure */
+  figure{margin:26px 0;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
+    padding:22px 22px 10px;box-shadow:var(--shadow);}
+  figure svg{display:block;width:100%;height:auto;}
+  figcaption{font-size:13px;color:var(--muted);margin-top:10px;padding-top:10px;border-top:1px solid var(--line-soft);}
+  figcaption b{color:var(--ink-soft);font-weight:650;}
+  .fig-num{font-family:var(--mono);color:var(--codex-deep);font-weight:700;}
+
+  /* tables */
+  table{width:100%;border-collapse:collapse;margin:18px 0;font-size:14px;
+    background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;}
+  th,td{text-align:left;padding:10px 13px;border-bottom:1px solid var(--line-soft);vertical-align:top;}
+  th{background:#f3f1ea;font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:700;}
+  tr:last-child td{border-bottom:none;}
+  td code{font-size:.84em;}
+  .tag{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;letter-spacing:.02em;}
+  .tag.c{background:var(--codex-wash);color:var(--codex-deep);}
+  .tag.a{background:var(--claude-wash);color:var(--claude-deep);}
+  .tag.bad{background:#fde7ec;color:#b01345;}
+  .tag.ok{background:#e3f5ec;color:#0b7d4f;}
+  .tag.mid{background:var(--amber-wash);color:#9a6207;}
+
+  pre{background:#15181e;color:#e7e9ee;border-radius:12px;padding:16px 18px;overflow-x:auto;
+    font-family:var(--mono);font-size:12.8px;line-height:1.62;margin:16px 0;border:1px solid #23272f;}
+  pre .c{color:#7f8794;} pre .k{color:#7fd6c0;} pre .s{color:#e7b08a;} pre .p{color:#9fb4ff;}
+
+  .lead-quote{font-size:19px;line-height:1.5;color:var(--ink);border-left:4px solid var(--claude);
+    padding:4px 0 4px 22px;margin:22px 0;font-weight:480;}
+
+  .num-stat{display:flex;gap:22px;flex-wrap:wrap;margin:18px 0;}
+  .num-stat .n{flex:1;min-width:150px;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:14px 16px;box-shadow:var(--shadow);}
+  .num-stat .n b{display:block;font-size:26px;font-weight:740;letter-spacing:-.02em;color:var(--ink);line-height:1.1;}
+  .num-stat .n span{font-size:13px;color:var(--muted);}
+
+  footer{margin-top:70px;padding-top:24px;border-top:1px solid var(--line);color:var(--muted);font-size:13px;}
+  .src{font-size:12.5px;color:var(--muted);}
+  .src a{color:var(--muted);}
+  .src li{margin:3px 0;}
+
+  /* svg shared text helpers */
+  svg text{font-family:var(--sans);}
+  .t-title{font-weight:700;}
+  .t-lab{font-weight:600;}
+  .t-sm{font-size:11px;}
+
+  @media (max-width:760px){
+    .toc ol{grid-template-columns:1fr;}
+    .g2,.g3{grid-template-columns:1fr;}
+    .cover{padding:54px 26px 44px;} .cover h1{font-size:32px;}
+    .wrap{padding:0 16px 80px;}
+  }
+  @media print{
+    body{background:#fff;} .toc{break-inside:avoid;} figure{break-inside:avoid;}
+    .cover{margin:0;} a{color:var(--ink);}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ============ COVER ============ -->
+  <header class="cover">
+    <p class="kicker">Codex Builders Meetup · Field Report &amp; Talking Points</p>
+    <h1>Building a <em>repo-native agent harness</em> for real research work</h1>
+    <p class="sub">How a dual-agent setup — OpenAI Codex and Claude Code, sharing one repository — runs a final-year LLM safety study without losing track of state, leaking data, or corrupting evidence. A grounded tour of the harness, the memory model, the workflow, and what it teaches about agent engineering in 2026.</p>
+    <div class="meta">
+      <span class="pill"><b>Project</b> · CCDS25-1136 — LLM safety &times; 4-bit quantization</span>
+      <span class="pill"><b>Agents</b> · Codex + Claude Code</span>
+      <span class="pill"><b>Surface</b> · one Git repo as shared memory</span>
+      <span class="pill">June 2026</span>
+    </div>
+  </header>
+
+  <!-- ============ TOC ============ -->
+  <nav class="toc">
+    <h4>What's inside</h4>
+    <ol>
+      <li><a href="#primer">A primer on agent &amp; harness engineering</a></li>
+      <li><a href="#codex">The Codex landscape (2025 → 2026)</a></li>
+      <li><a href="#project">The research project this harness serves</a></li>
+      <li><a href="#harness">The repo-native harness, layer by layer</a></li>
+      <li><a href="#memory">Memory: state lives in the repo, not the chat</a></li>
+      <li><a href="#dual">The dual-agent workflow (Codex &amp; Claude)</a></li>
+      <li><a href="#session">A session, start to finish</a></li>
+      <li><a href="#talk">How to explain it to peers</a></li>
+      <li><a href="#appendix">Appendix: command &amp; file map</a></li>
+      <li><a href="#sources">Sources</a></li>
+    </ol>
+  </nav>
+
+  <p style="margin-top:26px;color:var(--ink-soft);font-size:16.5px;">
+    The short version, before the detail: most people <em>use</em> a coding agent. This project <strong>engineers the environment the agents run in</strong> — the rules, the memory, the guardrails, and the verification gate — so that two different agents from two different vendors can pick up the same research project, days apart, and not break it. Everything below is grounded in real files in the repository; nothing is aspirational.
+  </p>
+
+  <!-- ============ 1. PRIMER ============ -->
+  <section id="primer">
+    <div class="sec-head"><span class="sec-num">1</span><h2>A primer on agent &amp; harness engineering</h2></div>
+    <p class="sec-lead">A shared vocabulary first, so the rest of the report lands. If you already live in this world, skim — the one idea that matters is the ladder from prompt → context → harness.</p>
+
+    <h3>The three eras of getting useful work out of a model</h3>
+    <p>The industry has moved through three phases of practice. Each one didn't replace the last — it wrapped it.</p>
+
+    <figure>
+      <svg viewBox="0 0 920 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Maturity ladder from prompt to context to harness engineering">
+        <defs>
+          <marker id="ar1" markerWidth="9" markerHeight="9" refX="6.5" refY="4" orient="auto">
+            <path d="M0,0 L8,4 L0,8 z" fill="#9aa3af"/>
+          </marker>
+        </defs>
+        <!-- step 1 -->
+        <g>
+          <rect x="20" y="78" width="250" height="150" rx="14" fill="#ffffff" stroke="#e6e3dc"/>
+          <rect x="20" y="78" width="250" height="40" rx="14" fill="#fbeee7"/>
+          <rect x="20" y="100" width="250" height="18" fill="#fbeee7"/>
+          <text x="40" y="104" class="t-title" font-size="15" fill="#bd5d3f">① Prompt engineering</text>
+          <text x="40" y="142" class="t-sm" font-size="12" fill="#3a414d">Get the wording right.</text>
+          <text x="40" y="162" class="t-sm" font-size="12" fill="#6b7480">One model, one message.</text>
+          <text x="40" y="182" class="t-sm" font-size="12" fill="#6b7480">Few-shot examples,</text>
+          <text x="40" y="200" class="t-sm" font-size="12" fill="#6b7480">role &amp; tone framing.</text>
+          <text x="40" y="220" class="t-sm" font-size="11" fill="#9aa3af">~2022–2023</text>
+        </g>
+        <line x1="276" y1="153" x2="328" y2="153" stroke="#9aa3af" stroke-width="2" marker-end="url(#ar1)"/>
+        <!-- step 2 -->
+        <g>
+          <rect x="334" y="62" width="250" height="182" rx="14" fill="#ffffff" stroke="#e6e3dc"/>
+          <rect x="334" y="62" width="250" height="40" rx="14" fill="#ecebfb"/>
+          <rect x="334" y="84" width="250" height="18" fill="#ecebfb"/>
+          <text x="354" y="88" class="t-title" font-size="15" fill="#4f46e5">② Context engineering</text>
+          <text x="354" y="126" class="t-sm" font-size="12" fill="#3a414d">Get the right stuff</text>
+          <text x="354" y="144" class="t-sm" font-size="12" fill="#3a414d">into the window.</text>
+          <text x="354" y="168" class="t-sm" font-size="12" fill="#6b7480">Relevant files, project</text>
+          <text x="354" y="186" class="t-sm" font-size="12" fill="#6b7480">rules, retrieval, memory,</text>
+          <text x="354" y="204" class="t-sm" font-size="12" fill="#6b7480">architectural constraints.</text>
+          <text x="354" y="228" class="t-sm" font-size="11" fill="#9aa3af">~2024–2025</text>
+        </g>
+        <line x1="590" y1="153" x2="642" y2="153" stroke="#9aa3af" stroke-width="2" marker-end="url(#ar1)"/>
+        <!-- step 3 -->
+        <g>
+          <rect x="648" y="40" width="252" height="226" rx="14" fill="#ffffff" stroke="#10a37f" stroke-width="2"/>
+          <rect x="648" y="40" width="252" height="40" rx="14" fill="#e7f6f1"/>
+          <rect x="648" y="62" width="252" height="18" fill="#e7f6f1"/>
+          <text x="668" y="66" class="t-title" font-size="15" fill="#0c7d61">③ Harness engineering</text>
+          <text x="668" y="104" class="t-sm" font-size="12" fill="#3a414d">Engineer the environment</text>
+          <text x="668" y="122" class="t-sm" font-size="12" fill="#3a414d">the agent runs inside.</text>
+          <text x="668" y="146" class="t-sm" font-size="12" fill="#6b7480">Tools &amp; orchestration ·</text>
+          <text x="668" y="164" class="t-sm" font-size="12" fill="#6b7480">verification loops ·</text>
+          <text x="668" y="182" class="t-sm" font-size="12" fill="#6b7480">context &amp; memory ·</text>
+          <text x="668" y="200" class="t-sm" font-size="12" fill="#6b7480">guardrails · observability.</text>
+          <text x="668" y="226" class="t-sm" font-size="11" fill="#0c7d61" font-weight="700">2026 — the main investment</text>
+          <text x="668" y="246" class="t-sm" font-size="11" fill="#9aa3af">where this project sits</text>
+        </g>
+      </svg>
+      <figcaption><span class="fig-num">Fig 1.</span> <b>The maturity ladder.</b> Harness engineering is the discipline of designing the environment, constraints and feedback loops that make a coding agent reliable at scale — the field's primary engineering focus in 2026. This project is an example of it applied to research, not production code.</figcaption>
+    </figure>
+
+    <h3>What a "harness" actually is</h3>
+    <p>A production-grade agent harness is usually described as <strong>five layers</strong>. Keep these in mind — Section 4 shows that this repository implements all five, by hand, in plain files:</p>
+    <div class="grid g3">
+      <div class="card"><span class="ic">🛠️</span><h5>Tool orchestration</h5><p>What the agent can do, and how calls are routed and sequenced.</p></div>
+      <div class="card"><span class="ic">🔁</span><h5>Verification loops</h5><p>Plan → execute → verify. Deterministic checks and review gates before a change is trusted.</p></div>
+      <div class="card"><span class="ic">🧠</span><h5>Context &amp; memory</h5><p>What persists between turns and sessions, and where the source of truth lives.</p></div>
+      <div class="card"><span class="ic">🛡️</span><h5>Guardrails</h5><p>What the agent must never do — privacy, safety, integrity boundaries.</p></div>
+      <div class="card"><span class="ic">📈</span><h5>Observability</h5><p>A trail of what happened, so a human (or the next agent) can audit it.</p></div>
+      <div class="card" style="background:var(--codex-wash);border-color:var(--codex)"><span class="ic">🎯</span><h5>The point</h5><p>Reliability comes from the harness, not from a smarter prompt. The model is a component; the harness is the system.</p></div>
+    </div>
+
+    <h3>The primitives every modern coding agent now shares</h3>
+    <p>Codex, Claude Code, Cursor, Gemini CLI and ~30 others have converged on the same handful of building blocks. This convergence is why a <em>dual-agent</em> setup is even possible — the two agents speak the same dialect.</p>
+    <table>
+      <thead><tr><th>Primitive</th><th>What it is</th><th>Where it lives</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Instruction file</strong></td><td>A "README for agents" — house rules, conventions, where to look.</td><td><code>AGENTS.md</code> / <code>CLAUDE.md</code></td></tr>
+        <tr><td><strong>Skills</strong></td><td>On-demand procedures the agent loads only when a task matches — keeps the base prompt small.</td><td><code>SKILL.md</code> files</td></tr>
+        <tr><td><strong>Subagents</strong></td><td>Specialised, context-isolated helpers spawned for a sub-task (explore, audit, review).</td><td>TOML / config files</td></tr>
+        <tr><td><strong>Hooks</strong></td><td>Code that fires on lifecycle events (before a tool runs, before compaction, on stop) for policy &amp; logging.</td><td><code>hooks.json</code> / <code>config.toml</code></td></tr>
+        <tr><td><strong>MCP</strong></td><td>Model Context Protocol — a standard socket for plugging external tools/data into any agent.</td><td>server configs</td></tr>
+      </tbody>
+    </table>
+    <div class="callout key"><span class="lab">The thesis of this report</span>
+      This project doesn't just use these primitives — it <strong>assembles them into a coherent harness whose job is research integrity</strong>: never mutate raw experimental data, never leak harmful prompt text, never let two agents drift out of sync, and never trust a claim that the repo can't verify.</div>
+  </section>
+
+  <!-- ============ 2. CODEX ============ -->
+  <section id="codex">
+    <div class="sec-head"><span class="sec-num">2</span><h2>The Codex landscape (2025 → 2026)</h2></div>
+    <p class="sec-lead">Since the meetup is hosted by the Codex team, here is the lay of the land — accurate as of mid-2026 — and exactly which Codex features this repo leans on.</p>
+
+    <h3>Codex, the short history</h3>
+    <div class="num-stat">
+      <div class="n"><b>Apr 2025</b><span>Codex CLI launches — an agentic coding agent in the terminal: reads the repo, edits files, runs tests, commits.</span></div>
+      <div class="n"><b>May 2025</b><span>Codex Cloud research preview, powered by <code>codex-1</code> (an o3 variant tuned for software engineering).</span></div>
+      <div class="n"><b>Dec 2025</b><span>Skills land — a <code>SKILL.md</code> file under <code>~/.agents/skills/</code>, auto-loaded when a task matches.</span></div>
+      <div class="n"><b>Mar 2026</b><span>2M+ weekly active users; Codex Security ships; positioned as an enterprise agent platform.</span></div>
+    </div>
+    <p>Codex now runs across one continuous surface — the <strong>ChatGPT web app, the CLI, a desktop app (macOS/Windows), IDE integrations, and the cloud</strong> — with limits shared across all of them. That "same agent, many doorways" model matters for this project: work can start in the CLI on a laptop and continue in the cloud, against the same repo.</p>
+
+    <figure>
+      <svg viewBox="0 0 920 430" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Codex primitives map">
+        <defs>
+          <marker id="ar2" markerWidth="9" markerHeight="9" refX="6.5" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#10a37f"/></marker>
+        </defs>
+        <!-- surfaces -->
+        <rect x="20" y="20" width="880" height="66" rx="12" fill="#0c7d61"/>
+        <text x="40" y="46" fill="#eafff8" font-size="13" font-weight="700">CODEX — ONE AGENT, MANY SURFACES</text>
+        <g font-size="12.5" fill="#d8f5ec" font-weight="600">
+          <text x="40" y="68">CLI</text><text x="120" y="68">Cloud</text><text x="215" y="68">IDE extension</text><text x="360" y="68">Desktop app</text><text x="500" y="68">ChatGPT web</text>
+        </g>
+        <text x="760" y="68" font-size="11.5" fill="#9fe7d2">shared limits + repo</text>
+        <!-- arrows down -->
+        <line x1="460" y1="86" x2="460" y2="116" stroke="#10a37f" stroke-width="2" marker-end="url(#ar2)"/>
+        <text x="472" y="106" font-size="11" fill="#6b7480">reads &amp; obeys ↓</text>
+        <!-- primitive boxes -->
+        <g>
+          <rect x="20" y="124" width="172" height="118" rx="12" fill="#fff" stroke="#10a37f" stroke-width="1.6"/>
+          <text x="36" y="150" font-size="13.5" font-weight="700" fill="#0c7d61">AGENTS.md</text>
+          <text x="36" y="172" font-size="11.5" fill="#3a414d">House rules &amp; map.</text>
+          <text x="36" y="190" font-size="11.5" fill="#6b7480">Plain markdown, no</text>
+          <text x="36" y="206" font-size="11.5" fill="#6b7480">schema. Nearest file</text>
+          <text x="36" y="222" font-size="11.5" fill="#6b7480">wins; 32 KiB cap.</text>
+        </g>
+        <g>
+          <rect x="204" y="124" width="172" height="118" rx="12" fill="#fff" stroke="#10a37f" stroke-width="1.6"/>
+          <text x="220" y="150" font-size="13.5" font-weight="700" fill="#0c7d61">Skills</text>
+          <text x="220" y="172" font-size="11.5" fill="#3a414d">SKILL.md, on-demand.</text>
+          <text x="220" y="190" font-size="11.5" fill="#6b7480">Loaded only when the</text>
+          <text x="220" y="206" font-size="11.5" fill="#6b7480">task matches — keeps</text>
+          <text x="220" y="222" font-size="11.5" fill="#6b7480">the base prompt lean.</text>
+        </g>
+        <g>
+          <rect x="388" y="124" width="172" height="118" rx="12" fill="#fff" stroke="#10a37f" stroke-width="1.6"/>
+          <text x="404" y="150" font-size="13.5" font-weight="700" fill="#0c7d61">Subagents</text>
+          <text x="404" y="172" font-size="11.5" fill="#3a414d">TOML in .codex/agents/</text>
+          <text x="404" y="190" font-size="11.5" fill="#6b7480">name · description ·</text>
+          <text x="404" y="206" font-size="11.5" fill="#6b7480">instructions. Defaults:</text>
+          <text x="404" y="222" font-size="11.5" fill="#6b7480">default/worker/explorer.</text>
+        </g>
+        <g>
+          <rect x="572" y="124" width="172" height="118" rx="12" fill="#fff" stroke="#10a37f" stroke-width="1.6"/>
+          <text x="588" y="150" font-size="13.5" font-weight="700" fill="#0c7d61">Hooks</text>
+          <text x="588" y="172" font-size="11.5" fill="#3a414d">hooks.json / config.toml</text>
+          <text x="588" y="190" font-size="11.5" fill="#6b7480">Fire on events; stdin in,</text>
+          <text x="588" y="206" font-size="11.5" fill="#6b7480">exit 0 allow / 1 block.</text>
+          <text x="588" y="222" font-size="11.5" fill="#6b7480">Audit &amp; policy.</text>
+        </g>
+        <g>
+          <rect x="756" y="124" width="144" height="118" rx="12" fill="#fff" stroke="#10a37f" stroke-width="1.6"/>
+          <text x="772" y="150" font-size="13.5" font-weight="700" fill="#0c7d61">MCP</text>
+          <text x="772" y="172" font-size="11.5" fill="#3a414d">External tools</text>
+          <text x="772" y="190" font-size="11.5" fill="#6b7480">via a standard</text>
+          <text x="772" y="206" font-size="11.5" fill="#6b7480">protocol socket.</text>
+        </g>
+        <!-- sandbox band -->
+        <rect x="20" y="262" width="880" height="58" rx="12" fill="#f3f1ea" stroke="#e6e3dc"/>
+        <text x="40" y="286" font-size="12.5" font-weight="700" fill="#3a414d">SANDBOX &amp; APPROVAL POLICY</text>
+        <g font-size="11.5" fill="#6b7480">
+          <text x="40" y="306">approval_policy: untrusted · on-request · never</text>
+          <text x="470" y="306">sandbox_mode: workspace-write · danger-full-access</text>
+        </g>
+        <!-- this-repo callout -->
+        <rect x="20" y="340" width="880" height="70" rx="12" fill="#e7f6f1" stroke="#10a37f"/>
+        <text x="40" y="366" font-size="12.5" font-weight="700" fill="#0c7d61">↳ THIS REPO USES EVERY ONE OF THESE</text>
+        <text x="40" y="388" font-size="11.8" fill="#3a414d">AGENTS.md (synced with CLAUDE.md) · 4 SKILL.md skills · 5 subagent TOMLs · 3 lifecycle hooks · a machine-readable policy file</text>
+        <text x="40" y="404" font-size="11.8" fill="#6b7480">— wired together into a single verification gate. The rest of this report is the tour.</text>
+      </svg>
+      <figcaption><span class="fig-num">Fig 2.</span> <b>Codex's extension primitives</b> and how the repository adopts each. The instruction file, skills, subagents and hooks are exactly the surfaces this harness is built on.</figcaption>
+    </figure>
+
+    <h3>AGENTS.md — the open standard underneath it all</h3>
+    <p>AGENTS.md was released by OpenAI in <strong>August 2025</strong>, then handed to the Linux Foundation's <strong>Agentic AI Foundation</strong> in late 2025. By May 2026 it was in <strong>60,000+ repositories</strong> and read by <strong>30+ agents</strong> (Codex, Claude Code, Copilot, Cursor, Gemini CLI, Aider, Zed, Windsurf, Devin…). It is deliberately boring: plain markdown, no required fields, no YAML front-matter. In a monorepo the <em>nearest</em> file to the edited file wins.</p>
+    <div class="callout codex"><span class="lab">Why this matters for a dual-agent setup</span>
+      Because AGENTS.md is a shared standard, Codex and Claude Code can read the <em>same house rules</em>. This repo keeps a <code>CLAUDE.md</code> for Claude and an <code>AGENTS.md</code> for Codex that are <strong>byte-identical below the title line</strong> — and the harness has a check that fails the build if they ever drift apart (see §4). One source of rules, two readers.</div>
+
+    <h3>Codex subagents &amp; hooks — the exact mechanisms used here</h3>
+    <p>Two Codex features deserve a close look because the harness is built directly on them:</p>
+    <div class="grid g2">
+      <div class="card">
+        <h5>Subagents &nbsp;<span class="tag c">.codex/agents/*.toml</span></h5>
+        <p style="margin-top:8px">Each TOML file defines one custom agent with <code>name</code>, <code>description</code>, <code>developer_instructions</code>. Codex spawns them <strong>in parallel</strong>, isolates their context, and collects results into one answer. Global knobs: <code>max_threads</code> (default 6), <code>max_depth</code> (default 1 — no deep nesting). Subagents inherit the parent's sandbox. Trade-off: more tokens than a single agent, bought for cleaner separation.</p>
+      </div>
+      <div class="card">
+        <h5>Hooks &nbsp;<span class="tag c">.codex/hooks.json</span></h5>
+        <p style="margin-top:8px">Lifecycle handlers configured per-repo. A hook declares a <code>matcher</code> and a <code>command</code>; it receives data on stdin and signals via exit code (0 allow, 1 block). Used for audit logging and policy enforcement — e.g. a <code>PreToolUse</code> hook that inspects a Bash command before it runs.</p>
+      </div>
+    </div>
+    <pre><span class="c"># .codex/hooks.json — the real shape of a Codex hook</span>
+{
+  <span class="p">"PreToolUse"</span>: [{
+    <span class="p">"matcher"</span>: <span class="s">"Bash|Edit|Write|apply_patch"</span>,
+    <span class="p">"hooks"</span>: [{ <span class="p">"type"</span>: <span class="s">"command"</span>,
+      <span class="p">"command"</span>: <span class="s">"python3 .codex/hooks/guard_artifact_paths.py"</span> }]
+  }],
+  <span class="p">"PreCompact"</span>: [ <span class="c">/* refresh the handoff before context is compacted */</span> ],
+  <span class="p">"Stop"</span>:      [ <span class="c">/* run a lightweight finish check when a turn ends */</span> ]
+}</pre>
+    <p>That is precisely the set of three hooks this project ships. They are <strong>reminders, not blockers</strong> — the authoritative gate is a separate command (§4). It's a deliberate design choice: hooks nudge, the gate decides.</p>
+  </section>
+
+  <!-- ============ 3. PROJECT ============ -->
+  <section id="project">
+    <div class="sec-head"><span class="sec-num">3</span><h2>The research project this harness serves</h2></div>
+    <p class="sec-lead">You can't appreciate the harness without knowing what it protects. The agents aren't writing a web app — they're running a controlled scientific experiment where the data must stay trustworthy.</p>
+
+    <div class="lead-quote">When you shrink a language model to 4&#8209;bit to make it cheap to run, does it become <em>less safe</em> — or just <em>less capable</em>? And can you even tell the two apart?</div>
+
+    <p>That is the research question of <strong>CCDS25-1136</strong>, a final-year project at NTU's College of Computing and Data Science. The study takes three small instruction-tuned models, makes a 4-bit (NF4) copy of each <em>from identical weights</em>, and measures both copies along three axes — then asks whether any safety change is real alignment movement or just collateral capability loss.</p>
+
+    <table>
+      <thead><tr><th>Model pair</th><th>Baseline → 4-bit</th><th>HarmBench (safety)</th><th>XSTest (over-refusal)</th><th>MMLU (capability)</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Qwen 1.7B</strong></td><td>Qwen3-1.7B → NF4</td><td>harmful compliance — ASR</td><td>benign refusal rate</td><td>6-subject accuracy</td></tr>
+        <tr><td><strong>Qwen 4B</strong></td><td>Qwen3-4B → NF4</td><td>ASR</td><td>refusal rate</td><td>accuracy</td></tr>
+        <tr><td><strong>Llama 3.2 3B</strong></td><td>Llama-3.2-3B-Instruct → NF4</td><td>ASR</td><td>refusal rate</td><td>accuracy</td></tr>
+      </tbody>
+    </table>
+
+    <figure>
+      <svg viewBox="0 0 920 396" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Research pipeline">
+        <defs>
+          <marker id="ar3" markerWidth="9" markerHeight="9" refX="6.5" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#6b7480"/></marker>
+        </defs>
+        <!-- pairs -->
+        <rect x="14" y="40" width="150" height="120" rx="12" fill="#fff" stroke="#e6e3dc"/>
+        <text x="30" y="64" font-size="12.5" font-weight="700" fill="#15181e">Matched pairs</text>
+        <rect x="30" y="76" width="118" height="30" rx="7" fill="#fbeee7"/><text x="40" y="96" font-size="11.5" fill="#bd5d3f">baseline (fp16)</text>
+        <rect x="30" y="114" width="118" height="30" rx="7" fill="#ecebfb"/><text x="40" y="134" font-size="11.5" fill="#4f46e5">4-bit NF4 (on-the-fly)</text>
+        <line x1="166" y1="100" x2="206" y2="100" stroke="#6b7480" stroke-width="2" marker-end="url(#ar3)"/>
+        <!-- generate -->
+        <rect x="210" y="56" width="150" height="88" rx="12" fill="#fff" stroke="#e6e3dc"/>
+        <text x="226" y="80" font-size="12.5" font-weight="700" fill="#15181e">Generate</text>
+        <text x="226" y="102" font-size="11" fill="#6b7480">load once, batch all</text>
+        <text x="226" y="118" font-size="11" fill="#6b7480">prompts, greedy (T=0),</text>
+        <text x="226" y="134" font-size="11" fill="#6b7480">seeded · deterministic</text>
+        <line x1="362" y1="100" x2="402" y2="100" stroke="#6b7480" stroke-width="2" marker-end="url(#ar3)"/>
+        <!-- benchmarks -->
+        <rect x="406" y="20" width="170" height="160" rx="12" fill="#fff" stroke="#e6e3dc"/>
+        <text x="422" y="44" font-size="12.5" font-weight="700" fill="#15181e">Benchmark plugins</text>
+        <rect x="422" y="56" width="138" height="34" rx="7" fill="#fde7ec"/><text x="432" y="77" font-size="11.5" fill="#b01345">HarmBench → ASR</text>
+        <rect x="422" y="96" width="138" height="34" rx="7" fill="#fbf1dd"/><text x="432" y="117" font-size="11.5" fill="#9a6207">XSTest → over-refusal</text>
+        <rect x="422" y="136" width="138" height="34" rx="7" fill="#e3f5ec"/><text x="432" y="157" font-size="11.5" fill="#0b7d4f">MMLU → accuracy</text>
+        <line x1="578" y1="100" x2="618" y2="100" stroke="#6b7480" stroke-width="2" marker-end="url(#ar3)"/>
+        <!-- scorers -->
+        <rect x="622" y="20" width="180" height="160" rx="12" fill="#fff" stroke="#10a37f" stroke-width="1.6"/>
+        <text x="638" y="44" font-size="12.5" font-weight="700" fill="#0c7d61">Scorers</text>
+        <text x="638" y="70" font-size="11" fill="#3a414d">HarmBench: official 13B</text>
+        <text x="638" y="86" font-size="11" fill="#3a414d">classifier — <tspan font-weight="700">primary</tspan></text>
+        <text x="638" y="106" font-size="11" fill="#6b7480">v2 regex — secondary proxy</text>
+        <text x="638" y="130" font-size="11" fill="#3a414d">XSTest: deterministic</text>
+        <text x="638" y="146" font-size="11" fill="#3a414d">refusal parser</text>
+        <text x="638" y="166" font-size="11" fill="#3a414d">MMLU: exact match</text>
+        <!-- analysis (full width) -->
+        <line x1="712" y1="180" x2="712" y2="206" stroke="#6b7480" stroke-width="2" marker-end="url(#ar3)"/>
+        <rect x="14" y="210" width="788" height="98" rx="12" fill="#15181e"/>
+        <text x="34" y="236" font-size="13" font-weight="700" fill="#9fe7d2">Pairwise analysis  →  interpretation label</text>
+        <text x="34" y="260" font-size="11.5" fill="#e7e9ee">ΔASR · Δover-refusal · ΔMMLU per pair, with paired bootstrap CI + McNemar exact test</text>
+        <text x="34" y="282" font-size="11.5" fill="#cbd2dc">label ∈ { alignment_degradation · broad_degradation · robust_preservation · capability_collapse · alignment_improvement }</text>
+        <text x="34" y="300" font-size="10.5" fill="#9aa3af">+ a separate evidence_status layer ∈ { confirmed · directional · null }</text>
+        <!-- runs on (full width strip) -->
+        <rect x="14" y="320" width="788" height="64" rx="12" fill="#f3f1ea" stroke="#e6e3dc"/>
+        <text x="34" y="344" font-size="12.5" font-weight="700" fill="#3a414d">Runs on TC1 (SLURM · Tesla V100-32GB)</text>
+        <text x="34" y="364" font-size="11" fill="#6b7480">No code on the head node · all compute via sbatch · offline mode (weights + datasets pre-cached) ·</text>
+        <text x="34" y="380" font-size="11" fill="#6b7480">1 GPU/job · 6h walltime · results copied back to the Mac. The cluster's strict policy is itself a guardrail.</text>
+      </svg>
+      <figcaption><span class="fig-num">Fig 3.</span> <b>The experimental pipeline.</b> Each model is loaded once and run through three benchmark plugins; the HarmBench scorer is the official 13B classifier (primary), with a fast regex kept as a secondary proxy. Deltas between a pair feed a labelled interpretation plus a separate evidence-strength layer.</figcaption>
+    </figure>
+
+    <h3>The finding — and why it's the harness's best demo</h3>
+    <p>The project's headline result is also the cleanest illustration of <em>why the harness exists</em>. The first-pass HarmBench scorer was a fast regex. Validating it against the <strong>official 13B HarmBench classifier</strong> (run as a judge model on the cluster) showed the regex <strong>over-counts</strong> attack success — agreement was poor on the Qwen pairs (Cohen's κ ≈ 0.19–0.37) and only moderate on Llama (κ ≈ 0.69–0.79).</p>
+    <div class="callout claude"><span class="lab">Decision D16 · the moment the harness earned its keep</span>
+      Switching to the judge as the <strong>primary</strong> scorer <em>moved the study's only statistically significant safety regression</em> from one model to another (from Qwen 4B under the regex to <strong>Qwen 1.7B</strong> under the judge). Under the judge, 4-bit quantization <strong>never</strong> reduces harmful compliance in any pair. A scoring layer changed the conclusion — but because raw model outputs are immutable evidence, <em>nothing had to be re-run</em>. The correction was a new sidecar, not a mutation.</p></div>
+
+    <h4 class="mini">The authoritative results (judge-primary)</h4>
+    <table>
+      <thead><tr><th>Pair</th><th>ΔASR (judge)</th><th>Evidence</th><th>ΔMMLU</th><th>Label</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Qwen 1.7B</strong></td><td>+0.055 &nbsp;<span class="tag bad">↑ harm</span></td><td>confirmed · McNemar p=0.027</td><td>−0.087 &nbsp;<span class="tag bad">↓ cap</span></td><td><span class="tag bad">broad_degradation</span></td></tr>
+        <tr><td><strong>Qwen 4B</strong></td><td>+0.025</td><td>directional · n.s. (p=0.18)</td><td>−0.003</td><td><span class="tag mid">alignment_degradation</span></td></tr>
+        <tr><td><strong>Llama 3.2 3B</strong></td><td>≈ 0.000</td><td>null</td><td>−0.043 &nbsp;<span class="tag bad">↓ cap</span></td><td><span class="tag bad">broad_degradation</span></td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:13.5px;color:var(--muted)">The label is never altered by significance; a second "evidence_status" layer carries the statistical confidence separately (Decision D19). That separation is itself a guardrail against over-claiming — a recurring theme.</p>
+  </section>
+
+  <!-- ============ 4. HARNESS ============ -->
+  <section id="harness">
+    <div class="sec-head"><span class="sec-num">4</span><h2>The repo-native harness, layer by layer</h2></div>
+    <p class="sec-lead">This is the centrepiece. Everything an agent needs to work safely on this project is a file in the repo — versioned, diffable, reviewable. The harness turns the project's prose rules into machine-checkable contracts.</p>
+
+    <h3>The repository at a glance</h3>
+    <p>Before the control plane, here is the whole project laid out by role. Four zones: the <strong>agent operating system</strong> (the harness itself), the <strong>research core</strong> (the science), the <strong>inputs &amp; compute</strong>, and the <strong>evidence &amp; deliverables</strong>. The harness governs the left; experimental evidence flows one-way into the right and is never mutated.</p>
+    <figure>
+      <svg viewBox="0 0 920 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Full repository architecture by role">
+        <text x="14" y="24" font-size="15" font-weight="700" fill="#15181e">fyp_quant/ <tspan font-weight="400" fill="#9aa3af">— the repository, organised by role</tspan></text>
+
+        <!-- Zone A: Agent OS -->
+        <rect x="14" y="44" width="214" height="216" rx="12" fill="#ecebfb" stroke="#4f46e5"/>
+        <rect x="14" y="44" width="214" height="30" rx="12" fill="#4f46e5"/><rect x="14" y="60" width="214" height="14" fill="#4f46e5"/>
+        <text x="26" y="64" font-size="10.5" font-weight="700" fill="#ffffff">① AGENT OPERATING SYSTEM</text>
+        <g font-size="10.3" fill="#3a414d">
+          <text x="26" y="98">CLAUDE.md · AGENTS.md</text>
+          <text x="26" y="118">configs/artifact_policy.yaml</text>
+          <text x="26" y="138">ethical_benchmark/harness/</text>
+          <text x="26" y="158">.agents/skills/ — 4 skills</text>
+          <text x="26" y="178">.codex/agents/ — 5 subagents</text>
+          <text x="26" y="198">.codex/hooks/ — 3 hooks</text>
+          <text x="26" y="218">docs/agent_tasks/ — packets</text>
+          <text x="26" y="238">fyp_cli.py agent-status/start</text>
+        </g>
+
+        <!-- Zone B: Research core -->
+        <rect x="240" y="44" width="214" height="216" rx="12" fill="#e7f6f1" stroke="#10a37f"/>
+        <rect x="240" y="44" width="214" height="30" rx="12" fill="#0c7d61"/><rect x="240" y="60" width="214" height="14" fill="#0c7d61"/>
+        <text x="252" y="64" font-size="10.5" font-weight="700" fill="#ffffff">② RESEARCH CORE</text>
+        <g font-size="10.3" fill="#3a414d">
+          <text x="252" y="98">ethical_benchmark/</text>
+          <text x="252" y="118">   benchmarks/ · models/</text>
+          <text x="252" y="138">   pipeline/ · analysis/</text>
+          <text x="252" y="158">   judges/ · metrics/ · quant/</text>
+          <text x="252" y="178">   cluster/</text>
+          <text x="252" y="198">configs/default · tc1.yaml</text>
+          <text x="252" y="218">scripts/ — prefetch · report</text>
+          <text x="252" y="238">tests/ — full suite</text>
+        </g>
+
+        <!-- Zone C: Inputs & compute -->
+        <rect x="466" y="44" width="214" height="216" rx="12" fill="#f1f3f5" stroke="#94a3b8"/>
+        <rect x="466" y="44" width="214" height="30" rx="12" fill="#475569"/><rect x="466" y="60" width="214" height="14" fill="#475569"/>
+        <text x="478" y="64" font-size="10.5" font-weight="700" fill="#ffffff">③ INPUTS &amp; COMPUTE</text>
+        <g font-size="10.3" fill="#3a414d">
+          <text x="478" y="98">data/xstest_v2_prompts.csv</text>
+          <text x="478" y="118">HF cache (offline mode):</text>
+          <text x="478" y="138">   Qwen3-1.7B · Qwen3-4B</text>
+          <text x="478" y="158">   Llama-3.2-3B-Instruct</text>
+          <text x="478" y="178">slurm/jobs_tc1/ — 6 sbatch</text>
+          <text x="478" y="198">slurm/jobs_tc1_smoke/ — 18</text>
+          <text x="478" y="218">slurm/judge_validation.sbatch</text>
+          <text x="478" y="238">TC1 · Tesla V100-32GB</text>
+        </g>
+
+        <!-- Zone D: Evidence & deliverables -->
+        <rect x="692" y="44" width="214" height="216" rx="12" fill="#fbf1dd" stroke="#d98b14"/>
+        <rect x="692" y="44" width="214" height="30" rx="12" fill="#9a6207"/><rect x="692" y="60" width="214" height="14" fill="#9a6207"/>
+        <text x="704" y="64" font-size="10.5" font-weight="700" fill="#ffffff">④ EVIDENCE &amp; DELIVERABLES</text>
+        <g font-size="10.3">
+          <text x="704" y="98" fill="#15181e" font-weight="700">results/…/raw.jsonl</text>
+          <text x="704" y="118" fill="#15181e" font-weight="700">results/…/summary.json</text>
+          <text x="704" y="138" fill="#15181e" font-weight="700">raw_artifact_manifest.sha256</text>
+          <text x="704" y="158" fill="#3a414d">scores.judge.*.jsonl — sidecar</text>
+          <text x="704" y="178" fill="#3a414d">scores.v2.jsonl — sidecar</text>
+          <text x="704" y="198" fill="#3a414d">results/analysis/ — Δ, κ</text>
+          <text x="704" y="218" fill="#3a414d">docs/PROJECT_LOG.md</text>
+          <text x="704" y="238" fill="#3a414d">FYP_Report.docx · HANDOFF.md</text>
+        </g>
+
+        <!-- bottom strip -->
+        <rect x="14" y="276" width="892" height="42" rx="10" fill="#15181e"/>
+        <text x="30" y="296" font-size="11" font-weight="600" fill="#9fe7d2">The Agent OS (left) governs how work is done.</text>
+        <text x="30" y="312" font-size="11" fill="#cbd2dc">Experimental evidence flows one-way into deliverables (right) — bold entries are immutable: hashed, never edited.</text>
+      </svg>
+      <figcaption><span class="fig-num">Fig 4.</span> <b>The repository, by role.</b> Four functional zones, every entry a real path. The agent operating system (harness) wraps the research core; raw outputs in the evidence zone are hashed and immutable, and corrections are written as additive sidecars rather than edits.</figcaption>
+    </figure>
+
+    <figure>
+      <svg viewBox="0 0 920 560" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Agent harness control plane">
+        <defs>
+          <marker id="ar4" markerWidth="9" markerHeight="9" refX="6.5" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#4f46e5"/></marker>
+        </defs>
+        <!-- entry -->
+        <rect x="300" y="16" width="320" height="58" rx="12" fill="#15181e"/>
+        <text x="460" y="42" text-anchor="middle" font-size="13.5" font-weight="700" fill="#fff">A fresh agent / new session starts</text>
+        <text x="460" y="61" text-anchor="middle" font-size="11.5" fill="#9fe7d2">python fyp_cli.py agent-status &nbsp;·&nbsp; agent-start --task T21 --agent …</text>
+        <line x1="460" y1="74" x2="460" y2="100" stroke="#4f46e5" stroke-width="2" marker-end="url(#ar4)"/>
+
+        <!-- layer 1 memory -->
+        <rect x="40" y="104" width="840" height="92" rx="12" fill="#fbeee7" stroke="#d97757"/>
+        <text x="58" y="128" font-size="12.5" font-weight="700" fill="#bd5d3f">① SOURCE OF TRUTH &amp; MEMORY</text>
+        <rect x="58" y="138" width="200" height="46" rx="8" fill="#fff" stroke="#e6e3dc"/><text x="68" y="160" font-size="11.5" font-weight="600" fill="#15181e">docs/PROJECT_LOG.md</text><text x="68" y="176" font-size="10.5" fill="#6b7480">status · decisions · changelog</text>
+        <rect x="270" y="138" width="186" height="46" rx="8" fill="#fff" stroke="#e6e3dc"/><text x="280" y="160" font-size="11.5" font-weight="600" fill="#15181e">AGENTS.md ≡ CLAUDE.md</text><text x="280" y="176" font-size="10.5" fill="#6b7480">house rules, kept in sync</text>
+        <rect x="468" y="138" width="180" height="46" rx="8" fill="#fff" stroke="#e6e3dc"/><text x="478" y="160" font-size="11.5" font-weight="600" fill="#15181e">docs/HANDOFF.md</text><text x="478" y="176" font-size="10.5" fill="#6b7480">generated session bridge</text>
+        <rect x="660" y="138" width="206" height="46" rx="8" fill="#fff" stroke="#e6e3dc"/><text x="670" y="160" font-size="11.5" font-weight="600" fill="#15181e">configs/artifact_policy.yaml</text><text x="670" y="176" font-size="10.5" fill="#6b7480">the machine-readable contract</text>
+        <line x1="460" y1="196" x2="460" y2="218" stroke="#4f46e5" stroke-width="2" marker-end="url(#ar4)"/>
+
+        <!-- layer 2 bounded context -->
+        <rect x="40" y="222" width="840" height="80" rx="12" fill="#ecebfb" stroke="#4f46e5"/>
+        <text x="58" y="246" font-size="12.5" font-weight="700" fill="#4f46e5">② BOUNDED CONTEXT — load only what the task needs</text>
+        <rect x="58" y="256" width="250" height="36" rx="8" fill="#fff" stroke="#e6e3dc"/><text x="68" y="279" font-size="11.5" fill="#15181e">Task packets · docs/agent_tasks/*.md</text>
+        <rect x="320" y="256" width="250" height="36" rx="8" fill="#fff" stroke="#e6e3dc"/><text x="330" y="279" font-size="11.5" fill="#15181e">Skills · .agents/skills/*/SKILL.md</text>
+        <rect x="582" y="256" width="284" height="36" rx="8" fill="#fff" stroke="#e6e3dc"/><text x="592" y="279" font-size="11.5" fill="#15181e">Subagents · .codex/agents/*.toml (5)</text>
+        <line x1="460" y1="302" x2="460" y2="324" stroke="#4f46e5" stroke-width="2" marker-end="url(#ar4)"/>
+
+        <!-- layer 3 guardrails during work -->
+        <rect x="40" y="328" width="840" height="80" rx="12" fill="#e7f6f1" stroke="#10a37f"/>
+        <text x="58" y="352" font-size="12.5" font-weight="700" fill="#0c7d61">③ GUARDRAILS WHILE WORKING — hooks (remind, don't block)</text>
+        <rect x="58" y="362" width="256" height="36" rx="8" fill="#fff" stroke="#e6e3dc"/><text x="68" y="385" font-size="11.5" fill="#15181e">PreToolUse → guard immutable paths</text>
+        <rect x="326" y="362" width="256" height="36" rx="8" fill="#fff" stroke="#e6e3dc"/><text x="336" y="385" font-size="11.5" fill="#15181e">PreCompact → refresh the handoff</text>
+        <rect x="594" y="362" width="272" height="36" rx="8" fill="#fff" stroke="#e6e3dc"/><text x="604" y="385" font-size="11.5" fill="#15181e">Stop → lightweight finish check</text>
+        <line x1="460" y1="408" x2="460" y2="430" stroke="#4f46e5" stroke-width="2" marker-end="url(#ar4)"/>
+
+        <!-- layer 4 the gate -->
+        <rect x="40" y="434" width="840" height="74" rx="12" fill="#15181e"/>
+        <text x="58" y="458" font-size="12.5" font-weight="700" fill="#9fe7d2">④ THE VERIFICATION GATE &nbsp;—&nbsp; make agent-check &nbsp;(8 contract checks)</text>
+        <g font-size="10.8" fill="#cbd2dc">
+          <text x="58" y="480">doc-sync</text><text x="150" y="480">log-updated</text><text x="262" y="480">immutable-artifacts</text><text x="420" y="480">redaction-scan</text><text x="556" y="480">stale-text</text><text x="660" y="480">report-fresh</text><text x="772" y="480">whitespace</text>
+          <text x="58" y="498">pytest (full suite) — all must be pass/warn or the gate fails</text>
+        </g>
+        <line x1="460" y1="508" x2="460" y2="524" stroke="#4f46e5" stroke-width="2" marker-end="url(#ar4)"/>
+
+        <!-- layer 5 outputs -->
+        <rect x="40" y="528" width="840" height="30" rx="9" fill="#fbf1dd" stroke="#d98b14"/>
+        <text x="460" y="548" text-anchor="middle" font-size="11.8" font-weight="600" fill="#9a6207">⑤ OUTPUTS regenerated from live state → HANDOFF.md · AGENT_DASHBOARD.md · TC1 checklist · FYP report</text>
+      </svg>
+      <figcaption><span class="fig-num">Fig 5.</span> <b>The harness control plane.</b> A session flows top-to-bottom: orient from the source of truth, pull in only the bounded context the task needs, work under hook-level reminders, then pass through one authoritative verification gate before regenerating the hand-off artifacts. Every box is a real file or command.</figcaption>
+    </figure>
+
+    <h3>Layer ① — One source of truth, enforced</h3>
+    <p>The rule the whole project hangs on: <strong><code>docs/PROJECT_LOG.md</code> is the only file that records "what's happening now."</strong> Every other doc is reference or archive. Every change to the repo appends one row to its changelog — <code>When | Files | Change | Why | Report? | Who</code> — newest first. The <em>Who</em> column is literally how you see the dual-agent split (Section 6). This is the harness's observability layer.</p>
+
+    <h3>Layer ② — Bounded context instead of a giant prompt</h3>
+    <p>Rather than one bloated instruction file, the harness keeps the base lean and pulls in detail on demand:</p>
+    <table>
+      <thead><tr><th>Mechanism</th><th>File</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Task packet</strong></td><td><code>docs/agent_tasks/T21-…md</code></td><td>A small, self-contained brief for one task: objective, likely files, what's allowed, what's forbidden, done-criteria.</td></tr>
+        <tr><td><strong>Skill</strong></td><td><code>.agents/skills/fyp-report-audit/SKILL.md</code></td><td>A reusable procedure loaded only when the work matches — e.g. auditing report claims, adding a second judge.</td></tr>
+        <tr><td><strong>Startup packet</strong></td><td><code>fyp_cli.py agent-start --task … --agent …</code></td><td>Assembles the live status + the chosen task packet + the chosen subagent profile into one focused briefing.</td></tr>
+      </tbody>
+    </table>
+    <p>Four skills exist today — <code>fyp-harness-maintenance</code>, <code>fyp-report-audit</code>, <code>fyp-second-judge</code>, <code>fyp-meetup-brief</code> — each with a clear scope, start step, guardrails, and finish step.</p>
+
+    <h3>Layer ② (cont.) — Five context-isolated subagents</h3>
+    <p>The five <code>.codex/agents/*.toml</code> profiles are all <strong>read-only reviewers</strong> by design — they audit, they don't mutate, and the main agent runs the gate:</p>
+    <div class="grid g2">
+      <div class="card"><h5>🔐 fyp-artifact-guardian</h5><p>Evidence-chain auditor: checks raw-artifact immutability, the SHA-256 manifest, and redaction leaks.</p></div>
+      <div class="card"><h5>⚖️ fyp-judge-reviewer</h5><p>Reviews the HarmBench judge layer — confirms the official classifier stays primary, checks the agreement analysis.</p></div>
+      <div class="card"><h5>📄 fyp-report-auditor</h5><p>Reviews report prose for stale claims, judge-vs-regex mistakes, and missing verification.</p></div>
+      <div class="card"><h5>🖥️ fyp-tc1-ops</h5><p>Cluster-safety reviewer: confirms compute is routed via sbatch and offline env vars are preserved.</p></div>
+      <div class="card"><h5>🎤 fyp-meetup-story</h5><p>Turns repo evidence into a human-readable workflow narrative — the agent that helped scope this very report.</p></div>
+      <div class="card" style="background:var(--indigo-wash);border-color:var(--indigo)"><h5>Why isolate them?</h5><p>An auditor with a clean, narrow context gives a sharper second opinion than the same model carrying the whole working session in its head.</p></div>
+    </div>
+
+    <h3>Layer ④ — The gate: <code>make agent-check</code></h3>
+    <p>This is the verification loop made concrete. Eight checks, each reading the same <code>artifact_policy.yaml</code>. Any <em>fail</em> stops the build. What it enforces, in plain terms:</p>
+    <table>
+      <thead><tr><th>Check</th><th>Fails when…</th></tr></thead>
+      <tbody>
+        <tr><td><strong>doc-sync</strong></td><td>AGENTS.md and CLAUDE.md drift apart below the title line.</td></tr>
+        <tr><td><strong>log-updated</strong></td><td>The repo has changes but PROJECT_LOG.md isn't among them — no silent edits.</td></tr>
+        <tr><td><strong>immutable-artifacts</strong></td><td>A raw <code>raw.jsonl</code>/<code>summary.json</code> hash no longer matches the manifest (tolerates <em>absent</em> files in fresh clones, fails on <em>mutation</em>).</td></tr>
+        <tr><td><strong>redaction-scan</strong></td><td>Raw prompt/response/behavior text leaks into any doc, hook, or agent profile.</td></tr>
+        <tr><td><strong>stale-text</strong></td><td>Outdated claims survive (e.g. "results pending", an old scorer being called primary).</td></tr>
+        <tr><td><strong>report-fresh</strong></td><td>A report-worthy source changed but the report docx wasn't regenerated.</td></tr>
+        <tr><td><strong>whitespace</strong></td><td><code>git diff --check</code> finds trailing-whitespace noise.</td></tr>
+        <tr><td><strong>pytest</strong></td><td>Any test in the full suite fails.</td></tr>
+      </tbody>
+    </table>
+    <div class="callout tip"><span class="lab">The detail that sells it</span>
+      There's a <em>test that the harness itself works</em> (<code>make harness-eval</code>): it builds a tiny throwaway repo, deliberately breaks each rule — mutates a raw artifact, drifts the two instruction files, plants a redaction leak — and asserts the gate catches each one. The guardrails are themselves under test. That's harness engineering taking itself seriously.</div>
+  </section>
+
+  <!-- ============ 5. MEMORY ============ -->
+  <section id="memory">
+    <div class="sec-head"><span class="sec-num">5</span><h2>Memory: state lives in the repo, not the chat</h2></div>
+    <p class="sec-lead">The single biggest idea to communicate at the meetup. Chat history is volatile and private to one agent. This project pushes durable state <em>out</em> of the conversation and <em>into</em> versioned files any agent can read.</p>
+
+    <figure>
+      <svg viewBox="0 0 920 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Memory layering">
+        <!-- left: volatile -->
+        <rect x="20" y="40" width="250" height="240" rx="14" fill="#fff" stroke="#e6e3dc" stroke-dasharray="5 4"/>
+        <text x="40" y="68" font-size="13" font-weight="700" fill="#9aa3af">VOLATILE · per-agent</text>
+        <rect x="40" y="84" width="210" height="40" rx="8" fill="#f7f6f3"/><text x="52" y="108" font-size="12" fill="#6b7480">Chat context window</text>
+        <rect x="40" y="132" width="210" height="40" rx="8" fill="#f7f6f3"/><text x="52" y="156" font-size="12" fill="#6b7480">Claude's auto-memory*</text>
+        <text x="40" y="200" font-size="11" fill="#9aa3af">*helpful index &amp; preferences,</text>
+        <text x="40" y="216" font-size="11" fill="#9aa3af">but explicitly NOT authoritative —</text>
+        <text x="40" y="232" font-size="11" fill="#9aa3af">it points back to the repo.</text>
+        <text x="40" y="262" font-size="11.5" fill="#b01345" font-weight="600">Lost on /clear or vendor switch.</text>
+        <!-- arrow -->
+        <text x="314" y="150" text-anchor="middle" font-size="22" fill="#10a37f">⇒</text>
+        <text x="314" y="178" text-anchor="middle" font-size="10" fill="#6b7480">promote</text>
+        <text x="314" y="192" text-anchor="middle" font-size="10" fill="#6b7480">durable</text>
+        <text x="314" y="206" text-anchor="middle" font-size="10" fill="#6b7480">facts</text>
+        <!-- right: durable -->
+        <rect x="360" y="20" width="540" height="280" rx="14" fill="#e7f6f1" stroke="#10a37f"/>
+        <text x="380" y="48" font-size="13" font-weight="700" fill="#0c7d61">DURABLE · in the repo · read by ANY agent</text>
+        <rect x="380" y="60" width="248" height="52" rx="9" fill="#fff" stroke="#cfe9e0"/><text x="394" y="82" font-size="12" font-weight="600" fill="#15181e">PROJECT_LOG.md</text><text x="394" y="100" font-size="10.5" fill="#6b7480">status · decisions D1–D21 · changelog</text>
+        <rect x="640" y="60" width="244" height="52" rx="9" fill="#fff" stroke="#cfe9e0"/><text x="654" y="82" font-size="12" font-weight="600" fill="#15181e">HANDOFF.md</text><text x="654" y="100" font-size="10.5" fill="#6b7480">generated next-session bridge</text>
+        <rect x="380" y="122" width="248" height="52" rx="9" fill="#fff" stroke="#cfe9e0"/><text x="394" y="144" font-size="12" font-weight="600" fill="#15181e">AGENTS.md ≡ CLAUDE.md</text><text x="394" y="162" font-size="10.5" fill="#6b7480">the rules both agents obey</text>
+        <rect x="640" y="122" width="244" height="52" rx="9" fill="#fff" stroke="#cfe9e0"/><text x="654" y="144" font-size="12" font-weight="600" fill="#15181e">AGENT_DASHBOARD.md</text><text x="654" y="162" font-size="10.5" fill="#6b7480">live state + next action</text>
+        <rect x="380" y="184" width="504" height="52" rx="9" fill="#fff" stroke="#cfe9e0"/><text x="394" y="206" font-size="12" font-weight="600" fill="#15181e">results/ + raw_artifact_manifest.sha256</text><text x="394" y="224" font-size="10.5" fill="#6b7480">the experimental evidence itself — hashed, immutable, the ultimate memory</text>
+        <rect x="380" y="246" width="504" height="40" rx="9" fill="#15181e"/><text x="394" y="271" font-size="11.5" fill="#9fe7d2">Git history = the audit log. Every state change is a commit + a changelog row.</text>
+      </svg>
+      <figcaption><span class="fig-num">Fig 6.</span> <b>Two tiers of memory.</b> Conversation context and an agent's private memory are convenient but volatile and vendor-specific. Everything that must survive a <code>/clear</code>, a new machine, or a switch between Codex and Claude is promoted into versioned repo files — with the experimental results, hashed and immutable, as the deepest layer.</figcaption>
+    </figure>
+
+    <h3>How the auto-memory and the repo cooperate</h3>
+    <p>The agent does keep a small private memory (user preferences, a project-state snapshot, file pointers). But it is deliberately framed as <strong>an index, not an authority</strong>: it carries warnings like "the source of truth is always the repo — don't trust memory numbers." If a memory note names a file or a result, the rule is to <em>verify it against the repo before acting</em>. The harness even scans for stale prose so that out-of-date claims can't quietly persist.</p>
+    <div class="callout key"><span class="lab">The one-liner for the meetup</span>
+      "My agents' memory isn't in the chat — it's in the repository. PROJECT_LOG.md is the brain, Git is the audit log, and a hashed manifest makes the raw data tamper-evident. A brand-new session — even on a different vendor's agent — reads four files and is fully oriented."</div>
+  </section>
+
+  <!-- ============ 6. DUAL AGENT ============ -->
+  <section id="dual">
+    <div class="sec-head"><span class="sec-num">6</span><h2>The dual-agent workflow (Codex &amp; Claude)</h2></div>
+    <p class="sec-lead">Two agents, two vendors, one repo. They don't talk to each other directly — they collaborate <em>through the repository</em>, the same way two humans collaborate through a shared codebase and a changelog.</p>
+
+    <figure>
+      <svg viewBox="0 0 920 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Dual agent collaboration loop">
+        <defs>
+          <marker id="ar6" markerWidth="9" markerHeight="9" refX="6.5" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#6b7480"/></marker>
+        </defs>
+        <!-- claude -->
+        <rect x="30" y="80" width="230" height="200" rx="16" fill="#fbeee7" stroke="#d97757" stroke-width="1.6"/>
+        <text x="50" y="110" font-size="15" font-weight="700" fill="#bd5d3f">Claude Code</text>
+        <text x="50" y="132" font-size="11.5" fill="#3a414d">reads CLAUDE.md</text>
+        <line x1="50" y1="146" x2="240" y2="146" stroke="#e6d5cc"/>
+        <text x="50" y="170" font-size="11.5" fill="#6b7480">tends toward:</text>
+        <text x="50" y="192" font-size="12" fill="#15181e">· analysis &amp; statistics</text>
+        <text x="50" y="212" font-size="12" fill="#15181e">· report prose, methodology</text>
+        <text x="50" y="232" font-size="12" fill="#15181e">· results interpretation</text>
+        <text x="50" y="252" font-size="12" fill="#15181e">· coordination &amp; handoff</text>
+        <!-- codex -->
+        <rect x="660" y="80" width="230" height="200" rx="16" fill="#e7f6f1" stroke="#10a37f" stroke-width="1.6"/>
+        <text x="680" y="110" font-size="15" font-weight="700" fill="#0c7d61">Codex</text>
+        <text x="680" y="132" font-size="11.5" fill="#3a414d">reads AGENTS.md</text>
+        <line x1="680" y1="146" x2="870" y2="146" stroke="#cfe9e0"/>
+        <text x="680" y="170" font-size="11.5" fill="#6b7480">tends toward:</text>
+        <text x="680" y="192" font-size="12" fill="#15181e">· harness &amp; tooling</text>
+        <text x="680" y="212" font-size="12" fill="#15181e">· hooks, skills, subagents</text>
+        <text x="680" y="232" font-size="12" fill="#15181e">· audits &amp; code review</text>
+        <text x="680" y="252" font-size="12" fill="#15181e">· cluster ops, integrity</text>
+        <!-- center -->
+        <rect x="330" y="60" width="260" height="120" rx="14" fill="#15181e"/>
+        <text x="460" y="92" text-anchor="middle" font-size="13.5" font-weight="700" fill="#fff">The repository</text>
+        <text x="460" y="114" text-anchor="middle" font-size="11.5" fill="#9fe7d2">PROJECT_LOG.md · HANDOFF.md</text>
+        <text x="460" y="132" text-anchor="middle" font-size="11.5" fill="#9fe7d2">artifact_policy.yaml · Git</text>
+        <text x="460" y="158" text-anchor="middle" font-size="11" fill="#cbd2dc">single source of truth + audit log</text>
+        <!-- arrows -->
+        <line x1="262" y1="150" x2="326" y2="135" stroke="#6b7480" stroke-width="2" marker-end="url(#ar6)"/>
+        <line x1="326" y1="165" x2="262" y2="190" stroke="#6b7480" stroke-width="2" marker-end="url(#ar6)"/>
+        <line x1="658" y1="150" x2="594" y2="135" stroke="#6b7480" stroke-width="2" marker-end="url(#ar6)"/>
+        <line x1="594" y1="165" x2="658" y2="190" stroke="#6b7480" stroke-width="2" marker-end="url(#ar6)"/>
+        <!-- handoff bar -->
+        <rect x="180" y="296" width="560" height="48" rx="12" fill="#ecebfb" stroke="#4f46e5"/>
+        <text x="460" y="318" text-anchor="middle" font-size="12.5" font-weight="700" fill="#4f46e5">The handoff skill bridges them</text>
+        <text x="460" y="335" text-anchor="middle" font-size="11" fill="#6b7480">executor · reviewer · fresh-session-recovery modes — "never trust a handoff alone; verify from the repo"</text>
+      </svg>
+      <figcaption><span class="fig-num">Fig 7.</span> <b>Collaboration through the repo, not through a channel.</b> Each agent reads its own instruction file (kept identical), does the kind of work it's best placed for, and records every change in the shared changelog. The "Who" column makes the division of labour visible and auditable.</figcaption>
+    </figure>
+
+    <h3>How the labour actually divided — from the changelog</h3>
+    <p>This isn't a theory; it's visible in the <em>Who</em> column of the changelog. Across the recorded history, the split looked like:</p>
+    <div class="grid g2">
+      <div class="card" style="background:var(--claude-wash);border-color:var(--claude)">
+        <h5>Claude — the analyst &amp; writer</h5>
+        <p>Judge-validation analysis and the McNemar/CI evidence layer; the two-layer reporting scheme; report prose; drafting the supervisor email; refreshing handoffs; landing and verifying Codex's uncommitted work before committing it.</p>
+      </div>
+      <div class="card" style="background:var(--codex-wash);border-color:var(--codex)">
+        <h5>Codex — the harness builder &amp; auditor</h5>
+        <p>The entire on-demand agentic layer (skills, subagents, hooks); the architecture diagrams; converting in-place rescoring into immutable sidecars after a near-miss; pre-push hardening audits; recording cluster submissions and the QoS concurrency discovery.</p>
+      </div>
+    </div>
+    <div class="callout claude"><span class="lab">A real handoff, captured in one changelog row</span>
+      On one occasion Claude <strong>committed Codex's uncommitted work for it</strong> — syncing AGENTS.md/CLAUDE.md, applying a report appendix edit, regenerating the docx — but only after <em>verifying the diffs matched what Codex's own changelog row claimed</em>. That is the whole model in miniature: one agent implements, the other reviews against the recorded intent and merges. Trust, but verify from the repo.</div>
+
+    <h3>Why split by vendor at all?</h3>
+    <p>Two honest reasons, both worth saying out loud at the meetup: (1) <strong>different agents have different strengths and quotas</strong>, and routing work to the better-suited one is just good economics; (2) <strong>a second agent is a second pair of eyes</strong> — a reviewer that didn't write the code catches what the author misses. The harness is what makes the split <em>safe</em>: because all state is in the repo and the gate is vendor-neutral, it genuinely doesn't matter which agent picks up the work next.</p>
+  </section>
+
+  <!-- ============ 7. SESSION ============ -->
+  <section id="session">
+    <div class="sec-head"><span class="sec-num">7</span><h2>A session, start to finish</h2></div>
+    <p class="sec-lead">Concretely: what happens between an agent opening this repo and closing it cleanly. This is the demo you'd run live.</p>
+
+    <figure>
+      <svg viewBox="0 0 920 274" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Session lifecycle timeline">
+        <defs>
+          <marker id="ar7" markerWidth="10" markerHeight="10" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#15181e"/></marker>
+        </defs>
+        <line x1="40" y1="70" x2="880" y2="70" stroke="#15181e" stroke-width="2.5" marker-end="url(#ar7)"/>
+        <!-- nodes -->
+        <g font-size="11.5">
+          <circle cx="90" cy="70" r="7" fill="#4f46e5"/><text x="90" y="48" text-anchor="middle" font-weight="700" fill="#4f46e5">ORIENT</text>
+          <text x="90" y="96" text-anchor="middle" fill="#3a414d">agent-status /</text><text x="90" y="111" text-anchor="middle" fill="#3a414d">agent-start</text>
+          <text x="90" y="130" text-anchor="middle" fill="#9aa3af" font-size="10">read 4 files</text>
+
+          <circle cx="270" cy="70" r="7" fill="#10a37f"/><text x="270" y="48" text-anchor="middle" font-weight="700" fill="#0c7d61">WORK</text>
+          <text x="270" y="96" text-anchor="middle" fill="#3a414d">edit code/docs</text>
+          <text x="270" y="115" text-anchor="middle" fill="#9aa3af" font-size="10">PreToolUse hook</text>
+          <text x="270" y="129" text-anchor="middle" fill="#9aa3af" font-size="10">warns on raw paths</text>
+
+          <circle cx="450" cy="70" r="7" fill="#d98b14"/><text x="450" y="48" text-anchor="middle" font-weight="700" fill="#9a6207">LOG</text>
+          <text x="450" y="96" text-anchor="middle" fill="#3a414d">append changelog row</text>
+          <text x="450" y="115" text-anchor="middle" fill="#9aa3af" font-size="10">+ decision/open-action</text>
+          <text x="450" y="129" text-anchor="middle" fill="#9aa3af" font-size="10">if needed</text>
+
+          <circle cx="630" cy="70" r="7" fill="#15181e"/><text x="630" y="48" text-anchor="middle" font-weight="700" fill="#15181e">GATE</text>
+          <text x="630" y="96" text-anchor="middle" fill="#3a414d">make agent-check</text>
+          <text x="630" y="115" text-anchor="middle" fill="#9aa3af" font-size="10">8 checks + pytest</text>
+          <text x="630" y="129" text-anchor="middle" fill="#9aa3af" font-size="10">Stop hook double-checks</text>
+
+          <circle cx="830" cy="70" r="7" fill="#bd5d3f"/><text x="830" y="48" text-anchor="middle" font-weight="700" fill="#bd5d3f">HAND OFF</text>
+          <text x="830" y="96" text-anchor="middle" fill="#3a414d">regen HANDOFF +</text>
+          <text x="830" y="111" text-anchor="middle" fill="#3a414d">DASHBOARD, commit</text>
+          <text x="830" y="130" text-anchor="middle" fill="#9aa3af" font-size="10">PreCompact also auto-refreshes</text>
+        </g>
+        <!-- loop back -->
+        <path d="M830,198 C610,226 310,226 92,198" fill="none" stroke="#9aa3af" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#ar7)"/>
+        <text x="460" y="256" text-anchor="middle" font-size="11" fill="#9aa3af">next session (any agent) re-orients from the regenerated state — the loop closes</text>
+      </svg>
+      <figcaption><span class="fig-num">Fig 8.</span> <b>The session loop.</b> Orient → work (under hook reminders) → log → pass the gate → hand off. The outputs of one session are the inputs of the next, which is what lets a different agent resume cleanly.</figcaption>
+    </figure>
+
+    <h3>The immutable-evidence rule, illustrated</h3>
+    <p>The strongest single story in this whole system is how it handled <em>changing the answer without corrupting the data</em>. Worth a diagram of its own:</p>
+
+    <figure>
+      <svg viewBox="0 0 920 230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Immutable evidence chain">
+        <defs>
+          <marker id="ar8" markerWidth="9" markerHeight="9" refX="6.5" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#6b7480"/></marker>
+        </defs>
+        <!-- raw -->
+        <rect x="24" y="60" width="210" height="110" rx="12" fill="#15181e"/>
+        <text x="40" y="86" font-size="12.5" font-weight="700" fill="#fff">RAW (immutable)</text>
+        <text x="40" y="110" font-size="11" fill="#cbd2dc">raw.jsonl · summary.json</text>
+        <text x="40" y="130" font-size="11" fill="#9fe7d2">hashed in the manifest</text>
+        <text x="40" y="150" font-size="11" fill="#9aa3af">the model's actual outputs —</text>
+        <text x="40" y="164" font-size="11" fill="#9aa3af">never edited, ever</text>
+        <line x1="236" y1="115" x2="282" y2="115" stroke="#6b7480" stroke-width="2" marker-end="url(#ar8)"/>
+        <!-- sidecars -->
+        <rect x="286" y="40" width="230" height="150" rx="12" fill="#fff" stroke="#10a37f" stroke-width="1.6"/>
+        <text x="302" y="66" font-size="12.5" font-weight="700" fill="#0c7d61">DERIVED SIDECARS</text>
+        <rect x="302" y="78" width="198" height="32" rx="7" fill="#f7f6f3"/><text x="312" y="99" font-size="10.3" fill="#6b7480">scores.v2.jsonl — regex (proxy)</text>
+        <rect x="302" y="116" width="198" height="32" rx="7" fill="#e7f6f1"/><text x="312" y="137" font-size="10.3" fill="#0c7d61">scores.judge.* — 13B (primary)</text>
+        <text x="302" y="166" font-size="10" fill="#9aa3af">re-scoring writes a NEW file —</text>
+        <text x="302" y="180" font-size="10" fill="#9aa3af">redacted (IDs + booleans only)</text>
+        <line x1="518" y1="115" x2="564" y2="115" stroke="#6b7480" stroke-width="2" marker-end="url(#ar8)"/>
+        <!-- analysis/report -->
+        <rect x="568" y="60" width="160" height="110" rx="12" fill="#ecebfb" stroke="#4f46e5"/>
+        <text x="584" y="86" font-size="12.5" font-weight="700" fill="#4f46e5">ANALYSIS</text>
+        <text x="584" y="108" font-size="11" fill="#3a414d">deltas, labels,</text>
+        <text x="584" y="124" font-size="11" fill="#3a414d">agreement κ</text>
+        <text x="584" y="146" font-size="10.5" fill="#6b7480">recomputed from</text>
+        <text x="584" y="160" font-size="10.5" fill="#6b7480">whichever scorer</text>
+        <line x1="730" y1="115" x2="776" y2="115" stroke="#6b7480" stroke-width="2" marker-end="url(#ar8)"/>
+        <rect x="780" y="60" width="116" height="110" rx="12" fill="#fbf1dd" stroke="#d98b14"/>
+        <text x="796" y="86" font-size="12.5" font-weight="700" fill="#9a6207">REPORT</text>
+        <text x="796" y="108" font-size="11" fill="#3a414d">regenerated</text>
+        <text x="796" y="124" font-size="11" fill="#3a414d">from source</text>
+        <text x="796" y="146" font-size="10.5" fill="#6b7480">never hand-</text>
+        <text x="796" y="160" font-size="10.5" fill="#6b7480">edited</text>
+        <text x="24" y="210" font-size="11.5" fill="#6b7480">The conclusion changed twice (regex → judge-primary). The raw evidence changed <tspan font-weight="700" fill="#15181e">zero times</tspan>. That's the invariant the harness exists to protect.</text>
+      </svg>
+      <figcaption><span class="fig-num">Fig 9.</span> <b>Immutable evidence, mutable interpretation.</b> Raw model outputs are hashed and frozen. Every scoring change is an additive, redacted sidecar; analysis and the report are always <em>regenerated</em> from sources. You can revise the answer as many times as the science demands without ever touching — or being able to silently corrupt — the data.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ============ 8. TALK ============ -->
+  <section id="talk">
+    <div class="sec-head"><span class="sec-num">8</span><h2>How to explain it to peers</h2></div>
+    <p class="sec-lead">Ready-to-use framing for the room. Lead with the idea, back it with one concrete file, and let people pull on the thread.</p>
+
+    <h3>The 30-second version</h3>
+    <div class="callout key"><span class="lab">Say this</span>
+      "I run two coding agents — Codex and Claude Code — on the same research repo. Instead of trusting either one's memory, I made the <strong>repository</strong> the memory: one log file is the source of truth, the raw experimental data is hashed and immutable, and there's a single <code>make agent-check</code> gate that fails if the two agents drift, if data gets mutated, or if a harmful prompt leaks into a doc. It's harness engineering applied to research integrity — built entirely out of Codex's own primitives: AGENTS.md, skills, subagents, and hooks."</div>
+
+    <h3>Five talking points, each with a concrete hook</h3>
+    <div class="grid g2">
+      <div class="card"><h5>1 · Memory lives in the repo</h5><p>"A new session reads four files and is oriented." → open <code>PROJECT_LOG.md</code> and <code>HANDOFF.md</code>.</p></div>
+      <div class="card"><h5>2 · Rules are executable, not just prose</h5><p>"Prose rules rot. I compiled mine into checks." → run <code>make agent-check</code>; show <code>artifact_policy.yaml</code>.</p></div>
+      <div class="card"><h5>3 · Two vendors, one standard</h5><p>"AGENTS.md ≡ CLAUDE.md, enforced by a drift check." → show the doc-sync check failing on a deliberate edit.</p></div>
+      <div class="card"><h5>4 · Evidence is immutable</h5><p>"I changed the conclusion twice and never touched the data." → show the sidecar files + the SHA manifest.</p></div>
+      <div class="card"><h5>5 · The guardrails are tested</h5><p>"My harness has a test suite that proves it catches bad states." → run <code>make harness-eval</code>.</p></div>
+      <div class="card" style="background:var(--codex-wash);border-color:var(--codex)"><h5>The hook for Q&amp;A</h5><p>"Hooks remind; the gate decides. I never let a hook silently block — a human (or the gate) stays in the loop." Invites the inevitable autonomy debate.</p></div>
+    </div>
+
+    <h3>A 3-minute live demo, if you get a laptop</h3>
+    <ol>
+      <li>Open a fresh terminal: <code>python fyp_cli.py agent-status</code> — show how the repo introduces itself.</li>
+      <li>Open <code>docs/PROJECT_LOG.md</code> §4 changelog — point at the <em>Who</em> column alternating between Claude and Codex.</li>
+      <li>Make a deliberate bad edit (drift CLAUDE.md, or add "RESULTS PENDING" to a doc) → run <code>make agent-check</code> → watch the relevant check go red.</li>
+      <li>Show <code>.codex/hooks.json</code> and one subagent TOML — "these are stock Codex features; I just composed them."</li>
+      <li>Close with Fig 9's story: the judge correction that moved the headline result without re-running a single experiment.</li>
+    </ol>
+
+    <h3>Anticipated questions — and honest answers</h3>
+    <table>
+      <thead><tr><th>They'll ask</th><th>Answer</th></tr></thead>
+      <tbody>
+        <tr><td>"Isn't this over-engineering for a student project?"</td><td>The over-engineering <em>is</em> the project's risk control: it's scientific data. The harness is small (a policy file, a check script, a few generated docs) and it's already caught a real near-miss (in-place rescoring) and a scorer error that changed the headline finding.</td></tr>
+        <tr><td>"Why two agents instead of one good one?"</td><td>Different strengths and quotas, plus a genuine second reviewer. The harness makes the choice of agent irrelevant to correctness — that's the whole point.</td></tr>
+        <tr><td>"Do the hooks enforce anything?"</td><td>No — hooks are reminders by design. The authoritative gate is <code>make agent-check</code>, run explicitly. Keeping enforcement in one visible place is deliberate.</td></tr>
+        <tr><td>"How is this different from a good README + CI?"</td><td>It largely <em>is</em> that — which is the point. The novel part is treating agents as first-class repo citizens: bounded task packets, context-isolated reviewer subagents, an immutable-evidence contract, and a vendor-neutral instruction standard, all checked together.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ============ 9. APPENDIX ============ -->
+  <section id="appendix">
+    <div class="sec-head"><span class="sec-num">9</span><h2>Appendix: command &amp; file map</h2></div>
+    <p class="sec-lead">The cheat-sheet to keep open during the event.</p>
+
+    <h4 class="mini">The harness commands</h4>
+    <table>
+      <thead><tr><th>Command</th><th>Does</th></tr></thead>
+      <tbody>
+        <tr><td><code>python fyp_cli.py agent-status</code></td><td>Live repo status for a fresh agent — git state, log freshness, open actions, suggested next step.</td></tr>
+        <tr><td><code>python fyp_cli.py agent-start --task T21 --agent fyp-report-auditor</code></td><td>Assemble a focused startup packet for one task + one subagent.</td></tr>
+        <tr><td><code>make agent-check</code></td><td>The verification gate — 8 contract checks + full pytest.</td></tr>
+        <tr><td><code>make harness-eval</code></td><td>Prove the harness itself catches broken states.</td></tr>
+        <tr><td><code>make agent-handoff</code> / <code>make agent-dashboard</code></td><td>Regenerate HANDOFF.md / AGENT_DASHBOARD.md from live state.</td></tr>
+        <tr><td><code>make report</code></td><td>Rebuild the FYP report docx from its build script (the docx is an artifact, never hand-edited).</td></tr>
+      </tbody>
+    </table>
+
+    <h4 class="mini">Where everything lives</h4>
+    <table>
+      <thead><tr><th>Path</th><th>Role</th></tr></thead>
+      <tbody>
+        <tr><td><code>docs/PROJECT_LOG.md</code></td><td>Single source of truth — status, decisions, changelog.</td></tr>
+        <tr><td><code>CLAUDE.md</code> · <code>AGENTS.md</code></td><td>Synced house rules (Claude / Codex &amp; others).</td></tr>
+        <tr><td><code>configs/artifact_policy.yaml</code></td><td>Machine-readable contract behind every check.</td></tr>
+        <tr><td><code>.agents/skills/*/SKILL.md</code></td><td>Four on-demand skills.</td></tr>
+        <tr><td><code>.codex/agents/*.toml</code></td><td>Five context-isolated reviewer subagents.</td></tr>
+        <tr><td><code>.codex/hooks.json</code> + <code>.codex/hooks/*.py</code></td><td>Three lifecycle hooks (PreToolUse / PreCompact / Stop).</td></tr>
+        <tr><td><code>docs/agent_tasks/*.md</code></td><td>Bounded task packets.</td></tr>
+        <tr><td><code>ethical_benchmark/harness/agent.py</code></td><td>The harness engine — status, checks, doc generation.</td></tr>
+        <tr><td><code>results/…/raw.jsonl</code> + <code>raw_artifact_manifest.sha256</code></td><td>Immutable evidence + its hash ledger.</td></tr>
+        <tr><td><code>results/…/scores.judge.*.jsonl</code></td><td>Redacted derived sidecars (the primary HarmBench scorer).</td></tr>
+        <tr><td><code>docs/architecture/</code></td><td>Editable source diagrams (draw.io / SVG / PNG).</td></tr>
+      </tbody>
+    </table>
+
+    <h4 class="mini">The vocabulary, one line each</h4>
+    <table>
+      <tbody>
+        <tr><td><strong>Harness</strong></td><td>The engineered environment around an agent: tools, verification, memory, guardrails, observability.</td></tr>
+        <tr><td><strong>AGENTS.md</strong></td><td>Open, markdown instruction standard read by 30+ agents; OpenAI-originated, now Linux-Foundation governed.</td></tr>
+        <tr><td><strong>Skill</strong></td><td>A <code>SKILL.md</code> procedure loaded on demand when a task matches.</td></tr>
+        <tr><td><strong>Subagent</strong></td><td>A context-isolated specialist spawned for a sub-task; defined in TOML for Codex.</td></tr>
+        <tr><td><strong>Hook</strong></td><td>Code fired on a lifecycle event (pre-tool, pre-compact, stop) for policy and logging.</td></tr>
+        <tr><td><strong>MCP</strong></td><td>Model Context Protocol — a standard way to attach external tools/data to an agent.</td></tr>
+        <tr><td><strong>Immutable artifact</strong></td><td>Raw experimental output that may never be edited; corrections go to additive sidecars.</td></tr>
+        <tr><td><strong>Verification gate</strong></td><td>One explicit command that must pass before work is trusted.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ============ SOURCES ============ -->
+  <section id="sources">
+    <div class="sec-head"><span class="sec-num">10</span><h2>Sources</h2></div>
+    <p class="sec-lead">External facts about Codex, AGENTS.md and harness engineering are drawn from the following; project facts are drawn directly from the repository.</p>
+    <ul class="src">
+      <li>OpenAI Developers — <a href="https://developers.openai.com/codex/subagents">Codex Subagents</a> and <a href="https://developers.openai.com/codex/config-advanced">Advanced Configuration (hooks, sandbox, config.toml)</a>.</li>
+      <li>OpenAI — <a href="https://openai.com/index/introducing-the-codex-app/">Introducing the Codex app</a>; Wikipedia — <a href="https://en.wikipedia.org/wiki/Codex_(AI_agent)">Codex (AI agent)</a> (timeline, surfaces, skills, user numbers).</li>
+      <li><a href="https://agents.md/">AGENTS.md</a> official site; <a href="https://www.morphllm.com/agents-md-guide">AGENTS.md spec guide (2026)</a> (format, governance, adoption).</li>
+      <li>Simon Willison — <a href="https://simonwillison.net/2026/Mar/16/codex-subagents/">Use subagents and custom agents in Codex</a>.</li>
+      <li>Faros AI — <a href="https://www.faros.ai/blog/harness-engineering">Harness Engineering: Making AI Coding Agents Work in 2026</a>; Augment Code — <a href="https://www.augmentcode.com/guides/harness-engineering-ai-coding-agents">Harness Engineering for AI Coding Agents</a> (five-layer model, verification loops).</li>
+      <li>Project repository — <code>docs/PROJECT_LOG.md</code>, <code>CLAUDE.md</code>/<code>AGENTS.md</code>, <code>configs/artifact_policy.yaml</code>, <code>ethical_benchmark/harness/agent.py</code>, <code>.codex/</code>, <code>.agents/skills/</code>, <code>docs/AGENTIC_WORKFLOW.md</code>.</li>
+    </ul>
+  </section>
+
+  <footer>
+    <p><strong>Codex Builders Meetup — field report.</strong> Built from the live state of the <code>fyp_quant</code> repository (CCDS25-1136, NTU CCDS). Every command and file path is real; the diagrams are originals for this report. Open in any browser; print to PDF for a handout.</p>
+  </footer>
+
+</div>
+</body>
+</html>

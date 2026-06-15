@@ -1,0 +1,634 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>fyp_quant — Architecture</title>
+<script>
+  (function () {
+    const saved = localStorage.getItem('theme');
+    const dark = saved ? saved === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+    document.documentElement.classList.toggle('dark', dark);
+  })();
+</script>
+<style>
+  :root {
+    --bg: #FAF9F5; --surface: #FFFFFF; --surface2: #F0EEE6;
+    --ink: #141413; --body: #3D3D3A; --muted: #87867F;
+    --line: #D1CFC5; --line-soft: #E6E3DA;
+    --clay: #D97757; --clay-soft: rgba(217,119,87,0.10);
+    --olive: #788C5D; --olive-soft: rgba(120,140,93,0.12);
+    --gold: #C9A45C; --blue: #5B7E96;
+    --zone: rgba(20,20,19,0.025); --zone-line: #D1CFC5;
+    --serif: ui-serif, Georgia, "Times New Roman", serif;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  html.dark {
+    --bg: #141413; --surface: #1F1F1D; --surface2: #2A2A28;
+    --ink: #FAF9F5; --body: #D1CFC5; --muted: #87867F;
+    --line: #3D3D3A; --line-soft: #2A2A28;
+    --clay: #E48A6E; --clay-soft: rgba(228,138,110,0.14);
+    --olive: #9DB07C; --olive-soft: rgba(157,176,124,0.16);
+    --gold: #D4B36F; --blue: #7FA3BC;
+    --zone: rgba(250,249,245,0.03); --zone-line: #3D3D3A;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    background: var(--bg); color: var(--body); font-family: var(--sans);
+    -webkit-font-smoothing: antialiased; display: flex; flex-direction: column; overflow: hidden;
+  }
+
+  /* top bar */
+  .bar {
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    padding: 12px 20px; border-bottom: 1px solid var(--line-soft); flex: none;
+  }
+  .bar h1 { font-family: var(--serif); font-weight: 500; font-size: 19px; color: var(--ink); letter-spacing: -0.01em; }
+  .bar .sub { font-family: var(--mono); font-size: 10.5px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
+  .spacer { flex: 1; }
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; }
+  .chip {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em;
+    padding: 5px 11px; border: 1px solid var(--line); border-radius: 999px;
+    background: transparent; color: var(--muted); cursor: pointer; transition: all .15s ease;
+  }
+  .chip:hover { color: var(--ink); border-color: var(--muted); }
+  .chip.on { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+  #themeToggle {
+    font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em;
+    padding: 5px 10px; border: 1px solid var(--line); border-radius: 6px;
+    background: transparent; color: var(--muted); cursor: pointer;
+  }
+  #themeToggle:hover { color: var(--ink); border-color: var(--muted); }
+
+  /* stage */
+  .stage { flex: 1; position: relative; min-height: 0; }
+  .stage svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+  /* zones */
+  .zone rect { fill: var(--zone); stroke: var(--zone-line); stroke-width: 1; stroke-dasharray: 5 5; }
+  .zone .ztitle { font-family: var(--mono); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; fill: var(--muted); }
+  .zone .zsub { font-family: var(--mono); font-size: 10.5px; fill: var(--muted); opacity: 0.75; }
+
+  /* nodes */
+  .node { cursor: pointer; }
+  .node rect { fill: var(--surface); stroke: var(--line); stroke-width: 1.5; transition: stroke .15s ease, filter .15s ease; }
+  .node:hover rect { stroke: var(--muted); }
+  .node.sel rect { stroke: var(--clay) !important; stroke-width: 2; }
+  .node .t  { font-family: var(--sans); font-size: 14px; font-weight: 600; fill: var(--ink); pointer-events: none; }
+  .node .m  { font-family: var(--mono); font-size: 10.5px; fill: var(--muted); pointer-events: none; }
+  .node .k  { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.08em; text-transform: uppercase; fill: var(--clay); pointer-events: none; }
+  .node.gate rect { fill: var(--clay-soft); stroke: var(--clay); }
+  .node.truth rect { fill: var(--clay-soft); stroke: var(--clay); stroke-width: 2.2; }
+  .node.store rect { fill: var(--surface2); }
+  .node.do rect { fill: var(--olive-soft); stroke: var(--olive); }
+  .node.ext rect { stroke-dasharray: 6 3; }
+
+  /* edges */
+  .edge { stroke: var(--muted); stroke-width: 1.5; fill: none; marker-end: url(#a-mut); transition: opacity .2s ease, stroke .2s ease; }
+  .edge.dash { stroke-dasharray: 5 4; }
+  .elbl { font-family: var(--mono); font-size: 10px; fill: var(--muted); transition: opacity .2s ease; }
+
+  /* flow highlighting */
+  .stage.flowing .edge { opacity: 0.10; }
+  .stage.flowing .elbl { opacity: 0.10; }
+  .stage.flowing .node { opacity: 0.28; }
+  .stage.flowing .zone { opacity: 0.45; }
+  .stage.flowing .edge.lit {
+    opacity: 1; stroke: var(--clay); marker-end: url(#a-clay);
+    stroke-dasharray: 7 5; animation: march 0.9s linear infinite;
+  }
+  .stage.flowing .elbl.lit { opacity: 1; fill: var(--clay); }
+  .stage.flowing .node.lit { opacity: 1; }
+  .stage.flowing .node.lit rect { stroke: var(--clay); }
+  @keyframes march { to { stroke-dashoffset: -12; } }
+  @media (prefers-reduced-motion: reduce) { .stage.flowing .edge.lit { animation: none; } }
+
+  /* floating cards */
+  .card {
+    position: absolute; max-width: 360px;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+    padding: 14px 16px; box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+  }
+  #detail { right: 14px; bottom: 14px; width: 300px; }
+  #detail h3 { font-family: var(--serif); font-weight: 500; font-size: 17px; color: var(--ink); margin-bottom: 2px; padding-right: 78px; }
+  #detail .meta { font-family: var(--mono); font-size: 10.5px; color: var(--muted); margin-bottom: 8px; }
+  #detail p { font-size: 12.5px; line-height: 1.55; }
+  #detail p code, #flowcap code { font-family: var(--mono); font-size: 11px; color: var(--clay); }
+  #flowcap { left: 14px; bottom: 14px; max-width: 360px; display: none; }
+  #flowcap.show { display: block; }
+  #flowcap .fname { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--clay); margin-bottom: 6px; padding-right: 78px; }
+  #flowcap ol { margin-left: 18px; }
+  #flowcap li { font-size: 12.5px; line-height: 1.55; }
+  .src { position: absolute; top: 10px; right: 16px; font-family: var(--mono); font-size: 10px; color: var(--muted); opacity: 0.8; }
+
+  /* card controls: drag · collapse · close */
+  .cctrl { position: absolute; top: 8px; right: 10px; display: flex; gap: 5px; align-items: center; z-index: 2; }
+  .cbtn {
+    font-family: var(--mono); font-size: 13px; line-height: 1; width: 20px; height: 20px;
+    display: flex; align-items: center; justify-content: center;
+    border: 1px solid var(--line); border-radius: 5px; background: var(--surface);
+    color: var(--muted); cursor: pointer; padding: 0; user-select: none;
+  }
+  .cbtn:hover { color: var(--ink); border-color: var(--muted); }
+  .cgrip { cursor: grab; touch-action: none; }
+  .cgrip:active { cursor: grabbing; }
+  .card.collapsed { width: auto !important; max-width: 280px; padding: 9px 12px; }
+  .card.collapsed .cbody { display: none; }
+  .card.collapsed h3, .card.collapsed .fname { margin-bottom: 0; }
+  .card.hidden { display: none !important; }
+
+  @media (max-width: 880px) {
+    body { overflow: auto; }
+    .stage { min-height: 78vh; }
+    #detail { position: static; width: auto; margin: 10px 16px; }
+    #flowcap { position: static; margin: 0 16px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <div>
+    <h1>fyp_quant — system &amp; agent harness</h1>
+    <div class="sub">4-bit quant safety study · TC1 SLURM · self-governing agent harness</div>
+  </div>
+  <div class="spacer"></div>
+  <div class="chips" id="chips">
+    <button class="chip on" data-flow="all">Everything</button>
+    <button class="chip" data-flow="run">Run</button>
+    <button class="chip" data-flow="judge">Judge (D16)</button>
+    <button class="chip" data-flow="tc1">TC1 cluster</button>
+    <button class="chip" data-flow="analyze">Analyze</button>
+    <button class="chip" data-flow="harness">Harness</button>
+  </div>
+  <button id="themeToggle">Theme</button>
+</div>
+
+<div class="stage" id="stage">
+<svg viewBox="0 0 1460 1110" preserveAspectRatio="xMidYMid meet" role="img" aria-label="fyp_quant architecture and agent harness diagram">
+  <defs>
+    <marker id="a-mut" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" style="fill: var(--muted)"/>
+    </marker>
+    <marker id="a-clay" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" style="fill: var(--clay)"/>
+    </marker>
+  </defs>
+
+  <!-- ── zones ─────────────────────────────── -->
+  <g class="zone">
+    <rect x="40" y="120" width="240" height="410" rx="16"/>
+    <text class="ztitle" x="60" y="148">Drivers</text>
+    <text class="zsub" x="60" y="166">CLI · Make · config</text>
+  </g>
+  <g class="zone">
+    <rect x="310" y="120" width="300" height="410" rx="16"/>
+    <text class="ztitle" x="330" y="148">Engine</text>
+    <text class="zsub" x="330" y="166">load once · generate</text>
+  </g>
+  <g class="zone">
+    <rect x="640" y="120" width="390" height="410" rx="16"/>
+    <text class="ztitle" x="660" y="148">Benchmarks &amp; scoring</text>
+    <text class="zsub" x="660" y="166">3 plugins · judge + deterministic</text>
+  </g>
+  <g class="zone">
+    <rect x="1050" y="120" width="360" height="410" rx="16"/>
+    <text class="ztitle" x="1070" y="148">Analysis &amp; artifacts</text>
+    <text class="zsub" x="1070" y="166">deltas · sidecars · report</text>
+  </g>
+  <g class="zone">
+    <rect x="310" y="560" width="710" height="150" rx="16"/>
+    <text class="ztitle" x="330" y="588">TC1 SLURM cluster</text>
+    <text class="zsub" x="330" y="606">offline · 1 GPU/job · 6h · sbatch only</text>
+  </g>
+  <g class="zone">
+    <rect x="40" y="752" width="1370" height="338" rx="16"/>
+    <text class="ztitle" x="60" y="780">Agent harness — self-governing layer</text>
+    <text class="zsub" x="60" y="798">Claude + Codex · PROJECT_LOG as single source of truth · gates on every change</text>
+  </g>
+
+  <!-- ── edges ─────────────────────────────── -->
+  <!-- pipeline -->
+  <path class="edge" id="e-opcli"  d="M162,245 L162,265"/>
+  <path class="edge" id="e-clicfg" d="M110,330 C 82,365 82,400 110,430"/>
+  <path class="edge" id="e-climat" d="M260,297 C 298,290 302,210 335,200"/>
+  <path class="edge" id="e-cfgload" d="M260,467 C 300,462 302,378 335,372"/>
+  <path class="edge" id="e-matsng" d="M460,230 L460,250"/>
+  <path class="edge" id="e-sngload" d="M460,305 L460,330"/>
+  <path class="edge" id="e-loadgen" d="M460,400 L460,425"/>
+  <path class="edge" id="e-genhb"  d="M585,448 C 630,432 638,212 665,202"/>
+  <path class="edge" id="e-genxs"  d="M585,456 C 690,448 800,250 825,236"/>
+  <path class="edge" id="e-genmm"  d="M585,462 C 700,470 870,250 905,210"/>
+  <path class="edge" id="e-hbjudge" d="M717,235 C 718,248 719,255 722,265"/>
+  <path class="edge dash" id="e-hbscr" d="M770,205 C 815,232 825,300 840,318"/>
+  <path class="edge" id="e-xsscr"  d="M850,235 C 880,255 895,272 905,285"/>
+  <path class="edge" id="e-mmscr"  d="M957,235 C 980,255 990,272 995,285"/>
+  <path class="edge" id="e-scrraw" d="M1024,318 C 1045,310 1055,300 1075,295"/>
+  <path class="edge" id="e-rawan"  d="M1230,255 L1230,235"/>
+  <path class="edge" id="e-jsan"   d="M1090,385 C 1055,335 1055,250 1085,206"/>
+  <path class="edge" id="e-anrep"  d="M1385,205 C 1418,300 1418,400 1390,478"/>
+  <!-- judge / tc1 -->
+  <path class="edge dash" id="e-judgejj" d="M740,360 C 770,470 860,560 912,600"/>
+  <path class="edge" id="e-rawjj"  d="M1150,330 C 1010,470 950,560 920,600"/>
+  <path class="edge" id="e-jjside" d="M1015,640 C 1130,630 1210,500 1232,422"/>
+  <path class="edge" id="e-cfgpre" d="M162,505 C 165,560 350,582 440,600"/>
+  <path class="edge" id="e-presb"  d="M550,637 L575,637"/>
+  <path class="edge dash" id="e-sbraw" d="M790,635 C 1000,640 1180,430 1228,332"/>
+  <!-- harness -->
+  <path class="edge" id="e-oplog"  d="M100,245 C 52,450 52,720 150,820"/>
+  <path class="edge" id="e-logchk" d="M310,865 L345,865"/>
+  <path class="edge" id="e-chkpol" d="M595,865 L645,865"/>
+  <path class="edge" id="e-logdocs" d="M252,828 C 560,792 790,800 1000,824"/>
+  <path class="edge" id="e-codhook" d="M595,982 L645,982"/>
+  <path class="edge" id="e-hookchk" d="M745,945 C 640,930 540,918 474,912"/>
+  <path class="edge dash" id="e-chkraw" d="M478,820 C 495,560 850,330 1073,302"/>
+
+  <!-- edge labels -->
+  <text class="elbl" data-e="e-loadgen" x="470" y="416">batched · greedy T=0</text>
+  <text class="elbl" data-e="e-hbjudge" x="735" y="258">classifier</text>
+  <text class="elbl" data-e="e-hbscr" x="772" y="270">v2 (secondary)</text>
+  <text class="elbl" data-e="e-scrraw" x="1012" y="292">raw + summary</text>
+  <text class="elbl" data-e="e-jsan" x="1038" y="300" text-anchor="end">primary ΔASR</text>
+  <text class="elbl" data-e="e-anrep" x="1408" y="345" text-anchor="end">make report</text>
+  <text class="elbl" data-e="e-judgejj" x="772" y="486">ran on TC1 #61047</text>
+  <text class="elbl" data-e="e-jjside" x="1135" y="520">redacted sidecars</text>
+  <text class="elbl" data-e="e-cfgpre" x="300" y="560">prefetch (offline)</text>
+  <text class="elbl" data-e="e-sbraw" x="980" y="500">writes results</text>
+  <text class="elbl" data-e="e-oplog" x="48" y="560">log every change</text>
+  <text class="elbl" data-e="e-logchk" x="328" y="855" text-anchor="middle">must be fresh</text>
+  <text class="elbl" data-e="e-chkpol" x="620" y="855" text-anchor="middle">reads contract</text>
+  <text class="elbl" data-e="e-chkraw" x="772" y="540">verify sha256</text>
+  <text class="elbl" data-e="e-hookchk" x="610" y="938" text-anchor="middle">re-run gate</text>
+  <text class="elbl" data-e="e-logdocs" x="640" y="800" text-anchor="middle">regenerate</text>
+
+  <!-- ── nodes: drivers ────────────────────── -->
+  <g class="node" data-k="operators">
+    <rect x="65" y="165" width="195" height="80" rx="10"/>
+    <text class="t" x="85" y="194">Operators</text>
+    <text class="m" x="85" y="214">Human · Claude · Codex</text>
+    <text class="m" x="85" y="231">dual-agent workflow</text>
+  </g>
+  <g class="node" data-k="cli">
+    <rect x="65" y="265" width="195" height="65" rx="10"/>
+    <text class="t" x="85" y="293">fyp_cli.py</text>
+    <text class="m" x="85" y="313">run · matrix · analyze</text>
+  </g>
+  <g class="node" data-k="make">
+    <rect x="65" y="350" width="195" height="55" rx="10"/>
+    <text class="t" x="85" y="378">Makefile</text>
+    <text class="m" x="85" y="396">smoke · run · matrix</text>
+  </g>
+  <g class="node store" data-k="config">
+    <rect x="65" y="430" width="195" height="75" rx="10"/>
+    <text class="t" x="85" y="458">configs/*.yaml</text>
+    <text class="m" x="85" y="478">default · tc1 · sensitivity</text>
+    <text class="m" x="85" y="495">Pydantic · pair rules</text>
+  </g>
+
+  <!-- ── nodes: engine ─────────────────────── -->
+  <g class="node" data-k="matrix">
+    <rect x="335" y="165" width="250" height="65" rx="10"/>
+    <text class="t" x="355" y="193">run_quant_matrix</text>
+    <text class="m" x="355" y="213">load model once · all benchmarks</text>
+  </g>
+  <g class="node" data-k="single">
+    <rect x="335" y="250" width="250" height="55" rx="10"/>
+    <text class="t" x="355" y="278">run_quant_benchmark</text>
+    <text class="m" x="355" y="296">one model × one benchmark</text>
+  </g>
+  <g class="node" data-k="loader">
+    <rect x="335" y="330" width="250" height="70" rx="10"/>
+    <text class="t" x="355" y="358">HFModelLoader</text>
+    <text class="m" x="355" y="378">on-the-fly NF4 (BitsAndBytes)</text>
+    <text class="m" x="355" y="395">baseline vs 4-bit · same model_id</text>
+  </g>
+  <g class="node" data-k="gen">
+    <rect x="335" y="425" width="250" height="70" rx="10"/>
+    <text class="t" x="355" y="453">TextGenerator</text>
+    <text class="m" x="355" y="473">chat template · no thinking</text>
+    <text class="m" x="355" y="490">greedy · seeded · resumable</text>
+  </g>
+
+  <!-- ── nodes: benchmarks & scoring ───────── -->
+  <g class="node" data-k="hb">
+    <rect x="665" y="165" width="105" height="70" rx="10"/>
+    <text class="t" x="682" y="192">HarmBench</text>
+    <text class="m" x="682" y="212">harmful</text>
+    <text class="m" x="682" y="228">compliance</text>
+  </g>
+  <g class="node" data-k="xs">
+    <rect x="785" y="165" width="105" height="70" rx="10"/>
+    <text class="t" x="802" y="192">XSTest</text>
+    <text class="m" x="802" y="212">over-</text>
+    <text class="m" x="802" y="228">refusal</text>
+  </g>
+  <g class="node" data-k="mmlu">
+    <rect x="905" y="165" width="105" height="70" rx="10"/>
+    <text class="t" x="922" y="192">MMLU</text>
+    <text class="m" x="922" y="212">capability</text>
+    <text class="m" x="922" y="228">accuracy</text>
+  </g>
+  <g class="node gate" data-k="judge">
+    <rect x="665" y="265" width="150" height="95" rx="10"/>
+    <text class="t" x="682" y="293">HarmBench judge</text>
+    <text class="k" x="682" y="311">primary · D16</text>
+    <text class="m" x="682" y="330">Llama-2-13b-cls</text>
+    <text class="m" x="682" y="348">official classifier</text>
+  </g>
+  <g class="node" data-k="scorers">
+    <rect x="838" y="285" width="186" height="75" rx="10"/>
+    <text class="t" x="855" y="312">Deterministic scorers</text>
+    <text class="m" x="855" y="332">v2 regex · XSTest parser</text>
+    <text class="m" x="855" y="349">MMLU exact-match</text>
+  </g>
+
+  <!-- ── nodes: analysis & artifacts ───────── -->
+  <g class="node" data-k="analysis">
+    <rect x="1075" y="165" width="310" height="70" rx="10"/>
+    <text class="t" x="1095" y="193">compare_quant_pairs</text>
+    <text class="m" x="1095" y="213">pairwise deltas (abs + rel)</text>
+    <text class="m" x="1095" y="230">interpretation label per pair</text>
+  </g>
+  <g class="node store" data-k="rawstore">
+    <rect x="1075" y="255" width="310" height="75" rx="10"/>
+    <text class="t" x="1095" y="283">results/ raw.jsonl + summary.json</text>
+    <text class="k" x="1095" y="301">immutable · TC1-original</text>
+    <text class="m" x="1095" y="320">per-prompt · full provenance</text>
+  </g>
+  <g class="node store" data-k="judgeside">
+    <rect x="1075" y="350" width="310" height="70" rx="10"/>
+    <text class="t" x="1095" y="378">scores.judge / scores.v2 sidecars</text>
+    <text class="m" x="1095" y="398">redacted: IDs + booleans only</text>
+    <text class="m" x="1095" y="414">judge_agreement.{json,csv}</text>
+  </g>
+  <g class="node" data-k="report">
+    <rect x="1075" y="445" width="310" height="70" rx="10"/>
+    <text class="t" x="1095" y="473">FYP report (.docx)</text>
+    <text class="m" x="1095" y="493">build_fyp_report.js → make report</text>
+    <text class="m" x="1095" y="510">deliverable · §6.12 judge results</text>
+  </g>
+
+  <!-- ── nodes: TC1 ────────────────────────── -->
+  <g class="node" data-k="prefetch">
+    <rect x="335" y="600" width="215" height="75" rx="10"/>
+    <text class="t" x="352" y="628">prefetch_tc1.py</text>
+    <text class="m" x="352" y="648">head node · cache models</text>
+    <text class="m" x="352" y="665">+ datasets for offline</text>
+  </g>
+  <g class="node" data-k="sbatch">
+    <rect x="575" y="600" width="215" height="75" rx="10"/>
+    <text class="t" x="592" y="628">slurm/jobs_tc1/*.sbatch</text>
+    <text class="m" x="592" y="648">6 per-model matrix jobs</text>
+    <text class="m" x="592" y="665">offline env · UGGPU-TC1</text>
+  </g>
+  <g class="node" data-k="judgejob">
+    <rect x="815" y="600" width="200" height="75" rx="10"/>
+    <text class="t" x="832" y="628">judge_validation.sbatch</text>
+    <text class="m" x="832" y="648">fp16 · V100 32GB</text>
+    <text class="m" x="832" y="665">job 61047 · 0 parse errors</text>
+  </g>
+
+  <!-- ── nodes: agent harness ──────────────── -->
+  <g class="node truth" data-k="log">
+    <rect x="70" y="820" width="240" height="90" rx="10"/>
+    <text class="t" x="90" y="850">docs/PROJECT_LOG.md</text>
+    <text class="k" x="90" y="868">single source of truth</text>
+    <text class="m" x="90" y="888">status · decisions · changelog</text>
+  </g>
+  <g class="node gate" data-k="check">
+    <rect x="345" y="820" width="250" height="90" rx="10"/>
+    <text class="t" x="365" y="846">make agent-check</text>
+    <text class="k" x="365" y="864">6 gates</text>
+    <text class="m" x="365" y="884">docs-sync · log · sha256</text>
+    <text class="m" x="365" y="901">report · git · pytest</text>
+  </g>
+  <g class="node store" data-k="policy">
+    <rect x="645" y="820" width="230" height="90" rx="10"/>
+    <text class="t" x="665" y="850">artifact_policy.yaml</text>
+    <text class="m" x="665" y="870">immutable · redaction</text>
+    <text class="m" x="665" y="888">stale-text · report-worthy</text>
+  </g>
+  <g class="node do" data-k="docs">
+    <rect x="925" y="820" width="220" height="90" rx="10"/>
+    <text class="t" x="945" y="850">Generated docs</text>
+    <text class="m" x="945" y="870">HANDOFF · DASHBOARD</text>
+    <text class="m" x="945" y="888">TC1 checklist · manifest</text>
+  </g>
+  <g class="node do" data-k="skills">
+    <rect x="1170" y="820" width="220" height="90" rx="10"/>
+    <text class="t" x="1190" y="850">Skills</text>
+    <text class="m" x="1190" y="870">.agents/skills (4)</text>
+    <text class="m" x="1190" y="888">.claude/skills · html-diagram</text>
+  </g>
+  <g class="node do" data-k="status">
+    <rect x="70" y="945" width="240" height="75" rx="10"/>
+    <text class="t" x="90" y="973">agent-status / agent-start</text>
+    <text class="m" x="90" y="993">live repo briefing for</text>
+    <text class="m" x="90" y="1010">a fresh session / agent</text>
+  </g>
+  <g class="node ext" data-k="codex">
+    <rect x="345" y="945" width="250" height="75" rx="10"/>
+    <text class="t" x="365" y="973">.codex/agents (5)</text>
+    <text class="m" x="365" y="993">artifact-guardian · auditor</text>
+    <text class="m" x="365" y="1010">tc1-ops · judge-reviewer</text>
+  </g>
+  <g class="node ext" data-k="hooks">
+    <rect x="645" y="945" width="230" height="75" rx="10"/>
+    <text class="t" x="665" y="973">.codex/hooks</text>
+    <text class="m" x="665" y="993">guard-artifacts · stop-check</text>
+    <text class="m" x="665" y="1010">pre-compact handoff</text>
+  </g>
+  <g class="node do" data-k="eval">
+    <rect x="925" y="945" width="220" height="75" rx="10"/>
+    <text class="t" x="945" y="973">make harness-eval</text>
+    <text class="m" x="945" y="993">proves the gates catch</text>
+    <text class="m" x="945" y="1010">bad repo states</text>
+  </g>
+  <g class="node do" data-k="workflow">
+    <rect x="1170" y="945" width="220" height="75" rx="10"/>
+    <text class="t" x="1190" y="973">AGENTIC_WORKFLOW.md</text>
+    <text class="m" x="1190" y="993">CLAUDE.md ≡ AGENTS.md</text>
+    <text class="m" x="1190" y="1010">conventions for agents</text>
+  </g>
+</svg>
+
+  <div class="src">docs/PROJECT_LOG.md · CLAUDE.md/AGENTS.md · D16 judge-primary</div>
+
+  <div class="card" id="flowcap">
+    <div class="cctrl">
+      <button class="cbtn cgrip" data-grip title="Drag">⠿</button>
+      <button class="cbtn" data-collapse title="Collapse">–</button>
+      <button class="cbtn" data-close title="Close">×</button>
+    </div>
+    <div class="fname" id="f-name"></div>
+    <div class="cbody"><ol id="f-steps"></ol></div>
+  </div>
+
+  <div class="card" id="detail">
+    <div class="cctrl">
+      <button class="cbtn cgrip" data-grip title="Drag">⠿</button>
+      <button class="cbtn" data-collapse title="Collapse">–</button>
+      <button class="cbtn" data-close title="Close">×</button>
+    </div>
+    <h3 id="d-title">Click any box</h3>
+    <div class="cbody">
+      <div class="meta" id="d-meta">node detail</div>
+      <p id="d-body">Every box is clickable. The chips up top light up paths — <b>Run</b> (generate + score), <b>Judge</b> (D16 primary scoring), <b>TC1</b> (cluster execution), <b>Analyze</b> (deltas + report), and <b>Harness</b> (the self-governing agent layer). Drag <span style="font-family:var(--mono)">⠿</span>, collapse <span style="font-family:var(--mono)">–</span>, or close <span style="font-family:var(--mono)">×</span> these panels.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+const DETAIL = {
+  operators:{ t:"Operators", m:"human + two coding agents", b:"You drive the study; <b>Claude Code</b> and <b>Codex</b> share the repo under a dual-agent workflow. Every agent action funnels through the CLI and is bound by the harness — most importantly, <b>logging each change</b> to PROJECT_LOG.md." },
+  cli:      { t:"fyp_cli.py", m:"the one entrypoint", b:"Subcommands: <code>run</code>, <code>matrix</code>, <code>analyze</code>, plus harness commands <code>agent-status</code> / <code>agent-start</code>. Resolves a YAML config into a model + benchmark and hands off to the pipeline." },
+  make:     { t:"Makefile", m:"developer shortcuts", b:"Thin wrappers: <code>make smoke / run / matrix / analyze / report</code> for the study, and <code>agent-check / harness-eval / agent-handoff / agent-dashboard</code> for the harness layer." },
+  config:   { t:"configs/*.yaml", m:"Pydantic-validated", b:"<code>default</code> (local), <code>tc1</code> (cluster), <code>tc1_sensitivity</code>. The schema enforces the core constraint: every <code>pair_id</code> needs ≥1 baseline + ≥1 quantized member, both sharing one <code>model_id</code>; quantization is applied on the fly." },
+  matrix:   { t:"run_quant_matrix", m:"matrix orchestrator", b:"Loads each model <b>once</b> and runs all its benchmarks sequentially — avoids two extra load cycles per model. A <code>try/finally</code> releases GPU memory between models (<code>gc.collect()</code> + <code>empty_cache()</code>)." },
+  single:   { t:"run_quant_benchmark", m:"one model × one benchmark", b:"The atomic run: set seeds, load model+tokenizer, batch prompts through the generator, score, then write <code>raw.jsonl</code> + <code>summary.json</code>. <code>--resume</code> skips already-processed prompt_ids." },
+  loader:   { t:"HFModelLoader", m:"dtype/device + NF4", b:"Loads HF weights; if <code>quantized: true</code> it applies on-the-fly 4-bit <code>BitsAndBytesConfig</code> (NF4) at load time. <code>dtype: auto</code> → fp16 on CUDA, fp32 on CPU; the 4-bit compute dtype follows the resolved dtype." },
+  gen:      { t:"TextGenerator", m:"batched generation", b:"Applies the chat template with <code>enable_thinking=False</code>, batches prompts, decodes greedily (<code>temperature: 0.0</code>) for determinism. Records seed + generation_config into every raw record." },
+  hb:       { t:"HarmBench", m:"walledai/HarmBench · ASR", b:"Harmful-compliance under unsafe prompts. The <b>Attack Success Rate</b> is the headline safety metric — and the one most affected by which scorer you trust (see the Judge node)." },
+  xs:       { t:"XSTest", m:"over-refusal rate", b:"Benign prompts that look risky — measures whether a model <b>over-refuses</b>. Scored by the deterministic v2 refusal parser (stays v2; the judge covers HarmBench only)." },
+  mmlu:     { t:"MMLU subset", m:"accuracy", b:"General capability, exact-match scored. The control axis: it lets analysis tell a real alignment shift apart from plain capability degradation." },
+  judge:    { t:"HarmBench judge (D16)", m:"the PRIMARY ASR scorer", b:"The official <code>cais/HarmBench-Llama-2-13b-cls</code> classifier. It found the v2 regex <b>over-counts ASR</b> (Qwen κ≈0.19–0.37, Llama κ≈0.69–0.79) and <b>relocated the only significant ΔASR</b> from Qwen 4B (proxy) to Qwen 1.7B (judge). Ran once on TC1; results are committed — no re-run needed." },
+  scorers:  { t:"Deterministic scorers", m:"regex + exact-match", b:"The v2 refusal regex is retained as a <b>secondary</b> HarmBench non-refusal proxy; XSTest uses the same parser for over-refusal; MMLU uses exact-match. All fast, reproducible, no GPU." },
+  analysis: { t:"compare_quant_pairs", m:"deltas + interpretation", b:"Groups results by <code>pair_id</code> (baseline vs 4-bit), computes absolute + relative deltas per benchmark, then assigns a label: <code>alignment_degradation</code>, <code>alignment_improvement</code>, <code>capability_collapse_masquerading_as_safety</code>, <code>robust_preservation</code>, or <code>broad_degradation</code>." },
+  rawstore: { t:"results/ raw + summary", m:"immutable TC1-original", b:"Per-prompt <code>raw.jsonl</code> (prompt, response, scores, pair_id, seed, generation_config, timestamp) and aggregate <code>summary.json</code>. Treated as <b>immutable</b> — post-hoc scoring only ever writes derived sidecars, never edits these. A sha256 manifest guards them." },
+  judgeside:{ t:"Judge / v2 sidecars", m:"redacted derived artifacts", b:"<code>scores.judge.*</code> and <code>scores.v2.*</code> carry IDs + booleans only (no prompt/response text). <code>judge_agreement.{json,csv}</code> holds the κ agreement table. Raw outputs are never modified." },
+  report:   { t:"FYP report (.docx)", m:"the deliverable", b:"Generated from <code>scripts/build_fyp_report.js</code> via <code>make report</code> — never hand-edited. Report-worthy changes regenerate it; §6.12 carries the judge-agreement results. The docx is the artifact; the JS is the source." },
+  prefetch: { t:"prefetch_tc1.py", m:"head node, one-time", b:"TC1 compute nodes run fully offline. This pre-caches all model weights + datasets on the head node first so jobs can export <code>HF_HUB_OFFLINE=1</code> etc. Package installs / downloads are allowed on the head node; user compute is not." },
+  sbatch:   { t:"matrix sbatch jobs", m:"6 per-model scripts", b:"One <code>*.sbatch</code> per model on partition <code>UGGPU-TC1</code>. QoS: 1 GPU/job, 6h walltime, MaxJobsPU=2 — in practice one GPU job runs while the second queues with <code>QOSMaxGRESPerUser</code>. Each preserves the offline bootstrap block." },
+  judgejob: { t:"judge_validation.sbatch", m:"job 61047 · done", b:"The D16 judge run: fp16, 32GB V100, n=200×6, <b>0 parse errors</b>. Reads the raw responses, scores with the 13B classifier, writes redacted judge sidecars. Already complete and committed." },
+  log:      { t:"docs/PROJECT_LOG.md", m:"single source of truth", b:"The only file that authoritatively records status, open actions, decisions, and the changelog. <b>Every repo change writes one changelog row</b> and bumps the metadata. Read it before doing anything; the harness fails if it's stale." },
+  check:    { t:"make agent-check", m:"the harness gate", b:"Runs six checks: <b>docs-sync</b> (CLAUDE.md ≡ AGENTS.md), <b>project-log-updated</b>, <b>immutable-artifacts</b> (sha256 manifest), <b>report-freshness</b>, <b>git-diff-clean</b>, and <b>pytest</b>. This is the contract that keeps both agents honest." },
+  policy:   { t:"artifact_policy.yaml", m:"machine-readable contract", b:"Declares which artifacts are immutable, the redaction rules for sidecars, the stale-text scans, and the report-worthy file patterns. Change harness behaviour here (and log the decision) rather than in scattered code." },
+  docs:     { t:"Generated docs", m:"regenerated from live state", b:"<code>HANDOFF.md</code>, <code>AGENT_DASHBOARD.md</code>, <code>TC1_AGENT_CHECKLIST.md</code> and the immutable manifest — all rebuilt from the live repo (<code>make agent-handoff / agent-dashboard / agent-tc1-checklist</code>) so a fresh session can recover fast." },
+  skills:   { t:"Skills", m:"task-scoped workflows", b:"Repo skills under <code>.agents/skills/</code> (harness-maintenance, report-audit, second-judge, meetup-brief) and <code>.claude/skills/</code> (agent-handoff + this <code>html-diagram</code> skill). Used instead of bloating always-loaded instructions." },
+  status:   { t:"agent-status / agent-start", m:"fresh-session briefing", b:"<code>agent-status</code> prints live repo status for a cold start; <code>agent-start --task … --agent …</code> emits a small task-specific startup packet. The fast on-ramp before any work begins." },
+  codex:    { t:".codex/agents", m:"context-isolated audits", b:"Five Codex subagents for isolated reviews: artifact-guardian, report-auditor, tc1-ops, judge-reviewer, meetup-story. They keep heavyweight audits out of the main context window." },
+  hooks:    { t:".codex/hooks", m:"reminder / refresh layer", b:"<code>guard_artifact_paths</code>, <code>stop_agent_check</code>, <code>pre_compact_handoff</code> — lightweight hooks (trust-reviewed) that nudge agents to re-run the gate and refresh handoffs. Not a replacement for <code>make agent-check</code>." },
+  eval:     { t:"make harness-eval", m:"tests the tester", b:"Focused tests that deliberately put the repo into bad states and prove the harness <b>catches</b> them — so the gates can be trusted, not just assumed." },
+  workflow: { t:"AGENTIC_WORKFLOW.md", m:"the agent conventions", b:"Documents the dual-agent process and the rule that <code>CLAUDE.md</code> and <code>AGENTS.md</code> stay byte-identical (only the agent-name header differs). docs-sync in the gate enforces it mechanically." },
+};
+
+const FLOWS = {
+  run: {
+    name: "Run — generate then score",
+    edges: ["e-opcli","e-clicfg","e-climat","e-cfgload","e-matsng","e-sngload","e-loadgen","e-genhb","e-genxs","e-genmm","e-hbscr","e-xsscr","e-mmscr","e-scrraw"],
+    nodes: ["operators","cli","config","matrix","single","loader","gen","hb","xs","mmlu","scorers","rawstore"],
+    steps: ["CLI resolves a YAML config (model + benchmark, Pydantic-validated)","Matrix loads the model once; loader applies on-the-fly NF4 if quantized","TextGenerator batches prompts, greedy decode for determinism","Plugins score; deterministic scorers write <code>raw.jsonl</code> + <code>summary.json</code>"]
+  },
+  judge: {
+    name: "Judge — the D16 primary HarmBench scorer",
+    edges: ["e-rawjj","e-judgejj","e-hbjudge","e-jjside","e-jsan"],
+    nodes: ["rawstore","hb","judge","judgejob","judgeside","analysis"],
+    steps: ["The 13B HarmBench classifier re-scores the saved HarmBench responses on TC1 (job 61047, fp16, 0 parse errors)","Writes redacted judge sidecars (IDs + booleans only) — raw artifacts untouched","Agreement vs the v2 regex: Qwen κ≈0.19–0.37, Llama κ≈0.69–0.79 → regex over-counts ASR","The only significant ΔASR moves from Qwen 4B (proxy) to Qwen 1.7B (judge) and feeds analysis"]
+  },
+  tc1: {
+    name: "TC1 — offline cluster execution",
+    edges: ["e-climat","e-cfgpre","e-presb","e-sbraw"],
+    nodes: ["cli","config","prefetch","sbatch","rawstore"],
+    steps: ["Head node pre-caches all models + datasets (compute nodes are offline)","Per-model <code>*.sbatch</code> on UGGPU-TC1: 1 GPU, 6h, offline env vars","Submit with direct <code>sbatch</code> (not make) — one GPU job runs, the next queues","Jobs write the immutable <code>raw.jsonl</code> / <code>summary.json</code> back into results/"]
+  },
+  analyze: {
+    name: "Analyze — deltas, then the report",
+    edges: ["e-rawan","e-jsan","e-anrep"],
+    nodes: ["rawstore","judgeside","analysis","report"],
+    steps: ["Group results by <code>pair_id</code>: baseline vs 4-bit","Compute absolute + relative deltas across HarmBench / XSTest / MMLU","Assign an interpretation label per pair (alignment vs capability)","<code>make report</code> regenerates the FYP docx; §6.12 carries the judge results"]
+  },
+  harness: {
+    name: "Harness — the self-governing layer",
+    edges: ["e-oplog","e-logchk","e-chkpol","e-logdocs","e-codhook","e-hookchk","e-chkraw"],
+    nodes: ["operators","log","check","policy","docs","codex","hooks","rawstore","status","eval","skills"],
+    steps: ["Every change writes one row to PROJECT_LOG.md — the single source of truth","<code>make agent-check</code> runs 6 gates against <code>artifact_policy.yaml</code> (docs-sync, log, sha256, report, git, pytest)","Handoff / dashboard / checklist regenerate from live state for the next session","Codex hooks re-run the gate on stop / pre-compact; <code>harness-eval</code> proves the gates actually catch bad states"]
+  }
+};
+
+const stage = document.getElementById('stage');
+const nodes = document.querySelectorAll('.node');
+const edges = document.querySelectorAll('.edge');
+const elbls = document.querySelectorAll('.elbl');
+const chips = document.querySelectorAll('.chip');
+const fcap = document.getElementById('flowcap');
+
+function setFlow(key) {
+  chips.forEach(c => c.classList.toggle('on', c.dataset.flow === key));
+  edges.forEach(e => e.classList.remove('lit'));
+  elbls.forEach(l => l.classList.remove('lit'));
+  nodes.forEach(n => n.classList.remove('lit'));
+  if (key === 'all') { stage.classList.remove('flowing'); fcap.classList.remove('show'); return; }
+  const f = FLOWS[key];
+  stage.classList.add('flowing');
+  f.edges.forEach(id => document.getElementById(id)?.classList.add('lit'));
+  elbls.forEach(l => { if (f.edges.includes(l.dataset.e)) l.classList.add('lit'); });
+  f.nodes.forEach(k => document.querySelector(`.node[data-k="${k}"]`)?.classList.add('lit'));
+  document.getElementById('f-name').textContent = f.name;
+  document.getElementById('f-steps').innerHTML = f.steps.map(s => `<li>${s}</li>`).join('');
+  reveal(fcap);
+  fcap.classList.add('show');
+}
+chips.forEach(c => c.addEventListener('click', () => setFlow(c.dataset.flow)));
+
+const detail = document.getElementById('detail');
+nodes.forEach(n => n.addEventListener('click', () => {
+  nodes.forEach(x => x.classList.remove('sel'));
+  n.classList.add('sel');
+  const d = DETAIL[n.dataset.k];
+  if (!d) return;
+  document.getElementById('d-title').textContent = d.t;
+  document.getElementById('d-meta').textContent = d.m;
+  document.getElementById('d-body').innerHTML = d.b;
+  reveal(detail);
+}));
+
+// reveal a card that may have been collapsed or closed
+function reveal(card) {
+  card.classList.remove('hidden', 'collapsed');
+  const col = card.querySelector('[data-collapse]');
+  if (col) col.textContent = '–';
+}
+
+// drag · collapse · close for both cards
+function wireCard(card) {
+  const grip = card.querySelector('[data-grip]');
+  const col  = card.querySelector('[data-collapse]');
+  const cls  = card.querySelector('[data-close]');
+  col.addEventListener('click', () => {
+    const c = card.classList.toggle('collapsed');
+    col.textContent = c ? '+' : '–';
+  });
+  cls.addEventListener('click', () => card.classList.add('hidden'));
+  let drag = false, sx = 0, sy = 0, sl = 0, st = 0;
+  grip.addEventListener('pointerdown', e => {
+    drag = true;
+    const r = card.getBoundingClientRect();
+    const p = card.parentElement.getBoundingClientRect();
+    sl = r.left - p.left; st = r.top - p.top;
+    card.style.left = sl + 'px'; card.style.top = st + 'px';
+    card.style.right = 'auto'; card.style.bottom = 'auto';
+    sx = e.clientX; sy = e.clientY;
+    grip.setPointerCapture(e.pointerId);
+    e.preventDefault();
+  });
+  grip.addEventListener('pointermove', e => {
+    if (!drag) return;
+    card.style.left = (sl + e.clientX - sx) + 'px';
+    card.style.top  = (st + e.clientY - sy) + 'px';
+  });
+  grip.addEventListener('pointerup', () => { drag = false; });
+}
+wireCard(detail);
+wireCard(fcap);
+
+document.getElementById('themeToggle').addEventListener('click', () => {
+  const dark = !document.documentElement.classList.contains('dark');
+  document.documentElement.classList.toggle('dark', dark);
+  localStorage.setItem('theme', dark ? 'dark' : 'light');
+});
+</script>
+</body>
+</html>
