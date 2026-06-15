@@ -7,11 +7,11 @@
 
 ---
 
-## [2026-06-15] ACTIVE: T26 — RUN Mistral-7B + Phi-4-mini on TC1 (local integration DONE + pushed; run pending)
+## [2026-06-15] ✅ DONE: T26 — Mistral-7B + Phi-4-mini RUN COMPLETE + folded into report (commit `19a3345`, merged to main; durable record = PROJECT_LOG D32)
 
 **Source of truth:** `docs/PROJECT_LOG.md` — D30 + §4 row (2026-06-14 23:45). This entry is only the "how to resume the RUN" buffer.
 
-**Status:** ALL local code/config/test/sbatch/report/doc work is DONE, committed **`60c0acc`**, pushed to branch **`t26-add-mistral-phi-pairs`** (NOT merged to main). 246 tests pass; `make agent-check` 8/8 green; adversarial 5-reviewer+verify pass = SHIP. The 4 new TC1 jobs + the new-pairs judge run are the only things left. Existing 3-pair results & setup are byte-unchanged.
+**Status:** ✅ COMPLETE 2026-06-15. Ran on TC1 (matrix 61121/61122/61123/61125 + HarmBench classifier 61134) + gpt-4o 2nd judge (local). Judge-primary: Mistral ΔASR **−0.040** (n.s.; v2 proxy +0.055 sign-flip, κ 0.11–0.19; gpt-4o concurs −0.030/κ 0.60–0.63), Phi ΔASR **0.000** (robust_preservation; ΔOR −0.028 SIG decrease). No new significant ΔASR (Qwen 1.7B stays the only one); D16's judge-over-proxy finding now spans 4 families. Folded into report (new §6.13 + Tables 6.1–6.3 + Abstract/RQ2/RQ5/§6.11/§6.4.1/§6.12/Ch10); manifest 48→80; 246 tests + `make agent-check` 8/8 + 3-agent adversarial verification (36/36 numeric checks) all green; Phi via native Phi3 (D31). Committed `19a3345`, **merged to main + pushed**. **Durable record: PROJECT_LOG.md D32.** Everything below is retained for reference only — nothing left to do for T26.
 
 **Why:** 3 pairs/2 families → 5 pairs/4 families (add `mistral_7b`, `phi4_mini`) for cross-family generality (RQ5) + small-model deployment. IDENTICAL methodology to the old 3 (NF4, greedy, seed 42, 4 benchmarks incl. ARC, HarmBench classifier as PRIMARY ASR).
 
