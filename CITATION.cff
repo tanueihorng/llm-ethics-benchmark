@@ -1,0 +1,30 @@
+# Citation File Format (https://citation-file-format.github.io/) — lets GitHub
+# render a "Cite this repository" widget and gives reusers a canonical reference.
+cff-version: 1.2.0
+title: "fyp-quant: A matched-pair framework for safety–capability trade-offs in quantized small language models"
+message: "If you use this framework or its findings, please cite it as below."
+type: software
+authors:
+  - family-names: "Tan"
+    given-names: "Uei Horng"
+    affiliation: "College of Computing and Data Science, Nanyang Technological University"
+abstract: >-
+  An open, reproducible benchmarking framework that evaluates safety–capability
+  trade-offs in small instruction-tuned LLMs under quantization. It uses a
+  matched-pair design (identical baseline weights, quantization applied on the
+  fly) across three precisions (fp16, INT8/LLM.int8, NF4 four-bit) and four
+  benchmarks (HarmBench, XSTest, MMLU, ARC-Challenge). HarmBench Attack Success
+  Rate is scored by the official HarmBench classifier as the primary judge,
+  cross-checked by a second (gpt-4o) judge; a capability-anchored interpretation
+  layer distinguishes genuine alignment shifts from capability degradation.
+keywords:
+  - large language models
+  - quantization
+  - AI safety
+  - evaluation framework
+  - HarmBench
+  - reproducibility
+repository-code: "https://github.com/tanueihorng/llm-ethics-benchmark"
+license-url: "https://github.com/tanueihorng/llm-ethics-benchmark/blob/main/LICENSE"
+# A formal year/version/DOI will be added on the archival release (e.g. Zenodo);
+# see docs/REPRODUCIBILITY.md.

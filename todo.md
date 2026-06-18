@@ -27,6 +27,8 @@
 - Add a genuinely different quant family (GPTQ / AWQ / GGUF) beyond the two bitsandbytes methods.
 - Arditi activation-direction probe; paired neutral-margin control with a significance test.
 
+**Reuse/dissemination deliverables — DONE 2026-06-18 (research-grounded):** `pip install -e .` packaging (`pyproject.toml`) + `CITATION.cff` + `docs/QUICKSTART.md` (framework reuse), `docs/paper_outline.md` (workshop paper/poster), `docs/REPRODUCIBILITY.md` + `docs/RESULTS_CARD.md`, `docs/THESIS_OUTLINE.md`. ⚠️ **ACTION (user decision): add a `LICENSE`** — the repo is currently all-rights-reserved, which blocks reuse. Recommend MIT or Apache-2.0 for the code, but **confirm against NTU FYP intellectual-property policy first** (FYP IP may be co-owned). Then set `license` in `pyproject.toml` + `CITATION.cff`, and optionally archive a release to Zenodo for a citable DOI. See `docs/REPRODUCIBILITY.md` §6.
+
 **Housekeeping (optional):** stale local branches already merged to main can be pruned — `t26-add-mistral-phi-pairs`, `mechanism-refusal-margin`, `int8-precision-point`, `harden/latent-six-audit`, `backup/pre-v2-scorer-final` (keep `backup/*` if wanted as a safety net).
 
 ## [2026-06-18] ✅ DONE: full-repo scorer-integrity + consistency audit (D36)

@@ -1,3 +1,28 @@
+Metadata-Version: 2.4
+Name: fyp-quant
+Version: 0.1.0
+Summary: A matched-pair benchmarking framework for safety–capability trade-offs in quantized small language models (fp16 / INT8 / NF4).
+Author: Tan Uei Horng
+Project-URL: Repository, https://github.com/tanueihorng/llm-ethics-benchmark
+Keywords: llm,quantization,safety,evaluation,harmbench,benchmark
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+Requires-Dist: transformers>=4.41.0
+Requires-Dist: torch>=2.2.0
+Requires-Dist: datasets>=2.19.0
+Requires-Dist: pyyaml>=6.0.0
+Requires-Dist: numpy>=1.26.0
+Requires-Dist: tqdm>=4.66.0
+Requires-Dist: pydantic>=2.7.0
+Requires-Dist: bitsandbytes>=0.43.0
+Requires-Dist: accelerate>=0.30.0
+Requires-Dist: sentencepiece>=0.2.0
+Requires-Dist: protobuf>=4.0.0
+Requires-Dist: tiktoken>=0.7.0
+Requires-Dist: openai>=1.0.0
+Requires-Dist: pytest>=8.0.0
+Requires-Dist: pytest-cov>=5.0.0
+
 # Safety-Capability Trade-offs in Quantized Small Language Models
 
 > **Coding agents:** read [`AGENTS.md`](AGENTS.md) (or [`CLAUDE.md`](CLAUDE.md) — they are duplicates) for the working conventions, then [`docs/PROJECT_LOG.md`](docs/PROJECT_LOG.md) for current state.
@@ -16,15 +41,6 @@ The core objective is to compare baseline and quantized checkpoints as matched p
 ## Documentation
 
 > **Start here:** [`docs/PROJECT_LOG.md`](docs/PROJECT_LOG.md) — single source of truth for current status, open tasks, decisions, and the changelog. Update this file whenever something changes; everything else listed below is permanent reference material that does not track day-to-day state.
-
-**Start using / reusing it:**
-- Quickstart & reuse guide: [`docs/QUICKSTART.md`](docs/QUICKSTART.md) — run your own study in 3 steps; extend to new models/benchmarks/precisions
-- Reproducibility kit: [`docs/REPRODUCIBILITY.md`](docs/REPRODUCIBILITY.md) — mapped to the ML Reproducibility Checklist
-- One-page results card: [`docs/RESULTS_CARD.md`](docs/RESULTS_CARD.md)
-
-**Academic write-up scaffolding:**
-- Workshop paper / poster outline: [`docs/paper_outline.md`](docs/paper_outline.md)
-- Thesis structure & writing guide: [`docs/THESIS_OUTLINE.md`](docs/THESIS_OUTLINE.md)
 
 **Permanent reference material:**
 - Current FYP interim report: `docs/FYP_Report_2026-06-14.docx`

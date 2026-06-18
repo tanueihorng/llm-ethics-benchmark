@@ -1,3 +1,32 @@
+# Packaging metadata so the framework is `pip install -e .`-able and reusable by
+# others (research-software practice: Wilson et al. 2017, PLOS Comp Biol; JOSS).
+# NOTE: `license` is intentionally left unset pending confirmation against NTU's
+# FYP intellectual-property policy — see docs/REPRODUCIBILITY.md §License.
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fyp-quant"
+version = "0.1.0"
+description = "A matched-pair benchmarking framework for safety–capability trade-offs in quantized small language models (fp16 / INT8 / NF4)."
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [{ name = "Tan Uei Horng" }]
+keywords = ["llm", "quantization", "safety", "evaluation", "harmbench", "benchmark"]
+dynamic = ["dependencies"]
+
+[project.urls]
+Repository = "https://github.com/tanueihorng/llm-ethics-benchmark"
+
+[tool.setuptools]
+# The importable package is `ethical_benchmark`; top-level run_*/fyp_cli scripts
+# stay as scripts (invoked via `python fyp_cli.py ...`), not installed modules.
+packages = ["ethical_benchmark"]
+
+[tool.setuptools.dynamic]
+dependencies = { file = ["requirements.txt"] }
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = ["test_*.py"]
