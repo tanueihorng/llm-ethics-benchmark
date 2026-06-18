@@ -87,3 +87,27 @@ def test_generator_emits_expected_files(tmp_path: Path) -> None:
     assert "run_judge_validation.py" in judge
     assert "--results-dir results_sensitivity/seed1" in judge
     assert "--precision fp16" in judge
+
+
+def test_v2_asr_prefers_v2_summary(tmp_path) -> None:
+    """_v2_asr must read summary.v2.json (the v2 regex), not the v1 runtime summary.json.
+
+    Guards against a future re-run silently picking up the stale v1 value for the
+    original 2026-05-27 models (mirrors the precision_sweep fix; audit 2026-06-18).
+    """
+    import json
+    sa = _load_script("sensitivity_analysis")
+    d = tmp_path / "qwen_2b_base" / "harmbench"
+    d.mkdir(parents=True)
+    (d / "summary.json").write_text(json.dumps({"metrics": {"attack_success_rate": 0.775}}))    # v1
+    (d / "summary.v2.json").write_text(json.dumps({"metrics": {"attack_success_rate": 0.600}}))  # v2
+    assert sa._v2_asr(d) == 0.600  # v2 sidecar wins
+
+
+def test_v2_asr_falls_back_to_runtime_summary(tmp_path) -> None:
+    import json
+    sa = _load_script("sensitivity_analysis")
+    d = tmp_path / "qwen_2b_8bit" / "harmbench"
+    d.mkdir(parents=True)
+    (d / "summary.json").write_text(json.dumps({"metrics": {"attack_success_rate": 0.585}}))
+    assert sa._v2_asr(d) == 0.585  # graceful fallback when no v2 sidecar

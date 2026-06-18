@@ -80,6 +80,33 @@ class TestEightBitDetection:
 
 
 # --------------------------------------------------------------------------
+# The silent-fp16 RAISE path (_require_quantization_engaged) — the guard that
+# refuses to emit fp16 results mislabelled as quantized.
+# --------------------------------------------------------------------------
+class TestQuantizationGuard:
+    @staticmethod
+    def _spec(quantized: bool, method=None):
+        return type("S", (), {"quantized": quantized, "quant_method": method, "alias": "x"})()
+
+    def test_raises_when_quantized_but_loaded_fp16(self) -> None:
+        fp16_model = type("M", (), {})()  # no is_loaded_in_* / hf_quantizer attrs
+        with pytest.raises(RuntimeError, match="no quantization is active"):
+            loader_module._require_quantization_engaged(self._spec(True, "int8"), fp16_model)
+
+    def test_raise_message_names_the_method(self) -> None:
+        with pytest.raises(RuntimeError, match="int8 quantization"):
+            loader_module._require_quantization_engaged(self._spec(True, "int8"), type("M", (), {})())
+
+    def test_no_raise_when_quantization_active(self) -> None:
+        active = type("M", (), {"is_loaded_in_8bit": True})()
+        loader_module._require_quantization_engaged(self._spec(True, "int8"), active)  # must not raise
+
+    def test_baseline_fp16_does_not_raise(self) -> None:
+        # Baselines load in fp16 with quantized=False — the guard must stay silent.
+        loader_module._require_quantization_engaged(self._spec(False), type("M", (), {})())
+
+
+# --------------------------------------------------------------------------
 # Loader branch: int8 -> 8-bit config; None/nf4 -> 4-bit config
 # --------------------------------------------------------------------------
 class _Cuda:

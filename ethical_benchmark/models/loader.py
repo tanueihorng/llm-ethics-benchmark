@@ -92,6 +92,31 @@ def _quantization_active(model: Any) -> bool:
     )
 
 
+def _require_quantization_engaged(spec: Any, model: Any) -> None:
+    """Fail loud if a quantized spec silently loaded in fp16.
+
+    A model recorded as ``quantized=True`` that actually loaded in full precision
+    would contaminate the baseline-vs-quantized comparison, so we refuse to
+    proceed rather than emit fp16 results mislabelled as 4-bit / INT8. Extracted
+    from the load path so the guard's raise condition is unit-testable without a
+    GPU or a real checkpoint.
+
+    Side Effects:
+        Raises ``RuntimeError`` when ``spec.quantized`` is True but no
+        quantization is active on ``model``.
+    """
+
+    if spec.quantized and not _quantization_active(model):
+        method = (getattr(spec, "quant_method", None) or "nf4")
+        raise RuntimeError(
+            f"Model '{getattr(spec, 'alias', '?')}' requested {method} quantization "
+            f"but no quantization is active after load (is_loaded_in_4bit / "
+            f"is_loaded_in_8bit / is_quantized / hf_quantizer all absent). Refusing "
+            f"to proceed: results would be fp16 mislabelled as quantized. Check the "
+            f"checkpoint and the bitsandbytes installation."
+        )
+
+
 @dataclass(frozen=True)
 class ModelSpec:
     """Specification for loading a model from Hugging Face.
@@ -217,17 +242,10 @@ class HFModelLoader:
 
         model = AutoModelForCausalLM.from_pretrained(spec.hf_id, **model_kwargs)
 
-        if spec.quantized and not _quantization_active(model):
-            # Refuse to proceed if quantization did not actually engage: a model
-            # that silently loaded in fp16 but is recorded as quantized=True would
-            # contaminate the entire baseline-vs-4bit comparison.
-            raise RuntimeError(
-                f"Model '{spec.alias}' requested 4-bit quantization but no "
-                f"quantization is active after load (is_loaded_in_4bit / "
-                f"is_quantized / hf_quantizer all absent). Refusing to proceed: "
-                f"results would be fp16 mislabelled as 4-bit. Check the "
-                f"checkpoint and the bitsandbytes installation."
-            )
+        # Refuse to proceed if quantization did not actually engage: a model that
+        # silently loaded in fp16 but is recorded as quantized=True would
+        # contaminate the entire baseline-vs-quantized comparison (4-bit or INT8).
+        _require_quantization_engaged(spec, model)
 
         if runtime_device == "cpu":
             model.to("cpu")

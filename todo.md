@@ -7,35 +7,35 @@
 
 ---
 
-## [2026-06-15] ACTIVE: T29 — RUN INT8 precision point on TC1 (groundwork DONE + pushed; run pending)
+## [2026-06-18] ACTIVE: submission wrap-up — the study is COMPLETE; only the two submission tasks remain
 
-**Source of truth:** `docs/PROJECT_LOG.md` D34 + §4 row (2026-06-15 21:15). This is the "how to resume the RUN" buffer only.
+**Source of truth:** `docs/PROJECT_LOG.md` §1 status + D35 (INT8) + D36 (audit). All experiments, code, and report work are done and on `main` (`67fb292`+). 295 tests; `make agent-check` 8/8.
 
-**Status:** groundwork DONE, committed **`780dc00`**, pushed to branch **`int8-precision-point`** (NOT merged). 282 tests pass; `make agent-check` 8/8. ZERO regression to the evaluated study (main `tc1.yaml` / tests / base-vs-4bit pipeline untouched; existing fp16/NF4 load byte-identical). Only the TC1 run + sweep analysis + report fold-in remain.
+**Do next, in order:**
+1. **T1 — email Dr. Zhang.** Draft is `docs/email_drZhang_2026-06-13.md` (gitignored, local-only). Highest non-research priority; last supervisor contact was 2026-03-09. Results are in hand (5 pairs / 4 families / 3 precisions, judge-validated).
+2. **T15 — submit the interim report.** `docs/FYP_Report_2026-06-14.docx` (regenerate with `make report` if edited). Now carries §6.15 (INT8 precision point) and the family-wise caveat (§6.5).
+3. **T3 — `MyTCinfo`** on TC1 (storage quota). Quick, optional.
 
-**Why:** add INT8 (bitsandbytes LLM.int8 — a SECOND method, NOT "8-bit NF4"; NF4 is inherently 4-bit) as a 3rd precision so the study spans fp16→INT8→NF4 (addresses the single-method / single-bit-width weakness). Open question: is degradation **graded** with bit-width or a **cliff** at 4-bit?
+**Optional disclosure polish (low; already partly covered in §7.5/Ch8 — do only if tightening for the viva):**
+- One-line XSTest-ΔOR construct-validity note where ΔOR is reported (the over-refusal regex was never judge-validated; same over-counting risk as HarmBench). Esp. the Phi −0.028 claim.
+- "HarmBench classifier adopted as reference without independent human-label validation" disclosure (the gpt-4o 2nd judge κ 0.69–0.94 is the partial cross-check).
+- `max_new_tokens=128` ASR-floor note (MMLU-truncation already disclosed in Ch8).
 
-**Decided (don't re-litigate):**
-- **Separate `configs/tc1_int8.yaml`** (NOT int8 in the main tc1.yaml) — `compare_quant_pairs._select_pair_members` picks the alphabetically-first quantized alias, so an `_8bit` member would silently hijack the base-vs-4bit analysis. INT8 is a separate precision dimension analysed by `scripts/precision_sweep_analysis.py`.
-- **`quant_method` field**: None defaults to nf4 (existing entries byte-identical); int8 → LLM.int8; rejected on a baseline.
-- **Baselines in tc1_int8.yaml are NOT re-run** (present only for pair-validity + as the sweep's fp16 reference; their results already exist). Submit ONLY the `*_8bit` aliases.
-- **Judge for int8 = fp16 classifier** (same instrument as fp16/NF4), scores ONLY the 5 int8 aliases (`slurm/judge_validation_int8.sbatch`).
+**Optional research follow-ups (Ch9 future work; not blocking submission):**
+- Replicate the §6.15 Llama-3B INT8 ASR effect across more models + decode seeds (it rests on ≈8–9 prompts, one pair, non-monotonic — establish if it's a general LLM.int8 phenomenon).
+- Trace the §6.14 first-token refusal-margin probe across all three precisions (fp16/INT8/NF4), not just the behavioural metrics.
+- Add a genuinely different quant family (GPTQ / AWQ / GGUF) beyond the two bitsandbytes methods.
+- Arditi activation-direction probe; paired neutral-margin control with a significance test.
 
-**Verification already done (don't repeat):** 282 tests (16 int8 + 5 sweep new); backward-compat + int8/nf4 branch selection verified without GPU/bitsandbytes; agent-check 8/8; int8 matrix sbatch byte-consistent (alias + `--config tc1_int8.yaml` only).
+**Housekeeping (optional):** stale local branches already merged to main can be pruned — `t26-add-mistral-phi-pairs`, `mechanism-refusal-margin`, `int8-precision-point`, `harden/latent-six-audit`, `backup/pre-v2-scorer-final` (keep `backup/*` if wanted as a safety net).
 
-**Next steps — RUN (TC1):**
-1. `cd /tc1home/FYP/utan001/fyp_quant/repo && git fetch origin && git checkout int8-precision-point && git pull --ff-only origin int8-precision-point` (expect `780dc00`). No prefetch / HF-login (same model IDs, already cached).
-2. **Smoke (GATE):** `sbatch slurm/jobs_tc1_int8_smoke/qwen_2b_8bit__harmbench.sbatch` → confirm `.err` clean, `load_in_8bit` loads on the V100, `raw.jsonl` coherent. STOP if it OOMs/errors.
-3. **Matrix (5, pair-by-pair, MaxJobsPU=2):** `sbatch slurm/jobs_tc1_int8/qwen_2b_8bit__matrix.sbatch`, then `qwen_4b_8bit`, `llama_3_2_3b_8bit`, `mistral_7b_8bit`, `phi4_mini_8bit`. Wait COMPLETED (`squeue -u utan001`; `seff <id>`).
-4. **Judge (after ALL 5 matrix COMPLETE):** `sbatch slurm/judge_validation_int8.sbatch`.
-5. **SCP back (Mac):** `rsync -avz utan001@10.96.189.11:/tc1home/FYP/utan001/fyp_quant/repo/results/{qwen_2b_8bit,qwen_4b_8bit,llama_3_2_3b_8bit,mistral_7b_8bit,phi4_mini_8bit} /Users/tanueihorng/fyp_quant/results/`
+## [2026-06-18] ✅ DONE: full-repo scorer-integrity + consistency audit (D36)
 
-**Next steps — POST-RUN (Mac; ping Claude):**
-6. `python scripts/precision_sweep_analysis.py` → `results/analysis/precision_sweep.{json,csv}`.
-7. (optional) INT8 margin capture: a margin job with `--config configs/tc1_int8.yaml --models <int8 aliases> --precision-tag int8`, to extend the §6.14 mechanism sweep across precisions.
-8. **ADVERSARIALLY VERIFY the trend BEFORE writing** (lesson from T28 — don't present before verifying), then fold fp16→INT8→NF4 into the report (`build_fyp_report.js`) + `make report`; PROJECT_LOG run-results D-decision + §4 row; `make agent-check`; merge `int8-precision-point` → main.
+6-dimension adversarial audit (the student's worry: did v1/v2 + the classifier-primary switch corrupt the old/NF4 results?). **Verdict: NOTHING invalidates the results** — every primary HarmBench ASR is classifier-scored and independent of the regex; the main pipeline + `pairwise_deltas.json` carry the V2 (not v1) proxy; 120 raw artifacts hash-match; redaction + matched-pair integrity clean; reproduced Qwen-1.7B +0.055 and Llama INT8 +0.040 byte-for-byte. Applied the non-invalidating fixes (§6.5 family-wise caveat, stale §6.1.1 opening, dir-tree 22→23, κ 0.69→0.68, sensitivity `_v2_asr`→v2 + loader raise guard, +6 tests → 295, PROJECT_LOG §1). Durable record: PROJECT_LOG D36. Nothing left to do.
 
-**Watch items:** `load_in_8bit` on V100 sm_70 (smoke is the gate); INT8 expected to sit between fp16 and NF4 (verify, don't assume); `summary.json` is gitignored, so the int8 summaries MUST be SCP'd back for the sweep.
+## [2026-06-18] ✅ DONE: T29 — INT8 precision point RUN COMPLETE + merged to main `48330d4` (D35, report §6.15)
+
+Ran 5 `*_8bit` matrix + INT8 classifier judge on TC1 + gpt-4o 2nd judge (0 parse errors). **Finding (NOT bit-width-graded):** capability = clean cliff at 4-bit; safety = two-peaked/method-specific — Qwen-1.7B @ NF4 (+0.055, judge-dependent) and **Llama-3B @ INT8 (+0.040, both-judge + McNemar sig, non-monotonic** — most judge-robust move, caveated). Full-parity INT8 diagnostics (scoped `*_int8`, zero drift); fixed a latent v1/v2 sweep-column bug. Durable record: PROJECT_LOG D35. Nothing left to do.
 
 ## [2026-06-15] ✅ DONE: T28 — refusal-margin mechanism probe (the "why"); merged to main `c67dbe8` (D33, report §6.14)
 

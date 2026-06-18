@@ -65,7 +65,15 @@ def summarise_deltas(per_seed_delta: List[float]) -> Dict[str, Any]:
 
 
 def _v2_asr(model_dir: Path) -> Optional[float]:
-    summary = model_dir / "summary.json"
+    # Prefer the v2 rescore sidecar over the runtime summary.json: for the
+    # original 2026-05-27 models summary.json carries the *v1* regex, whereas the
+    # v2 (current) regex lives in summary.v2.json. Reading summary.json here would
+    # silently pick up the stale v1 value on a re-run (mirrors the fix in
+    # precision_sweep_analysis.py). Fall back to summary.json only when no v2
+    # sidecar exists (e.g. a model rescored at v2 at runtime).
+    summary = model_dir / "summary.v2.json"
+    if not summary.exists():
+        summary = model_dir / "summary.json"
     if not summary.exists():
         return None
     data = json.loads(summary.read_text(encoding="utf-8"))
