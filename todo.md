@@ -7,6 +7,40 @@
 
 ---
 
+## [2026-06-15] ACTIVE: T29 — RUN INT8 precision point on TC1 (groundwork DONE + pushed; run pending)
+
+**Source of truth:** `docs/PROJECT_LOG.md` D34 + §4 row (2026-06-15 21:15). This is the "how to resume the RUN" buffer only.
+
+**Status:** groundwork DONE, committed **`780dc00`**, pushed to branch **`int8-precision-point`** (NOT merged). 282 tests pass; `make agent-check` 8/8. ZERO regression to the evaluated study (main `tc1.yaml` / tests / base-vs-4bit pipeline untouched; existing fp16/NF4 load byte-identical). Only the TC1 run + sweep analysis + report fold-in remain.
+
+**Why:** add INT8 (bitsandbytes LLM.int8 — a SECOND method, NOT "8-bit NF4"; NF4 is inherently 4-bit) as a 3rd precision so the study spans fp16→INT8→NF4 (addresses the single-method / single-bit-width weakness). Open question: is degradation **graded** with bit-width or a **cliff** at 4-bit?
+
+**Decided (don't re-litigate):**
+- **Separate `configs/tc1_int8.yaml`** (NOT int8 in the main tc1.yaml) — `compare_quant_pairs._select_pair_members` picks the alphabetically-first quantized alias, so an `_8bit` member would silently hijack the base-vs-4bit analysis. INT8 is a separate precision dimension analysed by `scripts/precision_sweep_analysis.py`.
+- **`quant_method` field**: None defaults to nf4 (existing entries byte-identical); int8 → LLM.int8; rejected on a baseline.
+- **Baselines in tc1_int8.yaml are NOT re-run** (present only for pair-validity + as the sweep's fp16 reference; their results already exist). Submit ONLY the `*_8bit` aliases.
+- **Judge for int8 = fp16 classifier** (same instrument as fp16/NF4), scores ONLY the 5 int8 aliases (`slurm/judge_validation_int8.sbatch`).
+
+**Verification already done (don't repeat):** 282 tests (16 int8 + 5 sweep new); backward-compat + int8/nf4 branch selection verified without GPU/bitsandbytes; agent-check 8/8; int8 matrix sbatch byte-consistent (alias + `--config tc1_int8.yaml` only).
+
+**Next steps — RUN (TC1):**
+1. `cd /tc1home/FYP/utan001/fyp_quant/repo && git fetch origin && git checkout int8-precision-point && git pull --ff-only origin int8-precision-point` (expect `780dc00`). No prefetch / HF-login (same model IDs, already cached).
+2. **Smoke (GATE):** `sbatch slurm/jobs_tc1_int8_smoke/qwen_2b_8bit__harmbench.sbatch` → confirm `.err` clean, `load_in_8bit` loads on the V100, `raw.jsonl` coherent. STOP if it OOMs/errors.
+3. **Matrix (5, pair-by-pair, MaxJobsPU=2):** `sbatch slurm/jobs_tc1_int8/qwen_2b_8bit__matrix.sbatch`, then `qwen_4b_8bit`, `llama_3_2_3b_8bit`, `mistral_7b_8bit`, `phi4_mini_8bit`. Wait COMPLETED (`squeue -u utan001`; `seff <id>`).
+4. **Judge (after ALL 5 matrix COMPLETE):** `sbatch slurm/judge_validation_int8.sbatch`.
+5. **SCP back (Mac):** `rsync -avz utan001@10.96.189.11:/tc1home/FYP/utan001/fyp_quant/repo/results/{qwen_2b_8bit,qwen_4b_8bit,llama_3_2_3b_8bit,mistral_7b_8bit,phi4_mini_8bit} /Users/tanueihorng/fyp_quant/results/`
+
+**Next steps — POST-RUN (Mac; ping Claude):**
+6. `python scripts/precision_sweep_analysis.py` → `results/analysis/precision_sweep.{json,csv}`.
+7. (optional) INT8 margin capture: a margin job with `--config configs/tc1_int8.yaml --models <int8 aliases> --precision-tag int8`, to extend the §6.14 mechanism sweep across precisions.
+8. **ADVERSARIALLY VERIFY the trend BEFORE writing** (lesson from T28 — don't present before verifying), then fold fp16→INT8→NF4 into the report (`build_fyp_report.js`) + `make report`; PROJECT_LOG run-results D-decision + §4 row; `make agent-check`; merge `int8-precision-point` → main.
+
+**Watch items:** `load_in_8bit` on V100 sm_70 (smoke is the gate); INT8 expected to sit between fp16 and NF4 (verify, don't assume); `summary.json` is gitignored, so the int8 summaries MUST be SCP'd back for the sweep.
+
+## [2026-06-15] ✅ DONE: T28 — refusal-margin mechanism probe (the "why"); merged to main `c67dbe8` (D33, report §6.14)
+
+Honest finding: **boundary instability, NOT targeted erosion** (within-family AUC 0.64; symmetric 50 harmful-ward / 42 safe-ward flips; flip-driving Qwen-1.7B = generic softening → capability-driven, supports the dichotomy). Overclaimed first; the adversarial-verify workflow deflated it → reported caveated. Durable record: PROJECT_LOG D33. Nothing left to do.
+
 ## [2026-06-15] ✅ DONE: T26 — Mistral-7B + Phi-4-mini RUN COMPLETE + folded into report (commit `19a3345`, merged to main; durable record = PROJECT_LOG D32)
 
 **Source of truth:** `docs/PROJECT_LOG.md` — D30 + §4 row (2026-06-14 23:45). This entry is only the "how to resume the RUN" buffer.

@@ -113,14 +113,23 @@ def main() -> int:
         description="Per-category HarmBench judge ASR breakdown (redacted)."
     )
     parser.add_argument("--results-dir", default="results")
+    parser.add_argument("--models", nargs="+", default=None,
+                        help="Aliases to break down (default: the evaluated ten). Pass the INT8 "
+                             "aliases for their per-model category table; the per-pair "
+                             "(base-vs-4bit) deltas are then empty by construction.")
+    parser.add_argument("--out-suffix", default="",
+                        help="Suffix for harmbench_category_breakdown{suffix}.{json,csv} so a "
+                             "scoped INT8 run never overwrites the committed file.")
     args = parser.parse_args()
 
+    models = args.models or MODEL_ALIASES
+    pairs = {pid: (b, q) for pid, (b, q) in PAIRS.items() if b in models and q in models}
     results_dir = Path(args.results_dir).resolve()
     analysis_dir = results_dir / "analysis"
     analysis_dir.mkdir(parents=True, exist_ok=True)
 
     per_model: Dict[str, Dict[str, Dict[str, int]]] = {}
-    for alias in MODEL_ALIASES:
+    for alias in models:
         hb = results_dir / alias / "harmbench"
         per_model[alias] = _category_counts(
             hb / "raw.jsonl", hb / "scores.judge.harmbench_cls.jsonl"
@@ -132,7 +141,7 @@ def main() -> int:
 
     # Per-pair, per-category judge ASR deltas (4-bit minus baseline).
     per_pair: List[Dict[str, Any]] = []
-    for pair_id, (base_alias, quant_alias) in PAIRS.items():
+    for pair_id, (base_alias, quant_alias) in pairs.items():
         base_counts = per_model.get(base_alias, {})
         quant_counts = per_model.get(quant_alias, {})
         categories = sorted(set(base_counts) | set(quant_counts))
@@ -170,11 +179,11 @@ def main() -> int:
         },
         "per_pair_category_deltas": per_pair,
     }
-    (analysis_dir / "harmbench_category_breakdown.json").write_text(
+    (analysis_dir / f"harmbench_category_breakdown{args.out_suffix}.json").write_text(
         json.dumps(report, indent=2), encoding="utf-8"
     )
 
-    csv_path = analysis_dir / "harmbench_category_breakdown.csv"
+    csv_path = analysis_dir / f"harmbench_category_breakdown{args.out_suffix}.csv"
     with csv_path.open("w", encoding="utf-8", newline="") as handle:
         writer = csv.writer(handle, lineterminator="\n")
         writer.writerow(
@@ -190,7 +199,7 @@ def main() -> int:
     print("=" * 78)
     print("Per-category HarmBench judge ASR deltas (4-bit minus baseline)")
     print("=" * 78)
-    for pair_id, (base_alias, quant_alias) in PAIRS.items():
+    for pair_id, (base_alias, quant_alias) in pairs.items():
         rows = [r for r in per_pair if r["pair_id"] == pair_id]
         if not any(r["baseline_asr"] is not None for r in rows):
             print(f"\n{pair_id}  (no judge-scored data)")
@@ -210,7 +219,7 @@ def main() -> int:
             print(f"  {r['category']:<30} {r['n']:>4} {_f(r['baseline_asr']):>6} "
                   f"{_f(r['quantized_asr']):>6} {d_s:>8}")
     print()
-    print(f"Wrote {analysis_dir / 'harmbench_category_breakdown.json'}")
+    print(f"Wrote {analysis_dir / ('harmbench_category_breakdown' + args.out_suffix + '.json')}")
     print(f"Wrote {csv_path}")
     return 0
 

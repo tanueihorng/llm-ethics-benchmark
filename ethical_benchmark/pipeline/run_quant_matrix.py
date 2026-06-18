@@ -250,6 +250,7 @@ def run_quant_matrix(
             dtype=model_entry.dtype,
             quantized=model_entry.quantized,
             attn_implementation=model_entry.attn_implementation,
+            quant_method=model_entry.quant_method,
         )
 
         model_loader = HFModelLoaderCls(device=device)

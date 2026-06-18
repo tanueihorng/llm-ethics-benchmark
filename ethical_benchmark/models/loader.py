@@ -45,6 +45,26 @@ def _build_bnb_4bit_config(compute_dtype: Any) -> Any:
     )
 
 
+def _build_bnb_8bit_config() -> Any:
+    """Builds a BitsAndBytesConfig for 8-bit (LLM.int8) loading.
+
+    Mirrors the judge backend's documented 8-bit fallback
+    (``ethical_benchmark/judges/validation.py``). Unlike NF4, LLM.int8() takes no
+    compute-dtype / quant-type arguments: it keeps fp16 outlier columns and
+    8-bit-quantizes the rest. Used for the INT8 precision point in the
+    fp16 -> INT8 -> NF4 sweep (configs/tc1_int8.yaml).
+
+    Returns:
+        ``transformers.BitsAndBytesConfig`` instance.
+
+    Raises:
+        ImportError: If ``bitsandbytes`` / ``accelerate`` are not installed.
+    """
+
+    transformers = import_module("transformers")
+    return transformers.BitsAndBytesConfig(load_in_8bit=True)
+
+
 def _quantization_active(model: Any) -> bool:
     """Reports whether a loaded model shows any sign of active quantization.
 
@@ -66,6 +86,7 @@ def _quantization_active(model: Any) -> bool:
 
     return (
         bool(getattr(model, "is_loaded_in_4bit", False))
+        or bool(getattr(model, "is_loaded_in_8bit", False))
         or bool(getattr(model, "is_quantized", False))
         or getattr(model, "hf_quantizer", None) is not None
     )
@@ -95,6 +116,7 @@ class ModelSpec:
     dtype: str = "auto"
     quantized: bool = False
     attn_implementation: Optional[str] = None
+    quant_method: Optional[str] = None  # 'nf4' (default when None+quantized) or 'int8'
 
 
 class HFModelLoader:
@@ -172,10 +194,17 @@ class HFModelLoader:
             if runtime_device != "cuda":
                 raise RuntimeError(
                     f"Model '{spec.alias}' is marked quantized=true but runtime device is "
-                    f"'{runtime_device}'. 4-bit bitsandbytes loading requires CUDA."
+                    f"'{runtime_device}'. bitsandbytes quantized loading requires CUDA."
                 )
-            model_kwargs["quantization_config"] = _build_bnb_4bit_config(torch_dtype)
-            LOGGER.info("Loading '%s' with bitsandbytes 4-bit (nf4) quantization.", spec.alias)
+            # quant_method None defaults to nf4 so existing entries' load call is
+            # byte-identical; 'int8' selects the LLM.int8 path for the precision sweep.
+            method = (spec.quant_method or "nf4").lower()
+            if method == "int8":
+                model_kwargs["quantization_config"] = _build_bnb_8bit_config()
+                LOGGER.info("Loading '%s' with bitsandbytes 8-bit (int8/LLM.int8) quantization.", spec.alias)
+            else:
+                model_kwargs["quantization_config"] = _build_bnb_4bit_config(torch_dtype)
+                LOGGER.info("Loading '%s' with bitsandbytes 4-bit (nf4) quantization.", spec.alias)
 
         # Only inject attn_implementation when explicitly set. When None, the
         # kwarg is omitted so the from_pretrained call for the existing models
@@ -286,4 +315,5 @@ def build_model_spec(alias: str, registry: Dict[str, Dict[str, Any]]) -> ModelSp
         dtype=entry.get("dtype", "auto"),
         quantized=bool(entry.get("quantized", False)),
         attn_implementation=entry.get("attn_implementation"),
+        quant_method=entry.get("quant_method"),
     )

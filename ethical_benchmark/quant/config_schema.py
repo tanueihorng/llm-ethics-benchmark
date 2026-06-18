@@ -51,6 +51,11 @@ class ModelEntry(BaseModel):
     dtype: str = Field(default="auto")
     revision: Optional[str] = Field(default=None)
     attn_implementation: Optional[str] = Field(default=None)
+    quant_method: Optional[str] = Field(
+        default=None,
+        description="Quantization method when quantized=true: 'nf4' (4-bit, the default "
+        "when omitted) or 'int8' (8-bit LLM.int8). Only meaningful when quantized=true.",
+    )
 
     @field_validator("benchmarks")
     @classmethod
@@ -89,6 +94,33 @@ class ModelEntry(BaseModel):
                 f"attn_implementation must be one of {sorted(allowed)} (or omitted), got '{value}'."
             )
         return normalized
+
+    @field_validator("quant_method")
+    @classmethod
+    def _validate_quant_method(cls, value: Optional[str]) -> Optional[str]:
+        # Fail loud on a bad method so a typo cannot silently fall back to a
+        # different precision and break the fp16/int8/nf4 sweep's comparability.
+        if value is None:
+            return None
+        allowed = {"nf4", "int8"}
+        normalized = value.strip().lower()
+        if normalized not in allowed:
+            raise ValueError(
+                f"quant_method must be one of {sorted(allowed)} (or omitted, which defaults "
+                f"to nf4 when quantized), got '{value}'."
+            )
+        return normalized
+
+    @model_validator(mode="after")
+    def _check_quant_method_consistency(self) -> "ModelEntry":
+        # quant_method only makes sense on a quantized member; setting it on a
+        # baseline is a config error (the baseline is full precision).
+        if self.quant_method is not None and not self.quantized:
+            raise ValueError(
+                f"quant_method='{self.quant_method}' was set on a non-quantized (baseline) "
+                "entry; quant_method applies only when quantized=true."
+            )
+        return self
 
 
 class BenchmarkEntry(BaseModel):

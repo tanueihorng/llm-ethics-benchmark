@@ -1,61 +1,60 @@
 # Handoff
 
-Last refreshed: 2026-06-15 (~00:30 UTC+8) by Claude (hand-authored via /fyp-agent-handoff).
+Last refreshed: 2026-06-15 (~21:30 UTC+8) by Claude (hand-authored via /fyp-agent-handoff).
 
 ## Mode
 
-Executor — the current agent completed the **T26 local integration** (add Mistral-7B + Phi-4-mini pairs); the next session/agent supports the **TC1 run** and the **post-run local write-up**. The core study is otherwise submission-ready.
+Executor — the current agent finished and merged the **T26 cross-family run** and the **T28 mechanism probe**, and built the **T29 INT8 groundwork** (run pending). The next session/agent runs INT8 on TC1 and folds it in; the study is otherwise submission-ready.
 
 ## Objective
 
-Run the 2 new pairs on TC1 and fold the real numbers into the report:
-1. **Active executor track — T26 RUN:** the integration is DONE, committed, and pushed on a branch; only the 4 new TC1 jobs + the new-pairs judge run remain, then the post-run local analysis/report. Full ordered run guide is in **`todo.md`** (repo root) and **`CLAUDE.md`** (TC1 block).
-2. **Submission-critical (unchanged):** T1 (supervisor email, `docs/email_drZhang_2026-06-13.md`, gitignored) and T15 (submit the report). Non-compute; still the deadline priority.
+Run the INT8 precision point on TC1 and fold the fp16 → INT8 → NF4 trend into the report; then the submission-critical email (T1) and report submission (T15).
 
 ## Source Of Truth
 
-- Read `/Users/tanueihorng/fyp_quant/AGENTS.md`, then `/Users/tanueihorng/fyp_quant/docs/PROJECT_LOG.md` (§1 status, §2 actions, §3 decisions **D1–D30**, §4 changelog — T26 is **D30** + the 2026-06-14 23:45 row).
-- For the T26 run/resume detail, read **`/Users/tanueihorng/fyp_quant/todo.md`** (tactical buffer, not source of truth).
+- Read `/Users/tanueihorng/fyp_quant/AGENTS.md`, then `/Users/tanueihorng/fyp_quant/docs/PROJECT_LOG.md` (§1 status, §2 actions, §3 decisions **D1–D34**, §4 changelog — INT8 is **D34** / **T29**; mechanism is **D33** / T28; cross-family is **D32** / T26).
+- For the INT8 run/resume detail, read **`/Users/tanueihorng/fyp_quant/todo.md`** (tactical buffer, not source of truth).
 - Run `git status -sb` and `git log --oneline -8` for live Git state — never trust a hard-coded commit/ahead count.
 
-## Current State (durable)
+## Current State (durable, verify before acting)
 
-- **T26 local integration DONE + committed `60c0acc`, pushed to branch `t26-add-mistral-phi-pairs` (NOT merged to main).** Adds `mistral_7b` + `phi4_mini` → 5 pairs / 4 families, on the **identical** methodology as the old 3 (NF4, greedy, seed 42, 4 benchmarks incl. ARC, HarmBench classifier as PRIMARY ASR). The **existing 3-pair results & setup are byte-unchanged** (additive config; NF4/decode/seed/chat-template code untouched; immutable artifacts not reopened).
-- **246 tests pass; `make agent-check` 8/8 green.** An 8-auditor repo audit + a 5-reviewer adversarial diff review (verdict: SHIP) backed the change; the one latent bug they found (cross-family `_sign(None)` collision) is fixed + tested.
-- **Core study (unchanged):** judge-primary (D16) + double-robustness-checked (T18/D23 multi-seed, T22/D26 gpt-4o). Qwen 1.7B = broad_degradation but **modest/borderline**; Qwen 4B directional; Llama capability-only. Report = `docs/FYP_Report_2026-06-14.docx`.
+- **Active branch `int8-precision-point` @ `780dc00` (pushed; NOT merged).** INT8 groundwork only — no INT8 numbers exist yet.
+- **`main` carries the evaluated study:** T26 (5 pairs / 4 families) merged at `19a3345` → report §6.13; the T28 mechanism probe merged at `c67dbe8` → report §6.14. Both adversarially verified.
+- **Headline (unchanged, judge-primary D16):** Qwen-1.7B is the **only** significant ΔASR (+0.055, modest/borderline); Mistral/Phi add no significant ΔASR; the mechanism probe reads the small-model effect as **capability-driven boundary instability, not targeted erosion** (§6.14, fully caveated).
+- **282 tests pass; `make agent-check` 8/8.** Report = `docs/FYP_Report_2026-06-14.docx`.
 
-## What Changed (this track) — file paths
+## What Changed (INT8 track) — file paths
 
-- New code (one field): `attn_implementation` in `ethical_benchmark/quant/config_schema.py` (+ fail-loud validator) → `ethical_benchmark/models/loader.py` (`ModelSpec` + truthiness-guarded `model_kwargs` injection) → both pipeline constructors (`run_quant_matrix.py`, `run_quant_benchmark.py`) → `build_model_spec`.
-- Config: 4 entries in `configs/{tc1,default}.yaml` (Phi: `trust_remote_code`+`eager` on both members; Mistral: neither).
-- Eval parity: the 6 judge/analysis scripts → 10 aliases/5 pairs; new `slurm/judge_validation_newpairs.sbatch` (only new aliases); `compute_cross_family_consistency` → all-pairs matrix; 4 matrix + 4 smoke sbatch templated byte-consistent.
-- Tests: new `tests/test_quant_config_schema.py` + loader attn tests + cross-family None-guard test.
-- Report/docs: additive "run pending" (Appendix A config, Appendix C field, Ch9, count 223→246) + CLAUDE/AGENTS/README + PROJECT_LOG **D30**.
+- Backward-compatible `quant_method` field: `ethical_benchmark/quant/config_schema.py` (+validator, +baseline-consistency check) → `ethical_benchmark/models/loader.py` (`ModelSpec`, `_build_bnb_8bit_config`, int8/nf4 branch, `is_loaded_in_8bit` detection, `build_model_spec`) → both pipeline constructors. **`None` ⇒ NF4, byte-identical to before** (verified).
+- `configs/tc1_int8.yaml` (5 `*_8bit` + fp16 baselines; baselines NOT re-run). Main `tc1.yaml` untouched.
+- `slurm/jobs_tc1_int8/*_8bit__matrix.sbatch` (5), `slurm/jobs_tc1_int8_smoke/*_8bit__harmbench.sbatch` (5), `slurm/judge_validation_int8.sbatch` (scores only the 5 int8 aliases).
+- `scripts/precision_sweep_analysis.py` → `results/analysis/precision_sweep.{json,csv}` (graded/cliff/non-monotonic; int8-pending graceful).
+- Tests: `tests/test_quant_int8.py` (16) + `tests/test_precision_sweep.py` (5). Report: Ch9 INT8 entry + count 261→282.
 
 ## Verification To Run
 
 ```bash
-git status -sb && git log --oneline -3      # expect branch t26-add-mistral-phi-pairs @ 60c0acc, in sync with origin
-pytest -q                                    # expect 246 passed
-make agent-check                             # expect 8/8 pass
+git status -sb && git log --oneline -3     # expect int8-precision-point @ 780dc00, in sync with origin
+pytest -q                                   # expect 282 passed
+make agent-check                            # expect 8/8 pass
 ```
 
 ## Risks / Things To Distrust
 
-- **The TC1 RUN is NOT done** — only the local integration. Nothing about the 2 new pairs is empirically validated yet; the report's Ch6 results are still the original 3 pairs (correctly marked "run pending").
-- **Mistral-7B (7.2B)** is the largest model yet — watch the **6h walltime / 10G** envelope; if `TIMEOUT`, bump `slurm.time` (fairness unaffected).
-- **Phi-4-mini** `eager` + `trust_remote_code` only exercise on the V100 (sm_70) — the 5-sample smoke is the gate; STOP if it errors.
-- **Run the judge AFTER the matrix** (`run_judge_validation` crashes on a missing `raw.jsonl`).
-- **v2 refusal proxy = KEEP** (decided): it is the flawed-baseline foil that proves the judge contribution (§6.12), not a trusted metric — do not delete it from old or new pairs.
-- The old Qwen 1.7B effect is **modest/borderline** — don't overstate +0.055.
+- **No INT8 numbers exist yet** — the report's results are fp16/NF4 only; INT8 is "run pending" (Ch9).
+- **Smoke each `*_8bit` first (the gate):** confirm `load_in_8bit` actually loads on the V100 (sm_70) — like the Phi remote-code issue, a smoke catches a load failure before a wasted matrix. STOP if it OOMs/errors.
+- **Run the int8 judge AFTER the int8 matrix** (`run_judge_validation` needs the `raw.jsonl`).
+- **INT8 is a different METHOD (LLM.int8), not "8-bit NF4"** — do not describe it as a lower-bit NF4.
+- **Do not merge `int8-precision-point` to main until the INT8 results are run + folded in** (mirrors how T26/T28 were merged only after results).
+- The mechanism finding (§6.14) is deliberately modest/caveated — do not re-inflate it to "targeted erosion."
 
 ## Next Actions (ordered)
 
-1. **(Active track) T26 RUN** — execute the TC1 steps in `todo.md` / `CLAUDE.md`: accept Mistral HF license → checkout the branch on TC1 → `huggingface-cli login` → `make prefetch` → smoke the 2 base models → matrix (Mistral first, pair-by-pair) → `judge_validation_newpairs.sbatch`. Then on the Mac: rsync results back → `make analyze` + breakdown scripts + gpt-4o 2nd judge → fold real numbers into the report (`build_fyp_report.js`) + `make report` → PROJECT_LOG run-results decision + §4 row → `--write-immutable-manifest` → `make agent-check` → merge branch to main.
+1. **(Active) T29 — run INT8 on TC1.** Per `todo.md`: checkout `int8-precision-point` on TC1 → smoke each `*_8bit` (gate) → `sbatch slurm/jobs_tc1_int8/<pair>_8bit__matrix.sbatch` (pair-by-pair, MaxJobsPU=2) → `sbatch slurm/judge_validation_int8.sbatch` (after the matrix). Then on the Mac: rsync the 5 `*_8bit` results dirs back → `python scripts/precision_sweep_analysis.py` → **adversarially verify the trend before writing** → fold fp16→INT8→NF4 into the report (`build_fyp_report.js`) + `make report` → PROJECT_LOG run-results + §4 row → `make agent-check` → merge branch to main. No new prefetch / HF login (same model IDs, cached).
 2. **T1 — send the supervisor email** (`docs/email_drZhang_2026-06-13.md`, gitignored). Submission-critical.
 3. **T15 — submit the report.** Submission-critical.
-4. Optional/later: T24 (`sensitivity_analysis.py` provenance nit), LlamaGuard cross-check; multi-seed on a new pair **only if** it becomes a headline.
+4. **T3 — `MyTCinfo`** on TC1 (storage quota). Optional later: Arditi activation-direction probe / paired neutral-margin control (§6.14 follow-ups).
 
 ## Privacy / Artifact Guardrails
 
-No raw HarmBench prompt/response text in chat, docs, or commits — IDs, counts, labels, aggregates, redacted sidecars only. `raw.jsonl`/`summary.json`/`scores.*` sidecars for the old pairs are immutable TC1 originals — never reopen. `tc1_sensitivity.yaml` stays as-is (separate study). `results_sensitivity/` + email drafts (`docs/email_*.md`) gitignored — never commit. Branch `t26-add-mistral-phi-pairs` is not merged to main yet.
+No raw HarmBench prompt/response text in chat, docs, or commits — IDs, counts, labels, aggregates, redacted sidecars only. `raw.jsonl`/`summary.json` are immutable TC1 originals (gitignored; hash-pinned in `results/raw_artifact_manifest.sha256`) — never reopen. The new `scores.margin.*` / `summary.margin.*` and the INT8 `scores.margin.*` are redacted (IDs + scalars) and committable. `tc1_sensitivity.yaml` stays as-is. Email drafts (`docs/email_*.md`) gitignored — never commit.
