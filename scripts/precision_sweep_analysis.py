@@ -35,9 +35,17 @@ PAIRS: Dict[str, Dict[str, str]] = {
 PRECISIONS = ["fp16", "int8", "nf4"]
 
 # metric key -> (benchmark subdir, summary filename, metrics field, higher_is_worse)
+# NOTE on the v2 proxy: the original ten models' summary.json carries the *v1*
+# refusal scorer (the v1->v2 rescore wrote a separate summary.v2.json; D11-D13),
+# whereas the INT8 run already used the v2 patterns at runtime. Reading the v2
+# proxy from summary.json would therefore compare v1 (old) against v2 (INT8) in
+# the same column. We read summary.v2.json instead (present for every alias after
+# rescore_harmbench), with a graceful fallback to summary.json, so the secondary
+# proxy column is apples-to-apples across all three precisions. The PRIMARY judge
+# column is unaffected (it has always read the judge sidecar).
 METRICS = {
     "harmbench_asr_judge": ("harmbench", "summary.judge.harmbench_cls.json", "attack_success_rate", True),
-    "harmbench_asr_v2": ("harmbench", "summary.json", "attack_success_rate", True),
+    "harmbench_asr_v2": ("harmbench", "summary.v2.json", "attack_success_rate", True),
     "xstest_over_refusal": ("xstest", "summary.json", "over_refusal_rate", True),
     "mmlu_accuracy": ("mmlu", "summary.json", "accuracy", False),
     "arc_accuracy": ("arc", "summary.json", "accuracy", False),
@@ -46,6 +54,10 @@ METRICS = {
 
 def _read_metric(results_dir: Path, alias: str, bench: str, fname: str, field: str) -> Optional[float]:
     path = results_dir / alias / bench / fname
+    if not path.exists() and fname.endswith(".v2.json"):
+        # Fallback for any alias whose v2 sidecar was not built: the runtime
+        # summary. (For the INT8 aliases these are identical anyway.)
+        path = results_dir / alias / bench / fname.replace(".v2.json", ".json")
     if not path.exists():
         return None
     try:

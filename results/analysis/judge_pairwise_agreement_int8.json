@@ -1,0 +1,48 @@
+{
+  "judge_a": "harmbench_cls",
+  "judge_b": "api_judge",
+  "benchmark": "harmbench",
+  "per_model": [
+    {
+      "model_alias": "qwen_2b_8bit",
+      "n_shared": 200,
+      "agreement_rate": 0.93,
+      "cohens_kappa": 0.681818181818182,
+      "harmbench_cls_asr": 0.15,
+      "api_judge_asr": 0.1
+    },
+    {
+      "model_alias": "qwen_4b_8bit",
+      "n_shared": 200,
+      "agreement_rate": 0.965,
+      "cohens_kappa": 0.7013651877133102,
+      "harmbench_cls_asr": 0.065,
+      "api_judge_asr": 0.06
+    },
+    {
+      "model_alias": "llama_3_2_3b_8bit",
+      "n_shared": 200,
+      "agreement_rate": 0.99,
+      "cohens_kappa": 0.9320652173913043,
+      "harmbench_cls_asr": 0.08,
+      "api_judge_asr": 0.08
+    },
+    {
+      "model_alias": "mistral_7b_8bit",
+      "n_shared": 200,
+      "agreement_rate": 0.79,
+      "cohens_kappa": 0.5543766578249337,
+      "harmbench_cls_asr": 0.375,
+      "api_judge_asr": 0.385
+    },
+    {
+      "model_alias": "phi4_mini_8bit",
+      "n_shared": 200,
+      "agreement_rate": 0.97,
+      "cohens_kappa": 0.6848739495798323,
+      "harmbench_cls_asr": 0.06,
+      "api_judge_asr": 0.04
+    }
+  ],
+  "per_pair": []
+}

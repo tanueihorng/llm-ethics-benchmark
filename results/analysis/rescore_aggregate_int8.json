@@ -1,0 +1,103 @@
+{
+  "scorer_version": "v2_expanded_refusal_patterns_2026-05-28",
+  "n_models": 5,
+  "harmbench": {
+    "per_model": [
+      {
+        "model_alias": "qwen_2b_8bit",
+        "benchmark": "harmbench",
+        "n": 200,
+        "old_asr": 0.585,
+        "new_asr": 0.585,
+        "asr_delta": 0.0
+      },
+      {
+        "model_alias": "qwen_4b_8bit",
+        "benchmark": "harmbench",
+        "n": 200,
+        "old_asr": 0.245,
+        "new_asr": 0.245,
+        "asr_delta": 0.0
+      },
+      {
+        "model_alias": "llama_3_2_3b_8bit",
+        "benchmark": "harmbench",
+        "n": 200,
+        "old_asr": 0.1,
+        "new_asr": 0.1,
+        "asr_delta": 0.0
+      },
+      {
+        "model_alias": "mistral_7b_8bit",
+        "benchmark": "harmbench",
+        "n": 200,
+        "old_asr": 0.885,
+        "new_asr": 0.885,
+        "asr_delta": 0.0
+      },
+      {
+        "model_alias": "phi4_mini_8bit",
+        "benchmark": "harmbench",
+        "n": 200,
+        "old_asr": 0.085,
+        "new_asr": 0.085,
+        "asr_delta": 0.0
+      }
+    ],
+    "totals": {
+      "total_records": 1000,
+      "total_reclassified_to_refusal": 0,
+      "total_still_harmful": 380,
+      "total_still_refusal": 620
+    }
+  },
+  "xstest": {
+    "per_model": [
+      {
+        "model_alias": "qwen_2b_8bit",
+        "benchmark": "xstest",
+        "n": 250,
+        "old_over_refusal": 0.04,
+        "new_over_refusal": 0.04,
+        "over_refusal_delta": 0.0
+      },
+      {
+        "model_alias": "qwen_4b_8bit",
+        "benchmark": "xstest",
+        "n": 250,
+        "old_over_refusal": 0.028,
+        "new_over_refusal": 0.028,
+        "over_refusal_delta": 0.0
+      },
+      {
+        "model_alias": "llama_3_2_3b_8bit",
+        "benchmark": "xstest",
+        "n": 250,
+        "old_over_refusal": 0.032,
+        "new_over_refusal": 0.032,
+        "over_refusal_delta": 0.0
+      },
+      {
+        "model_alias": "mistral_7b_8bit",
+        "benchmark": "xstest",
+        "n": 250,
+        "old_over_refusal": 0.0,
+        "new_over_refusal": 0.0,
+        "over_refusal_delta": 0
+      },
+      {
+        "model_alias": "phi4_mini_8bit",
+        "benchmark": "xstest",
+        "n": 250,
+        "old_over_refusal": 0.12,
+        "new_over_refusal": 0.12,
+        "over_refusal_delta": 0.0
+      }
+    ],
+    "totals": {
+      "total_records": 1250,
+      "total_newly_flagged_over_refusal": 0,
+      "total_over_refusal": 55
+    }
+  }
+}

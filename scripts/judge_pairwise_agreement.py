@@ -162,8 +162,17 @@ def main() -> int:
     parser.add_argument("--judge-b", default="api_judge",
                         help="Second judge sidecar name (default: api_judge).")
     parser.add_argument("--benchmark", default="harmbench")
+    parser.add_argument("--models", nargs="+", default=None,
+                        help="Aliases to report (default: the evaluated ten). Pass the INT8 "
+                             "aliases for the INT8 cross-judge agreement table; the per-pair "
+                             "(base-vs-4bit) section is then empty by construction.")
+    parser.add_argument("--out-suffix", default="",
+                        help="Suffix for judge_pairwise_agreement{suffix}.{json,csv} so a scoped "
+                             "INT8 run never overwrites the committed file (§6.12/W3).")
     args = parser.parse_args()
 
+    models = args.models or MODEL_ALIASES
+    pairs = {pid: (b, q) for pid, (b, q) in PAIRS.items() if b in models and q in models}
     results_dir = Path(args.results_dir).resolve()
     analysis_dir = results_dir / "analysis"
     analysis_dir.mkdir(parents=True, exist_ok=True)
@@ -173,7 +182,7 @@ def main() -> int:
     # Per-model agreement between the two judges.
     per_model: List[Dict[str, Any]] = []
     found_b = False
-    for alias in MODEL_ALIASES:
+    for alias in models:
         mdir = results_dir / alias / args.benchmark
         a = load_judge_outcomes(mdir, a_name)
         b = load_judge_outcomes(mdir, b_name)
@@ -196,7 +205,7 @@ def main() -> int:
 
     # Per-pair ΔASR under each judge + cross-judge concordance.
     per_pair: List[Dict[str, Any]] = []
-    for pair_id, (base_alias, quant_alias) in PAIRS.items():
+    for pair_id, (base_alias, quant_alias) in pairs.items():
         base_dir = results_dir / base_alias / args.benchmark
         quant_dir = results_dir / quant_alias / args.benchmark
         a_delta = _pair_delta(load_judge_outcomes(base_dir, a_name),
@@ -223,11 +232,11 @@ def main() -> int:
         "per_model": per_model,
         "per_pair": per_pair,
     }
-    (analysis_dir / "judge_pairwise_agreement.json").write_text(
+    (analysis_dir / f"judge_pairwise_agreement{args.out_suffix}.json").write_text(
         json.dumps(report, indent=2), encoding="utf-8"
     )
 
-    csv_path = analysis_dir / "judge_pairwise_agreement.csv"
+    csv_path = analysis_dir / f"judge_pairwise_agreement{args.out_suffix}.csv"
     with csv_path.open("w", encoding="utf-8", newline="") as handle:
         writer = csv.writer(handle, lineterminator="\n")
         writer.writerow([
@@ -264,7 +273,7 @@ def main() -> int:
               f"{db:>13} {str(r[f'{b_name}_significant']):>5} "
               f"{str(r['sign_agree']):>6} {str(r['significance_agree']):>5}")
     print()
-    print(f"Wrote {analysis_dir / 'judge_pairwise_agreement.json'}")
+    print(f"Wrote {analysis_dir / ('judge_pairwise_agreement' + args.out_suffix + '.json')}")
     print(f"Wrote {csv_path}")
     return 0
 

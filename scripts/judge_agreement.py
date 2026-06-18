@@ -180,8 +180,20 @@ def main() -> int:
     parser.add_argument("--results-dir", default="results")
     parser.add_argument("--judge-name", default="harmbench_cls")
     parser.add_argument("--benchmark", default="harmbench")
+    parser.add_argument("--models", nargs="+", default=None,
+                        help="Aliases to report (default: the evaluated ten). Pass the INT8 "
+                             "aliases for the INT8 per-model judge-vs-v2 agreement table; the "
+                             "per-pair (base-vs-4bit) section is then empty by construction.")
+    parser.add_argument("--out-suffix", default="",
+                        help="Suffix for judge_agreement{suffix}.{json,csv} so a scoped INT8 "
+                             "run never overwrites the committed judge_agreement.json (§6.12).")
     args = parser.parse_args()
 
+    models = args.models or MODEL_ALIASES
+    # Restrict base-vs-4bit pairs to those whose BOTH members are in scope. For an
+    # INT8-only model set this is empty (INT8 has no base-vs-4bit pairing — that is
+    # the precision sweep's job), leaving a clean per-model agreement table.
+    pairs = {pid: (b, q) for pid, (b, q) in PAIRS.items() if b in models and q in models}
     results_dir = Path(args.results_dir).resolve()
     analysis_dir = results_dir / "analysis"
     analysis_dir.mkdir(parents=True, exist_ok=True)
@@ -190,7 +202,7 @@ def main() -> int:
     per_model: Dict[str, Dict[str, Any]] = {}
     judge_asr_by_model: Dict[str, Optional[float]] = {}
     any_judge = False
-    for alias in MODEL_ALIASES:
+    for alias in models:
         model_dir = results_dir / alias / args.benchmark
         v2 = _load_v2_harmful(model_dir)
         judge_path = model_dir / f"scores.judge.{args.judge_name}.jsonl"
@@ -217,7 +229,7 @@ def main() -> int:
             v2_sig[(row["pair_id"], row["benchmark"])] = row.get("delta_significant")
 
     per_pair: List[Dict[str, Any]] = []
-    for pair_id, (base_alias, quant_alias) in PAIRS.items():
+    for pair_id, (base_alias, quant_alias) in pairs.items():
         base_judge = judge_asr_by_model.get(base_alias)
         quant_judge = judge_asr_by_model.get(quant_alias)
         judge_delta = (
@@ -287,12 +299,12 @@ def main() -> int:
         "per_model": per_model,
         "per_pair": per_pair,
     }
-    (analysis_dir / "judge_agreement.json").write_text(
+    (analysis_dir / f"judge_agreement{args.out_suffix}.json").write_text(
         json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8"
     )
 
     # Redacted CSV (per model).
-    csv_path = analysis_dir / "judge_agreement.csv"
+    csv_path = analysis_dir / f"judge_agreement{args.out_suffix}.csv"
     with csv_path.open("w", encoding="utf-8", newline="") as handle:
         writer = csv.writer(handle, lineterminator="\n")
         writer.writerow([
@@ -300,7 +312,7 @@ def main() -> int:
             "v2_asr", "judge_asr", "both_harmful", "neither_harmful",
             "v2_harmful_judge_not", "judge_harmful_v2_not",
         ])
-        for alias in MODEL_ALIASES:
+        for alias in models:
             c = per_model[alias]
             writer.writerow([
                 alias, c["n_shared"], c["agreement_rate"], c["cohens_kappa"],
@@ -314,7 +326,7 @@ def main() -> int:
     print("=" * 84)
     print(f"{'model_alias':<22} {'n':>4} {'agree':>7} {'kappa':>7} {'v2 ASR':>8} {'judge ASR':>10}")
     print("-" * 84)
-    for alias in MODEL_ALIASES:
+    for alias in models:
         c = per_model[alias]
         def _f(x: Optional[float]) -> str:
             return f"{x:.3f}" if isinstance(x, float) else "   n/a"
@@ -342,7 +354,7 @@ def main() -> int:
         print(f"{p['pair_id']:<14} {p.get('mcnemar_b_base_to_harmful', 0):>9} "
               f"{p.get('mcnemar_c_harmful_to_safe', 0):>9} {p.get('mcnemar_discordant', 0):>11} {pv_s:>9}")
     print()
-    print(f"Wrote {analysis_dir / 'judge_agreement.json'}")
+    print(f"Wrote {analysis_dir / ('judge_agreement' + args.out_suffix + '.json')}")
     print(f"Wrote {csv_path}")
     return 0
 

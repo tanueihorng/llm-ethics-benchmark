@@ -81,3 +81,22 @@ def test_accuracy_direction(tmp_path: Path) -> None:
     mmlu = ps.analyse(tmp_path)["per_pair"]["phi4_mini"]["metrics"]["mmlu_accuracy"]
     assert mmlu["shape"] == "graded"
     assert mmlu["delta_nf4_vs_fp16"] == -0.04
+
+
+def test_v2_proxy_prefers_v2_summary(tmp_path: Path) -> None:
+    # The v2 proxy column must read summary.v2.json, not the runtime summary.json
+    # (the original models' summary.json is the v1 scorer; reading it would mix
+    # v1 and v2 across precisions). When both exist, prefer summary.v2.json.
+    alias = "qwen_2b_base"
+    _write_summary(tmp_path, alias, "harmbench", "summary.json", attack_success_rate=0.775)
+    _write_summary(tmp_path, alias, "harmbench", "summary.v2.json", attack_success_rate=0.600)
+    val = ps._read_metric(tmp_path, alias, "harmbench", "summary.v2.json", "attack_success_rate")
+    assert val == 0.600  # v2 sidecar wins over the v1 runtime summary
+
+
+def test_v2_proxy_falls_back_to_runtime_summary(tmp_path: Path) -> None:
+    # If no v2 sidecar was built, fall back to summary.json rather than returning None.
+    alias = "qwen_2b_8bit"
+    _write_summary(tmp_path, alias, "harmbench", "summary.json", attack_success_rate=0.585)
+    val = ps._read_metric(tmp_path, alias, "harmbench", "summary.v2.json", "attack_success_rate")
+    assert val == 0.585  # graceful fallback when summary.v2.json is absent

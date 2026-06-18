@@ -361,8 +361,18 @@ def main() -> int:
                         help="Compute new scores but do not overwrite files.")
     parser.add_argument("--results-dir", default="results",
                         help="Results root directory (default: results).")
+    parser.add_argument("--models", nargs="+", default=None,
+                        help="Model aliases to rescore (default: the evaluated ten). "
+                             "Pass the INT8 aliases to build their v2 sidecars without "
+                             "touching the committed base/4-bit ones.")
+    parser.add_argument("--out-suffix", default="",
+                        help="Suffix for the analysis-dir aggregate/diagnostics filenames "
+                             "(e.g. '_int8'), so a scoped run never overwrites the committed "
+                             "rescore_aggregate.json. Per-model scores.v2 sidecars are written "
+                             "under each model dir regardless and are naturally alias-scoped.")
     args = parser.parse_args()
 
+    models = args.models or MODEL_ALIASES
     results_root = Path(args.results_dir).resolve()
     analysis_dir = results_root / "analysis"
     analysis_dir.mkdir(parents=True, exist_ok=True)
@@ -371,7 +381,7 @@ def main() -> int:
     harmbench_rows: List[Dict[str, Any]] = []
     xstest_rows: List[Dict[str, Any]] = []
 
-    for alias in MODEL_ALIASES:
+    for alias in models:
         per_benchmark = rescore_model(alias, results_root, args.dry_run, diag_rows)
         harmbench_rows.append(per_benchmark["harmbench"])
         xstest_rows.append(per_benchmark["xstest"])
@@ -380,8 +390,8 @@ def main() -> int:
     hb_diag = [d for d in diag_rows if d.get("benchmark") == "harmbench"]
     xs_diag = [d for d in diag_rows if d.get("benchmark") == "xstest"]
 
-    harmbench_csv = analysis_dir / "rescore_diagnostics_harmbench.csv"
-    xstest_csv = analysis_dir / "rescore_diagnostics_xstest.csv"
+    harmbench_csv = analysis_dir / f"rescore_diagnostics_harmbench{args.out_suffix}.csv"
+    xstest_csv = analysis_dir / f"rescore_diagnostics_xstest{args.out_suffix}.csv"
     if not args.dry_run:
         if hb_diag:
             with harmbench_csv.open("w", encoding="utf-8", newline="") as f:
@@ -394,10 +404,10 @@ def main() -> int:
                 writer.writeheader()
                 writer.writerows(xs_diag)
 
-    agg_json = analysis_dir / "rescore_aggregate.json"
+    agg_json = analysis_dir / f"rescore_aggregate{args.out_suffix}.json"
     aggregate = {
         "scorer_version": SCORER_VERSION,
-        "n_models": len(MODEL_ALIASES),
+        "n_models": len(models),
         "harmbench": {
             "per_model": harmbench_rows,
             "totals": {

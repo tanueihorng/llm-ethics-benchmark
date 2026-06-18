@@ -1,0 +1,285 @@
+{
+  "scorer_version": "precision_sweep_v1",
+  "precisions": [
+    "fp16",
+    "int8",
+    "nf4"
+  ],
+  "per_pair": {
+    "qwen_2b": {
+      "aliases": {
+        "fp16": "qwen_2b_base",
+        "int8": "qwen_2b_8bit",
+        "nf4": "qwen_2b_4bit"
+      },
+      "metrics": {
+        "harmbench_asr_judge": {
+          "fp16": 0.135,
+          "int8": 0.15,
+          "nf4": 0.19,
+          "delta_int8_vs_fp16": 0.015,
+          "delta_nf4_vs_fp16": 0.055,
+          "delta_nf4_vs_int8": 0.04,
+          "shape": "graded"
+        },
+        "harmbench_asr_v2": {
+          "fp16": 0.6,
+          "int8": 0.585,
+          "nf4": 0.575,
+          "delta_int8_vs_fp16": -0.015,
+          "delta_nf4_vs_fp16": -0.025,
+          "delta_nf4_vs_int8": -0.01,
+          "shape": "graded"
+        },
+        "xstest_over_refusal": {
+          "fp16": 0.032,
+          "int8": 0.04,
+          "nf4": 0.016,
+          "delta_int8_vs_fp16": 0.008,
+          "delta_nf4_vs_fp16": -0.016,
+          "delta_nf4_vs_int8": -0.024,
+          "shape": "non_monotonic"
+        },
+        "mmlu_accuracy": {
+          "fp16": 0.62,
+          "int8": 0.64,
+          "nf4": 0.5333333333333333,
+          "delta_int8_vs_fp16": 0.02,
+          "delta_nf4_vs_fp16": -0.0867,
+          "delta_nf4_vs_int8": -0.1067,
+          "shape": "non_monotonic"
+        },
+        "arc_accuracy": {
+          "fp16": 0.7192832764505119,
+          "int8": 0.7320819112627986,
+          "nf4": 0.7064846416382252,
+          "delta_int8_vs_fp16": 0.0128,
+          "delta_nf4_vs_fp16": -0.0128,
+          "delta_nf4_vs_int8": -0.0256,
+          "shape": "non_monotonic"
+        }
+      },
+      "int8_present": true
+    },
+    "qwen_4b": {
+      "aliases": {
+        "fp16": "qwen_4b_base",
+        "int8": "qwen_4b_8bit",
+        "nf4": "qwen_4b_4bit"
+      },
+      "metrics": {
+        "harmbench_asr_judge": {
+          "fp16": 0.065,
+          "int8": 0.065,
+          "nf4": 0.09,
+          "delta_int8_vs_fp16": 0.0,
+          "delta_nf4_vs_fp16": 0.025,
+          "delta_nf4_vs_int8": 0.025,
+          "shape": "cliff_at_nf4"
+        },
+        "harmbench_asr_v2": {
+          "fp16": 0.24,
+          "int8": 0.245,
+          "nf4": 0.305,
+          "delta_int8_vs_fp16": 0.005,
+          "delta_nf4_vs_fp16": 0.065,
+          "delta_nf4_vs_int8": 0.06,
+          "shape": "cliff_at_nf4"
+        },
+        "xstest_over_refusal": {
+          "fp16": 0.016,
+          "int8": 0.028,
+          "nf4": 0.016,
+          "delta_int8_vs_fp16": 0.012,
+          "delta_nf4_vs_fp16": 0.0,
+          "delta_nf4_vs_int8": -0.012,
+          "shape": "non_monotonic"
+        },
+        "mmlu_accuracy": {
+          "fp16": 0.7466666666666667,
+          "int8": 0.74,
+          "nf4": 0.7433333333333333,
+          "delta_int8_vs_fp16": -0.0067,
+          "delta_nf4_vs_fp16": -0.0033,
+          "delta_nf4_vs_int8": 0.0033,
+          "shape": "non_monotonic"
+        },
+        "arc_accuracy": {
+          "fp16": 0.8745733788395904,
+          "int8": 0.8703071672354948,
+          "nf4": 0.8532423208191127,
+          "delta_int8_vs_fp16": -0.0043,
+          "delta_nf4_vs_fp16": -0.0213,
+          "delta_nf4_vs_int8": -0.0171,
+          "shape": "graded"
+        }
+      },
+      "int8_present": true
+    },
+    "llama_3_2_3b": {
+      "aliases": {
+        "fp16": "llama_3_2_3b_base",
+        "int8": "llama_3_2_3b_8bit",
+        "nf4": "llama_3_2_3b_4bit"
+      },
+      "metrics": {
+        "harmbench_asr_judge": {
+          "fp16": 0.04,
+          "int8": 0.08,
+          "nf4": 0.04,
+          "delta_int8_vs_fp16": 0.04,
+          "delta_nf4_vs_fp16": 0.0,
+          "delta_nf4_vs_int8": -0.04,
+          "shape": "non_monotonic"
+        },
+        "harmbench_asr_v2": {
+          "fp16": 0.06,
+          "int8": 0.1,
+          "nf4": 0.06,
+          "delta_int8_vs_fp16": 0.04,
+          "delta_nf4_vs_fp16": 0.0,
+          "delta_nf4_vs_int8": -0.04,
+          "shape": "non_monotonic"
+        },
+        "xstest_over_refusal": {
+          "fp16": 0.0,
+          "int8": 0.032,
+          "nf4": 0.0,
+          "delta_int8_vs_fp16": 0.032,
+          "delta_nf4_vs_fp16": 0.0,
+          "delta_nf4_vs_int8": -0.032,
+          "shape": "non_monotonic"
+        },
+        "mmlu_accuracy": {
+          "fp16": 0.61,
+          "int8": 0.5966666666666667,
+          "nf4": 0.5666666666666667,
+          "delta_int8_vs_fp16": -0.0133,
+          "delta_nf4_vs_fp16": -0.0433,
+          "delta_nf4_vs_int8": -0.03,
+          "shape": "graded"
+        },
+        "arc_accuracy": {
+          "fp16": 0.726962457337884,
+          "int8": 0.7167235494880546,
+          "nf4": 0.6988054607508533,
+          "delta_int8_vs_fp16": -0.0102,
+          "delta_nf4_vs_fp16": -0.0282,
+          "delta_nf4_vs_int8": -0.0179,
+          "shape": "graded"
+        }
+      },
+      "int8_present": true
+    },
+    "mistral_7b": {
+      "aliases": {
+        "fp16": "mistral_7b_base",
+        "int8": "mistral_7b_8bit",
+        "nf4": "mistral_7b_4bit"
+      },
+      "metrics": {
+        "harmbench_asr_judge": {
+          "fp16": 0.385,
+          "int8": 0.375,
+          "nf4": 0.345,
+          "delta_int8_vs_fp16": -0.01,
+          "delta_nf4_vs_fp16": -0.04,
+          "delta_nf4_vs_int8": -0.03,
+          "shape": "graded"
+        },
+        "harmbench_asr_v2": {
+          "fp16": 0.835,
+          "int8": 0.885,
+          "nf4": 0.89,
+          "delta_int8_vs_fp16": 0.05,
+          "delta_nf4_vs_fp16": 0.055,
+          "delta_nf4_vs_int8": 0.005,
+          "shape": "cliff_at_int8"
+        },
+        "xstest_over_refusal": {
+          "fp16": 0.004,
+          "int8": 0.0,
+          "nf4": 0.004,
+          "delta_int8_vs_fp16": -0.004,
+          "delta_nf4_vs_fp16": 0.0,
+          "delta_nf4_vs_int8": 0.004,
+          "shape": "non_monotonic"
+        },
+        "mmlu_accuracy": {
+          "fp16": 0.63,
+          "int8": 0.6433333333333333,
+          "nf4": 0.6133333333333333,
+          "delta_int8_vs_fp16": 0.0133,
+          "delta_nf4_vs_fp16": -0.0167,
+          "delta_nf4_vs_int8": -0.03,
+          "shape": "non_monotonic"
+        },
+        "arc_accuracy": {
+          "fp16": 0.7320819112627986,
+          "int8": 0.7337883959044369,
+          "nf4": 0.7414675767918089,
+          "delta_int8_vs_fp16": 0.0017,
+          "delta_nf4_vs_fp16": 0.0094,
+          "delta_nf4_vs_int8": 0.0077,
+          "shape": "cliff_at_nf4"
+        }
+      },
+      "int8_present": true
+    },
+    "phi4_mini": {
+      "aliases": {
+        "fp16": "phi4_mini_base",
+        "int8": "phi4_mini_8bit",
+        "nf4": "phi4_mini_4bit"
+      },
+      "metrics": {
+        "harmbench_asr_judge": {
+          "fp16": 0.055,
+          "int8": 0.06,
+          "nf4": 0.055,
+          "delta_int8_vs_fp16": 0.005,
+          "delta_nf4_vs_fp16": 0.0,
+          "delta_nf4_vs_int8": -0.005,
+          "shape": "non_monotonic"
+        },
+        "harmbench_asr_v2": {
+          "fp16": 0.075,
+          "int8": 0.085,
+          "nf4": 0.075,
+          "delta_int8_vs_fp16": 0.01,
+          "delta_nf4_vs_fp16": 0.0,
+          "delta_nf4_vs_int8": -0.01,
+          "shape": "non_monotonic"
+        },
+        "xstest_over_refusal": {
+          "fp16": 0.112,
+          "int8": 0.12,
+          "nf4": 0.084,
+          "delta_int8_vs_fp16": 0.008,
+          "delta_nf4_vs_fp16": -0.028,
+          "delta_nf4_vs_int8": -0.036,
+          "shape": "non_monotonic"
+        },
+        "mmlu_accuracy": {
+          "fp16": 0.7,
+          "int8": 0.6966666666666667,
+          "nf4": 0.6766666666666666,
+          "delta_int8_vs_fp16": -0.0033,
+          "delta_nf4_vs_fp16": -0.0233,
+          "delta_nf4_vs_int8": -0.02,
+          "shape": "cliff_at_nf4"
+        },
+        "arc_accuracy": {
+          "fp16": 0.8131399317406144,
+          "int8": 0.8156996587030717,
+          "nf4": 0.7977815699658704,
+          "delta_int8_vs_fp16": 0.0026,
+          "delta_nf4_vs_fp16": -0.0154,
+          "delta_nf4_vs_int8": -0.0179,
+          "shape": "non_monotonic"
+        }
+      },
+      "int8_present": true
+    }
+  }
+}

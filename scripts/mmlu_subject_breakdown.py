@@ -78,14 +78,23 @@ def _accuracy(cell: Dict[str, int]) -> Optional[float]:
 def main() -> int:
     parser = argparse.ArgumentParser(description="Per-subject MMLU breakdown (redacted).")
     parser.add_argument("--results-dir", default="results")
+    parser.add_argument("--models", nargs="+", default=None,
+                        help="Aliases to break down (default: the evaluated ten). Pass the INT8 "
+                             "aliases for their per-model subject table; the per-pair "
+                             "(base-vs-4bit) deltas are then empty by construction.")
+    parser.add_argument("--out-suffix", default="",
+                        help="Suffix for mmlu_subject_breakdown{suffix}.{json,csv} so a scoped "
+                             "INT8 run never overwrites the committed file.")
     args = parser.parse_args()
 
+    models = args.models or MODEL_ALIASES
+    pairs = {pid: (b, q) for pid, (b, q) in PAIRS.items() if b in models and q in models}
     results_dir = Path(args.results_dir).resolve()
     analysis_dir = results_dir / "analysis"
     analysis_dir.mkdir(parents=True, exist_ok=True)
 
     per_model: Dict[str, Dict[str, Dict[str, int]]] = {}
-    for alias in MODEL_ALIASES:
+    for alias in models:
         per_model[alias] = _subject_counts(results_dir / alias / "mmlu" / "raw.jsonl")
 
     if not any(per_model.values()):
@@ -94,7 +103,7 @@ def main() -> int:
 
     # Per-pair, per-subject accuracy deltas (4-bit minus baseline).
     per_pair: List[Dict[str, Any]] = []
-    for pair_id, (base_alias, quant_alias) in PAIRS.items():
+    for pair_id, (base_alias, quant_alias) in pairs.items():
         base_counts = per_model.get(base_alias, {})
         quant_counts = per_model.get(quant_alias, {})
         subjects = sorted(set(base_counts) | set(quant_counts))
@@ -131,11 +140,11 @@ def main() -> int:
         },
         "per_pair_subject_deltas": per_pair,
     }
-    (analysis_dir / "mmlu_subject_breakdown.json").write_text(
+    (analysis_dir / f"mmlu_subject_breakdown{args.out_suffix}.json").write_text(
         json.dumps(report, indent=2), encoding="utf-8"
     )
 
-    csv_path = analysis_dir / "mmlu_subject_breakdown.csv"
+    csv_path = analysis_dir / f"mmlu_subject_breakdown{args.out_suffix}.csv"
     with csv_path.open("w", encoding="utf-8", newline="") as handle:
         writer = csv.writer(handle, lineterminator="\n")
         writer.writerow([
@@ -151,7 +160,7 @@ def main() -> int:
     print("=" * 78)
     print("Per-subject MMLU accuracy deltas (4-bit minus baseline)")
     print("=" * 78)
-    for pair_id, (base_alias, quant_alias) in PAIRS.items():
+    for pair_id, (base_alias, quant_alias) in pairs.items():
         rows = [r for r in per_pair if r["pair_id"] == pair_id]
         regressed = sum(1 for r in rows if isinstance(r["accuracy_delta"], float) and r["accuracy_delta"] < 0)
         print(f"\n{pair_id}  ({len(rows)} subjects; {regressed} regressed)")
@@ -163,7 +172,7 @@ def main() -> int:
             d_s = f"{d:+.3f}" if isinstance(d, float) else "  n/a"
             print(f"  {r['subject']:<32} {_f(r['baseline_accuracy']):>6} {_f(r['quantized_accuracy']):>6} {d_s:>8}")
     print()
-    print(f"Wrote {analysis_dir / 'mmlu_subject_breakdown.json'}")
+    print(f"Wrote {analysis_dir / ('mmlu_subject_breakdown' + args.out_suffix + '.json')}")
     print(f"Wrote {csv_path}")
     return 0
 
