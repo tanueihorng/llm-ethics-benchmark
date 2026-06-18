@@ -81,6 +81,10 @@ prefetch:
 report:
 	NODE_PATH=$$(npm root -g) node scripts/build_fyp_report.js
 
+# Standalone full thesis (separate from the interim report; not overwritten by `make report`)
+thesis:
+	NODE_PATH=$$(npm root -g) node scripts/build_fyp_thesis.js
+
 architecture-diagram:
 	$(PYTHON) scripts/generate_architecture_diagram.py
 	$(PYTHON) scripts/generate_repo_hierarchy_diagram.py

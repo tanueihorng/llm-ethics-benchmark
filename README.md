@@ -22,7 +22,8 @@ The core objective is to compare baseline and quantized checkpoints as matched p
 - Reproducibility kit: [`docs/REPRODUCIBILITY.md`](docs/REPRODUCIBILITY.md) — mapped to the ML Reproducibility Checklist
 - One-page results card: [`docs/RESULTS_CARD.md`](docs/RESULTS_CARD.md)
 
-**Academic write-up scaffolding:**
+**Academic write-up:**
+- Full FYP thesis (standalone Word document): `docs/FYP_Thesis_2026-06-18.docx` — build with `make thesis` (separate from the interim report)
 - Workshop paper / poster outline: [`docs/paper_outline.md`](docs/paper_outline.md)
 - Thesis structure & writing guide: [`docs/THESIS_OUTLINE.md`](docs/THESIS_OUTLINE.md)
 
