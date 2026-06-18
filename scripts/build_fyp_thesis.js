@@ -322,8 +322,8 @@ const refs = [
   REF(1, "T. Dettmers, M. Lewis, Y. Belkada, and L. Zettlemoyer, “LLM.int8(): 8-bit matrix multiplication for transformers at scale,” in Proc. Advances in Neural Information Processing Systems (NeurIPS), 2022. arXiv:2208.07339."),
   REF(2, "T. Dettmers, A. Pagnoni, A. Holtzman, and L. Zettlemoyer, “QLoRA: Efficient finetuning of quantized LLMs,” in Proc. NeurIPS, 2023. arXiv:2305.14314."),
   REF(3, "A. Kharinaev et al., “Investigating the impact of quantization methods on the safety and reliability of large language models,” arXiv preprint arXiv:2502.15799, 2025."),
-  REF(4, "R. Jin et al., “A comprehensive evaluation of quantization strategies for large language models,” arXiv preprint arXiv:2402.16775, 2024."),
-  REF(5, "K. Egashira et al., “Exploiting LLM quantization,” in Proc. NeurIPS, 2024. arXiv:2405.18137."),
+  REF(4, "R. Jin et al., “A comprehensive evaluation of quantization strategies for large language models,” in Findings of the Association for Computational Linguistics (ACL Findings), 2024. arXiv:2402.16775."),
+  REF(5, "K. Egashira et al., “Exploiting LLM quantization,” arXiv preprint arXiv:2405.18137, 2024."),
   REF(6, "Y. Belkhiter et al., “HarmLevelBench: Evaluating harm-level compliance and the impact of quantization on model alignment,” arXiv preprint arXiv:2411.06835, 2024."),
   REF(7, "M. Mazeika et al., “HarmBench: A standardized evaluation framework for automated red teaming and robust refusal,” in Proc. International Conference on Machine Learning (ICML), 2024. arXiv:2402.04249."),
   REF(8, "P. Röttger, H. R. Kirk, B. Vidgen, G. Attanasio, F. Bianchi, and D. Hovy, “XSTest: A test suite for identifying exaggerated safety behaviours in large language models,” in Proc. NAACL, 2024. arXiv:2308.01263."),
@@ -332,11 +332,11 @@ const refs = [
   REF(11, "M. Krumdick et al., “No free labels: Limitations of LLM-as-a-judge without human grounding,” arXiv preprint arXiv:2503.05061, 2025."),
   REF(12, "D. Hendrycks, C. Burns, S. Basart, A. Zou, M. Mazeika, D. Song, and J. Steinhardt, “Measuring massive multitask language understanding,” in Proc. International Conference on Learning Representations (ICLR), 2021. arXiv:2009.03300."),
   REF(13, "P. Clark, I. Cowhey, O. Etzioni, T. Khot, A. Sabharwal, C. Schoenick, and O. Tafjord, “Think you have solved question answering? Try ARC, the AI2 reasoning challenge,” arXiv preprint arXiv:1803.05457, 2018."),
-  REF(14, "I. Proskurina, L. Brun, G. Metzler, and J. Velcin, “When quantization affects confidence of large language models?,” in Findings of NAACL, 2024. arXiv:2405.00632."),
-  REF(15, "J. Pineau et al., “Improving reproducibility in machine learning research (a report from the NeurIPS 2019 reproducibility program),” Journal of Machine Learning Research (JMLR), vol. 22, pp. 1–20, 2021."),
+  REF(14, "I. Proskurina, L. Brun, G. Metzler, and J. Velcin, “When quantization affects confidence of large language models?,” arXiv preprint arXiv:2405.00632, 2024."),
+  REF(15, "J. Pineau et al., “Improving reproducibility in machine learning research (a report from the NeurIPS 2019 reproducibility program),” Journal of Machine Learning Research (JMLR), vol. 22, 2021. arXiv:2003.12206."),
   REF(16, "G. K. Sandve, A. Nekrutenko, J. Taylor, and E. Hovig, “Ten simple rules for reproducible computational research,” PLOS Computational Biology, vol. 9, no. 10, e1003285, 2013."),
   REF(17, "G. Wilson, J. Bryan, K. Cranston, J. Kitzes, L. Nederbragt, and T. K. Teal, “Good enough practices in scientific computing,” PLOS Computational Biology, vol. 13, no. 6, e1005510, 2017."),
-  REF(18, "A. M. Smith et al., “Journal of Open Source Software (JOSS): Design and first-year review,” arXiv preprint arXiv:1707.02264, 2018."),
+  REF(18, "A. M. Smith et al., “Journal of Open Source Software (JOSS): Design and first-year review,” arXiv preprint arXiv:1707.02264, 2017."),
 ];
 
 const appendix = [
