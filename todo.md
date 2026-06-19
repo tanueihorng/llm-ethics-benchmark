@@ -9,11 +9,11 @@
 
 ## [2026-06-18] ACTIVE: submission wrap-up — the study is COMPLETE; only the two submission tasks remain
 
-**Source of truth:** `docs/PROJECT_LOG.md` §1 status + D35 (INT8) + D36 (audit). All experiments, code, and report work are done and on `main` (`67fb292`+). 295 tests; `make agent-check` 8/8.
+**Source of truth:** `docs/PROJECT_LOG.md` §1 status + D35 (INT8) + D36 (audit). All experiments, code, report, deliverables, and the standalone thesis are done and on `main` (`87920c7`, in sync with origin). 295 tests; `make agent-check` 8/8.
 
 **Do next, in order:**
 1. **T1 — email Dr. Zhang.** Draft is `docs/email_drZhang_2026-06-13.md` (gitignored, local-only). Highest non-research priority; last supervisor contact was 2026-03-09. Results are in hand (5 pairs / 4 families / 3 precisions, judge-validated).
-2. **T15 — submit the interim report.** `docs/FYP_Report_2026-06-14.docx` (regenerate with `make report` if edited). Now carries §6.15 (INT8 precision point) and the family-wise caveat (§6.5).
+2. **T15 — submit.** Two documents exist: the interim report `docs/FYP_Report_2026-06-14.docx` (`make report`; §6.15 + §6.5 caveat) and the NEW standalone thesis `docs/FYP_Thesis_2026-06-18.docx` (`make thesis`; IEEE-cited, sources verified). Decide which the milestone requires; the thesis cover says "Final Report — Thesis" (one-line change in `scripts/build_fyp_thesis.js` if it's actually the interim).
 3. **T3 — `MyTCinfo`** on TC1 (storage quota). Quick, optional.
 
 **Optional disclosure polish (low; already partly covered in §7.5/Ch8 — do only if tightening for the viva):**
@@ -27,7 +27,9 @@
 - Add a genuinely different quant family (GPTQ / AWQ / GGUF) beyond the two bitsandbytes methods.
 - Arditi activation-direction probe; paired neutral-margin control with a significance test.
 
-**Reuse/dissemination deliverables — DONE 2026-06-18 (research-grounded):** `pip install -e .` packaging (`pyproject.toml`) + `CITATION.cff` + `docs/QUICKSTART.md` (framework reuse), `docs/paper_outline.md` (workshop paper/poster), `docs/REPRODUCIBILITY.md` + `docs/RESULTS_CARD.md`, `docs/THESIS_OUTLINE.md`. ⚠️ **ACTION (user decision): add a `LICENSE`** — the repo is currently all-rights-reserved, which blocks reuse. Recommend MIT or Apache-2.0 for the code, but **confirm against NTU FYP intellectual-property policy first** (FYP IP may be co-owned). Then set `license` in `pyproject.toml` + `CITATION.cff`, and optionally archive a release to Zenodo for a citable DOI. See `docs/REPRODUCIBILITY.md` §6.
+**Standalone thesis — DONE 2026-06-18:** new `scripts/build_fyp_thesis.js` (`make thesis`) → `docs/FYP_Thesis_2026-06-18.docx` (24 pp, Times New Roman, full front matter + 10 chapters + 7 tables + IEEE references + appendices). SEPARATE from the interim report (`make report` never touches it). **IEEE done:** numbered `[n]` in-text citations + reference list by citation order; **all 18 sources browsed/verified against arXiv (none hallucinated)** — see PROJECT_LOG §4 rows (2026-06-18 20:45 / 21:15). Optional thesis polish if tightening for submission (don't re-research): (a) the RQs render as "1. RQ1: …" (drop the redundant list number → plain "RQ1: …" by switching the `NUM(...,"rq")` calls to `PJ`); (b) expand any chapter (it's ~5,100 words, complete-but-concise — interim report has the deeper §6 detail); (c) double-check the two PLOS journal page numbers ([16] Sandve, [17] Wilson) and the full author lists behind the "et al." entries; (d) `make thesis` after any edit, then re-validate.
+
+**Reuse/dissemination deliverables — DONE 2026-06-18 (research-grounded):** `pip install -e .` packaging (`pyproject.toml`) + `CITATION.cff` + `docs/QUICKSTART.md` (framework reuse), `docs/paper_outline.md` (workshop paper/poster), `docs/REPRODUCIBILITY.md` + `docs/RESULTS_CARD.md`, `docs/THESIS_OUTLINE.md`. README links them all. ⚠️ **ACTION (user decision): add a `LICENSE`** — the repo is currently all-rights-reserved, which blocks reuse. Recommend MIT or Apache-2.0 for the code, but **confirm against NTU FYP intellectual-property policy first** (FYP IP may be co-owned). Then set `license` in `pyproject.toml` + `CITATION.cff`, and optionally archive a release to Zenodo for a citable DOI. See `docs/REPRODUCIBILITY.md` §6.
 
 **Housekeeping (optional):** stale local branches already merged to main can be pruned — `t26-add-mistral-phi-pairs`, `mechanism-refusal-margin`, `int8-precision-point`, `harden/latent-six-audit`, `backup/pre-v2-scorer-final` (keep `backup/*` if wanted as a safety net).
 
