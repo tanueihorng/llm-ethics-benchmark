@@ -93,12 +93,16 @@ report_worthy:
     - scripts/rescore_harmbench.py
     - results/analysis/*.json
     - results/analysis/*.csv
+  # Only a regenerated docx satisfies the freshness gate. build_fyp_report.js is a
+  # TRIGGER (above), not a satisfier: editing the report source must force `make report`,
+  # so it deliberately does NOT appear here (otherwise a source-only edit would
+  # self-satisfy the gate and the committed docx could go stale silently).
   required_changed_patterns:
     - docs/FYP_Report_*.docx
-    - scripts/build_fyp_report.js
 
 agent_status:
-  # expected_judge_sidecars stays 6 until the T26 new-pairs judge run lands on TC1
-  # (the 4 new scores.judge.harmbench_cls.* sidecars do not exist yet).
-  expected_judge_sidecars: 6
-  expected_test_count_note: 246
+  # Informational only — no check consumes these (they document expected counts for
+  # a human reading the policy). Kept current with the post-T26/T29 state:
+  # 10 main-study harmbench_cls judge sidecars (5 pairs x 2 members); 306 tests.
+  expected_judge_sidecars: 10
+  expected_test_count_note: 306

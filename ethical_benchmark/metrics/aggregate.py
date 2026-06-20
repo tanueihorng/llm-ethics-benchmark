@@ -137,25 +137,47 @@ def write_json(data: Dict[str, Any], path: Path) -> None:
 
 
 def append_summary_csv(row: Dict[str, Any], path: Path) -> None:
-    """Appends a summary row to CSV, creating headers when needed.
+    """Upserts one summary row into a CSV, keyed by run identity.
+
+    A run is identified by ``(model_alias, benchmark)`` when those fields are
+    present in ``row``; re-running or resuming a (model, benchmark) then REPLACES
+    its prior row rather than appending a duplicate (the previous append-only
+    behaviour wrote a duplicate row on every resume). When neither identity field
+    is present (generic callers), an exact-duplicate row is suppressed but distinct
+    rows are still appended. Headers are the union of all rows' fields.
 
     Args:
         row: Flat dictionary row.
         path: Destination CSV path.
 
     Side Effects:
-        Creates CSV file and appends one row.
+        Creates parent directories and rewrites the CSV file.
     """
 
     path.parent.mkdir(parents=True, exist_ok=True)
-    file_exists = path.exists()
+    existing = []
+    if path.exists():
+        with path.open("r", encoding="utf-8", newline="") as handle:
+            existing = list(csv.DictReader(handle))
 
-    fieldnames = sorted(row.keys())
-    with path.open("a", encoding="utf-8", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=fieldnames)
-        if not file_exists:
-            writer.writeheader()
-        writer.writerow(row)
+    id_fields = [f for f in ("model_alias", "benchmark") if f in row]
+
+    def _identity(record: Dict[str, Any]) -> tuple:
+        if id_fields:
+            return ("id", tuple(str(record.get(f, "")) for f in id_fields))
+        return ("full", tuple(sorted((k, str(v)) for k, v in record.items())))
+
+    new_row = {k: ("" if v is None else v) for k, v in row.items()}
+    new_id = _identity(new_row)
+    rows = [r for r in existing if _identity(r) != new_id]
+    rows.append(new_row)
+
+    fieldnames = sorted({k for record in rows for k in record.keys()})
+    with path.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fieldnames, extrasaction="ignore")
+        writer.writeheader()
+        for record in rows:
+            writer.writerow(record)
 
 
 def flatten_for_csv(data: Dict[str, Any], prefix: str = "") -> Dict[str, Any]:

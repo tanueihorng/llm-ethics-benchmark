@@ -82,7 +82,7 @@ const cover = [
   CTR("Email:  UTAN001@e.ntu.edu.sg", { size: 22, after: 120 }),
   CTR("Supervisor:  Dr. Zhang Jiehuang  (jiehuang.zhang@ntu.edu.sg)", { size: 22, after: 560 }),
   CTR("18 June 2026", { size: 26, bold: true, after: 80 }),
-  CTR("Five matched pairs / ten models / four families · three precisions · four benchmarks · 295 automated tests", { size: 18, italics: true, color: "555555" }),
+  CTR("Five matched pairs / ten models / four families · three precisions · four benchmarks · 306 automated tests", { size: 18, italics: true, color: "555555" }),
   new Paragraph({ children: [new PageBreak()] }),
 ];
 
@@ -216,7 +216,7 @@ const ch4 = [
   H2("4.2  Extensibility and the plugin contract"),
   PJ("Adding a model requires only a configuration entry; adding a benchmark requires implementing four methods (load, build prompt, score, aggregate) and registering one line; adding a quantization method extends the loader’s method branch. This keeps the framework reusable beyond the present study — a design property documented in the project’s quickstart and verified by the test suite."),
   H2("4.3  Reliability safeguards"),
-  PJ("Several safeguards protect result integrity. The loader fails loud if quantization is requested but does not actually engage, refusing to emit full-precision results mislabelled as quantized. Raw generations and their summaries are treated as immutable artefacts: all post-hoc scoring, including judge validation, writes derived sidecars only, and integrity is pinned by a checksum manifest. Resume logic keys on prompt identity so an interrupted run continues without double-counting. A suite of 295 automated tests covers the schema, loaders, scorers, analysis mathematics, and the cluster job generator."),
+  PJ("Several safeguards protect result integrity. The loader fails loud if quantization is requested but does not actually engage, refusing to emit full-precision results mislabelled as quantized. Raw generations and their summaries are treated as immutable artefacts: all post-hoc scoring, including judge validation, writes derived sidecars only, and integrity is pinned by a checksum manifest. Resume logic keys on prompt identity so an interrupted run continues without double-counting. A suite of 306 automated tests covers the schema, loaders, scorers, analysis mathematics, and the cluster job generator."),
   H2("4.4  Privacy discipline"),
   PJ("Because the study handles harmful prompts and responses, committed artefacts are redacted: prompt identifiers, boolean labels, scalar scores, and run metadata only — never prompt or response text. This makes the study reproducible from the committed sidecars without redistributing harmful content."),
 ];
@@ -233,7 +233,7 @@ const ch5 = [
     ["Second judge", "GPT-4o (architecturally independent)"],
     ["Statistics", "paired bootstrap 95% CI (2000 resamples) + McNemar"],
     ["Hardware", "NVIDIA Tesla V100-32GB (TC1)"],
-    ["Verification", "295 automated tests"],
+    ["Verification", "306 automated tests"],
   ], [3600, 5760]),
   CAP("Table 5.1  Experimental configuration summary."),
   PJ("The five NF4 pairs and the judge validation ran first; the INT8 precision point and its judge ran subsequently on the same cluster with identical methodology. The GPT-4o second judge runs locally against an API. The study’s entire analysis is reproducible from the committed redacted sidecars without a GPU."),
@@ -245,7 +245,7 @@ const ch6 = [
   PJ("The first result concerns the instrument. The refusal regex reports far higher Attack Success Rates than the HarmBench classifier, and the gap is uneven by family. Cohen’s κ between the regex and the classifier is poor for the Qwen and Mistral models and good for Llama and Phi (Table 6.1), because models that produce a large volume of ambiguous, non-refusing-but-benign text are exactly those the regex mis-scores. Adopting the classifier relocates the study’s single significant effect from one model (under the regex) to another (under the classifier). This is the thesis’s central methodological result: in safety evaluation, the choice of scorer is not a detail but can change the conclusion."),
   tbl(["Family", "Cohen’s κ (regex vs classifier)", "Reading"], [
     ["Qwen", "0.19 – 0.37", "poor — regex over-counts heavily"],
-    ["Mistral", "0.11", "worst — v2 0.885 vs judge 0.375"],
+    ["Mistral", "0.11", "worst — regex 0.890 vs judge 0.345 (4-bit)"],
     ["Llama", "0.68 – 0.79", "good — little ambiguous middle ground"],
     ["Phi", "0.59 – 0.67", "moderate"],
   ], [1900, 3660, 3800]),
@@ -282,11 +282,11 @@ const ch6 = [
 
 const ch7 = [
   H1("Chapter 7  Discussion and Threats to Validity"),
-  PJ("The results answer the research questions with calibrated, not sweeping, claims. NF4 never makes these models safer on harmful compliance, and only the smallest model becomes significantly less safe; over-refusal does not rise (the only significant change is a decrease); capability loss is real but modest and partly benchmark-specific; and the cross-precision picture is that effects are method- and model-specific, not graded with bit-width. For deployment, the practical message is that eight-bit quantization is essentially free on these axes, whereas four-bit carries a small, model-specific risk that should be measured per model rather than assumed."),
+  PJ("The results answer the research questions with calibrated, not sweeping, claims. NF4 never makes these models safer on harmful compliance, and only the smallest model becomes significantly less safe; over-refusal does not rise (the only significant change is a decrease); capability loss is real but modest and partly benchmark-specific; and the cross-precision picture is that effects are method- and model-specific, not graded with bit-width. For deployment, the practical message is that eight-bit quantization is essentially free on capability, whereas its effect on safety is method- and model-specific — it left harmful compliance unchanged for four of five pairs but produced the study’s most judge-robust increase in one (Llama-3B at INT8, §6.5) — and four-bit likewise carries a small, model-specific risk; both should be measured per model rather than assumed."),
   H2("7.1  Internal validity"),
   PJ("Internal validity is the design’s strongest property: the matched-pair structure with on-the-fly quantization from identical weights, plus deterministic decoding and deterministic or judge-validated scoring, leaves quantization as the only plausible cause of a measured delta. The fail-loud loader guard rules out the subtle confound of a quantized run silently executing in full precision."),
   H2("7.2  Construct validity"),
-  PJ("The primary safety construct is scored by the benchmark’s own fine-tuned classifier rather than refusal matching, and the cross-judge agreement (κ 0.69–0.94) shows the finding is not an artefact of one classifier. The residual construct threat is that both judges are themselves LLMs without independent human-label validation; this is disclosed and flagged for future work. Over-refusal remains regex-scored, a known weaker construct."),
+  PJ("The primary safety construct is scored by the benchmark’s own fine-tuned classifier rather than refusal matching, and the cross-judge agreement (κ 0.60–0.95 across all ten models) shows the finding is not an artefact of one classifier. The residual construct threat is that both judges are themselves LLMs without independent human-label validation; this is disclosed and flagged for future work. Over-refusal remains regex-scored, a known weaker construct."),
   H2("7.3  External and statistical-conclusion validity"),
   PJ("External validity is bounded by five pairs, one decoding regime, and two bitsandbytes methods; the cross-family and cross-precision sweeps widen it but do not make it general. Statistical-conclusion validity is bounded by sample size and uncorrected multiplicity, addressed by reporting intervals, McNemar corroboration, a multi-seed arm, and an explicit two-layer evidence status rather than bare significance."),
 ];
@@ -343,7 +343,7 @@ const appendix = [
   H1("Appendix A  Reproducibility Statement"),
   PJ("All code, configuration, and redacted result artefacts are in the project repository. The analysis reproduces byte-for-byte from the committed sidecars without a GPU; full experiments require the gated model weights and a CUDA GPU. The project maps to the ML Reproducibility Checklist [15]: models and algorithms are described (Chapters 3–4); datasets, splits, and sample counts are recorded in each run summary; code and pinned dependencies are released; hyper-parameters and decoding controls are recorded in every summary; the compute infrastructure is recorded; and significance procedures are specified, with multiple comparisons disclosed. The repository follows recognised research-software practice — scripts rather than manual steps, fixed seeds, explicit dependencies, and a documented project structure [16], [17] — and is packaged for reuse in line with open-source-software peer-review norms [18]. Raw generations are gitignored and hash-pinned; only redacted sidecars (identifiers, booleans, scalars) are released, so the study is reproducible without redistributing harmful text."),
   H1("Appendix B  Artefacts and Test Suite"),
-  PJ("The framework ships 295 automated tests across the schema, loaders (including the fail-loud quantization guard), scorers, analysis mathematics (delta computation, paired bootstrap, McNemar, Cohen’s κ), and the SLURM job generator. Result artefacts comprise per-prompt redacted score sidecars, per-model judge summaries, and analysis files (pairwise deltas, judge agreement, the precision sweep). A checksum manifest pins the immutable raw artefacts."),
+  PJ("The framework ships 306 automated tests across the schema, loaders (including the fail-loud quantization guard), scorers, analysis mathematics (delta computation, paired bootstrap, McNemar, Cohen’s κ), and the SLURM job generator. Result artefacts comprise per-prompt redacted score sidecars, per-model judge summaries, and analysis files (pairwise deltas, judge agreement, the precision sweep). A checksum manifest pins the immutable raw artefacts."),
 ];
 
 // ===========================================================================

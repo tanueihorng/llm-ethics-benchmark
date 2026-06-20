@@ -104,7 +104,16 @@ def _select_pair_members(config: QuantizationConfig, pair_id: str) -> Tuple[str,
 
     members = [(alias, entry) for alias, entry in config.models.items() if entry.pair_id == pair_id]
     baselines = [alias for alias, entry in members if not entry.quantized]
-    quantized = [alias for alias, entry in members if entry.quantized]
+    # The base-vs-4-bit pairwise pipeline labels the selected quantized member as
+    # the canonical NF4 result, so it must NOT pick an INT8 member: an INT8 sweep
+    # lives in its own config (configs/tc1_int8.yaml) and is analysed separately by
+    # scripts/precision_sweep_analysis.py. quant_method None means NF4 (the default),
+    # so only nf4-method members are eligible here. A pair whose only quantized
+    # member is INT8 returns None and is skipped rather than mislabelled as NF4.
+    quantized = [
+        alias for alias, entry in members
+        if entry.quantized and (entry.quant_method or "nf4") == "nf4"
+    ]
 
     if not baselines or not quantized:
         return None

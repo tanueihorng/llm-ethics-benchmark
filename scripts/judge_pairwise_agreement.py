@@ -108,7 +108,10 @@ def agreement_and_kappa(
     pa1 = sum(xa) / n
     pb1 = sum(xb) / n
     pe = pa1 * pb1 + (1 - pa1) * (1 - pb1)
-    kappa = None if (1 - pe) == 0 else (po - pe) / (1 - pe)
+    # Undefined (0/0) when chance agreement is total — both raters constant and
+    # identical. Use a tolerance, matching judge_agreement._cohens_kappa, rather
+    # than an exact float-equality test.
+    kappa = None if abs(1 - pe) <= 1e-12 else (po - pe) / (1 - pe)
     return n, po, kappa
 
 

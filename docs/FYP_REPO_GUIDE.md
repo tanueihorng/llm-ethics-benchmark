@@ -1,5 +1,5 @@
 # FYP Repository Guide
-## Safety-Capability Trade-offs in 4-Bit Quantized Small Language Models
+## Safety-Capability Trade-offs in Quantized Small Language Models (fp16 → INT8 → NF4)
 
 ## 1. Purpose of This Guide
 This document is a full operational manual for using this repository in a Final Year Project workflow. It is written in report style and is intended to support:
@@ -11,19 +11,23 @@ This document is a full operational manual for using this repository in a Final 
 
 The guide focuses on the repository's current scope:
 
-- harmful compliance (HarmBench),
+- harmful compliance (HarmBench, scored primarily by the official HarmBench classifier; the v2 regex is a secondary proxy),
 - over-refusal (XSTest),
-- capability (MMLU subset),
-- matched baseline vs 4-bit pair analysis.
+- capability (MMLU subset, corroborated by ARC-Challenge),
+- matched baseline vs quantized pair analysis across three precisions (fp16 → INT8 → NF4).
 
 ## 2. Study Scope Encoded in the Repository
-The repository operationalizes a controlled quantization study where each baseline model is compared against its 4-bit counterpart. The current matrix includes:
+The repository operationalizes a controlled quantization study where each baseline model is compared against its quantized counterpart. The current matrix is **5 matched pairs / 10 models / 4 families**:
 
-- Qwen 2B baseline vs Qwen 2B on-the-fly 4-bit,
-- Qwen 4B baseline vs Qwen 4B 4-bit,
-- Llama 3.2 3B baseline vs Llama 3.2 3B on-the-fly 4-bit.
+- Qwen3-1.7B baseline vs on-the-fly 4-bit (`qwen_2b`),
+- Qwen3-4B baseline vs 4-bit (`qwen_4b`),
+- Llama-3.2-3B-Instruct baseline vs 4-bit (`llama_3_2_3b`),
+- Mistral-7B-Instruct-v0.3 baseline vs 4-bit (`mistral_7b`),
+- Phi-4-mini-instruct baseline vs 4-bit (`phi4_mini`).
 
-The study does **not** design quantization algorithms. It evaluates fixed model checkpoints under controlled full-precision vs BitsAndBytes NF4 loading conditions.
+In addition to the main fp16-vs-NF4 study, a separate **INT8 precision point** (bitsandbytes LLM.int8 — a distinct method, not lower-bit NF4) is run for all five pairs via `configs/tc1_int8.yaml` + `scripts/precision_sweep_analysis.py`, so each pair spans fp16 → INT8 → NF4.
+
+The study does **not** design quantization algorithms. It evaluates fixed model checkpoints under controlled full-precision vs BitsAndBytes (NF4 and INT8) loading conditions.
 
 ## 3. Repository Structure and Responsibilities
 ### 3.1 Core execution modules

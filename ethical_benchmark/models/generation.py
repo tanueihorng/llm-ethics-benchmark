@@ -127,6 +127,11 @@ class TextGenerator:
         if not prompt_list:
             return []
 
+        # Left-truncate: for a chat-templated prompt the generation-prompt tail
+        # (the most recent turn + the assistant cue) lives at the END, so an
+        # over-length prompt must drop tokens from the FRONT, not the back. The
+        # default right-truncation would silently cut the assistant cue.
+        self.tokenizer.truncation_side = "left"
         inputs = self.tokenizer(
             prompt_list,
             return_tensors="pt",
@@ -189,10 +194,30 @@ class TextGenerator:
                         add_generation_prompt=True,
                     )
                 except Exception as exc:  # pragma: no cover
-                    LOGGER.debug("Chat template failed; using raw prompt. Error: %s", exc)
+                    LOGGER.warning(
+                        "Chat template failed; FELL BACK to the raw prompt "
+                        "(no template applied). Error: %s", exc,
+                    )
             except Exception as exc:  # pragma: no cover
-                LOGGER.debug("Chat template failed; using raw prompt. Error: %s", exc)
+                LOGGER.warning(
+                    "Chat template failed; FELL BACK to the raw prompt "
+                    "(no template applied). Error: %s", exc,
+                )
         return prompt
+
+    def prompt_was_templated(self, prompt: str) -> bool:
+        """Provenance: whether the chat template actually transformed ``prompt``.
+
+        Returns True when ``use_chat_template`` is enabled and
+        ``apply_chat_template`` produced a string different from the raw prompt;
+        False when templating was disabled or silently fell back to the raw
+        prompt (see ``_format_prompt``). This lets each ``raw.jsonl`` record carry
+        a per-prompt flag for which prompt path the model actually saw, so a
+        silent template failure is auditable from the artifacts and not only the
+        run-time WARNING.
+        """
+
+        return bool(self.config.use_chat_template) and self._format_prompt(prompt) != prompt
 
     @staticmethod
     def _postprocess(text: str) -> str:

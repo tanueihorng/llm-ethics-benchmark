@@ -224,3 +224,41 @@ def test_agent_start_packet_selects_task_and_subagent(tmp_path: Path) -> None:
     assert packet["selected_agent"]["name"] == "fyp-test-agent"
     assert "Context Isolation Prompt" in rendered
     assert "docs/agent_tasks/T99-test-task.md" in rendered
+
+
+def test_report_freshness_fails_on_source_edit_without_docx(tmp_path: Path, monkeypatch) -> None:
+    """Editing the report SOURCE without regenerating the docx must FAIL the gate (audit H2).
+
+    Previously build_fyp_report.js appeared in BOTH the trigger and the satisfier
+    set, so a source-only edit self-satisfied report-freshness and the committed
+    docx could go stale silently. The satisfier is now the docx alone.
+    """
+    from ethical_benchmark.harness import agent as harness_agent
+
+    repo = _init_harness_repo(tmp_path)
+    policy = load_policy(repo)
+
+    # Source-only edit: report-worthy trigger fires, no docx regenerated -> FAIL.
+    monkeypatch.setattr(harness_agent, "_changed_files", lambda root: ["scripts/build_fyp_report.js"])
+    assert harness_agent.check_report_freshness(repo, policy).status == "fail"
+
+    # Source edit + regenerated docx (the correct `make report` workflow) -> PASS.
+    monkeypatch.setattr(
+        harness_agent, "_changed_files",
+        lambda root: ["scripts/build_fyp_report.js", "docs/FYP_Report_2026-06-14.docx"],
+    )
+    assert harness_agent.check_report_freshness(repo, policy).status == "pass"
+
+
+def test_real_policy_report_source_is_not_a_freshness_satisfier() -> None:
+    """The committed policy must keep the report source a TRIGGER, not a SATISFIER (audit H2).
+
+    This guards the REAL configs/artifact_policy.yaml (the prior bug was masked
+    because the test fixture used a different, already-correct policy).
+    """
+    repo = Path(__file__).resolve().parents[1]
+    policy = load_policy(repo)
+    report_worthy = policy["report_worthy"]
+    assert "scripts/build_fyp_report.js" in report_worthy["changed_file_patterns"]
+    assert "scripts/build_fyp_report.js" not in report_worthy["required_changed_patterns"]
+    assert any("FYP_Report" in pat for pat in report_worthy["required_changed_patterns"])

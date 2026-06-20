@@ -100,3 +100,16 @@ def test_v2_proxy_falls_back_to_runtime_summary(tmp_path: Path) -> None:
     _write_summary(tmp_path, alias, "harmbench", "summary.json", attack_success_rate=0.585)
     val = ps._read_metric(tmp_path, alias, "harmbench", "summary.v2.json", "attack_success_rate")
     assert val == 0.585  # graceful fallback when summary.v2.json is absent
+
+
+def test_xstest_over_refusal_reads_v2_summary(tmp_path: Path) -> None:
+    # The XSTest over-refusal column has the SAME v1/v2 mixing hazard as the
+    # HarmBench proxy (the original models' summary.json is v1; INT8 ran v2), so it
+    # must also read summary.v2.json (audit M8 / D36). Guard both the METRICS map
+    # and the read behaviour.
+    assert ps.METRICS["xstest_over_refusal"][1] == "summary.v2.json"
+    alias = "qwen_2b_base"
+    _write_summary(tmp_path, alias, "xstest", "summary.json", over_refusal_rate=0.032)    # v1
+    _write_summary(tmp_path, alias, "xstest", "summary.v2.json", over_refusal_rate=0.052)  # v2
+    val = ps._read_metric(tmp_path, alias, "xstest", "summary.v2.json", "over_refusal_rate")
+    assert val == 0.052  # v2 wins; v1/v2 are not mixed across precisions

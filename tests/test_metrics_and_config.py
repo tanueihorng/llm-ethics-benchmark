@@ -152,6 +152,28 @@ class TestSummaryCSV:
         lines = path.read_text().strip().split("\n")
         assert len(lines) == 3  # header + 2 rows
 
+    def test_upsert_replaces_same_run_on_resume(self, tmp_path: Path) -> None:
+        """A re-run/resume of the same (model_alias, benchmark) replaces its row.
+
+        The previous append-only behaviour wrote a duplicate row on every resume
+        (audit: summary-runs-csv-duplicate-on-resume).
+        """
+        import csv
+
+        path = tmp_path / "harmbench_runs.csv"
+        append_summary_csv({"model_alias": "qwen_2b_4bit", "benchmark": "harmbench", "asr": 0.18}, path)
+        # Resume writes the same (model, benchmark) again with an updated value.
+        append_summary_csv({"model_alias": "qwen_2b_4bit", "benchmark": "harmbench", "asr": 0.19}, path)
+        # A different model appends a distinct row.
+        append_summary_csv({"model_alias": "qwen_2b_base", "benchmark": "harmbench", "asr": 0.135}, path)
+
+        with path.open() as handle:
+            rows = list(csv.DictReader(handle))
+        assert len(rows) == 2  # the 4bit row was replaced, not duplicated
+        by_alias = {r["model_alias"]: r["asr"] for r in rows}
+        assert by_alias["qwen_2b_4bit"] == "0.19"  # latest value won
+        assert by_alias["qwen_2b_base"] == "0.135"
+
 
 class TestRadarCSV:
     """Tests for ``export_radar_csv``."""

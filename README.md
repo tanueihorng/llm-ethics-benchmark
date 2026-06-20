@@ -2,7 +2,7 @@
 
 > **Coding agents:** read [`AGENTS.md`](AGENTS.md) (or [`CLAUDE.md`](CLAUDE.md) — they are duplicates) for the working conventions, then [`docs/PROJECT_LOG.md`](docs/PROJECT_LOG.md) for current state.
 
-> **Current state (2026-06-18):** experimental study **complete** — 5 matched pairs / 10 models / 4 families, across 3 precisions (**fp16 → INT8 → NF4**), 4 benchmarks, scored primarily by the official HarmBench classifier (+ a gpt-4o second judge). 295 tests pass; `make agent-check` 8/8; full-repo scorer audit clean (PROJECT_LOG D36). Remaining work is non-research (supervisor email, report submission).
+> **Current state (2026-06-18):** experimental study **complete** — 5 matched pairs / 10 models / 4 families, across 3 precisions (**fp16 → INT8 → NF4**), 4 benchmarks, scored primarily by the official HarmBench classifier (+ a gpt-4o second judge). 306 tests pass; `make agent-check` 8/8; full-repo scorer audit clean (PROJECT_LOG D36). Remaining work is non-research (supervisor email, report submission).
 
 ## Project Overview
 This repository implements a research-grade benchmarking framework for a focused quantization study:

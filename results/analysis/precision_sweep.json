@@ -32,13 +32,13 @@
           "shape": "graded"
         },
         "xstest_over_refusal": {
-          "fp16": 0.032,
+          "fp16": 0.052,
           "int8": 0.04,
-          "nf4": 0.016,
-          "delta_int8_vs_fp16": 0.008,
-          "delta_nf4_vs_fp16": -0.016,
-          "delta_nf4_vs_int8": -0.024,
-          "shape": "non_monotonic"
+          "nf4": 0.028,
+          "delta_int8_vs_fp16": -0.012,
+          "delta_nf4_vs_fp16": -0.024,
+          "delta_nf4_vs_int8": -0.012,
+          "shape": "graded"
         },
         "mmlu_accuracy": {
           "fp16": 0.62,
@@ -87,13 +87,13 @@
           "shape": "cliff_at_nf4"
         },
         "xstest_over_refusal": {
-          "fp16": 0.016,
+          "fp16": 0.028,
           "int8": 0.028,
-          "nf4": 0.016,
-          "delta_int8_vs_fp16": 0.012,
-          "delta_nf4_vs_fp16": 0.0,
-          "delta_nf4_vs_int8": -0.012,
-          "shape": "non_monotonic"
+          "nf4": 0.02,
+          "delta_int8_vs_fp16": 0.0,
+          "delta_nf4_vs_fp16": -0.008,
+          "delta_nf4_vs_int8": -0.008,
+          "shape": "cliff_at_nf4"
         },
         "mmlu_accuracy": {
           "fp16": 0.7466666666666667,
@@ -142,12 +142,12 @@
           "shape": "non_monotonic"
         },
         "xstest_over_refusal": {
-          "fp16": 0.0,
+          "fp16": 0.044,
           "int8": 0.032,
-          "nf4": 0.0,
-          "delta_int8_vs_fp16": 0.032,
-          "delta_nf4_vs_fp16": 0.0,
-          "delta_nf4_vs_int8": -0.032,
+          "nf4": 0.06,
+          "delta_int8_vs_fp16": -0.012,
+          "delta_nf4_vs_fp16": 0.016,
+          "delta_nf4_vs_int8": 0.028,
           "shape": "non_monotonic"
         },
         "mmlu_accuracy": {

@@ -7,6 +7,7 @@ from pathlib import Path
 
 from ethical_benchmark.analysis.compare_quant_pairs import (
     _extract_binary_outcome,
+    _select_pair_members,
     build_pairwise_report,
     classify_pair_change,
     compute_cross_family_consistency,
@@ -293,6 +294,76 @@ def test_build_pairwise_prefers_v2_score_sidecars(tmp_path: Path) -> None:
     assert harmbench["quantized_value"] == 1.0
     assert harmbench["absolute_delta"] == 1.0
     assert harmbench["n_paired"] == 2
+
+
+def _member(quantized: bool, quant_method: str | None = None) -> dict:
+    entry = {
+        "family": "qwen",
+        "size_b": 1.7,
+        "quantized": quantized,
+        "pair_id": "qwen_2b",
+        "model_id": "org/model",
+        "benchmarks": ["harmbench"],
+    }
+    if quant_method is not None:
+        entry["quant_method"] = quant_method
+    return entry
+
+
+def test_select_pair_members_never_picks_int8_as_nf4(tmp_path: Path) -> None:
+    """The base-vs-4bit pipeline must select the NF4 member, never an INT8 one (audit M9).
+
+    A pair carrying base + NF4 + INT8 members must resolve to the NF4 alias so an
+    INT8 number is never silently emitted under the NF4-labelled delta columns.
+    """
+
+    raw_cfg = {
+        "study_name": "test",
+        "models": {
+            "qwen_2b_base": _member(False),
+            "qwen_2b_4bit": _member(True, "nf4"),
+            "qwen_2b_8bit": _member(True, "int8"),
+        },
+        "benchmarks": {"harmbench": {"dataset_name": "dummy", "split": "test"}},
+    }
+    config = QuantizationConfig.model_validate(raw_cfg)
+    selected = _select_pair_members(config, "qwen_2b")
+    assert selected == ("qwen_2b_base", "qwen_2b_4bit")  # NF4, not _8bit
+
+
+def test_select_pair_members_none_when_only_int8(tmp_path: Path) -> None:
+    """An INT8-only pair (configs/tc1_int8.yaml shape) yields None, not a mislabel.
+
+    The main pairwise pipeline is NF4-only; an INT8 sweep is analysed separately by
+    precision_sweep_analysis.py. A base + INT8 pair must be skipped here rather than
+    have its INT8 member labelled as the NF4 result.
+    """
+
+    raw_cfg = {
+        "study_name": "test",
+        "models": {
+            "qwen_2b_base": _member(False),
+            "qwen_2b_8bit": _member(True, "int8"),
+        },
+        "benchmarks": {"harmbench": {"dataset_name": "dummy", "split": "test"}},
+    }
+    config = QuantizationConfig.model_validate(raw_cfg)
+    assert _select_pair_members(config, "qwen_2b") is None
+
+
+def test_select_pair_members_default_quant_method_is_nf4(tmp_path: Path) -> None:
+    """quant_method omitted means NF4 (the default), so it stays eligible (back-compat)."""
+
+    raw_cfg = {
+        "study_name": "test",
+        "models": {
+            "qwen_2b_base": _member(False),
+            "qwen_2b_4bit": _member(True),  # no quant_method -> NF4
+        },
+        "benchmarks": {"harmbench": {"dataset_name": "dummy", "split": "test"}},
+    }
+    config = QuantizationConfig.model_validate(raw_cfg)
+    assert _select_pair_members(config, "qwen_2b") == ("qwen_2b_base", "qwen_2b_4bit")
 
 
 def test_build_pairwise_and_reports(tmp_path: Path) -> None:

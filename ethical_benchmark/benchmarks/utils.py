@@ -232,20 +232,24 @@ def parse_choice_index(response: str, num_choices: int) -> int | None:
         return idx if 0 <= idx < num_choices else None
 
     # 1. Canonical MMLU answer format: the response leads with the option letter
-    #    ("B.", "B)", "(C)", "D -"). This is what the studied models emit, so it
-    #    stays the primary path and matches the prior parser on every response the
-    #    prior parser already answered.
-    lead = re.match(r"\(?\s*([A-Z])\b", upper)
+    #    ("B.", "B)", "(C)", "D -", or a markdown-emphasised "**B."). This is what
+    #    the studied models emit, so it stays the primary path and matches the prior
+    #    parser on every response the prior parser already answered (the optional
+    #    leading [*\s]* only ADDS markdown recovery; it never changes a prior match).
+    lead = re.match(r"[*\s]*\(?\s*([A-Z])\b", upper)
     if lead:
         idx = _in_range(lead.group(1))
         if idx is not None:
             return idx
 
     # 2. Explicit answer declaration anywhere ("answer is C", "answer: C",
-    #    "the correct answer (C)"). Take the LAST such mention — chatty models
-    #    often restate after reasoning. Recovers verbose answers the prior parser
-    #    dropped to None.
-    for letter in reversed(re.findall(r"ANSWER\s*(?:IS|:|=)?\s*\(?\s*([A-Z])\b", upper)):
+    #    "the correct answer (C)", or markdown-wrapped "answer is: **B"). Take the
+    #    LAST such mention — chatty models often restate after reasoning. The
+    #    optional \** tolerates markdown emphasis between the declaration and the
+    #    letter (the dominant 4-bit format), so it is recovered by this intentional
+    #    rule rather than the generic capital scan below. Recovers verbose answers
+    #    the prior parser dropped to None.
+    for letter in reversed(re.findall(r"ANSWER\s*(?:IS|:|=)?\s*\**\s*\(?\s*([A-Z])\b", upper)):
         idx = _in_range(letter)
         if idx is not None:
             return idx

@@ -254,6 +254,31 @@ class TestPromptFormatting:
         assert "enable_thinking" not in tokenizer.kwargs
 
 
+class _WrappingTokenizer(_ThinkingAwareTokenizer):
+    """A tokenizer whose chat template actually transforms the prompt."""
+
+    def apply_chat_template(self, messages: list, **kwargs: Any) -> str:
+        self.kwargs = kwargs
+        return f"<|user|>{messages[0]['content']}<|assistant|>"
+
+
+class TestPromptProvenance:
+    """prompt_was_templated records whether the model saw a templated prompt (audit M11)."""
+
+    def test_flags_a_genuinely_templated_prompt(self) -> None:
+        generator = TextGenerator(
+            model=_FakeModel(), tokenizer=_WrappingTokenizer(), device="cpu", config=DecodingConfig(),
+        )
+        assert generator.prompt_was_templated("hello") is True
+
+    def test_not_flagged_when_templating_disabled(self) -> None:
+        generator = TextGenerator(
+            model=_FakeModel(), tokenizer=_WrappingTokenizer(), device="cpu",
+            config=DecodingConfig(use_chat_template=False),
+        )
+        assert generator.prompt_was_templated("hello") is False
+
+
 # =========================================================================
 # Quantization-active guard (refuse fp16-mislabelled-as-4bit)
 # =========================================================================

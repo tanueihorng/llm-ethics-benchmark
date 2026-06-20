@@ -336,6 +336,12 @@ def execute_quant_benchmark_loaded(
         leave=False,
     )
 
+    # Provenance hook: real TextGenerator exposes prompt_was_templated; test
+    # stubs need not. When present, each record carries chat_templated so the
+    # artifacts can confirm the native chat template was applied (not the silent
+    # raw-prompt fallback) rather than relying on the run-time WARNING alone.
+    templated_fn = getattr(generator, "prompt_was_templated", None)
+
     for batch in progress:
         prompts = [plugin.build_prompt(item) for item in batch]
         responses = generator.generate_batch(prompts)
@@ -360,6 +366,8 @@ def execute_quant_benchmark_loaded(
                 "seed": seed,
                 "timestamp": now,
             }
+            if templated_fn is not None:
+                record["chat_templated"] = bool(templated_fn(prompt))
             validate_record_schema(record)
             records.append(record)
 

@@ -12,12 +12,12 @@ Send the supervisor email (T1) and submit the FYP document (T15); optionally set
 
 ## Source Of Truth
 
-- Read `/Users/tanueihorng/fyp_quant/AGENTS.md`, then `/Users/tanueihorng/fyp_quant/docs/PROJECT_LOG.md` (§1 status; §3 decisions **D1–D36**; §4 changelog). Tactical resume buffer: `/Users/tanueihorng/fyp_quant/todo.md`.
+- Read `/Users/tanueihorng/fyp_quant/AGENTS.md`, then `/Users/tanueihorng/fyp_quant/docs/PROJECT_LOG.md` (§1 status; §3 decisions **D1–D37**; §4 changelog). Tactical resume buffer: `/Users/tanueihorng/fyp_quant/todo.md`.
 - Run `git status -sb` and `git log --oneline -8` for live Git state — never trust a hard-coded commit/ahead count.
 
 ## Current State (durable, verify before acting)
 
-- **`main` @ `87920c7`, in sync with origin.** 295 tests pass; `make agent-check` 8/8.
+- **On `main`; run `git status -sb` for the live sync state** (do not trust a hard-coded hash). 306 tests pass; `make agent-check` 8/8.
 - **The study (durable headline, judge-primary D16):** under four-bit NF4, Qwen-1.7B is the only significant ΔASR (+0.055, modest/borderline/judge-dependent); the INT8 precision point (D35, report §6.15) shows the effect is **not bit-width-graded** — capability loss is a clean cliff at 4-bit, and a second, both-judge + McNemar-significant ASR move appears on **Llama-3B specifically at INT8** and reverts at NF4 (caveated: ~8–9 prompts, one pair).
 - **Full-repo audit (D36) verdict:** nothing invalidates the results — every primary HarmBench ASR is classifier-scored, the v2 regex is the demoted foil only, 120 raw artefacts hash-match.
 - **Two deliverable documents exist:**
@@ -27,6 +27,7 @@ Send the supervisor email (T1) and submit the FYP document (T15); optionally set
 
 ## What Changed (recent, verified) — see PROJECT_LOG §4
 
+- D37 (2026-06-21): full 13-dimension adversarial audit of **every component** (code, tests, results, report, thesis, citations, discussion, harness, docs) — **0 result-invalidating** findings; applied all 43 fixes (prose/docs/process/latent); tests 295→**306**.
 - D35 / T29: INT8 precision point run + folded into report §6.15 (merged `48330d4`).
 - D36: full-repo scorer-integrity audit + non-invalidating fixes (tests 282→295).
 - Reuse/dissemination deliverables + README refresh.
@@ -35,8 +36,8 @@ Send the supervisor email (T1) and submit the FYP document (T15); optionally set
 ## Verification To Run
 
 ```bash
-git status -sb && git log --oneline -3     # expect main @ 87920c7, in sync
-pytest -q                                   # expect 295 passed
+git status -sb && git log --oneline -3     # confirm branch + live sync state
+pytest -q                                   # expect 306 passed
 make agent-check                            # expect 8/8 pass
 make thesis && make report                  # both docx rebuild cleanly (independent)
 ```

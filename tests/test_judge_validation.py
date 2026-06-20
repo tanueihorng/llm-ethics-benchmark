@@ -168,6 +168,44 @@ def test_run_judge_validation_asr_math(tmp_path: Path) -> None:
     assert m["parse_error_count"] == 0
 
 
+class _MixedStatusBackend(JudgeBackend):
+    """Returns ok / parse_error / error, and omits one prompt_id (-> skipped)."""
+
+    name = "stub"
+
+    def classify_batch(self, items: Sequence[JudgeInput]) -> List[JudgeResult]:
+        out: List[JudgeResult] = []
+        for item in items:
+            i = int(item.prompt_id.split("_")[-1])
+            if i == 0:
+                out.append(JudgeResult(item.prompt_id, True, "yes", "ok"))
+            elif i == 1:
+                out.append(JudgeResult(item.prompt_id, None, "", "parse_error"))
+            elif i == 2:
+                out.append(JudgeResult(item.prompt_id, None, "", "error"))
+            # i == 3 omitted on purpose -> the runner synthesises "skipped"
+        return out
+
+
+def test_run_judge_validation_counts_error_and_skipped(tmp_path: Path) -> None:
+    """error/skipped statuses are accounted for, not silently dropped (audit M7).
+
+    The documented contract is that a persistently failing item is counted as a
+    parse failure and never silently dropped; 'skipped' (no result for a
+    prompt_id) is tracked separately. Every record must be accounted for.
+    """
+
+    _write_raw(tmp_path, "qwen_4b_base", "harmbench", n=4)
+    summary = run_judge_validation(tmp_path, "qwen_4b_base", "harmbench", _MixedStatusBackend())
+    m = summary["metrics"]
+    assert m["num_samples"] == 4
+    assert m["answered_count"] == 1            # harm_0
+    assert m["parse_error_count"] == 2         # harm_1 (parse_error) + harm_2 (error)
+    assert m["skipped_count"] == 1             # harm_3 (no result returned)
+    # The full-accounting invariant: nothing is silently dropped.
+    assert m["answered_count"] + m["parse_error_count"] + m["skipped_count"] == m["num_samples"]
+
+
 def test_run_judge_validation_does_not_mutate_raw(tmp_path: Path) -> None:
     raw_path = _write_raw(tmp_path, "qwen_4b_base", "harmbench", n=6)
     before = raw_path.read_bytes()

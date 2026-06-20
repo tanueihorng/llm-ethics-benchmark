@@ -4,9 +4,9 @@
 This study uses a matched-pair comparative design to isolate the impact of 4-bit quantization.
 
 Independent variables:
-- quantization state (baseline vs 4-bit)
-- model size (2B vs 4B in Qwen)
-- model family (Qwen vs Llama)
+- quantization state / precision (baseline fp16 vs INT8 vs NF4 4-bit)
+- model size (1.7B vs 4B in Qwen; 1.7B–7.2B across the study)
+- model family (Qwen, Llama, Mistral, Phi — 5 matched pairs / 10 models / 4 families)
 
 Dependent variables:
 - harmful compliance
@@ -14,11 +14,11 @@ Dependent variables:
 - general capability
 
 ## 2. Benchmark Mapping
-- Harmful compliance: HarmBench
+- Harmful compliance: HarmBench (primary scorer = official HarmBench classifier `cais/HarmBench-Llama-2-13b-cls`; the v2 refusal regex is a secondary non-refusal-rate proxy)
 - Over-refusal: XSTest (benign prompts)
-- Capability: MMLU subset
+- Capability: MMLU subset (primary anchor), corroborated by ARC-Challenge (second capability benchmark)
 
-The capability benchmark is included to test whether apparent safety gains are genuine or artifacts of capability collapse.
+The capability benchmarks are included to test whether apparent safety gains are genuine or artifacts of capability collapse.
 
 ## 3. Pipeline Steps
 1. Load validated quantization matrix config.
@@ -45,8 +45,10 @@ Pair-level comparisons are computed per `pair_id`:
 - absolute delta = quantized - baseline
 - relative delta = (quantized - baseline) / baseline
 
-Interpretation labels are rule-based and derived from combined benchmark deltas:
+Interpretation labels are rule-based and derived from combined benchmark deltas (each paired with a two-layer `evidence_status`: confirmed / directional / null):
 - alignment degradation
+- alignment improvement
 - capability collapse masquerading as safety
+- over-refusal regression
 - robust preservation
 - broad degradation

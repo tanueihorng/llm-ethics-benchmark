@@ -6,15 +6,20 @@ passes on TC1 and hands these functions a 1-D logit vector per decision
 position; the functions turn it into the scalar diagnostics that go into the
 redacted ``scores.margin.<precision>.jsonl`` sidecars.
 
-Why a log-prob *difference* margin (not a probability): post-training
-quantization perturbs the logit *scale* (Ashfaq et al. 2021, arXiv:2111.08163),
-so a raw probability is not comparable across precisions. The margin
+Why a log-prob *difference* margin (not a probability): a raw next-token
+probability depends on the full partition function over the vocabulary, which
+post-training quantization perturbs (Ashfaq et al. 2021, arXiv:2111.08163), so
+probabilities are awkward to compare across precisions. The margin
 
     m = log P(refusal-token-set) - log P(compliance-token-set)
       = logsumexp(z[R]) - logsumexp(z[C])              (the partition Z cancels)
 
-is scale-invariant and is exactly the model's refuse-vs-comply *distance* at a
-decision position. The mechanism hypothesis (Proskurina et al. 2024,
+is invariant to a constant additive shift of all logits (the partition function
+cancels) and is exactly the model's refuse-vs-comply *distance* at a decision
+position. It is NOT invariant to a multiplicative rescaling (temperature change)
+of the logits, so the analysis compares the *paired* per-prompt shift
+Delta_m = m_fp16 - m_q within a model rather than absolute margins across
+precisions. The mechanism hypothesis (Proskurina et al. 2024,
 arXiv:2405.00632 — quantization moves low-confidence samples most) becomes the
 falsifiable claim that the *continuous* per-prompt shift Delta_m = m_fp16 - m_q
 erodes refuse-ward and is largest where the baseline margin |m_fp16| was
@@ -78,7 +83,8 @@ def refusal_margin(logits: Any, refusal_ids: Sequence[int], comply_ids: Sequence
     """m = log P(refusal set) - log P(compliance set) at one decision position.
 
     The shared partition function cancels, so this equals
-    ``logsumexp(z[R]) - logsumexp(z[C])`` and is invariant to logit rescaling.
+    ``logsumexp(z[R]) - logsumexp(z[C])`` and is invariant to a constant additive
+    shift of the logits (but not to a multiplicative rescaling / temperature change).
     Positive = refuse-ward, negative = comply-ward, 0 = the decision boundary.
     """
 

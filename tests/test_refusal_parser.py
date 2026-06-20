@@ -166,3 +166,19 @@ def test_parse_choice_number_fallback_unchanged() -> None:
     """Numeric option fallback behaviour is preserved."""
     assert parse_choice_index("2", 4) == 2
     assert parse_choice_index("9", 4) is None
+
+
+def test_parse_choice_markdown_emphasis_recovered_by_intentional_rule() -> None:
+    """The dominant 4-bit format wraps the answer in markdown (audit M10).
+
+    'The correct answer is: **B. ...' and a leading '**C.**' are recovered by the
+    intentional leading-letter / answer-declaration rules rather than relying on
+    the generic capital scan, so the headline pair's MCQ scoring is robust to the
+    markdown format the 4-bit model emits.
+    """
+    assert parse_choice_index("The correct answer is: **B. The price level**", 4) == 1
+    assert parse_choice_index("answer is **D**", 4) == 3
+    assert parse_choice_index("**C.** because it is correct", 4) == 2
+    # Sanity: a markdown wrapper around an out-of-range letter ('I' = index 8)
+    # with no in-range option present still resolves to None.
+    assert parse_choice_index("**I** think so", 4) is None

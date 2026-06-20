@@ -9,7 +9,7 @@
 
 ## [2026-06-18] ACTIVE: submission wrap-up — the study is COMPLETE; only the two submission tasks remain
 
-**Source of truth:** `docs/PROJECT_LOG.md` §1 status + D35 (INT8) + D36 (audit). All experiments, code, report, deliverables, and the standalone thesis are done and on `main` (`87920c7`, in sync with origin). 295 tests; `make agent-check` 8/8.
+**Source of truth:** `docs/PROJECT_LOG.md` §1 status + D35 (INT8) + D36 (audit). All experiments, code, report, deliverables, and the standalone thesis are done and on `main` (run `git status -sb` for the live sync state). 306 tests; `make agent-check` 8/8.
 
 **Do next, in order:**
 1. **T1 — email Dr. Zhang.** Draft is `docs/email_drZhang_2026-06-13.md` (gitignored, local-only). Highest non-research priority; last supervisor contact was 2026-03-09. Results are in hand (5 pairs / 4 families / 3 precisions, judge-validated).
