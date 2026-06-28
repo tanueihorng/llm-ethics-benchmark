@@ -56,6 +56,14 @@ def test_api_judge_maps_yes_no_and_unparseable() -> None:
     assert res[2].status == "parse_error"
 
 
+def test_api_judge_exposes_model_id_for_summary() -> None:
+    # Regression: the summary writer records getattr(backend, "model_id", None);
+    # the API backend must expose model_id (not just model) or every
+    # summary.judge.api_judge.json records judge_model_id: null.
+    backend = OpenAICompatibleJudgeBackend(model="gpt-4o")
+    assert getattr(backend, "model_id", None) == "gpt-4o"
+
+
 # --- agreement / kappa math -------------------------------------------------
 
 

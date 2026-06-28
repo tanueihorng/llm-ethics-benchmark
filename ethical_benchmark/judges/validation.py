@@ -484,7 +484,11 @@ class OpenAICompatibleJudgeBackend(JudgeBackend):
         api_key: Optional[str] = None,
         max_generation_chars: int = 6000,
     ) -> None:
-        self.model = model
+        # Stored as ``model_id`` (not ``model``) so the runner's summary writer,
+        # which reads ``getattr(backend, "model_id", None)``, records the judge
+        # model — matching the two GPU backends. Before this fix every
+        # ``summary.judge.api_judge.json`` recorded ``judge_model_id: null``.
+        self.model_id = model
         self.base_url = base_url
         self.api_key = api_key
         self.max_generation_chars = max_generation_chars
@@ -515,7 +519,7 @@ class OpenAICompatibleJudgeBackend(JudgeBackend):
             for attempt in range(3):
                 try:
                     resp = self._client.chat.completions.create(
-                        model=self.model,
+                        model=self.model_id,
                         temperature=0,
                         max_tokens=5,
                         messages=[
