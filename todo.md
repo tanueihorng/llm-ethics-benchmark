@@ -70,11 +70,11 @@
 
 ## [2026-06-18] ACTIVE: submission wrap-up — the study is COMPLETE; only the two submission tasks remain
 
-**Source of truth:** `docs/PROJECT_LOG.md` §1 status + D35 (INT8) + D36 (audit). All experiments, code, report, deliverables, and the standalone thesis are done and on `main` (run `git status -sb` for the live sync state). 306 tests; `make agent-check` 8/8.
+**Source of truth:** `docs/PROJECT_LOG.md` §1 status + D35 (INT8) + D36 (audit). All experiments, code, report, deliverables, and the standalone thesis are done and on `main` (run `git status -sb` for the live sync state). 329 tests; `make agent-check` 8/8.
 
 **Do next, in order:**
 1. **T1 — email Dr. Zhang.** June update SENT 2026-06-13 (as-sent record `docs/email_drZhang_june.md`). Remaining: send the staged July follow-up + its deck — see the **[2026-06-26]** entry at the top.
-2. **T15 — submit.** Two documents exist: the interim report `docs/FYP_Report_2026-06-14.docx` (`make report`; §6.15 + §6.5 caveat) and the NEW standalone thesis `docs/FYP_Thesis_2026-06-18.docx` (`make thesis`; IEEE-cited, sources verified). Decide which the milestone requires; the thesis cover says "Final Report — Thesis" (one-line change in `scripts/build_fyp_thesis.js` if it's actually the interim).
+2. **T15 — submit.** Two documents exist: the interim report `docs/FYP_Report_2026-06-26_v3.docx` (`make report`; §6.15 + §6.5 caveat) and the NEW standalone thesis `docs/FYP_Thesis_2026-06-18.docx` (`make thesis`; IEEE-cited, sources verified). Decide which the milestone requires; the thesis cover says "Final Report — Thesis" (one-line change in `scripts/build_fyp_thesis.js` if it's actually the interim).
 3. **T3 — `MyTCinfo`** on TC1 (storage quota). Quick, optional.
 
 **Optional disclosure polish (low; already partly covered in §7.5/Ch8 — do only if tightening for the viva):**
@@ -142,7 +142,7 @@ Honest finding: **boundary instability, NOT targeted erosion** (within-family AU
 8. `rsync` the 4 new `results/{mistral_7b_base,mistral_7b_4bit,phi4_mini_base,phi4_mini_4bit}/` dirs back from TC1.
 9. `make analyze` + `python scripts/{judge_agreement,judge_pairwise_agreement,harmbench_category_breakdown,mmlu_subject_breakdown,rescore_harmbench}.py`.
 10. gpt-4o 2nd judge (local, needs `OPENAI_API_KEY` from `~/.zshrc`): `python scripts/run_judge_validation.py --backend api_judge --models mistral_7b_base mistral_7b_4bit phi4_mini_base phi4_mini_4bit`, then `python scripts/judge_pairwise_agreement.py`.
-11. Fold REAL numbers into `scripts/build_fyp_report.js` (Tables 6.1/6.2/6.3, §6.11 cross-family, §6.4.1 ARC, Abstract, RQ5/Ch10) → `make report`. Add PROJECT_LOG run-results D-decision + §4 row. `python scripts/agent_check.py --write-immutable-manifest` (ADD new raw hashes, never overwrite). `make agent-check`. Then merge branch → main.
+11. Fold REAL numbers into `scripts/build_fyp_report_v3.js` (Tables 6.1/6.2/6.3, §6.11 cross-family, §6.4.1 ARC, Abstract, RQ5/Ch10) → `make report`. Add PROJECT_LOG run-results D-decision + §4 row. `python scripts/agent_check.py --write-immutable-manifest` (ADD new raw hashes, never overwrite). `make agent-check`. Then merge branch → main.
 
 **Watch items / guardrails:**
 - **Mistral 7.2B vs 6h walltime / 10G mem** — the binding risk. If `TIMEOUT`, bump `slurm.time` (+ regenerate, or hand-edit the 2 mistral sbatch) — decoding/seed/NF4/n unaffected, so fairness holds.

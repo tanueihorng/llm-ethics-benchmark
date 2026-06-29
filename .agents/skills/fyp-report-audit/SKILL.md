@@ -19,7 +19,7 @@ a small task router, not a replacement for the log.
 
 - Verify judge-primary claims against `results/analysis/judge_agreement.{json,csv}`.
 - Verify pair labels and deltas against `results/analysis/pairwise_deltas.{json,csv}` and `results/analysis/pair_interpretations.{csv,json}`.
-- For report-worthy edits, change `scripts/build_fyp_report.js` first, then run `make report`.
+- For report-worthy edits, change `scripts/build_fyp_report_v3.js` first, then run `make report`.
 - Update `docs/PROJECT_LOG.md` for every change.
 
 ## Guardrails

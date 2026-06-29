@@ -759,7 +759,7 @@ def render_handoff(status: dict[str, Any], results: Sequence[CheckResult] | None
         "## Next Actions",
         "",
         f"1. {status['suggested_next_action']}",
-        "2. If editing report-worthy content, edit `scripts/build_fyp_report.js` and run `make report`.",
+        "2. If editing report-worthy content, edit `scripts/build_fyp_report_v3.js` and run `make report`.",
         "3. Regenerate this handoff and the dashboard after meaningful harness or state changes.",
         "",
         "## Privacy / Artifact Guardrails",

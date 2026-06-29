@@ -26,7 +26,7 @@ When in doubt: write it down in PROJECT_LOG.md.
 
 ## Update the FYP report on "report-worthy" changes
 
-The current FYP interim report (`docs/FYP_Report_2026-06-14.docx`) is generated from `scripts/build_fyp_report.js` (a docx-js build script). After making a change that affects the report's content, regenerate the docx:
+The current FYP report (`docs/FYP_Report_2026-06-26_v3.docx`) is generated from `scripts/build_fyp_report_v3.js` (a docx-js build script). After making a change that affects the report's content, regenerate the docx:
 
 ```bash
 make report
@@ -44,7 +44,7 @@ A change is **not** report-worthy if it's purely internal: typos, refactors with
 
 **Rule:** when in doubt, regenerate. Building the docx is a one-second operation. The FYP report is a deliverable; it must reflect the current state of the project when handed to the supervisor.
 
-If the change requires text edits in the report (not just regeneration), edit `scripts/build_fyp_report.js` first, then `make report`. The script is the source; the docx is the artifact. Never hand-edit the docx — the next `make report` will overwrite it.
+If the change requires text edits in the report (not just regeneration), edit `scripts/build_fyp_report_v3.js` first, then `make report`. The script is the source; the docx is the artifact. Never hand-edit the docx — the next `make report` will overwrite it.
 
 After regenerating, log the regeneration in PROJECT_LOG.md (one changelog line: "regenerated FYP report to reflect <change>").
 
@@ -196,7 +196,7 @@ ethical_benchmark/
 
 scripts/
 ├── prefetch_tc1.py      # Head-node pre-cache: datasets + model weights
-└── build_fyp_report.js  # docx-js builder for the FYP interim report
+└── build_fyp_report_v3.js  # docx-js builder for the FYP report (canonical)
 
 slurm/
 ├── jobs_tc1/            # 6 per-model matrix sbatch files (offline-mode)

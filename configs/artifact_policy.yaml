@@ -69,6 +69,9 @@ stale_text:
     - scripts/*.py
   exclude:
     - docs/archive/*
+    # Task packets are point-in-time records of completed tasks (like archive); they
+    # legitimately cite the then-current report/builder, so they are not stale-scanned.
+    - docs/agent_tasks/*
   patterns:
     - 'RESULTS PENDING'
     - 'pending judge'
@@ -76,6 +79,14 @@ stale_text:
     - 'NEXT:\s*push'
     - 'push the latest'
     - 'judge validation still needs to run'
+    # D40: the canonical report is docs/FYP_Report_2026-06-26_v3.docx (built by
+    # scripts/build_fyp_report_v3.js). Guard against the retired predecessors being
+    # cited as current in the instruction layer. The retired build_fyp_report.js still
+    # EXISTS and is shown as a node in repo/architecture diagrams, so the builder guard
+    # targets only instructional "edit/update/regenerate the old builder" phrasing,
+    # NOT bare structural mentions.
+    - 'FYP_Report_2026-06-14'
+    - '(?:edit|edits|change|update|regenerate|generated from)[^\n]{0,40}build_fyp_report\.js'
 
 report_worthy:
   changed_file_patterns:

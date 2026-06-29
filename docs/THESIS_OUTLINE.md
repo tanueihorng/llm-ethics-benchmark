@@ -7,7 +7,7 @@
 > arXiv:2211.09110; HarmBench, Mazeika et al. 2024, ICML, arXiv:2402.04249); the
 > ML Reproducibility Checklist (Pineau et al. 2021, JMLR); and LLM-as-judge
 > validity practice (survey arXiv:2411.15594; "No Free Labels", arXiv:2503.05061).
-> Your interim report (`docs/FYP_Report_2026-06-14.docx`) already realizes most of
+> Your interim report (`docs/FYP_Report_2026-06-26_v3.docx`) already realizes most of
 > this — this guide makes the structure and the conventions explicit so the *final*
 > thesis is defensible.
 

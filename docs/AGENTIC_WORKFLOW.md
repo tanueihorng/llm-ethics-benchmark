@@ -107,7 +107,7 @@ python scripts/generate_handoff.py
 python scripts/generate_agent_dashboard.py
 ```
 
-If the change is report-worthy, update `scripts/build_fyp_report.js` and run:
+If the change is report-worthy, update `scripts/build_fyp_report_v3.js` and run:
 
 ```bash
 make report

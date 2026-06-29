@@ -1,20 +1,20 @@
 # Agent Dashboard
 
-Generated: 2026-06-29 16:14:51 UTC+8
+Generated: 2026-06-29 17:20:02 UTC+8
 
 ## Live State
 
-- Git: `## main...origin/main`
-- Changed files: 62
+- Git: `## main...origin/main [ahead 1]`
+- Changed files: 13
 - PROJECT_LOG: 2026-06-29 (UTC+8) by Claude
 - Report: 2026-06-29 16:14:50 +08 (677737 bytes)
-- Handoff: 2026-06-29 16:14:51 +08
+- Handoff: 2026-06-29 17:20:02 +08
 - Immutable manifest: 2026-06-18 11:33:39 +08
 - Judge sidecars: 15 score files
 
 ## Suggested Next Action
 
-Run make agent-check, review the diff, then commit or hand off the current change.
+Finish the current change, update docs/PROJECT_LOG.md, then run make agent-check.
 
 ## Open Actions
 
