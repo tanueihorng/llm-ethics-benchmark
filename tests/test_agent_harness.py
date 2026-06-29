@@ -259,6 +259,6 @@ def test_real_policy_report_source_is_not_a_freshness_satisfier() -> None:
     repo = Path(__file__).resolve().parents[1]
     policy = load_policy(repo)
     report_worthy = policy["report_worthy"]
-    assert "scripts/build_fyp_report.js" in report_worthy["changed_file_patterns"]
-    assert "scripts/build_fyp_report.js" not in report_worthy["required_changed_patterns"]
+    assert "scripts/build_fyp_report_v3.js" in report_worthy["changed_file_patterns"]
+    assert "scripts/build_fyp_report_v3.js" not in report_worthy["required_changed_patterns"]
     assert any("FYP_Report" in pat for pat in report_worthy["required_changed_patterns"])

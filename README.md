@@ -335,7 +335,7 @@ Raw generations are written once and never overwritten. Post-hoc re-scoring and 
 
 **Academic write-up**
 - FYP thesis (standalone) — `docs/FYP_Thesis_2026-06-18.docx` (`make thesis`)
-- FYP interim report — `docs/FYP_Report_2026-06-14.docx` (`make report`)
+- FYP interim report — `docs/FYP_Report_2026-06-26_v3.docx` (`make report`)
 - Workshop paper / poster outline — [`docs/paper_outline.md`](docs/paper_outline.md)
 
 **Reference**

@@ -646,7 +646,7 @@ def build_agent_status(repo_root: Path, policy: dict[str, Any] | None = None) ->
         "report": _file_info(
             max(
                 repo_root.glob("docs/FYP_Report_*.docx"),
-                default=repo_root / "docs/FYP_Report_2026-06-14.docx",
+                default=repo_root / "docs/FYP_Report_2026-06-26_v3.docx",
             ),
             repo_root,
         ),

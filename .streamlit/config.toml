@@ -1,0 +1,13 @@
+# Base palette for the fyp_quant dashboard (editorial-light, matches the FYP
+# showcase-deck identity). Fonts + fine styling are layered on in dashboard/theme.py
+# via injected CSS; this file sets the colours Streamlit applies before CSS loads,
+# so there is no flash of the default theme on first paint.
+[theme]
+base = "light"
+primaryColor = "#4f46e5"
+backgroundColor = "#faf7f1"
+secondaryBackgroundColor = "#f4eee1"
+textColor = "#1b1b29"
+
+[browser]
+gatherUsageStats = false

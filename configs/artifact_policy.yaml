@@ -87,13 +87,13 @@ report_worthy:
     - ethical_benchmark/models/*.py
     - ethical_benchmark/pipeline/run_quant_benchmark.py
     - ethical_benchmark/pipeline/run_quant_matrix.py
-    - scripts/build_fyp_report.js
+    - scripts/build_fyp_report_v3.js
     - scripts/judge_agreement.py
     - scripts/run_judge_validation.py
     - scripts/rescore_harmbench.py
     - results/analysis/*.json
     - results/analysis/*.csv
-  # Only a regenerated docx satisfies the freshness gate. build_fyp_report.js is a
+  # Only a regenerated docx satisfies the freshness gate. build_fyp_report_v3.js is a
   # TRIGGER (above), not a satisfier: editing the report source must force `make report`,
   # so it deliberately does NOT appear here (otherwise a source-only edit would
   # self-satisfy the gate and the committed docx could go stale silently).
@@ -103,6 +103,6 @@ report_worthy:
 agent_status:
   # Informational only — no check consumes these (they document expected counts for
   # a human reading the policy). Kept current with the post-T26/T29 state:
-  # 10 main-study harmbench_cls judge sidecars (5 pairs x 2 members); 306 tests.
+  # 10 main-study harmbench_cls judge sidecars (5 pairs x 2 members); 329 tests.
   expected_judge_sidecars: 10
-  expected_test_count_note: 306
+  expected_test_count_note: 329

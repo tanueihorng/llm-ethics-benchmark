@@ -19,6 +19,38 @@ def _write_summary(results_dir: Path, alias: str, bench: str, fname: str, **metr
     (d / fname).write_text(json.dumps({"metrics": metrics}), encoding="utf-8")
 
 
+def _write_judge_sidecar(results_dir: Path, alias: str, backend: str, outcomes) -> None:
+    """Writes a redacted HarmBench judge sidecar: {prompt_id: judge_harmful bool}."""
+    d = results_dir / alias / "harmbench"
+    d.mkdir(parents=True, exist_ok=True)
+    lines = [json.dumps({"prompt_id": pid, "judge_harmful": bool(v)}) for pid, v in outcomes.items()]
+    (d / f"scores.judge.{backend}.jsonl").write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def _paired(b: int, c: int, concordant_harmful: int = 0, concordant_safe: int = 0):
+    """Builds (fp16_outcomes, int8_outcomes) with exactly b appeared / c disappeared.
+
+    b = fp16-safe -> INT8-harmful (appeared); c = fp16-harmful -> INT8-safe
+    (disappeared). The two concordant cells pad the shared prompt set to a chosen n.
+    Both dicts share every prompt id, so the McNemar pairing is over all of them.
+    """
+    fp16, int8 = {}, {}
+    i = 0
+    for _ in range(b):
+        fp16[f"p{i}"], int8[f"p{i}"] = False, True
+        i += 1
+    for _ in range(c):
+        fp16[f"p{i}"], int8[f"p{i}"] = True, False
+        i += 1
+    for _ in range(concordant_harmful):
+        fp16[f"p{i}"], int8[f"p{i}"] = True, True
+        i += 1
+    for _ in range(concordant_safe):
+        fp16[f"p{i}"], int8[f"p{i}"] = False, False
+        i += 1
+    return fp16, int8
+
+
 def _populate(results_dir: Path, pair_prefix: str, judge_asr, mmlu) -> None:
     """Writes judge-ASR + MMLU summaries for fp16/int8/nf4 of one pair."""
     aliases = {"fp16": f"{pair_prefix}_base", "int8": f"{pair_prefix}_8bit", "nf4": f"{pair_prefix}_4bit"}
@@ -113,3 +145,60 @@ def test_xstest_over_refusal_reads_v2_summary(tmp_path: Path) -> None:
     _write_summary(tmp_path, alias, "xstest", "summary.v2.json", over_refusal_rate=0.052)  # v2
     val = ps._read_metric(tmp_path, alias, "xstest", "summary.v2.json", "over_refusal_rate")
     assert val == 0.052  # v2 wins; v1/v2 are not mixed across precisions
+
+
+def test_int8_mcnemar_reproduces_documented_llama(tmp_path: Path) -> None:
+    # The §6.15 / thesis-footnote INT8 headline: the fp16->INT8 Llama-3B HarmBench
+    # ASR move (Δ=+0.040) is significant under BOTH judges and McNemar — classifier
+    # b=9,c=1 -> exact p=0.022; GPT-4o b=8,c=0 -> exact p=0.008. This locks the
+    # discordant counts AND the binomial p-values the thesis now cites from
+    # results/analysis/precision_sweep.json (closing the reproducibility gap).
+    cls_fp16, cls_int8 = _paired(9, 1, concordant_harmful=7, concordant_safe=183)   # n=200
+    api_fp16, api_int8 = _paired(8, 0, concordant_harmful=8, concordant_safe=184)   # n=200
+    _write_judge_sidecar(tmp_path, "llama_3_2_3b_base", "harmbench_cls", cls_fp16)
+    _write_judge_sidecar(tmp_path, "llama_3_2_3b_8bit", "harmbench_cls", cls_int8)
+    _write_judge_sidecar(tmp_path, "llama_3_2_3b_base", "api_judge", api_fp16)
+    _write_judge_sidecar(tmp_path, "llama_3_2_3b_8bit", "api_judge", api_int8)
+
+    rec = ps.analyse(tmp_path)["per_pair"]["llama_3_2_3b"]["harmbench_asr_int8_mcnemar"]
+    cls = rec["harmbench_cls"]
+    assert (cls["n"], cls["b"], cls["c"], cls["n_discordant"]) == (200, 9, 1, 10)
+    # Exact two-sided binomial: 2 * (C(10,0)+C(10,1)) / 2^10 = 22/1024 = 0.021484375
+    # (rounds to 0.0215; the thesis displays this as p=0.022).
+    assert cls["p_value"] == 22 / 1024
+    assert round(cls["p_value"], 4) == 0.0215
+    assert cls["uncorrected_significant"] is True
+    assert cls["delta"] == 0.04 and cls["direction"] == "harmful-ward"
+
+    api = rec["api_judge"]
+    assert (api["n"], api["b"], api["c"], api["n_discordant"]) == (200, 8, 0, 8)
+    # Exact two-sided binomial: 2 * C(8,0) / 2^8 = 2/256 = 0.0078125 (-> 0.008).
+    assert api["p_value"] == 2 / 256
+    assert round(api["p_value"], 3) == 0.008
+    assert api["uncorrected_significant"] is True
+    assert api["delta"] == 0.04 and api["direction"] == "harmful-ward"
+
+
+def test_int8_mcnemar_safe_ward_and_partial_judges(tmp_path: Path) -> None:
+    # delta<0 (more disappeared than appeared) -> "safe-ward"; and a backend whose
+    # sidecar is absent reports None rather than crashing (partial-judge coverage).
+    fp16, int8 = _paired(1, 3, concordant_safe=10)
+    _write_judge_sidecar(tmp_path, "mistral_7b_base", "harmbench_cls", fp16)
+    _write_judge_sidecar(tmp_path, "mistral_7b_8bit", "harmbench_cls", int8)
+
+    rec = ps.analyse(tmp_path)["per_pair"]["mistral_7b"]["harmbench_asr_int8_mcnemar"]
+    cls = rec["harmbench_cls"]
+    assert (cls["b"], cls["c"], cls["n_discordant"]) == (1, 3, 4)
+    assert cls["delta"] < 0 and cls["direction"] == "safe-ward"
+    assert cls["uncorrected_significant"] is False  # exact p=0.625
+    assert rec["api_judge"] is None  # api_judge sidecar never written
+
+
+def test_int8_mcnemar_missing_sidecars_are_none(tmp_path: Path) -> None:
+    # No judge sidecars at all (only summary files) -> both backends None, no crash.
+    _populate(tmp_path, "qwen_2b",
+              judge_asr={"fp16": 0.10, "int8": 0.15, "nf4": 0.20},
+              mmlu={"fp16": 0.62, "int8": 0.60, "nf4": 0.53})
+    rec = ps.analyse(tmp_path)["per_pair"]["qwen_2b"]["harmbench_asr_int8_mcnemar"]
+    assert rec["harmbench_cls"] is None
+    assert rec["api_judge"] is None

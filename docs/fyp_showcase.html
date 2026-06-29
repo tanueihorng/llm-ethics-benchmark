@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>What Survives Compression? — Benchmarking the Ethics of 4-bit LLMs</title>
+<meta name="description" content="An NTU Final-Year Project, presented as a full-screen deck: does 4-bit quantization change a language model's safety, or just its competence?" />
+
+<!--
+=====================================================================================
+  FYP SHOWCASE  ·  CCDS25-1136  ·  Tan Uei Horng  ·  NTU College of Computing & Data Science
+  A FULL-SCREEN, SCROLL-SNAP DECK with a dark/light theme toggle and a moving background.
+  Navigate: scroll / trackpad / ↑ ↓ / Page Up-Down / Space / Home-End / click the side dots.
+  Theme: the ◐ button (top-right), or it follows your OS preference on first load.
+
+  Every number is sourced from the project's committed analysis artifacts
+  (results/analysis/*.json) and docs/PROJECT_LOG.md — the single source of truth.
+  External "state of AI" facts on the context slides carry inline citations.
+
+  >>> HOW TO EDIT THE TIMELINE DATES <<<
+  All milestone dates live in ONE place: the `TIMELINE` array in the <script> at the
+  bottom (search "EDIT YOUR TIMELINE DATES HERE"). Edit the `date` strings; the
+  "The journey" slide rebuilds automatically. Placeholder months carry an "editable" tag.
+=====================================================================================
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400;1,9..144,500;1,9..144,600&family=Inter:wght@400..700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<script>(function(){try{var t=localStorage.getItem('fyp-theme');if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+
+<style>
+/* ============================== THEME TOKENS ============================== */
+:root, :root[data-theme="light"]{
+  --paper:#fbfcfe; --paper-2:#f3f5f9;
+  --ink:#0f1521;            /* deep display ink (numbers, big quotes) */
+  --text:#161d29; --text-soft:#39434f;
+  --muted:#73809a; --faint:#9aa3b2;
+  --line:#e6e9ef; --line-2:#eef1f5;
+  --card:#ffffff; --card-2:#f4f6fa;
+  --harm:#dc2626; --safe:#0a9d6e; --cap:#d97706; --signal:#2563eb; --cyan:#0891b2; --violet:#7c3aed;
+  /* chart-specific (themed) */
+  --c-neutral:#9aa6b8; --c-neutral-stroke:rgba(15,21,33,.14); --c-sub:#647089; --c-corner:#aab2c0; --axisline:rgba(15,21,33,.30);
+  /* moving background orbs */
+  --blob-a:#cfe0ff; --blob-b:#e7dcff; --blob-c:#ccedf0; --orb-op:.6; --fx:96,116,156;
+  --shadow:0 14px 40px rgba(15,21,33,.07);
+}
+:root[data-theme="dark"]{
+  --paper:#0a0e17; --paper-2:#0f1420;
+  --ink:#eef2f8;
+  --text:#eef2f8; --text-soft:#c7d0dd;
+  --muted:#8a95a9; --faint:#5c6678;
+  --line:#222b3a; --line-2:#1a2230;
+  --card:#111824; --card-2:#161f2e;
+  --harm:#f87171; --safe:#34d399; --cap:#fbbf24; --signal:#7da2ff; --cyan:#22d3ee; --violet:#a78bfa;
+  --c-neutral:#5a6678; --c-neutral-stroke:rgba(255,255,255,.16); --c-sub:#97a3b8; --c-corner:#5a6678; --axisline:rgba(255,255,255,.32);
+  --blob-a:#16244e; --blob-b:#241b4a; --blob-c:#0d2f3a; --orb-op:.55; --fx:150,178,238;
+  --shadow:0 16px 44px rgba(0,0,0,.4);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:var(--sans);color:var(--text);background:var(--paper);
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow:hidden;
+  transition:background-color .55s ease,color .55s ease;
+}
+::selection{background:rgba(37,99,235,.18)}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+.skip{position:fixed;left:-9999px;top:0;z-index:400;background:var(--signal);color:#fff;
+  padding:10px 16px;font-family:var(--mono);font-size:13px;font-weight:600;border-radius:0 0 8px 0}
+.skip:focus{left:0}
+a:focus-visible,button:focus-visible{outline:2px solid var(--signal);outline-offset:3px;border-radius:4px}
+:root{
+  --display:'Bricolage Grotesque','Fraunces',Georgia,sans-serif;
+  --serif:'Fraunces',Georgia,'Times New Roman',serif;
+  --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --td:.78s;
+}
+strong{font-weight:700;color:var(--text)}
+em{font-family:var(--serif);font-style:italic;font-weight:500;letter-spacing:.01em}
+
+/* ============================== MOVING BACKGROUND ============================== */
+#bg{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.orb{position:absolute;border-radius:50%;filter:blur(85px);opacity:var(--orb-op);
+  will-change:transform;transition:background-color .55s ease}
+.o1{width:46vw;height:46vw;left:-8vw;top:-10vh;background:var(--blob-a);animation:fl1 27s var(--ease) infinite alternate}
+.o2{width:40vw;height:40vw;right:-10vw;top:14vh;background:var(--blob-b);animation:fl2 33s var(--ease) infinite alternate}
+.o3{width:50vw;height:50vw;left:24vw;bottom:-18vh;background:var(--blob-c);animation:fl3 39s var(--ease) infinite alternate}
+@keyframes fl1{to{transform:translate(22vw,16vh) scale(1.22)}}
+@keyframes fl2{to{transform:translate(-18vw,13vh) scale(1.15)}}
+@keyframes fl3{to{transform:translate(13vw,-16vh) scale(1.26)}}
+#fx{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+/* ============================== DECK / PANELS ============================== */
+#deck{position:fixed;inset:0;z-index:1;overflow:hidden;background:transparent;perspective:1500px;perspective-origin:50% 45%}
+.panel{
+  position:absolute;inset:0;width:100%;background:transparent;
+  overflow-y:auto;overflow-x:hidden;
+  opacity:0;visibility:hidden;
+  transform-style:preserve-3d;backface-visibility:hidden;will-change:transform,opacity;
+  transition:transform var(--td,.78s) var(--ease), opacity calc(var(--td,.78s)*.78) var(--ease);
+  scrollbar-width:none;-ms-overflow-style:none;
+}
+.panel::-webkit-scrollbar{display:none}
+.panel.active{opacity:1;visibility:visible}
+body.turning .panel{background:var(--paper)}  /* opaque faces while a cube is rotating */
+.panel-inner{min-height:100%;width:100%;max-width:1180px;margin:0 auto;
+  display:flex;flex-direction:column;justify-content:safe center;
+  padding:clamp(40px,6.5vh,78px) clamp(26px,7vw,120px)}
+.panel.chart .panel-inner{justify-content:flex-start}
+
+/* statement slide — dramatic, theme-independent */
+.panel.statement{color:#eef1f6}
+.panel.statement::before{content:"";position:absolute;inset:0;z-index:-1;
+  background:linear-gradient(135deg,#0e1838 0%,#1b2552 55%,#0f1b3d 100%)}
+.panel.statement .eyebrow{color:#8fb0ff}
+.panel.statement .lead{color:#c3cce0}
+
+/* reveal animation, gated on .active */
+.anim{opacity:0;transform:translateY(30px);filter:blur(5px);
+  transition:opacity .9s var(--ease),transform .9s var(--ease),filter .9s var(--ease)}
+.panel.active .anim{opacity:1;transform:none;filter:none}
+.panel.active .d1{transition-delay:.07s}.panel.active .d2{transition-delay:.15s}
+.panel.active .d3{transition-delay:.23s}.panel.active .d4{transition-delay:.31s}
+.panel.active .d5{transition-delay:.39s}.panel.active .d6{transition-delay:.47s}
+
+/* ============================== TYPE ============================== */
+.eyebrow{font-family:var(--mono);font-size:clamp(11px,1.2vw,13px);letter-spacing:.28em;
+  text-transform:uppercase;color:var(--signal);margin-bottom:clamp(14px,2.4vh,26px);
+  display:flex;align-items:center;gap:12px}
+.eyebrow::before{content:"";width:26px;height:1px;background:currentColor;opacity:.6}
+h1{font-family:var(--display);font-weight:800;letter-spacing:-.035em;line-height:0.98;
+  font-size:clamp(2.8rem,7.6vw,6.1rem)}
+h2{font-family:var(--display);font-weight:700;letter-spacing:-.025em;line-height:1.02;
+  font-size:clamp(2.05rem,5vw,3.7rem);margin-bottom:clamp(10px,1.8vh,20px)}
+h2 .accent{font-family:var(--serif);font-style:italic;font-weight:600;color:var(--signal)}
+.lead{font-size:clamp(1.06rem,1.7vw,1.34rem);color:var(--text);font-weight:460;line-height:1.55;max-width:800px}
+p{color:var(--text-soft);line-height:1.6}
+.mono{font-family:var(--mono)}
+.kbd{font-family:var(--mono);font-size:.84em;background:var(--card-2);border:1px solid var(--line);
+  border-radius:5px;padding:1px 6px;color:var(--text)}
+.takeaway{margin-top:clamp(12px,2.2vh,22px);font-size:clamp(.95rem,1.5vw,1.18rem);
+  color:var(--text);font-weight:500;max-width:920px;line-height:1.5}
+.takeaway b{color:var(--signal)}
+.src{font-family:var(--mono);font-size:11.5px;color:var(--text-soft);margin-top:8px;letter-spacing:.01em;line-height:1.6}
+.src a{color:var(--text-soft);text-decoration:underline;text-underline-offset:2px}
+.src a:hover{color:var(--signal)}
+
+/* recent-headlines news feed */
+.news{display:flex;flex-direction:column;gap:clamp(8px,1.3vh,13px);margin-top:clamp(14px,2.2vh,26px)}
+.nlab{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.nrow{display:flex;align-items:baseline;gap:16px;padding:clamp(10px,1.4vh,15px) clamp(14px,1.6vw,22px);
+  background:var(--card);border:1px solid var(--line);border-radius:12px;transition:transform .35s var(--ease),border-color .35s var(--ease)}
+.nrow:hover{transform:translateX(5px);border-color:var(--signal)}
+.nrow .nd{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--signal);min-width:78px;white-space:nowrap}
+.nrow .nh{font-size:clamp(.92rem,1.3vw,1.1rem);color:var(--text);line-height:1.4;flex:1;font-weight:500}
+.nrow .nsrc{font-family:var(--mono);font-size:10.5px;color:var(--muted);white-space:nowrap}
+.nrow .nsrc a{color:var(--muted);text-decoration:underline;text-underline-offset:2px}
+.nrow .nsrc a:hover{color:var(--signal)}
+@media(max-width:620px){.nrow{flex-wrap:wrap;gap:4px 12px}.nrow .nh{flex:1 1 100%;order:3}}
+
+/* dynamic rotating news ticker */
+.ticker{margin-top:clamp(16px,2.6vh,30px);max-width:940px}
+.tk-lab{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:9px}
+.tk-lab::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--harm);animation:pulse 2s var(--ease) infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(220,38,38,.45)}70%{box-shadow:0 0 0 9px rgba(220,38,38,0)}100%{box-shadow:0 0 0 0 rgba(220,38,38,0)}}
+.tk-card{position:relative;background:var(--card);border:1px solid var(--line);border-radius:16px;
+  padding:clamp(20px,2.6vw,32px) clamp(22px,3vw,38px);min-height:clamp(150px,21vh,196px);overflow:hidden;box-shadow:var(--shadow)}
+.tk-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(var(--signal),var(--cyan))}
+.tk-top{display:flex;align-items:center;gap:11px;margin-bottom:14px}
+.tk-date{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--signal)}
+.tk-tag{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-soft);border:1px solid var(--line);border-radius:100px;padding:3px 11px}
+.tk-headline{font-family:var(--display);font-weight:700;font-size:clamp(1.3rem,2.7vw,2.05rem);line-height:1.12;letter-spacing:-.012em;color:var(--text)}
+.tk-src{margin-top:14px;font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+.tk-src a{color:var(--signal);text-decoration:underline;text-underline-offset:2px}
+.tk-pop{animation:tkpop .6s var(--ease)}
+@keyframes tkpop{from{opacity:0;transform:translateY(18px) scale(.985)}to{opacity:1;transform:none}}
+.tk-dots{display:flex;gap:8px;margin-top:15px}
+.tk-dots button{width:26px;height:4px;border-radius:3px;border:0;background:var(--line);cursor:pointer;padding:0;transition:.3s var(--ease)}
+.tk-dots button:hover{background:var(--muted)}
+.tk-dots button.on{background:var(--signal);width:36px}
+
+/* ============================== HERO ============================== */
+#hero .panel-inner{justify-content:center}
+.hero-kicker{font-family:var(--mono);font-size:clamp(11px,1.3vw,13.5px);letter-spacing:.22em;
+  text-transform:uppercase;color:var(--text-soft);margin-bottom:clamp(20px,3.2vh,34px)}
+.hero-kicker b{color:var(--signal);font-weight:600}
+#hero h1{margin-bottom:clamp(18px,2.6vh,28px)}
+#hero h1 .accent{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--signal)}
+.hero-meta{margin-top:clamp(26px,4vh,46px);display:flex;flex-wrap:wrap;gap:10px 28px;
+  font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+.hero-meta b{color:var(--text);font-weight:600}
+.hero-motif{position:absolute;right:clamp(-40px,-2vw,0px);top:50%;transform:translateY(-50%);
+  width:min(40vw,460px);opacity:.9;pointer-events:none}
+@media (max-width:860px){.hero-motif{display:none}}
+
+/* ============================== CARDS / GRIDS ============================== */
+.grid{display:grid;gap:clamp(14px,1.6vw,22px)}
+.g2{grid-template-columns:1fr 1fr}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:clamp(16px,2vw,26px);
+  transition:transform .4s var(--ease),border-color .4s var(--ease),box-shadow .4s var(--ease),background-color .55s ease}
+.card:hover{transform:translateY(-4px);border-color:var(--signal);box-shadow:var(--shadow)}
+.card .tag{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:10px}
+.card h3{font-family:var(--sans);font-weight:600;font-size:clamp(1.02rem,1.5vw,1.22rem);margin-bottom:8px;color:var(--text)}
+.card p{font-size:clamp(.86rem,1.1vw,.97rem);line-height:1.5;color:var(--text-soft);margin:0}
+
+.stat{background:var(--card-2);border-radius:14px;padding:clamp(16px,2vw,26px);
+  transition:transform .4s var(--ease),background-color .55s ease}
+.stat:hover{transform:translateY(-4px)}
+.stat .num{font-family:var(--serif);font-weight:600;font-size:clamp(2rem,4.2vw,3.1rem);line-height:1;color:var(--ink);letter-spacing:-.02em}
+.stat .num .u{font-size:.42em;color:var(--muted);font-family:var(--mono);margin-left:3px}
+.stat .lab{margin-top:10px;font-size:clamp(.8rem,1vw,.92rem);color:var(--text-soft);line-height:1.4}
+
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{font-family:var(--mono);font-size:clamp(10.5px,1.1vw,12px);letter-spacing:.04em;
+  padding:8px 13px;border-radius:100px;border:1px solid var(--line);color:var(--text-soft);
+  background:var(--card);display:inline-flex;align-items:center;gap:8px;transition:.35s var(--ease)}
+.chip:hover{border-color:var(--signal);color:var(--text);transform:translateY(-2px)}
+.chip .dot{width:7px;height:7px;border-radius:50%}
+
+.callout{border-left:3px solid var(--signal);padding:4px 0 4px 26px}
+.callout .q{font-family:var(--serif);font-size:clamp(1.3rem,3vw,2.1rem);font-style:italic;font-weight:400;line-height:1.28;color:var(--ink)}
+.callout .a{margin-top:12px;font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+
+.matched{display:grid;grid-template-columns:1fr auto 1fr;gap:clamp(12px,2vw,26px);align-items:center}
+.mbox{border:1px solid var(--line);border-radius:14px;padding:clamp(14px,1.8vw,22px);text-align:center;background:var(--card);transition:.4s var(--ease)}
+.mbox:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.mbox .ttl{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.mbox .big{font-family:var(--serif);font-size:clamp(1.4rem,2.6vw,2rem);margin:8px 0 4px}
+.mbox.base .big{color:var(--safe)} .mbox.quant .big{color:var(--signal)}
+.mbox .small{font-size:12.5px;color:var(--muted)}
+.msplit{font-family:var(--mono);font-size:11px;color:var(--muted);text-align:center;line-height:1.7}
+.msplit .glyph{font-size:1.6rem;color:var(--violet);display:block;margin-bottom:2px}
+
+.flist{display:grid;gap:clamp(10px,1.6vh,18px)}
+.frow{display:flex;gap:18px;align-items:baseline}
+.frow .idx{font-family:var(--serif);font-size:clamp(1.4rem,2.4vw,2rem);color:var(--faint);min-width:46px;line-height:1}
+.frow .ft{font-size:clamp(.95rem,1.4vw,1.12rem);color:var(--text);line-height:1.45}
+.up{color:var(--harm);font-weight:600}.down{color:var(--cap);font-weight:600}.good{color:var(--safe);font-weight:600}
+
+/* ============================== CHARTS ============================== */
+.chartwrap{flex:1 1 auto;min-height:0;display:flex;align-items:center;justify-content:center;width:100%;
+  margin-top:clamp(6px,1.4vh,16px);background:color-mix(in srgb,var(--card) 55%, transparent);
+  border:1px solid var(--line);border-radius:18px;padding:clamp(8px,1.4vh,18px);transition:background-color .55s ease,border-color .55s ease}
+.chartwrap.cap{max-width:1040px;margin-inline:auto}
+.chartwrap svg{width:100%;height:100%;max-height:100%;display:block}
+.svg-twin{display:grid;grid-template-columns:1fr 1fr;gap:clamp(14px,2.4vw,40px);width:100%;flex:1;min-height:0;
+  background:color-mix(in srgb,var(--card) 55%, transparent);border:1px solid var(--line);border-radius:18px;
+  padding:clamp(12px,1.8vh,22px);margin-top:clamp(6px,1.4vh,14px);transition:background-color .55s ease,border-color .55s ease}
+.svg-twin .col{display:flex;flex-direction:column;min-height:0}
+.svg-twin .col h4{font-family:var(--sans);font-weight:600;font-size:clamp(.92rem,1.3vw,1.08rem);margin-bottom:2px}
+.svg-twin .col .sub{font-size:12px;color:var(--muted);margin-bottom:6px}
+.tick{font-family:var(--mono);font-size:11px;fill:var(--muted)}
+.gridline{stroke:var(--line-2)}
+.barlabel{font-family:var(--mono);font-size:11.5px;fill:var(--text-soft)}
+.axislab{font-family:var(--mono);font-size:11px;fill:var(--muted)}
+.chead{display:flex;justify-content:space-between;align-items:flex-end;gap:18px;flex-wrap:wrap}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;letter-spacing:.03em;color:var(--muted);text-transform:uppercase}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.toggle{display:inline-flex;border:1px solid var(--line);border-radius:100px;overflow:hidden;background:var(--card);
+  font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase}
+.toggle button{background:transparent;color:var(--muted);border:0;padding:8px 14px;cursor:pointer;transition:.25s var(--ease)}
+.toggle button.on{background:var(--signal);color:#fff;font-weight:600}
+.qnote{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:clamp(8px,1.4vh,16px)}
+.qn{border:1px solid var(--line);border-radius:11px;padding:11px 14px;background:var(--card);transition:.35s var(--ease)}
+.qn:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.qn .h{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:5px}
+.qn p{font-size:11.5px;line-height:1.4;margin:0;color:var(--muted)}
+
+/* ============================== TIMELINE ============================== */
+.tl-wrap{flex:1;min-height:0;display:flex;align-items:center;width:100%;overflow-x:auto;overflow-y:hidden;padding:10px 0;scrollbar-width:thin}
+.tl-track{position:relative;display:flex;align-items:stretch;min-width:100%;gap:0}
+.tl-track::before{content:"";position:absolute;left:2%;right:2%;top:50%;height:2px;transform:translateY(-50%);
+  background:linear-gradient(90deg,color-mix(in srgb,var(--signal) 55%,transparent),color-mix(in srgb,var(--cyan) 55%,transparent))}
+.tl-item{position:relative;flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 5px}
+.tl-item .node{width:15px;height:15px;border-radius:50%;background:var(--paper);border:2px solid var(--faint);margin:10px auto;position:relative;z-index:2;transition:.5s var(--ease)}
+.panel.active .tl-item .node{border-color:var(--signal)}
+.tl-item.placeholder .node{border-style:dashed}
+.tl-item .phase{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+.tl-item .date{font-family:var(--mono);font-size:11px;color:var(--signal);margin-top:2px;white-space:nowrap}
+.tl-item .date .ph{display:block;font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-top:2px}
+.tl-item h4{font-family:var(--sans);font-weight:600;font-size:11.5px;line-height:1.25;margin-top:6px;color:var(--text)}
+.tl-item .top{min-height:96px;display:flex;align-items:flex-end;justify-content:center}
+.tl-item .bot{min-height:96px;display:flex;align-items:flex-start;justify-content:center}
+
+/* ============================== FIXED CHROME ============================== */
+#progress{position:fixed;top:0;left:0;height:3px;width:0;z-index:200;background:linear-gradient(90deg,var(--signal),var(--cyan));transition:width .15s linear}
+#themeToggle{position:fixed;top:18px;right:20px;z-index:220;width:40px;height:40px;border-radius:50%;
+  border:1px solid var(--line);background:var(--card);color:var(--text-soft);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:.35s var(--ease)}
+#themeToggle:hover{color:var(--signal);border-color:var(--signal);transform:rotate(18deg)}
+#themeToggle svg{width:19px;height:19px}
+#dots{position:fixed;right:24px;top:50%;transform:translateY(-50%);z-index:200;display:flex;flex-direction:column;gap:12px}
+#dots button{width:9px;height:9px;border-radius:50%;border:0;padding:0;cursor:pointer;background:var(--faint);opacity:.55;transition:.35s var(--ease);position:relative}
+#dots button:hover{opacity:1;transform:scale(1.3)}
+#dots button.active{background:var(--signal);opacity:1;box-shadow:0 0 0 4px color-mix(in srgb,var(--signal) 20%,transparent)}
+#dots button .lab{position:absolute;right:20px;top:50%;transform:translateY(-50%) translateX(6px);
+  white-space:nowrap;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--text);background:var(--card);border:1px solid var(--line);padding:4px 8px;border-radius:6px;
+  opacity:0;pointer-events:none;transition:.3s var(--ease)}
+#dots button:hover .lab{opacity:1;transform:translateY(-50%) translateX(0)}
+#counter{position:fixed;left:24px;bottom:20px;z-index:200;font-family:var(--mono);font-size:12px;letter-spacing:.1em;color:var(--muted)}
+#counter b{color:var(--text);font-weight:600}
+.scrollcue{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);z-index:5;
+  font-family:var(--mono);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);
+  display:flex;flex-direction:column;align-items:center;gap:9px}
+.scrollcue .line{width:1px;height:34px;background:linear-gradient(var(--signal),transparent);position:relative;overflow:hidden}
+.scrollcue .line::after{content:"";position:absolute;top:-50%;left:0;width:100%;height:50%;background:var(--cyan);animation:drop 1.8s var(--ease) infinite}
+@keyframes drop{0%{top:-50%}60%,100%{top:100%}}
+/* chrome legibility over the dark statement slide */
+body.on-dark #counter{color:#9fb0c8}body.on-dark #counter b{color:#fff}
+body.on-dark #themeToggle{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.25);color:#e6ecf6}
+body.on-dark #dots button{background:rgba(255,255,255,.4)}
+body.on-dark #dots button.active{background:#8fb0ff}
+
+/* ============================== RESPONSIVE ============================== */
+@media (max-width:880px){
+  .g2,.g3,.g4{grid-template-columns:1fr 1fr}
+  .matched{grid-template-columns:1fr}
+  .svg-twin{grid-template-columns:1fr;gap:14px}
+  .qnote{grid-template-columns:1fr 1fr}
+  .tl-item{flex:0 0 130px}
+  #dots{display:none}
+}
+@media (max-width:560px){
+  #counter{display:none}
+  .g3,.g4,.g2{grid-template-columns:1fr}
+  .qnote{grid-template-columns:1fr 1fr}
+  .panel-inner{padding:74px 22px 72px}
+  .frow .idx{min-width:34px}
+}
+@media (max-height:680px){ h1{font-size:clamp(2rem,6vw,3.4rem)} h2{font-size:clamp(1.5rem,4vw,2.2rem)} }
+@media (prefers-reduced-motion:reduce){
+  :root{--td:.25s}
+  .anim{opacity:1;transform:none;filter:none;transition:none}
+  .orb{animation:none}
+  .scrollcue .line::after{display:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#p-landscape">Skip to content</a>
+<div id="bg" aria-hidden="true"><span class="orb o1"></span><span class="orb o2"></span><span class="orb o3"></span></div>
+<canvas id="fx" aria-hidden="true"></canvas>
+<div id="progress"></div>
+<button id="themeToggle" aria-label="Toggle dark and light theme" title="Toggle theme"></button>
+<nav id="dots" aria-label="Slides"></nav>
+<div id="counter" aria-hidden="true"><b id="cNow">01</b> / <span id="cTot">13</span></div>
+
+<main id="deck">
+
+  <!-- 01 TITLE -->
+  <section class="panel" id="hero" data-nav="Title" aria-label="Title">
+    <svg class="hero-motif" viewBox="0 0 400 400" aria-hidden="true">
+      <g fill="none" stroke="var(--signal)" stroke-width="2" opacity=".75">
+        <path d="M20 300 C 80 120, 140 120, 200 200 S 320 280, 380 100" stroke="var(--cyan)" opacity=".4"/>
+        <path d="M20 300 L80 300 L80 210 L140 210 L140 240 L200 240 L200 170 L260 170 L260 210 L320 210 L320 130 L380 130"/>
+      </g>
+      <g fill="var(--signal)">
+        <circle cx="80" cy="210" r="3"/><circle cx="140" cy="240" r="3"/><circle cx="200" cy="170" r="3"/><circle cx="260" cy="210" r="3"/><circle cx="320" cy="130" r="3"/>
+      </g>
+      <text x="20" y="340" font-family="JetBrains Mono" font-size="11" fill="var(--muted)">16-bit → 4-bit</text>
+    </svg>
+    <div class="panel-inner">
+      <div class="hero-kicker anim d1">Final-Year Project · <b>CCDS25-1136</b> · NTU College of Computing &amp; Data Science</div>
+      <h1 class="anim d2">What survives<br/><span class="accent">compression?</span></h1>
+      <p class="lead anim d3">When a language model is squeezed from 16 bits to 4 so it can run on your laptop, something has to give. The open question is <em>what</em> — does it lose its grip on right and wrong, or merely its competence?</p>
+      <div class="hero-meta anim d4">
+        <span><b>Tan&nbsp;Uei&nbsp;Horng</b> · Author</span>
+        <span>Supervisor · <b>Dr.&nbsp;Zhang&nbsp;Jiehuang</b></span>
+        <span><b>5</b> model pairs · <b>4</b> families · <b>2</b> judges</span>
+      </div>
+    </div>
+    <div class="scrollcue"><div class="line"></div>Scroll · ↓</div>
+  </section>
+
+  <!-- 02 LANDSCAPE -->
+  <section class="panel" id="p-landscape" data-nav="Landscape" aria-label="The landscape">
+    <div class="panel-inner">
+      <div class="eyebrow anim">01 — The moment</div>
+      <h2 class="anim d1">Open source is having its <span class="accent">moment</span>.</h2>
+      <p class="lead anim d2">Frontier models keep getting more expensive and more gated — and the response is a surge in <strong>open-weight</strong> and <strong>on-device</strong> AI. The centre of gravity is moving <em>off the cloud and onto your own hardware</em>.</p>
+      <div class="ticker anim d3" id="newsTicker" aria-label="Recent headlines, auto-rotating">
+        <div class="tk-lab">In the news · the open &amp; on-device surge</div>
+        <div class="tk-card" id="tkCard"></div>
+        <div class="tk-dots" id="tkDots"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 THE SHIFT (going local) -->
+  <section class="panel" id="p-shift" data-nav="Going local" aria-label="AI going local">
+    <div class="panel-inner">
+      <div class="eyebrow anim">02 — The shift</div>
+      <h2 class="anim d1">So capable AI is going <span class="accent">local</span>.</h2>
+      <p class="lead anim d2">Open-weight models have all but caught the closed frontier, and 4-bit quantization shrinks them ~4× to run on a laptop or a single GPU. When DeepSeek's open R1 landed in January 2025, markets erased roughly $600B of NVIDIA's value in a day — a verdict that frontier-grade AI no longer needs the most expensive hardware.</p>
+      <div class="grid g3 anim d3" style="margin-top:clamp(18px,3vh,36px)">
+        <div class="stat"><div class="num">~3.5<span class="u">mo</span></div><div class="lab">how far open-weight models now trail the closed frontier, on average</div></div>
+        <div class="stat"><div class="num">1B+</div><div class="lab">downloads of Meta's open Llama models; Hugging Face hosts 2M+ open models</div></div>
+        <div class="stat"><div class="num">4×<span class="u">· 48GB</span></div><div class="lab">4-bit NF4 (QLoRA) memory cut — a 65B model fine-tunable on one 48GB GPU</div></div>
+      </div>
+      <div class="src anim d4">Sources: <a href="https://epoch.ai/data-insights/open-weights-vs-closed-weights-models" target="_blank" rel="noopener">Epoch AI, 2025</a> · <a href="https://about.fb.com/news/2025/03/celebrating-1-billion-downloads-llama/" target="_blank" rel="noopener">Meta, 2025</a> · <a href="https://huggingface.co/blog/4bit-transformers-bitsandbytes" target="_blank" rel="noopener">Hugging Face, 2023</a> · <a href="https://techcrunch.com/2025/01/27/nvidia-drops-600bn-off-its-market-cap-amid-the-rise-of-deepseek/" target="_blank" rel="noopener">TechCrunch, 2025</a></div>
+    </div>
+  </section>
+
+  <!-- 04 THE STAKES -->
+  <section class="panel" id="p-stakes" data-nav="The stakes" aria-label="The stakes">
+    <div class="panel-inner">
+      <div class="eyebrow anim">03 — The stakes</div>
+      <h2 class="anim d1">Which makes safety everyone's problem.</h2>
+      <p class="lead anim d2">Once anyone can download, quantize and run — or modify — a capable model offline, its alignment is no longer the lab's responsibility. And alignment is fragile: it can be stripped for pocket change, and prior work shows the compression step itself can weaken a model's refusals.</p>
+      <div class="grid g2 anim d3" style="margin-top:clamp(16px,2.6vh,30px)">
+        <div class="card" style="border-color:color-mix(in srgb,var(--cap) 40%,var(--line))"><span class="tag" style="color:var(--cap)">fragile by fine-tuning</span><h3>10 examples · &lt;$0.20</h3><p>enough to jailbreak a frontier model's safety guardrails — and even benign fine-tuning degraded alignment (Qi et al., 2023).</p></div>
+        <div class="card" style="border-color:color-mix(in srgb,var(--harm) 40%,var(--line))"><span class="tag" style="color:var(--harm)">fragile by quantization</span><h3>85% → 96%</h3><p>Mistral-7B's jailbreak success rate after quantization in one study — precision cuts can weaken refusal (Kumar et al., 2024).</p></div>
+      </div>
+      <div class="takeaway anim d4">So: does the everyday 4-bit step itself change safety — or just capability? Prior work rarely separates the two. <b>This project does.</b></div>
+      <div class="src anim d5">Sources: <a href="https://arxiv.org/abs/2310.03693" target="_blank" rel="noopener">Qi et al., 2023 (arXiv:2310.03693)</a> · <a href="https://arxiv.org/abs/2404.04392" target="_blank" rel="noopener">Kumar et al., 2024 (arXiv:2404.04392)</a></div>
+    </div>
+  </section>
+
+  <!-- 03 GAP -->
+  <section class="panel" id="p-gap" data-nav="The gap" aria-label="The research gap">
+    <div class="panel-inner">
+      <div class="eyebrow anim">04 — The research gap</div>
+      <h2 class="anim d1">A quieter model isn't always a safer one.</h2>
+      <div class="callout anim d2" style="margin:clamp(8px,1.6vh,18px) 0 clamp(16px,2.6vh,28px)">
+        <div class="q">“Did the model get safer — or just get worse at everything, refusals included?”</div>
+        <div class="a">the conflation prior work rarely separates</div>
+      </div>
+      <div class="grid g2 anim d3">
+        <div class="card" style="border-color:color-mix(in srgb,var(--safe) 40%,var(--line))">
+          <span class="tag" style="color:var(--safe)">Hypothesis A · true alignment shift</span>
+          <h3>The safety training itself moved.</h3>
+          <p>Quantization perturbs the weights that encode refusal, genuinely shifting the ethical line — while capability on neutral tasks holds.</p>
+        </div>
+        <div class="card" style="border-color:color-mix(in srgb,var(--cap) 40%,var(--line))">
+          <span class="tag" style="color:var(--cap)">Hypothesis B · capability collapse</span>
+          <h3>The model just got dumber.</h3>
+          <p>Any "safety" change is a side-effect of broad degradation. A safety score is meaningless until anchored against what happened to capability.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 QUESTION -->
+  <section class="panel" id="p-question" data-nav="The question" aria-label="The research question">
+    <div class="panel-inner">
+      <div class="eyebrow anim">05 — The research question</div>
+      <h2 class="anim d1" style="font-size:clamp(1.8rem,4.3vw,3rem);max-width:1000px">Do safety changes in 4-bit models reflect a <span class="accent" style="color:var(--harm)">real alignment shift</span> — or just <span style="color:var(--cap)">capability degradation</span>?</h2>
+      <div class="grid g3 anim d3" style="margin-top:clamp(18px,3vh,36px)">
+        <div class="card"><span class="tag">RQ1 · direction</span><p>Does 4-bit change harmful-prompt compliance, and which way?</p></div>
+        <div class="card"><span class="tag">RQ2 · over-refusal</span><p>Does it change refusals of perfectly benign requests?</p></div>
+        <div class="card"><span class="tag">RQ3 · capability</span><p>What is the simultaneous cost to capability — and does it explain the safety change?</p></div>
+        <div class="card"><span class="tag">RQ4 · mechanism</span><p>Where behavior moves, <em>why</em> — targeted erosion, or an unstable boundary?</p></div>
+        <div class="card"><span class="tag">RQ5 · precision</span><p>Is the effect graded by bit-width (fp16→INT8→NF4), or a cliff?</p></div>
+        <div class="card" style="border-color:color-mix(in srgb,var(--signal) 40%,var(--line))"><span class="tag" style="color:var(--signal)">cross-cutting</span><p>Does any finding generalize across model families?</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 METHOD -->
+  <section class="panel" id="p-method" data-nav="The method" aria-label="The method">
+    <div class="panel-inner">
+      <div class="eyebrow anim">06 — The method</div>
+      <h2 class="anim d1">One variable. Everything else held still.</h2>
+      <p class="lead anim d2" style="margin-bottom:clamp(14px,2.2vh,24px)">Each pair starts from <strong>identical weights</strong>; the 4-bit member is quantized on the fly at load time. Same prompts, greedy decoding, seed 42, chat template — the only difference is the number of bits.</p>
+      <div class="matched anim d3" style="margin-bottom:clamp(14px,2.2vh,24px)">
+        <div class="mbox base"><div class="ttl">Baseline</div><div class="big">16-bit</div><div class="small">fp16 reference weights</div></div>
+        <div class="msplit"><span class="glyph" aria-hidden="true">⟶</span>on-the-fly<br/>NF4 quantize</div>
+        <div class="mbox quant"><div class="ttl">Treatment</div><div class="big">4-bit</div><div class="small">same weights, NF4</div></div>
+      </div>
+      <div class="grid g3 anim d4" style="margin-bottom:clamp(12px,2vh,20px)">
+        <div class="card"><span class="tag" style="color:var(--harm)">safety · harm</span><h3>HarmBench</h3><p>Attack-success on 200 unsafe prompts — scored by an LLM judge, not keywords.</p></div>
+        <div class="card"><span class="tag" style="color:var(--safe)">safety · over-refusal</span><h3>XSTest</h3><p>Over-refusal on 250 benign prompts that merely look risky.</p></div>
+        <div class="card"><span class="tag" style="color:var(--cap)">capability</span><h3>MMLU + ARC</h3><p>Knowledge &amp; reasoning (300 + 1,172) — the anchor for every safety claim.</p></div>
+      </div>
+      <div class="chips anim d5">
+        <span class="chip"><span class="dot" style="background:var(--harm)"></span>2 independent judges · κ 0.60–0.95</span>
+        <span class="chip"><span class="dot" style="background:var(--signal)"></span>paired bootstrap CIs + McNemar</span>
+        <span class="chip"><span class="dot" style="background:var(--cap)"></span>NTU TC1 · V100-32GB · offline SLURM</span>
+        <span class="chip"><span class="dot" style="background:var(--safe)"></span>immutable, hash-pinned artifacts</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 PIVOT -->
+  <section class="panel chart" id="p-pivot" data-nav="The pivot" aria-label="The scoring pivot">
+    <div class="panel-inner">
+      <div class="eyebrow anim">07 — A turning point</div>
+      <div class="chead">
+        <div>
+          <h2 class="anim d1" style="margin-bottom:4px">My first scorer was measuring the wrong thing.</h2>
+          <p class="anim d2" style="font-size:clamp(.9rem,1.3vw,1.05rem);max-width:760px">A regex refusal-matcher scored a response harmful whenever it failed to <em>sound</em> like a refusal — even when useless or incoherent. A 13B judge over the same outputs disagreed sharply.</p>
+        </div>
+        <div class="legend anim d2"><span><i style="background:var(--c-neutral)"></i>Regex proxy</span><span><i style="background:var(--harm)"></i>13B judge (primary)</span></div>
+      </div>
+      <div class="chartwrap anim d3"><div id="kappaChart" style="width:100%;height:100%"></div></div>
+      <div class="takeaway anim d4">Re-scoring with the judge <b>relocated the study's only significant safety change</b> and forced a rewrite. A second judge (GPT-4o) was added to confirm the first.</div>
+    </div>
+  </section>
+
+  <!-- 07 QUADRANT -->
+  <section class="panel chart" id="p-quadrant" data-nav="The quadrant" aria-label="The interpretation quadrant">
+    <div class="panel-inner">
+      <div class="eyebrow anim">08 — The results</div>
+      <div class="chead">
+        <div><h2 class="anim d1" style="margin-bottom:2px">Safety vs. capability — the story in one chart.</h2>
+        <p class="anim d2" style="font-size:clamp(.86rem,1.2vw,1rem)">Δ HarmBench ASR (up = worse) vs Δ MMLU (left = worse), baseline → 4-bit. Bubble size ∝ parameters; red ring = significant.</p></div>
+        <div class="legend anim d2">
+          <span><i style="background:var(--signal)"></i>Qwen</span><span><i style="background:var(--cyan)"></i>Llama</span>
+          <span><i style="background:var(--violet)"></i>Mistral</span><span><i style="background:var(--cap)"></i>Phi</span>
+        </div>
+      </div>
+      <div class="chartwrap cap anim d3"><div id="quadChart" style="width:100%;height:100%"></div></div>
+      <div class="qnote anim d4">
+        <div class="qn" style="border-color:color-mix(in srgb,var(--harm) 35%,var(--line))"><div class="h" style="color:var(--harm)">↗ alignment degradation</div><p>more harmful, capability kept — the worrying corner.</p></div>
+        <div class="qn" style="border-color:color-mix(in srgb,var(--cap) 35%,var(--line))"><div class="h" style="color:var(--cap)">↙ capability collapse</div><p>"safer" only because the model broke.</p></div>
+        <div class="qn" style="border-color:color-mix(in srgb,var(--harm) 35%,var(--line))"><div class="h" style="color:var(--harm)">↖ broad degradation</div><p>worse on both axes at once.</p></div>
+        <div class="qn" style="border-color:color-mix(in srgb,var(--safe) 35%,var(--line))"><div class="h" style="color:var(--safe)">· robust</div><p>near origin — both axes intact.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 08 FINDINGS -->
+  <section class="panel chart" id="p-findings" data-nav="Findings" aria-label="Findings">
+    <div class="panel-inner">
+      <div class="eyebrow anim">09 — What the numbers say</div>
+      <div class="chead">
+        <div><h2 class="anim d1" style="margin-bottom:2px">Exactly one significant rise in harm.</h2>
+        <p class="anim d2" style="font-size:clamp(.86rem,1.2vw,1rem)">Absolute change, baseline → 4-bit. ✦ = significant (bootstrap CI excludes zero).</p></div>
+        <div class="toggle anim d2" id="barToggle" role="group" aria-label="Choose metric">
+          <button data-metric="asr" class="on">Harm ↑</button><button data-metric="mmlu">MMLU</button>
+          <button data-metric="arc">ARC</button><button data-metric="or">Over-refusal</button>
+        </div>
+      </div>
+      <div class="chartwrap anim d3"><div id="deltaChart" style="width:100%;height:100%"></div></div>
+      <div class="takeaway anim d4" id="deltaCaption"></div>
+    </div>
+  </section>
+
+  <!-- 09 PRECISION -->
+  <section class="panel chart" id="p-precision" data-nav="Precision" aria-label="Precision sweep">
+    <div class="panel-inner">
+      <div class="eyebrow anim">10 — Is it the bits?</div>
+      <h2 class="anim d1" style="margin-bottom:2px">The damage isn't graded by bit-width.</h2>
+      <p class="anim d2" style="font-size:clamp(.86rem,1.2vw,1rem);margin-bottom:6px">Tracing each pair across fp16 → INT8 → NF4: capability holds, holds, then drops off a cliff at 4-bit, while safety moves are model- and method-specific.</p>
+      <div class="svg-twin anim d3">
+        <div class="col"><h4>Safety across precision</h4><div class="sub">HarmBench ASR (judge) — Llama spikes at INT8, then reverts.</div><div id="sweepAsr" style="flex:1;min-height:0"></div></div>
+        <div class="col"><h4>Capability across precision</h4><div class="sub">MMLU accuracy — flat through INT8, cliff at NF4.</div><div id="sweepMmlu" style="flex:1;min-height:0"></div></div>
+      </div>
+      <div class="takeaway anim d4">The most judge-robust safety move is <b>Llama-3B at INT8 (+4.0pp)</b> — significant under both judges, but non-monotonic and small (~8 of 200 prompts). Suggestive, not settled.</div>
+    </div>
+  </section>
+
+  <!-- 10 MECHANISM -->
+  <section class="panel" id="p-mechanism" data-nav="The why" aria-label="The mechanism">
+    <div class="panel-inner">
+      <div class="eyebrow anim">11 — The mechanism</div>
+      <h2 class="anim d1">Not erosion. Instability.</h2>
+      <p class="lead anim d2" style="margin-bottom:clamp(16px,2.6vh,28px)">Probing each model's <strong>refusal margin</strong>: behavioral flips cluster where the baseline margin was already thin — but only weakly, and they go <strong>both ways</strong>. The quantized boundary jitters; it isn't selectively dismantled.</p>
+      <div class="grid g3 anim d3">
+        <div class="card"><span class="tag">thin margins move first</span><div class="num" style="font-family:var(--serif);font-size:clamp(2rem,3.6vw,2.6rem);color:var(--signal);line-height:1">0.64</div><p style="margin-top:8px">within-family AUC — a weak predictor (near-chance for the smallest model)</p></div>
+        <div class="card"><span class="tag">but symmetrically</span><div class="num" style="font-family:var(--serif);font-size:clamp(2rem,3.6vw,2.6rem);line-height:1"><span style="color:var(--harm)">16</span> <span style="color:var(--faint);font-size:.5em">/</span> <span style="color:var(--safe)">5</span></div><p style="margin-top:8px">harmful-ward vs safe-ward flips — not one-directional erosion</p></div>
+        <div class="card"><span class="tag">verdict</span><div style="font-family:var(--serif);font-size:clamp(1.3rem,2.4vw,1.7rem);line-height:1.15;color:var(--text)">boundary <span style="color:var(--cap)">instability</span></div><p style="margin-top:8px">capability-driven jitter, not a targeted attack on refusal</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11 VERDICT (statement) -->
+  <section class="panel statement" id="p-verdict" data-nav="The verdict" aria-label="The verdict">
+    <div class="panel-inner" style="text-align:center;align-items:center">
+      <div class="eyebrow anim" style="justify-content:center">12 — The answer</div>
+      <h2 class="anim d1" style="font-size:clamp(2rem,5.4vw,3.8rem);color:#fff">Mostly capability.<br/>Rarely conscience.</h2>
+      <p class="lead anim d2" style="margin:clamp(14px,2.4vh,26px) auto 0;max-width:880px;text-align:center">Across five families and three precisions, 4-bit quantization did <strong style="color:#fff">not</strong> broadly collapse alignment. The worrying corner — more harmful while just as capable — stayed <strong style="color:#fff">empty</strong>: no pair lost safety without also losing capability. When a quantized model looks safer, it is usually because it got worse — not more principled.</p>
+    </div>
+  </section>
+
+  <!-- 12 TIMELINE -->
+  <section class="panel" id="p-journey" data-nav="The journey" aria-label="Project timeline">
+    <div class="panel-inner">
+      <div class="eyebrow anim">13 — The journey</div>
+      <h2 class="anim d1" style="margin-bottom:4px">From question to evidence.</h2>
+      <p class="anim d2" style="font-size:clamp(.86rem,1.2vw,1rem);margin-bottom:clamp(6px,1.2vh,14px)">The real arc — including the self-corrections, because that's where the rigor lives.</p>
+      <div class="tl-wrap anim d3"><div class="tl-track" id="timeline"></div></div>
+    </div>
+  </section>
+
+  <!-- 13 CLOSE -->
+  <section class="panel" id="p-close" data-nav="Close" aria-label="Summary and credits">
+    <div class="panel-inner">
+      <div class="eyebrow anim">Benchmarking the ethical performance of open-source LLMs</div>
+      <h2 class="anim d1" style="max-width:1000px">A controlled study of the safety–capability trade-off under 4-bit quantization.</h2>
+      <div class="chips anim d2" style="margin:clamp(14px,2.4vh,26px) 0">
+        <span class="chip"><span class="dot" style="background:var(--safe)"></span>5 pairs · 4 families</span>
+        <span class="chip"><span class="dot" style="background:var(--signal)"></span>fp16 · INT8 · NF4</span>
+        <span class="chip"><span class="dot" style="background:var(--harm)"></span>2 judges · κ 0.60–0.95</span>
+        <span class="chip"><span class="dot" style="background:var(--cap)"></span>295 tests · immutable artifacts</span>
+      </div>
+      <div class="grid g2 anim d3">
+        <div class="card">
+          <span class="tag">credits</span>
+          <p class="mono" style="line-height:1.9;font-size:13px">
+            <b style="color:var(--text)">Author</b> · Tan Uei Horng<br/>
+            <b style="color:var(--text)">Supervisor</b> · Dr. Zhang Jiehuang<br/>
+            <b style="color:var(--text)">Programme</b> · BSc, College of Computing &amp; Data Science<br/>
+            <b style="color:var(--text)">Institution</b> · Nanyang Technological University<br/>
+            <b style="color:var(--text)">Project</b> · CCDS25-1136
+          </p>
+        </div>
+        <div class="card">
+          <span class="tag">provenance</span>
+          <p style="font-size:13px;line-height:1.6">Every figure is drawn from the project's committed analysis artifacts (<span class="kbd">results/analysis/*.json</span>) and verified against its single source of truth. HarmBench ASR is judge-primary (<span class="kbd">HarmBench-Llama-2-13B</span>), cross-checked by GPT-4o; the regex proxy appears only as a foil.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+/* =====================================================================================
+   DATA — sourced from the committed analysis artifacts (judge-primary).
+   ===================================================================================== */
+const PAIRS = [
+  { id:'qwen_2b',  fam:'Qwen',   color:'#2563eb', name:'Qwen3-1.7B', params:1.7,
+    asr:{fp16:0.135, int8:0.150, nf4:0.190}, asrDelta:0.055, asrSig:true,
+    v2:{base:0.600}, kappa:0.19,
+    mmlu:{fp16:0.620, int8:0.640, nf4:0.533}, mmluDelta:-0.087, mmluSig:true,
+    arc:{base:0.719, q:0.706}, arcDelta:-0.013, arcSig:false,
+    or:{base:0.052, q:0.028}, orDelta:-0.024, orSig:false, label:'broad_degradation' },
+  { id:'qwen_4b',  fam:'Qwen',   color:'#2563eb', name:'Qwen3-4B', params:4,
+    asr:{fp16:0.065, int8:0.065, nf4:0.090}, asrDelta:0.025, asrSig:false,
+    v2:{base:0.240}, kappa:0.36,
+    mmlu:{fp16:0.747, int8:0.740, nf4:0.743}, mmluDelta:-0.003, mmluSig:false,
+    arc:{base:0.875, q:0.853}, arcDelta:-0.021, arcSig:true,
+    or:{base:0.028, q:0.020}, orDelta:-0.008, orSig:false, label:'alignment_degradation' },
+  { id:'llama_3_2_3b', fam:'Llama', color:'#0891b2', name:'Llama-3.2-3B', params:3,
+    asr:{fp16:0.040, int8:0.080, nf4:0.040}, asrDelta:0.000, asrSig:false,
+    v2:{base:0.060}, kappa:0.68,
+    mmlu:{fp16:0.610, int8:0.597, nf4:0.567}, mmluDelta:-0.043, mmluSig:true,
+    arc:{base:0.727, q:0.699}, arcDelta:-0.028, arcSig:true,
+    or:{base:0.044, q:0.060}, orDelta:0.016, orSig:false, label:'broad_degradation' },
+  { id:'mistral_7b', fam:'Mistral', color:'#7c3aed', name:'Mistral-7B', params:7,
+    asr:{fp16:0.385, int8:0.375, nf4:0.345}, asrDelta:-0.040, asrSig:false,
+    v2:{base:0.835}, kappa:0.19,
+    mmlu:{fp16:0.630, int8:0.643, nf4:0.613}, mmluDelta:-0.017, mmluSig:false,
+    arc:{base:0.732, q:0.741}, arcDelta:0.009, arcSig:false,
+    or:{base:0.004, q:0.004}, orDelta:0.000, orSig:false, label:'alignment_improvement' },
+  { id:'phi4_mini', fam:'Phi', color:'#d97706', name:'Phi-4-mini', params:3.8,
+    asr:{fp16:0.055, int8:0.060, nf4:0.055}, asrDelta:0.000, asrSig:false,
+    v2:{base:0.075}, kappa:0.67,
+    mmlu:{fp16:0.700, int8:0.697, nf4:0.677}, mmluDelta:-0.023, mmluSig:false,
+    arc:{base:0.813, q:0.798}, arcDelta:-0.015, arcSig:false,
+    or:{base:0.112, q:0.084}, orDelta:-0.028, orSig:true, lpos:'below', label:'robust_preservation' },
+];
+
+/* ============  EDIT YOUR TIMELINE DATES HERE  ============ */
+const TIMELINE = [
+  { date:'Aug 2025', phase:'Discover', placeholder:true, title:'Literature review & gap' },
+  { date:'Oct 2025', phase:'Design', placeholder:true, title:'Methodology designed' },
+  { date:'Jan 2026', phase:'Build', placeholder:true, title:'Benchmark framework built' },
+  { date:'Mar 2026', phase:'Access', title:'TC1 cluster approved' },
+  { date:'26 May 2026', phase:'Environment', title:'Datasets & weights cached' },
+  { date:'27 May 2026', phase:'Run', title:'Base × 4-bit matrix done' },
+  { date:'06 Jun 2026', phase:'Pivot', title:'Regex → 13B judge' },
+  { date:'14 Jun 2026', phase:'Harden', title:'2nd judge · multi-seed · ARC' },
+  { date:'15 Jun 2026', phase:'Generalize', title:'Mistral + Phi · mechanism' },
+  { date:'18 Jun 2026', phase:'Deepen', title:'INT8 sweep · scorer audit' },
+  { date:'Jun 2026', phase:'Deliver', placeholder:true, title:'Final report & submission' },
+];
+
+/* =====================================================================================
+   HELPERS
+   ===================================================================================== */
+const SVGNS='http://www.w3.org/2000/svg';
+const el=(t,a={})=>{const e=document.createElementNS(SVGNS,t);for(const k in a)e.setAttribute(k,a[k]);return e;};
+const pp=v=>(v>=0?'+':'−')+Math.abs(v*100).toFixed(1);
+const reduceMotion=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+const svgBase=(W,H,aria)=>el('svg',{viewBox:`0 0 ${W} ${H}`,preserveAspectRatio:'xMidYMid meet',role:'img','aria-label':aria});
+
+/* =====================================================================================
+   CHART: regex vs judge (the pivot)
+   ===================================================================================== */
+function drawKappa(){
+  const host=document.getElementById('kappaChart'); host.innerHTML='';
+  const W=880, rowH=58, padL=140, padR=78, padT=8, H=padT+PAIRS.length*rowH+24;
+  const svg=svgBase(W,H,'Bar chart comparing the regex-proxy and 13-billion-parameter judge attack-success rates per model, with Cohen kappa agreement.'); host.appendChild(svg);
+  const plotW=W-padL-padR, x=v=>padL+v*plotW;
+  [0,0.25,0.5,0.75,1].forEach(g=>{
+    svg.appendChild(el('line',{x1:x(g),x2:x(g),y1:padT,y2:H-30,class:'gridline'}));
+    const t=el('text',{x:x(g),y:H-12,'text-anchor':'middle',class:'tick'}); t.textContent=(g*100)+'%'; svg.appendChild(t);
+  });
+  PAIRS.forEach((p,i)=>{
+    const y=padT+i*rowH+8;
+    const nm=el('text',{x:padL-14,y:y+24,'text-anchor':'end',class:'barlabel',fill:'var(--text)'}); nm.textContent=p.name; svg.appendChild(nm);
+    const r1=el('rect',{x:padL,y:y,height:13,rx:3,fill:'var(--c-neutral)',stroke:'var(--c-neutral-stroke)','stroke-width':0.5,width:0}); svg.appendChild(r1);
+    const r2=el('rect',{x:padL,y:y+18,height:13,rx:3,fill:'var(--harm)',width:0}); svg.appendChild(r2);
+    const grow=()=>{ r1.style.transition='width 1s var(--ease)'; r1.setAttribute('width',Math.max(2,x(p.v2.base)-padL));
+      r2.style.transition='width 1s var(--ease) .12s'; r2.setAttribute('width',Math.max(2,x(p.asr.fp16)-padL)); };
+    reduceMotion?(r1.setAttribute('width',Math.max(2,x(p.v2.base)-padL)),r2.setAttribute('width',Math.max(2,x(p.asr.fp16)-padL))):setTimeout(grow,40+i*70);
+    const l1=el('text',{x:x(p.v2.base)+6,y:y+11,class:'tick',fill:'var(--c-sub)'}); l1.textContent=(p.v2.base*100).toFixed(0)+'%'; svg.appendChild(l1);
+    const l2=el('text',{x:x(p.asr.fp16)+6,y:y+29,class:'tick',fill:'var(--harm)'}); l2.textContent=(p.asr.fp16*100).toFixed(1)+'%'; svg.appendChild(l2);
+    const kg=el('text',{x:W-padR+46,y:y+22,'text-anchor':'end',class:'barlabel'});
+    kg.setAttribute('fill',p.kappa<0.4?'var(--harm)':(p.kappa<0.6?'var(--cap)':'var(--safe)'));
+    kg.textContent='κ '+p.kappa.toFixed(2); svg.appendChild(kg);
+  });
+}
+
+/* =====================================================================================
+   CHART: interpretation quadrant
+   ===================================================================================== */
+function drawQuad(){
+  const host=document.getElementById('quadChart'); host.innerHTML='';
+  const W=900, H=540, m={t:30,r:30,b:54,l:62};
+  const svg=svgBase(W,H,'Scatter of change in HarmBench ASR versus change in MMLU accuracy, baseline to 4-bit, for five pairs. Qwen-1.7B is top-left; the more-harmful-but-still-capable corner is empty.'); host.appendChild(svg);
+  const xMin=-0.10,xMax=0.04,yMin=-0.06,yMax=0.08;
+  const X=v=>m.l+((v-xMin)/(xMax-xMin))*(W-m.l-m.r);
+  const Y=v=>m.t+(1-(v-yMin)/(yMax-yMin))*(H-m.t-m.b);
+  const ox=X(0),oy=Y(0);
+  [[ox,m.t,W-m.r-ox,oy-m.t,'rgba(220,38,38,.06)'],[m.l,m.t,ox-m.l,oy-m.t,'rgba(220,38,38,.09)'],
+   [m.l,oy,ox-m.l,(H-m.b)-oy,'rgba(217,119,6,.09)'],[ox,oy,W-m.r-ox,(H-m.b)-oy,'rgba(10,157,110,.08)']]
+   .forEach(s=>svg.appendChild(el('rect',{x:s[0],y:s[1],width:Math.max(0,s[2]),height:Math.max(0,s[3]),fill:s[4]})));
+  for(let gx=-0.10;gx<=0.041;gx+=0.02){svg.appendChild(el('line',{x1:X(gx),x2:X(gx),y1:m.t,y2:H-m.b,class:'gridline'}));
+    const t=el('text',{x:X(gx),y:H-m.b+18,'text-anchor':'middle',class:'tick'});t.textContent=(gx*100).toFixed(0);svg.appendChild(t);}
+  for(let gy=-0.06;gy<=0.081;gy+=0.02){svg.appendChild(el('line',{x1:m.l,x2:W-m.r,y1:Y(gy),y2:Y(gy),class:'gridline'}));
+    const t=el('text',{x:m.l-10,y:Y(gy)+4,'text-anchor':'end',class:'tick'});t.textContent=(gy*100).toFixed(0);svg.appendChild(t);}
+  svg.appendChild(el('line',{x1:ox,y1:m.t,x2:ox,y2:H-m.b,stroke:'var(--axisline)','stroke-dasharray':'3 4'}));
+  svg.appendChild(el('line',{x1:m.l,y1:oy,x2:W-m.r,y2:oy,stroke:'var(--axisline)','stroke-dasharray':'3 4'}));
+  const axl=el('text',{x:(m.l+(W-m.r))/2,y:H-4,'text-anchor':'middle',class:'axislab'}); axl.textContent='← capability worse      Δ MMLU (pp)      better →'; svg.appendChild(axl);
+  const ayl=el('text',{x:16,y:(m.t+(H-m.b))/2,'text-anchor':'middle',class:'axislab',transform:`rotate(-90 16 ${(m.t+(H-m.b))/2})`}); ayl.textContent='← safer    Δ harmful compliance (pp)    more harmful →'; svg.appendChild(ayl);
+  [['broad degradation',m.l+8,m.t+18,'start'],['alignment degradation',W-m.r-8,m.t+18,'end'],
+   ['capability collapse',m.l+8,H-m.b-10,'start'],['robust',W-m.r-8,H-m.b-10,'end']].forEach(c=>{
+    const t=el('text',{x:c[1],y:c[2],'text-anchor':c[3],class:'tick',fill:'var(--c-corner)'});t.setAttribute('letter-spacing','.08em');t.textContent=c[0].toUpperCase();svg.appendChild(t);});
+  PAIRS.forEach((p,i)=>{
+    const cx=X(p.mmluDelta),cy=Y(p.asrDelta),r=9+Math.sqrt(p.params)*4.4,rDot=4.5+Math.sqrt(p.params)*2.2;
+    const g=el('g',{}); svg.appendChild(g);
+    const ttl=el('title',{}); ttl.textContent=`${p.name} (${p.params}B): ΔASR ${pp(p.asrDelta)}pp${p.asrSig?' (significant)':''}, ΔMMLU ${pp(p.mmluDelta)}pp — ${p.label.replace(/_/g,' ')}`; g.appendChild(ttl);
+    g.appendChild(el('circle',{cx,cy,r,fill:p.color,'fill-opacity':.16,stroke:p.color,'stroke-opacity':.6}));
+    if(p.asrSig) g.appendChild(el('circle',{cx,cy,r:rDot+4,fill:'none',stroke:'var(--harm)','stroke-width':1.6}));
+    const dot=el('circle',{cx,cy,r:reduceMotion?rDot:0,fill:p.color,'fill-opacity':.95}); g.appendChild(dot);
+    const lbl=el('text',{x:cx,y:p.lpos==='below'?cy+r+18:cy-r-9,'text-anchor':'middle',class:'barlabel',fill:'var(--text)',opacity:reduceMotion?1:0}); lbl.textContent=p.name; g.appendChild(lbl);
+    if(!reduceMotion) setTimeout(()=>{ dot.style.transition='r .8s var(--ease)'; dot.setAttribute('r',rDot);
+      lbl.style.transition='opacity .6s ease .3s'; lbl.setAttribute('opacity',1); },120+i*110);
+  });
+}
+
+/* =====================================================================================
+   CHART: per-pair delta bars (toggle)
+   ===================================================================================== */
+const deltaMeta={
+  asr:{key:'asrDelta',sig:'asrSig',label:'Δ HarmBench ASR (judge)',color:p=>p.asrDelta>0?'var(--harm)':'var(--safe)',
+    cap:'Only Qwen-1.7B (+5.5pp) is significant; under the judge, NF4 never significantly raised or lowered harm in any other pair.'},
+  mmlu:{key:'mmluDelta',sig:'mmluSig',label:'Δ MMLU accuracy',color:()=>'var(--cap)',
+    cap:'Capability anchor: Qwen-1.7B (−8.7pp) and Llama-3B (−4.3pp) drop significantly — the others hold.'},
+  arc:{key:'arcDelta',sig:'arcSig',label:'Δ ARC-Challenge accuracy',color:()=>'var(--cap)',
+    cap:'Second capability anchor — direction-robust (mostly down); MMLU overstated the smallest model.'},
+  or:{key:'orDelta',sig:'orSig',label:'Δ XSTest over-refusal',color:p=>p.orDelta>0?'var(--harm)':'var(--safe)',
+    cap:'Benign-prompt refusals: only Phi-4-mini moves significantly — and it over-refuses less, not more.'},
+};
+let curMetric='asr';
+function drawDelta(metric){
+  const host=document.getElementById('deltaChart'); host.innerHTML='';
+  const meta=deltaMeta[metric];
+  const W=880, rowH=46, padL=140, padR=96, padT=12, H=padT+PAIRS.length*rowH+26;
+  const svg=svgBase(W,H,meta.label+' from baseline to 4-bit per model pair; markers note significance.'); host.appendChild(svg);
+  const absMax=Math.max(0.10,...PAIRS.map(p=>Math.abs(p[meta.key])))*1.15;
+  const plotW=W-padL-padR, zero=padL+plotW/2, X=v=>zero+(v/absMax)*(plotW/2);
+  svg.appendChild(el('line',{x1:zero,y1:padT,x2:zero,y2:H-26,stroke:'var(--axisline)'}));
+  [{v:-absMax,a:'start'},{v:absMax,a:'end'}].forEach(t=>{const x=el('text',{x:X(t.v),y:H-9,'text-anchor':t.a,class:'tick'});x.textContent=pp(t.v)+'pp';svg.appendChild(x);});
+  const z=el('text',{x:zero,y:H-9,'text-anchor':'middle',class:'tick'});z.textContent='0';svg.appendChild(z);
+  PAIRS.forEach((p,i)=>{
+    const y=padT+i*rowH, v=p[meta.key], sig=p[meta.sig], c=meta.color(p);
+    const nm=el('text',{x:padL-14,y:y+24,'text-anchor':'end',class:'barlabel',fill:'var(--text)'}); nm.textContent=p.name; svg.appendChild(nm);
+    const bw=Math.abs(X(v)-zero), bx=v>=0?zero:X(v);
+    const rect=el('rect',{x:zero,y:y+8,height:20,rx:4,width:0,fill:c,'fill-opacity':sig?0.95:0.42,stroke:c,'stroke-opacity':sig?1:0.5}); svg.appendChild(rect);
+    reduceMotion?(rect.setAttribute('x',bx),rect.setAttribute('width',Math.max(1.5,bw))):setTimeout(()=>{rect.style.transition='all .8s var(--ease)';rect.setAttribute('x',bx);rect.setAttribute('width',Math.max(1.5,bw));},20+i*70);
+    const lt=el('text',{x:W-6,y:y+23,'text-anchor':'end',class:'barlabel'}); lt.textContent=pp(v)+'pp'+(sig?' ✦':''); lt.setAttribute('fill',sig?c:'var(--c-sub)'); lt.setAttribute('opacity',reduceMotion?1:0); svg.appendChild(lt);
+    if(!reduceMotion) setTimeout(()=>{lt.style.transition='opacity .5s ease';lt.setAttribute('opacity',1);},560+i*70);
+  });
+  document.getElementById('deltaCaption').textContent=meta.cap;
+}
+document.querySelectorAll('#barToggle button').forEach(b=>{
+  b.setAttribute('aria-pressed',b.classList.contains('on')?'true':'false');
+  b.addEventListener('click',()=>{document.querySelectorAll('#barToggle button').forEach(x=>{x.classList.remove('on');x.setAttribute('aria-pressed','false');});
+    b.classList.add('on');b.setAttribute('aria-pressed','true');curMetric=b.dataset.metric;drawDelta(curMetric);});
+});
+
+/* =====================================================================================
+   CHART: precision sweep
+   ===================================================================================== */
+function drawSweep(hostId,accessor,fmt,aria){
+  const host=document.getElementById(hostId); if(!host)return; host.innerHTML='';
+  const W=430, H=320, m={t:16,r:88,b:34,l:46};
+  const svg=svgBase(W,H,aria); host.appendChild(svg);
+  const steps=['fp16','int8','nf4'];
+  const all=PAIRS.flatMap(p=>steps.map(s=>accessor(p,s)));
+  let lo=Math.min(...all),hi=Math.max(...all); const pad=(hi-lo||0.1)*0.18; lo-=pad; hi+=pad;
+  const X=i=>m.l+i*((W-m.l-m.r)/(steps.length-1)), Y=v=>m.t+(1-(v-lo)/(hi-lo))*(H-m.t-m.b);
+  for(let k=0;k<=3;k++){const v=lo+(hi-lo)*k/3; svg.appendChild(el('line',{x1:m.l,x2:W-m.r,y1:Y(v),y2:Y(v),class:'gridline'}));
+    const t=el('text',{x:m.l-8,y:Y(v)+4,'text-anchor':'end',class:'tick'});t.textContent=fmt(v);svg.appendChild(t);}
+  steps.forEach((s,i)=>{const t=el('text',{x:X(i),y:H-12,'text-anchor':'middle',class:'tick'});t.textContent=s.toUpperCase();svg.appendChild(t);});
+  const endLabels=[];
+  PAIRS.forEach((p,pi)=>{
+    const pts=steps.map((s,i)=>[X(i),Y(accessor(p,s))]); let d=''; pts.forEach((pt,i)=>d+=(i?'L':'M')+pt[0]+' '+pt[1]+' ');
+    const path=el('path',{d,fill:'none',stroke:p.color,'stroke-width':2.2,'stroke-opacity':.9,'stroke-linejoin':'round'}); svg.appendChild(path);
+    if(!reduceMotion){const len=path.getTotalLength?path.getTotalLength():400; path.style.strokeDasharray=len; path.style.strokeDashoffset=len;
+      setTimeout(()=>{path.style.transition='stroke-dashoffset 1.1s var(--ease)';path.style.strokeDashoffset=0;},60+pi*80);}
+    pts.forEach(pt=>svg.appendChild(el('circle',{cx:pt[0],cy:pt[1],r:3,fill:p.color})));
+    endLabels.push({y:Y(accessor(p,'nf4')),color:p.color,text:p.name.replace('Qwen3-1.7B','Qwen 1.7B').replace('Qwen3-4B','Qwen 4B').replace('Llama-3.2-3B','Llama-3B').replace('Mistral-7B','Mistral').replace('Phi-4-mini','Phi')});
+  });
+  endLabels.sort((a,b)=>a.y-b.y);
+  for(let i=1;i<endLabels.length;i++){ if(endLabels[i].y-endLabels[i-1].y<14) endLabels[i].y=endLabels[i-1].y+14; }
+  endLabels.forEach(L=>{const t=el('text',{x:X(2)+8,y:Math.min(H-m.b,Math.max(m.t+4,L.y))+4,class:'tick',fill:L.color});t.textContent=L.text;svg.appendChild(t);});
+}
+const drawSweepAsr=()=>drawSweep('sweepAsr',(p,s)=>p.asr[s],v=>(v*100).toFixed(0)+'%','Line chart of HarmBench ASR across fp16, INT8 and NF4 for five pairs; Llama spikes at INT8 then reverts.');
+const drawSweepMmlu=()=>drawSweep('sweepMmlu',(p,s)=>p.mmlu[s],v=>(v*100).toFixed(0)+'%','Line chart of MMLU accuracy across fp16, INT8 and NF4 for five pairs; capability holds then drops at NF4.');
+
+/* =====================================================================================
+   COUNT-UP
+   ===================================================================================== */
+function countUp(node){
+  const target=parseFloat(node.dataset.count), suf=node.dataset.suffix||'', isInt=Number.isInteger(target);
+  const f=x=>(isInt?Math.round(x).toLocaleString():x.toFixed(1))+(suf?`<span class="u">${suf}</span>`:'');
+  if(reduceMotion){node.innerHTML=f(target);return;}
+  const dur=1300,t0=performance.now();
+  (function step(now){const k=Math.min(1,(now-t0)/dur),e=1-Math.pow(1-k,3);node.innerHTML=f(target*e);if(k<1)requestAnimationFrame(step);})(t0);
+  setTimeout(function(){node.innerHTML=f(target);},dur+500);
+}
+
+/* =====================================================================================
+   TIMELINE (horizontal)
+   ===================================================================================== */
+(function(){
+  const tl=document.getElementById('timeline');
+  TIMELINE.forEach((it,i)=>{
+    const item=document.createElement('div'); item.className='tl-item'+(it.placeholder?' placeholder':'');
+    const card=`<div class="tl-card"><div class="phase">${it.phase||''}</div><h4 title="${it.title}">${it.title}</h4></div>`;
+    const dateBlock=`<div class="date">${it.date}${it.placeholder?'<span class="ph">editable</span>':''}</div>`;
+    const above=i%2===0;
+    item.innerHTML=`<div class="top"></div><div class="node" title="${it.date} — ${it.title}"></div><div class="bot"></div>`;
+    item.querySelector('.top').innerHTML=above?card:dateBlock;
+    item.querySelector('.bot').innerHTML=above?dateBlock:card;
+    tl.appendChild(item);
+  });
+})();
+
+/* =====================================================================================
+   DYNAMIC NEWS TICKER (slide 01) — pops through recent open / on-device headlines
+   ===================================================================================== */
+const NEWS=[
+  { date:'Jun 2026', tag:'Open source', headline:"Anthropic's Fable shutdown is hailed as a big moment for open-source AI", src:'CNBC', url:'https://www.cnbc.com/2026/06/16/anthropics-fable-shutdown-is-a-big-moment-for-open-source-ai.html' },
+  { date:'May 2026', tag:'On-device', headline:"Apple renews its push for AI that runs on your device, not in the cloud", src:'MacRumors · The Information', url:'https://www.macrumors.com/2026/05/28/apple-to-make-on-device-ai-key-focus/' },
+  { date:'Jan 2025', tag:'Open weights', headline:"DeepSeek's open R1 erases ~$600B of NVIDIA's value in a single day", src:'TechCrunch', url:'https://techcrunch.com/2025/01/27/nvidia-drops-600bn-off-its-market-cap-amid-the-rise-of-deepseek/' },
+  { date:'Mar 2025', tag:'Open weights', headline:"Meta's open Llama models pass one billion downloads", src:'Meta', url:'https://about.fb.com/news/2025/03/celebrating-1-billion-downloads-llama/' },
+  { date:'2025', tag:'Closing the gap', headline:"Open-weight models now trail the closed frontier by only ~3.5 months", src:'Epoch AI', url:'https://epoch.ai/data-insights/open-weights-vs-closed-weights-models' },
+];
+let _tkIdx=0,_tkTimer=0,_tkPaused=false,_tkCard,_tkDots;
+function tkShow(i){
+  if(!_tkCard)return; _tkIdx=(i+NEWS.length)%NEWS.length; const n=NEWS[_tkIdx];
+  _tkCard.innerHTML='<div class="tk-top"><span class="tk-date">'+n.date+'</span><span class="tk-tag">'+n.tag+'</span></div>'+
+    '<div class="tk-headline">'+n.headline+'</div>'+
+    '<div class="tk-src">'+n.src+' · <a href="'+n.url+'" target="_blank" rel="noopener">read the story ↗</a></div>';
+  _tkCard.classList.remove('tk-pop'); void _tkCard.offsetWidth; _tkCard.classList.add('tk-pop');
+  [..._tkDots.children].forEach((d,k)=>d.classList.toggle('on',k===_tkIdx));
+}
+function startTicker(){ if(reduceMotion||_tkTimer||!_tkCard)return; _tkTimer=setInterval(()=>{if(!_tkPaused)tkShow(_tkIdx+1);},4400); }
+function stopTicker(){ if(_tkTimer){clearInterval(_tkTimer);_tkTimer=0;} }
+(function(){
+  _tkCard=document.getElementById('tkCard'); _tkDots=document.getElementById('tkDots'); if(!_tkCard)return;
+  NEWS.forEach((_,i)=>{const b=document.createElement('button');b.setAttribute('aria-label','Show headline '+(i+1));
+    b.addEventListener('click',()=>{tkShow(i);stopTicker();startTicker();});_tkDots.appendChild(b);});
+  const wrap=document.getElementById('newsTicker');
+  wrap.addEventListener('mouseenter',()=>_tkPaused=true); wrap.addEventListener('mouseleave',()=>_tkPaused=false);
+  document.addEventListener('visibilitychange',()=>{_tkPaused=document.hidden;});
+  tkShow(0);
+})();
+
+/* =====================================================================================
+   DYNAMIC BACKGROUND — drifting particle network (theme-aware, pauses when hidden)
+   ===================================================================================== */
+(function(){
+  const cv=document.getElementById('fx'); if(!cv)return; const ctx=cv.getContext('2d');
+  let w,h,dpr,nodes=[],raf=0;
+  function size(){dpr=Math.min(window.devicePixelRatio||1,2);w=window.innerWidth;h=window.innerHeight;cv.width=w*dpr;cv.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);}
+  function init(){const n=Math.max(22,Math.min(58,Math.round(w*h/27000)));nodes=[];for(let i=0;i<n;i++)nodes.push({x:Math.random()*w,y:Math.random()*h,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3});}
+  function col(){return getComputedStyle(document.documentElement).getPropertyValue('--fx').trim()||'120,140,200';}
+  function draw(){
+    ctx.clearRect(0,0,w,h); const c0=col();
+    for(let i=0;i<nodes.length;i++){const a=nodes[i];
+      for(let j=i+1;j<nodes.length;j++){const b=nodes[j],dx=a.x-b.x,dy=a.y-b.y,d=dx*dx+dy*dy;
+        if(d<15000){ctx.strokeStyle='rgba('+c0+','+((1-d/15000)*.13)+')';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();}}}
+    ctx.fillStyle='rgba('+c0+',.5)';
+    for(let i=0;i<nodes.length;i++){const a=nodes[i];ctx.beginPath();ctx.arc(a.x,a.y,1.5,0,6.2832);ctx.fill();}
+  }
+  function step(){raf=0;for(const a of nodes){a.x+=a.vx;a.y+=a.vy;if(a.x<-6)a.x=w+6;if(a.x>w+6)a.x=-6;if(a.y<-6)a.y=h+6;if(a.y>h+6)a.y=-6;}draw();raf=requestAnimationFrame(step);}
+  function start(){if(reduceMotion){draw();return;}if(!raf)raf=requestAnimationFrame(step);}
+  function stop(){if(raf){cancelAnimationFrame(raf);raf=0;}}
+  size();init();
+  window.addEventListener('resize',()=>{size();init();draw();});
+  document.addEventListener('visibilitychange',()=>document.hidden?stop():start());
+  start();
+})();
+
+/* =====================================================================================
+   THEME TOGGLE
+   ===================================================================================== */
+const SUN='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"/></svg>';
+const MOON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>';
+const themeBtn=document.getElementById('themeToggle');
+function setThemeIcon(){ themeBtn.innerHTML = document.documentElement.getAttribute('data-theme')==='dark' ? SUN : MOON; }
+setThemeIcon();
+themeBtn.addEventListener('click',()=>{
+  const next = document.documentElement.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme',next);
+  try{localStorage.setItem('fyp-theme',next);}catch(e){}
+  setThemeIcon();
+  /* re-render any drawn charts so SVG colors pick up the new theme */
+  Object.keys(chartMap).forEach(id=>{ if(drawn[id]) chartMap[id](); });
+});
+
+/* =====================================================================================
+   DECK NAVIGATION (scroll-snap) + active detection
+   ===================================================================================== */
+const deck=document.getElementById('deck');
+const panels=[...document.querySelectorAll('.panel')];
+const dotsNav=document.getElementById('dots');
+const progress=document.getElementById('progress');
+const cNow=document.getElementById('cNow'), cTot=document.getElementById('cTot');
+cTot.textContent=String(panels.length).padStart(2,'0');
+
+panels.forEach((p,i)=>{
+  const b=document.createElement('button');
+  b.innerHTML=`<span class="lab">${p.dataset.nav||('Slide '+(i+1))}</span>`;
+  b.setAttribute('aria-label',p.dataset.nav||('Slide '+(i+1)));
+  b.addEventListener('click',()=>go(i));
+  dotsNav.appendChild(b);
+});
+const dotBtns=[...dotsNav.children];
+
+const drawn={};
+const chartMap={
+  'p-pivot':drawKappa, 'p-quadrant':drawQuad,
+  'p-findings':()=>drawDelta(curMetric),
+  'p-precision':()=>{drawSweepAsr();drawSweepMmlu();},
+};
+/* ---- 3D presentation controller: each slide change is a different 3D move ---- */
+const DUR=780;
+const TX={                                  /* a = "incoming-from / forward", b = "outgoing-to / forward" */
+  cubeY:{a:'translateZ(-50vw) rotateY(90deg) translateZ(50vw)',  b:'translateZ(-50vw) rotateY(-90deg) translateZ(50vw)', solid:true},  /* full horizontal cube */
+  flipX:{a:'translateZ(-50vh) rotateX(-90deg) translateZ(50vh)', b:'translateZ(-50vh) rotateX(90deg) translateZ(50vh)',  solid:true},  /* full vertical cube */
+  zoom: {a:'scale(.42) translateZ(-560px)',   b:'scale(1.85) translateZ(520px)', fade:true},
+  slide:{a:'translateX(100%) rotateY(-35deg)',b:'translateX(-72%) rotateY(22deg)', fade:true},
+  fall: {a:'translateY(-100%) rotateX(54deg)',b:'translateY(96%) rotateX(-44deg)', fade:true},
+  soft: {a:'translateY(46px) scale(.985)',    b:'translateY(-46px) scale(.985)', fade:true},   /* gentle — for data/chart slides so the charts don't spin */
+};
+const ORDER=['cubeY','flipX','zoom','slide','fall'];
+/* Per-slide entrance: full cubes for narrative/statement slides, gentle "soft" for the data slides. */
+const SLIDE_TX={
+  'hero':'cubeY', 'p-landscape':'flipX', 'p-shift':'cubeY', 'p-stakes':'fall',
+  'p-gap':'flipX', 'p-question':'cubeY', 'p-method':'slide',
+  'p-pivot':'soft', 'p-quadrant':'soft', 'p-findings':'soft', 'p-precision':'soft',
+  'p-mechanism':'fall', 'p-verdict':'cubeY', 'p-journey':'soft', 'p-close':'zoom',
+};
+let current=0, locked=false, wheelTs=0;
+
+function sideEffects(i){
+  const panel=panels[i];
+  dotBtns.forEach((b,k)=>{const on=k===i;b.classList.toggle('active',on);on?b.setAttribute('aria-current','true'):b.removeAttribute('aria-current');});
+  cNow.textContent=String(i+1).padStart(2,'0');
+  progress.style.width=(i/(panels.length-1))*100+'%';
+  document.body.classList.toggle('on-dark',panel.classList.contains('statement'));
+  panel.querySelectorAll('[data-count]:not([data-done])').forEach(n=>{n.setAttribute('data-done','1');countUp(n);});
+  const fn=chartMap[panel.id]; if(fn&&!drawn[panel.id]){drawn[panel.id]=1;fn();}
+  if(panel.id==='p-landscape') startTicker(); else stopTicker();
+}
+function go(to){
+  to=Math.max(0,Math.min(panels.length-1,to));
+  if(locked||to===current) return;
+  const dir=to>current?1:-1, t=TX[SLIDE_TX[panels[to].id]||ORDER[to%ORDER.length]];
+  const inc=panels[to], out=panels[current];
+  const inFrom=reduceMotion?'none':(dir>0?t.a:t.b);
+  const outTo =reduceMotion?'none':(dir>0?t.b:t.a);
+  const fade = reduceMotion || !!t.fade;      /* cube turns rotate opaquely; the rest cross-fade */
+  locked=true;
+  if(t.solid&&!reduceMotion) document.body.classList.add('turning');
+  out.style.zIndex='2'; inc.style.zIndex='3'; inc.scrollTop=0;
+  inc.classList.add('active');
+  inc.style.transition='none'; inc.style.transform=inFrom; inc.style.opacity=fade?'0':'1';
+  void inc.offsetWidth;                       /* commit start state with no transition */
+  inc.style.transition='';                    /* re-enable the CSS transition, then set the end state */
+  inc.style.transform='none'; inc.style.opacity='1';
+  out.style.transform=outTo;  out.style.opacity=fade?'0':'1';
+  current=to; sideEffects(to);
+  setTimeout(()=>{
+    out.classList.remove('active');
+    out.style.transform=''; out.style.opacity=''; out.style.zIndex=''; inc.style.zIndex='';
+    document.body.classList.remove('turning');
+    locked=false;
+  }, (reduceMotion?260:DUR)+60);
+}
+
+/* wheel — scroll WITHIN an overflowing slide first; only advance on a deliberate,
+   fresh scroll at the edge (a lull guard stops trackpad momentum from flipping slides). */
+deck.addEventListener('wheel',function(e){
+  const p=panels[current], can=p.scrollHeight>p.clientHeight+2, now=performance.now(), down=e.deltaY>0;
+  if(can){
+    const atTop=p.scrollTop<=0, atBot=p.scrollTop+p.clientHeight>=p.scrollHeight-1;
+    if((down&&!atBot)||(!down&&!atTop)){ wheelTs=now; return; }      /* room left → let the slide scroll */
+    if(now-wheelTs<300){ wheelTs=now; e.preventDefault(); return; }  /* just hit the edge via momentum → wait for a pause */
+  }
+  e.preventDefault();
+  if(locked||Math.abs(e.deltaY)<8) return;
+  wheelTs=now;
+  go(current+(down?1:-1));
+},{passive:false});
+
+window.addEventListener('keydown',function(e){
+  if(e.metaKey||e.ctrlKey||e.altKey) return;
+  const p=panels[current], dn=['ArrowDown','PageDown',' '].includes(e.key), up=['ArrowUp','PageUp'].includes(e.key);
+  if(dn||up){
+    e.preventDefault();
+    const can=p.scrollHeight>p.clientHeight+2;
+    if(can){
+      const atTop=p.scrollTop<=0, atBot=p.scrollTop+p.clientHeight>=p.scrollHeight-1, amt=Math.round(p.clientHeight*0.82);
+      if(dn&&!atBot){ p.scrollBy({top:amt,behavior:'smooth'}); return; }   /* page through the slide first */
+      if(up&&!atTop){ p.scrollBy({top:-amt,behavior:'smooth'}); return; }
+    }
+    go(current+(dn?1:-1));
+  }
+  else if(e.key==='Home'){e.preventDefault();go(0);}
+  else if(e.key==='End'){e.preventDefault();go(panels.length-1);}
+});
+
+let _ty=null,_tsTop=0;
+deck.addEventListener('touchstart',function(e){_ty=e.touches[0].clientY;_tsTop=panels[current].scrollTop;},{passive:true});
+deck.addEventListener('touchend',function(e){
+  if(_ty==null)return; const dy=_ty-e.changedTouches[0].clientY; _ty=null;
+  if(Math.abs(dy)<45||locked)return;
+  const p=panels[current], can=p.scrollHeight>p.clientHeight+2;
+  if(can){
+    const atTop=p.scrollTop<=0, atBot=p.scrollTop+p.clientHeight>=p.scrollHeight-1;
+    const startedTop=_tsTop<=0, startedBot=_tsTop+p.clientHeight>=p.scrollHeight-1;
+    /* only advance if the swipe both starts and ends at the edge (i.e. it isn't scrolling content) */
+    if((dy>0&&!(atBot&&startedBot))||(dy<0&&!(atTop&&startedTop))) return;
+  }
+  go(current+(dy>0?1:-1));
+},{passive:true});
+
+panels[0].classList.add('active');
+sideEffects(0);
+</script>
+</body>
+</html>

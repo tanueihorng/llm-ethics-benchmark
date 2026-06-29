@@ -44,7 +44,7 @@
 The repo follows the recommended `README / LICENSE / CITATION / data / doc /
 results / src` shape: `README.md`, `CITATION.cff`, `data/`, `docs/`, `results/`,
 and the `ethical_benchmark/` package as `src`. Dependencies are explicit
-(`requirements.txt`), code is decomposed into plugins/modules, and a 306-test
+(`requirements.txt`), code is decomposed into plugins/modules, and a 329-test
 suite guards behaviour.
 
 ## 4. One-command reproduction

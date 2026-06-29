@@ -1,0 +1,12 @@
+{
+  "name": "fyp-quant-docs",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Node tooling for FYP document generation (docx-js reports + @resvg/resvg-js figure rasterisation).",
+  "scripts": {
+    "agentic-report": "node scripts/build_agentic_report.js"
+  },
+  "dependencies": {
+    "@resvg/resvg-js": "^2.6.2"
+  }
+}

@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="blueprint">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Harness — an agentic-workflow blueprint · CCDS25-1136</title>
+<meta name="description" content="An engineering blueprint of the repo-native agent harness behind an NTU FYP: explore the schematic, then run a real agent session and watch the gate catch a violation." />
+
+<!--
+==========================================================================================
+  THE HARNESS — A BLUEPRINT  ·  CCDS25-1136  ·  Tan Uei Horng  ·  NTU CCDS
+  An interactive engineering-drawing of how this FYP is run with two AI agents.
+  NAVIGATE: ← →  /  PageUp-Down  /  click the sheet ticks  /  prev-next buttons.
+  The mouse wheel does NOT change sheets — it pans/zooms the blueprint on Sheet 03.
+  THEME: ◧ toggles Blueprint (cyan-on-navy) ↔ Whiteprint (navy-on-paper).
+  Every figure is sourced from the repo: PROJECT_LOG.md, artifact_policy.yaml,
+  ethical_benchmark/harness/agent.py, tests/test_agent_harness.py.
+==========================================================================================
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+<script>(function(){try{var t=localStorage.getItem('bp-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+
+<style>
+/* ============================== TOKENS ============================== */
+:root, :root[data-theme="blueprint"]{
+  --bg:#081628; --bg2:#0b1f38;
+  --grid:rgba(86,166,237,.10); --grid-bold:rgba(86,166,237,.20);
+  --ink:#dbe9ff; --ink-soft:#9cbbe0; --faint:#5d7da6; --hair:rgba(140,180,225,.26);
+  --panel:rgba(12,32,58,.78); --panel-solid:#0c2240; --panel-line:rgba(120,170,225,.30);
+  --cyan:#46c6f5; --cyan-deep:#1f8fd0;
+  --emerald:#37e0a6; --amber:#ffc24b; --rose:#ff7a8f; --violet:#b69cff;
+  --glow:0 0 0 1px rgba(70,198,245,.18), 0 18px 50px rgba(0,0,0,.45);
+  --node:#0e2745; --node-line:rgba(120,180,235,.5);
+  --shadow:0 14px 40px rgba(0,0,0,.4);
+}
+:root[data-theme="whiteprint"]{
+  --bg:#eef3fb; --bg2:#e4ecf7;
+  --grid:rgba(37,99,235,.10); --grid-bold:rgba(37,99,235,.18);
+  --ink:#0f2747; --ink-soft:#3a5e90; --faint:#7e98bd; --hair:rgba(37,99,235,.28);
+  --panel:rgba(255,255,255,.82); --panel-solid:#ffffff; --panel-line:rgba(37,99,235,.30);
+  --cyan:#0e83b8; --cyan-deep:#0b6fa0;
+  --emerald:#089b6e; --amber:#c07c10; --rose:#d63a59; --violet:#6d52d6;
+  --glow:0 0 0 1px rgba(14,131,184,.18), 0 18px 46px rgba(20,50,90,.16);
+  --node:#ffffff; --node-line:rgba(37,99,235,.4);
+  --shadow:0 14px 38px rgba(20,50,90,.14);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+:root{
+  --disp:'Space Grotesk',system-ui,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+  --sans:'IBM Plex Sans',-apple-system,system-ui,sans-serif;
+  --e:cubic-bezier(.22,1,.36,1);
+}
+body{font-family:var(--sans);background:var(--bg);color:var(--ink);overflow:hidden;
+  -webkit-font-smoothing:antialiased;transition:background-color .5s ease,color .5s ease}
+::selection{background:rgba(70,198,245,.25)}
+button{font-family:inherit;cursor:pointer}
+a{color:var(--cyan)}
+strong{font-weight:600;color:var(--ink)}
+
+/* ============================== BLUEPRINT GROUND ============================== */
+#grid{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    linear-gradient(var(--grid) 1px,transparent 1px),
+    linear-gradient(90deg,var(--grid) 1px,transparent 1px),
+    linear-gradient(var(--grid-bold) 1px,transparent 1px),
+    linear-gradient(90deg,var(--grid-bold) 1px,transparent 1px);
+  background-size:30px 30px,30px 30px,150px 150px,150px 150px;
+  transition:background-color .5s ease}
+#grid::after{content:"";position:absolute;inset:0;
+  background:radial-gradient(120% 90% at 50% 30%, transparent 55%, var(--bg) 100%);opacity:.9}
+#scan{position:fixed;left:0;right:0;height:160px;z-index:0;pointer-events:none;
+  background:linear-gradient(180deg,transparent,rgba(70,198,245,.05),transparent);
+  animation:scan 9s linear infinite}
+@keyframes scan{0%{top:-160px}100%{top:100%}}
+:root[data-theme="whiteprint"] #scan{display:none}
+
+/* ============================== STAGE / SHEETS ============================== */
+#stage{position:fixed;inset:0;z-index:1}
+.sheet{position:absolute;inset:0;display:flex;flex-direction:column;
+  padding:clamp(74px,9.5vh,100px) clamp(28px,5vw,84px) clamp(88px,12vh,104px);
+  opacity:0;visibility:hidden;transform:translateY(16px);pointer-events:none;
+  transition:none;overflow:hidden}
+.sheet.active{opacity:1;visibility:visible;transform:none;pointer-events:auto;
+  transition:opacity .5s var(--e),transform .62s var(--e)}
+.sheet.scrolly{overflow-y:auto;scrollbar-width:thin}
+
+/* sheet header */
+.shead{display:flex;align-items:flex-start;gap:18px;flex:0 0 auto}
+.sno{font-family:var(--mono);font-size:clamp(11px,1.2vw,13px);letter-spacing:.18em;color:var(--cyan);
+  border:1px solid var(--panel-line);border-radius:7px;padding:6px 10px;white-space:nowrap;margin-top:6px}
+.stit h1{font-family:var(--disp);font-weight:700;letter-spacing:-.02em;line-height:1.0;
+  font-size:clamp(1.7rem,3.7vw,3.1rem)}
+.stit h1 .c{color:var(--cyan)}
+.stit .sub{font-family:var(--mono);font-size:clamp(11px,1.25vw,13.5px);color:var(--ink-soft);
+  margin-top:8px;max-width:760px;line-height:1.55;letter-spacing:.01em}
+.stit .sub b{color:var(--ink)}
+.sbody{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;margin-top:clamp(14px,2.4vh,26px)}
+
+/* mono micro-label */
+.mlab{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
+
+/* ============================== COVER ============================== */
+#cover .sbody{justify-content:center;align-items:flex-start}
+.cover-kick{font-family:var(--mono);font-size:clamp(11px,1.3vw,13.5px);letter-spacing:.26em;text-transform:uppercase;color:var(--cyan);margin-bottom:22px}
+.cover-title{font-family:var(--disp);font-weight:700;letter-spacing:-.03em;line-height:.95;
+  font-size:clamp(2.6rem,8vw,6.2rem)}
+.cover-title .c{color:var(--cyan)}
+.cover-lead{font-family:var(--mono);font-size:clamp(12px,1.5vw,15px);color:var(--ink-soft);
+  margin-top:24px;max-width:620px;line-height:1.7}
+.cover-lead b{color:var(--ink)}
+.cover-spec{display:flex;flex-wrap:wrap;gap:10px 14px;margin-top:30px}
+.spec{font-family:var(--mono);font-size:12px;color:var(--ink);border:1px solid var(--panel-line);
+  border-radius:100px;padding:7px 14px;display:inline-flex;gap:8px;align-items:center;background:var(--panel)}
+.spec b{color:var(--cyan);font-weight:600}
+.cover-motif{position:absolute;right:clamp(-20px,2vw,40px);top:50%;transform:translateY(-50%);
+  width:min(40vw,440px);opacity:.85;pointer-events:none}
+@media(max-width:900px){.cover-motif{opacity:.18}}
+
+/* ============================== TECHNICAL NODE / SVG SHARED ============================== */
+.draw{stroke-dasharray:var(--len);stroke-dashoffset:var(--len);animation:draw 1.1s var(--e) forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.fadein{opacity:0;animation:fade .7s var(--e) forwards}
+@keyframes fade{to{opacity:1}}
+
+/* ============================== MAP (sheet 03) ============================== */
+#map .sbody{position:relative}
+.map-wrap{position:relative;flex:1 1 auto;min-height:0;border:1px solid var(--hair);border-radius:14px;
+  overflow:hidden;background:rgba(8,22,40,.35);cursor:grab}
+:root[data-theme="whiteprint"] .map-wrap{background:rgba(255,255,255,.3)}
+.map-wrap.grabbing{cursor:grabbing}
+.map-wrap svg{width:100%;height:100%;display:block;touch-action:none}
+.map-tools{position:absolute;top:12px;right:12px;display:flex;gap:6px;z-index:4}
+.map-tools button{width:34px;height:34px;border-radius:8px;border:1px solid var(--panel-line);
+  background:var(--panel);color:var(--ink);font-family:var(--mono);font-size:15px;display:flex;align-items:center;justify-content:center;
+  backdrop-filter:blur(6px);transition:.25s var(--e)}
+.map-tools button:hover{border-color:var(--cyan);color:var(--cyan)}
+.map-hint{position:absolute;left:12px;bottom:12px;font-family:var(--mono);font-size:11px;color:var(--faint);
+  letter-spacing:.04em;z-index:4;display:flex;align-items:center;gap:7px;pointer-events:none}
+.map-hint .blink{width:7px;height:7px;border-radius:50%;background:var(--cyan);animation:bl 1.4s steps(1) infinite}
+@keyframes bl{50%{opacity:.25}}
+/* node visuals */
+.nbox{fill:var(--node);stroke:var(--node-line);stroke-width:1.4;rx:8;transition:.25s var(--e)}
+.ntick{stroke:var(--cyan);stroke-width:1.6;opacity:.7}
+.ntitle{font-family:var(--mono);font-weight:600;fill:var(--ink);font-size:14px}
+.nrole{font-family:var(--mono);fill:var(--faint);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase}
+.gnode{cursor:pointer}
+.gnode:hover .nbox{stroke:var(--cyan);filter:drop-shadow(0 0 10px rgba(70,198,245,.4))}
+.gnode.sel .nbox{stroke:var(--cyan);stroke-width:2.2}
+.gnode .plus{font-family:var(--mono);fill:var(--cyan);font-size:14px;opacity:0;transition:.25s}
+.gnode:hover .plus,.gnode.sel .plus{opacity:1}
+.conn{fill:none;stroke:var(--hair);stroke-width:1.5}
+.conn.flow{stroke:var(--cyan);stroke-opacity:.55;stroke-dasharray:5 7;animation:march 1s linear infinite}
+@keyframes march{to{stroke-dashoffset:-24}}
+.connlab{font-family:var(--mono);fill:var(--faint);font-size:10px;letter-spacing:.08em}
+.zone{fill:none;stroke:var(--hair);stroke-width:1;stroke-dasharray:2 5;rx:12}
+.zonelab{font-family:var(--mono);fill:var(--faint);font-size:10px;letter-spacing:.18em;text-transform:uppercase}
+/* detail drawer */
+.drawer{position:absolute;top:0;right:0;height:100%;width:min(372px,82%);z-index:6;
+  background:var(--panel-solid);border-left:1px solid var(--panel-line);box-shadow:var(--shadow);
+  transform:translateX(102%);transition:transform .42s var(--e);display:flex;flex-direction:column;
+  padding:clamp(18px,2vw,26px)}
+.drawer.open{transform:none}
+.drawer .dx{position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:7px;border:1px solid var(--panel-line);
+  background:transparent;color:var(--ink);font-family:var(--mono);font-size:14px}
+.drawer .dx:hover{border-color:var(--cyan);color:var(--cyan)}
+.drawer .dkind{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan)}
+.drawer h3{font-family:var(--disp);font-weight:700;font-size:clamp(1.25rem,2vw,1.6rem);margin:8px 0 4px;letter-spacing:-.01em}
+.drawer .dpath{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin-bottom:14px;word-break:break-all}
+.drawer .drole{font-size:14px;line-height:1.6;color:var(--ink)}
+.drawer ul{list-style:none;margin-top:14px;display:flex;flex-direction:column;gap:9px}
+.drawer li{font-family:var(--mono);font-size:12px;color:var(--ink-soft);line-height:1.45;padding-left:16px;position:relative;overflow-wrap:anywhere}
+.drawer li::before{content:"▸";position:absolute;left:0;color:var(--cyan)}
+.drawer li b{color:var(--ink)}
+
+/* ============================== CONSOLE / SESSION SIMULATOR (sheet 04) ============================== */
+.sim{display:grid;grid-template-columns:1.55fr 1fr;grid-template-rows:minmax(0,1fr);gap:clamp(14px,1.8vw,22px);flex:1 1 auto;min-height:0}
+.console{background:var(--panel-solid);border:1px solid var(--panel-line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--shadow)}
+.con-head{display:flex;align-items:center;gap:8px;padding:11px 16px;border-bottom:1px solid var(--panel-line);flex:0 0 auto}
+.con-head .d{width:11px;height:11px;border-radius:50%}
+.con-head .r{background:#ff5f57}.con-head .y{background:#febc2e}.con-head .g{background:#28c840}
+.con-head .t{margin-left:8px;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);letter-spacing:.03em}
+.con-body{flex:1 1 auto;min-height:0;overflow-y:auto;padding:16px 18px;font-family:var(--mono);
+  font-size:clamp(11.5px,1.15vw,13px);line-height:1.85;scrollbar-width:thin}
+.con-line{opacity:0;transform:translateY(6px);animation:cl .35s var(--e) forwards}
+@keyframes cl{to{opacity:1;transform:none}}
+.con-line .p{color:var(--cyan)}
+.con-line .ok{color:var(--emerald)} .con-line .bad{color:var(--rose)} .con-line .warn{color:var(--amber)}
+.con-line .dim{color:var(--faint)}
+.con-line.blocked{color:var(--rose);font-weight:600}
+.con-line.passed{color:var(--emerald);font-weight:600}
+.con-cur{display:inline-block;width:8px;height:1em;background:var(--cyan);vertical-align:-2px;animation:bl 1s steps(1) infinite}
+/* phase rail + state */
+.simside{display:flex;flex-direction:column;gap:14px;min-height:0}
+.phaserail{border:1px solid var(--panel-line);border-radius:14px;padding:16px;background:var(--panel)}
+.phaserail .rh{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);margin-bottom:12px}
+.prow{display:flex;align-items:center;gap:11px;padding:7px 0;font-family:var(--mono);font-size:12.5px;color:var(--faint);transition:.3s}
+.prow .pdot{width:10px;height:10px;border-radius:50%;border:1.6px solid var(--faint);flex:0 0 auto;transition:.3s}
+.prow.on{color:var(--ink)} .prow.on .pdot{border-color:var(--cyan);background:var(--cyan);box-shadow:0 0 0 4px rgba(70,198,245,.18)}
+.prow.done{color:var(--ink-soft)} .prow.done .pdot{border-color:var(--emerald);background:var(--emerald)}
+.prow.fail .pdot{border-color:var(--rose);background:var(--rose)}
+.statecard{border:1px solid var(--panel-line);border-radius:14px;padding:16px;background:var(--panel);flex:1 1 auto;min-height:0;overflow:hidden}
+.statecard .rh{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);margin-bottom:12px}
+.srow{display:flex;justify-content:space-between;gap:10px;font-family:var(--mono);font-size:12px;padding:6px 0;border-top:1px solid var(--hair)}
+.srow:first-of-type{border-top:0}
+.srow .k{color:var(--ink-soft)} .srow .v{color:var(--ink);text-align:right}
+.srow .v.ok{color:var(--emerald)} .srow .v.bad{color:var(--rose)} .srow .v.warn{color:var(--amber)}
+.sim-ctrl{display:flex;gap:10px;margin-top:14px;flex:0 0 auto;flex-wrap:wrap}
+.btn{font-family:var(--mono);font-size:12.5px;letter-spacing:.04em;border:1px solid var(--panel-line);
+  background:var(--panel);color:var(--ink);border-radius:9px;padding:11px 18px;transition:.25s var(--e);display:inline-flex;align-items:center;gap:8px}
+.btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.btn.primary{background:var(--cyan);color:#04121f;border-color:var(--cyan);font-weight:600}
+.btn.primary:hover{filter:brightness(1.08);color:#04121f}
+.btn:disabled{opacity:.4;cursor:default}
+@media(max-width:900px){.sim{grid-template-columns:1fr;overflow-y:auto}}
+
+/* ============================== CAST (sheet 05) ============================== */
+.castgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(12px,1.6vw,18px);flex:1 1 auto;min-height:0}
+.castcol{display:flex;flex-direction:column;min-height:0}
+.castcol .colh{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px}
+.castcol .colh .n{font-family:var(--disp);font-weight:700;font-size:1.05rem}
+.castcol .colh .ct{font-family:var(--mono);font-size:1.4rem;color:var(--cyan)}
+.castlist{display:flex;flex-direction:column;gap:8px;overflow-y:auto;scrollbar-width:thin;padding-right:4px}
+.unit{border:1px solid var(--panel-line);border-radius:10px;background:var(--panel);overflow:hidden;transition:.25s var(--e)}
+.unit:hover{border-color:var(--cyan)}
+.unit .uh{display:flex;align-items:center;gap:9px;padding:11px 13px;cursor:pointer}
+.unit .uh .ui{width:8px;height:8px;border-radius:2px;flex:0 0 auto}
+.unit .uh .un{font-family:var(--mono);font-size:12px;color:var(--ink);font-weight:500}
+.unit .uh .uc{margin-left:auto;font-family:var(--mono);font-size:13px;color:var(--faint);transition:.25s}
+.unit.open .uh .uc{transform:rotate(45deg);color:var(--cyan)}
+.unit .ud{max-height:0;overflow:hidden;transition:max-height .35s var(--e);font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);line-height:1.5}
+.unit.open .ud{max-height:160px}
+.unit .ud .inner{padding:0 13px 13px;border-top:1px solid var(--hair);padding-top:10px}
+.unit .ud .ro{color:var(--violet)}
+@media(max-width:820px){.castgrid{grid-template-columns:1fr;overflow-y:auto}}
+
+/* ============================== GATE (sheet 06) ============================== */
+.gatelayout{display:grid;grid-template-columns:1fr .8fr;gap:clamp(14px,2vw,24px);flex:1 1 auto;min-height:0}
+.glist{display:flex;flex-direction:column;gap:7px;overflow-y:auto;scrollbar-width:thin}
+.grow{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:13px;
+  border:1px solid var(--panel-line);border-radius:10px;padding:11px 15px;background:var(--panel);transition:.3s var(--e)}
+.grow .gi{width:20px;height:20px;border-radius:50%;border:1.8px solid var(--faint);flex:0 0 auto;
+  display:flex;align-items:center;justify-content:center;transition:.3s}
+.grow .gi svg{width:11px;height:11px;stroke:#04121f;stroke-width:3;fill:none;opacity:0;transition:.2s}
+.grow.pass .gi{background:var(--emerald);border-color:var(--emerald)} .grow.pass .gi svg{opacity:1}
+.grow.fail{border-color:var(--rose);background:color-mix(in srgb,var(--rose) 14%,var(--panel))}
+.grow.fail .gi{background:var(--rose);border-color:var(--rose)}
+.grow .gn{font-family:var(--mono);font-size:12.5px;color:var(--ink);font-weight:500}
+.grow .gd{font-family:var(--mono);font-size:11px;color:var(--faint);grid-column:2;justify-self:start}
+.grow .gs{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--emerald)}
+.grow.fail .gs{color:var(--rose)}
+.gctrl{border:1px solid var(--panel-line);border-radius:14px;background:var(--panel);padding:18px;display:flex;flex-direction:column}
+.gctrl .rh{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);margin-bottom:6px}
+.gctrl .gq{font-family:var(--disp);font-weight:600;font-size:1.05rem;line-height:1.3;margin-bottom:14px}
+.injbtns{display:flex;flex-direction:column;gap:8px}
+.injbtn{text-align:left;font-family:var(--mono);font-size:11.5px;border:1px solid var(--panel-line);background:transparent;
+  color:var(--ink);border-radius:9px;padding:10px 13px;transition:.2s var(--e);line-height:1.4}
+.injbtn:hover{border-color:var(--rose);color:var(--rose)}
+.gverdict{margin-top:auto;padding-top:14px;font-family:var(--mono);font-size:13px;font-weight:600}
+.gverdict.ok{color:var(--emerald)} .gverdict.no{color:var(--rose)}
+@media(max-width:860px){.gatelayout{grid-template-columns:1fr;overflow-y:auto}}
+
+/* ============================== EVIDENCE (sheet 07) ============================== */
+.ev-wrap{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;gap:14px}
+.ev-chart{flex:1 1 auto;min-height:0;border:1px solid var(--hair);border-radius:14px;padding:14px;background:rgba(8,22,40,.3)}
+:root[data-theme="whiteprint"] .ev-chart{background:rgba(255,255,255,.3)}
+.ev-chart svg{width:100%;height:100%;display:block}
+.ev-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;flex:0 0 auto}
+.estat{border:1px solid var(--panel-line);border-radius:12px;padding:14px 16px;background:var(--panel)}
+.estat .n{font-family:var(--disp);font-weight:700;font-size:clamp(1.5rem,3vw,2.3rem);color:var(--cyan);line-height:1}
+.estat .l{font-family:var(--mono);font-size:10.5px;color:var(--ink-soft);margin-top:7px;line-height:1.4}
+@media(max-width:760px){.ev-stats{grid-template-columns:1fr 1fr}}
+
+/* ============================== STORY (sheet 08) ============================== */
+.story{display:grid;grid-template-columns:1fr 1fr;gap:clamp(14px,2vw,22px);flex:1 1 auto;min-height:0;align-content:center}
+.scard{border:1px solid var(--panel-line);border-radius:14px;padding:clamp(18px,2.2vw,28px);background:var(--panel);position:relative;overflow:hidden}
+.scard::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px}
+.scard.d16::before{background:var(--cyan)} .scard.d21::before{background:var(--amber)}
+.scard .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px}
+.scard.d16 .tag{color:var(--cyan)} .scard.d21 .tag{color:var(--amber)}
+.scard h3{font-family:var(--disp);font-weight:700;font-size:clamp(1.2rem,1.9vw,1.55rem);line-height:1.2;margin-bottom:10px}
+.scard p{font-family:var(--mono);font-size:12px;line-height:1.6;color:var(--ink-soft)}
+.scard p b{color:var(--ink)}
+.story-quote{grid-column:1/-1;font-family:var(--disp);font-weight:500;font-style:italic;
+  font-size:clamp(1.1rem,2.1vw,1.6rem);line-height:1.35;color:var(--ink);text-align:center;
+  border-top:1px solid var(--hair);padding-top:clamp(14px,2.2vh,24px);margin-top:6px}
+.story-quote .c{color:var(--cyan);font-style:normal}
+@media(max-width:760px){.story{grid-template-columns:1fr;overflow-y:auto}}
+
+/* ============================== STATEMENT (sheets 02, 09) ============================== */
+.statement .sbody{justify-content:center;align-items:flex-start}
+.bigstate{font-family:var(--disp);font-weight:700;letter-spacing:-.02em;line-height:1.02;
+  font-size:clamp(2rem,5.2vw,4rem);max-width:1100px}
+.bigstate .c{color:var(--cyan)}
+.statelead{font-family:var(--mono);font-size:clamp(12px,1.5vw,15px);color:var(--ink-soft);
+  margin-top:24px;max-width:820px;line-height:1.7}
+.statelead b{color:var(--ink)}
+/* problem: failing chips */
+.failrow{display:flex;flex-wrap:wrap;gap:10px;margin-top:30px;max-width:920px}
+.failchip{font-family:var(--mono);font-size:12px;border:1px solid var(--panel-line);border-radius:9px;
+  padding:10px 13px;background:var(--panel);color:var(--ink-soft);display:inline-flex;gap:9px;align-items:center;
+  transition:.3s var(--e)}
+.failchip:hover{border-color:var(--rose);color:var(--ink)}
+.failchip .x{color:var(--rose);font-weight:600}
+.failchip .fix{color:var(--emerald)}
+
+/* ============================== CLOSE (sheet 10) ============================== */
+.closegrid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(14px,2vw,22px);margin-top:26px;max-width:900px}
+.cbox{border:1px solid var(--panel-line);border-radius:14px;padding:20px;background:var(--panel)}
+.cbox .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--cyan);margin-bottom:10px}
+.cbox p{font-family:var(--mono);font-size:12px;line-height:1.85;color:var(--ink-soft)}
+.cbox p b{color:var(--ink)}
+@media(max-width:680px){.closegrid{grid-template-columns:1fr}}
+
+/* ============================== CHROME: title block, nav, theme ============================== */
+#titleblock{position:fixed;right:18px;bottom:16px;z-index:30;display:flex;
+  border:1px solid var(--panel-line);background:var(--panel);
+  backdrop-filter:blur(8px);border-radius:8px;overflow:hidden;font-family:var(--mono)}
+#titleblock .cell{padding:6px 13px;border-right:1px solid var(--hair);display:flex;flex-direction:column;gap:1px;justify-content:center}
+#titleblock .cell:last-child{border-right:0}
+#titleblock .k{font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+#titleblock .v{font-size:12px;color:var(--ink);white-space:nowrap}
+#titleblock .v b{color:var(--cyan)}
+@media(max-width:820px){#titleblock{display:none}}
+
+#nav{position:fixed;left:18px;bottom:18px;z-index:30;display:flex;align-items:center;gap:12px}
+#nav .arw{width:38px;height:38px;border-radius:9px;border:1px solid var(--panel-line);background:var(--panel);
+  color:var(--ink);font-size:16px;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px);transition:.25s var(--e)}
+#nav .arw:hover{border-color:var(--cyan);color:var(--cyan)}
+#nav .arw:disabled{opacity:.35;cursor:default}
+#ticks{display:flex;gap:7px;align-items:center}
+#ticks button{width:24px;height:5px;border-radius:3px;border:0;padding:0;background:var(--hair);transition:.3s var(--e);position:relative}
+#ticks button:hover{background:var(--ink-soft)}
+#ticks button.on{background:var(--cyan);width:34px}
+#navhint{font-family:var(--mono);font-size:10.5px;color:var(--faint);letter-spacing:.05em;margin-left:4px}
+@media(max-width:600px){#navhint,#ticks{display:none}}
+
+#topbar{position:fixed;top:16px;left:18px;right:18px;z-index:30;display:flex;align-items:center;justify-content:space-between;pointer-events:none}
+#brand{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;color:var(--ink-soft);pointer-events:auto;display:flex;gap:10px;align-items:center}
+#brand .dot{width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan)}
+#brand b{color:var(--ink)}
+#themeBtn{pointer-events:auto;width:40px;height:40px;border-radius:10px;border:1px solid var(--panel-line);
+  background:var(--panel);color:var(--ink-soft);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px);transition:.25s var(--e)}
+#themeBtn:hover{border-color:var(--cyan);color:var(--cyan)}
+#themeBtn svg{width:18px;height:18px}
+
+/* status strip (under brand) */
+#statusbar{position:fixed;top:48px;left:18px;z-index:29;font-family:var(--mono);font-size:10.5px;color:var(--faint);
+  display:flex;gap:14px;letter-spacing:.04em;pointer-events:none}
+#statusbar .s b{color:var(--emerald)}
+@media(max-width:600px){#statusbar{display:none}}
+
+/* ============================== RESPONSIVE / MOTION ============================== */
+@media(max-width:760px){
+  .sheet{padding:64px 20px 92px}
+  .shead{flex-direction:column;gap:10px}
+}
+@media (prefers-reduced-motion:reduce){
+  #scan,.draw,.con-cur,.map-hint .blink{animation:none}
+  .draw{stroke-dashoffset:0}
+  .sheet{transition:opacity .25s}
+}
+</style>
+</head>
+<body>
+<div id="grid" aria-hidden="true"></div>
+<div id="scan" aria-hidden="true"></div>
+
+<div id="topbar">
+  <div id="brand"><span class="dot"></span><b>THE&nbsp;HARNESS</b> · agentic-workflow blueprint</div>
+  <button id="themeBtn" aria-label="Toggle blueprint / whiteprint" title="Blueprint ↔ Whiteprint"></button>
+</div>
+<div id="statusbar" aria-hidden="true">
+  <span class="s">main <b>✓</b></span><span class="s">295 tests <b>✓</b></span><span class="s">agent-check <b>8/8</b></span>
+</div>
+
+<main id="stage">
+
+  <!-- 01 COVER -->
+  <section class="sheet" id="cover" data-title="Cover sheet">
+    <svg class="cover-motif" viewBox="0 0 400 400" aria-hidden="true">
+      <g class="conn" stroke="var(--hair)">
+        <rect x="150" y="40" width="100" height="46" class="nbox"/>
+        <rect x="40" y="170" width="100" height="46" class="nbox"/>
+        <rect x="150" y="170" width="100" height="46" class="nbox"/>
+        <rect x="260" y="170" width="100" height="46" class="nbox"/>
+        <rect x="150" y="300" width="100" height="46" class="nbox"/>
+        <path d="M200 86 V170 M200 216 V300 M90 170 V120 H200 M310 170 V120 H200"/>
+      </g>
+      <g fill="var(--cyan)"><circle cx="200" cy="63" r="3"/><circle cx="200" cy="193" r="3"/><circle cx="200" cy="323" r="3"/></g>
+    </svg>
+    <div class="sbody">
+      <div class="cover-kick fadein">Final-Year Project · CCDS25-1136 · NTU CCDS</div>
+      <div class="cover-title fadein" style="animation-delay:.1s">The <span class="c">harness</span><br/>that remembers.</div>
+      <div class="cover-lead fadein" style="animation-delay:.25s">An engineering drawing of how I run a year-long LLM-safety study with <b>two AI agents</b> sharing one repo. <b>Explore the schematic — then run a real session and watch the gate stop a mistake.</b></div>
+      <div class="cover-spec fadein" style="animation-delay:.4s">
+        <span class="spec"><b>2</b> agents</span>
+        <span class="spec"><b>4</b> skills</span>
+        <span class="spec"><b>5</b> subagents</span>
+        <span class="spec"><b>3</b> hooks</span>
+        <span class="spec"><b>8</b>-check gate</span>
+        <span class="spec"><b>120</b> locked artifacts</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 PROBLEM (statement) -->
+  <section class="sheet statement" id="problem" data-title="The problem">
+    <div class="shead">
+      <div class="sno">SHEET 02</div>
+      <div class="stit"><h1>An agent <span class="c">forgets</span>. Research can't.</h1>
+        <div class="sub">Months of cluster jobs, generated reports, scoring corrections, immutable evidence. A chat window can't hold that — so each failure mode becomes a rail the repo must enforce.</div></div>
+    </div>
+    <div class="sbody">
+      <div class="failrow" id="failRow"></div>
+      <div class="statelead fadein" style="margin-top:30px">Every <span style="color:var(--rose)">✗</span> on the left is answered by a <span style="color:var(--emerald)">rail</span> on the right. The rest of this drawing is those rails.</div>
+    </div>
+  </section>
+
+  <!-- 03 THE MAP -->
+  <section class="sheet" id="map" data-title="Harness — general arrangement">
+    <div class="shead">
+      <div class="sno">SHEET 03</div>
+      <div class="stit"><h1>General arrangement <span class="c">— the whole harness</span></h1>
+        <div class="sub"><b>Drag</b> to pan · <b>＋ ／ －</b> to zoom · <b>click any block</b> to open its specification.</div></div>
+    </div>
+    <div class="sbody">
+      <div class="map-wrap" id="mapWrap">
+        <svg id="mapSvg" viewBox="0 0 1280 720" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Schematic of the agent harness: law and source of truth feed orientation; bounded context feeds work; the gate verifies; outputs regenerate; hooks remind; raw evidence is locked.">
+          <g id="mapG"></g>
+        </svg>
+        <div class="map-tools">
+          <button id="zin" aria-label="Zoom in">＋</button>
+          <button id="zout" aria-label="Zoom out">－</button>
+          <button id="zreset" aria-label="Reset view">⟲</button>
+        </div>
+        <div class="map-hint"><span class="blink"></span>click a block to expand · drag to pan</div>
+        <aside class="drawer" id="drawer" aria-live="polite">
+          <button class="dx" id="drawerX" aria-label="Close">✕</button>
+          <div id="drawerBody"></div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 RUN A SESSION -->
+  <section class="sheet" id="session" data-title="Run a session — workflow demo">
+    <div class="shead">
+      <div class="sno">SHEET 04</div>
+      <div class="stit"><h1>Run a session <span class="c">— watch the gate catch a mistake</span></h1>
+        <div class="sub">A real agent loop on a tiny task. <b>Press Run</b> (or Step). The agent edits the report, then forgets to log &amp; rebuild — the gate <b>blocks it</b> — the agent fixes it — 8/8 green.</div></div>
+    </div>
+    <div class="sbody">
+      <div class="sim">
+        <div class="console">
+          <div class="con-head"><span class="d r"></span><span class="d y"></span><span class="d g"></span><span class="t">session · fyp_quant</span></div>
+          <div class="con-body" id="conBody"></div>
+        </div>
+        <div class="simside">
+          <div class="phaserail">
+            <div class="rh">session loop</div>
+            <div class="prow" data-ph="0"><span class="pdot"></span>orient — read source of truth</div>
+            <div class="prow" data-ph="1"><span class="pdot"></span>work — edit a file</div>
+            <div class="prow" data-ph="2"><span class="pdot"></span>gate — make agent-check</div>
+            <div class="prow" data-ph="3"><span class="pdot"></span>fix — log &amp; rebuild</div>
+            <div class="prow" data-ph="4"><span class="pdot"></span>gate — re-run (8/8)</div>
+            <div class="prow" data-ph="5"><span class="pdot"></span>hand off — regenerate</div>
+          </div>
+          <div class="statecard">
+            <div class="rh">repo state</div>
+            <div class="srow"><span class="k">files touched</span><span class="v" id="stFiles">—</span></div>
+            <div class="srow"><span class="k">PROJECT_LOG row</span><span class="v" id="stLog">—</span></div>
+            <div class="srow"><span class="k">report rebuilt</span><span class="v" id="stReport">—</span></div>
+            <div class="srow"><span class="k">agent-check</span><span class="v" id="stGate">idle</span></div>
+          </div>
+          <div class="sim-ctrl">
+            <button class="btn primary" id="simRun">▶ Run session</button>
+            <button class="btn" id="simStep">⏭ Step</button>
+            <button class="btn" id="simReset">↺ Reset</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 THE CAST -->
+  <section class="sheet" id="cast" data-title="Components — skills, subagents, hooks">
+    <div class="shead">
+      <div class="sno">SHEET 05</div>
+      <div class="stit"><h1>Components <span class="c">— click to open</span></h1>
+        <div class="sub">Built from the agent's own primitives. <span style="color:var(--violet)">◆</span> = read-only reviewer.</div></div>
+    </div>
+    <div class="sbody">
+      <div class="castgrid">
+        <div class="castcol"><div class="colh"><span class="n">Skills</span><span class="ct">4</span></div><div class="castlist" id="colSkills"></div></div>
+        <div class="castcol"><div class="colh"><span class="n">Subagents</span><span class="ct">5</span></div><div class="castlist" id="colSubs"></div></div>
+        <div class="castcol"><div class="colh"><span class="n">Hooks</span><span class="ct">3</span></div><div class="castlist" id="colHooks"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 THE GATE -->
+  <section class="sheet" id="gate" data-title="The verification gate">
+    <div class="shead">
+      <div class="sno">SHEET 06</div>
+      <div class="stit"><h1>The gate <span class="c">— try to break it</span></h1>
+        <div class="sub"><span class="kbd">make agent-check</span> runs 8 checks before any commit. <b>Click a fault on the right</b> and watch the matching rail fail.</div></div>
+    </div>
+    <div class="sbody">
+      <div class="gatelayout">
+        <div class="glist" id="gateList"></div>
+        <div class="gctrl">
+          <div class="rh">inject a fault</div>
+          <div class="gq">A misbehaving agent tries to slip something past. Which rail stops it?</div>
+          <div class="injbtns" id="injBtns"></div>
+          <div class="gverdict ok" id="gverdict">● all rails green — clear to commit</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 07 IMMUTABLE EVIDENCE -->
+  <section class="sheet" id="evidence" data-title="Detail — immutable evidence">
+    <div class="shead">
+      <div class="sno">SHEET 07</div>
+      <div class="stit"><h1>Immutable evidence <span class="c">— mutable interpretation</span></h1>
+        <div class="sub">Raw cluster outputs are hashed and never touched. Every scoring correction is an additive, redacted sidecar — never an edit.</div></div>
+    </div>
+    <div class="sbody">
+      <div class="ev-wrap">
+        <div class="ev-chart"><svg id="evSvg" viewBox="0 0 1180 300" preserveAspectRatio="xMidYMid meet" aria-label="Flow from hashed immutable raw artifacts, through redacted v2 and judge sidecars, to analysis, to the regenerated report."></svg></div>
+        <div class="ev-stats">
+          <div class="estat"><div class="n" data-c="120">0</div><div class="l">raw artifacts hash-pinned — all match the manifest</div></div>
+          <div class="estat"><div class="n" data-c="130" data-pre="≈">0</div><div class="l">redacted sidecars — raw text never leaks</div></div>
+          <div class="estat"><div class="n">2</div><div class="l">scoring layers — additive only (regex → 13B judge)</div></div>
+          <div class="estat"><div class="n">0</div><div class="l">times the raw evidence was ever mutated</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 08 STORY -->
+  <section class="sheet" id="story" data-title="Field notes — when it earned its keep">
+    <div class="shead">
+      <div class="sno">SHEET 08</div>
+      <div class="stit"><h1>When it <span class="c">earned its keep</span></h1>
+        <div class="sub">Two moments the rails actually mattered — both preserved on this drawing.</div></div>
+    </div>
+    <div class="sbody">
+      <div class="story">
+        <div class="scard d16"><div class="tag">D16 · the judge pivot</div>
+          <h3>The conclusion moved pairs — honestly.</h3>
+          <p>A 13B judge disagreed with my first regex scorer and relocated the study's only significant safety regression from <b>Qwen-4B (+0.065)</b> to <b>Qwen-1.7B (+0.055, p=0.027)</b>. Because raw outputs are immutable, <b>nothing was re-run</b> — the fix was a new sidecar.</p>
+        </div>
+        <div class="scard d21"><div class="tag">D21 · it caught itself</div>
+          <h3>The harness failed its own CI — and emailed me.</h3>
+          <p>The immutability check I built to guard 36 evidence files ran in CI, where those gitignored files can't exist — so it failed every push and emailed the owner. The fix taught the gate the right rule: <b>absence is not mutation.</b></p>
+        </div>
+        <div class="story-quote">“The conclusion changed twice. The raw evidence changed <span class="c">zero</span> times.”</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 09 VERDICT (statement) -->
+  <section class="sheet statement" id="verdict" data-title="The verdict">
+    <div class="shead">
+      <div class="sno">SHEET 09</div>
+      <div class="stit"><h1>The principle</h1></div>
+    </div>
+    <div class="sbody">
+      <div class="bigstate fadein">Not a smarter prompt.<br/>A <span class="c">better environment.</span></div>
+      <div class="statelead fadein" style="animation-delay:.15s">I'm not just prompting better — I shaped the repo so two agents can <b>do more while being trusted less</b>: immutable evidence, executable rails, and one gate that even has its own test suite. <b>Memory is not magic; I make the repo remember.</b></div>
+    </div>
+  </section>
+
+  <!-- 10 CLOSE -->
+  <section class="sheet" id="close" data-title="Title block">
+    <div class="shead">
+      <div class="sno">SHEET 10</div>
+      <div class="stit"><h1>Drawn &amp; verified.</h1>
+        <div class="sub">Every figure here is read from the repo's own files — and the harness doesn't just describe these rules, it runs them.</div></div>
+    </div>
+    <div class="sbody">
+      <div class="closegrid">
+        <div class="cbox"><div class="tag">drawn by</div>
+          <p><b>Author</b> · Tan Uei Horng<br/><b>Supervisor</b> · Dr. Zhang Jiehuang<br/><b>Programme</b> · BSc, CCDS<br/><b>Institution</b> · Nanyang Technological University<br/><b>Project</b> · CCDS25-1136</p></div>
+        <div class="cbox"><div class="tag">sources of truth</div>
+          <p><b>PROJECT_LOG.md</b> — status, decisions, changelog<br/><b>artifact_policy.yaml</b> — the machine-readable contract<br/><b>harness/agent.py</b> — the checks, in code<br/><b>test_agent_harness.py</b> — 9 tests that break the rules on purpose</p></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div id="titleblock" aria-hidden="true">
+  <div class="cell"><span class="k">Sheet</span><span class="v" id="tbSheet">01 / 10</span></div>
+  <div class="cell"><span class="k">Title</span><span class="v" id="tbTitle">Cover sheet</span></div>
+  <div class="cell"><span class="k">Project</span><span class="v"><b>CCDS25-1136</b></span></div>
+  <div class="cell"><span class="k">Drawn · Rev</span><span class="v">TAN U.H. · B</span></div>
+</div>
+
+<nav id="nav" aria-label="Sheets">
+  <button class="arw" id="prev" aria-label="Previous sheet">‹</button>
+  <div id="ticks"></div>
+  <button class="arw" id="next" aria-label="Next sheet">›</button>
+  <span id="navhint">← → to navigate</span>
+</nav>
+
+<script>
+/* =====================================================================================
+   DATA — sourced from the repo (PROJECT_LOG.md, artifact_policy.yaml, agent.py, tests).
+   ===================================================================================== */
+const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+const NS='http://www.w3.org/2000/svg';
+const E=(t,a={})=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);return e;};
+
+/* ---- problem failure modes ---- */
+const FAILS=[
+  ['context reset','PROJECT_LOG.md'],['drift from the rules','make agent-check'],
+  ['overwritten evidence','hashed raw artifacts'],['leaked harmful text','redaction scan'],
+  ['hallucinated state','stale-text scan'],['cold restart','generated HANDOFF'],
+  ['two agents disagree','AGENTS.md ≡ CLAUDE.md'],
+];
+
+/* ---- MAP nodes & connectors ---- */
+const NODES={
+  agents:{x:150,y:54,w:250,h:84,t:'AGENTS.md ≡ CLAUDE.md',r:'the law',kind:'source of truth',
+    path:'AGENTS.md · CLAUDE.md',role:'The shared operating contract. Byte-identical twins, because Codex and Claude auto-load different files.',
+    li:['Identical below the “Project Overview” header','The “test” is a one-line <b>diff</b> — and the gate runs it','First thing every agent reads']},
+  log:{x:515,y:54,w:250,h:84,t:'PROJECT_LOG.md',r:'source of truth',kind:'memory',
+    path:'docs/PROJECT_LOG.md',role:'The durable brain. Status, decisions, open actions, and an append-only changelog.',
+    li:['<b>Every change writes one row</b>','No commit without a PROJECT_LOG update','36 decisions logged (D1–D36)']},
+  policy:{x:880,y:54,w:250,h:84,t:'artifact_policy.yaml',r:'the contract',kind:'machine-readable',
+    path:'configs/artifact_policy.yaml',role:'Prose rules compiled into data: what is immutable, what must be redacted, what counts as stale, what is report-worthy.',
+    li:['Immutable globs + allowed sidecars','6 redaction + 6 stale-text patterns','Drives every gate check']},
+  skills:{x:70,y:250,w:190,h:74,t:'4 skills',r:'on-demand context',kind:'bounded context',
+    path:'.agents/skills/*/SKILL.md',role:'Thin routers that load only the relevant workflow — not the whole repo.',
+    li:['harness-maintenance · report-audit','second-judge · meetup-brief','Keeps always-on context small']},
+  subs:{x:70,y:340,w:190,h:74,t:'5 subagents',r:'context-isolated review',kind:'bounded context',
+    path:'.codex/agents/*.toml',role:'Single-purpose auditors, each spawned with only the files it needs.',
+    li:['artifact-guardian ◆ · report-auditor ◆','judge-reviewer · tc1-ops · meetup-story','Audit in isolation; main agent decides edits']},
+  packets:{x:70,y:430,w:190,h:74,t:'task packets',r:'bounded scope',kind:'bounded context',
+    path:'docs/agent_tasks/*.md',role:'A small, bounded brief per task so an agent starts focused.',
+    li:['One file per task (T21, T22, …)','Objective + the exact files to touch','Fed by <b>agent-start</b>']},
+  orient:{x:330,y:286,w:150,h:82,t:'ORIENT',r:'agent-status',kind:'session',
+    path:'python fyp_cli.py agent-status',role:'A fresh agent asks the repo what is true — git, log date, gate status, next action.',
+    li:['Reads the law + source of truth','One command → live state','“ask the repo what is true”']},
+  work:{x:520,y:286,w:150,h:82,t:'WORK',r:'edit · analyse',kind:'session',
+    path:'—',role:'The actual change — analysis, code, report prose — under the loaded constraints.',
+    li:['Uses bounded context','Constrained by the contract','One variable at a time']},
+  gate:{x:720,y:286,w:180,h:82,t:'make agent-check',r:'the gate · 8 checks',kind:'verification',
+    path:'make agent-check',role:'The one hard stop before commit or handoff. Eight checks; any fail blocks the change.',
+    li:['doc-sync · log · immutable · redaction','stale-text · report-fresh · whitespace · pytest','Exits non-zero on any failure']},
+  outputs:{x:960,y:286,w:180,h:82,t:'OUTPUTS',r:'regenerated',kind:'recover',
+    path:'HANDOFF.md · dashboard · report',role:'Handoff, dashboard and the FYP report — all rebuilt from live state, never hand-maintained.',
+    li:['HANDOFF.md = the next-session bridge','Report-as-code (make report)','PreCompact hook refreshes before context is lost']},
+  hooks:{x:330,y:470,w:340,h:70,t:'3 hooks',r:'remind, don’t block',kind:'guardrails',
+    path:'.codex/hooks.json',role:'Lifecycle reminders that fire automatically — and exit 0 by design.',
+    li:['PreToolUse — warns on immutable-path touch','PreCompact — refreshes handoff before compaction','Stop — runs a lightweight check']},
+  raw:{x:720,y:470,w:150,h:84,t:'raw.jsonl 🔒',r:'immutable',kind:'evidence',
+    path:'results/*/*/raw.jsonl',role:'TC1-original outputs. Hashed in a SHA-256 manifest and never modified.',
+    li:['120 artifacts pinned, all hash-match','Mutated → gate fails; absent → tolerated','The invariant the harness protects']},
+  evidence:{x:930,y:470,w:200,h:84,t:'redacted sidecars',r:'derived scoring',kind:'evidence',
+    path:'scores.v2 · scores.judge.*',role:'Corrections live here — additive, IDs + booleans only. Raw text never copied out.',
+    li:['v2 regex → 13B judge (additive)','≈130 sidecars, redaction clean','Feeds the analysis + report']},
+  eval:{x:960,y:172,w:170,h:70,t:'make harness-eval',r:'self-test · 9',kind:'verification',
+    path:'tests/test_agent_harness.py',role:'The harness testing itself: throwaway repos, one rule broken at a time, gate must react.',
+    li:['9 tests break the rails on purpose','Mutated fails · absent tolerated','“guardrails under test”']},
+};
+const CONNS=[
+  ['agents','orient','flow'],['log','orient','flow'],
+  ['skills','work',''],['subs','work',''],['packets','work',''],
+  ['orient','work','flow'],['work','gate','flow'],['gate','outputs','flow'],
+  ['policy','gate',''],['raw','gate',''],['raw','evidence','flow'],['evidence','gate',''],
+  ['gate','eval',''],
+];
+
+/* ---- session simulator beats ---- */
+const SESSION=[
+  {ph:0,lines:[['p','$ python fyp_cli.py agent-status'],['dim','  → reading AGENTS.md  (the law)'],['dim','  → reading PROJECT_LOG.md  (source of truth)'],['','oriented · task → fix a figure in §6.2 of the report']],
+    state:{},rail:{0:'done'}},
+  {ph:1,lines:[['','✎ edit  scripts/build_fyp_report.js'],['dim','   + §6.2  ΔASR 0.190  (was 0.19)']],
+    state:{files:'build_fyp_report.js'},rail:{1:'done'}},
+  {ph:2,lines:[['p','$ make agent-check'],['ok','  ✓ doc-sync   ✓ immutable   ✓ redaction   ✓ stale-text   ✓ whitespace   ✓ pytest'],['bad','  ✗ log-updated   — PROJECT_LOG.md not touched'],['bad','  ✗ report-fresh  — report-worthy change, .docx not rebuilt'],['blk','  BLOCKED · 6 / 8 — change rejected']],
+    state:{gate:'BLOCKED 6/8'},rail:{2:'fail'}},
+  {ph:3,lines:[['warn','↳ the gate caught it. fixing…'],['dim','   + PROJECT_LOG.md  §4 changelog row'],['p','$ make report'],['dim','   ↻ FYP_Report_*.docx rebuilt']],
+    state:{log:'+1 row',report:'yes'},rail:{2:'done',3:'done'}},
+  {ph:4,lines:[['p','$ make agent-check'],['pass','  ✓ 8 / 8 — all rails green']],
+    state:{gate:'8/8 PASS'},rail:{4:'done'}},
+  {ph:5,lines:[['p','$ python scripts/generate_handoff.py'],['dim','   ↻ HANDOFF.md + dashboard regenerated'],['ok','  ✓ clear to commit / hand off']],
+    state:{},rail:{5:'done'}},
+];
+
+/* ---- cast ---- */
+const CAST={
+  skills:[['harness-maintenance','#46c6f5','Change checks, hooks, agents, packets — and add tests that catch future agents.'],
+    ['report-audit','#46c6f5','Strengthen the FYP report; verify every claim against the analysis JSON.'],
+    ['second-judge','#46c6f5','Add a second HarmBench judge as new redacted sidecars — never overwrite.'],
+    ['meetup-brief','#46c6f5','Turn the repo into the workflow / demo / USP narrative.']],
+  subs:[['artifact-guardian ◆','#b69cff','Evidence-chain auditor — immutability, the manifest, redaction leaks.',1],
+    ['report-auditor ◆','#b69cff','Report ↔ log ↔ results consistency; hunts stale claims.',1],
+    ['judge-reviewer','#37e0a6','HarmBench judge sidecars &amp; second-judge work.',0],
+    ['tc1-ops','#37e0a6','SLURM / TC1 policy / offline-mode cluster safety.',0],
+    ['meetup-story','#37e0a6','Repo evidence → a talk. “Don’t overclaim automation.”',0]],
+  hooks:[['PreToolUse · 10s','#ffc24b','guard_artifact_paths — warns if a tool call touches an immutable raw artifact.'],
+    ['PreCompact · 60s','#ffc24b','pre_compact_handoff — refreshes the handoff before context is compacted away.'],
+    ['Stop · 90s','#ffc24b','stop_agent_check — runs agent-status + a lightweight check when a turn ends.']],
+};
+
+/* ---- gate checks + injectable faults ---- */
+const GATE=[
+  ['doc-sync','AGENTS.md ≡ CLAUDE.md'],['log-updated','a PROJECT_LOG row per change'],
+  ['immutable-artifacts','120 raw files hash-match'],['redaction','no raw text in docs'],
+  ['stale-text','no stale claims'],['report-fresh','report rebuilt when needed'],
+  ['whitespace','git diff --check'],['pytest','295 tests pass'],
+];
+const FAULTS=[
+  ['Edit CLAUDE.md only','doc-sync',0],
+  ['Touch a file, skip the log','log-updated',1],
+  ['Rewrite a raw.jsonl by one byte','immutable-artifacts',2],
+  ['Paste {"response": …} into HANDOFF','redaction',3],
+  ['Write “v2 primary” in a doc','stale-text',4],
+  ['Ship a report-worthy change, no rebuild','report-fresh',5],
+];
+
+/* =====================================================================================
+   PROBLEM — failing chips
+   ===================================================================================== */
+(function(){const r=document.getElementById('failRow');
+  FAILS.forEach(([f,fix])=>{const c=document.createElement('span');c.className='failchip';
+    c.innerHTML='<span class="x">✗</span> '+f+' <span class="dim" style="color:var(--faint)">→</span> <span class="fix">'+fix+'</span>';
+    r.appendChild(c);});})();
+
+/* =====================================================================================
+   MAP — render schematic, pan/zoom, click-to-expand
+   ===================================================================================== */
+let mapDrawn=false;
+function corner(g,x,y,dx,dy){g.appendChild(E('path',{d:`M${x+dx} ${y} L${x} ${y} L${x} ${y+dy}`,class:'ntick'}));}
+function renderMap(){
+  if(mapDrawn)return; mapDrawn=true;
+  const g=document.getElementById('mapG'); g.innerHTML='';
+  /* zones */
+  const zones=[[40,40,1100,118,'CONTRACT & SOURCE OF TRUTH'],[40,235,230,270,'BOUNDED CONTEXT'],
+    [300,262,860,130,'THE SESSION SPINE'],[700,452,460,118,'IMMUTABLE EVIDENCE']];
+  zones.forEach(([x,y,w,h,l])=>{g.appendChild(E('rect',{x,y,width:w,height:h,class:'zone'}));
+    const t=E('text',{x:x+10,y:y+18,class:'zonelab'});t.textContent=l;g.appendChild(t);});
+  /* connectors first (under nodes) */
+  const cx=n=>NODES[n].x+NODES[n].w/2, cy=n=>NODES[n].y+NODES[n].h/2;
+  CONNS.forEach(([a,b,f])=>{
+    const x1=cx(a),y1=cy(a),x2=cx(b),y2=cy(b);
+    const midY=(y1+y2)/2;
+    const d=`M${x1} ${y1} C ${x1} ${midY}, ${x2} ${midY}, ${x2} ${y2}`;
+    g.appendChild(E('path',{d,class:'conn'+(f?' flow':'')}));
+  });
+  /* nodes */
+  Object.entries(NODES).forEach(([id,n])=>{
+    const grp=E('g',{class:'gnode','data-id':id,tabindex:0,role:'button','aria-label':n.t+' — '+n.r});
+    grp.appendChild(E('rect',{x:n.x,y:n.y,width:n.w,height:n.h,class:'nbox',rx:9}));
+    [[0,0,12,12],[n.w,0,-12,12],[0,n.h,12,-12],[n.w,n.h,-12,-12]].forEach(c=>corner(grp,n.x+c[0],n.y+c[1],c[2],c[3]));
+    const t1=E('text',{x:n.x+16,y:n.y+n.h/2-2,class:'ntitle'});t1.textContent=n.t;grp.appendChild(t1);
+    const t2=E('text',{x:n.x+16,y:n.y+n.h/2+16,class:'nrole'});t2.textContent=n.r;grp.appendChild(t2);
+    const pl=E('text',{x:n.x+n.w-18,y:n.y+22,class:'plus'});pl.textContent='+';grp.appendChild(pl);
+    g.appendChild(grp);
+  });
+  /* draw-in — nodes are visible by default; only connectors animate, with a
+     guaranteed end-state in case CSS animation is paused (backgrounded tab). */
+  if(!reduce){
+    const conns=[...g.querySelectorAll('.conn')];
+    conns.forEach((p,i)=>{const L=p.getTotalLength?p.getTotalLength():400;
+      p.style.setProperty('--len',L);p.classList.add('draw');p.style.animationDelay=(.15+i*.05)+'s';});
+    setTimeout(()=>conns.forEach(p=>{p.style.strokeDasharray='none';p.style.strokeDashoffset='0';}),1600);
+  }
+}
+/* pan / zoom */
+let mz=1,mtx=0,mty=0,dragging=false,moved=false,sx,sy;
+function applyMapT(){document.getElementById('mapG').setAttribute('transform',`translate(${mtx} ${mty}) scale(${mz})`);}
+(function(){
+  const wrap=document.getElementById('mapWrap'),svg=document.getElementById('mapSvg');
+  document.getElementById('zin').onclick=()=>{mz=Math.min(2.4,mz*1.2);applyMapT();};
+  document.getElementById('zout').onclick=()=>{mz=Math.max(.6,mz/1.2);applyMapT();};
+  document.getElementById('zreset').onclick=()=>{mz=1;mtx=0;mty=0;applyMapT();};
+  svg.addEventListener('pointerdown',e=>{dragging=true;moved=false;sx=e.clientX;sy=e.clientY;wrap.classList.add('grabbing');svg.setPointerCapture(e.pointerId);});
+  svg.addEventListener('pointermove',e=>{if(!dragging)return;const dx=e.clientX-sx,dy=e.clientY-sy;
+    if(Math.abs(dx)+Math.abs(dy)>4)moved=true;
+    const sc=svg.clientWidth?1280/svg.clientWidth:1; mtx+=dx*sc;mty+=dy*sc;sx=e.clientX;sy=e.clientY;applyMapT();});
+  const end=()=>{dragging=false;wrap.classList.remove('grabbing');};
+  svg.addEventListener('pointerup',end);svg.addEventListener('pointercancel',end);
+  svg.addEventListener('wheel',e=>{e.preventDefault();const f=e.deltaY<0?1.12:1/1.12;mz=Math.max(.6,Math.min(2.4,mz*f));applyMapT();},{passive:false});
+  /* node activate */
+  function activate(id){const n=NODES[id];if(!n)return;
+    [...document.querySelectorAll('.gnode')].forEach(g=>g.classList.toggle('sel',g.dataset.id===id));
+    const b=document.getElementById('drawerBody');
+    b.innerHTML='<div class="dkind">'+n.kind+'</div><h3>'+n.t+'</h3><div class="dpath">'+n.path+'</div>'+
+      '<div class="drole">'+n.role+'</div><ul>'+n.li.map(x=>'<li>'+x+'</li>').join('')+'</ul>';
+    document.getElementById('drawer').classList.add('open');}
+  svg.addEventListener('click',e=>{if(moved)return;const g=e.target.closest('.gnode');if(g)activate(g.dataset.id);});
+  svg.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')){const g=e.target.closest('.gnode');if(g){e.preventDefault();activate(g.dataset.id);}}});
+  document.getElementById('drawerX').onclick=()=>{document.getElementById('drawer').classList.remove('open');
+    [...document.querySelectorAll('.gnode')].forEach(g=>g.classList.remove('sel'));};
+})();
+
+/* =====================================================================================
+   SESSION SIMULATOR
+   ===================================================================================== */
+let simI=0,simTimer=0,simState={};
+const conBody=()=>document.getElementById('conBody');
+function setRail(map){for(const k in map){const r=document.querySelector('.prow[data-ph="'+k+'"]');if(r){r.classList.remove('on','done','fail');r.classList.add(map[k]);}}}
+function setActiveRail(ph){document.querySelectorAll('.prow').forEach(r=>{if(!r.classList.contains('done')&&!r.classList.contains('fail'))r.classList.remove('on');});
+  const r=document.querySelector('.prow[data-ph="'+ph+'"]');if(r&&!r.classList.contains('done')&&!r.classList.contains('fail'))r.classList.add('on');}
+function renderState(){
+  document.getElementById('stFiles').textContent=simState.files||'—';
+  const lg=document.getElementById('stLog');lg.textContent=simState.log||'—';lg.className='v'+(simState.log?' ok':'');
+  const rp=document.getElementById('stReport');rp.textContent=simState.report?'yes':'—';rp.className='v'+(simState.report?' ok':'');
+  const gt=document.getElementById('stGate');gt.textContent=simState.gate||'idle';
+  gt.className='v'+(simState.gate&&simState.gate.indexOf('PASS')>=0?' ok':(simState.gate&&simState.gate.indexOf('BLOCK')>=0?' bad':''));
+}
+const CLS={p:'p',ok:'ok',bad:'bad',warn:'warn',dim:'dim',blk:'blocked',pass:'passed','':''};
+function simStep(){
+  if(simI>=SESSION.length)return false;
+  const beat=SESSION[simI];
+  setActiveRail(beat.ph);
+  const body=conBody();
+  beat.lines.forEach((ln,k)=>{const d=document.createElement('div');d.className='con-line '+(CLS[ln[0]]||'');
+    d.innerHTML=ln[1];d.style.animationDelay=(k*.06)+'s';body.appendChild(d);});
+  body.scrollTop=body.scrollHeight;
+  Object.assign(simState,beat.state); renderState();
+  if(beat.rail)setRail(beat.rail);
+  simI++;
+  if(simI>=SESSION.length){const d=document.createElement('div');d.className='con-line dim';d.innerHTML='— session complete —';conBody().appendChild(d);
+    document.getElementById('simRun').disabled=true;document.getElementById('simStep').disabled=true;}
+  conBody().scrollTop=conBody().scrollHeight;
+  return simI<SESSION.length;
+}
+function simReset(){
+  simI=0;simState={};clearTimeout(simTimer);
+  conBody().innerHTML='<div class="con-line dim">$ ready — press Run or Step</div><div class="con-line"><span class="con-cur"></span></div>';
+  document.querySelectorAll('.prow').forEach(r=>r.classList.remove('on','done','fail'));
+  renderState();
+  document.getElementById('simRun').disabled=false;document.getElementById('simStep').disabled=false;
+}
+function simRun(){
+  document.getElementById('simRun').disabled=true;
+  (function go(){const more=simStep();if(more)simTimer=setTimeout(go,reduce?260:1050);})();
+}
+document.getElementById('simRun').onclick=()=>{if(simI===0)conBody().innerHTML='';simRun();};
+document.getElementById('simStep').onclick=()=>{if(simI===0)conBody().innerHTML='';simStep();};
+document.getElementById('simReset').onclick=simReset;
+simReset();
+
+/* =====================================================================================
+   CAST — expandable units
+   ===================================================================================== */
+(function(){
+  const map={skills:'colSkills',subs:'colSubs',hooks:'colHooks'};
+  for(const key in map){const host=document.getElementById(map[key]);
+    CAST[key].forEach(u=>{const el=document.createElement('div');el.className='unit';
+      el.innerHTML='<div class="uh"><span class="ui" style="background:'+u[1]+'"></span><span class="un">'+u[0]+'</span><span class="uc">+</span></div>'+
+        '<div class="ud"><div class="inner">'+u[2]+'</div></div>';
+      el.querySelector('.uh').onclick=()=>el.classList.toggle('open');
+      host.appendChild(el);});}
+})();
+
+/* =====================================================================================
+   GATE — inject faults
+   ===================================================================================== */
+function buildGate(){
+  const list=document.getElementById('gateList');list.innerHTML='';
+  GATE.forEach((g,i)=>{const r=document.createElement('div');r.className='grow pass';r.id='gk'+i;
+    r.innerHTML='<span class="gi"><svg viewBox="0 0 12 12"><path d="M2 6.2 L4.8 9 L10 3"/></svg></span>'+
+      '<span class="gn">'+g[0]+'</span><span class="gd">'+g[1]+'</span><span class="gs">pass</span>';
+    list.appendChild(r);});
+  const inj=document.getElementById('injBtns');inj.innerHTML='';
+  FAULTS.forEach(f=>{const b=document.createElement('button');b.className='injbtn';b.innerHTML='✗ '+f[0];
+    b.onclick=()=>fireFault(f);inj.appendChild(b);});
+  const rb=document.createElement('button');rb.className='injbtn';rb.style.borderColor='var(--emerald)';rb.style.color='var(--emerald)';
+  rb.innerHTML='↺ reset — all green';rb.onclick=resetGate;inj.appendChild(rb);
+}
+function resetGate(){GATE.forEach((g,i)=>{const r=document.getElementById('gk'+i);r.className='grow pass';r.querySelector('.gs').textContent='pass';});
+  const v=document.getElementById('gverdict');v.className='gverdict ok';v.innerHTML='● all rails green — clear to commit';}
+function fireFault(f){resetGate();const r=document.getElementById('gk'+f[2]);r.className='grow fail';r.querySelector('.gs').textContent='FAIL';
+  r.scrollIntoView({block:'nearest',behavior:'smooth'});
+  const v=document.getElementById('gverdict');v.className='gverdict no';v.innerHTML='● BLOCKED by <b>'+GATE[f[2]][0]+'</b> — the change is rejected';}
+buildGate();
+
+/* =====================================================================================
+   EVIDENCE flow (SVG)
+   ===================================================================================== */
+let evDrawn=false;
+function drawEv(){
+  if(evDrawn)return; evDrawn=true;
+  const svg=document.getElementById('evSvg');svg.innerHTML='';
+  const C=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+  const ink=C('--ink'),soft=C('--ink-soft'),faint=C('--faint'),cyan=C('--cyan'),em=C('--emerald'),rose=C('--rose'),line=C('--hair'),node=C('--node'),nl=C('--node-line');
+  const box=(x,y,w,h,st)=>svg.appendChild(E('rect',{x,y,width:w,height:h,rx:10,fill:node,stroke:st||nl,'stroke-width':1.5}));
+  const tx=(x,y,s,o={})=>{const t=E('text',{x,y,'text-anchor':o.a||'middle','font-family':'IBM Plex Mono','font-size':o.fs||13,'font-weight':o.fw||500,fill:o.f||ink});t.textContent=s;svg.appendChild(t);};
+  const arr=(x1,x2,y,c)=>{svg.appendChild(E('line',{x1,y1:y,x2:x2-9,y2:y,stroke:c||line,'stroke-width':1.6}));svg.appendChild(E('path',{d:`M${x2-9} ${y-5} L${x2} ${y} L${x2-9} ${y+5}`,fill:c||line}));};
+  tx(590,28,'The conclusion changed twice — the raw evidence changed zero times.',{fs:13.5,fw:600,f:soft});
+  box(30,96,200,116,em);tx(130,124,'RAW · immutable',{fs:12,fw:600,f:em});tx(130,150,'raw.jsonl',{fs:15,fw:600});tx(130,172,'summary.json',{fs:15,fw:600});
+  svg.appendChild(E('rect',{x:115,y:182,width:30,height:20,rx:4,fill:'none',stroke:em,'stroke-width':2}));
+  svg.appendChild(E('path',{d:'M120 182 v-5 a10 10 0 0 1 20 0 v5',fill:'none',stroke:em,'stroke-width':2}));
+  tx(130,226,'SHA-256 manifest',{fs:10.5,f:faint});
+  arr(230,330,154);
+  box(340,76,230,68,cyan);tx(455,104,'scores.v2.jsonl',{fs:13,fw:600});tx(455,124,'regex proxy · redacted',{fs:10.5,f:faint});
+  box(340,164,230,68,cyan);tx(455,192,'scores.judge.*.jsonl',{fs:13,fw:600});tx(455,212,'13B judge · redacted',{fs:10.5,f:faint});
+  tx(455,254,'IDs + booleans only — never raw text',{fs:10.5,f:rose});
+  arr(570,650,154);
+  box(650,116,150,80,line);tx(725,150,'analysis',{fs:14,fw:600});tx(725,172,'Δ · CI · McNemar',{fs:10.5,f:faint});
+  arr(800,880,154);
+  box(880,96,200,116,cyan);tx(980,128,'REPORT',{fs:12,fw:600,f:cyan});tx(980,156,'regenerated',{fs:15,fw:600});tx(980,178,'from live state',{fs:11,f:soft});
+  if(!reduce){[...svg.children].forEach((n,k)=>{n.style.opacity=0;n.style.transition='opacity .45s var(--e)';setTimeout(()=>n.style.opacity=1,80+k*45);});}
+}
+
+/* =====================================================================================
+   COUNT-UP (evidence stats)
+   ===================================================================================== */
+function countUp(node){const target=parseFloat(node.dataset.c),pre=node.dataset.pre||'';
+  const f=x=>(pre||'')+Math.round(x).toLocaleString();
+  if(reduce){node.textContent=f(target);return;}
+  const t0=performance.now(),dur=1100;
+  (function s(now){const k=Math.min(1,(now-t0)/dur),e=1-Math.pow(1-k,3);node.textContent=f(target*e);if(k<1)requestAnimationFrame(s);})(t0);
+  setTimeout(()=>node.textContent=f(target),dur+400);}
+
+/* =====================================================================================
+   THEME
+   ===================================================================================== */
+const GRID='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>';
+const themeBtn=document.getElementById('themeBtn');themeBtn.innerHTML=GRID;
+themeBtn.onclick=()=>{const cur=document.documentElement.getAttribute('data-theme');
+  const nx=cur==='whiteprint'?'blueprint':'whiteprint';document.documentElement.setAttribute('data-theme',nx);
+  try{localStorage.setItem('bp-theme',nx);}catch(e){}
+  if(evDrawn){evDrawn=false;drawEv();}};
+
+/* =====================================================================================
+   SHEET NAVIGATION (explicit; no wheel hijack)
+   ===================================================================================== */
+const sheets=[...document.querySelectorAll('.sheet')];
+const ticks=document.getElementById('ticks');
+sheets.forEach((s,i)=>{const b=document.createElement('button');b.setAttribute('aria-label','Sheet '+(i+1)+' — '+(s.dataset.title||''));
+  b.title=s.dataset.title||('Sheet '+(i+1));b.onclick=()=>show(i);ticks.appendChild(b);});
+const tickBtns=[...ticks.children];
+let cur=0,locked=false;
+const onEnter={2:renderMap,6:drawEv};   /* sheet index → init fn */
+function show(i){
+  i=Math.max(0,Math.min(sheets.length-1,i));if(i===cur||locked)return;locked=true;
+  sheets[cur].classList.remove('active');sheets[i].classList.add('active');
+  tickBtns.forEach((b,k)=>b.classList.toggle('on',k===i));
+  document.getElementById('tbSheet').textContent=String(i+1).padStart(2,'0')+' / '+String(sheets.length).padStart(2,'0');
+  document.getElementById('tbTitle').textContent=sheets[i].dataset.title||'';
+  document.getElementById('prev').disabled=i===0;document.getElementById('next').disabled=i===sheets.length-1;
+  cur=i;
+  if(onEnter[i])onEnter[i]();
+  sheets[i].querySelectorAll('[data-c]:not([data-done])').forEach(n=>{n.setAttribute('data-done','1');countUp(n);});
+  setTimeout(()=>locked=false,520);
+}
+document.getElementById('prev').onclick=()=>show(cur-1);
+document.getElementById('next').onclick=()=>show(cur+1);
+addEventListener('keydown',e=>{
+  if(e.metaKey||e.ctrlKey||e.altKey)return;
+  if(e.target.closest('.con-body,.castlist,.glist,.drawer'))return;
+  if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();show(cur+1);}
+  else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();show(cur-1);}
+  else if(e.key==='Home'){e.preventDefault();show(0);}
+  else if(e.key==='End'){e.preventDefault();show(sheets.length-1);}
+});
+/* touch swipe (outside interactive zones) */
+let tx0=null;
+addEventListener('touchstart',e=>{if(e.target.closest('.map-wrap,.con-body,.castlist,.glist,.injbtns,.sim-ctrl'))return;tx0=e.touches[0].clientX;},{passive:true});
+addEventListener('touchend',e=>{if(tx0==null)return;const dx=e.changedTouches[0].clientX-tx0;tx0=null;if(Math.abs(dx)<60)return;show(cur+(dx<0?1:-1));},{passive:true});
+
+/* init */
+sheets[0].classList.add('active');
+tickBtns[0].classList.add('on');
+document.getElementById('prev').disabled=true;
+</script>
+</body>
+</html>

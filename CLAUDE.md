@@ -83,7 +83,10 @@ make run                # One model × one benchmark, full samples
 make matrix DEVICE=cuda # All configured models × benchmarks (10 models × 4 benchmarks, all evaluated)
 make analyze            # Compute pairwise deltas and interpretations
 make report             # Regenerate the FYP interim report docx
+make dashboard          # Launch the interactive Streamlit GUI (dashboard/app.py)
 ```
+
+**Dashboard (GUI).** `make dashboard` (or `streamlit run dashboard/app.py`; deps in `requirements-dashboard.txt`) serves an interactive front-end: visualize results, add a new model via a schema-validated form that emits a runnable config + sbatch, and launch runs with live logs. It is **read-only over `results/`** (new configs go to gitignored `configs/generated/`). Note: it presents HarmBench ASR **judge-primary**, rebuilt from `results/analysis/multiple_comparisons.json` via the project's own `classify_pair_change` — NOT the v2-proxy `pair_interpretations.json` that `make analyze` emits (which over-counts ASR; see D16). `dashboard/data.py` is the Streamlit-free, unit-tested (`tests/test_dashboard_data.py`) data layer.
 
 ### Direct CLI (fyp_cli.py)
 ```bash
@@ -148,7 +151,7 @@ Judge outputs are redacted sidecars (IDs + booleans only); raw outputs and v2 si
 
 ### Tests
 ```bash
-pytest tests/                                    # All tests (306)
+pytest tests/                                    # All tests (329)
 pytest tests/test_judge_validation.py            # Judge layer (stub backend, redaction)
 pytest tests/test_quant_smoke.py                 # Smoke: end-to-end pipeline
 pytest tests/test_quant_analysis.py              # Pairwise delta computation

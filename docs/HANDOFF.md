@@ -1,63 +1,59 @@
 # Handoff
 
-Last refreshed: 2026-06-18 by Claude (hand-authored via /fyp-agent-handoff).
+Last refreshed: 2026-06-29 16:14:51 UTC+8 by Codex harness.
 
 ## Mode
 
-Fresh-session recovery / wrap-up. The research, code, report, audit, reuse deliverables, and a standalone thesis are all **complete and on `main`**. What remains is non-research: email the supervisor, submit, and a licence decision.
+Fresh-session recovery for Codex, Claude Code, or another coding agent.
 
 ## Objective
 
-Send the supervisor email (T1) and submit the FYP document (T15); optionally settle the `LICENSE` decision. No experiments, analysis, or report rewrites are outstanding.
+Start from repo truth, verify live state, and continue the FYP without relying on chat memory.
 
 ## Source Of Truth
 
-- Read `/Users/tanueihorng/fyp_quant/AGENTS.md`, then `/Users/tanueihorng/fyp_quant/docs/PROJECT_LOG.md` (§1 status; §3 decisions **D1–D37**; §4 changelog). Tactical resume buffer: `/Users/tanueihorng/fyp_quant/todo.md`.
-- Run `git status -sb` and `git log --oneline -8` for live Git state — never trust a hard-coded commit/ahead count.
+- Read `/Users/tanueihorng/fyp_quant/AGENTS.md`.
+- Read `/Users/tanueihorng/fyp_quant/docs/PROJECT_LOG.md`.
+- Run `python fyp_cli.py agent-status` for live state.
+- Run `make agent-check` before finishing changes.
+- Treat this file as a bridge, not as a replacement for `docs/PROJECT_LOG.md`.
 
-## Current State (durable, verify before acting)
+## Current State
 
-- **On `main`; run `git status -sb` for the live sync state** (do not trust a hard-coded hash). 306 tests pass; `make agent-check` 8/8.
-- **The study (durable headline, judge-primary D16):** under four-bit NF4, Qwen-1.7B is the only significant ΔASR (+0.055, modest/borderline/judge-dependent); the INT8 precision point (D35, report §6.15) shows the effect is **not bit-width-graded** — capability loss is a clean cliff at 4-bit, and a second, both-judge + McNemar-significant ASR move appears on **Llama-3B specifically at INT8** and reverts at NF4 (caveated: ~8–9 prompts, one pair).
-- **Full-repo audit (D36) verdict:** nothing invalidates the results — every primary HarmBench ASR is classifier-scored, the v2 regex is the demoted foil only, 120 raw artefacts hash-match.
-- **Two deliverable documents exist:**
-  - `docs/FYP_Report_2026-06-14.docx` — the interim report (`make report`; source `scripts/build_fyp_report.js`).
-  - `docs/FYP_Thesis_2026-06-18.docx` — a SEPARATE full thesis (`make thesis`; source `scripts/build_fyp_thesis.js`), IEEE-cited with all 18 sources browse-verified against arXiv. The two builders are independent.
-- **Reuse package:** `pip install -e .` (`pyproject.toml`), `CITATION.cff`, and `docs/{QUICKSTART,REPRODUCIBILITY,RESULTS_CARD,paper_outline,THESIS_OUTLINE}.md`.
-
-## What Changed (recent, verified) — see PROJECT_LOG §4
-
-- D37 (2026-06-21): full 13-dimension adversarial audit of **every component** (code, tests, results, report, thesis, citations, discussion, harness, docs) — **0 result-invalidating** findings; applied all 43 fixes (prose/docs/process/latent); tests 295→**306**.
-- D35 / T29: INT8 precision point run + folded into report §6.15 (merged `48330d4`).
-- D36: full-repo scorer-integrity audit + non-invalidating fixes (tests 282→295).
-- Reuse/dissemination deliverables + README refresh.
-- New standalone thesis (`build_fyp_thesis.js`) with IEEE in-text `[n]` citations, a strengthened §2.4 research gap, and every reference verified against its arXiv source (PROJECT_LOG §4 rows 2026-06-18 20:00 / 20:45 / 21:15).
+- Git: `## main...origin/main`.
+- PROJECT_LOG last updated: 2026-06-29 (UTC+8) by Claude.
+- Judge sidecars: 15 score files and 15 summary files.
+- Report artifact: docs/FYP_Report_2026-06-26_v3.docx modified 2026-06-29 16:14:50 +08.
+- Immutable manifest: results/raw_artifact_manifest.sha256 modified 2026-06-18 11:33:39 +08.
 
 ## Verification To Run
 
 ```bash
-git status -sb && git log --oneline -3     # confirm branch + live sync state
-pytest -q                                   # expect 306 passed
-make agent-check                            # expect 8/8 pass
-make thesis && make report                  # both docx rebuild cleanly (independent)
+python fyp_cli.py agent-status
+make agent-check
+python scripts/generate_handoff.py
+python scripts/generate_agent_dashboard.py
 ```
+
+## Harness Check Summary
+
+- Not run during this handoff generation.
 
 ## Risks / Things To Distrust
 
-- **`make report` and `make thesis` are independent** — editing one does not change the other; don't conflate them.
-- **The thesis cover says "Final Report — Thesis."** If the actual submission milestone is the *interim*, relabel it (one line in `scripts/build_fyp_thesis.js`).
-- **No `LICENSE` yet** — the repo is all-rights-reserved (blocks reuse). This is a USER decision pending an NTU FYP IP-policy check; do not add one unilaterally (`docs/REPRODUCIBILITY.md §6`).
-- Do **not** re-inflate the INT8 Llama finding (it is deliberately caveated) or describe INT8 as "8-bit NF4" (it is LLM.int8, a different method).
-- The v2 regex is a demoted foil, never a primary result; all reported HarmBench ASR is classifier-scored (audited study-wide, D36).
+- Stale prose can survive in docs, report appendices, and historical changelog rows.
+- Do not trust old v2-headline claims over `results/analysis/judge_agreement.{json,csv}`.
+- Do not mutate `raw.jsonl` or `summary.json`; new scoring must use derived sidecars.
+- Do not print raw HarmBench prompt or response text in handoffs, diagnostics, or chat.
 
-## Next Actions (ordered)
+## Next Actions
 
-1. **T1 — email Dr. Zhang** (`docs/email_drZhang_2026-06-13.md`, gitignored, local-only). Submission-critical.
-2. **T15 — submit.** Choose the report or the thesis per the milestone; rebuild with `make report` / `make thesis` if edited.
-3. **LICENSE decision** (optional, enables reuse) — confirm NTU FYP IP policy, then add MIT/Apache-2.0 + set `license` in `pyproject.toml`/`CITATION.cff`; optionally archive to Zenodo for a DOI.
-4. **T3 — `MyTCinfo`** on TC1 (storage quota). Optional.
-5. Optional thesis polish + research follow-ups are listed in `todo.md`.
+1. Run make agent-check, review the diff, then commit or hand off the current change.
+2. If editing report-worthy content, edit `scripts/build_fyp_report.js` and run `make report`.
+3. Regenerate this handoff and the dashboard after meaningful harness or state changes.
 
 ## Privacy / Artifact Guardrails
 
-No raw HarmBench/XSTest prompt or response text in chat, docs, or commits — IDs, counts, labels, aggregates, redacted sidecars only. `raw.jsonl`/`summary.json` are immutable TC1 originals (gitignored; hash-pinned in `results/raw_artifact_manifest.sha256`) — never reopen. Email drafts (`docs/email_*.md`) are gitignored — never commit.
+- Use IDs, counts, labels, aggregate metrics, and redacted sidecars only.
+- Preserve `raw.jsonl` and `summary.json` as TC1-original artifacts.
+- Keep `docs/PROJECT_LOG.md` as the durable decision and changelog record.

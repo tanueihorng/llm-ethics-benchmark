@@ -15,7 +15,10 @@ PYTEST_ARGS ?= -q
 TASK ?=
 AGENT ?=
 
-.PHONY: smoke run matrix analyze prefetch report architecture-diagram cluster-generate cluster-submit cluster-dry cluster-check cluster-all cluster-smoke agent-start agent-status agent-check agent-manifest agent-handoff agent-dashboard agent-tc1-checklist harness-eval
+.PHONY: smoke run matrix analyze prefetch report architecture-diagram cluster-generate cluster-submit cluster-dry cluster-check cluster-all cluster-smoke agent-start agent-status agent-check agent-manifest agent-handoff agent-dashboard agent-tc1-checklist harness-eval dashboard
+
+dashboard:
+	$(PYTHON) -m streamlit run dashboard/app.py
 
 smoke:
 	$(PYTHON) fyp_cli.py --config $(CONFIG) --results_dir $(RESULTS_DIR) smoke -m $(MODEL) -b $(BENCHMARK) -s $(SEED) -d $(DEVICE) $(if $(MAX_SAMPLES),-n $(MAX_SAMPLES),)
@@ -79,11 +82,18 @@ prefetch:
 # the report). Output: docs/FYP_Report_<date>.docx.
 # Requires docx-js installed globally: npm install -g docx
 report:
-	NODE_PATH=$$(npm root -g) node scripts/build_fyp_report.js
+	NODE_PATH=$$(npm root -g) node scripts/build_fyp_report_v3.js
 
 # Standalone full thesis (separate from the interim report; not overwritten by `make report`)
 thesis:
 	NODE_PATH=$$(npm root -g) node scripts/build_fyp_thesis.js
+
+# Standalone agentic-AI workflow / methods report (how agentic AI tools were used to
+# accelerate the project — separate deliverable; touches neither report nor thesis).
+# Regenerates figures (local @resvg/resvg-js → run `npm install` once) + the docx.
+# Output: docs/Agentic_AI_Workflow_Report_<date>.docx.
+agentic-report:
+	NODE_PATH=$$(npm root -g) node scripts/build_agentic_report.js
 
 architecture-diagram:
 	$(PYTHON) scripts/generate_architecture_diagram.py

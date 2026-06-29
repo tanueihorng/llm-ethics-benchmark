@@ -1,14 +1,20 @@
 // ============================================================================
-// FYP THESIS builder — a NEW, standalone, research-grade thesis (docx-js).
+// FYP THESIS builder (v2 — publication-grade pass) — standalone thesis (docx-js).
 // Separate from scripts/build_fyp_report.js; `make report` never touches this.
-// Output: docs/FYP_Thesis_2026-06-18.docx   (build: node scripts/build_fyp_thesis.js)
+// Output: docs/FYP_Thesis_2026-06-26_v2.docx
+// NOTE: publication-grade revision (figures, +stats refs, FDR/power, Phi-κ fix).
+// The original (build_fyp_thesis.js → FYP_Thesis_2026-06-18.docx) is left intact
+// for side-by-side comparison.
 // ============================================================================
 const fs = require("fs");
+const path = require("path");
 const {
   Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell,
   Header, Footer, AlignmentType, LevelFormat, TableOfContents, HeadingLevel,
-  BorderStyle, WidthType, ShadingType, PageNumber, PageBreak,
+  BorderStyle, WidthType, ShadingType, PageNumber, PageBreak, ImageRun,
 } = require("docx");
+
+const FIGDIR = path.join(__dirname, "..", "docs", "figures");
 
 const SERIF = "Times New Roman";
 const MONO = "Consolas";
@@ -47,6 +53,23 @@ const REF = (n, text) => new Paragraph({ spacing: { after: 90, line: 264 },
 const CAP = (text) => new Paragraph({ spacing: { before: 60, after: 200 }, alignment: AlignmentType.CENTER,
   children: [new TextRun({ text, font: SERIF, size: 20, italics: true })] });
 
+// Figure: centered PNG (aspect-preserving) + numbered italic caption. Figures
+// are produced reproducibly from results/analysis/*.json by scripts/make_figures.py.
+let __figN = 0;
+const _pngSize = (buf) => ({ w: buf.readUInt32BE(16), h: buf.readUInt32BE(20) });
+function FIG(file, caption, dispW = 520) {
+  __figN += 1;
+  const buf = fs.readFileSync(path.join(FIGDIR, file));
+  const { w, h } = _pngSize(buf);
+  const dispH = Math.round(dispW * h / w);
+  return [
+    new Paragraph({ alignment: AlignmentType.CENTER, spacing: { before: 140, after: 60 },
+      children: [new ImageRun({ type: "png", data: buf, transformation: { width: dispW, height: dispH } })] }),
+    new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 200 },
+      children: [new TextRun({ text: `Figure ${__figN}. ${caption}`, font: SERIF, size: 20, italics: true })] }),
+  ];
+}
+
 function tbl(headers, rows, widths) {
   const border = { style: BorderStyle.SINGLE, size: 1, color: "999999" };
   const borders = { top: border, bottom: border, left: border, right: border };
@@ -81,7 +104,7 @@ const cover = [
   CTR("Student:  TAN UEI HORNG  (UTAN001)", { size: 26, bold: true, after: 120 }),
   CTR("Email:  UTAN001@e.ntu.edu.sg", { size: 22, after: 120 }),
   CTR("Supervisor:  Dr. Zhang Jiehuang  (jiehuang.zhang@ntu.edu.sg)", { size: 22, after: 560 }),
-  CTR("18 June 2026", { size: 26, bold: true, after: 80 }),
+  CTR("26 June 2026", { size: 26, bold: true, after: 80 }),
   CTR("Five matched pairs / ten models / four families · three precisions · four benchmarks · 329 automated tests", { size: 18, italics: true, color: "555555" }),
   new Paragraph({ children: [new PageBreak()] }),
 ];
@@ -93,7 +116,7 @@ const declaration = [
   new Paragraph({ spacing: { before: 700, after: 40 }, children: [T("_______________________________")] }),
   P("Tan Uei Horng  (UTAN001)", { after: 30 }),
   P("College of Computing and Data Science, Nanyang Technological University", { after: 30 }),
-  P("Date:  18 June 2026", { after: 30 }),
+  P("Date:  26 June 2026", { after: 30 }),
   new Paragraph({ children: [new PageBreak()] }),
 ];
 
@@ -121,7 +144,7 @@ const toc = [
   H1NB("Table of Contents"),
   new TableOfContents("Table of Contents", { hyperlink: true, headingStyleRange: "1-3" }),
   new Paragraph({ children: [new PageBreak()] }),
-  H1NB("List of Tables"),
+  H1NB("List of Tables and Figures"),
   P("Table 3.1  Model pairs, families, and parameter scales.", { after: 60 }),
   P("Table 3.2  Benchmarks, primary metrics, and sample budgets.", { after: 60 }),
   P("Table 3.3  Interpretation labels derived from combined deltas.", { after: 60 }),
@@ -129,6 +152,9 @@ const toc = [
   P("Table 6.1  Judge-versus-regex agreement (Cohen’s κ) by model family.", { after: 60 }),
   P("Table 6.2  Main study: per-pair deltas and interpretation labels (fp16 vs NF4).", { after: 60 }),
   P("Table 6.3  Precision sweep: HarmBench ASR at fp16 / INT8 / NF4 (judge).", { after: 60 }),
+  P("Figure 1  Scorer validation: judge ASR vs regex proxy, and judge-vs-proxy Cohen's κ.", { after: 60 }),
+  P("Figure 2  The capability-anchored safety space (ΔMMLU vs judge ΔASR, with label regions).", { after: 60 }),
+  P("Figure 3  Precision sweep fp16 → INT8 → NF4 (HarmBench ASR, MMLU, ARC).", { after: 60 }),
   new Paragraph({ children: [new PageBreak()] }),
 ];
 
@@ -150,7 +176,7 @@ const ch1 = [
   NUM("RQ4: Within a family, are smaller models more sensitive than larger ones?", "rq"),
   NUM("RQ5: Are the effects consistent across model families and across quantization precisions?", "rq"),
   H2("1.4  Contributions"),
-  PJ("This thesis makes three contributions. First, a methodological one: a capability-anchored, judge-validated procedure for distinguishing genuine alignment shifts from capability degradation under quantization — and the finding that a refusal-counting scorer systematically over-counts attack success, relocating the study’s one significant effect once the benchmark’s own classifier is used. Second, an empirical one: across five matched pairs, four families, and three precisions, capability loss is a clean cliff at four-bit while the safety effect is sparse, model- and method-specific rather than a smooth function of bit-width. Third, an engineering one: an open, reproducible, extensible framework (matched-pair loading, a benchmark-plugin contract, a judge-validation layer, and cluster orchestration) that others can reuse for their own quantization-safety studies."),
+  PJ("This thesis makes four contributions. The first, and the one with consequences beyond this study, is a scorer-validity result: a refusal-counting scorer systematically over-counts attack success — its harmful set is a near-strict superset of the benchmark classifier's — and adopting HarmBench's own classifier (cross-checked by a second, independent judge) relocates the study's one significant effect from one model to another. The choice of scorer is not a detail; in safety evaluation it can change the conclusion. The second is methodological: a controlled, capability-anchored, judge-validated procedure that isolates quantization (matched-pair, on-the-fly) and distinguishes genuine alignment shifts from capability degradation. The third is empirical: across five matched pairs, four families, and three precisions, capability loss is a clean cliff at four-bit while the safety effect is sparse and model- and method-specific rather than a smooth function of bit-width — and the multiplicity-robust signal is capability loss, not a safety change. The fourth is an engineering one: an open, reproducible, extensible framework (matched-pair loading, a benchmark-plugin contract, a judge-validation layer, and cluster orchestration) that others can reuse for their own quantization-safety studies."),
   H2("1.5  Thesis structure"),
   PJ("Chapter 2 surveys related work and isolates the gap. Chapter 3 details the methodology: the matched-pair design, quantization, benchmarks, scoring, the interpretation framework, and the statistical procedure. Chapter 4 documents the system design and implementation. Chapter 5 describes the experimental setup. Chapter 6 presents the results. Chapter 7 discusses them and the threats to validity, Chapter 8 records limitations, Chapter 9 proposes future work, and Chapter 10 concludes. A reproducibility statement and appendices follow."),
 ];
@@ -206,7 +232,7 @@ const ch3 = [
   ], [4200, 5160]),
   CAP("Table 3.3  Interpretation labels derived from combined deltas."),
   H2("3.6  Decoding controls and statistics"),
-  PJ("All inference uses greedy decoding at temperature 0.0 with a fixed seed, so the only variance reflected in the intervals is prompt sampling. Deltas carry paired-bootstrap 95% confidence intervals (2,000 resamples, seed 42), resampled by prompt identity so that both members of a pair see the same prompts in the same order. The single load-bearing effect is additionally tested with McNemar’s exact paired test, and a multi-seed sensitivity arm (temperature 0.7) estimates generation-level variance for that pair. Significance flags are nominal and uncorrected for multiple comparisons; this is stated wherever significance is claimed."),
+  PJ("All inference uses greedy decoding at temperature 0.0 with a fixed seed, so the only variance reflected in the intervals is prompt sampling. Deltas carry paired-bootstrap 95% confidence intervals [20] (2,000 resamples, seed 42), resampled by prompt identity so that both members of a pair see the same prompts in the same order. The single load-bearing effect is additionally tested with McNemar’s exact paired test [19], and a multi-seed sensitivity arm (temperature 0.7) estimates generation-level variance for that pair. Significance flags are reported both uncorrected and under a Benjamini-Hochberg false-discovery-rate correction, with a power/minimum-detectable-effect analysis (§6.6)."),
 ];
 
 const ch4 = [
@@ -247,9 +273,10 @@ const ch6 = [
     ["Qwen", "0.19 – 0.37", "poor — regex over-counts heavily"],
     ["Mistral", "0.11", "worst — regex 0.890 vs judge 0.345 (4-bit)"],
     ["Llama", "0.68 – 0.79", "good — little ambiguous middle ground"],
-    ["Phi", "0.59 – 0.67", "moderate"],
+    ["Phi", "0.67", "good — like Llama"],
   ], [1900, 3660, 3800]),
-  CAP("Table 6.1  Judge-versus-regex agreement (Cohen’s κ) by model family."),
+  CAP("Table 6.1  Judge-versus-regex agreement (Cohen’s κ) by model family (fp16-vs-NF4 main study)."),
+  ...FIG("judge_vs_proxy.png", "Scorer validation. Left: HarmBench-classifier ASR versus the regex 'non-refusal' proxy, one marker per model — every point lies below the diagonal, so the proxy over-counts harmful compliance (worst for Qwen and Mistral). Right: judge-vs-proxy Cohen's κ per model — family-dependent. Source: results/analysis/judge_agreement.json."),
   H2("6.2  Main study (fp16 vs NF4)"),
   PJ("Under the primary classifier, NF4 quantization never significantly reduces harmful compliance, and the only significant increase is in the smallest model, Qwen3-1.7B (ΔASR = +0.055, CI [+0.010, +0.100]). That pair also loses significant capability, so it is labelled broad_degradation. The remaining pairs show no significant safety change. Table 6.2 reports the per-pair deltas and labels."),
   tbl(["Pair", "ΔASR (95% CI)", "Sig?", "ΔMMLU", "ΔARC", "Label"], [
@@ -260,6 +287,7 @@ const ch6 = [
     ["phi4_mini", "0.000 [−0.030,+0.030]", "no", "−0.023", "−0.015", "robust_preservation"],
   ], [1500, 2700, 700, 1320, 1240, 1900]),
   CAP("Table 6.2  Main study: per-pair deltas and interpretation labels (fp16 vs NF4). Bold-zero CIs exclude zero."),
+  ...FIG("capability_anchor.png", "The capability-anchored safety space. Each pair is placed by its capability delta (ΔMMLU, x) and harmful-compliance delta (judge ΔASR, y); dashed lines mark the interpretation thresholds and shaded quadrants name the labels. Bars are paired-bootstrap 95% CIs. Source: results/analysis/{judge_agreement,pairwise_deltas}.json."),
   PJ("The Qwen3-1.7B effect, though significant, is modest and fragile: it is corroborated by McNemar’s exact test (p = 0.027) but is not significant under the GPT-4o second judge, and a multi-seed arm attenuates it to roughly half the greedy estimate (mean +0.024). It should be read as the upper end of a decode-dependent range, not a fixed effect (RQ1, RQ4)."),
   H2("6.3  Capability anchoring (RQ3)"),
   PJ("Every pair loses capability under NF4 in direction; the loss is significant on at least one benchmark for Qwen3-1.7B (MMLU), Qwen3-4B (ARC), and Llama-3B (both). The two capability benchmarks diverge informatively: Qwen3-1.7B’s large MMLU drop does not replicate on ARC, so the dramatic within-Qwen scale gap is partly MMLU-specific. The capability anchor is what allows the safety deltas to be read correctly — the smallest Qwen pair degrades on both axes, while no pair shows a safety “improvement” that is really capability collapse."),
@@ -275,9 +303,11 @@ const ch6 = [
     ["phi4_mini", "0.055", "0.060", "0.055", "flat"],
   ], [1700, 1100, 1100, 1100, 4360]),
   CAP("Table 6.3  Precision sweep: HarmBench ASR at fp16 / INT8 / NF4 (primary judge)."),
+  ...FIG("precision_sweep.png", "Precision sweep fp16 → INT8 → NF4. Capability (MMLU, ARC) is essentially flat through INT8 and falls only at four-bit — a cliff, not a gradient — while the safety axis (judge ASR) is method-specific: Llama-3B rises at INT8 and reverts at NF4. Source: results/analysis/precision_sweep.json."),
   PJ("The Llama INT8 effect is real but bounded: it rests on roughly eight to nine prompts, concentrated in the illegal and cybercrime categories, on a single pair, and it does not persist to the more aggressive four-bit method. It is therefore reported as a method-specific numerical effect of the LLM.int8 algorithm on this model, not a general law — the honest, calibrated reading."),
   H2("6.6  Statistical caveats"),
-  PJ("Three caveats bound the conclusions. With 200 HarmBench prompts the confidence intervals are wide (about ±0.05), so small deltas are not distinguishable from zero. Significance is nominal and uncorrected for multiple comparisons — across the sweep roughly thirty Attack-Success-Rate comparisons are made, so the single significant NF4 delta (Qwen3-1.7B, p = 0.027) is a nominal result that would not survive a strict family-wise correction; it is carried as the headline only because it is independently corroborated by McNemar, a multi-seed arm, and (in direction) the second judge. The Llama INT8 effect, significant under two judges and two tests, is the more multiplicity-robust of the two. The reader is asked to weigh this converging evidence rather than any single per-comparison threshold."),
+  PJ("Three caveats bound the conclusions. With 200 HarmBench prompts the confidence intervals are wide (about ±0.05), so small deltas are not distinguishable from zero. Indeed a power analysis shows the study is underpowered for the effects it measures: at n = 200 and the observed discordant rates the minimum detectable ΔASR for 80%% power is roughly ±0.04–0.06, and the Qwen3-1.7B effect (+0.055) has post-hoc power of only about 0.67 — so the predominance of nulls on the safety axis partly reflects a detection floor, not only a substantive absence of effect."),
+  PJ("Significance is also nominal and, rather than merely noting this, we report the corrected view. Applying a Benjamini-Hochberg false-discovery-rate correction (q < 0.05) over the family of twenty primary NF4-vs-fp16 contrasts (exact McNemar p per contrast; results/analysis/multiple_comparisons.json), exactly three survive — and all three are capability losses (Qwen3-1.7B MMLU q = 0.029, Llama-3B ARC q = 0.029, Qwen3-4B ARC q = 0.039). The Qwen3-1.7B ΔASR (p = 0.027) does not survive (q = 0.13). The multiplicity-robust signal of four-bit NF4 is therefore capability degradation, not a safety change; the single safety regression is carried as the headline only because it is independently corroborated by McNemar, a multi-seed arm, and (in direction) the second judge, and it is consistent with the capability-driven mechanism reading (§6.4). The Llama INT8 effect, significant under two judges and two tests, is the more multiplicity-robust safety move. The reader is asked to weigh this converging evidence rather than any single per-comparison threshold."),
 ];
 
 const ch7 = [
@@ -304,7 +334,7 @@ const ch8 = [
 
 const ch9 = [
   H1("Chapter 9  Future Work"),
-  NUM("Human-grounded judge validation, to remove the residual construct threat on the primary scorer.", "fw"),
+  NUM("Human-grounded judge validation — a stratified human-labelled subset reporting classifier-vs-human and regex-vs-human agreement — and an open-weight guard model (e.g. Llama Guard [21]) for a fully reproducible cross-check, to remove the residual construct threat on the primary scorer.", "fw"),
   NUM("Replication of the INT8 Llama effect across more models and decode seeds, to establish whether it is a general LLM.int8 phenomenon or model-specific numerics.", "fw"),
   NUM("Extending the refusal-margin probe across all three precisions, not only the behavioural metrics.", "fw"),
   NUM("Adding genuinely different quantization families (GPTQ, AWQ, GGUF) beyond the two bitsandbytes methods.", "fw"),
@@ -337,6 +367,9 @@ const refs = [
   REF(16, "G. K. Sandve, A. Nekrutenko, J. Taylor, and E. Hovig, “Ten simple rules for reproducible computational research,” PLOS Computational Biology, vol. 9, no. 10, e1003285, 2013."),
   REF(17, "G. Wilson, J. Bryan, K. Cranston, J. Kitzes, L. Nederbragt, and T. K. Teal, “Good enough practices in scientific computing,” PLOS Computational Biology, vol. 13, no. 6, e1005510, 2017."),
   REF(18, "A. M. Smith et al., “Journal of Open Source Software (JOSS): Design and first-year review,” arXiv preprint arXiv:1707.02264, 2017."),
+  REF(19, "Q. McNemar, “Note on the sampling error of the difference between correlated proportions or percentages,” Psychometrika, vol. 12, no. 2, pp. 153–157, 1947."),
+  REF(20, "B. Efron and R. J. Tibshirani, An Introduction to the Bootstrap. New York: Chapman & Hall, 1993."),
+  REF(21, "H. Inan et al., “Llama Guard: LLM-based input-output safeguard for human-AI conversations,” Meta AI, 2023. arXiv:2312.06674."),
 ];
 
 const appendix = [
@@ -387,5 +420,5 @@ const doc = new Document({
   }],
 });
 
-const out = "/Users/tanueihorng/fyp_quant/docs/FYP_Thesis_2026-06-18.docx";
+const out = "/Users/tanueihorng/fyp_quant/docs/FYP_Thesis_2026-06-26_v2.docx";
 Packer.toBuffer(doc).then(buf => { fs.writeFileSync(out, buf); console.log("WROTE:", out, "(" + buf.length + " bytes)"); });

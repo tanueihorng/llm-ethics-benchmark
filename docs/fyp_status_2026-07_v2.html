@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CCDS25-1136: Project Status · July 2026 · v2 (liquid glass)</title>
+<meta name="description" content="Follow-up status of an NTU Final-Year Project: does 4-bit quantization change a small language model's safety, or just its competence? Five matched pairs across four families, three precisions, two judges. Liquid-glass edition." />
+
+<!--
+=====================================================================================
+  FYP STATUS DECK · v2 (LIQUID GLASS)  ·  CCDS25-1136  ·  Tan Uei Horng (UTAN001)
+  NTU College of Computing & Data Science  ·  Supervisor: Dr. Zhang Jiehuang
+
+  This is a VISUAL VARIANT of docs/fyp_status_2026-07.html — same 8 panels, same copy,
+  same scroll engine. Reskinned to a dusk-blue "liquid glass" aesthetic (studied DNA
+  from a user-supplied reference image: cherry-blossom dusk SaaS hero, frosted glass
+  UI, two-tone grotesque headline, translucent watermark glyph).
+
+  The ORIGINAL fyp_status_2026-07.html is kept intact for side-by-side comparison.
+
+  Hallmark · macrostructure: Marquee Hero · tone: atmospheric · anchor hue: cool dusk-blue
+  theme: studied-DNA (source: image) · paper dusk-blue · accent blossom-pink / translucent-white
+  display: grotesque (Spline Sans) · label: mono (IBM Plex Mono) · blossoms: hand-built SVG
+  studied: yes · DNA-source: user reference image · pre-emit critique: P5 H4 E5 S4 R4 V5
+=====================================================================================
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+<style>
+:root{
+  /* ---- dusk sky ---- */
+  --sky-1:#7c91c4; --sky-2:#546893; --sky-3:#3d4d73; --sky-4:#34415f;
+  /* ---- ink (light on dusk) ---- */
+  --ink:#ffffff; --text:#ffffff; --text-soft:rgba(255,255,255,.74);
+  --muted:rgba(255,255,255,.56); --faint:rgba(255,255,255,.36);
+  /* ---- liquid glass ---- */
+  --glass:rgba(255,255,255,.10); --glass-2:rgba(255,255,255,.055);
+  --glass-bd:rgba(255,255,255,.22); --glass-bd-soft:rgba(255,255,255,.13);
+  --blur:blur(18px) saturate(135%);
+  --sheen:inset 0 1px 0 rgba(255,255,255,.26);
+  --shadow:0 18px 48px rgba(18,26,52,.30), var(--sheen);
+  /* ---- accents ---- */
+  --blossom:#f4a9c4; --blossom-deep:#e87ba6;
+  --signal:#cdd8ff; --gold:#f0cd86;
+  --harm:#ff9db1; --cap:#ffd08a; --safe:#9fe7c6;
+  --harm-bg:rgba(255,120,150,.16); --cap-bg:rgba(255,200,110,.15); --safe-bg:rgba(120,230,180,.15);
+  --harm-bd:rgba(255,120,150,.42); --cap-bd:rgba(255,200,110,.4); --safe-bd:rgba(120,230,180,.42);
+  /* ---- type ---- */
+  --display:'Spline Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --sans:'Spline Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+  --ease:cubic-bezier(.22,1,.36,1); --td:.78s;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow-x:clip}
+body{font-family:var(--sans);color:var(--text);background:var(--sky-3);
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow:hidden}
+::selection{background:rgba(244,169,196,.32)}
+strong{font-weight:700;color:#fff}
+em{font-style:italic;font-weight:500;color:#fff}
+a{color:inherit}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+button:focus-visible,a:focus-visible{outline:2px solid #fff;outline-offset:3px;border-radius:6px}
+
+/* ===== dusk-sky background + blossoms + watermark ===== */
+#bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+  background:
+    radial-gradient(120% 90% at 50% -10%, rgba(255,255,255,.10), transparent 55%),
+    linear-gradient(178deg,var(--sky-1) 0%,var(--sky-2) 38%,var(--sky-3) 72%,var(--sky-4) 100%)}
+/* soft bottom vignette keeps text crisp */
+#bg::after{content:"";position:absolute;inset:0;
+  background:radial-gradient(130% 80% at 50% 120%, rgba(20,26,50,.34), transparent 60%)}
+.wm{position:absolute;top:48%;left:50%;transform:translate(-50%,-50%);
+  width:min(58vw,720px);height:min(58vw,720px);opacity:.9}
+.blossoms{position:absolute;top:-26px;width:min(52vw,660px);height:auto;
+  filter:drop-shadow(0 10px 22px rgba(16,18,40,.28));transition:opacity .6s var(--ease)}
+.blossoms.left{left:-46px}
+.blossoms.right{right:-46px;transform:scaleX(-1)}
+/* blossoms are a hero device: full on the cover, ghosted on content panels so
+   they frame rather than collide with panel headings */
+body.inner .blossoms{opacity:.15}
+@media(max-width:680px){.blossoms{width:78vw}.blossoms.right{display:none}}
+
+/* ===== deck / panels ===== */
+#deck{position:fixed;inset:0;z-index:1;overflow:hidden;background:transparent;perspective:1500px;perspective-origin:50% 45%}
+.panel{position:absolute;inset:0;width:100%;background:transparent;overflow-y:auto;overflow-x:hidden;
+  opacity:0;visibility:hidden;transform-style:preserve-3d;backface-visibility:hidden;will-change:transform,opacity;
+  transition:transform var(--td,.78s) var(--ease), opacity calc(var(--td,.78s)*.78) var(--ease);
+  scrollbar-width:none;-ms-overflow-style:none}
+.panel::-webkit-scrollbar{display:none}
+.panel.active{opacity:1;visibility:visible}
+.panel-inner{min-height:100%;width:100%;max-width:1180px;margin:0 auto;display:flex;flex-direction:column;
+  justify-content:safe center;padding:clamp(44px,6vh,76px) clamp(26px,7vw,116px)}
+.panel.statement::before{content:"";position:absolute;inset:0;z-index:-1;
+  background:radial-gradient(80% 60% at 50% 42%, rgba(255,255,255,.07), transparent 70%)}
+
+.anim{opacity:0;transform:translateY(16px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.panel.active .anim{opacity:1;transform:none}
+.panel.active .d1{transition-delay:.06s}.panel.active .d2{transition-delay:.13s}
+.panel.active .d3{transition-delay:.20s}.panel.active .d4{transition-delay:.27s}
+.panel.active .d5{transition-delay:.34s}.panel.active .d6{transition-delay:.41s}
+
+/* ===== type ===== */
+.eyebrow{font-family:var(--mono);font-size:clamp(11px,1.2vw,13px);letter-spacing:.26em;text-transform:uppercase;
+  color:var(--text-soft);margin-bottom:clamp(14px,2.2vh,24px);display:flex;align-items:center;gap:12px}
+.eyebrow::before{content:"";width:26px;height:1px;background:currentColor;opacity:.6}
+h1{font-family:var(--display);font-weight:600;letter-spacing:-.025em;line-height:1.02;
+  font-size:clamp(2.9rem,7vw,5.8rem);color:#fff}
+h2{font-family:var(--display);font-weight:600;letter-spacing:-.02em;line-height:1.06;
+  font-size:clamp(2.1rem,4.6vw,3.5rem);margin-bottom:clamp(10px,1.6vh,18px);color:#fff}
+h2 .accent,h1 .accent{color:rgba(255,255,255,.5);font-weight:600;font-style:normal}
+.lead{font-size:clamp(1.06rem,1.65vw,1.32rem);color:var(--text);font-weight:400;line-height:1.6;max-width:820px}
+p{color:var(--text-soft);line-height:1.62}
+.mono{font-family:var(--mono)}
+.src{font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-top:clamp(14px,2vh,22px);letter-spacing:.01em;line-height:1.6}
+
+/* ===== glass primitive ===== */
+.glass{background:var(--glass);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);
+  border:1px solid var(--glass-bd-soft);box-shadow:var(--shadow)}
+
+/* ===== chips ===== */
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:clamp(20px,3vh,30px)}
+.chip{font-family:var(--mono);font-size:12.5px;font-weight:500;color:var(--text-soft);
+  background:var(--glass);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);
+  border:1px solid var(--glass-bd-soft);border-radius:999px;padding:7px 15px;display:flex;align-items:center;gap:8px;box-shadow:var(--sheen)}
+.chip b{color:#fff;font-weight:700}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--safe);box-shadow:0 0 0 3px rgba(159,231,198,.22)}
+
+/* ===== cta pills (cover) ===== */
+.cta{display:flex;flex-wrap:wrap;gap:14px;margin-top:clamp(24px,3.4vh,36px)}
+.btn{font-family:var(--sans);font-size:.96rem;font-weight:600;border-radius:999px;
+  padding:13px 26px;cursor:pointer;border:1px solid transparent;display:inline-flex;align-items:center;gap:9px;
+  transition:transform .18s var(--ease),box-shadow .18s var(--ease),background .2s var(--ease)}
+.btn-primary{background:#fff;color:#2a3556;box-shadow:0 10px 26px rgba(16,22,46,.28)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(16,22,46,.36)}
+.btn-ghost{background:var(--glass);color:#fff;border-color:var(--glass-bd);
+  -webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);box-shadow:var(--sheen)}
+.btn-ghost:hover{background:rgba(255,255,255,.18);transform:translateY(-2px)}
+.btn:active{transform:translateY(0)}
+
+/* ===== stats ===== */
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(14px,2vw,26px);margin-top:clamp(22px,3.4vh,40px)}
+.stat{background:var(--glass-2);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);
+  border:1px solid var(--glass-bd-soft);border-radius:16px;padding:clamp(15px,1.8vw,22px);box-shadow:var(--sheen)}
+.stat .num{font-family:var(--display);font-weight:600;letter-spacing:-.01em;line-height:1;
+  font-size:clamp(2.1rem,4.6vw,3.3rem);color:#fff}
+.stat .lab{font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;color:var(--muted);margin-top:8px;line-height:1.45}
+@media(max-width:760px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* ===== cards ===== */
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(14px,1.6vw,22px);margin-top:clamp(20px,3vh,32px)}
+@media(max-width:840px){.grid2{grid-template-columns:1fr}}
+.card{background:var(--glass);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);
+  border:1px solid var(--glass-bd-soft);border-radius:18px;padding:clamp(18px,2vw,26px);box-shadow:var(--shadow);position:relative;overflow:hidden}
+.card .ct{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:11px}
+.card h3{font-family:var(--display);font-weight:700;font-size:clamp(1.15rem,1.7vw,1.45rem);letter-spacing:-.02em;margin-bottom:8px;color:#fff}
+.card p{font-size:clamp(.9rem,1.2vw,1rem)}
+.card .edge{position:absolute;left:0;top:0;bottom:0;width:4px}
+.eCap{background:var(--cap)}.eSig{background:var(--signal)}
+
+/* ===== results table (in glass) ===== */
+.tblwrap{margin-top:clamp(18px,2.6vh,28px);overflow-x:auto;scrollbar-width:thin;-webkit-overflow-scrolling:touch;
+  background:var(--glass);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);
+  border:1px solid var(--glass-bd-soft);border-radius:18px;box-shadow:var(--shadow);padding:clamp(6px,1vw,14px)}
+.tbl{width:100%;min-width:560px;border-collapse:collapse;font-size:clamp(.86rem,1.15vw,1rem)}
+.tbl th,.tbl td{text-align:left;padding:clamp(11px,1.5vh,16px) clamp(10px,1.3vw,18px);border-bottom:1px solid rgba(255,255,255,.12)}
+.tbl tbody tr:last-child td{border-bottom:none}
+.tbl thead th{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.tbl tbody tr{transition:background-color .3s var(--ease)}
+.tbl tbody tr:hover{background:rgba(255,255,255,.07)}
+.tbl .model{font-family:var(--display);font-weight:700;font-size:1.05em;letter-spacing:-.01em;color:#fff}
+.tbl .model small{display:block;font-family:var(--mono);font-weight:400;font-size:10.5px;color:var(--muted);letter-spacing:.02em;margin-top:2px}
+.delta{font-family:var(--mono);font-weight:700;white-space:nowrap}
+.delta .star{color:#fff;font-weight:700}
+.up{color:var(--harm)} .down{color:var(--cap)} .flat{color:var(--muted)}
+.verdict{font-family:var(--mono);font-size:11.5px;font-weight:700;letter-spacing:.02em;padding:4px 11px;border-radius:999px;white-space:nowrap;display:inline-block}
+.vHarm{color:var(--harm);background:var(--harm-bg);border:1px solid var(--harm-bd)}
+.vCap{color:var(--cap);background:var(--cap-bg);border:1px solid var(--cap-bd)}
+.vSafe{color:var(--safe);background:var(--safe-bg);border:1px solid var(--safe-bd)}
+.tnote{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:14px;line-height:1.6}
+
+/* ===== flow (methodology) ===== */
+.flow{display:flex;align-items:stretch;gap:clamp(8px,1vw,14px);margin-top:clamp(20px,3vh,32px);flex-wrap:wrap}
+.fnode{flex:1;min-width:150px;background:var(--glass);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);
+  border:1px solid var(--glass-bd-soft);border-radius:16px;padding:clamp(14px,1.6vw,20px);box-shadow:var(--shadow);position:relative}
+.fnode .fi{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--signal);margin-bottom:9px}
+.fnode h4{font-family:var(--display);font-weight:700;font-size:1.02rem;letter-spacing:-.01em;margin-bottom:5px;color:#fff}
+.fnode p{font-size:.82rem;line-height:1.5}
+.farrow{display:flex;align-items:center;color:var(--faint);font-size:20px;font-weight:300}
+@media(max-width:840px){.flow{flex-direction:column}.farrow{transform:rotate(90deg);justify-content:center}}
+
+/* ===== next-steps ===== */
+.steps{display:flex;flex-direction:column;gap:clamp(10px,1.5vh,15px);margin-top:clamp(20px,3vh,30px)}
+.step{display:flex;gap:16px;align-items:flex-start;background:var(--glass);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);
+  border:1px solid var(--glass-bd-soft);border-radius:16px;padding:clamp(14px,1.7vw,20px) clamp(16px,1.8vw,24px);
+  box-shadow:var(--shadow);transition:transform .35s var(--ease),border-color .35s var(--ease)}
+.step:hover{transform:translateX(5px);border-color:var(--glass-bd)}
+.step .si{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--signal);min-width:30px;padding-top:2px}
+.step h4{font-family:var(--display);font-weight:700;font-size:1.06rem;letter-spacing:-.01em;margin-bottom:3px;color:#fff}
+.step p{font-size:.9rem}
+.tag{font-family:var(--mono);font-size:9.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);
+  background:rgba(240,205,134,.14);border:1px solid rgba(240,205,134,.4);border-radius:6px;padding:2px 7px;margin-left:auto;white-space:nowrap;align-self:center}
+
+/* ===== fixed UI ===== */
+#topbar{position:fixed;top:0;left:0;right:0;height:60px;z-index:60;display:flex;align-items:center;justify-content:space-between;
+  padding:0 clamp(18px,3vw,34px);pointer-events:none}
+.brand{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--text-soft);pointer-events:auto}
+.brand svg{width:18px;height:18px;opacity:.9}
+.brand b{color:#fff;font-weight:700}
+.counter{font-family:var(--mono);font-size:12px;color:var(--text-soft);pointer-events:auto;
+  background:var(--glass);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);
+  border:1px solid var(--glass-bd-soft);border-radius:999px;padding:6px 14px;box-shadow:var(--sheen)}
+.counter b{color:#fff;font-weight:700}
+#progress-wrap{position:fixed;left:0;right:0;bottom:0;height:3px;z-index:60;background:rgba(255,255,255,.12)}
+#progress{height:100%;width:0;background:linear-gradient(90deg,#fff,var(--blossom));transition:width .6s var(--ease)}
+#dots{position:fixed;right:clamp(14px,2vw,26px);top:50%;transform:translateY(-50%);z-index:60;display:flex;flex-direction:column;gap:13px}
+#dots button{width:11px;height:11px;border-radius:50%;border:1.5px solid rgba(255,255,255,.5);background:transparent;cursor:pointer;padding:0;position:relative;transition:border-color .3s,transform .3s,background .3s}
+#dots button:hover{border-color:#fff;transform:scale(1.2)}
+#dots button.active{border-color:#fff;background:#fff}
+#dots button .lab{position:absolute;right:20px;top:50%;transform:translateY(-50%);white-space:nowrap;font-family:var(--mono);
+  font-size:10.5px;color:#fff;background:var(--glass);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);
+  border:1px solid var(--glass-bd-soft);border-radius:7px;padding:3px 9px;opacity:0;pointer-events:none;transition:opacity .25s}
+#dots button:hover .lab{opacity:1}
+.hint{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:60;font-family:var(--mono);font-size:11px;
+  color:var(--muted);display:flex;align-items:center;gap:8px;animation:bob 2.4s var(--ease) infinite}
+@keyframes bob{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,5px)}}
+@media(max-width:680px){#dots{display:none}.hint{display:none}}
+@media(prefers-reduced-motion:reduce){.hint{animation:none}.anim{transition:none}}
+</style>
+</head>
+<body>
+
+<div id="bg">
+  <!-- translucent watermark glyph (6-spoke mark) -->
+  <svg class="wm" viewBox="-50 -50 100 100" aria-hidden="true" fill="rgba(255,255,255,.07)">
+    <g>
+      <rect x="-7" y="-46" width="14" height="92" rx="7"/>
+      <rect x="-7" y="-46" width="14" height="92" rx="7" transform="rotate(60)"/>
+      <rect x="-7" y="-46" width="14" height="92" rx="7" transform="rotate(120)"/>
+    </g>
+  </svg>
+
+  <!-- hand-built cherry-blossom branches (Tier-B SVG), framing the top corners -->
+  <svg class="blossoms left" viewBox="0 0 660 420" aria-hidden="true">
+    <defs>
+      <radialGradient id="pet" cx="50%" cy="34%" r="66%">
+        <stop offset="0" stop-color="#fff4f8"/><stop offset="55%" stop-color="#f6b1cb"/><stop offset="100%" stop-color="#e87ba6"/>
+      </radialGradient>
+      <radialGradient id="bud" cx="50%" cy="40%" r="70%">
+        <stop offset="0" stop-color="#f9cad9"/><stop offset="100%" stop-color="#e486ab"/>
+      </radialGradient>
+      <linearGradient id="br" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#4a3a2c"/><stop offset="100%" stop-color="#2a2017"/>
+      </linearGradient>
+      <g id="bl">
+        <g opacity=".97">
+          <ellipse rx="8.6" ry="13.2" cy="-13" fill="url(#pet)"/>
+          <ellipse rx="8.6" ry="13.2" cy="-13" fill="url(#pet)" transform="rotate(72)"/>
+          <ellipse rx="8.6" ry="13.2" cy="-13" fill="url(#pet)" transform="rotate(144)"/>
+          <ellipse rx="8.6" ry="13.2" cy="-13" fill="url(#pet)" transform="rotate(216)"/>
+          <ellipse rx="8.6" ry="13.2" cy="-13" fill="url(#pet)" transform="rotate(288)"/>
+        </g>
+        <circle r="3.1" fill="#f2c14e"/>
+        <g fill="#d77ba0">
+          <circle cx="0" cy="-6.4" r="1.05"/><circle cx="6.1" cy="-2" r="1.05"/>
+          <circle cx="3.8" cy="5.2" r="1.05"/><circle cx="-3.8" cy="5.2" r="1.05"/><circle cx="-6.1" cy="-2" r="1.05"/>
+        </g>
+      </g>
+    </defs>
+    <!-- branches -->
+    <g stroke="url(#br)" fill="none" stroke-linecap="round" opacity=".9">
+      <path d="M-30,36 C120,66 210,28 320,86 C404,130 500,118 600,150" stroke-width="7"/>
+      <path d="M150,52 C176,96 150,150 196,196" stroke-width="4.5"/>
+      <path d="M430,108 C470,150 470,150 452,210" stroke-width="4"/>
+      <path d="M250,66 C268,40 300,30 332,30" stroke-width="3.4"/>
+    </g>
+    <!-- buds -->
+    <g>
+      <ellipse cx="200" cy="198" rx="6" ry="9" fill="url(#bud)" transform="rotate(18 200 198)"/>
+      <ellipse cx="455" cy="214" rx="5.5" ry="8.5" fill="url(#bud)" transform="rotate(-12 455 214)"/>
+      <ellipse cx="338" cy="28" rx="5" ry="8" fill="url(#bud)" transform="rotate(40 338 28)"/>
+      <ellipse cx="612" cy="150" rx="6" ry="9" fill="url(#bud)" transform="rotate(70 612 150)"/>
+    </g>
+    <!-- blossoms -->
+    <use href="#bl" transform="translate(60,44) scale(1.7) rotate(-8)"/>
+    <use href="#bl" transform="translate(150,54) scale(1.25) rotate(20)"/>
+    <use href="#bl" transform="translate(232,40) scale(1.5) rotate(6)"/>
+    <use href="#bl" transform="translate(322,86) scale(1.85) rotate(-14)"/>
+    <use href="#bl" transform="translate(404,72) scale(1.15) rotate(28)"/>
+    <use href="#bl" transform="translate(470,128) scale(1.55) rotate(10)"/>
+    <use href="#bl" transform="translate(560,148) scale(1.3) rotate(-6)"/>
+    <use href="#bl" transform="translate(168,150) scale(1.0) rotate(18)"/>
+  </svg>
+  <svg class="blossoms right" viewBox="0 0 660 420" aria-hidden="true">
+    <use href="#bl" transform="translate(60,44) scale(1.6) rotate(-8)"/>
+    <g stroke="url(#br)" fill="none" stroke-linecap="round" opacity=".9">
+      <path d="M-30,40 C120,70 210,32 320,90 C404,134 500,120 600,150" stroke-width="7"/>
+      <path d="M150,56 C176,100 150,154 196,200" stroke-width="4.5"/>
+      <path d="M430,112 C470,154 470,154 452,214" stroke-width="4"/>
+    </g>
+    <use href="#bl" transform="translate(150,54) scale(1.3) rotate(20)"/>
+    <use href="#bl" transform="translate(232,42) scale(1.55) rotate(6)"/>
+    <use href="#bl" transform="translate(322,88) scale(1.8) rotate(-14)"/>
+    <use href="#bl" transform="translate(404,74) scale(1.2) rotate(28)"/>
+    <use href="#bl" transform="translate(470,130) scale(1.5) rotate(10)"/>
+    <use href="#bl" transform="translate(560,150) scale(1.35) rotate(-6)"/>
+    <ellipse cx="200" cy="202" rx="6" ry="9" fill="url(#bud)" transform="rotate(18 200 202)"/>
+    <ellipse cx="455" cy="218" rx="5.5" ry="8.5" fill="url(#bud)" transform="rotate(-12 455 218)"/>
+  </svg>
+</div>
+
+<div id="topbar">
+  <div class="brand">
+    <svg viewBox="-50 -50 100 100" fill="#fff" aria-hidden="true"><g><rect x="-7" y="-46" width="14" height="92" rx="7"/><rect x="-7" y="-46" width="14" height="92" rx="7" transform="rotate(60)"/><rect x="-7" y="-46" width="14" height="92" rx="7" transform="rotate(120)"/></g></svg>
+    <span><b>CCDS25-1136</b> · Project status</span>
+  </div>
+  <div class="counter"><b id="cNow">01</b> / <span id="cTot">08</span></div>
+</div>
+<nav id="dots" aria-label="Slides"></nav>
+<div id="progress-wrap"><div id="progress"></div></div>
+<div class="hint"><span>scroll</span><span>↓</span></div>
+
+<main id="deck">
+
+  <!-- 1 · COVER -->
+  <section class="panel statement active" id="hero" data-nav="Cover">
+    <div class="panel-inner">
+      <div class="eyebrow anim d1">Follow-up · July 2026</div>
+      <h1 class="anim d2">What survives<br><span class="accent">compression?</span></h1>
+      <p class="lead anim d3" style="margin-top:22px">The follow-up to June. The size-and-family pattern, now stress-tested across <em>five pairs, four families, three precisions</em>, and two independent judges. The headline held.</p>
+      <div class="stats anim d4">
+        <div class="stat"><div class="num" data-count="5">0</div><div class="lab">matched model pairs<br>baseline vs quantized</div></div>
+        <div class="stat"><div class="num" data-count="4">0</div><div class="lab">model families<br>Qwen · Llama · Mistral · Phi</div></div>
+        <div class="stat"><div class="num" data-count="3">0</div><div class="lab">precision points<br>fp16 · INT8 · NF4</div></div>
+        <div class="stat"><div class="num" data-count="306">0</div><div class="lab">automated tests<br>all passing</div></div>
+      </div>
+      <div class="cta anim d5">
+        <button class="btn btn-primary" onclick="go(6)">See the verdict →</button>
+        <button class="btn btn-ghost" onclick="go(7)">What's next</button>
+      </div>
+      <div class="chips anim d6">
+        <span class="chip"><span class="dot"></span><b>Status:</b>&nbsp;extensions complete</span>
+        <span class="chip">Tan Uei Horng · UTAN001</span>
+        <span class="chip">Supervisor: Dr. Zhang Jiehuang</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 · BRIDGE: THE PATTERN HELD -->
+  <section class="panel statement" id="p-recap" data-nav="The pattern held">
+    <div class="panel-inner">
+      <div class="eyebrow anim d1">Where June left off</div>
+      <h2 class="anim d2" style="font-size:clamp(2rem,4.8vw,3.6rem);max-width:16ch">The June pattern, now <span class="accent">put to the test</span></h2>
+      <p class="lead anim d3" style="margin-top:18px">In June, three matched pairs told a clean three-way story: only the smallest model degraded on both safety and capability, one lost capability alone, and one came through intact.</p>
+      <p class="anim d4" style="margin-top:16px;max-width:780px;font-size:1.05rem">The worry with three pairs is that the pattern is a coincidence of which models I picked. So I extended it: five pairs, four families, three precisions, a second judge, and a second capability test. This follow-up reports what survived.</p>
+      <div class="src anim d5">All figures below are judge-primary (official HarmBench 13B classifier), with a GPT-4o second judge as a cross-check.</div>
+    </div>
+  </section>
+
+  <!-- 3 · GENERALISATION TABLE -->
+  <section class="panel" id="p-pairs" data-nav="Five pairs">
+    <div class="panel-inner">
+      <div class="eyebrow anim d1">Generalisation across families</div>
+      <h2 class="anim d2">Five pairs, four families, <span class="accent">one outlier</span></h2>
+      <p class="lead anim d3">Adding Mistral-7B and Phi-4-mini produced no new safety regression. Qwen3-1.7B remains the only pair where 4-bit quantization significantly raises harmful compliance.</p>
+      <div class="tblwrap anim d4">
+      <table class="tbl">
+        <thead><tr>
+          <th>Model pair</th><th>Family</th><th>Δ Harmful compliance</th><th>Reading</th>
+        </tr></thead>
+        <tbody>
+          <tr><td><span class="model">Qwen3-1.7B<small>smallest</small></span></td><td class="mono">Qwen</td><td class="delta up">+5.5 pp <span class="star">✻</span></td><td><span class="verdict vHarm">degrades on both</span></td></tr>
+          <tr><td><span class="model">Qwen3-4B<small>4 B</small></span></td><td class="mono">Qwen</td><td class="delta flat">+2.5 pp</td><td><span class="verdict vSafe">essentially intact</span></td></tr>
+          <tr><td><span class="model">Llama-3.2-3B<small>3 B</small></span></td><td class="mono">Llama</td><td class="delta flat">0.0 pp</td><td><span class="verdict vCap">capability-only loss</span></td></tr>
+          <tr><td><span class="model">Mistral-7B<small>largest</small></span></td><td class="mono">Mistral</td><td class="delta flat">−4.0 pp</td><td><span class="verdict vSafe">no significant change</span></td></tr>
+          <tr><td><span class="model">Phi-4-mini<small>3.8 B</small></span></td><td class="mono">Phi</td><td class="delta flat">0.0 pp</td><td><span class="verdict vSafe">robust · fewer benign refusals</span></td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p class="tnote anim d5"><span class="star" style="color:#fff">✻</span> = statistically significant (McNemar p = 0.027; bootstrap CI excludes 0). Δ is judge-primary (official 13B classifier). Only Qwen3-1.7B rises significantly; across all five pairs, 4-bit quantization never significantly <em>reduced</em> harmful compliance. Capability fell under quantization for every pair.</p>
+    </div>
+  </section>
+
+  <!-- 4 · ROBUSTNESS -->
+  <section class="panel" id="p-robust" data-nav="Second opinions">
+    <div class="panel-inner">
+      <div class="eyebrow anim d1">Does the headline survive a second opinion?</div>
+      <h2 class="anim d2">Two judges, <span class="accent">two capability tests</span></h2>
+      <p class="lead anim d3">The two things a reviewer would press on hardest: is the safety result an artifact of one scorer, and is the capability anchor an artifact of one benchmark?</p>
+      <div class="grid2 anim d4">
+        <div class="card"><span class="edge eSig"></span><div class="ct">Second judge · GPT-4o</div><h3>Not scorer-dependent</h3><p>An independent judge scored every HarmBench response. It agrees with the official classifier at a Cohen's κ of 0.69 to 0.94 (against 0.19 to 0.37 for the old regex) and reproduces the Qwen3-1.7B rise in the same direction.</p></div>
+        <div class="card"><span class="edge eCap"></span><div class="ct">Second capability test · ARC</div><h3>Direction robust, magnitude overstated</h3><p>ARC-Challenge agrees with MMLU in direction (every pair loses capability) but the gaps are smaller: Qwen3-1.7B drops 1.3 pp on ARC versus 8.7 pp on MMLU. Capability loss is now reported as direction-robust but magnitude-uncertain.</p></div>
+      </div>
+      <p class="src anim d5">Both judges and McNemar's test agree on the significant moves. The regex proxy disagreed most on Mistral (a sign flip), which is exactly why the classifier is primary.</p>
+    </div>
+  </section>
+
+  <!-- 5 · PRECISION SWEEP -->
+  <section class="panel" id="p-precision" data-nav="Precision sweep">
+    <div class="panel-inner">
+      <div class="eyebrow anim d1">Does it scale with bit-width?</div>
+      <h2 class="anim d2">Not a <span class="accent">smooth dial</span></h2>
+      <p class="lead anim d3">Each pair now runs at three precisions. If quantization damage were graded by bit-width, every effect would grow as the bits drop. It does not.</p>
+      <div class="flow anim d4">
+        <div class="fnode"><div class="fi">fp16</div><h4>Full precision</h4><p>The baseline. Both members of each pair start here.</p></div>
+        <div class="farrow">→</div>
+        <div class="fnode"><div class="fi">INT8 · LLM.int8</div><h4>Capability intact</h4><p>No measurable capability hit. But Llama-3.2-3B's safety rises here (+4.0 pp, both judges + McNemar) and reverts at NF4.</p></div>
+        <div class="farrow">→</div>
+        <div class="fnode"><div class="fi">NF4 · 4-bit</div><h4>The capability cliff</h4><p>Capability drops sharply. Qwen3-1.7B's safety rise lives here, not at INT8.</p></div>
+      </div>
+      <p class="src anim d5">Capability loss is a clean cliff at 4-bit; the safety axis is method-specific (Qwen3-1.7B at NF4, Llama-3.2-3B at INT8). Which quantization method you choose matters in its own right, not just how many bits you drop.</p>
+    </div>
+  </section>
+
+  <!-- 6 · MECHANISM -->
+  <section class="panel" id="p-why" data-nav="The why">
+    <div class="panel-inner">
+      <div class="eyebrow anim d1">Why do the flips happen?</div>
+      <h2 class="anim d2">Boundary instability, <span class="accent">not targeted erosion</span></h2>
+      <p class="lead anim d3">I looked at each model's refusal margin (how close a response sits to the refuse/comply boundary) to test whether quantization erodes alignment in a targeted way.</p>
+      <div class="stats anim d4" style="grid-template-columns:repeat(2,minmax(0,1fr));max-width:640px">
+        <div class="stat"><div class="num">0.64</div><div class="lab">within-family AUC<br>thin margins predict flips</div></div>
+        <div class="stat"><div class="num">50 / 42</div><div class="lab">flips toward harmful / toward safe<br>roughly symmetric</div></div>
+      </div>
+      <p class="anim d5" style="margin-top:22px;max-width:820px;font-size:1.05rem">If quantization were stripping guardrails, the flips would be one-directional and safety-specific. Instead they go both ways, are model- and token-specific, and for the headline pair they track <em>generic capability softening</em>. The reading the evidence supports is boundary instability, which reinforces the capability-driven story rather than a targeted alignment shift.</p>
+    </div>
+  </section>
+
+  <!-- 7 · SYNTHESIS -->
+  <section class="panel statement" id="p-verdict" data-nav="What it says">
+    <div class="panel-inner">
+      <div class="eyebrow anim d1">What it all says</div>
+      <h2 class="anim d2" style="max-width:18ch">Quantization erodes competence, <span class="accent">not guardrails</span></h2>
+      <p class="lead anim d3" style="margin-top:18px">Across five pairs, four families, three precisions, two judges, and two capability benchmarks, the picture is consistent.</p>
+      <p class="anim d4" style="margin-top:16px;max-width:820px;font-size:1.06rem">4-bit quantization mostly degrades capability. Only the smallest model, Qwen3-1.7B, shows a genuine and modest safety regression on top of that. Everywhere else, an apparent safety change is better explained by lost capability, or the model is simply robust. Quantization does not quietly strip alignment; it wears down competence, and the safety effects follow from that.</p>
+    </div>
+  </section>
+
+  <!-- 8 · WHAT'S NEXT -->
+  <section class="panel statement" id="p-next" data-nav="What's next">
+    <div class="panel-inner">
+      <div class="eyebrow anim d1">What comes next</div>
+      <h2 class="anim d2" style="font-size:clamp(1.9rem,4.4vw,3.2rem)">From results to <span class="accent">write-up</span></h2>
+      <div class="steps anim d3">
+        <div class="step"><div class="si">01</div><div><h4>Finalise for submission</h4><p>Consolidating the full study into the interim report and a standalone thesis (306 tests, all artifacts committed and reproducible).</p></div><span class="tag">in progress</span></div>
+        <div class="step"><div class="si">02</div><div><h4>An optional third scorer</h4><p>An open-weight guard model (Llama Guard) as a third independent HarmBench judge, for fully open reproducibility, if time allows.</p></div><span class="tag">optional</span></div>
+      </div>
+      <p class="src anim d4">Built and maintained with a dual AI-agent workflow (Claude Code + OpenAI Codex) over a custom agent harness, with shared rules and automated checks that keep both agents consistent against one repository.</p>
+    </div>
+  </section>
+
+</main>
+
+<script>
+const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const deck=document.getElementById('deck');
+const panels=[...document.querySelectorAll('.panel')];
+const dotsNav=document.getElementById('dots');
+const progress=document.getElementById('progress');
+const cNow=document.getElementById('cNow'),cTot=document.getElementById('cTot');
+cTot.textContent=String(panels.length).padStart(2,'0');
+
+panels.forEach((p,i)=>{const b=document.createElement('button');
+  b.innerHTML=`<span class="lab">${p.dataset.nav||('Slide '+(i+1))}</span>`;
+  b.setAttribute('aria-label',p.dataset.nav||('Slide '+(i+1)));
+  b.addEventListener('click',()=>go(i));dotsNav.appendChild(b);});
+const dotBtns=[...dotsNav.children];
+
+/* count-up */
+function countUp(el){const target=parseFloat(el.dataset.count);if(isNaN(target)){return;}
+  const dur=900,t0=performance.now();
+  function tick(now){const k=Math.min(1,(now-t0)/dur),e=1-Math.pow(1-k,3);
+    el.textContent=Math.round(target*e);if(k<1)requestAnimationFrame(tick);else el.textContent=target;}
+  requestAnimationFrame(tick);}
+
+const TX={soft:{a:'translateY(46px) scale(.985)',b:'translateY(-46px) scale(.985)',fade:true}};
+let current=0,locked=false,wheelTs=0;
+
+function sideEffects(i){const panel=panels[i];
+  document.body.classList.toggle('inner',i!==0);
+  dotBtns.forEach((b,k)=>{const on=k===i;b.classList.toggle('active',on);on?b.setAttribute('aria-current','true'):b.removeAttribute('aria-current');});
+  cNow.textContent=String(i+1).padStart(2,'0');
+  progress.style.width=(i/(panels.length-1))*100+'%';
+  panel.querySelectorAll('[data-count]:not([data-done])').forEach(n=>{n.setAttribute('data-done','1');countUp(n);});}
+
+function go(to){to=Math.max(0,Math.min(panels.length-1,to));if(locked||to===current)return;
+  const dir=to>current?1:-1,t=TX.soft;
+  const inc=panels[to],out=panels[current];
+  const inFrom=reduceMotion?'none':(dir>0?t.a:t.b),outTo=reduceMotion?'none':(dir>0?t.b:t.a);
+  const fade=reduceMotion||!!t.fade;locked=true;
+  out.style.zIndex='2';inc.style.zIndex='3';inc.scrollTop=0;inc.classList.add('active');
+  inc.style.transition='none';inc.style.transform=inFrom;inc.style.opacity=fade?'0':'1';
+  void inc.offsetWidth;inc.style.transition='';inc.style.transform='none';inc.style.opacity='1';
+  out.style.transform=outTo;out.style.opacity=fade?'0':'1';current=to;sideEffects(to);
+  setTimeout(()=>{out.classList.remove('active');out.style.transform='';out.style.opacity='';out.style.zIndex='';inc.style.zIndex='';
+    locked=false;},(reduceMotion?260:780)+60);}
+
+deck.addEventListener('wheel',function(e){const p=panels[current],can=p.scrollHeight>p.clientHeight+2,now=performance.now(),down=e.deltaY>0;
+  if(can){const atTop=p.scrollTop<=0,atBot=p.scrollTop+p.clientHeight>=p.scrollHeight-1;
+    if((down&&!atBot)||(!down&&!atTop)){wheelTs=now;return;}
+    if(now-wheelTs<300){wheelTs=now;e.preventDefault();return;}}
+  e.preventDefault();if(locked||Math.abs(e.deltaY)<8)return;wheelTs=now;go(current+(down?1:-1));},{passive:false});
+
+window.addEventListener('keydown',function(e){if(e.metaKey||e.ctrlKey||e.altKey)return;
+  const p=panels[current],dn=['ArrowDown','PageDown',' '].includes(e.key),up=['ArrowUp','PageUp'].includes(e.key);
+  if(dn||up){e.preventDefault();const can=p.scrollHeight>p.clientHeight+2;
+    if(can){const atTop=p.scrollTop<=0,atBot=p.scrollTop+p.clientHeight>=p.scrollHeight-1,amt=Math.round(p.clientHeight*0.82);
+      if(dn&&!atBot){p.scrollBy({top:amt,behavior:'smooth'});return;}
+      if(up&&!atTop){p.scrollBy({top:-amt,behavior:'smooth'});return;}}
+    go(current+(dn?1:-1));}
+  else if(e.key==='Home'){e.preventDefault();go(0);}
+  else if(e.key==='End'){e.preventDefault();go(panels.length-1);}});
+
+let _ty=null,_tsTop=0;
+deck.addEventListener('touchstart',function(e){_ty=e.touches[0].clientY;_tsTop=panels[current].scrollTop;},{passive:true});
+deck.addEventListener('touchend',function(e){if(_ty==null)return;const dy=_ty-e.changedTouches[0].clientY;_ty=null;
+  if(Math.abs(dy)<45||locked)return;const p=panels[current],can=p.scrollHeight>p.clientHeight+2;
+  if(can){const atTop=p.scrollTop<=0,atBot=p.scrollTop+p.clientHeight>=p.scrollHeight-1,startedTop=_tsTop<=0,startedBot=_tsTop+p.clientHeight>=p.scrollHeight-1;
+    if((dy>0&&!(atBot&&startedBot))||(dy<0&&!(atTop&&startedTop)))return;}
+  go(current+(dy>0?1:-1));},{passive:true});
+
+panels[0].classList.add('active');sideEffects(0);
+</script>
+</body>
+</html>
