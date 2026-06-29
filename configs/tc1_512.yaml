@@ -1,0 +1,181 @@
+study_name: safety_capability_tradeoff_4bit_slm
+
+models:
+  qwen_2b_base:
+    family: qwen
+    size_b: 1.7
+    quantized: false
+    pair_id: qwen_2b
+    model_id: Qwen/Qwen3-1.7B
+    trust_remote_code: false
+    dtype: auto
+    benchmarks: [harmbench, xstest, mmlu, arc]
+
+  qwen_2b_4bit:
+    family: qwen
+    size_b: 1.7
+    quantized: true
+    pair_id: qwen_2b
+    model_id: Qwen/Qwen3-1.7B
+    trust_remote_code: false
+    dtype: auto
+    benchmarks: [harmbench, xstest, mmlu, arc]
+
+  qwen_4b_base:
+    family: qwen
+    size_b: 4.0
+    quantized: false
+    pair_id: qwen_4b
+    model_id: Qwen/Qwen3-4B
+    trust_remote_code: false
+    dtype: auto
+    benchmarks: [harmbench, xstest, mmlu, arc]
+
+  qwen_4b_4bit:
+    family: qwen
+    size_b: 4.0
+    quantized: true
+    pair_id: qwen_4b
+    model_id: Qwen/Qwen3-4B
+    trust_remote_code: false
+    dtype: auto
+    benchmarks: [harmbench, xstest, mmlu, arc]
+
+  llama_3_2_3b_base:
+    family: llama
+    size_b: 3.0
+    quantized: false
+    pair_id: llama_3_2_3b
+    model_id: meta-llama/Llama-3.2-3B-Instruct
+    trust_remote_code: false
+    dtype: auto
+    benchmarks: [harmbench, xstest, mmlu, arc]
+
+  llama_3_2_3b_4bit:
+    family: llama
+    size_b: 3.0
+    quantized: true
+    pair_id: llama_3_2_3b
+    model_id: meta-llama/Llama-3.2-3B-Instruct
+    trust_remote_code: false
+    dtype: auto
+    benchmarks: [harmbench, xstest, mmlu, arc]
+
+  mistral_7b_base:
+    family: mistral
+    size_b: 7.2
+    quantized: false
+    pair_id: mistral_7b
+    model_id: mistralai/Mistral-7B-Instruct-v0.3
+    trust_remote_code: false
+    dtype: auto
+    benchmarks: [harmbench, xstest, mmlu, arc]
+
+  mistral_7b_4bit:
+    family: mistral
+    size_b: 7.2
+    quantized: true
+    pair_id: mistral_7b
+    model_id: mistralai/Mistral-7B-Instruct-v0.3
+    trust_remote_code: false
+    dtype: auto
+    benchmarks: [harmbench, xstest, mmlu, arc]
+
+  phi4_mini_base:
+    family: phi
+    size_b: 3.8
+    quantized: false
+    pair_id: phi4_mini
+    model_id: microsoft/Phi-4-mini-instruct
+    trust_remote_code: false
+    attn_implementation: eager
+    dtype: auto
+    benchmarks: [harmbench, xstest, mmlu, arc]
+
+  phi4_mini_4bit:
+    family: phi
+    size_b: 3.8
+    quantized: true
+    pair_id: phi4_mini
+    model_id: microsoft/Phi-4-mini-instruct
+    trust_remote_code: false
+    attn_implementation: eager
+    dtype: auto
+    benchmarks: [harmbench, xstest, mmlu, arc]
+
+decoding:
+  # T31/D39: 512-token generation budget (HarmBench's reference default) for the
+  # generation-length robustness rerun. The 128-token study (configs/tc1.yaml) is
+  # retained untouched in results/; this run writes to a parallel results_512/ root.
+  max_new_tokens: 512
+  temperature: 0.0
+  top_p: 1.0
+  repetition_penalty: 1.0
+  max_input_tokens: 1024
+  use_chat_template: true
+
+benchmarks:
+  harmbench:
+    dataset_name: walledai/HarmBench
+    config_name: standard   # HF dataset config; HarmBench has standard/contextual/copyright. The current standard split has 200 rows.
+    split: train
+    max_samples: 400
+    batch_size: 4
+
+  xstest:
+    # Canonical XSTest v2 prompts (Röttger et al., NAACL 2024), bundled
+    # locally as a CSV under data/ to eliminate the HF dataset dependency.
+    # The CSV is 450 rows = 250 safe + 200 unsafe; we filter benign_only=true
+    # to score over-refusal on the 250 safe prompts.
+    dataset_name: paul-rottger/xstest-prompts   # not used when local_csv is set; kept for traceability
+    local_csv: data/xstest_v2_prompts.csv
+    split: prompts                              # ignored for local_csv path
+    max_samples: 400
+    batch_size: 4
+    benign_only: true
+
+  mmlu:
+    dataset_name: cais/mmlu
+    split: test
+    max_samples: 300
+    batch_size: 4
+    subjects:
+      - business_ethics
+      - clinical_knowledge
+      - college_biology
+      - high_school_world_history
+      - high_school_macroeconomics
+      - human_aging
+
+  arc:
+    # ARC-Challenge (Clark et al., 2018) — second capability benchmark (T23 / W5).
+    # Grade-school science MCQ; identical exact-match scoring to MMLU but a
+    # structurally different construct, so capability becomes a 2-benchmark
+    # composite. Full ARC-Challenge test split is ~1,172 questions.
+    dataset_name: allenai/ai2_arc
+    config_name: ARC-Challenge
+    split: test
+    max_samples: 1200
+    batch_size: 4
+
+slurm:
+  partition: UGGPU-TC1
+  qos: normal
+  account:
+  gpus: 1
+  cpus_per_task: 1
+  mem: 10G
+  time: "06:00:00"
+  log_dir: results_512/slurm_logs_tc1
+  work_dir: /tc1home/FYP/utan001/fyp_quant/repo
+  setup_commands:
+    - module load slurm
+    - module load anaconda
+    - source activate fyp-tc1
+    # Force offline mode: compute nodes may not have outbound internet,
+    # and even if they do, runtime fetches risk burning the 6h walltime
+    # on a slow HuggingFace mirror. Pre-cache via scripts/prefetch_tc1.py
+    # on the HEAD node (see TC1_CLUSTER_RUNBOOK.md) before submitting.
+    - export HF_HUB_OFFLINE=1
+    - export HF_DATASETS_OFFLINE=1
+    - export TRANSFORMERS_OFFLINE=1

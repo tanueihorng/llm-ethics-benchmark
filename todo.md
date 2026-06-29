@@ -7,12 +7,71 @@
 
 ---
 
+## [2026-06-29] ACTIVE: T31 — full 512-token rerun of the whole study (retain 128), phases A→G
+
+**Why:** Reviewer-proofing. Study used `max_new_tokens=128`; HarmBench's reference is 512 and generation length materially affects ASR. User chose (over my scoped-check recommendation, eyes-open) a FULL rerun at 512 of everything, keeping all 128 data. See PROJECT_LOG D39 + T31.
+
+**Source of truth:** `docs/PROJECT_LOG.md` §1 + T31 + D39.
+
+**Decided (don't re-litigate):**
+- FULL rerun, all 4 benchmarks, main fp16+NF4 + INT8 sweep + multi-seed — NOT a scoped headline-pair check (user rejected scoped twice).
+- RETAIN all 128-token data: 512 writes to a parallel `results_512/` root (the `results_sensitivity/` pattern). Never touch `results/`.
+- 128-vs-512 contrast is reported as a robustness result.
+- Single annotator for T30 (when it resumes on 512 data).
+
+**Done so far (2026-06-29, local, no GPU):**
+- `configs/tc1_512.yaml` (only diff vs tc1.yaml: max_new_tokens 512 + log_dir results_512/; schema-valid).
+- `slurm/jobs_tc1_512/` (10 matrix, `--output_dir results_512 --device cuda`) + `slurm/jobs_tc1_512_smoke/` (40).
+- `slurm/judge_validation_512.sbatch` (classifier, all 10 aliases, results_512, fp16, 6h; no resume-skip — on timeout resubmit only unscored aliases).
+- `.gitignore` results_512 rules. 29 slurm+config tests pass; 128 jobs byte-identical.
+
+**Next steps (ordered, concrete):**
+1. **Commit + push** the T31 scaffolding (path-scoped — do NOT sweep the pre-existing dashboard/v2/v3 backlog into it). Files: configs/tc1_512.yaml, slurm/jobs_tc1_512/, slurm/jobs_tc1_512_smoke/, slurm/judge_validation_512.sbatch, .gitignore, docs/PROJECT_LOG.md, todo.md.
+2. **TC1 (phase A):** `git -C /tc1home/FYP/utan001/fyp_quant/repo pull --ff-only`. Models already cached (same model_ids as 128 run) → prefetch only if cache cleared. Smoke ONE model first: `sbatch slurm/jobs_tc1_512_smoke/qwen_2b_base__harmbench.sbatch` (confirm it writes to results_512/ + uses native chat template). Then the 10 matrix jobs pair-by-pair (QoS = 1 GPU job at a time; `--resume` continues on 6h timeout — Mistral-7B @512 is the long pole, watch its runtime).
+3. **TC1 (phase B):** `sbatch slurm/judge_validation_512.sbatch` (HarmBench classifier). gpt-4o judge runs on the MAC after SCP (api_judge backend, needs internet): `python scripts/run_judge_validation.py --results-dir results_512 --models <all 10> --benchmark harmbench --backend api_judge ...`.
+4. **Phase C–G scaffolding still to build (next session):** `configs/tc1_int8_512.yaml` + jobs (INT8 sweep; needs phase A fp16 refs in results_512); `configs/tc1_sensitivity_512.yaml` + multi-seed sbatch (clone slurm/jobs_tc1_sensitivity/, point to results_sensitivity_512/); then `make analyze RESULTS_DIR=results_512 ANALYSIS_DIR=results_512/analysis` + a 128-vs-512 comparison artifact; redo T30 (`--make-sheet`/`--make-html` reading results_512); regenerate report/thesis @512 + add the generation-budget robustness section.
+
+**Verification to run after data returns:** manifest/immutability of results/ unchanged; results_512 has 10 aliases × 4 benchmarks; judges 0 parse errors; ΔASR(512) vs ΔASR(128) per pair; whether Qwen-1.7B stays the only significant move.
+
+---
+
+## [2026-06-26] ACTIVE: send the JULY follow-up email + attach the July status deck (staged for a July send)
+
+**Why:** Deliberate pacing of supervisor updates. The June progress update was SENT 2026-06-13 (completed 3-pair results, expansion framed as "next steps"). The follow-up reporting the completed extensions is drafted and its companion deck is built; hold it for a July send. This item is the send action.
+
+**Source of truth:** `docs/PROJECT_LOG.md` §1 + T1.
+
+**Decided (don't re-litigate):**
+- Pacing: June sent now (done), completed-expansion update held for July. (User strategy.)
+- Email file naming = month, not date: `email_drZhang_june.md` / `email_drZhang_july.md`.
+- Deck identity = editorial whitepaper (Newsreader / Spline Sans / IBM Plex Mono, ruled-paper bg, indigo+gold), light-first. (User chose after rejecting the recolor-only + the showcase-lookalike fonts.)
+
+**Verification already done:**
+- June email SENT 2026-06-13; as-sent text saved verbatim to `docs/email_drZhang_june.md`.
+- July deck `docs/fyp_status_2026-07.html` verified in Claude preview (light default): 8 unique panel IDs, 0 console errors, cover + 5-pair table + precision flow render, numbers match §1.
+
+**Next steps (ordered, concrete):**
+1. When ready (July), send the body of `docs/email_drZhang_july.md` to `jiehuang.zhang@ntu.edu.sg` — subject `FYP July Progress Update: Cross-family + precision results (CCDS25-1136)`.
+2. ATTACH `docs/fyp_status_2026-07.html` (the 5-pair completed deck). Do NOT attach `docs/fyp_status_2026-06-13.html` (June 3-pair deck — already sent with June).
+3. If NTU mail strips/blocks the `.html` attachment: zip it or export to PDF first.
+4. After sending: add a PROJECT_LOG §4 row (July sent) + tick T1; mark `docs/email_drZhang_july.md`'s header note SENT (like the June file).
+
+**Watch items / guardrails:**
+- Both email md files are gitignored (`docs/email_*.md`) — keep local; repo is PUBLIC.
+- Don't cross the decks: July email ↔ `fyp_status_2026-07.html`; June email ↔ `fyp_status_2026-06-13.html`.
+- The deck shows Mistral/Phi on the safety axis only (no fabricated ΔMMLU) — if adding capability columns, pull from `results/analysis/*.csv`.
+
+**Ready-to-paste:**
+- To: `jiehuang.zhang@ntu.edu.sg`
+- Subject: `FYP July Progress Update: Cross-family + precision results (CCDS25-1136)`
+- Body: `docs/email_drZhang_july.md`  ·  Attach: `docs/fyp_status_2026-07.html`
+
 ## [2026-06-18] ACTIVE: submission wrap-up — the study is COMPLETE; only the two submission tasks remain
 
 **Source of truth:** `docs/PROJECT_LOG.md` §1 status + D35 (INT8) + D36 (audit). All experiments, code, report, deliverables, and the standalone thesis are done and on `main` (run `git status -sb` for the live sync state). 306 tests; `make agent-check` 8/8.
 
 **Do next, in order:**
-1. **T1 — email Dr. Zhang.** Draft is `docs/email_drZhang_2026-06-13.md` (gitignored, local-only). Highest non-research priority; last supervisor contact was 2026-03-09. Results are in hand (5 pairs / 4 families / 3 precisions, judge-validated).
+1. **T1 — email Dr. Zhang.** June update SENT 2026-06-13 (as-sent record `docs/email_drZhang_june.md`). Remaining: send the staged July follow-up + its deck — see the **[2026-06-26]** entry at the top.
 2. **T15 — submit.** Two documents exist: the interim report `docs/FYP_Report_2026-06-14.docx` (`make report`; §6.15 + §6.5 caveat) and the NEW standalone thesis `docs/FYP_Thesis_2026-06-18.docx` (`make thesis`; IEEE-cited, sources verified). Decide which the milestone requires; the thesis cover says "Final Report — Thesis" (one-line change in `scripts/build_fyp_thesis.js` if it's actually the interim).
 3. **T3 — `MyTCinfo`** on TC1 (storage quota). Quick, optional.
 

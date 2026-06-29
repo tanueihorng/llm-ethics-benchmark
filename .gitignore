@@ -24,6 +24,17 @@ results/summary/*.csv
 # results/analysis/sensitivity_multiseed.{json,csv} is committed.
 results_sensitivity/
 
+# T31/D39 512-token generation-length rerun arm: same policy as results/ —
+# raw generations + summaries stay local (harmful text), redacted judge sidecars
+# and results_512/analysis/* are the only tracked artifacts.
+results_512/**/raw.jsonl
+results_512/**/raw.v2.jsonl
+results_512/**/summary.json
+results_512/**/submitted_jobs.json
+results_512/**/check_status.json
+results_512/summary/*.csv
+results_512/slurm_logs*/
+
 # SLURM logs for any cluster variant (slurm_logs, slurm_logs_tc1, ...)
 results/slurm_logs*/
 
@@ -52,3 +63,21 @@ docs/email_*.md
 
 # Python packaging build artifacts (from pip install -e .)
 *.egg-info/
+
+# Node dependencies — local @resvg/resvg-js (figure rasteriser for
+# scripts/build_agentic_report.js). package.json + package-lock.json ARE tracked
+# so the dependency is recorded; restore the platform binary with `npm install`.
+node_modules/
+
+# Human-label audit: annotation sheet contains raw prompt/response text — local only.
+# Only the redacted aggregate results/analysis/human_validation.json is committed.
+human_labels/
+
+# FYP submission staging package (contains private email drafts) — keep local
+fyp_submission/
+
+# Dashboard (dashboard/app.py) scratch outputs: user-scaffolded configs and the
+# sbatch they generate are working files, not committed artifacts. Force-add a
+# specific one (git add -f) if you decide to keep it.
+configs/generated/
+slurm/jobs_generated/
