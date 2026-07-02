@@ -4,8 +4,9 @@
 # and its base-vs-4bit pairwise pipeline stay byte-untouched. It defines the five
 # `*_8bit` models (quantized via bitsandbytes LLM.int8 -- quant_method: int8) plus
 # their fp16 baselines. The baselines are present only for schema pair-validity and
-# as the sweep's fp16 reference; they are NOT re-run (results/<base>/ already exist
-# from the main run). Submit ONLY the `*_8bit` aliases on TC1, e.g.:
+# as the sweep's fp16 reference; they are NOT re-run (the 512-token fp16 baselines
+# already exist in results_512/<base>/ from the 512 main study, configs/tc1_512.yaml —
+# NOT the 128-token results/<base>/ tree). Submit ONLY the `*_8bit` aliases on TC1, e.g.:
 #   sbatch slurm/jobs_tc1_int8/qwen_2b_8bit__matrix.sbatch
 # then score with the judge (slurm/judge_validation_int8.sbatch) and analyse the
 # fp16/int8/nf4 trend with scripts/precision_sweep_analysis.py.

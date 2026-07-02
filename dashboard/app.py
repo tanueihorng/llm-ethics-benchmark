@@ -469,15 +469,11 @@ def page_run() -> None:
         help="Runs write here. The canonical evidence trees (results/, results_512/, "
              "results_sensitivity*/) are refused — they hold the study's immutable raw artifacts.",
     )
-    exec_dir = REPO_ROOT / out_dir_str
-
     if st.button("▶️ Run", type="primary"):
-        if D.is_protected_results_dir(exec_dir, REPO_ROOT):
-            st.error(
-                f"`{out_dir_str}` is a protected evidence tree (results/, results_512/, "
-                "results_sensitivity*). Execution into it is blocked — use a scratch "
-                f"dir such as `{D.DEFAULT_EXECUTION_DIR}/`."
-            )
+        try:
+            exec_dir = D.resolve_execution_dir(out_dir_str, REPO_ROOT)
+        except D.ProtectedResultsDirError as exc:
+            st.error(str(exc))
             st.stop()
         sub = "smoke" if mode.startswith("Smoke") else "run"
         cmd = [

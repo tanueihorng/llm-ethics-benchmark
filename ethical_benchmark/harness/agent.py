@@ -286,13 +286,17 @@ def check_immutable_artifacts(repo_root: Path, policy: dict[str, Any]) -> CheckR
             "expected in CI / fresh clone); nothing to verify.",
         )
     if missing:
-        # Some present and verified, some absent — flag the absences (e.g. a
-        # local deletion) without blocking the gate.
+        # Some present and verified, some absent. On a machine that has the
+        # evidence checked out this means part of the immutable tree was
+        # deleted locally - an integrity failure, not a tolerable absence
+        # (full absence, i.e. CI / fresh clone, is handled above). Audit P2:
+        # the gate must detect destruction, not only mutation.
         return CheckResult(
             "immutable-artifacts",
-            "warn",
-            f"Immutable artifact manifest matches {verified} present files; "
-            f"{len(missing)} manifest files are absent on disk.",
+            "fail",
+            f"Immutable manifest matches {verified} present files but "
+            f"{len(missing)} manifest files are absent on disk — possible "
+            "local deletion of immutable evidence.",
             [f"absent: {path}" for path in missing[:40]],
         )
     return CheckResult(

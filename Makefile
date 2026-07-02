@@ -80,9 +80,17 @@ prefetch:
 # Regenerate the FYP interim report docx. Run after any "report-worthy"
 # change (methodology, scope, results, anything cited in Chapters 3-6 of
 # the report). Output: docs/FYP_Report_<date>.docx.
-# Requires docx-js installed globally: npm install -g docx
+# docx is pinned in package.json — `npm install` once on a fresh clone.
+# (NODE_PATH is kept as a fallback for machines with only a global install;
+# local node_modules wins when present.)
 report:
 	NODE_PATH=$$(npm root -g) node scripts/build_fyp_report_v5.js
+
+# Deterministic claim lock (D43): every load-bearing number in the canonical
+# report builder is asserted against the committed analysis artifacts. Also
+# runs inside pytest via tests/test_report_claims.py.
+verify-claims:
+	$(PYTHON) scripts/verify_report_claims.py
 
 # Standalone full thesis (separate from the interim report; not overwritten by `make report`)
 thesis:

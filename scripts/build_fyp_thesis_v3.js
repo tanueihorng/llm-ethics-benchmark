@@ -382,6 +382,30 @@ const appendix = [
 // ===========================================================================
 // ASSEMBLE
 // ===========================================================================
+// ---------------------------------------------------------------------------
+// DATA SNAPSHOT BANNER (2026-07-02, decision D43): this build is a 128-era
+// snapshot; its headline safety finding is superseded by the 512-primary
+// study (D41). Keep this banner until the thesis is mirrored to 512.
+// ---------------------------------------------------------------------------
+const snapshotBanner = [
+  new Paragraph({
+    alignment: AlignmentType.CENTER,
+    spacing: { after: 200 },
+    children: [new TextRun({
+      text: "DATA SNAPSHOT NOTICE (2026-07-02) - 128-TOKEN-ERA BUILD, HEADLINE SUPERSEDED",
+      font: SERIF, size: 26, bold: true, color: "B00020",
+    })],
+  }),
+  new Paragraph({
+    alignment: AlignmentType.JUSTIFIED,
+    spacing: { after: 300 },
+    children: [new TextRun({
+      text: "This thesis build presents the study at the retired 128-token generation budget. The primary study is now HarmBench's 512-token reference budget (decision D41, 2026-07-02): the +0.055 Qwen3-1.7B ASR increase reported as significant in this document was a generation-length truncation artefact and does not replicate at the reference budget (dASR 0.000 under the official classifier, McNemar p = 1.000). At 512 tokens no pair shows a significant harmful-compliance increase and no ASR contrast survives BH-FDR correction; the robust cost of NF4 is capability, not safety. For the current findings see docs/FYP_Report_2026-07-01_v5.docx. A 512-mirrored thesis build is tracked as open work; do not cite this document's safety numbers as current.",
+      font: SERIF, size: 21, bold: true, color: "B00020",
+    })],
+  }),
+];
+
 const doc = new Document({
   styles: {
     default: { document: { run: { font: SERIF, size: BODY } } },
@@ -413,7 +437,7 @@ const doc = new Document({
       new TextRun({ children: [PageNumber.TOTAL_PAGES], font: SERIF, size: 18 }),
     ] })] }) },
     children: [
-      ...cover, ...declaration, ...abstract, ...acknowledgements, ...aiDeclaration, ...toc,
+      ...snapshotBanner, ...cover, ...declaration, ...abstract, ...acknowledgements, ...aiDeclaration, ...toc,
       ...ch1, ...ch2, ...ch3, ...ch4, ...ch5, ...ch6, ...ch7, ...ch8, ...ch9, ...ch10,
       ...refs, ...appendix,
     ],

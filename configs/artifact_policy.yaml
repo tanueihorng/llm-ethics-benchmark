@@ -55,6 +55,25 @@ redaction:
     - .claude/skills/**/*.md
     - .codex/agents/*.toml
     - .codex/hooks/*.py
+    # Audit P3 (2026-07-02): the committed evidence sidecars and analysis
+    # outputs were never redaction-scanned — a future judge run emitting a
+    # raw-text field would have been committed unblocked. Now scanned;
+    # self-tested in tests/test_agent_harness.py (synthetic leaked sidecar
+    # fails the gate).
+    - results/*/*/scores.v2.jsonl
+    - results/*/*/summary.v2.json
+    - results/*/harmbench/scores.judge.*.jsonl
+    - results/*/harmbench/summary.judge.*.json
+    - results/analysis/*.json
+    - results/analysis/*.csv
+    - results_512/*/*/scores.v2.jsonl
+    - results_512/*/*/summary.v2.json
+    - results_512/*/harmbench/scores.judge.*.jsonl
+    - results_512/*/harmbench/summary.judge.*.json
+    - results_512/analysis/*.json
+    - results_512/analysis/*.csv
+    - results_sensitivity_512/*/*/harmbench/scores.judge.*.jsonl
+    - results_sensitivity_512/*/*/harmbench/summary.judge.*.json
   exclude:
     - docs/archive/*
   patterns:
@@ -93,6 +112,12 @@ stale_text:
     # 2026-07-02 and are scanned again; the as-sent June deck lives in
     # docs/archive/ (excluded wholesale, like all archives).
     - docs/*.html
+    # Audit P1 root cause (2026-07-02): the stale 128-era κ values in report
+    # §6.13 survived every gate because the canonical report SOURCE (.js) was
+    # never in scan_paths — only .py/.md/.html were. The canonical builder is
+    # now scanned; retired v1–v4 and the thesis builders are excluded below
+    # as historical sources.
+    - scripts/build_fyp_report_v5.js
   exclude:
     - docs/archive/*
     - docs/fyp_showcase.html
@@ -104,6 +129,17 @@ stale_text:
     # Task packets are point-in-time records of completed tasks (like archive); they
     # legitimately cite the then-current report/builder, so they are not stale-scanned.
     - docs/agent_tasks/*
+    # Retired report builders (v1–v4) and the 128-era thesis builders are
+    # historical sources for archived/banner-marked docx — not scanned. Only
+    # the CANONICAL builder (added to scan_paths above) is stale-scanned; when
+    # a v6 builder is promoted, swap it into scan_paths and move v5 here.
+    - scripts/build_fyp_report.js
+    - scripts/build_fyp_report_v2.js
+    - scripts/build_fyp_report_v3.js
+    - scripts/build_fyp_report_v4.js
+    - scripts/build_fyp_thesis.js
+    - scripts/build_fyp_thesis_v2.js
+    - scripts/build_fyp_thesis_v3.js
   patterns:
     - 'RESULTS PENDING'
     - 'pending judge'
@@ -117,7 +153,10 @@ stale_text:
     # EXISTS and is shown as a node in repo/architecture diagrams, so the builder guard
     # targets only instructional "edit/update/regenerate the old builder" phrasing,
     # NOT bare structural mentions.
-    - 'FYP_Report_2026-06-14'
+    # (superseded-exempt since 2026-07-02: the canonical builder's Appendix
+    # changelog legitimately names retired docx on lines that mark them
+    # "(superseded ...)" — history stays legal, current-facing citation fails.)
+    - '^(?!.*[Ss]uperseded).*FYP_Report_2026-06-14'
     - '(?:edit|edits|change|update|regenerate|generated from)[^\n]{0,40}build_fyp_report\.js'
     # D41: the canonical report is docs/FYP_Report_2026-07-01_v5.docx (built by
     # scripts/build_fyp_report_v5.js; 512-token primary). Guard against the retired
@@ -125,8 +164,8 @@ stale_text:
     # as current. Same two-tier approach as the D40 guard above: naked docx names
     # (they should only survive in docs/archive/, which is excluded) + verb-anchored
     # builder phrasing (the v3 builder file still exists as history).
-    - 'FYP_Report_2026-06-26_v3'
-    - 'FYP_Report_2026-06-30_v4'
+    - '^(?!.*[Ss]uperseded).*FYP_Report_2026-06-26_v3'
+    - '^(?!.*[Ss]uperseded).*FYP_Report_2026-06-30_v4'
     - '(?:edit|edits|change|update|regenerate|generated from)[^\n]{0,40}build_fyp_report_v3\.js'
     # D41 stale-RESULT guards: the 128-era headline may only be cited with explicit
     # 128-scoping on the same line. Pattern 1 catches a line asserting the +0.055
@@ -140,6 +179,13 @@ stale_text:
     # guards cannot catch. Negated forms ("no significant safety regression")
     # and 128-scoped lines stay legal.
     - '^(?!.*128).*(?<!no )(?<!no new )significant safety regression'
+    # Audit P1 (2026-07-02): retired 128-era κ values may only appear on lines
+    # scoped with "128" — the canonical report carried "κ = 0.19 at baseline,
+    # 0.11 under 4-bit" and "κ 0.60–0.63" as 512-framed prose (true 512 values:
+    # 0.28/0.25 judge-vs-proxy, 0.83/0.78 cross-judge). Self-tested to fire.
+    - '^(?!.*128).*0\.19 at baseline'
+    - '^(?!.*128).*κ as low as 0\.11'
+    - '^(?!.*128).*0\.60–0\.63'
 
 report_worthy:
   changed_file_patterns:
@@ -169,8 +215,8 @@ report_worthy:
 
 agent_status:
   # Informational only — no check consumes these (they document expected counts for
-  # a human reading the policy). Kept current with the post-T26/T29 state:
+  # a human reading the policy). Kept current with the post-audit 2026-07-02 state:
   # 10 main-study fp16/NF4 harmbench_cls judge sidecars per tree (5 pairs x 2 members;
-  # the 512-primary tree additionally carries 5 INT8 + 10 api_judge sidecars); 329 tests.
+  # the 512-primary tree additionally carries 5 INT8 + 10 api_judge sidecars); 339 tests (incl. the D43 claim lock, tests/test_report_claims.py).
   expected_judge_sidecars: 10
-  expected_test_count_note: 329
+  expected_test_count_note: 339

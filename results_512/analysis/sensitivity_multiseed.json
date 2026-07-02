@@ -83,7 +83,7 @@
         "sign_consistent": true
       },
       "greedy_judge_delta": -0.04000000000000001,
-      "greedy_in_multiseed_range": false
+      "greedy_in_multiseed_range": true
     }
   ]
 }

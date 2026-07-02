@@ -147,6 +147,30 @@ def normalize_model_key(alias: str) -> str:
     return normalized
 
 
+def _resolved_dtype_name(dtype: str, runtime_device: str) -> str:
+    """String form of the loader's dtype policy, for artifact provenance.
+
+    Mirrors ``HFModelLoader._resolve_dtype`` (models/loader.py) without
+    importing torch, so summaries built against stub backends carry the same
+    provenance string: ``auto`` resolves to float16 on CUDA and float32
+    elsewhere. For quantized members the NF4 compute dtype follows this same
+    resolved value.
+
+    Args:
+        dtype: Configured dtype policy string (e.g. ``auto``).
+        runtime_device: Resolved runtime device string.
+
+    Returns:
+        Canonical dtype name (``float16`` / ``float32`` / ``bfloat16`` / ...).
+    """
+
+    normalized = (dtype or "auto").strip().lower()
+    if normalized == "auto":
+        return "float16" if runtime_device == "cuda" else "float32"
+    aliases = {"fp16": "float16", "bf16": "bfloat16", "fp32": "float32"}
+    return aliases.get(normalized, normalized)
+
+
 def build_run_paths(output_dir: Path, model_alias: str, benchmark: str) -> Dict[str, Path]:
     """Builds output paths for one run.
 
@@ -383,6 +407,13 @@ def execute_quant_benchmark_loaded(
         "family": model_entry.family,
         "size_b": model_entry.size_b,
         "quantized": model_entry.quantized,
+        # Provenance fields (audit P2): the committed pre-2026-07 summaries
+        # predate these keys - their method/dtype provenance rests on
+        # study_name + alias + the loader's dtype policy.
+        "quant_method": (
+            (model_entry.quant_method or "nf4") if model_entry.quantized else None
+        ),
+        "torch_dtype": _resolved_dtype_name(model_entry.dtype, runtime_device),
         "pair_id": model_entry.pair_id,
         "benchmark": benchmark,
         "runtime_device": runtime_device,

@@ -7,7 +7,17 @@
 
 ---
 
-## [2026-07-02] ACTIVE: D41 layer COMMITTED+PUSHED — remaining: T30 annotation (user), thesis mirror to 512, T1 send
+## [2026-07-02 PM] ACTIVE: D43 adversarial-audit remediation DONE — remaining: claim-verification ledger, T30 annotation (user), thesis 512 mirror, T1 send
+
+**STATUS 2026-07-02 ~17:30:** a 5-examiner adversarial validity audit (methods / setup / stats / hallucination / code) ran read-only, every finding cross-verified against artifacts (2 auditor hallucinations REFUTED with evidence — Kharinaev overlap, Appendix D.1 sums). All confirmed findings FIXED in one pass (full list: PROJECT_LOG §3 D43 + §4 17:30 row): DirectRequest threat-model disclosure throughout report v5; §6.13 stale κ → 512 values + the canonical .js source is now stale-scanned with retired-κ guards; thesis docx ×3 bannered (page-1 red snapshot notice); dashboard guard case-bypass closed (inode+casefold); immutable gate fails on partial deletion; redaction covers committed sidecars; docx pinned (fresh-clone `make report` works); LOC/test counts re-based (**338**); sensitivity JSON re-emitted (llama greedy in-range). Gates: pytest 338/338; docx content-verified by 18 automated checks.
+
+**Next steps (ordered):**
+1. ✅ ~~Claim-by-claim verification ledger~~ — **DONE 2026-07-02 19:00** (inline deterministic loop after the agent fleet hit the session limit): `scripts/verify_report_claims.py` (43-check machine claim lock, `make verify-claims` + pytest) caught + fixed 6 more errors (mistral proxy prose 0.835/0.900→0.825/0.890; phi cross-judge 0.79/0.95 was 128-era → 0.68/0.83@512; llama/mistral/phi-OR CIs re-based to committed artifacts; TrustLLM → Y. Huang). All 24 references primary-source verified (Egashira NeurIPS-2024 + NF4 confirmed; Kharinaev full text confirms Gap 2 stands); HarmBench N=512 standardization quoted verbatim in §6.16. Ledger: `docs/REPORT_CLAIM_AUDIT_v5.md`. 43/43 lock, 339/339 tests, docx content-verified.
+2. Then the pre-existing queue (below).
+
+---
+
+## [2026-07-02] D41 layer COMMITTED+PUSHED — remaining: T30 annotation (user), thesis mirror to 512, T1 send
 
 **STATUS 2026-07-02 (post-Codex):** Codex reviewed v5 → 9 findings, **all verified real and all FIXED** (see PROJECT_LOG §4 2026-07-02 03:00): §6.12/Ch7/Appendix judge prose → 512 run (job 61524); `number_bible_512.py` fixed (runs end-to-end, exit 0); `multiple_comparisons.py` power note now DYNAMIC (512 artifact regenerated; 128 artifact byte-identical); prefix-truncation now committed in `genlen_robustness.json` (`prefix_truncation_128`: 60.3%/30.5%/9.2%); Llama evidence confirmed→directional; composite→side-by-side wording; Qwen-4B deployment claim scoped. **PROMOTION EXECUTED (D40-style full sweep):** `make report` → `build_fyp_report_v5.js`; v3+v4 docx archived to `docs/archive/`; AGENTS/CLAUDE/README/AGENTIC_WORKFLOW/THESIS_OUTLINE/skill/codex-agent/`agent.py`/3 diagram generators → v5; `artifact_policy` extended (immutable manifest **120→300** now pinning `results_512` + `results_sensitivity_512`; report-worthy v5 + `results_512/analysis/*`; **stale-text guard forbids v3/v4-as-current, self-tested**); HANDOFF/dashboard/checklist regenerated. **Gates: `make agent-check` 8/8, pytest 329, guard fires on injected violations.**
 

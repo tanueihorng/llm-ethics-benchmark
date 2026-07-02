@@ -177,6 +177,10 @@ def test_smoke_each_benchmark(tmp_path: Path, quant_config_dict: dict, monkeypat
         assert run_paths["summary_json"].exists()
         assert summary["benchmark"] == benchmark
         assert summary["num_records"] == 3
+        # Provenance fields (audit P2): a baseline member records the resolved
+        # dtype and a null quant_method; quantized members record the method.
+        assert summary["torch_dtype"] == "float32"  # dtype auto on cpu
+        assert summary["quant_method"] is None
 
 
 def test_reproducible_order_same_seed(tmp_path: Path, quant_config_dict: dict, monkeypatch) -> None:

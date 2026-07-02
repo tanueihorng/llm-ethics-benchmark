@@ -148,9 +148,16 @@ def main() -> int:
         judge_summary = summarise_deltas(judge_deltas)
         greedy_judge = greedy.get(pair_id)
         # Does the greedy headline sit inside the observed multi-seed range?
+        # A small absolute tolerance guards against float artifacts: llama's
+        # greedy delta is -0.04000000000000001 vs a seed minimum of
+        # -0.039999999999999994 - identical to 3 dp, yet a strict <= called
+        # it out-of-range (audit P3).
         greedy_in_range = None
         if greedy_judge is not None and judge_summary["n_seeds"] > 0:
-            greedy_in_range = judge_summary["min"] <= greedy_judge <= judge_summary["max"]
+            tol = 1e-9
+            greedy_in_range = (
+                (judge_summary["min"] - tol) <= greedy_judge <= (judge_summary["max"] + tol)
+            )
 
         per_pair.append({
             "pair_id": pair_id,

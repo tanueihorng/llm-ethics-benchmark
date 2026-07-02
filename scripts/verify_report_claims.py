@@ -1,0 +1,525 @@
+#!/usr/bin/env python3
+"""Deterministic claim checker for the canonical FYP report (D43 follow-up).
+
+Every load-bearing number in ``scripts/build_fyp_report_v5.js`` is asserted
+twice:
+
+  (a) the builder TEXT still contains the claim string, so a silent rewording
+      or accidental deletion is caught; and
+  (b) the value recomputed from the committed analysis artifacts equals the
+      claimed value, so the report can never drift from the evidence.
+
+Checks whose evidence is local-only (gitignored raw summaries, sensitivity
+sidecars) are SKIPPED when absent (fresh clone / CI) rather than failed —
+the same absence policy as the immutable-artifacts gate.
+
+Run directly (``python scripts/verify_report_claims.py``) or via
+``make verify-claims``; also wrapped by ``tests/test_report_claims.py`` so the
+claim lock rides the normal pytest gate. Exit 0 = no FAIL.
+
+Rationale: the 2026-07-02 adversarial audit found the canonical report
+asserting retired 128-era kappa values as 512 results, and a follow-up sweep
+found a prose/table mismatch (Mistral v2 proxy 0.835/0.900 vs the artifact's
+0.825/0.890) that seven external review rounds had missed. Prose is not
+self-verifying; this file makes the numeric claim surface machine-checked.
+"""
+from __future__ import annotations
+
+import json
+import re
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+BUILDER = ROOT / "scripts/build_fyp_report_v5.js"
+A512 = ROOT / "results_512/analysis"
+A128 = ROOT / "results/analysis"
+
+
+def _load(path: Path):
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def near(claimed: float, actual: float, places: int = 3) -> bool:
+    """True when ``actual`` rounds to ``claimed`` at the claimed precision."""
+    return abs(claimed - actual) <= 0.5 * 10 ** (-places) + 1e-12
+
+
+class Checker:
+    def __init__(self) -> None:
+        self.text = BUILDER.read_text(encoding="utf-8")
+        self.results: list[tuple[str, str, str]] = []
+
+    def check(self, name: str, snippets: list[str], fn) -> None:
+        missing = [s for s in snippets if s not in self.text]
+        if missing:
+            self.results.append(
+                ("FAIL", name, f"report text missing: {missing[0][:90]!r}")
+            )
+            return
+        try:
+            ok, detail = fn()
+        except FileNotFoundError as exc:
+            self.results.append(("SKIP", name, f"local-only evidence absent: {exc}"))
+            return
+        except Exception as exc:  # noqa: BLE001 - a broken lookup is a failure
+            self.results.append(("FAIL", name, f"checker error: {exc!r}"))
+            return
+        self.results.append(("PASS" if ok else "FAIL", name, detail))
+
+    def report(self) -> int:
+        width = max(len(n) for _, n, _ in self.results)
+        fails = 0
+        for status, name, detail in self.results:
+            if status == "FAIL":
+                fails += 1
+            marker = {"PASS": "ok  ", "FAIL": "FAIL", "SKIP": "skip"}[status]
+            print(f"{marker}  {name:<{width}}  {detail}")
+        n = len(self.results)
+        skips = sum(1 for s, _, _ in self.results if s == "SKIP")
+        print("-" * 60)
+        print(f"{n} checks: {n - fails - skips} pass, {fails} fail, {skips} skipped")
+        return 1 if fails else 0
+
+
+def run_checks(checker: Checker | None = None) -> Checker:
+    c = checker or Checker()
+
+    mc = _load(A512 / "multiple_comparisons.json")
+    hl = _load(A512 / "headline_512_vs_128.json")
+    ja = _load(A512 / "judge_agreement.json")["per_model"]
+    jp = _load(A512 / "judge_pairwise_agreement.json")
+    gl = _load(A512 / "genlen_robustness.json")
+    sm = _load(A512 / "sensitivity_multiseed.json")
+    pdl = _load(A512 / "pairwise_deltas.json")
+    ps512 = _load(A512 / "precision_sweep.json")["per_pair"]
+    ps128 = _load(A128 / "precision_sweep.json")["per_pair"]
+    jp128 = _load(A128 / "judge_pairwise_agreement.json")
+    ja128 = _load(A128 / "judge_agreement.json")["per_model"]
+
+    hl512 = {r["pair"]: r for r in hl["512"]}
+    hl128 = {r["pair"]: r for r in hl["128"]}
+    jpp = {r["pair_id"]: r for r in jp["per_pair"]}
+    jpm = {r["model_alias"]: r for r in jp["per_model"]}
+    smp = {r["pair_id"]: r for r in sm["per_pair"]}
+    pdix = {(r["pair_id"], r["benchmark"]): r for r in pdl}
+    contrasts = {(r["pair_id"], r["metric"]): r for r in mc["contrasts"]}
+
+    # ---------------- BH-FDR family / headline -----------------------------
+    c.check(
+        "bh: exactly 3 survivors, none ASR",
+        ["Not one HarmBench ASR contrast survives the correction"],
+        lambda: (
+            mc["n_bh_significant_q05"] == 3
+            and not any("asr" in s["metric"] for s in mc["bh_survivors"]),
+            f"n={mc['n_bh_significant_q05']}, metrics={[s['metric'] for s in mc['bh_survivors']]}",
+        ),
+    )
+    c.check(
+        "bh: survivor identities and deltas",
+        ["Qwen-1.7B MMLU −0.090, Llama ARC −0.032, Phi over-refusal −0.044"],
+        lambda: (
+            {(s["pair_id"], s["metric"]) for s in mc["bh_survivors"]}
+            == {("qwen_2b", "mmlu_accuracy"), ("llama_3_2_3b", "arc_accuracy"),
+                ("phi4_mini", "xstest_over_refusal")}
+            and near(-0.090, mc["bh_survivors"][0]["delta"])
+            and near(-0.032, mc["bh_survivors"][1]["delta"])
+            and near(-0.044, mc["bh_survivors"][2]["delta"]),
+            str([(s["pair_id"], s["delta"]) for s in mc["bh_survivors"]]),
+        ),
+    )
+    c.check(
+        "bh: survivor q-values 0.008/0.008/0.049",
+        [],
+        lambda: (
+            near(0.008, mc["bh_survivors"][0]["bh_q_value"])
+            and near(0.008, mc["bh_survivors"][1]["bh_q_value"])
+            and near(0.049, mc["bh_survivors"][2]["bh_q_value"]),
+            str([s["bh_q_value"] for s in mc["bh_survivors"]]),
+        ),
+    )
+    c.check(
+        "power: MDE ~0.06 at median discordant 0.09",
+        [],
+        lambda: (
+            near(0.0594, mc["power_analysis"]["representative_mde_delta_asr_at_median_discordant_rate"], 4)
+            and near(0.09, mc["power_analysis"]["median_discordant_rate"], 2),
+            f"mde={mc['power_analysis']['representative_mde_delta_asr_at_median_discordant_rate']}",
+        ),
+    )
+
+    # ---------------- per-pair judge ASR @512 -------------------------------
+    def pair512(pair, base, quant, delta, lo, hi, p, places=3):
+        r = hl512[pair]
+        return (
+            near(base, r["asr_base"]) and near(quant, r["asr_4bit"])
+            and near(delta, r["delta"]) and near(lo, r["ci"][0])
+            and near(hi, r["ci"][1]) and near(p, r["mcnemar_p"], places),
+            f"{r['asr_base']}->{r['asr_4bit']} d={r['delta']} ci={r['ci']} p={r['mcnemar_p']}",
+        )
+
+    c.check("qwen_2b @512: 0.255->0.255, 0.000 [−0.055,+0.055], p=1.000",
+            ['"0.255", "0.255", "0.000 [−0.055, +0.055]"'],
+            lambda: pair512("qwen_2b", 0.255, 0.255, 0.0, -0.055, 0.055, 1.0))
+    c.check("qwen_2b @512: symmetric 16/16 flips",
+            ["sixteen prompts flip from refusal to compliance and sixteen"],
+            lambda: (hl512["qwen_2b"]["n01"] == 16 and hl512["qwen_2b"]["n10"] == 16,
+                     f"n01={hl512['qwen_2b']['n01']} n10={hl512['qwen_2b']['n10']}"))
+    c.check("llama @512: 0.100->0.060, −0.040 [−0.075,−0.010], p=0.021",
+            ["ΔASR = −0.040, CI [−0.075, −0.010]", "p = 0.021"],
+            lambda: pair512("llama_3_2_3b", 0.100, 0.060, -0.040, -0.075, -0.010, 0.021))
+    c.check("mistral @512: 0.585->0.565, −0.020 [−0.080,+0.040], p=0.627",
+            ["0.585 at baseline and 0.565 under 4-bit", "McNemar p = 0.627"],
+            lambda: pair512("mistral_7b", 0.585, 0.565, -0.020, -0.080, 0.040, 0.627))
+    c.check("phi @512: 0.070->0.090, +0.020 [−0.015,+0.055], p=0.424",
+            ["judge ASR 0.070 at baseline and 0.090 under 4-bit", "p = 0.424"],
+            lambda: pair512("phi4_mini", 0.070, 0.090, 0.020, -0.015, 0.055, 0.424))
+    c.check("qwen_4b @512: 0.115->0.155, +0.040 [0.000,+0.080]",
+            ['"0.115", "0.155", "+0.040 [0.000, +0.080]"'],
+            lambda: pair512("qwen_4b", 0.115, 0.155, 0.040, 0.000, 0.080,
+                            hl512["qwen_4b"]["mcnemar_p"]))
+    c.check(
+        "128-era qwen_2b: +0.055, McNemar p=0.027, sig",
+        ["+0.055 at 128 tokens"],
+        lambda: (
+            near(0.055, hl128["qwen_2b"]["delta"]) and near(0.027, hl128["qwen_2b"]["mcnemar_p"])
+            and bool(hl128["qwen_2b"]["sig_ci"]),
+            f"d={hl128['qwen_2b']['delta']} p={hl128['qwen_2b']['mcnemar_p']} sig={hl128['qwen_2b']['sig_ci']}",
+        ),
+    )
+
+    # ---------------- second judge (gpt-4o) ---------------------------------
+    c.check("gpt-4o deltas: qwen_2b +0.005, llama −0.035",
+            ["gpt-4o gives Qwen 1.7B +0.005", "Llama −0.035"],
+            lambda: (near(0.005, jpp["qwen_2b"]["api_judge_delta"])
+                     and near(-0.035, jpp["llama_3_2_3b"]["api_judge_delta"]),
+                     f"qwen={jpp['qwen_2b']['api_judge_delta']} llama={jpp['llama_3_2_3b']['api_judge_delta']}"))
+    c.check(
+        "cross-judge kappa range 0.68–0.95 @512",
+        ["κ 0.68–0.95"],
+        lambda: (
+            near(0.68, min(m["cohens_kappa"] for m in jp["per_model"]), 2)
+            and near(0.95, max(m["cohens_kappa"] for m in jp["per_model"]), 2),
+            f"min={min(m['cohens_kappa'] for m in jp['per_model']):.3f} "
+            f"max={max(m['cohens_kappa'] for m in jp['per_model']):.3f}",
+        ),
+    )
+    c.check(
+        "cross-judge kappa 0.60–0.95 across both budgets",
+        ["κ 0.60–0.95 across all ten models, 0.68–0.95 at the 512-token reference budget"],
+        lambda: (
+            near(0.60, min(m["cohens_kappa"] for m in jp128["per_model"]), 2)
+            and near(0.95, max(max(m["cohens_kappa"] for m in jp["per_model"]),
+                               max(m["cohens_kappa"] for m in jp128["per_model"])), 2),
+            f"128 min={min(m['cohens_kappa'] for m in jp128['per_model']):.3f}",
+        ),
+    )
+    c.check("mistral cross-judge 0.83/0.78 @512",
+            ["κ 0.83 (baseline) and 0.78 (4-bit)"],
+            lambda: (near(0.83, jpm["mistral_7b_base"]["cohens_kappa"], 2)
+                     and near(0.78, jpm["mistral_7b_4bit"]["cohens_kappa"], 2),
+                     f"{jpm['mistral_7b_base']['cohens_kappa']:.3f}/{jpm['mistral_7b_4bit']['cohens_kappa']:.3f}"))
+    jpm128 = {r["model_alias"]: r for r in jp128["per_model"]}
+    c.check("phi cross-judge 0.68/0.83 @512 (0.79/0.95 scoped to 128)",
+            ["κ 0.68 at baseline and 0.83 under 4-bit",
+             "κ 0.79/0.95 belongs to the retired 128-token budget"],
+            lambda: (near(0.68, jpm["phi4_mini_base"]["cohens_kappa"], 2)
+                     and near(0.83, jpm["phi4_mini_4bit"]["cohens_kappa"], 2)
+                     and near(0.79, jpm128["phi4_mini_base"]["cohens_kappa"], 2)
+                     and near(0.95, jpm128["phi4_mini_4bit"]["cohens_kappa"], 2),
+                     f"512={jpm['phi4_mini_base']['cohens_kappa']:.3f}/{jpm['phi4_mini_4bit']['cohens_kappa']:.3f} "
+                     f"128={jpm128['phi4_mini_base']['cohens_kappa']:.3f}/{jpm128['phi4_mini_4bit']['cohens_kappa']:.3f}"))
+
+    # ---------------- judge-vs-proxy kappa (Table 6.3 + prose) --------------
+    KAPPA = {
+        "qwen_2b_base": 0.36, "qwen_2b_4bit": 0.41,
+        "qwen_4b_base": 0.49, "qwen_4b_4bit": 0.59,
+        "llama_3_2_3b_base": 0.71, "llama_3_2_3b_4bit": 0.84,
+        "mistral_7b_base": 0.28, "mistral_7b_4bit": 0.25,
+        "phi4_mini_base": 0.67, "phi4_mini_4bit": 0.77,
+    }
+    c.check(
+        "judge-vs-proxy kappa per model (all 10)",
+        ['"0.36"', '"0.41"'],
+        lambda: (
+            all(near(v, ja[k]["cohens_kappa"], 2) for k, v in KAPPA.items()),
+            str({k: round(ja[k]["cohens_kappa"], 3) for k in KAPPA}),
+        ),
+    )
+    c.check(
+        "mistral 512 kappa in prose: 0.28/0.25 (128-era 0.19/0.11 scoped)",
+        ["Cohen's κ = 0.28 at baseline, 0.25 under 4-bit",
+         "at the retired 128-token budget it had been lower still, 0.19/0.11"],
+        lambda: (
+            near(0.28, ja["mistral_7b_base"]["cohens_kappa"], 2)
+            and near(0.25, ja["mistral_7b_4bit"]["cohens_kappa"], 2)
+            and near(0.19, ja128["mistral_7b_base"]["cohens_kappa"], 2)
+            and near(0.11, ja128["mistral_7b_4bit"]["cohens_kappa"], 2),
+            f"512={ja['mistral_7b_base']['cohens_kappa']:.3f}/{ja['mistral_7b_4bit']['cohens_kappa']:.3f} "
+            f"128={ja128['mistral_7b_base']['cohens_kappa']:.3f}/{ja128['mistral_7b_4bit']['cohens_kappa']:.3f}",
+        ),
+    )
+    c.check(
+        "no unscoped retired-128-era kappa left (0.19-at-baseline / 0.60-0.63 / as-low-as-0.11)",
+        [],
+        lambda: (
+            all(("128" in line) for line in c.text.split("\n")
+                if re.search(r"0\.19 at baseline|κ 0\.60–0\.63|κ as low as 0\.11", line)),  # retired 128-era values
+            "every retired-kappa mention is 128-scoped on its line",
+        ),
+    )
+    c.check(
+        "v2 proxy range 0.25–0.84; Qwen+Mistral 0.25–0.59; Llama+Phi 0.67–0.84",
+        ["κ 0.25–0.59", "κ 0.67–0.84"],
+        lambda: (
+            near(0.25, min(m["cohens_kappa"] for m in ja.values()), 2)
+            and near(0.84, max(m["cohens_kappa"] for m in ja.values()), 2)
+            and near(0.59, max(ja[k]["cohens_kappa"] for k in KAPPA if "qwen" in k), 2)
+            and near(0.67, min(ja[k]["cohens_kappa"] for k in KAPPA if "llama" in k or "phi" in k), 2),
+            "ranges recomputed from judge_agreement.json",
+        ),
+    )
+    c.check(
+        "mistral v2 proxy 0.825 -> 0.890 (prose == table == artifact)",
+        ["non-refusal rate (0.825) rising to 0.890", '"0.825", "0.890"'],
+        lambda: (
+            near(0.825, ja["mistral_7b_base"]["v2_asr"]) and near(0.890, ja["mistral_7b_4bit"]["v2_asr"]),
+            f"{ja['mistral_7b_base']['v2_asr']}/{ja['mistral_7b_4bit']['v2_asr']}",
+        ),
+    )
+    c.check(
+        "qwen judge-vs-proxy over-count examples (0.255 vs 0.595; 0.115 vs 0.235)",
+        ["0.255 vs 0.595", "0.115 vs 0.235"],
+        lambda: (
+            near(0.255, ja["qwen_2b_base"]["judge_asr"]) and near(0.595, ja["qwen_2b_base"]["v2_asr"])
+            and near(0.115, ja["qwen_4b_base"]["judge_asr"]) and near(0.235, ja["qwen_4b_base"]["v2_asr"]),
+            "judge/v2 per alias match",
+        ),
+    )
+
+    # ---------------- generation-length (6.16) ------------------------------
+    pt = gl["prefix_truncation_128"]
+    rl = gl["response_length"]
+    c.check(
+        "truncation: 60.3% (1206/2000), 30.5% natural, 9.2% mismatch (184)",
+        ["60.3 percent", "9.2 percent of the 2,000 paired generations (184"],
+        lambda: (
+            near(60.3, pt["pct_truncated"], 1) and pt["total"]["truncated"] == 1206
+            and pt["total"]["n"] == 2000 and near(30.5, pt["pct_natural_stop"], 1)
+            and near(9.2, pt["pct_mismatch"], 1) and pt["total"]["mismatch"] == 184,
+            f"{pt['total']}",
+        ),
+    )
+    c.check(
+        "per-family truncation: mistral 93.5–98.0, phi 73.5–78.5, qwen 54.5–70.0, llama 3.0–4.0",
+        ["93.5–98.0", "73.5–78.5", "54.5–70.0", "3.0–4.0"],
+        lambda: (
+            near(93.5, min(pt["per_model"][k]["pct_truncated"] for k in pt["per_model"] if "mistral" in k), 1)
+            and near(98.0, max(pt["per_model"][k]["pct_truncated"] for k in pt["per_model"] if "mistral" in k), 1)
+            and near(73.5, min(pt["per_model"][k]["pct_truncated"] for k in pt["per_model"] if "phi" in k), 1)
+            and near(78.5, max(pt["per_model"][k]["pct_truncated"] for k in pt["per_model"] if "phi" in k), 1)
+            and near(54.5, min(pt["per_model"][k]["pct_truncated"] for k in pt["per_model"] if "qwen" in k), 1)
+            and near(70.0, max(pt["per_model"][k]["pct_truncated"] for k in pt["per_model"] if "qwen" in k), 1)
+            and near(3.0, min(pt["per_model"][k]["pct_truncated"] for k in pt["per_model"] if "llama" in k), 1)
+            and near(4.0, max(pt["per_model"][k]["pct_truncated"] for k in pt["per_model"] if "llama" in k), 1),
+            "family ranges recomputed",
+        ),
+    )
+    c.check(
+        "median lengths 1,675 vs 567 chars; ceiling proxy 62%",
+        ["median length 1,675 characters against 567"],
+        lambda: (
+            rl["all_median_512"] == 1675 and rl["all_median_128"] == 567
+            and near(62.0, rl["pct_512_over_ceiling"], 1),
+            f"{rl['all_median_128']}->{rl['all_median_512']} ceiling%={rl['pct_512_over_ceiling']}",
+        ),
+    )
+    c.check(
+        "mistral absolute ASR budget effect 0.585 vs 0.385",
+        ["Mistral-7B classifier ASR is 0.585 at the reference budget against 0.385 at 128 tokens"],
+        lambda: (
+            near(0.585, hl512["mistral_7b"]["asr_base"]) and near(0.385, hl128["mistral_7b"]["asr_base"]),
+            f"512={hl512['mistral_7b']['asr_base']} 128={hl128['mistral_7b']['asr_base']}",
+        ),
+    )
+
+    # ---------------- multi-seed (6.6.1) ------------------------------------
+    c.check(
+        "multiseed qwen_2b: mean +0.013 [0.000,+0.035], 5 seeds, all non-negative, greedy in range",
+        ["mean +0.013, range [0.000, +0.035]", "all five seed deltas are non-negative"],
+        lambda: (
+            near(0.013, smp["qwen_2b"]["judge_delta"]["mean"])
+            and near(0.0, smp["qwen_2b"]["judge_delta"]["min"])
+            and near(0.035, smp["qwen_2b"]["judge_delta"]["max"])
+            and smp["qwen_2b"]["judge_delta"]["n_seeds"] == 5
+            and bool(smp["qwen_2b"]["judge_delta"]["sign_consistent"])
+            and smp["qwen_2b"]["judge_delta"]["min"] >= 0
+            and bool(smp["qwen_2b"]["greedy_in_multiseed_range"]),
+            str(smp["qwen_2b"]["judge_delta"]),
+        ),
+    )
+    c.check(
+        "multiseed qwen_4b mean +0.029; llama mean −0.024, no positive seed, greedy in range",
+        ["mean +0.029", "mean −0.024 with no positive seed"],
+        lambda: (
+            near(0.029, smp["qwen_4b"]["judge_delta"]["mean"])
+            and near(-0.024, smp["llama_3_2_3b"]["judge_delta"]["mean"])
+            and smp["llama_3_2_3b"]["judge_delta"]["max"] < 0
+            and bool(smp["llama_3_2_3b"]["greedy_in_multiseed_range"]),
+            f"llama={smp['llama_3_2_3b']['judge_delta']}",
+        ),
+    )
+
+    # ---------------- INT8 precision point (6.15) ---------------------------
+    def _mcn(ps, pair, judge):
+        blk = ps[pair]["harmbench_asr_int8_mcnemar"][judge]
+        return blk.get("p_value", blk.get("p", blk.get("mcnemar_p")))
+
+    c.check(
+        "INT8 llama @512: clf +0.005 p=1.000; gpt-4o +0.010 p=0.688",
+        ["classifier Δ+0.005, McNemar p = 1.000", "gpt-4o Δ+0.010, p = 0.688"],
+        lambda: (
+            near(0.005, ps512["llama_3_2_3b"]["metrics"]["harmbench_asr_judge"]["delta_int8_vs_fp16"])
+            and near(1.0, _mcn(ps512, "llama_3_2_3b", "harmbench_cls"))
+            and near(0.688, _mcn(ps512, "llama_3_2_3b", "api_judge")),
+            f"d={ps512['llama_3_2_3b']['metrics']['harmbench_asr_judge']['delta_int8_vs_fp16']} "
+            f"p_cls={_mcn(ps512, 'llama_3_2_3b', 'harmbench_cls')} p_api={_mcn(ps512, 'llama_3_2_3b', 'api_judge')}",
+        ),
+    )
+    c.check(
+        "INT8 llama @128: +0.040 both-judge (clf p=0.021, api p=0.008)",
+        ["p = 0.021", "0.0078"] if "0.0078" in c.text else ["p = 0.021"],
+        lambda: (
+            near(0.040, ps128["llama_3_2_3b"]["metrics"]["harmbench_asr_judge"]["delta_int8_vs_fp16"])
+            and near(0.021, _mcn(ps128, "llama_3_2_3b", "harmbench_cls"))
+            and near(0.008, _mcn(ps128, "llama_3_2_3b", "api_judge")),
+            f"d={ps128['llama_3_2_3b']['metrics']['harmbench_asr_judge']['delta_int8_vs_fp16']} "
+            f"p_cls={_mcn(ps128, 'llama_3_2_3b', 'harmbench_cls')} p_api={_mcn(ps128, 'llama_3_2_3b', 'api_judge')}",
+        ),
+    )
+
+    # ---------------- capability / over-refusal (pairwise_deltas) -----------
+    def pdelta(pair, bench, base=None, quant=None, delta=None, sig=None, places=3):
+        r = pdix[(pair, bench)]
+        ok = True
+        if base is not None:
+            ok &= near(base, r["baseline_value"], places)
+        if quant is not None:
+            ok &= near(quant, r["quantized_value"], places)
+        if delta is not None:
+            ok &= near(delta, r["absolute_delta"], places)
+        if sig is not None:
+            ok &= bool(r["delta_significant"]) == sig
+        return ok, (f"{r['baseline_value']}->{r['quantized_value']} d={r['absolute_delta']:.4f} "
+                    f"sig={r['delta_significant']}")
+
+    c.check("qwen_2b MMLU 0.643->0.553 (−0.090, sig)",
+            ["0.643 → 0.553"] if "0.643 → 0.553" in c.text else ["−0.090"],
+            lambda: pdelta("qwen_2b", "mmlu", 0.643, 0.553, -0.090, True))
+    c.check("llama MMLU 0.610->0.573 (−0.037, n.s.)",
+            ["0.610 → 0.573"],
+            lambda: pdelta("llama_3_2_3b", "mmlu", 0.610, 0.573, -0.037, False))
+    c.check("llama ARC −0.032 (sig)", ["ΔARC = −0.032"],
+            lambda: pdelta("llama_3_2_3b", "arc", delta=-0.032, sig=True))
+    c.check("mistral MMLU −0.020 n.s.; ARC +0.009 n.s.",
+            ["MMLU −2.0 pp, n.s.; ARC +0.9 pp, n.s."],
+            lambda: (pdelta("mistral_7b", "mmlu", delta=-0.020, sig=False)[0]
+                     and pdelta("mistral_7b", "arc", delta=0.009, sig=False)[0],
+                     f"mmlu={pdix[('mistral_7b','mmlu')]['absolute_delta']:.4f} "
+                     f"arc={pdix[('mistral_7b','arc')]['absolute_delta']:.4f}"))
+    c.check("phi MMLU −2.7pp n.s.; ARC −1.5pp n.s.",
+            ["MMLU −2.7 pp and ARC −1.5 pp (both n.s.)"],
+            lambda: (pdelta("phi4_mini", "mmlu", delta=-0.027, sig=False)[0]
+                     and pdelta("phi4_mini", "arc", delta=-0.015, sig=False)[0],
+                     f"mmlu={pdix[('phi4_mini','mmlu')]['absolute_delta']:.4f} "
+                     f"arc={pdix[('phi4_mini','arc')]['absolute_delta']:.4f}"))
+    c.check("phi over-refusal −0.044 [−0.072,−0.016] (sig, a decrease)",
+            ["ΔOR = −0.044 (CI [−0.072, −0.016]"],
+            lambda: (
+                pdelta("phi4_mini", "xstest", delta=-0.044, sig=True)[0]
+                and near(-0.072, pdix[("phi4_mini", "xstest")]["delta_ci_lower"])
+                and near(-0.016, pdix[("phi4_mini", "xstest")]["delta_ci_upper"]),
+                f"ci=[{pdix[('phi4_mini','xstest')]['delta_ci_lower']},"
+                f"{pdix[('phi4_mini','xstest')]['delta_ci_upper']}]"))
+    c.check(
+        "Table 6.1 v2-proxy CI cells (qwen_2b/qwen_4b/mistral)",
+        ['"−0.025 [−0.070, +0.020]"', '"+0.070 [+0.030, +0.115]"', '"+0.065 [+0.020, +0.110]"'],
+        lambda: (
+            near(-0.025, pdix[("qwen_2b", "harmbench")]["absolute_delta"])
+            and near(-0.070, pdix[("qwen_2b", "harmbench")]["delta_ci_lower"])
+            and near(0.020, pdix[("qwen_2b", "harmbench")]["delta_ci_upper"])
+            and near(0.070, pdix[("qwen_4b", "harmbench")]["absolute_delta"])
+            and near(0.030, pdix[("qwen_4b", "harmbench")]["delta_ci_lower"])
+            and near(0.115, pdix[("qwen_4b", "harmbench")]["delta_ci_upper"])
+            and near(0.065, pdix[("mistral_7b", "harmbench")]["absolute_delta"])
+            and near(0.020, pdix[("mistral_7b", "harmbench")]["delta_ci_lower"])
+            and near(0.110, pdix[("mistral_7b", "harmbench")]["delta_ci_upper"]),
+            "v2 deltas + CIs match pairwise_deltas.json",
+        ),
+    )
+    c.check("qwen_4b ARC −1.6pp sig; OR flat 0.032->0.032",
+            ["−1.6 pp", "0.032 → 0.032"],
+            lambda: (pdelta("qwen_4b", "arc", delta=-0.016, sig=True)[0]
+                     and pdelta("qwen_4b", "xstest", 0.032, 0.032, 0.0)[0],
+                     f"arc={pdix[('qwen_4b','arc')]['absolute_delta']:.4f}"))
+    c.check("llama OR 0.036->0.052 (+0.016, n.s.)",
+            ["0.036 to 0.052"],
+            lambda: pdelta("llama_3_2_3b", "xstest", 0.036, 0.052, 0.016, False))
+    c.check("baseline MMLU anchors 0.643 / 0.747 / 0.610",
+            ["0.643", "0.747", "0.610"],
+            lambda: (near(0.643, pdix[("qwen_2b", "mmlu")]["baseline_value"])
+                     and near(0.747, pdix[("qwen_4b", "mmlu")]["baseline_value"])
+                     and near(0.610, pdix[("llama_3_2_3b", "mmlu")]["baseline_value"]),
+                     "qwen_2b/qwen_4b/llama baseline MMLU"))
+
+    # ---------------- local-only evidence (skip when absent) ----------------
+    def sample_counts():
+        counts = {}
+        for bench, expect in (("harmbench", 200), ("xstest", 250), ("mmlu", 300), ("arc", 1172)):
+            p = ROOT / "results_512/qwen_2b_base" / bench / "summary.json"
+            if not p.exists():
+                raise FileNotFoundError(p)
+            counts[bench] = _load(p)["num_records"]
+        ok = counts == {"harmbench": 200, "xstest": 250, "mmlu": 300, "arc": 1172}
+        return ok, str(counts)
+
+    c.check("sample sizes: 200/250/300/1172", ["200", "250", "300", "1,172"], sample_counts)
+
+    def judge_sidecar_volume():
+        total = 0
+        aliases = 0
+        for d in sorted((ROOT / "results_512").iterdir()):
+            f = d / "harmbench/scores.judge.harmbench_cls.jsonl"
+            if f.exists():
+                aliases += 1
+                total += sum(1 for _ in f.open())
+        if aliases == 0:
+            raise FileNotFoundError("no judge sidecars checked out")
+        return (aliases == 15 and total == 3000,
+                f"{aliases} aliases, {total} classifications")
+
+    c.check("512 judge volume: 15 aliases x 200 = 3,000 classifications",
+            ["3 000 "] if "3 000 " in c.text else ["2 000 generations"],
+            judge_sidecar_volume)
+
+    # ---------------- XSTest source file ------------------------------------
+    def xstest_counts():
+        import csv as _csv
+        p = ROOT / "data/xstest_v2_prompts.csv"
+        rows = list(_csv.DictReader(p.open()))
+        safe = sum(1 for r in rows if not r["type"].startswith("contrast_"))
+        return (len(rows) == 450 and safe == 250,
+                f"{len(rows)} rows, {safe} benign")
+
+    c.check("XSTest v2: 450 prompts, 250 benign evaluated", ["250"], xstest_counts)
+
+    return c
+
+
+def main() -> int:
+    c = run_checks()
+    return c.report()
+
+
+if __name__ == "__main__":
+    sys.exit(main())

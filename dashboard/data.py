@@ -120,25 +120,93 @@ def is_protected_results_dir(candidate: Path, repo_root: Path = REPO_ROOT) -> bo
     Protected: ``results``, ``results_512``, and any ``results_sensitivity*``
     tree. Codex round-7 P1 fix — the Run page previously defaulted execution
     into ``results/`` where a click could overwrite canonical raw evidence.
+
+    Comparison is case-insensitive: macOS filesystems are case-insensitive by
+    default, so ``RESULTS`` is the *same directory* as ``results`` yet passed
+    the previous exact-string check (audit P1). Two layers: a physical
+    device+inode match against the protected trees (catches any aliasing the
+    real filesystem performs), and a case-folded lexical match (catches paths
+    that do not exist yet). On a case-sensitive filesystem the lexical layer
+    over-blocks a genuinely distinct ``Results/`` — acceptable: scratch dirs
+    must simply not be spelled like evidence trees.
     """
     root = Path(repo_root).resolve()
     try:
-        cand = Path(candidate).resolve()
+        cand = Path(candidate)
+        if not cand.is_absolute():
+            cand = root / cand
+        cand = cand.resolve()
     except OSError:
         return True  # unresolvable input: refuse rather than risk it
-    protected = [root / "results", root / "results_512"]
-    for base in protected:
+
+    def _stat_id(p: Path):
+        try:
+            st = p.stat()
+        except OSError:
+            return None
+        return (st.st_dev, st.st_ino)
+
+    # Physical identity of the candidate and every existing ancestor.
+    cand_ids = set()
+    probe = cand
+    while True:
+        sid = _stat_id(probe)
+        if sid is not None:
+            cand_ids.add(sid)
+        if probe == probe.parent:
+            break
+        probe = probe.parent
+
+    protected_bases = [root / "results", root / "results_512"]
+    try:
+        for entry in root.iterdir():
+            if entry.is_dir() and entry.name.casefold().startswith("results_sensitivity"):
+                protected_bases.append(entry)
+    except OSError:
+        pass
+    for base in protected_bases:
+        bid = _stat_id(base)
+        if bid is not None and bid in cand_ids:
+            return True
+
+    # Lexical (case-folded) check for paths that may not exist yet.
+    try:
+        rel = cand.relative_to(root)
+    except ValueError:
+        rel = None
+    if rel is not None and rel.parts:
+        head = rel.parts[0].casefold()
+        if head in ("results", "results_512") or head.startswith("results_sensitivity"):
+            return True
+
+    for base in protected_bases:
         if cand == base or base in cand.parents:
             return True
-    for part_base in (root,):
-        rel = None
-        try:
-            rel = cand.relative_to(part_base)
-        except ValueError:
-            continue
-        if rel.parts and rel.parts[0].startswith("results_sensitivity"):
-            return True
     return False
+
+
+class ProtectedResultsDirError(ValueError):
+    """Raised when a requested execution dir points at protected evidence."""
+
+
+def resolve_execution_dir(out_dir_str: str, repo_root: Path = REPO_ROOT) -> Path:
+    """Resolves a user-typed execution dir, refusing protected evidence trees.
+
+    The single choke point for the Run page: every execution path must pass
+    through here before any subprocess is launched (the smoke path force-
+    restarts and deletes ``raw.jsonl`` in its target). Raises
+    :class:`ProtectedResultsDirError` for ``results``/``results_512``/
+    ``results_sensitivity*`` in any casing or aliasing.
+    """
+    text = str(out_dir_str or "").strip() or DEFAULT_EXECUTION_DIR
+    exec_dir = Path(repo_root).resolve() / text
+    if is_protected_results_dir(exec_dir, repo_root):
+        raise ProtectedResultsDirError(
+            f"'{text}' is a protected evidence tree (results/, results_512/, "
+            f"results_sensitivity*, in any casing). Execution into it is blocked - "
+            f"use a scratch dir such as '{DEFAULT_EXECUTION_DIR}/'."
+        )
+    return exec_dir
 
 
 def safe_generated_config_name(name: str, fallback: str = "new_pair.yaml") -> str:

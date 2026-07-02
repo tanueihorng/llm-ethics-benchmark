@@ -161,6 +161,64 @@ def test_agent_harness_catches_stale_text(tmp_path: Path) -> None:
     assert _result_by_name(results, "stale-text").status == "fail"
 
 
+def test_real_policy_stale_kappa_guards_fire_and_exempt(tmp_path: Path) -> None:
+    """Audit P1 self-test against the REAL policy: retired 128-era κ values
+    must fail the stale-text scan when cited without 128-scoping on the line,
+    and stay legal when scoped (same two-tier discipline as the +0.055 guard).
+    The stale κ survived every earlier gate because scripts/*.js was never
+    scanned — this also pins the canonical builder into scan_paths."""
+    from ethical_benchmark.harness.agent import _scan_policy_group
+
+    repo = Path(__file__).resolve().parents[1]
+    policy = load_policy(repo)
+    stale = policy["stale_text"]
+    assert "scripts/build_fyp_report_v5.js" in stale["scan_paths"]
+
+    group = {"scan_paths": ["README.md"], "patterns": stale["patterns"]}
+
+    def scan(line: str) -> str:
+        (tmp_path / "README.md").write_text(line + "\n", encoding="utf-8")
+        return _scan_policy_group(tmp_path, group, "stale-text").status
+
+    for bad in (
+        "Mistral judge-vs-proxy agreement: Cohen's κ = 0.19 at baseline, 0.11 under 4-bit.",
+        "the second judge agrees with the classifier at κ 0.60–0.63.",
+        "a sign-flipped over-count, judge-vs-proxy κ as low as 0.11.",
+    ):
+        assert scan(bad) == "fail", bad
+    for ok in (
+        "at the retired 128-token budget it had been lower still, 0.19/0.11.",
+        "gpt-4o concurring at κ 0.60–0.63 (128-token era; superseded).",
+        "judge-vs-proxy κ as low as 0.25 at the reference budget.",
+    ):
+        assert scan(ok) == "pass", ok
+
+
+def test_real_policy_redaction_covers_committed_sidecars(tmp_path: Path) -> None:
+    """Audit P3 self-test against the REAL policy: a sidecar in a committed
+    results path that emits a raw-text field must fail the redaction scan.
+    Previously results/** was never redaction-scanned, so a leaky future
+    sidecar would have been committed unblocked."""
+    from ethical_benchmark.harness.agent import _scan_policy_group
+
+    repo = Path(__file__).resolve().parents[1]
+    policy = load_policy(repo)
+    side = tmp_path / "results_512/qwen_test/harmbench"
+    side.mkdir(parents=True)
+    leaky = side / "scores.judge.harmbench_cls.jsonl"
+    leaky.write_text(
+        '{"prompt_id": "p1", "judge_label": "no", "response": "LEAKED RAW TEXT"}\n',
+        encoding="utf-8",
+    )
+    assert _scan_policy_group(tmp_path, policy["redaction"], "redaction").status == "fail"
+
+    leaky.write_text(
+        '{"prompt_id": "p1", "judge_label": "no", "judge_harmful": false, "status": "ok"}\n',
+        encoding="utf-8",
+    )
+    assert _scan_policy_group(tmp_path, policy["redaction"], "redaction").status == "pass"
+
+
 def test_agent_harness_catches_redaction_leak(tmp_path: Path) -> None:
     repo = _init_harness_repo(tmp_path)
     (repo / "docs/HANDOFF.md").write_text('# Handoff\n{"response": "secret"}\n', encoding="utf-8")
@@ -199,6 +257,22 @@ def test_agent_harness_immutable_tolerates_absent_artifacts(tmp_path: Path) -> N
     immutable = _result_by_name(results, "immutable-artifacts")
     assert immutable.ok
     assert immutable.status == "pass"
+
+
+def test_agent_harness_immutable_fails_on_partial_deletion(tmp_path: Path) -> None:
+    """Audit P2 regression: partial local deletion of the immutable evidence
+    tree must FAIL the gate. Full absence (CI / fresh clone) stays a pass —
+    see the test above — but "some files verified present, some missing" means
+    a machine that *has* the evidence checked out lost part of it, and the
+    gate previously downgraded that to a non-blocking warn (it detected
+    mutation but not destruction)."""
+    repo = _init_harness_repo(tmp_path)
+    (repo / "results/model/harmbench/raw.jsonl").unlink()  # summary.json kept
+
+    results = run_agent_checks(repo, include_pytest=False, include_diff_check=False)
+
+    immutable = _result_by_name(results, "immutable-artifacts")
+    assert immutable.status == "fail"
 
 
 def test_agent_status_and_renderers_are_redaction_safe(tmp_path: Path) -> None:

@@ -217,3 +217,31 @@ def test_protected_results_dirs_are_refused() -> None:
         assert D.is_protected_results_dir(REPO_ROOT / bad, REPO_ROOT), bad
     for ok in ("results_dev", "results_dev/qwen_2b_base", "scratch/results"):
         assert not D.is_protected_results_dir(REPO_ROOT / ok, REPO_ROOT), ok
+
+
+def test_protected_results_dirs_refuse_case_variants() -> None:
+    """Audit P1 regression: on the (case-insensitive) macOS filesystem
+    ``RESULTS`` is the same physical directory as ``results``, so the previous
+    exact-string guard let a case-variant execution dir delete canonical raw
+    evidence via the smoke path's force-restart. Every casing must be refused,
+    whether or not the spelled path exists on this filesystem."""
+    for bad in ("RESULTS", "Results", "RESULTS_512", "Results_512",
+                "RESULTS_SENSITIVITY_512", "Results_Sensitivity_512",
+                "RESULTS/qwen_2b_base", "results_512/../RESULTS"):
+        assert D.is_protected_results_dir(REPO_ROOT / bad, REPO_ROOT), bad
+
+
+def test_resolve_execution_dir_blocks_protected_and_defaults() -> None:
+    """The Run page resolves every execution dir through this single choke
+    point before launching any subprocess (audit follow-up: the guard *wiring*,
+    not just the predicate, is under test)."""
+    for bad in ("results", "RESULTS", "results_512", "Results_512",
+                "results_sensitivity_512", "results_dev/../results"):
+        with pytest.raises(D.ProtectedResultsDirError):
+            D.resolve_execution_dir(bad, REPO_ROOT)
+    assert (
+        D.resolve_execution_dir("results_dev", REPO_ROOT)
+        == Path(REPO_ROOT).resolve() / "results_dev"
+    )
+    # Empty input falls back to the safe default scratch dir.
+    assert D.resolve_execution_dir("", REPO_ROOT).name == D.DEFAULT_EXECUTION_DIR
