@@ -90,7 +90,16 @@ def label_gloss(label: Optional[str]) -> str:
 # --------------------------------------------------------------------------- #
 
 def analysis_dir(repo_root: Path = REPO_ROOT) -> Path:
-    """Returns the results/analysis directory."""
+    """Returns the primary analysis directory.
+
+    D41 (2026-07-02): the 512-token study is the PRIMARY study, so the dashboard
+    prefers ``results_512/analysis`` when it exists and falls back to the
+    128-token ``results/analysis`` tree otherwise (which also keeps synthetic
+    test fixtures that build a bare ``results/analysis`` working unchanged).
+    """
+    primary = Path(repo_root) / "results_512" / "analysis"
+    if primary.is_dir():
+        return primary
     return Path(repo_root) / "results" / "analysis"
 
 

@@ -1,5 +1,7 @@
 # Agent Task Packet: Codex Meetup Prep
 
+> **STATUS: EVENT PASSED — HISTORICAL PACKET.** Numbers/framings within are of their date (pre-D41 512-primary re-base). Kept as a point-in-time record only.
+
 ## Objective
 
 Prepare a repo-grounded explanation of how Codex is used in this FYP and why the harness is the differentiator.

@@ -1,5 +1,7 @@
 # Agent Task Packet: T22 Second Independent Judge
 
+> **STATUS: COMPLETED 2026-06-14 (D25/D26) — HISTORICAL PACKET.** Do not execute. 128-era framing (pre-D41); the primary study is now the 512-token tree and the second judge has been run at 512 too. Kept as a point-in-time record only.
+
 ## Objective
 
 Add and run a second independent HarmBench judge as a robustness cross-check against `cais/HarmBench-Llama-2-13b-cls`.

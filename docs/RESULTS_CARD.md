@@ -1,45 +1,78 @@
 # Results Card — one-page reference
 
 > Study: safety–capability trade-offs in quantized small LLMs. 5 pairs / 10 models
-> / 4 families · 3 precisions (fp16 → INT8 → NF4) · 4 benchmarks. HarmBench ASR =
-> **official HarmBench classifier (primary)** + gpt-4o (2nd judge); v2 refusal
-> regex = demoted foil. CIs = paired bootstrap (2 000 resamples, seed 42); greedy
-> decoding, seed 42. **Significance flags are nominal / uncorrected.**
+> / 4 families · 3 precisions (fp16 → INT8 → NF4) · 4 benchmarks. **Primary
+> configuration: HarmBench's 512-token reference generation budget (D41)**; the
+> 128-token run is retained as a generation-length comparison (report §6.16).
+> HarmBench ASR = **official HarmBench classifier (primary)** + gpt-4o (2nd
+> judge); v2 refusal regex = demoted foil. CIs = paired bootstrap (2 000
+> resamples, seed 42); greedy decoding, seed 42. **Multiplicity handled via
+> BH-FDR (§6.5.1).**
 
-## Main study — fp16 vs NF4 (4-bit), judge ASR
+## Main study — fp16 vs NF4 (4-bit), judge ASR @ 512 tokens
 
 | Pair (family) | ASR fp16→NF4 | ΔASR (95% CI) | Sig? | ΔMMLU | ΔARC | Label |
 |---|---:|---|:--:|---:|---:|---|
-| qwen_2b (Qwen 1.7B) | 0.135 → 0.190 | **+0.055** [+0.010, +0.100] | **yes** | **−0.087** | −0.013 | **broad_degradation** |
-| qwen_4b (Qwen 4B) | 0.065 → 0.090 | +0.025 [−0.000, +0.055] | no | −0.003 | **−0.021** | alignment_degradation (dir.) |
-| llama_3_2_3b (Llama 3B) | 0.040 → 0.040 | 0.000 [−0.020, +0.020] | no | **−0.043** | **−0.028** | broad_degradation |
-| mistral_7b (Mistral 7B) | 0.385 → 0.345 | −0.040 [−0.110, +0.025] | no | −0.017 | +0.009 | alignment_improvement (dir.) |
-| phi4_mini (Phi-4-mini) | 0.055 → 0.055 | 0.000 [−0.030, +0.030] | no | −0.023 | −0.015 | robust_preservation |
+| qwen_2b (Qwen 1.7B) | 0.255 → 0.255 | 0.000 [−0.055, +0.055] | no | **−0.090** | −0.009 | **broad_degradation** *(capability-driven; harm flat)* |
+| qwen_4b (Qwen 4B) | 0.115 → 0.155 | +0.040 [0.000, +0.080] | no | −0.003 | **−0.016** | alignment_degradation (dir.) |
+| llama_3_2_3b (Llama 3B) | 0.100 → 0.060 | **−0.040** [−0.070, −0.010] | **yes (decrease)** | −0.037 | **−0.032** | capability_collapse_masq._as_safety (dir.) |
+| mistral_7b (Mistral 7B) | 0.585 → 0.565 | −0.020 [−0.085, +0.040] | no | −0.020 | +0.009 | alignment_improvement (dir.) |
+| phi4_mini (Phi-4-mini) | 0.070 → 0.090 | +0.020 [−0.015, +0.055] | no | −0.027 | −0.015 | robust_preservation |
 
-**Bold** = CI excludes zero. NF4 never *reduces* harmful compliance. **Qwen-1.7B is the only significant ΔASR** (modest, borderline, and judge-dependent — not significant under gpt-4o; McNemar p = 0.027).
+**Bold** = CI excludes zero. **No pair shows a significant harmful-compliance
+increase**; the only significant ΔASR is Llama-3B's *decrease*. Under BH-FDR over
+the 20 primary contrasts, **zero ASR contrasts survive** — the three survivors are
+qwen_2b MMLU (−0.090, q=0.008), llama ARC (−0.032, q=0.008), and phi over-refusal
+(−0.044, q=0.049, a *decrease*).
 
-## Precision sweep — fp16 → INT8 → NF4, judge ASR
+## Generation budget matters (why 512 is primary)
 
-| Pair | fp16 | INT8 | NF4 | Shape |
-|---|---:|---:|---:|---|
-| qwen_2b | 0.135 | 0.150 | 0.190 | rising; only NF4 significant |
-| qwen_4b | 0.065 | 0.065 | 0.090 | INT8 = fp16 |
-| llama_3_2_3b | 0.040 | **0.080** | 0.040 | **INT8 spike, reverts at NF4** |
-| mistral_7b | 0.385 | 0.375 | 0.345 | falling |
-| phi4_mini | 0.055 | 0.060 | 0.055 | flat |
+At a shorter 128-token budget the study showed Qwen-1.7B ΔASR **+0.055**
+(McNemar p = 0.027) — this was a **truncation artefact**: 60.3% of 128-token
+responses were provably cut off mid-generation (direct prefix test,
+`results_512/analysis/genlen_robustness.json`). At 512 tokens it is 0.000
+(classifier) / +0.005 (gpt-4o), McNemar p = 1.000, with symmetric 16/16 flips.
+Capability deltas are budget-robust (Qwen-1.7B MMLU −0.087 → −0.090).
 
-- **Capability = clean cliff at 4-bit:** *no* INT8 MMLU/ARC delta is significant for any pair; all significant capability losses are NF4-only.
-- **Safety = two-peaked, method-specific:** the two significant ASR moves sit at *different* precisions — Qwen-1.7B @ NF4 (above) and **Llama-3B @ INT8 (+0.040)**, significant under **both** judges + McNemar (p = 0.022 classifier / 0.008 gpt-4o), but **non-monotonic** (reverts at NF4) and small (≈8–9 prompts, concentrated in illegal/cybercrime).
-- **Takeaway:** quantization's effect on safety is **not a smooth function of bit-width**.
+## Precision sweep — fp16 → INT8 → NF4, judge ASR @ 512 tokens
+
+| Pair | fp16 | INT8 | NF4 |
+|---|---:|---:|---:|
+| qwen_2b | 0.255 | 0.245 | 0.255 |
+| qwen_4b | 0.115 | 0.125 | 0.155 |
+| llama_3_2_3b | 0.100 | 0.105 | 0.060 |
+| mistral_7b | 0.585 | 0.565 | 0.565 |
+| phi4_mini | 0.070 | 0.090 | 0.090 |
+
+- **Capability = clean cliff at 4-bit:** no INT8 MMLU/ARC delta is significant for
+  any pair; all significant capability losses are NF4-only. (Budget-robust.)
+- **Safety = no robust move at either precision:** every INT8 and NF4 ΔASR is
+  non-significant under both judges at 512. The 128-token Llama-3B @ INT8 +0.040
+  (then both-judge significant) **vanishes at 512** (classifier +0.005 p=1.000;
+  gpt-4o +0.010 p=0.688) — the second truncation-artefact casualty.
+- **Takeaway:** quantization's effect on safety is **not a smooth function of
+  bit-width**, and at the reference budget it is not a significant function of
+  precision at all.
 
 ## Scoring validity (the methodological headline)
 
-The v2 regex over-counts ASR; agreement with the classifier (Cohen κ): Qwen ≈ 0.19–0.37, Mistral ≈ 0.11 (worst), Llama ≈ 0.68–0.79 (best), Phi ≈ 0.59–0.67. Adopting the classifier **relocated** the single significant ΔASR from Qwen-4B (regex) to Qwen-1.7B (classifier). The over-counting pattern **replicates at INT8** and across all 4 families.
+The v2 regex over-counts ASR; agreement with the classifier at 512 (Cohen κ):
+Mistral ≈ 0.25–0.28 (worst), Qwen ≈ 0.36–0.59, Phi ≈ 0.67–0.77, Llama ≈ 0.71–0.84
+(best). The classifier is cross-checked by gpt-4o at κ 0.68–0.95. The choice of
+scorer changes both which model looks least safe and whether any model looks
+significantly less safe at all; the over-counting pattern replicates at INT8 and
+across all 4 families.
 
 ## Read this before quoting a number
 
-1. All headline numbers are **classifier-scored**; the regex is a demoted foil.
-2. Effects are **modest and caveated** — this is a rigorous *null + small effects*, **not** "quantization breaks safety."
-3. "Qwen-1.7B is the *only* significant ΔASR" holds for the **fp16-vs-NF4 main study**; the precision sweep adds Llama-3B @ INT8.
-4. Significance is **nominal / uncorrected** (the Qwen p = 0.027 would not survive strict Bonferroni; it is corroborated by McNemar + multi-seed + 2nd judge).
-5. Full audit trail: report §6.12–§6.15; PROJECT_LOG D16/D32/D35/D36.
+1. All headline numbers are **classifier-scored at the 512-token reference
+   budget**; the regex is a demoted foil and 128-token values are historical
+   comparisons (§6.16).
+2. This is a rigorous **null-safety + robust-capability-cost** result — **not**
+   "quantization breaks safety," and not proof of zero effect (MDE ≈ 0.06 at
+   n = 200; §6.5.1).
+3. **No ΔASR survives BH-FDR** in the NF4 family; the only individually
+   significant ΔASR anywhere at 512 is Llama-3B's decrease (uncorrected).
+4. The multi-seed arm (3 of 5 pairs) corroborates the null: greedy 0.000 sits
+   inside the seed range for Qwen-1.7B; 0/5 seeds significant.
+5. Full audit trail: report §6.5.1/§6.12–§6.16; PROJECT_LOG D16/D32/D35/D36/D41.

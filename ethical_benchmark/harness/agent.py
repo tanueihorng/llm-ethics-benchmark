@@ -646,7 +646,7 @@ def build_agent_status(repo_root: Path, policy: dict[str, Any] | None = None) ->
         "report": _file_info(
             max(
                 repo_root.glob("docs/FYP_Report_*.docx"),
-                default=repo_root / "docs/FYP_Report_2026-06-26_v3.docx",
+                default=repo_root / "docs/FYP_Report_2026-07-01_v5.docx",
             ),
             repo_root,
         ),
@@ -759,7 +759,7 @@ def render_handoff(status: dict[str, Any], results: Sequence[CheckResult] | None
         "## Next Actions",
         "",
         f"1. {status['suggested_next_action']}",
-        "2. If editing report-worthy content, edit `scripts/build_fyp_report_v3.js` and run `make report`.",
+        "2. If editing report-worthy content, edit `scripts/build_fyp_report_v5.js` and run `make report`.",
         "3. Regenerate this handoff and the dashboard after meaningful harness or state changes.",
         "",
         "## Privacy / Artifact Guardrails",

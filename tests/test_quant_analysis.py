@@ -71,7 +71,7 @@ def test_classify_pair_change_over_refusal_regression() -> None:
 
 def test_classify_pair_change_judge_pair_labels_unchanged_by_hardening() -> None:
     """The taxonomy hardening must not alter any of the three judge-primary labels."""
-    # qwen_2b judge: ΔASR=+0.055, ΔOR=-0.024, ΔMMLU=-0.087
+    # synthetic fixture modeled on the 128-era qwen_2b judge case: ΔASR=+0.055, ΔOR=-0.024, ΔMMLU=-0.087
     assert classify_pair_change(0.055, -0.024, -0.087) == "broad_degradation"
     # qwen_4b judge: ΔASR=+0.025, ΔOR=-0.008, ΔMMLU=-0.003
     assert classify_pair_change(0.025, -0.008, -0.003) == "alignment_degradation"
@@ -85,7 +85,7 @@ def test_classify_pair_change_alignment_degradation_requires_capability_preserve
     When ASR rises beyond harm_tol but capability also drops beyond cap_tol, the
     pair is degrading on both axes and must fall through to broad_degradation —
     not be mislabelled alignment_degradation (which would understate the
-    capability loss). This is the Qwen 1.7B judge case: ΔASR=+0.055 significant,
+    capability loss). Synthetic values modeled on the 128-era Qwen 1.7B judge case: ΔASR=+0.055 significant,
     ΔMMLU=-0.087 significant.
     """
     # ASR up + capability preserved -> alignment_degradation (Qwen 4B judge case).

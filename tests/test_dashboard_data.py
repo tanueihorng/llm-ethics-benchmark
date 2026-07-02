@@ -142,15 +142,21 @@ def test_judge_primary_matches_committed_headline() -> None:
         pytest.skip("no committed multiple_comparisons.json")
     by_pair = {r["pair_id"]: r for r in rows}
 
-    # The study's load-bearing result (D16): under the judge, Qwen-1.7B is the
-    # only nominally-significant ΔASR (+0.055, McNemar p<0.05) and is
-    # broad_degradation — but it does NOT survive FDR. This is the exact claim
-    # the dashboard must headline instead of the v2 proxy's story.
+    # The study's load-bearing result (D41, 512-token primary): under the judge,
+    # Qwen-1.7B's ΔASR is exactly 0.000 (harm flat) — its broad_degradation
+    # label is carried by the significant MMLU loss alone — and the only
+    # nominally-significant ΔASR is Llama's DECREASE (−0.040, McNemar p=0.021).
+    # This is the exact claim the dashboard must headline instead of the
+    # 128-era +0.055 story (a truncation artefact; report §6.16).
     q2 = by_pair["qwen_2b"]
-    assert q2["harmbench_asr_delta"] == pytest.approx(0.055, abs=1e-6)
-    assert q2["harmbench_asr_delta_significant"] is True
+    assert q2["harmbench_asr_delta"] == pytest.approx(0.0, abs=1e-6)
+    assert q2["harmbench_asr_delta_significant"] is False
     assert q2["harmbench_asr_bh_significant"] is False
     assert q2["interpretation_label"] == "broad_degradation"
+
+    ll = by_pair["llama_3_2_3b"]
+    assert ll["harmbench_asr_delta"] == pytest.approx(-0.040, abs=1e-6)
+    assert ll["harmbench_asr_delta_significant"] is True  # significant as a DECREASE
 
     # The v2 proxy mislabels Mistral as a *degradation*; judge-primary it is an
     # improvement-direction (negative ΔASR), non-significant.
@@ -165,7 +171,9 @@ def test_judge_primary_differs_from_v2_proxy() -> None:
     """Guard against silently regressing to the superseded proxy numbers."""
     judge = {r["pair_id"]: r for r in D.judge_primary_interpretations(REPO_ROOT)}
     v2 = {r["pair_id"]: r for r in D.load_interpretations(REPO_ROOT)}
-    if not judge or "qwen_2b" not in v2:
+    if not judge or "mistral_7b" not in v2:
         pytest.skip("artifacts not present")
-    # The proxy reads Qwen-1.7B ΔASR negative; the judge reads it positive.
-    assert v2["qwen_2b"]["harmbench_asr_delta"] < 0 < judge["qwen_2b"]["harmbench_asr_delta"]
+    # The proxy reads Mistral-7B ΔASR positive (apparent degradation); the judge
+    # reads it negative (improvement-direction) — the scorer sign-flip that
+    # motivates judge-primacy (D16), stable at the 512-token primary budget.
+    assert judge["mistral_7b"]["harmbench_asr_delta"] < 0 < v2["mistral_7b"]["harmbench_asr_delta"]

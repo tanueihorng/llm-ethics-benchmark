@@ -26,7 +26,7 @@ When in doubt: write it down in PROJECT_LOG.md.
 
 ## Update the FYP report on "report-worthy" changes
 
-The current FYP report (`docs/FYP_Report_2026-06-26_v3.docx`) is generated from `scripts/build_fyp_report_v3.js` (a docx-js build script). After making a change that affects the report's content, regenerate the docx:
+The current FYP report (`docs/FYP_Report_2026-07-01_v5.docx`, the 512-token-primary build; decision D41) is generated from `scripts/build_fyp_report_v5.js` (a docx-js build script). After making a change that affects the report's content, regenerate the docx:
 
 ```bash
 make report
@@ -44,9 +44,19 @@ A change is **not** report-worthy if it's purely internal: typos, refactors with
 
 **Rule:** when in doubt, regenerate. Building the docx is a one-second operation. The FYP report is a deliverable; it must reflect the current state of the project when handed to the supervisor.
 
-If the change requires text edits in the report (not just regeneration), edit `scripts/build_fyp_report_v3.js` first, then `make report`. The script is the source; the docx is the artifact. Never hand-edit the docx — the next `make report` will overwrite it.
+If the change requires text edits in the report (not just regeneration), edit `scripts/build_fyp_report_v5.js` first, then `make report`. The script is the source; the docx is the artifact. Never hand-edit the docx — the next `make report` will overwrite it.
 
 After regenerating, log the regeneration in PROJECT_LOG.md (one changelog line: "regenerated FYP report to reflect <change>").
+
+## When a RESULT changes, sweep the claim surface (D42)
+
+Editing the report is not enough when a change alters **what is true** (a headline number, a significance verdict, the primary configuration). Old claims live in many surfaces beyond the report builder: `README.md`, `docs/RESULTS_CARD.md`, PROJECT_LOG §1 prose, this file's own method text, figure copies under `.github/assets/`, the HTML decks under `docs/`, the dashboard's data layer, `todo.md`, and gitignored email drafts. After any truth-changing edit:
+
+1. **Grep the whole repo for the old numbers/claims themselves** (e.g. the retired 128-era `+0.055`), not just for old filenames. Classify each hit as historical (fine, if clearly scoped to its era) or current-facing (fix).
+2. **Do not cite a passing `make agent-check` as proof of content correctness** — say what the gate actually tests. If a property isn't machine-checked, add a stale-text pattern to `configs/artifact_policy.yaml` and self-test that it fires.
+3. Point-in-time presentation artifacts (decks, meetup reports) either get refreshed or carry an explicit data-snapshot notice.
+
+This rule generalises D40 ("sweep the instruction layer"): sweep every layer that *references* the changed thing — instructions, results claims, visualisations, and generated docs. Rationale: during the D41 512-primary re-base, three successive external audits kept finding stale 128-era claims that diff-scoped verification had missed (PROJECT_LOG 2026-07-02 rows).
 
 ## Keeping CLAUDE.md and AGENTS.md in sync
 
@@ -86,7 +96,7 @@ make report             # Regenerate the FYP interim report docx
 make dashboard          # Launch the interactive Streamlit GUI (dashboard/app.py)
 ```
 
-**Dashboard (GUI).** `make dashboard` (or `streamlit run dashboard/app.py`; deps in `requirements-dashboard.txt`) serves an interactive front-end: visualize results, add a new model via a schema-validated form that emits a runnable config + sbatch, and launch runs with live logs. It is **read-only over `results/`** (new configs go to gitignored `configs/generated/`). Note: it presents HarmBench ASR **judge-primary**, rebuilt from `results/analysis/multiple_comparisons.json` via the project's own `classify_pair_change` — NOT the v2-proxy `pair_interpretations.json` that `make analyze` emits (which over-counts ASR; see D16). `dashboard/data.py` is the Streamlit-free, unit-tested (`tests/test_dashboard_data.py`) data layer.
+**Dashboard (GUI).** `make dashboard` (or `streamlit run dashboard/app.py`; deps in `requirements-dashboard.txt`) serves an interactive front-end: visualize results, add a new model via a schema-validated form that emits a runnable config + sbatch, and launch runs with live logs. It is **read-only over the results trees** (prefers `results_512/analysis` — the primary tree, D41 — and falls back to `results/analysis`) (new configs go to gitignored `configs/generated/`). Note: it presents HarmBench ASR **judge-primary**, rebuilt from the preferred tree's `analysis/multiple_comparisons.json` (`results_512` first) via the project's own `classify_pair_change` — NOT the v2-proxy `pair_interpretations.json` that `make analyze` emits (which over-counts ASR; see D16). `dashboard/data.py` is the Streamlit-free, unit-tested (`tests/test_dashboard_data.py`) data layer.
 
 ### Direct CLI (fyp_cli.py)
 ```bash
@@ -138,7 +148,7 @@ sbatch slurm/judge_validation_newpairs.sbatch
 ```
 
 ### Judge-model validation (T20, HarmBench classifier) — COMPLETE (D16)
-The HarmBench judge validation has already run on TC1 (job 61047, fp16, 32 GB V100, n=200×6, 0 parse errors) and its results are committed: the official classifier is the **primary** HarmBench scorer, the redacted `scores.judge.harmbench_cls.*` sidecars + `results/analysis/judge_agreement.{json,csv}` are in the repo, and report §6.12 carries the results. **You do not need to re-run it.** Only re-run if you are revalidating or extending (e.g. adding a second independent judge). The full pipeline, for reference:
+The HarmBench judge validation has run at **both** budgets and its results are committed: the official classifier is the **primary** HarmBench scorer (D16, first established at 128 tokens: job 61047, fp16, 32 GB V100, n=200×6, 0 parse errors), and the **current primary study is the 512-token tree** (D41: job 61524 + INT8 follow-up, 3 000 classifications, 0 parse errors) — redacted `scores.judge.*` sidecars live in both `results/` and `results_512/`, current agreement figures in `results_512/analysis/judge_agreement.{json,csv}`, and report §6.12 carries the results. **You do not need to re-run it.** Only re-run if you are revalidating or extending (e.g. adding a second independent judge). The full pipeline, for reference:
 ```bash
 # On TC1 HEAD node (only if re-running / extending):
 git -C /tc1home/FYP/utan001/fyp_quant/repo pull --ff-only
@@ -196,7 +206,7 @@ ethical_benchmark/
 
 scripts/
 ├── prefetch_tc1.py      # Head-node pre-cache: datasets + model weights
-└── build_fyp_report_v3.js  # docx-js builder for the FYP report (canonical)
+└── build_fyp_report_v5.js  # docx-js builder for the FYP report (canonical, 512-primary)
 
 slurm/
 ├── jobs_tc1/            # 6 per-model matrix sbatch files (offline-mode)
@@ -210,7 +220,7 @@ slurm/
 2. Set seed (Python, NumPy, Torch)
 3. `HFModelLoader` loads model + tokenizer (dtype/device resolution; on-the-fly NF4 if `quantized: true`)
 4. `TextGenerator` batches prompts through model (chat template with `enable_thinking=False`)
-5. Benchmark plugin scores each response. HarmBench ASR primary scorer is the **official HarmBench classifier** (judge; D16, run on TC1 job 61047); XSTest over-refusal uses the deterministic v2 refusal parser; MMLU uses exact-match. The v2 regex is retained as a secondary HarmBench non-refusal-rate proxy.
+5. Benchmark plugin scores each response. HarmBench ASR primary scorer is the **official HarmBench classifier** (judge; D16 — validated at 128 tokens on TC1 job 61047, re-run for the primary 512-token study on job 61524); XSTest over-refusal uses the deterministic v2 refusal parser; MMLU uses exact-match. The v2 regex is retained as a secondary HarmBench non-refusal-rate proxy.
 6. Aggregate metrics → write `results/<model>/<benchmark>/raw.jsonl` + `summary.json`
 
 **Matrix run** (`run_quant_matrix.py`):
@@ -225,7 +235,7 @@ slurm/
 
 ### Benchmark Plugins
 
-All plugins implement `BenchmarkPlugin` ABC in `ethical_benchmark/benchmarks/base.py`. Each plugin handles its own dataset loading, prompt formatting, and per-response scoring. **HarmBench ASR is scored by the official HarmBench classifier (`cais/HarmBench-Llama-2-13b-cls`) as the primary scorer — decision D16, run on TC1 (job 61047, fp16, 32 GB V100).** The deterministic v2 refusal regex is retained as a secondary HarmBench non-refusal-rate proxy. The judge run found the regex over-counts ASR (agreement: Qwen κ≈0.19–0.37, Llama κ≈0.69–0.79), which relocated the study's only significant ΔASR from Qwen 4B (proxy) to Qwen 1.7B (judge). Judge artifacts: redacted `scores.judge.<name>.jsonl` + `summary.judge.<name>.json` sidecars (IDs + booleans only) and `results/analysis/judge_agreement.{json,csv}`; raw outputs and v2 sidecars are never modified. To re-run or extend: `scripts/run_judge_validation.py` (TC1 sbatch `slurm/judge_validation.sbatch`), then `scripts/judge_agreement.py` (no GPU). Scope: the judge covers **harmbench** only; XSTest over-refusal stays v2-scored. Report §6.12 carries the full agreement results. Future work (optional): a second independent judge (LlamaGuard / API) to cross-check the HarmBench classifier.
+All plugins implement `BenchmarkPlugin` ABC in `ethical_benchmark/benchmarks/base.py`. Each plugin handles its own dataset loading, prompt formatting, and per-response scoring. **HarmBench ASR is scored by the official HarmBench classifier (`cais/HarmBench-Llama-2-13b-cls`) as the primary scorer — decision D16 (validated on TC1 job 61047 @128 tokens; the primary 512-token study is scored by job 61524, D41).** The deterministic v2 refusal regex is retained as a secondary HarmBench non-refusal-rate proxy. The judge validation found the regex over-counts ASR (at 512: Qwen κ≈0.36–0.59, Mistral κ≈0.25–0.28, Llama κ≈0.71–0.84, Phi κ≈0.67–0.77) — at the 128 budget this relocated the then-significant ΔASR between models, and at the primary 512 budget no significant increase remains anywhere (the 128-era Qwen-1.7B +0.055 was a truncation artefact; report §6.16). Judge artifacts: redacted `scores.judge.<name>.jsonl` + `summary.judge.<name>.json` sidecars (IDs + booleans only) and `results/analysis/judge_agreement.{json,csv}`; raw outputs and v2 sidecars are never modified. To re-run or extend: `scripts/run_judge_validation.py` (TC1 sbatch `slurm/judge_validation.sbatch`), then `scripts/judge_agreement.py` (no GPU). Scope: the judge covers **harmbench** only; XSTest over-refusal stays v2-scored. Report §6.12 carries the full agreement results. Future work (optional): a second independent judge (LlamaGuard / API) to cross-check the HarmBench classifier.
 
 | Benchmark | Dataset | Primary Metric | Batch Size |
 |-----------|---------|----------------|------------|

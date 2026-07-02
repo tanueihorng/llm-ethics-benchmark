@@ -34,6 +34,7 @@ Output: results/analysis/multiple_comparisons.json (+ .csv).
 """
 from __future__ import annotations
 
+import argparse
 import csv
 import json
 import math
@@ -148,6 +149,33 @@ def power_mcnemar(b: int, c: int, n: int) -> Optional[float]:
     return _phi(z)
 
 
+def _power_note(representative_mde: float, contrasts: List[dict]) -> str:
+    """Builds the power-floor note from the ACTUAL contrasts, so it can never
+    go stale against the tree being analysed (a previous hardcoded version kept
+    citing the 128-token Qwen-1.7B +0.055 after the 512 rerun nulled it)."""
+    at_floor = [
+        c for c in contrasts
+        if c["metric"] == "harmbench_asr_judge" and abs(c["delta"]) >= representative_mde
+    ]
+    if at_floor:
+        listed = "; ".join(
+            f"{c['pair_id']} ({c['delta']:+.3f})" for c in at_floor
+        )
+        return (
+            "At n=200 and the observed HarmBench discordant rates, the minimum "
+            f"detectable ASR delta for 80% power is ~{representative_mde:.2f}; ASR effect(s) "
+            f"at/above this floor: {listed}. Sparse significance is therefore partly a "
+            "power floor, not solely a substantive null."
+        )
+    return (
+        "At n=200 and the observed HarmBench discordant rates, the minimum "
+        f"detectable ASR delta for 80% power is ~{representative_mde:.2f}; no observed "
+        "NF4 ASR effect reaches this floor, so effects smaller than the floor cannot "
+        "be ruled out (absence of significance is bounded by power, not proof of a "
+        "zero effect)."
+    )
+
+
 def benjamini_hochberg(pvals: List[float], q: float = 0.05) -> Tuple[List[float], List[bool]]:
     """Returns (adjusted_q_values, reject_flags) for BH-FDR at level q.
 
@@ -177,6 +205,15 @@ def benjamini_hochberg(pvals: List[float], q: float = 0.05) -> Tuple[List[float]
 
 
 def main() -> None:
+    global RESULTS, ANALYSIS
+    parser = argparse.ArgumentParser(description="BH-FDR + power over the NF4-vs-fp16 family.")
+    parser.add_argument("--results-dir", default="results",
+                        help="Results tree to read/write analysis under "
+                             "(default: results; use results_512 for the 512-token study).")
+    args = parser.parse_args()
+    RESULTS = REPO / args.results_dir
+    ANALYSIS = RESULTS / "analysis"
+
     ja = json.load((ANALYSIS / "judge_agreement.json").open())
     judge_per_pair = {row["pair_id"]: row for row in ja["per_pair"]}
 
@@ -265,13 +302,7 @@ def main() -> None:
             "target_power": 0.80,
             "representative_mde_delta_asr_at_median_discordant_rate": representative_mde,
             "median_discordant_rate": round(median_psi, 4),
-            "note": (
-                "At n=200 and the observed HarmBench discordant rates, the "
-                "minimum detectable ASR delta for 80%% power is ~%.2f; the only "
-                "NF4 ASR effect at/above this floor is Qwen-1.7B (+0.055). "
-                "'Only one significant effect' is therefore partly a power floor, "
-                "not solely a substantive null." % representative_mde
-            ),
+            "note": _power_note(representative_mde, contrasts),
             "per_pair_harmbench_asr": asr_power,
         },
         "contrasts": contrasts,

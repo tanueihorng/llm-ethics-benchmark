@@ -23,7 +23,8 @@ results/summary/*.csv
 # response text) and judge sidecars stay local. Only the redacted aggregate
 # results/analysis/sensitivity_multiseed.{json,csv} is committed.
 results_sensitivity/
-results_sensitivity_512/   # T31/D39: 512-token multi-seed arm (same local-only policy)
+# T31/D39: 512-token multi-seed arm (same local-only policy as results_sensitivity/)
+results_sensitivity_512/
 
 # T31/D39 512-token generation-length rerun arm: same policy as results/ —
 # raw generations + summaries stay local (harmful text), redacted judge sidecars

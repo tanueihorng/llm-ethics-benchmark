@@ -442,7 +442,7 @@ def build_doc() -> None:
             ("Agent entry", "Codex reads AGENTS.md and docs/PROJECT_LOG.md, then runs python fyp_cli.py agent-status to understand live repo state."),
             ("Task packet", "Codex runs python fyp_cli.py agent-start --task T21 --agent fyp-report-auditor. This loads a bounded packet instead of the entire repo story."),
             ("Specialist audit", "The fyp-report-auditor reviews report source, PROJECT_LOG, judge_agreement outputs, and stale current-facing claims. It returns findings, not random edits."),
-            ("Implementation", "The main Codex session edits scripts/build_fyp_report_v3.js if report-worthy, regenerates the report with make report, and updates docs/PROJECT_LOG.md."),
+            ("Implementation", "The main Codex session edits scripts/build_fyp_report_v5.js if report-worthy, regenerates the report with make report, and updates docs/PROJECT_LOG.md."),
             ("Finish gate", "Codex runs make agent-check. If it passes, generated handoff/dashboard files are refreshed so another session can continue."),
         ],
     )

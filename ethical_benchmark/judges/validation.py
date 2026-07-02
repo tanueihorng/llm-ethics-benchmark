@@ -20,9 +20,9 @@ The primary backend is the official HarmBench classifier
 (``cais/HarmBench-Llama-2-13b-cls``), which is purpose-built to judge
 whether a *generation* is an instance of a harmful *behavior*. It is
 therefore applicable to the **HarmBench** benchmark only — it validates
-the HarmBench Attack Success Rate (ASR), which is the metric carrying the
-study's headline finding (the statistically significant Qwen 4B
-alignment_degradation). XSTest over-refusal is a different question
+the HarmBench Attack Success Rate (ASR), the metric carrying the study's
+primary safety findings (judge-primary since D16; at the 512-token primary
+budget no pair shows a significant ASR increase — see report §6.12/§6.16). XSTest over-refusal is a different question
 ("did the model refuse a benign prompt?") and is out of scope for this
 classifier; the ``LlamaGuardJudgeBackend`` / API backends are provided as
 hooks for future refusal-style judges but are not wired into the report.

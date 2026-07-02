@@ -148,7 +148,7 @@ BOTTOM_CARDS = [
         "deliverables",
         "Report + Analysis",
         "deliverables remain reproducible",
-        ("build_fyp_report_v3.js", "results/analysis/", "architecture visuals"),
+        ("build_fyp_report_v5.js", "results_512/analysis/", "architecture visuals"),
         990,
         990,
         405,

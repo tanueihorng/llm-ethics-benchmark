@@ -53,10 +53,10 @@ To answer it honestly the study compares each model against **itself** — a mat
 ## The answer, in one figure
 
 <p align="center">
-  <img src=".github/assets/asr_forest.png" width="660" alt="Forest plot of the quantization effect on harmful compliance across five model pairs; only Qwen3-1.7B has a confidence interval excluding zero.">
+  <img src=".github/assets/asr_forest.png" width="660" alt="Forest plot of the quantization effect on harmful compliance across five model pairs at the 512-token reference budget; only Llama-3.2-3B has a confidence interval excluding zero, and it is a decrease.">
 </p>
 
-Across five matched pairs, **only the smallest model (Qwen3‑1.7B) shows a statistically significant increase in genuine harmful compliance** under 4-bit — and even that is modest (+0.055), borderline, and judge-dependent. Every other pair's effect overlaps zero. Under a proper judge, **4-bit quantization never *reduces* true harmful compliance**, but it does not broadly *increase* it either.
+Across five matched pairs at HarmBench's **512-token reference budget** (the primary configuration), **no pair shows a statistically significant increase in genuine harmful compliance** under 4-bit — the only ΔASR whose CI excludes zero is Llama-3.2-3B's **−0.040, a decrease**, and no HarmBench ASR contrast survives a BH-FDR correction. The multiplicity-robust effects are all **capability losses** (and one over-refusal *decrease*). An apparent +0.055 increase in the smallest model at a shorter 128-token budget turned out to be a **truncation artefact** (60% of 128-token responses were provably cut off mid-generation) and dissolves to 0.000 at the reference budget.
 
 The headline isn't a single number — it's a **methodological** finding:
 
@@ -64,9 +64,9 @@ The headline isn't a single number — it's a **methodological** finding:
   <img src=".github/assets/judge_vs_proxy.png" width="820" alt="Left: regex proxy non-refusal rate vs HarmBench classifier ASR — most points sit far below the diagonal, so the proxy over-counts. Right: judge-vs-proxy Cohen's kappa is family-dependent, low for Qwen and Mistral, high for Llama and Phi.">
 </p>
 
-The cheap regex proxy **over-counts** harmful compliance (left: most points sit well below the diagonal), and *how badly* it over-counts is **family-dependent** (right: agreement κ ranges from 0.11 for Mistral to 0.79 for Llama). Swapping the regex for the real classifier **relocated the study's only significant effect from the wrong model (Qwen‑4B) to the right one (Qwen‑1.7B)**. The scorer you choose changes the scientific conclusion — which is exactly the trap this project was built to expose.
+The cheap regex proxy **over-counts** harmful compliance (left: most points sit well below the diagonal), and *how badly* it over-counts is **family-dependent** (right: agreement κ ranges from 0.25 for Mistral to 0.84 for Llama at the 512-token budget). Swapping the regex for the real classifier **changes both which model looks least safe and whether any model looks significantly less safe at all**. The scorer you choose changes the scientific conclusion — which is exactly the trap this project was built to expose.
 
-> **TL;DR** — Apparent "quantization breaks safety" results are fragile to *how you score them*. With a trustworthy judge and a separate capability axis, the safety effects are small, borderline, and concentrated in the smallest model, where capability *also* drops — pointing to capability-driven degradation, not targeted alignment erosion.
+> **TL;DR** — Apparent "quantization breaks safety" results are fragile to *how you score them* **and *at what generation budget***. With a trustworthy judge, HarmBench's 512-token reference budget, and a separate capability axis, no safety regression survives multiplicity correction — the robust cost of 4-bit quantization is **capability**, and the borderline 128-token safety signals were truncation artefacts, pointing to capability-driven degradation, not targeted alignment erosion.
 
 ---
 
@@ -205,26 +205,28 @@ HarmBench ASR is scored by the **official HarmBench classifier** (`cais/HarmBenc
 
 | Pair | HarmBench ASR (judge) | ΔASR (95% CI) | Significant? | Label |
 | --- | ---: | --- | :--: | --- |
-| `qwen_2b` | 0.135 → 0.190 | **+0.055** [+0.010, +0.100] | ✅ **yes** | **broad_degradation** |
-| `qwen_4b` | 0.065 → 0.090 | +0.025 [−0.000, +0.055] | no | alignment_degradation *(directional)* |
-| `llama_3_2_3b` | 0.040 → 0.040 | 0.000 [−0.020, +0.020] | no | broad_degradation |
-| `mistral_7b` | 0.385 → 0.345 | −0.040 [−0.110, +0.025] | no | alignment_improvement *(directional)* |
-| `phi4_mini` | 0.055 → 0.055 | 0.000 [−0.030, +0.030] | no | robust_preservation |
+| `qwen_2b` | 0.255 → 0.255 | 0.000 [−0.055, +0.055] | no | **broad_degradation** *(capability-driven; harm flat)* |
+| `qwen_4b` | 0.115 → 0.155 | +0.040 [0.000, +0.080] | no | alignment_degradation *(directional)* |
+| `llama_3_2_3b` | 0.100 → 0.060 | **−0.040** [−0.070, −0.010] | ✅ **yes (a decrease)** | capability_collapse_masq._as_safety *(directional)* |
+| `mistral_7b` | 0.585 → 0.565 | −0.020 [−0.085, +0.040] | no | alignment_improvement *(directional)* |
+| `phi4_mini` | 0.070 → 0.090 | +0.020 [−0.015, +0.055] | no | robust_preservation |
 
-Qwen‑1.7B is the **only** significant ΔASR in the fp16-vs-NF4 comparison — and it loses significant capability too (hence *broad_degradation*, consistent with the capability-driven reading rather than targeted erosion).
+*(512-token reference budget, the primary configuration; the retained 128-token comparison is analysed in report §6.16.)*
+
+The only significant ΔASR is Llama‑3B's **decrease**; no pair shows a significant increase, and no ASR contrast survives BH-FDR. Qwen‑1.7B's *broad_degradation* label is driven entirely by its significant MMLU loss (−0.090) — its harm axis is exactly flat, consistent with the capability-driven reading rather than targeted erosion.
 
 ### Precision point — `fp16` → `INT8` → `NF4`
 
 <p align="center">
-  <img src=".github/assets/precision_sweep.png" width="820" alt="Three panels across fp16, INT8, NF4: HarmBench ASR, MMLU accuracy, ARC accuracy. Capability drops sharply only at NF4; the safety axis moves at different precisions for different models.">
+  <img src=".github/assets/precision_sweep.png" width="820" alt="Three panels across fp16, INT8, NF4 at the 512-token budget: HarmBench ASR, MMLU accuracy, ARC accuracy. Capability drops sharply only at NF4; no safety move is significant at either precision.">
 </p>
 
 Adding INT8 shows the quantization effect is **not a smooth function of bit-width**:
 
 - **Capability** is a clean **cliff at 4-bit** — no INT8 MMLU/ARC delta is significant for any pair; the real capability losses all appear at NF4.
-- **Safety** is **two-peaked** — the two significant ΔASR moves sit at *different* precisions: Qwen‑1.7B @ NF4 (above) and **Llama‑3B @ INT8 (+0.040)**, the latter significant under both judges + McNemar (p = 0.008 / 0.022) but non-monotonic (it reverts at NF4) and small (≈8–9 prompts), so reported as a caveated, method-specific effect.
+- **Safety** shows **no robust move at either precision** at the reference budget — every INT8 and NF4 ΔASR is non-significant under both judges. (At the shorter 128-token budget Llama‑3B showed a both-judge-significant +0.040 at INT8; like the Qwen‑1.7B NF4 signal, it vanishes at 512 — classifier +0.005, gpt‑4o +0.010, both p ≫ 0.05 — another casualty of the truncation artefact.)
 
-> Significance flags are per-comparison / nominal (no family-wise correction; Qwen‑1.7B's p = 0.027 would not survive strict Bonferroni — see report §6.5). A full-repo scorer audit (PROJECT_LOG D36) confirmed every primary number is classifier-scored.
+> Multiplicity is handled explicitly: under a Benjamini–Hochberg FDR correction over the 20 primary contrasts, **zero HarmBench ASR contrasts survive**; the three survivors are capability/over-refusal effects (see report §6.5.1). A full-repo scorer audit (PROJECT_LOG D36) confirmed every primary number is classifier-scored.
 
 ---
 
@@ -262,7 +264,7 @@ TC1 policy: no user code on the head node, `sbatch` only, offline mode on comput
 
 ### Interactive dashboard
 
-`make dashboard` serves a Streamlit GUI over `results/`: visualize the judge-primary findings, add a new model through a schema-validated form (it emits a runnable config + sbatch), and launch runs with live logs. It is **read-only** over results and rebuilds the headline table judge-primary from the analysis JSON — matching the report, not the demoted proxy.
+`make dashboard` serves a Streamlit GUI over the primary analysis tree (prefers `results_512/analysis`, D41; falls back to `results/analysis`): visualize the judge-primary findings, add a new model through a schema-validated form (it emits a runnable config + sbatch), and launch runs with live logs. It is **read-only** over results and rebuilds the headline table judge-primary from the analysis JSON — matching the report, not the demoted proxy.
 
 ---
 
@@ -315,7 +317,7 @@ Raw generations are written once and never overwritten. Post-hoc re-scoring and 
 - **Matched-pair design** — baseline and quantized share identical weights; only precision differs.
 - **Fixed seed (42) + greedy decoding** — deterministic generation across every model.
 - **Immutable raw-output contract** — re-scoring writes sidecars; `raw.jsonl` / `summary.json` are hash-pinned and never mutated.
-- **Two independent judges** — the primary HarmBench classifier and gpt‑4o agree at κ 0.60–0.95, far above the regex.
+- **Two independent judges** — the primary HarmBench classifier and gpt‑4o agree at κ 0.68–0.95 at the 512-token primary budget (0.60–0.95 at 128), far above the regex.
 - **Uncertainty quantified** — paired-bootstrap 95% CIs and McNemar exact tests on every delta, with an honest family-wise-correction caveat.
 - **Machine-checkable rails** — `make agent-check` (8/8) guards docs, artifacts, redaction, and report freshness on every change.
 
@@ -335,7 +337,7 @@ Raw generations are written once and never overwritten. Post-hoc re-scoring and 
 
 **Academic write-up**
 - FYP thesis (standalone) — `docs/FYP_Thesis_2026-06-18.docx` (`make thesis`)
-- FYP interim report — `docs/FYP_Report_2026-06-26_v3.docx` (`make report`)
+- FYP interim report — `docs/FYP_Report_2026-07-01_v5.docx` (512-token-primary; `make report`)
 - Workshop paper / poster outline — [`docs/paper_outline.md`](docs/paper_outline.md)
 
 **Reference**

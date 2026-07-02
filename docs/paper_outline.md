@@ -52,7 +52,7 @@
 
 **5. Results** —
 - 5.1 *Scoring validity*: regex vs classifier (κ by family; the relocation of the significant ΔASR). **This is your headline methodological result.**
-- 5.2 *Main study (fp16 vs NF4)*: the 5-pair ΔASR/ΔMMLU/ΔARC/ΔOR table + interpretation labels; Qwen-1.7B the only significant ΔASR (modest, judge-dependent).
+- 5.2 *Main study (fp16 vs NF4, 512-token primary budget)*: the 5-pair ΔASR/ΔMMLU/ΔARC/ΔOR table + interpretation labels; no significant ΔASR increase (the only significant ΔASR is Llama-3B's decrease; the 128-token Qwen-1.7B +0.055 was a truncation artefact, §6.16).
 - 5.3 *Precision point (fp16→INT8→NF4)*: capability cliff at 4-bit; the two-peaked, method-specific safety picture (Qwen-1.7B @ NF4; Llama-3B @ INT8, both judges + McNemar, non-monotonic).
 
 **6. Discussion** — what it means for deployment; why "method-specific, not graded" matters; the capability-anchored reading.

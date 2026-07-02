@@ -1,0 +1,520 @@
+{
+  "description": "Generation-length robustness (128 vs 512 tokens) backing report \u00a76.16. Aggregates only.",
+  "asr_128_classifier": {
+    "qwen_2b": {
+      "n": 200,
+      "asr_base": 0.135,
+      "asr_quant": 0.19,
+      "delta": 0.055,
+      "ci": [
+        0.01,
+        0.1
+      ],
+      "n01": 16,
+      "n10": 5,
+      "mcnemar_p": 0.0266,
+      "sig_ci": true,
+      "bh_fdr_sig": false
+    },
+    "qwen_4b": {
+      "n": 200,
+      "asr_base": 0.065,
+      "asr_quant": 0.09,
+      "delta": 0.025,
+      "ci": [
+        -0.005,
+        0.055
+      ],
+      "n01": 7,
+      "n10": 2,
+      "mcnemar_p": 0.1797,
+      "sig_ci": false,
+      "bh_fdr_sig": false
+    },
+    "llama_3_2_3b": {
+      "n": 200,
+      "asr_base": 0.04,
+      "asr_quant": 0.04,
+      "delta": 0.0,
+      "ci": [
+        -0.02,
+        0.02
+      ],
+      "n01": 2,
+      "n10": 2,
+      "mcnemar_p": 1.0,
+      "sig_ci": false,
+      "bh_fdr_sig": false
+    },
+    "mistral_7b": {
+      "n": 200,
+      "asr_base": 0.385,
+      "asr_quant": 0.345,
+      "delta": -0.04,
+      "ci": [
+        -0.11,
+        0.025
+      ],
+      "n01": 20,
+      "n10": 28,
+      "mcnemar_p": 0.3123,
+      "sig_ci": false,
+      "bh_fdr_sig": false
+    },
+    "phi4_mini": {
+      "n": 200,
+      "asr_base": 0.055,
+      "asr_quant": 0.055,
+      "delta": 0.0,
+      "ci": [
+        -0.03,
+        0.03
+      ],
+      "n01": 5,
+      "n10": 5,
+      "mcnemar_p": 1.0,
+      "sig_ci": false,
+      "bh_fdr_sig": false
+    }
+  },
+  "asr_512_classifier": {
+    "qwen_2b": {
+      "n": 200,
+      "asr_base": 0.255,
+      "asr_quant": 0.255,
+      "delta": 0.0,
+      "ci": [
+        -0.055,
+        0.055
+      ],
+      "n01": 16,
+      "n10": 16,
+      "mcnemar_p": 1.0,
+      "sig_ci": false,
+      "bh_fdr_sig": false
+    },
+    "qwen_4b": {
+      "n": 200,
+      "asr_base": 0.115,
+      "asr_quant": 0.155,
+      "delta": 0.04,
+      "ci": [
+        0.0,
+        0.08
+      ],
+      "n01": 13,
+      "n10": 5,
+      "mcnemar_p": 0.0963,
+      "sig_ci": false,
+      "bh_fdr_sig": false
+    },
+    "llama_3_2_3b": {
+      "n": 200,
+      "asr_base": 0.1,
+      "asr_quant": 0.06,
+      "delta": -0.04,
+      "ci": [
+        -0.075,
+        -0.01
+      ],
+      "n01": 1,
+      "n10": 9,
+      "mcnemar_p": 0.0215,
+      "sig_ci": true,
+      "bh_fdr_sig": false
+    },
+    "mistral_7b": {
+      "n": 200,
+      "asr_base": 0.585,
+      "asr_quant": 0.565,
+      "delta": -0.02,
+      "ci": [
+        -0.08,
+        0.04
+      ],
+      "n01": 17,
+      "n10": 21,
+      "mcnemar_p": 0.6271,
+      "sig_ci": false,
+      "bh_fdr_sig": false
+    },
+    "phi4_mini": {
+      "n": 200,
+      "asr_base": 0.07,
+      "asr_quant": 0.09,
+      "delta": 0.02,
+      "ci": [
+        -0.015,
+        0.055
+      ],
+      "n01": 9,
+      "n10": 5,
+      "mcnemar_p": 0.424,
+      "sig_ci": false,
+      "bh_fdr_sig": false
+    }
+  },
+  "asr_512_gpt4o": {
+    "qwen_2b": {
+      "n": 200,
+      "asr_base": 0.19,
+      "asr_quant": 0.195,
+      "delta": 0.005,
+      "ci": [
+        -0.05,
+        0.06
+      ],
+      "n01": 16,
+      "n10": 15,
+      "mcnemar_p": 1.0,
+      "sig_ci": false,
+      "bh_fdr_sig": false
+    },
+    "qwen_4b": {
+      "n": 200,
+      "asr_base": 0.075,
+      "asr_quant": 0.115,
+      "delta": 0.04,
+      "ci": [
+        -0.005,
+        0.085
+      ],
+      "n01": 14,
+      "n10": 6,
+      "mcnemar_p": 0.1153,
+      "sig_ci": false,
+      "bh_fdr_sig": false
+    },
+    "llama_3_2_3b": {
+      "n": 200,
+      "asr_base": 0.09,
+      "asr_quant": 0.055,
+      "delta": -0.035,
+      "ci": [
+        -0.065,
+        -0.01
+      ],
+      "n01": 0,
+      "n10": 7,
+      "mcnemar_p": 0.0156,
+      "sig_ci": true,
+      "bh_fdr_sig": false
+    },
+    "mistral_7b": {
+      "n": 200,
+      "asr_base": 0.55,
+      "asr_quant": 0.545,
+      "delta": -0.005,
+      "ci": [
+        -0.07,
+        0.055
+      ],
+      "n01": 20,
+      "n10": 21,
+      "mcnemar_p": 1.0,
+      "sig_ci": false,
+      "bh_fdr_sig": false
+    },
+    "phi4_mini": {
+      "n": 200,
+      "asr_base": 0.045,
+      "asr_quant": 0.065,
+      "delta": 0.02,
+      "ci": [
+        -0.015,
+        0.055
+      ],
+      "n01": 8,
+      "n10": 4,
+      "mcnemar_p": 0.3877,
+      "sig_ci": false,
+      "bh_fdr_sig": false
+    }
+  },
+  "capability_128_vs_512": {
+    "mmlu": {
+      "qwen_2b": {
+        "d128": -0.0867,
+        "sig128": true,
+        "d512": -0.09,
+        "sig512": true
+      },
+      "qwen_4b": {
+        "d128": -0.0033,
+        "sig128": false,
+        "d512": -0.0033,
+        "sig512": false
+      },
+      "llama_3_2_3b": {
+        "d128": -0.0433,
+        "sig128": true,
+        "d512": -0.0367,
+        "sig512": false
+      },
+      "mistral_7b": {
+        "d128": -0.0167,
+        "sig128": false,
+        "d512": -0.02,
+        "sig512": false
+      },
+      "phi4_mini": {
+        "d128": -0.0233,
+        "sig128": false,
+        "d512": -0.0267,
+        "sig512": false
+      }
+    },
+    "arc": {
+      "qwen_2b": {
+        "d128": -0.0128,
+        "sig128": false,
+        "d512": -0.0094,
+        "sig512": false
+      },
+      "qwen_4b": {
+        "d128": -0.0213,
+        "sig128": true,
+        "d512": -0.0162,
+        "sig512": true
+      },
+      "llama_3_2_3b": {
+        "d128": -0.0282,
+        "sig128": true,
+        "d512": -0.0316,
+        "sig512": true
+      },
+      "mistral_7b": {
+        "d128": 0.0094,
+        "sig128": false,
+        "d512": 0.0094,
+        "sig512": false
+      },
+      "phi4_mini": {
+        "d128": -0.0154,
+        "sig128": false,
+        "d512": -0.0145,
+        "sig512": false
+      }
+    },
+    "xstest": {
+      "qwen_2b": {
+        "d128": -0.024,
+        "sig128": false,
+        "d512": -0.028,
+        "sig512": true
+      },
+      "qwen_4b": {
+        "d128": -0.008,
+        "sig128": false,
+        "d512": 0.0,
+        "sig512": false
+      },
+      "llama_3_2_3b": {
+        "d128": 0.016,
+        "sig128": false,
+        "d512": 0.016,
+        "sig512": false
+      },
+      "mistral_7b": {
+        "d128": 0.0,
+        "sig128": false,
+        "d512": 0.004,
+        "sig512": false
+      },
+      "phi4_mini": {
+        "d128": -0.028,
+        "sig128": true,
+        "d512": -0.044,
+        "sig512": true
+      }
+    }
+  },
+  "response_length": {
+    "per_model": {
+      "qwen_2b_base": {
+        "med128": 597,
+        "max128": 757,
+        "med512": 1686,
+        "max512": 2922,
+        "over_ceiling_512": 130,
+        "n": 200
+      },
+      "qwen_2b_4bit": {
+        "med128": 563,
+        "max128": 758,
+        "med512": 1410,
+        "max512": 2933,
+        "over_ceiling_512": 117,
+        "n": 200
+      },
+      "qwen_4b_base": {
+        "med128": 612,
+        "max128": 765,
+        "med512": 778,
+        "max512": 3076,
+        "over_ceiling_512": 99,
+        "n": 200
+      },
+      "qwen_4b_4bit": {
+        "med128": 633,
+        "max128": 792,
+        "med512": 1145,
+        "max512": 2956,
+        "over_ceiling_512": 124,
+        "n": 200
+      },
+      "llama_3_2_3b_base": {
+        "med128": 130,
+        "max128": 768,
+        "med512": 139,
+        "max512": 3005,
+        "over_ceiling_512": 28,
+        "n": 200
+      },
+      "llama_3_2_3b_4bit": {
+        "med128": 111,
+        "max128": 691,
+        "med512": 110,
+        "max512": 3057,
+        "over_ceiling_512": 32,
+        "n": 200
+      },
+      "mistral_7b_base": {
+        "med128": 566,
+        "max128": 669,
+        "med512": 1997,
+        "max512": 2697,
+        "over_ceiling_512": 187,
+        "n": 200
+      },
+      "mistral_7b_4bit": {
+        "med128": 567,
+        "max128": 654,
+        "med512": 2014,
+        "max512": 2657,
+        "over_ceiling_512": 191,
+        "n": 200
+      },
+      "phi4_mini_base": {
+        "med128": 619,
+        "max128": 771,
+        "med512": 2483,
+        "max512": 3283,
+        "over_ceiling_512": 178,
+        "n": 200
+      },
+      "phi4_mini_4bit": {
+        "med128": 598,
+        "max128": 766,
+        "med512": 2401,
+        "max512": 3225,
+        "over_ceiling_512": 154,
+        "n": 200
+      }
+    },
+    "ceiling_chars": 792,
+    "all_median_128": 567,
+    "all_median_512": 1675,
+    "all_max_512": 3283,
+    "pct_512_over_ceiling": 62.0
+  },
+  "prefix_truncation_128": {
+    "per_model": {
+      "qwen_2b_base": {
+        "truncated": 135,
+        "natural_stop": 65,
+        "mismatch": 0,
+        "n": 200,
+        "pct_truncated": 67.5
+      },
+      "qwen_2b_4bit": {
+        "truncated": 121,
+        "natural_stop": 79,
+        "mismatch": 0,
+        "n": 200,
+        "pct_truncated": 60.5
+      },
+      "qwen_4b_base": {
+        "truncated": 109,
+        "natural_stop": 91,
+        "mismatch": 0,
+        "n": 200,
+        "pct_truncated": 54.5
+      },
+      "qwen_4b_4bit": {
+        "truncated": 140,
+        "natural_stop": 60,
+        "mismatch": 0,
+        "n": 200,
+        "pct_truncated": 70.0
+      },
+      "llama_3_2_3b_base": {
+        "truncated": 6,
+        "natural_stop": 119,
+        "mismatch": 75,
+        "n": 200,
+        "pct_truncated": 3.0
+      },
+      "llama_3_2_3b_4bit": {
+        "truncated": 8,
+        "natural_stop": 122,
+        "mismatch": 70,
+        "n": 200,
+        "pct_truncated": 4.0
+      },
+      "mistral_7b_base": {
+        "truncated": 187,
+        "natural_stop": 6,
+        "mismatch": 7,
+        "n": 200,
+        "pct_truncated": 93.5
+      },
+      "mistral_7b_4bit": {
+        "truncated": 196,
+        "natural_stop": 4,
+        "mismatch": 0,
+        "n": 200,
+        "pct_truncated": 98.0
+      },
+      "phi4_mini_base": {
+        "truncated": 147,
+        "natural_stop": 21,
+        "mismatch": 32,
+        "n": 200,
+        "pct_truncated": 73.5
+      },
+      "phi4_mini_4bit": {
+        "truncated": 157,
+        "natural_stop": 43,
+        "mismatch": 0,
+        "n": 200,
+        "pct_truncated": 78.5
+      }
+    },
+    "total": {
+      "truncated": 1206,
+      "natural_stop": 610,
+      "mismatch": 184,
+      "n": 2000
+    },
+    "pct_truncated": 60.3,
+    "pct_natural_stop": 30.5,
+    "pct_mismatch": 9.2
+  },
+  "cross_judge_kappa_512": {
+    "per_model": {
+      "qwen_2b_base": 0.785,
+      "qwen_2b_4bit": 0.8,
+      "qwen_4b_base": 0.768,
+      "qwen_4b_4bit": 0.744,
+      "llama_3_2_3b_base": 0.942,
+      "llama_3_2_3b_4bit": 0.954,
+      "mistral_7b_base": 0.827,
+      "mistral_7b_4bit": 0.777,
+      "phi4_mini_base": 0.678,
+      "phi4_mini_4bit": 0.826
+    },
+    "kappa_min": 0.678,
+    "kappa_max": 0.954
+  }
+}

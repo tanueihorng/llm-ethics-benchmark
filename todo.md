@@ -7,33 +7,35 @@
 
 ---
 
-## [2026-06-29] ACTIVE: T31 — full 512-token rerun of the whole study (retain 128), phases A→G
+## [2026-07-02] ACTIVE: v5 promoted to CANONICAL (D41 complete) — remaining: COMMIT, T30 gold set @512, thesis mirror
 
-**Why:** Reviewer-proofing. Study used `max_new_tokens=128`; HarmBench's reference is 512 and generation length materially affects ASR. User chose (over my scoped-check recommendation, eyes-open) a FULL rerun at 512 of everything, keeping all 128 data. See PROJECT_LOG D39 + T31.
+**STATUS 2026-07-02 (post-Codex):** Codex reviewed v5 → 9 findings, **all verified real and all FIXED** (see PROJECT_LOG §4 2026-07-02 03:00): §6.12/Ch7/Appendix judge prose → 512 run (job 61524); `number_bible_512.py` fixed (runs end-to-end, exit 0); `multiple_comparisons.py` power note now DYNAMIC (512 artifact regenerated; 128 artifact byte-identical); prefix-truncation now committed in `genlen_robustness.json` (`prefix_truncation_128`: 60.3%/30.5%/9.2%); Llama evidence confirmed→directional; composite→side-by-side wording; Qwen-4B deployment claim scoped. **PROMOTION EXECUTED (D40-style full sweep):** `make report` → `build_fyp_report_v5.js`; v3+v4 docx archived to `docs/archive/`; AGENTS/CLAUDE/README/AGENTIC_WORKFLOW/THESIS_OUTLINE/skill/codex-agent/`agent.py`/3 diagram generators → v5; `artifact_policy` extended (immutable manifest **120→300** now pinning `results_512` + `results_sensitivity_512`; report-worthy v5 + `results_512/analysis/*`; **stale-text guard forbids v3/v4-as-current, self-tested**); HANDOFF/dashboard/checklist regenerated. **Gates: `make agent-check` 8/8, pytest 329, guard fires on injected violations.**
 
-**Source of truth:** `docs/PROJECT_LOG.md` §1 + T31 + D39.
+**Next steps (ordered):**
+1. **COMMIT the whole layer** (v5 builder+docx, results_512 sidecars/_int8/analysis, results_sensitivity_512, policy/Makefile/AGENTS/CLAUDE/tests/harness sweep, archives, manifest 300, figures, PROJECT_LOG/todo). Suggest: one commit "T31/D41: promote 512-token study to primary; report v5 canonical" (or split data/infra). NOT yet pushed — remember origin/main is behind.
+2. **Phase F — T30 human-label gold set on 512:** `python scripts/human_label_audit.py --make-sheet --results-dir results_512` (check flag support first; it may need `--results-dir` plumbing) then `--make-html`; user annotates (single annotator, n=200, representative mix), then `--apply-labels` → fold classifier-vs-human agreement into §6.12/§7.
+3. **Thesis mirror to 512:** `make thesis` still → `scripts/build_fyp_thesis.js` → `FYP_Thesis_2026-06-18.docx` (128-era). Mirror the v5 512-primary content (same D41 framing) into a thesis v4/new build + archive predecessors + extend stale-text guard if the thesis filename changes.
+4. T1 (July email — update draft numbers to 512-primary before sending!), T15, T3.
 
-**Decided (don't re-litigate):**
-- FULL rerun, all 4 benchmarks, main fp16+NF4 + INT8 sweep + multi-seed — NOT a scoped headline-pair check (user rejected scoped twice).
-- RETAIN all 128-token data: 512 writes to a parallel `results_512/` root (the `results_sensitivity/` pattern). Never touch `results/`.
-- 128-vs-512 contrast is reported as a robustness result.
-- Single annotator for T30 (when it resumes on 512 data).
+**Watch items / guardrails:**
+- ⚠️ user pasted the OpenAI key in chat (twice) — ROTATE it.
+- The July email drafts (`docs/email_drZhang_july.md`, gitignored) still carry 128-era numbers (Qwen-1.7B +0.055 as the headline) — MUST be re-based to 512-primary before sending. **Same for the attachment deck `docs/fyp_status_2026-07.html` (+v2) and the other showcase/architecture HTML decks — all carry hardcoded 128-era data and are now banner-marked as snapshots; refresh from `results_512/analysis` before any send/presentation.**
+- `docs/agentic report`/architecture .svg/.drawio emitted artifacts still show old builder node labels (regen optional, guard is verb-anchored — same as D40).
+- 128 artifacts (`results/`, `results/analysis/`) are retained UNCHANGED as the comparison; never clobber.
 
-**Done so far (2026-06-29, local, no GPU):**
-- `configs/tc1_512.yaml` (only diff vs tc1.yaml: max_new_tokens 512 + log_dir results_512/; schema-valid).
-- `slurm/jobs_tc1_512/` (10 matrix, `--output_dir results_512 --device cuda`) + `slurm/jobs_tc1_512_smoke/` (40).
-- `slurm/judge_validation_512.sbatch` (classifier, all 10 aliases, results_512, fp16, 6h; no resume-skip — on timeout resubmit only unscored aliases).
-- `.gitignore` results_512 rules. 29 slurm+config tests pass; 128 jobs byte-identical.
+**Prior context:** the original re-base plan that this entry supersedes was fully executed on 2026-07-01/02 — Ch6 prose, figures, §6.15/§6.16, appendix, infra promotion, and the 3-round + Codex verification are ALL DONE (durable record: PROJECT_LOG §4 rows 2026-07-01 22:15 → 2026-07-02). Numbers source: `results_512/analysis/` via `python scripts/number_bible_512.py`.
 
-**Next steps (ordered, concrete):**
-1. **Commit + push** the T31 scaffolding (path-scoped — do NOT sweep the pre-existing dashboard/v2/v3 backlog into it). Files: configs/tc1_512.yaml, slurm/jobs_tc1_512/, slurm/jobs_tc1_512_smoke/, slurm/judge_validation_512.sbatch, .gitignore, docs/PROJECT_LOG.md, todo.md.
-2. **TC1 (phase A):** `git -C /tc1home/FYP/utan001/fyp_quant/repo pull --ff-only`. Models already cached (same model_ids as 128 run) → prefetch only if cache cleared. Smoke ONE model first: `sbatch slurm/jobs_tc1_512_smoke/qwen_2b_base__harmbench.sbatch` (confirm it writes to results_512/ + uses native chat template). Then the 10 matrix jobs pair-by-pair (QoS = 1 GPU job at a time; `--resume` continues on 6h timeout — Mistral-7B @512 is the long pole, watch its runtime).
-3. **TC1 (phase B):** `sbatch slurm/judge_validation_512.sbatch` (HarmBench classifier). gpt-4o judge runs on the MAC after SCP (api_judge backend, needs internet): `python scripts/run_judge_validation.py --results-dir results_512 --models <all 10> --benchmark harmbench --backend api_judge ...`.
-4. **Phase C (INT8@512) — BUILT 2026-06-29, run after Phase A:** `sbatch slurm/jobs_tc1_int8_512/<model>_8bit__matrix.sbatch` (5 `*_8bit`; base/4bit refs reused from Phase A results_512) → `sbatch slurm/judge_validation_int8_512.sbatch`.
-5. **Phase D (multi-seed@512) — BUILT 2026-06-29, independent of A:** the 6 gen sbatch in `slurm/jobs_tc1_sensitivity_512/*__sens512.sbatch` (each loops seeds 1-5 → `results_sensitivity_512/seed<N>/`) → the 5 `judge_sens512_seed<N>.sbatch`.
-6. **Phases E–G still to build (after data returns, on the Mac):** `make analyze RESULTS_DIR=results_512 ANALYSIS_DIR=results_512/analysis` + a 128-vs-512 comparison artifact (incl. response-length distribution proving 512 took effect); `precision_sweep_analysis.py` on results_512 for the INT8 sweep; redo T30 (`--make-sheet`/`--make-html` reading results_512); regenerate report/thesis @512 + the generation-budget robustness section.
+---
 
-**Verification to run after data returns:** manifest/immutability of results/ unchanged; results_512 has 10 aliases × 4 benchmarks; judges 0 parse errors; ΔASR(512) vs ΔASR(128) per pair; whether Qwen-1.7B stays the only significant move.
+## [2026-06-30] ✅ DONE: promote 512-token to PRIMARY — full apparatus at 512
+
+All phases executed (TC1 INT8/multi-seed runs, SCP, local analysis, Phase G re-base, D41 promotion). Durable record: PROJECT_LOG §3 D41 + §4 rows 2026-06-30 → 2026-07-02. Only Phase F (T30 gold set @512) remains — tracked in the top entry.
+
+---
+
+## [2026-06-29] ✅ DONE: T31 — full 512-token rerun (phases A→E, G complete; F pending)
+
+Superseded by the entries above; durable record in PROJECT_LOG (D39/D41, §4). Phase F (T30 @512) tracked in the top entry.
 
 ---
 
@@ -74,7 +76,7 @@
 
 **Do next, in order:**
 1. **T1 — email Dr. Zhang.** June update SENT 2026-06-13 (as-sent record `docs/email_drZhang_june.md`). Remaining: send the staged July follow-up + its deck — see the **[2026-06-26]** entry at the top.
-2. **T15 — submit.** Two documents exist: the interim report `docs/FYP_Report_2026-06-26_v3.docx` (`make report`; §6.15 + §6.5 caveat) and the NEW standalone thesis `docs/FYP_Thesis_2026-06-18.docx` (`make thesis`; IEEE-cited, sources verified). Decide which the milestone requires; the thesis cover says "Final Report — Thesis" (one-line change in `scripts/build_fyp_thesis.js` if it's actually the interim).
+2. **T15 — submit.** Two documents exist: the interim report `docs/FYP_Report_2026-07-01_v5.docx` (`make report`; 512-primary, D41) and the NEW standalone thesis `docs/FYP_Thesis_2026-06-18.docx` (`make thesis`; IEEE-cited, sources verified). Decide which the milestone requires; the thesis cover says "Final Report — Thesis" (one-line change in `scripts/build_fyp_thesis.js` if it's actually the interim).
 3. **T3 — `MyTCinfo`** on TC1 (storage quota). Quick, optional.
 
 **Optional disclosure polish (low; already partly covered in §7.5/Ch8 — do only if tightening for the viva):**
@@ -142,7 +144,7 @@ Honest finding: **boundary instability, NOT targeted erosion** (within-family AU
 8. `rsync` the 4 new `results/{mistral_7b_base,mistral_7b_4bit,phi4_mini_base,phi4_mini_4bit}/` dirs back from TC1.
 9. `make analyze` + `python scripts/{judge_agreement,judge_pairwise_agreement,harmbench_category_breakdown,mmlu_subject_breakdown,rescore_harmbench}.py`.
 10. gpt-4o 2nd judge (local, needs `OPENAI_API_KEY` from `~/.zshrc`): `python scripts/run_judge_validation.py --backend api_judge --models mistral_7b_base mistral_7b_4bit phi4_mini_base phi4_mini_4bit`, then `python scripts/judge_pairwise_agreement.py`.
-11. Fold REAL numbers into `scripts/build_fyp_report_v3.js` (Tables 6.1/6.2/6.3, §6.11 cross-family, §6.4.1 ARC, Abstract, RQ5/Ch10) → `make report`. Add PROJECT_LOG run-results D-decision + §4 row. `python scripts/agent_check.py --write-immutable-manifest` (ADD new raw hashes, never overwrite). `make agent-check`. Then merge branch → main.
+11. ~~(executed 2026-06-15, T26/D32; builder since superseded by v5)~~ Fold REAL numbers into the report builder (Tables 6.1/6.2/6.3, §6.11 cross-family, §6.4.1 ARC, Abstract, RQ5/Ch10) → `make report`. Add PROJECT_LOG run-results D-decision + §4 row. `python scripts/agent_check.py --write-immutable-manifest` (ADD new raw hashes, never overwrite). `make agent-check`. Then merge branch → main.
 
 **Watch items / guardrails:**
 - **Mistral 7.2B vs 6h walltime / 10G mem** — the binding risk. If `TIMEOUT`, bump `slurm.time` (+ regenerate, or hand-edit the 2 mistral sbatch) — decoding/seed/NF4/n unaffected, so fairness holds.

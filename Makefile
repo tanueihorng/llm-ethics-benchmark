@@ -82,7 +82,7 @@ prefetch:
 # the report). Output: docs/FYP_Report_<date>.docx.
 # Requires docx-js installed globally: npm install -g docx
 report:
-	NODE_PATH=$$(npm root -g) node scripts/build_fyp_report_v3.js
+	NODE_PATH=$$(npm root -g) node scripts/build_fyp_report_v5.js
 
 # Standalone full thesis (separate from the interim report; not overwritten by `make report`)
 thesis:

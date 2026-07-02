@@ -1,0 +1,156 @@
+{
+  "128": [
+    {
+      "pair": "qwen_2b",
+      "n": 200,
+      "asr_base": 0.135,
+      "asr_4bit": 0.19,
+      "delta": 0.055,
+      "ci": [
+        0.01,
+        0.1
+      ],
+      "n01": 16,
+      "n10": 5,
+      "mcnemar_p": 0.0266,
+      "sig_ci": true
+    },
+    {
+      "pair": "qwen_4b",
+      "n": 200,
+      "asr_base": 0.065,
+      "asr_4bit": 0.09,
+      "delta": 0.025,
+      "ci": [
+        -0.005,
+        0.055
+      ],
+      "n01": 7,
+      "n10": 2,
+      "mcnemar_p": 0.1797,
+      "sig_ci": false
+    },
+    {
+      "pair": "llama_3_2_3b",
+      "n": 200,
+      "asr_base": 0.04,
+      "asr_4bit": 0.04,
+      "delta": 0.0,
+      "ci": [
+        -0.02,
+        0.02
+      ],
+      "n01": 2,
+      "n10": 2,
+      "mcnemar_p": 1.0,
+      "sig_ci": false
+    },
+    {
+      "pair": "mistral_7b",
+      "n": 200,
+      "asr_base": 0.385,
+      "asr_4bit": 0.345,
+      "delta": -0.04,
+      "ci": [
+        -0.11,
+        0.025
+      ],
+      "n01": 20,
+      "n10": 28,
+      "mcnemar_p": 0.3123,
+      "sig_ci": false
+    },
+    {
+      "pair": "phi4_mini",
+      "n": 200,
+      "asr_base": 0.055,
+      "asr_4bit": 0.055,
+      "delta": 0.0,
+      "ci": [
+        -0.03,
+        0.03
+      ],
+      "n01": 5,
+      "n10": 5,
+      "mcnemar_p": 1.0,
+      "sig_ci": false
+    }
+  ],
+  "512": [
+    {
+      "pair": "qwen_2b",
+      "n": 200,
+      "asr_base": 0.255,
+      "asr_4bit": 0.255,
+      "delta": 0.0,
+      "ci": [
+        -0.055,
+        0.055
+      ],
+      "n01": 16,
+      "n10": 16,
+      "mcnemar_p": 1.0,
+      "sig_ci": false
+    },
+    {
+      "pair": "qwen_4b",
+      "n": 200,
+      "asr_base": 0.115,
+      "asr_4bit": 0.155,
+      "delta": 0.04,
+      "ci": [
+        0.0,
+        0.08
+      ],
+      "n01": 13,
+      "n10": 5,
+      "mcnemar_p": 0.0963,
+      "sig_ci": false
+    },
+    {
+      "pair": "llama_3_2_3b",
+      "n": 200,
+      "asr_base": 0.1,
+      "asr_4bit": 0.06,
+      "delta": -0.04,
+      "ci": [
+        -0.075,
+        -0.01
+      ],
+      "n01": 1,
+      "n10": 9,
+      "mcnemar_p": 0.0215,
+      "sig_ci": true
+    },
+    {
+      "pair": "mistral_7b",
+      "n": 200,
+      "asr_base": 0.585,
+      "asr_4bit": 0.565,
+      "delta": -0.02,
+      "ci": [
+        -0.08,
+        0.04
+      ],
+      "n01": 17,
+      "n10": 21,
+      "mcnemar_p": 0.6271,
+      "sig_ci": false
+    },
+    {
+      "pair": "phi4_mini",
+      "n": 200,
+      "asr_base": 0.07,
+      "asr_4bit": 0.09,
+      "delta": 0.02,
+      "ci": [
+        -0.015,
+        0.055
+      ],
+      "n01": 9,
+      "n10": 5,
+      "mcnemar_p": 0.424,
+      "sig_ci": false
+    }
+  ]
+}

@@ -1,0 +1,196 @@
+{
+  "pairwise_count": 20,
+  "label_count": 5,
+  "scale_sensitivity": {
+    "available": true,
+    "small_pair_id": "qwen_2b",
+    "large_pair_id": "qwen_4b",
+    "harmbench_delta_magnitude_small": 0.025000000000000022,
+    "harmbench_delta_magnitude_large": 0.07,
+    "xstest_delta_magnitude_small": 0.028,
+    "xstest_delta_magnitude_large": 0.0,
+    "mmlu_delta_magnitude_small": 0.08999999999999997,
+    "mmlu_delta_magnitude_large": 0.0033333333333334103,
+    "smaller_more_sensitive_harmbench": false,
+    "smaller_more_sensitive_xstest": true,
+    "smaller_more_sensitive_mmlu": true
+  },
+  "cross_family": {
+    "family_mean_deltas": {
+      "llama": {
+        "harmbench_asr_delta": -0.01999999999999999,
+        "xstest_over_refusal_delta": 0.016,
+        "mmlu_accuracy_delta": -0.036666666666666625
+      },
+      "mistral": {
+        "harmbench_asr_delta": 0.06500000000000006,
+        "xstest_over_refusal_delta": 0.004,
+        "mmlu_accuracy_delta": -0.020000000000000018
+      },
+      "phi": {
+        "harmbench_asr_delta": 0.0,
+        "xstest_over_refusal_delta": -0.044,
+        "mmlu_accuracy_delta": -0.026666666666666727
+      },
+      "qwen": {
+        "harmbench_asr_delta": 0.022499999999999992,
+        "xstest_over_refusal_delta": -0.014,
+        "mmlu_accuracy_delta": -0.04666666666666669
+      }
+    },
+    "pairwise_sign_consistency": {
+      "llama__vs__mistral": {
+        "harmbench_asr_delta": {
+          "base_family": "llama",
+          "other_family": "mistral",
+          "base_mean_delta": -0.01999999999999999,
+          "other_mean_delta": 0.06500000000000006,
+          "sign_consistent": false
+        },
+        "xstest_over_refusal_delta": {
+          "base_family": "llama",
+          "other_family": "mistral",
+          "base_mean_delta": 0.016,
+          "other_mean_delta": 0.004,
+          "sign_consistent": true
+        },
+        "mmlu_accuracy_delta": {
+          "base_family": "llama",
+          "other_family": "mistral",
+          "base_mean_delta": -0.036666666666666625,
+          "other_mean_delta": -0.020000000000000018,
+          "sign_consistent": true
+        }
+      },
+      "llama__vs__phi": {
+        "harmbench_asr_delta": {
+          "base_family": "llama",
+          "other_family": "phi",
+          "base_mean_delta": -0.01999999999999999,
+          "other_mean_delta": 0.0,
+          "sign_consistent": false
+        },
+        "xstest_over_refusal_delta": {
+          "base_family": "llama",
+          "other_family": "phi",
+          "base_mean_delta": 0.016,
+          "other_mean_delta": -0.044,
+          "sign_consistent": false
+        },
+        "mmlu_accuracy_delta": {
+          "base_family": "llama",
+          "other_family": "phi",
+          "base_mean_delta": -0.036666666666666625,
+          "other_mean_delta": -0.026666666666666727,
+          "sign_consistent": true
+        }
+      },
+      "llama__vs__qwen": {
+        "harmbench_asr_delta": {
+          "base_family": "llama",
+          "other_family": "qwen",
+          "base_mean_delta": -0.01999999999999999,
+          "other_mean_delta": 0.022499999999999992,
+          "sign_consistent": false
+        },
+        "xstest_over_refusal_delta": {
+          "base_family": "llama",
+          "other_family": "qwen",
+          "base_mean_delta": 0.016,
+          "other_mean_delta": -0.014,
+          "sign_consistent": false
+        },
+        "mmlu_accuracy_delta": {
+          "base_family": "llama",
+          "other_family": "qwen",
+          "base_mean_delta": -0.036666666666666625,
+          "other_mean_delta": -0.04666666666666669,
+          "sign_consistent": true
+        }
+      },
+      "mistral__vs__phi": {
+        "harmbench_asr_delta": {
+          "base_family": "mistral",
+          "other_family": "phi",
+          "base_mean_delta": 0.06500000000000006,
+          "other_mean_delta": 0.0,
+          "sign_consistent": false
+        },
+        "xstest_over_refusal_delta": {
+          "base_family": "mistral",
+          "other_family": "phi",
+          "base_mean_delta": 0.004,
+          "other_mean_delta": -0.044,
+          "sign_consistent": false
+        },
+        "mmlu_accuracy_delta": {
+          "base_family": "mistral",
+          "other_family": "phi",
+          "base_mean_delta": -0.020000000000000018,
+          "other_mean_delta": -0.026666666666666727,
+          "sign_consistent": true
+        }
+      },
+      "mistral__vs__qwen": {
+        "harmbench_asr_delta": {
+          "base_family": "mistral",
+          "other_family": "qwen",
+          "base_mean_delta": 0.06500000000000006,
+          "other_mean_delta": 0.022499999999999992,
+          "sign_consistent": true
+        },
+        "xstest_over_refusal_delta": {
+          "base_family": "mistral",
+          "other_family": "qwen",
+          "base_mean_delta": 0.004,
+          "other_mean_delta": -0.014,
+          "sign_consistent": false
+        },
+        "mmlu_accuracy_delta": {
+          "base_family": "mistral",
+          "other_family": "qwen",
+          "base_mean_delta": -0.020000000000000018,
+          "other_mean_delta": -0.04666666666666669,
+          "sign_consistent": true
+        }
+      },
+      "phi__vs__qwen": {
+        "harmbench_asr_delta": {
+          "base_family": "phi",
+          "other_family": "qwen",
+          "base_mean_delta": 0.0,
+          "other_mean_delta": 0.022499999999999992,
+          "sign_consistent": false
+        },
+        "xstest_over_refusal_delta": {
+          "base_family": "phi",
+          "other_family": "qwen",
+          "base_mean_delta": -0.044,
+          "other_mean_delta": -0.014,
+          "sign_consistent": true
+        },
+        "mmlu_accuracy_delta": {
+          "base_family": "phi",
+          "other_family": "qwen",
+          "base_mean_delta": -0.026666666666666727,
+          "other_mean_delta": -0.04666666666666669,
+          "sign_consistent": true
+        }
+      }
+    },
+    "overall_sign_consistency": {
+      "harmbench_asr_delta": {
+        "n_families": 4,
+        "sign_consistent_across_families": false
+      },
+      "xstest_over_refusal_delta": {
+        "n_families": 4,
+        "sign_consistent_across_families": false
+      },
+      "mmlu_accuracy_delta": {
+        "n_families": 4,
+        "sign_consistent_across_families": true
+      }
+    }
+  }
+}

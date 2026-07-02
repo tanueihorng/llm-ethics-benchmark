@@ -9,10 +9,18 @@ immutable_manifest: results/raw_artifact_manifest.sha256
 immutable_artifacts:
   - results/*/*/raw.jsonl
   - results/*/*/summary.json
+  # D41: the 512-token study is PRIMARY — its raw evidence gets the same
+  # tamper-detection discipline as the 128 tree (plus the 512 multi-seed arm).
+  - results_512/*/*/raw.jsonl
+  - results_512/*/*/summary.json
+  - results_sensitivity_512/*/*/*/raw.jsonl
+  - results_sensitivity_512/*/*/*/summary.json
 
 immutable_exclude:
   - results/analysis/*
   - results/summary/*
+  - results_512/analysis/*
+  - results_512/summary/*
 
 allowed_derived_artifacts:
   - results/*/*/scores.v2.jsonl
@@ -21,6 +29,14 @@ allowed_derived_artifacts:
   - results/*/harmbench/summary.judge.*.json
   - results/analysis/*.json
   - results/analysis/*.csv
+  - results_512/*/*/scores.v2.jsonl
+  - results_512/*/*/summary.v2.json
+  - results_512/*/harmbench/scores.judge.*.jsonl
+  - results_512/*/harmbench/summary.judge.*.json
+  - results_512/analysis/*.json
+  - results_512/analysis/*.csv
+  - results_sensitivity_512/*/*/harmbench/scores.judge.*.jsonl
+  - results_sensitivity_512/*/*/harmbench/summary.judge.*.json
 
 redaction:
   scan_paths:
@@ -54,6 +70,7 @@ stale_text:
     - AGENTS.md
     - CLAUDE.md
     - README.md
+    - docs/RESULTS_CARD.md
     - docs/HANDOFF.md
     - docs/AGENT_DASHBOARD.md
     - docs/TC1_AGENT_CHECKLIST.md
@@ -67,8 +84,23 @@ stale_text:
     - .codex/agents/*.toml
     - .codex/hooks/*.py
     - scripts/*.py
+    - ethical_benchmark/**/*.py
+    - dashboard/*.py
+    # D42 round-5: scan presentation HTML so future decks can't silently carry
+    # retired results. The seven pre-D41 decks below are visibly banner-marked
+    # 128-era snapshots (refresh-before-use) and are excluded as point-in-time
+    # artifacts, like docs/archive.
+    - docs/*.html
   exclude:
     - docs/archive/*
+    - docs/fyp_showcase.html
+    - docs/fyp_showcase_v2.html
+    - docs/fyp_architecture.html
+    - docs/Codex_Meetup_Agent_Harness_Report.html
+    - docs/fyp_status_2026-07.html
+    - docs/fyp_status_2026-07_v2.html
+    - docs/agent_harness_showcase.html
+    - docs/agentic_ai_report.html
     # Task packets are point-in-time records of completed tasks (like archive); they
     # legitimately cite the then-current report/builder, so they are not stale-scanned.
     - docs/agent_tasks/*
@@ -87,6 +119,22 @@ stale_text:
     # NOT bare structural mentions.
     - 'FYP_Report_2026-06-14'
     - '(?:edit|edits|change|update|regenerate|generated from)[^\n]{0,40}build_fyp_report\.js'
+    # D41: the canonical report is docs/FYP_Report_2026-07-01_v5.docx (built by
+    # scripts/build_fyp_report_v5.js; 512-token primary). Guard against the retired
+    # v3/v4 docx names or instructional edits to the retired v3 builder being cited
+    # as current. Same two-tier approach as the D40 guard above: naked docx names
+    # (they should only survive in docs/archive/, which is excluded) + verb-anchored
+    # builder phrasing (the v3 builder file still exists as history).
+    - 'FYP_Report_2026-06-26_v3'
+    - 'FYP_Report_2026-06-30_v4'
+    - '(?:edit|edits|change|update|regenerate|generated from)[^\n]{0,40}build_fyp_report_v3\.js'
+    # D41 stale-RESULT guards: the 128-era headline may only be cited with explicit
+    # 128-scoping on the same line. Pattern 1 catches a line asserting the +0.055
+    # value without "128" on that line (CI bounds like "[−0.015, +0.055]" are
+    # exempted via the ", "/"]" context). Pattern 2 catches the retired headline
+    # phrasing ("only the smallest model ... significant") without 128-scoping.
+    - '^(?!.*128).*(?<!, )\+0\.055(?!\])'
+    - '^(?!.*128)(?=.*only the smallest model)(?=.*significant)'
 
 report_worthy:
   changed_file_patterns:
@@ -98,13 +146,16 @@ report_worthy:
     - ethical_benchmark/models/*.py
     - ethical_benchmark/pipeline/run_quant_benchmark.py
     - ethical_benchmark/pipeline/run_quant_matrix.py
-    - scripts/build_fyp_report_v3.js
+    - scripts/build_fyp_report_v5.js
     - scripts/judge_agreement.py
     - scripts/run_judge_validation.py
     - scripts/rescore_harmbench.py
+    - configs/tc1_512.yaml
     - results/analysis/*.json
     - results/analysis/*.csv
-  # Only a regenerated docx satisfies the freshness gate. build_fyp_report_v3.js is a
+    - results_512/analysis/*.json
+    - results_512/analysis/*.csv
+  # Only a regenerated docx satisfies the freshness gate. build_fyp_report_v5.js is a
   # TRIGGER (above), not a satisfier: editing the report source must force `make report`,
   # so it deliberately does NOT appear here (otherwise a source-only edit would
   # self-satisfy the gate and the committed docx could go stale silently).
@@ -114,6 +165,7 @@ report_worthy:
 agent_status:
   # Informational only — no check consumes these (they document expected counts for
   # a human reading the policy). Kept current with the post-T26/T29 state:
-  # 10 main-study harmbench_cls judge sidecars (5 pairs x 2 members); 329 tests.
+  # 10 main-study fp16/NF4 harmbench_cls judge sidecars per tree (5 pairs x 2 members;
+  # the 512-primary tree additionally carries 5 INT8 + 10 api_judge sidecars); 329 tests.
   expected_judge_sidecars: 10
   expected_test_count_note: 329

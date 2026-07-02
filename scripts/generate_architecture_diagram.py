@@ -244,7 +244,7 @@ CARDS = [
     Card(
         "report",
         "Report builder",
-        ("build_fyp_report_v3.js", "make report", "FYP_Report.docx"),
+        ("build_fyp_report_v5.js", "make report", "FYP_Report.docx"),
         1430,
         710,
         280,

@@ -22,6 +22,7 @@ Run:  python scripts/make_figures.py
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 
 import matplotlib
@@ -30,8 +31,12 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Patch
 
 REPO = Path(__file__).resolve().parents[1]
-ANALYSIS = REPO / "results" / "analysis"
-FIGDIR = REPO / "docs" / "figures"
+# Paths default to the 128-token study but can be redirected to the 512-token
+# tree (or any other) via env vars, so the figure suite is reproducible against
+# either results root without clobbering the committed figures:
+#   FIG_ANALYSIS_DIR=results_512/analysis FIG_OUT_DIR=docs/figures_512 python scripts/make_figures.py
+ANALYSIS = Path(os.environ.get("FIG_ANALYSIS_DIR") or REPO / "results" / "analysis")
+FIGDIR = Path(os.environ.get("FIG_OUT_DIR") or REPO / "docs" / "figures")
 FIGDIR.mkdir(parents=True, exist_ok=True)
 
 plt.rcParams.update({

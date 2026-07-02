@@ -1,0 +1,144 @@
+{
+  "judge_a": "harmbench_cls",
+  "judge_b": "api_judge",
+  "benchmark": "harmbench",
+  "per_model": [
+    {
+      "model_alias": "qwen_2b_base",
+      "n_shared": 200,
+      "agreement_rate": 0.925,
+      "cohens_kappa": 0.7845446710715313,
+      "harmbench_cls_asr": 0.255,
+      "api_judge_asr": 0.19
+    },
+    {
+      "model_alias": "qwen_2b_4bit",
+      "n_shared": 200,
+      "agreement_rate": 0.93,
+      "cohens_kappa": 0.8003137926116105,
+      "harmbench_cls_asr": 0.255,
+      "api_judge_asr": 0.195
+    },
+    {
+      "model_alias": "qwen_4b_base",
+      "n_shared": 200,
+      "agreement_rate": 0.96,
+      "cohens_kappa": 0.7684515195369028,
+      "harmbench_cls_asr": 0.115,
+      "api_judge_asr": 0.075
+    },
+    {
+      "model_alias": "qwen_4b_4bit",
+      "n_shared": 200,
+      "agreement_rate": 0.94,
+      "cohens_kappa": 0.7439726904203113,
+      "harmbench_cls_asr": 0.155,
+      "api_judge_asr": 0.115
+    },
+    {
+      "model_alias": "llama_3_2_3b_base",
+      "n_shared": 200,
+      "agreement_rate": 0.99,
+      "cohens_kappa": 0.941860465116279,
+      "harmbench_cls_asr": 0.1,
+      "api_judge_asr": 0.09
+    },
+    {
+      "model_alias": "llama_3_2_3b_4bit",
+      "n_shared": 200,
+      "agreement_rate": 0.995,
+      "cohens_kappa": 0.9538745387453875,
+      "harmbench_cls_asr": 0.06,
+      "api_judge_asr": 0.055
+    },
+    {
+      "model_alias": "mistral_7b_base",
+      "n_shared": 200,
+      "agreement_rate": 0.915,
+      "cohens_kappa": 0.82706002034588,
+      "harmbench_cls_asr": 0.585,
+      "api_judge_asr": 0.55
+    },
+    {
+      "model_alias": "mistral_7b_4bit",
+      "n_shared": 200,
+      "agreement_rate": 0.89,
+      "cohens_kappa": 0.7773955276737833,
+      "harmbench_cls_asr": 0.565,
+      "api_judge_asr": 0.545
+    },
+    {
+      "model_alias": "phi4_mini_base",
+      "n_shared": 200,
+      "agreement_rate": 0.965,
+      "cohens_kappa": 0.6780128794848207,
+      "harmbench_cls_asr": 0.07,
+      "api_judge_asr": 0.045
+    },
+    {
+      "model_alias": "phi4_mini_4bit",
+      "n_shared": 200,
+      "agreement_rate": 0.975,
+      "cohens_kappa": 0.825540823447313,
+      "harmbench_cls_asr": 0.09,
+      "api_judge_asr": 0.065
+    }
+  ],
+  "per_pair": [
+    {
+      "pair_id": "qwen_2b",
+      "harmbench_cls_delta": 0.0,
+      "harmbench_cls_significant": false,
+      "harmbench_cls_mcnemar_p": 1.0,
+      "api_judge_delta": 0.0050000000000000044,
+      "api_judge_significant": false,
+      "api_judge_mcnemar_p": 1.0,
+      "sign_agree": false,
+      "significance_agree": true
+    },
+    {
+      "pair_id": "qwen_4b",
+      "harmbench_cls_delta": 0.039999999999999994,
+      "harmbench_cls_significant": false,
+      "harmbench_cls_mcnemar_p": 0.09625244140625,
+      "api_judge_delta": 0.04000000000000001,
+      "api_judge_significant": false,
+      "api_judge_mcnemar_p": 0.11531829833984375,
+      "sign_agree": true,
+      "significance_agree": true
+    },
+    {
+      "pair_id": "llama_3_2_3b",
+      "harmbench_cls_delta": -0.04000000000000001,
+      "harmbench_cls_significant": true,
+      "harmbench_cls_mcnemar_p": 0.021484375,
+      "api_judge_delta": -0.034999999999999996,
+      "api_judge_significant": true,
+      "api_judge_mcnemar_p": 0.015625,
+      "sign_agree": true,
+      "significance_agree": true
+    },
+    {
+      "pair_id": "mistral_7b",
+      "harmbench_cls_delta": -0.020000000000000018,
+      "harmbench_cls_significant": false,
+      "harmbench_cls_mcnemar_p": 0.6271025701571489,
+      "api_judge_delta": -0.0050000000000000044,
+      "api_judge_significant": false,
+      "api_judge_mcnemar_p": 1.0,
+      "sign_agree": true,
+      "significance_agree": true
+    },
+    {
+      "pair_id": "phi4_mini",
+      "harmbench_cls_delta": 0.01999999999999999,
+      "harmbench_cls_significant": false,
+      "harmbench_cls_mcnemar_p": 0.4239501953125,
+      "api_judge_delta": 0.020000000000000004,
+      "api_judge_significant": false,
+      "api_judge_mcnemar_p": 0.3876953125,
+      "sign_agree": true,
+      "significance_agree": true
+    }
+  ]
+}

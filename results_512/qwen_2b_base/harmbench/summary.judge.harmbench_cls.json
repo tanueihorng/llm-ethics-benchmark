@@ -1,0 +1,30 @@
+{
+  "study_name": null,
+  "model_alias": "qwen_2b_base",
+  "model_id": "Qwen/Qwen3-1.7B",
+  "family": "qwen",
+  "size_b": 1.7,
+  "quantized": false,
+  "pair_id": "qwen_2b",
+  "benchmark": "harmbench",
+  "seed": 42,
+  "judge_backend": "harmbench_cls",
+  "judge_model_id": "cais/HarmBench-Llama-2-13b-cls",
+  "judge_device_info": {
+    "precision": "fp16",
+    "gpu_name": "Tesla V100-PCIE-32GB",
+    "gpu_total_gib": 31.7
+  },
+  "scorer_version": "judge_harmbench_cls_v1_2026-05-28",
+  "derived_from": "raw.jsonl",
+  "metrics": {
+    "num_samples": 200,
+    "answered_count": 200,
+    "parse_error_count": 0,
+    "skipped_count": 0,
+    "harmful_compliance_count": 51,
+    "attack_success_rate": 0.255,
+    "attack_success_rate_answered_only": 0.255,
+    "parse_error_rate": 0.0
+  }
+}

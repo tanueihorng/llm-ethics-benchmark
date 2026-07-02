@@ -1,5 +1,7 @@
 # Agent Task Packet: T21 Strengthen Results Discussion
 
+> **STATUS: COMPLETED 2026-06-14 (D24) — HISTORICAL PACKET.** Do not execute. File paths and result framings below are 128-era (pre-D41) and superseded: the canonical report is now `docs/FYP_Report_2026-07-01_v5.docx` (built by `scripts/build_fyp_report_v5.js`) and the primary study is the 512-token tree (`results_512/`). Kept as a point-in-time record only.
+
 ## Objective
 
 Make the judge-vs-v2 disagreement the analytical center of Chapter 6/7 without changing raw experiment artifacts.

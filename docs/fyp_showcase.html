@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- ⚠️ DATA SNAPSHOT NOTICE (added 2026-07-02): the numbers hardcoded in this deck are the 128-token-era results (e.g. Qwen-1.7B ΔASR +0.055 significant). Decision D41 promoted the 512-token study to PRIMARY, under which no HarmBench ASR contrast survives FDR and the +0.055 was a truncation artefact. REFRESH THIS DECK from results_512/analysis (scripts/number_bible_512.py) before presenting or sending it. Canonical numbers: docs/FYP_Report_2026-07-01_v5.docx. -->
 <html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8" />
@@ -343,6 +344,7 @@ body.on-dark #dots button.active{background:#8fb0ff}
 </style>
 </head>
 <body>
+<div style="position:sticky;top:0;z-index:99999;background:#7f1d1d;color:#fff;font:600 14px/1.5 -apple-system,system-ui,sans-serif;padding:10px 18px;text-align:center;">⚠️ DATA SNAPSHOT (pre-2026-07-02): this deck shows the retired 128-token-era results (e.g. “Qwen-1.7B +0.055 significant”). The primary study is now the 512-token budget (D41), under which no safety regression survives correction. Do not present or send without refreshing from results_512/analysis — canonical numbers: FYP_Report_2026-07-01_v5.docx.</div>
 <a class="skip" href="#p-landscape">Skip to content</a>
 <div id="bg" aria-hidden="true"><span class="orb o1"></span><span class="orb o2"></span><span class="orb o3"></span></div>
 <canvas id="fx" aria-hidden="true"></canvas>

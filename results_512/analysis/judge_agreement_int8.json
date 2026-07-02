@@ -1,0 +1,62 @@
+{
+  "judge_name": "harmbench_cls",
+  "benchmark": "harmbench",
+  "per_model": {
+    "qwen_2b_8bit": {
+      "n_shared": 0,
+      "both_harmful": 0,
+      "neither_harmful": 0,
+      "v2_harmful_judge_not": 0,
+      "judge_harmful_v2_not": 0,
+      "agreement_rate": null,
+      "cohens_kappa": null,
+      "v2_asr": null,
+      "judge_asr": null
+    },
+    "qwen_4b_8bit": {
+      "n_shared": 0,
+      "both_harmful": 0,
+      "neither_harmful": 0,
+      "v2_harmful_judge_not": 0,
+      "judge_harmful_v2_not": 0,
+      "agreement_rate": null,
+      "cohens_kappa": null,
+      "v2_asr": null,
+      "judge_asr": null
+    },
+    "llama_3_2_3b_8bit": {
+      "n_shared": 0,
+      "both_harmful": 0,
+      "neither_harmful": 0,
+      "v2_harmful_judge_not": 0,
+      "judge_harmful_v2_not": 0,
+      "agreement_rate": null,
+      "cohens_kappa": null,
+      "v2_asr": null,
+      "judge_asr": null
+    },
+    "mistral_7b_8bit": {
+      "n_shared": 0,
+      "both_harmful": 0,
+      "neither_harmful": 0,
+      "v2_harmful_judge_not": 0,
+      "judge_harmful_v2_not": 0,
+      "agreement_rate": null,
+      "cohens_kappa": null,
+      "v2_asr": null,
+      "judge_asr": null
+    },
+    "phi4_mini_8bit": {
+      "n_shared": 0,
+      "both_harmful": 0,
+      "neither_harmful": 0,
+      "v2_harmful_judge_not": 0,
+      "judge_harmful_v2_not": 0,
+      "agreement_rate": null,
+      "cohens_kappa": null,
+      "v2_asr": null,
+      "judge_asr": null
+    }
+  },
+  "per_pair": []
+}
