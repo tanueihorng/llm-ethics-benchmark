@@ -30,8 +30,17 @@ def test_stat_tiles_html_count() -> None:
 
 
 def test_badge_uses_label_colour() -> None:
-    assert "#dc2626" in T.badge("broad_degradation")  # red
+    # Streamlit's sanitizer strips inline CSS custom properties, so the badge
+    # bakes LITERAL tints derived from the label colour (Codex round-7 era fix).
+    html = T.badge("broad_degradation")
+    assert T._mix_hex("#dc2626", T.INK, 0.60) in html   # text = darkened label red
+    assert T._mix_hex("#dc2626", T.CARD, 0.12) in html  # bg = red-tinted paper
     assert "label-badge" in T.badge(None)
+
+
+def test_mix_hex_endpoints() -> None:
+    assert T._mix_hex("#ffffff", "#000000", 1.0) == "#ffffff"
+    assert T._mix_hex("#ffffff", "#000000", 0.0) == "#000000"
 
 
 def test_pair_card_judge_primary_renders_stat_line() -> None:

@@ -7,7 +7,7 @@
 
 ---
 
-## [2026-07-02] ACTIVE: v5 promoted to CANONICAL (D41 complete) — remaining: COMMIT, T30 gold set @512, thesis mirror
+## [2026-07-02] ACTIVE: D41 layer COMMITTED+PUSHED — remaining: T30 annotation (user), thesis mirror to 512, T1 send
 
 **STATUS 2026-07-02 (post-Codex):** Codex reviewed v5 → 9 findings, **all verified real and all FIXED** (see PROJECT_LOG §4 2026-07-02 03:00): §6.12/Ch7/Appendix judge prose → 512 run (job 61524); `number_bible_512.py` fixed (runs end-to-end, exit 0); `multiple_comparisons.py` power note now DYNAMIC (512 artifact regenerated; 128 artifact byte-identical); prefix-truncation now committed in `genlen_robustness.json` (`prefix_truncation_128`: 60.3%/30.5%/9.2%); Llama evidence confirmed→directional; composite→side-by-side wording; Qwen-4B deployment claim scoped. **PROMOTION EXECUTED (D40-style full sweep):** `make report` → `build_fyp_report_v5.js`; v3+v4 docx archived to `docs/archive/`; AGENTS/CLAUDE/README/AGENTIC_WORKFLOW/THESIS_OUTLINE/skill/codex-agent/`agent.py`/3 diagram generators → v5; `artifact_policy` extended (immutable manifest **120→300** now pinning `results_512` + `results_sensitivity_512`; report-worthy v5 + `results_512/analysis/*`; **stale-text guard forbids v3/v4-as-current, self-tested**); HANDOFF/dashboard/checklist regenerated. **Gates: `make agent-check` 8/8, pytest 329, guard fires on injected violations.**
 

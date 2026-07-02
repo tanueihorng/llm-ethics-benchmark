@@ -83,3 +83,4 @@ fyp_submission/
 # specific one (git add -f) if you decide to keep it.
 configs/generated/
 slurm/jobs_generated/
+results_dev/

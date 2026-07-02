@@ -2,16 +2,10 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "static",
-      "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "8765"],
-      "port": 8765
-    },
-    {
       "name": "dashboard",
-      "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "streamlit", "run", "dashboard/app.py", "--server.headless", "true", "--server.port", "8533", "--browser.gatherUsageStats", "false"],
-      "port": 8533
+      "runtimeExecutable": "streamlit",
+      "runtimeArgs": ["run", "dashboard/app.py", "--server.headless", "true", "--server.port", "8503"],
+      "port": 8503
     }
   ]
 }

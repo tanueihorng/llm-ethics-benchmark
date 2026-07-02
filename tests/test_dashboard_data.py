@@ -177,3 +177,43 @@ def test_judge_primary_differs_from_v2_proxy() -> None:
     # reads it negative (improvement-direction) — the scorer sign-flip that
     # motivates judge-primacy (D16), stable at the 512-token primary budget.
     assert judge["mistral_7b"]["harmbench_asr_delta"] < 0 < v2["mistral_7b"]["harmbench_asr_delta"]
+
+
+def test_phi_label_matches_canonical_judge_artifact() -> None:
+    """Codex round-7 P1 regression: the dashboard must render Phi-4-mini with the
+    CANONICAL judge_agreement.json label (robust_preservation / null), not the
+    alignment_degradation that a rebuild from the ROUNDED multiple_comparisons
+    delta (0.02 >= tol) produces."""
+    rows = {r["pair_id"]: r for r in D.judge_primary_interpretations(REPO_ROOT)}
+    if "phi4_mini" not in rows:
+        pytest.skip("no committed judge artifacts")
+    assert rows["phi4_mini"]["interpretation_label"] == "robust_preservation"
+    assert rows["phi4_mini"]["evidence_status"] == "null"
+    # And every dashboard label must agree with the canonical artifact wholesale.
+    ja = D.load_judge_agreement(REPO_ROOT)
+    canon = {r["pair_id"]: r for r in ja["per_pair"]}
+    for pid, row in rows.items():
+        if pid in canon:
+            assert row["interpretation_label"] == canon[pid]["judge_label"], pid
+
+
+def test_safe_generated_config_name_blocks_path_escape() -> None:
+    """Codex round-7 P2 regression: user-supplied filenames cannot escape
+    configs/generated/."""
+    assert D.safe_generated_config_name("../tc1.yaml") == "tc1.yaml"
+    assert D.safe_generated_config_name("../../etc/passwd") == "passwd.yaml"
+    assert D.safe_generated_config_name("/abs/path/evil.yaml") == "evil.yaml"
+    assert D.safe_generated_config_name("ok") == "ok.yaml"
+    assert D.safe_generated_config_name("") == "new_pair.yaml"
+    assert D.safe_generated_config_name("..") == "new_pair.yaml"
+
+
+def test_protected_results_dirs_are_refused() -> None:
+    """Codex round-7 P1 regression: execution may never target the canonical
+    evidence trees."""
+    for bad in ("results", "results_512", "results/qwen_2b_base",
+                "results_512/analysis", "results_sensitivity_512",
+                "results_sensitivity_512/seed1", "results_sensitivity"):
+        assert D.is_protected_results_dir(REPO_ROOT / bad, REPO_ROOT), bad
+    for ok in ("results_dev", "results_dev/qwen_2b_base", "scratch/results"):
+        assert not D.is_protected_results_dir(REPO_ROOT / ok, REPO_ROOT), ok

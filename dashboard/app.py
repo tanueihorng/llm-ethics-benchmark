@@ -60,12 +60,21 @@ config_labels = [str(p.relative_to(REPO_ROOT)) for p in config_files] or ["confi
 sel_config = st.sidebar.selectbox("Config", config_labels, index=0)
 config_path = REPO_ROOT / sel_config
 
-results_dir_str = st.sidebar.text_input("Results dir", value="results")
+results_dir_str = st.sidebar.text_input(
+    "Results dir (browse)", value="results_512",
+    help="Tree used for browsing. results_512 = the primary 512-token study (D41); "
+         "results = the retained 128-token comparison (historical).",
+)
 results_dir = REPO_ROOT / results_dir_str
+if results_dir_str.strip() == "results":
+    st.sidebar.caption("⚠ `results/` is the retained **128-token** comparison — "
+                       "the primary study is `results_512/`.")
 
 st.sidebar.divider()
 st.sidebar.caption(
-    "Read-only over `results/`. New models are written under "
+    "Browsing is read-only over the results trees. Execution writes ONLY to a "
+    "scratch tree (default `results_dev/`) — the canonical `results*/` evidence "
+    "trees are write-protected in this UI. New models are written under "
     "`configs/generated/` and never overwrite committed configs."
 )
 
@@ -78,8 +87,9 @@ def page_overview() -> None:
         T.hero_html(
             "Quantization Safety–Capability Study",
             dek="Matched-pair, judge-validated comparison of fp16 vs on-the-fly quantized "
-            "compact LLMs (1.7–7.2B) across HarmBench (ASR), XSTest (over-refusal), and MMLU/ARC (capability).",
-            eyebrow="CCDS25-1136 · Judge-validated",
+            "compact LLMs (1.7–7.2B) across HarmBench (ASR), XSTest (over-refusal), and MMLU/ARC "
+            "(capability) — at HarmBench's <b>512-token reference budget</b> (decision D41).",
+            eyebrow="CCDS25-1136 · Judge-validated · 512-token primary",
         ),
         unsafe_allow_html=True,
     )
@@ -102,12 +112,14 @@ def page_overview() -> None:
         return
 
     if judge_primary:
-        st.success(
-            "**HarmBench ASR is judge-primary** — scored by the official HarmBench classifier "
-            "(`cais/HarmBench-Llama-2-13b-cls`, decision D16). The v2 refusal regex over-counts harm "
-            "and is shown only as a secondary proxy. Significance is McNemar's exact test; *q* is the "
-            "Benjamini–Hochberg FDR value across the 20-contrast family.",
-            icon="🛡️",
+        st.markdown(
+            T.verdict_html(
+                "The reading",
+                "At the reference budget, <em>no pair significantly raises harmful compliance</em> — "
+                "the multiplicity-robust costs of 4-bit quantization are capability and over-refusal, "
+                "not safety. The only significant ΔASR is a <em>decrease</em> (Llama-3.2-3B).",
+            ),
+            unsafe_allow_html=True,
         )
     else:
         st.warning(
@@ -116,24 +128,30 @@ def page_overview() -> None:
             icon="⚠️",
         )
 
-    tiles = [("Model pairs", str(len(interps)))]
-    if summary:
-        tiles.append(("Pairwise contrasts", str(summary.get("pairwise_count", "—"))))
+    tiles = [("Model pairs · families", f'{len(interps)}<span class="unit">/4</span>')]
     if mc:
-        tiles.append(("FDR survivors · q<0.05", f'<span class="accent">{mc.get("n_bh_significant_q05", "—")}</span>'))
+        tiles.append(("ASR contrasts surviving FDR", '<span class="accent">0</span>'))
+        tiles.append(("FDR survivors · q<0.05", f'{mc.get("n_bh_significant_q05", "—")}<span class="unit">cap/OR</span>'))
         tiles.append(("Uncorrected significant", str(mc.get("n_uncorrected_significant", "—"))))
+    elif summary:
+        tiles.append(("Pairwise contrasts", str(summary.get("pairwise_count", "—"))))
     st.markdown(T.stat_tiles_html(tiles), unsafe_allow_html=True)
 
     st.markdown(
-        f'<h3 style="font-family:var(--font-display)">Per-pair interpretation '
-        f'<span class="muted">· {"judge-primary" if judge_primary else "v2 proxy"}</span></h3>',
+        T.section_head_html(
+            "01 · Findings",
+            "Per-pair interpretation",
+            note=("Judge-primary: the official HarmBench classifier (D16), McNemar exact significance, "
+                  "Benjamini–Hochberg q over the 20-contrast family."
+                  if judge_primary else "v2 regex proxy — NOT the authoritative headline."),
+        ),
         unsafe_allow_html=True,
     )
     for row in interps:
         st.markdown(T.pair_card_html(row, judge_primary), unsafe_allow_html=True)
 
     if mc:
-        st.markdown('<h3 style="font-family:var(--font-display)">Multiple-comparison correction (Benjamini–Hochberg)</h3>',
+        st.markdown(T.section_head_html("02 · Multiplicity", "Benjamini–Hochberg correction"),
                     unsafe_allow_html=True)
         st.caption(mc.get("description", ""))
         survivors = mc.get("bh_survivors")
@@ -141,9 +159,16 @@ def page_overview() -> None:
             st.markdown("**Effects that survive FDR (q<0.05):**")
             for s in survivors:
                 if isinstance(s, dict):
-                    label = s.get("contrast") or s.get("name") or s.get("label") or str(s)
-                    q = s.get("q_value") or s.get("q")
-                    st.markdown(f"- {label}" + (f"  ·  q={q:.3f}" if isinstance(q, (int, float)) else ""))
+                    pair = s.get("pair_id") or s.get("contrast") or s.get("name") or "?"
+                    metric = str(s.get("metric") or s.get("label") or "").replace("_", " ")
+                    q = s.get("bh_q_value") or s.get("q_value") or s.get("q")
+                    delta = s.get("delta")
+                    bits = [f"**`{pair}`** — {metric}"]
+                    if isinstance(delta, (int, float)):
+                        bits.append(f"Δ {delta*100:+.1f} pp")
+                    if isinstance(q, (int, float)):
+                        bits.append(f"q = {q:.3f}")
+                    st.markdown("- " + " · ".join(bits))
                 else:
                     st.markdown(f"- {s}")
         st.info(
@@ -359,9 +384,13 @@ def page_add_model() -> None:
     st.success(f"Valid! Matched pair `{pair_id}_base` + `{pair_id}_{D.quant_suffix(quant_method)}` created.")
     st.code(yaml_text, language="yaml")
 
-    gen_dir = D.configs_dir(REPO_ROOT) / "generated"
+    gen_dir = (D.configs_dir(REPO_ROOT) / "generated").resolve()
     gen_dir.mkdir(parents=True, exist_ok=True)
-    out_path = gen_dir / (out_name or f"{pair_id}.yaml")
+    safe_name = D.safe_generated_config_name(out_name, fallback=f"{pair_id}.yaml")
+    out_path = (gen_dir / safe_name).resolve()
+    if gen_dir not in out_path.parents:
+        st.error("Config filename escapes configs/generated/ — refused.")
+        return
 
     colw = st.columns(2)
     with colw[0]:
@@ -435,16 +464,28 @@ def page_run() -> None:
         icon="⚠️",
     )
 
+    out_dir_str = st.text_input(
+        "Execution output dir", value=D.DEFAULT_EXECUTION_DIR,
+        help="Runs write here. The canonical evidence trees (results/, results_512/, "
+             "results_sensitivity*/) are refused — they hold the study's immutable raw artifacts.",
+    )
+    exec_dir = REPO_ROOT / out_dir_str
+
     if st.button("▶️ Run", type="primary"):
+        if D.is_protected_results_dir(exec_dir, REPO_ROOT):
+            st.error(
+                f"`{out_dir_str}` is a protected evidence tree (results/, results_512/, "
+                "results_sensitivity*). Execution into it is blocked — use a scratch "
+                f"dir such as `{D.DEFAULT_EXECUTION_DIR}/`."
+            )
+            st.stop()
         sub = "smoke" if mode.startswith("Smoke") else "run"
         cmd = [
             sys.executable, str(REPO_ROOT / "fyp_cli.py"), sub,
-            "--config", str(config_path), "--results_dir", str(results_dir),
+            "--config", str(config_path), "--results_dir", str(exec_dir),
             "-m", alias, "-b", benchmark, "-n", str(int(n)),
             "--batch_size", str(int(batch)), "-s", str(int(seed)), "-d", device,
         ]
-        if sub == "run":
-            cmd.append("--force_restart")
         st.code(" ".join(cmd), language="bash")
 
         log_box = st.empty()

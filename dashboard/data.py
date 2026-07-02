@@ -108,6 +108,54 @@ def configs_dir(repo_root: Path = REPO_ROOT) -> Path:
     return Path(repo_root) / "configs"
 
 
+# Canonical evidence trees the dashboard must never execute runs into (their
+# raw.jsonl/summary.json are the immutable study artifacts; the run pipeline
+# can delete/rewrite them on restart). Execution defaults to results_dev/.
+DEFAULT_EXECUTION_DIR = "results_dev"
+
+
+def is_protected_results_dir(candidate: Path, repo_root: Path = REPO_ROOT) -> bool:
+    """True if ``candidate`` points at (or inside) a protected results tree.
+
+    Protected: ``results``, ``results_512``, and any ``results_sensitivity*``
+    tree. Codex round-7 P1 fix — the Run page previously defaulted execution
+    into ``results/`` where a click could overwrite canonical raw evidence.
+    """
+    root = Path(repo_root).resolve()
+    try:
+        cand = Path(candidate).resolve()
+    except OSError:
+        return True  # unresolvable input: refuse rather than risk it
+    protected = [root / "results", root / "results_512"]
+    for base in protected:
+        if cand == base or base in cand.parents:
+            return True
+    for part_base in (root,):
+        rel = None
+        try:
+            rel = cand.relative_to(part_base)
+        except ValueError:
+            continue
+        if rel.parts and rel.parts[0].startswith("results_sensitivity"):
+            return True
+    return False
+
+
+def safe_generated_config_name(name: str, fallback: str = "new_pair.yaml") -> str:
+    """Sanitizes a user-supplied config filename to a bare ``*.yaml`` basename.
+
+    Strips any directory components (``../tc1.yaml`` → ``tc1.yaml``, absolute
+    paths → basename) so the caller can safely join it under
+    ``configs/generated/``. Codex round-7 P2 fix (path-escape).
+    """
+    base = Path(str(name or "").strip()).name
+    if not base or base in (".", ".."):
+        base = fallback
+    if not base.endswith((".yaml", ".yml")):
+        base += ".yaml"
+    return base
+
+
 def load_json(path: Path) -> Optional[Any]:
     """Loads JSON, returning ``None`` if the file is absent or unparseable."""
     p = Path(path)
@@ -297,6 +345,19 @@ def judge_primary_interpretations(repo_root: Path = REPO_ROOT) -> List[Dict[str,
     per_pair_sweep = sweep.get("per_pair", {})
     pairs = sorted({pair for (pair, _metric) in idx})
 
+    # Codex round-7 P1 fix: prefer the CANONICAL labels from judge_agreement.json
+    # (computed by the pipeline on UNROUNDED deltas) over a local rebuild from the
+    # rounded multiple_comparisons deltas. The rebuild sat exactly on the 0.02
+    # threshold for Phi (rounded 0.02 >= tol) and mislabelled robust_preservation
+    # as alignment_degradation. The rebuild below remains only as a fallback for
+    # trees that lack judge_agreement.json.
+    canonical: Dict[str, Dict[str, Any]] = {}
+    ja = load_judge_agreement(repo_root)
+    if ja:
+        for row in ja.get("per_pair", []):
+            if row.get("pair_id"):
+                canonical[row["pair_id"]] = row
+
     out: List[Dict[str, Any]] = []
     for pair in pairs:
         harm = idx.get((pair, _AXIS["harm"]))
@@ -312,8 +373,13 @@ def judge_primary_interpretations(repo_root: Path = REPO_ROOT) -> List[Dict[str,
         mmlu_sig = mmlu.get("uncorrected_significant") if mmlu else None
         or_sig = oref.get("uncorrected_significant") if oref else None
 
-        label = classify_pair_change(harm_delta, or_delta, mmlu_delta)
-        evidence = label_evidence_status(label, harm_sig, mmlu_sig, or_sig)
+        canon = canonical.get(pair) or {}
+        if canon.get("judge_label"):
+            label = canon["judge_label"]
+            evidence = canon.get("evidence_status")
+        else:
+            label = classify_pair_change(harm_delta, or_delta, mmlu_delta)
+            evidence = label_evidence_status(label, harm_sig, mmlu_sig, or_sig)
 
         sweep_metrics = (per_pair_sweep.get(pair) or {}).get("metrics", {})
         judge_asr = sweep_metrics.get("harmbench_asr_judge", {})
