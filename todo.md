@@ -12,10 +12,10 @@
 **STATUS 2026-07-02 (post-Codex):** Codex reviewed v5 → 9 findings, **all verified real and all FIXED** (see PROJECT_LOG §4 2026-07-02 03:00): §6.12/Ch7/Appendix judge prose → 512 run (job 61524); `number_bible_512.py` fixed (runs end-to-end, exit 0); `multiple_comparisons.py` power note now DYNAMIC (512 artifact regenerated; 128 artifact byte-identical); prefix-truncation now committed in `genlen_robustness.json` (`prefix_truncation_128`: 60.3%/30.5%/9.2%); Llama evidence confirmed→directional; composite→side-by-side wording; Qwen-4B deployment claim scoped. **PROMOTION EXECUTED (D40-style full sweep):** `make report` → `build_fyp_report_v5.js`; v3+v4 docx archived to `docs/archive/`; AGENTS/CLAUDE/README/AGENTIC_WORKFLOW/THESIS_OUTLINE/skill/codex-agent/`agent.py`/3 diagram generators → v5; `artifact_policy` extended (immutable manifest **120→300** now pinning `results_512` + `results_sensitivity_512`; report-worthy v5 + `results_512/analysis/*`; **stale-text guard forbids v3/v4-as-current, self-tested**); HANDOFF/dashboard/checklist regenerated. **Gates: `make agent-check` 8/8, pytest 329, guard fires on injected violations.**
 
 **Next steps (ordered):**
-1. **COMMIT the whole layer** (v5 builder+docx, results_512 sidecars/_int8/analysis, results_sensitivity_512, policy/Makefile/AGENTS/CLAUDE/tests/harness sweep, archives, manifest 300, figures, PROJECT_LOG/todo). Suggest: one commit "T31/D41: promote 512-token study to primary; report v5 canonical" (or split data/infra). NOT yet pushed — remember origin/main is behind.
-2. **Phase F — T30 human-label gold set on 512:** `python scripts/human_label_audit.py --make-sheet --results-dir results_512` (check flag support first; it may need `--results-dir` plumbing) then `--make-html`; user annotates (single annotator, n=200, representative mix), then `--apply-labels` → fold classifier-vs-human agreement into §6.12/§7.
-3. **Thesis mirror to 512:** `make thesis` still → `scripts/build_fyp_thesis.js` → `FYP_Thesis_2026-06-18.docx` (128-era). Mirror the v5 512-primary content (same D41 framing) into a thesis v4/new build + archive predecessors + extend stale-text guard if the thesis filename changes.
-4. T1 (July email — update draft numbers to 512-primary before sending!), T15, T3.
+1. ✅ ~~COMMIT + push~~ — DONE 2026-07-02: `77468e1` (D41 layer, 219 files; pre-commit review caught a .gitignore bug that would have leaked raw text) + `b7aa53f` (T1/T30 prep). main == origin/main.
+2. ✅ ~~T30 tooling~~ — sheet + annotator regenerated from `results_512` (see Watch items). **USER: annotate `human_labels/annotate.html`**, paste back, then `--apply-labels` + `--score` → fold into §6.12/§7.
+3. **Thesis mirror to 512 (NEXT BIG BLOCK):** `make thesis` still → `scripts/build_fyp_thesis.js` → `FYP_Thesis_2026-06-18.docx` (128-era). Mirror the v5 512-primary content (same D41 framing + D42 claim-surface sweep from the start) into a new thesis build + archive predecessors + extend the stale-text guard if the filename changes.
+4. T1 (READY — user reviews + sends in July; see Watch items), T15, T3.
 
 **Watch items / guardrails:**
 - ⚠️ user pasted the OpenAI key in chat (twice) — ROTATE it.
@@ -53,11 +53,11 @@ Superseded by the entries above; durable record in PROJECT_LOG (D39/D41, §4). P
 
 **Verification already done:**
 - June email SENT 2026-06-13; as-sent text saved verbatim to `docs/email_drZhang_june.md`.
-- July deck `docs/fyp_status_2026-07.html` verified in Claude preview (light default): 8 unique panel IDs, 0 console errors, cover + 5-pair table + precision flow render, numbers match §1.
+- July deck verified in Claude preview 2026-06-26 (design); COPY re-based to 512-primary 2026-07-02 (14 replacements/deck, passes the stale scan) — re-verify rendering once before sending.
 
 **Next steps (ordered, concrete):**
-1. When ready (July), send the body of `docs/email_drZhang_july.md` to `jiehuang.zhang@ntu.edu.sg` — subject `FYP July Progress Update: Cross-family + precision results (CCDS25-1136)`.
-2. ATTACH `docs/fyp_status_2026-07.html` (the 5-pair completed deck). Do NOT attach `docs/fyp_status_2026-06-13.html` (June 3-pair deck — already sent with June).
+1. When ready (July), send the body of `docs/email_drZhang_july.md` to `jiehuang.zhang@ntu.edu.sg` — subject `FYP July Progress Update: full 512-token rerun, revised headline (CCDS25-1136)`.
+2. ATTACH `docs/fyp_status_2026-07.html` or `_v2` (both REFRESHED to 512-primary on 2026-07-02; pick the design you prefer). Do NOT attach `docs/fyp_status_2026-06-13.html` (June 3-pair deck — already sent with June).
 3. If NTU mail strips/blocks the `.html` attachment: zip it or export to PDF first.
 4. After sending: add a PROJECT_LOG §4 row (July sent) + tick T1; mark `docs/email_drZhang_july.md`'s header note SENT (like the June file).
 
@@ -68,7 +68,7 @@ Superseded by the entries above; durable record in PROJECT_LOG (D39/D41, §4). P
 
 **Ready-to-paste:**
 - To: `jiehuang.zhang@ntu.edu.sg`
-- Subject: `FYP July Progress Update: Cross-family + precision results (CCDS25-1136)`
+- Subject: `FYP July Progress Update: full 512-token rerun, revised headline (CCDS25-1136)`
 - Body: `docs/email_drZhang_july.md`  ·  Attach: `docs/fyp_status_2026-07.html`
 
 ## [2026-06-18] ACTIVE: submission wrap-up — the study is COMPLETE; only the two submission tasks remain
