@@ -86,10 +86,12 @@ stale_text:
     - scripts/*.py
     - ethical_benchmark/**/*.py
     - dashboard/*.py
-    # D42 round-5: scan presentation HTML so future decks can't silently carry
-    # retired results. The seven pre-D41 decks below are visibly banner-marked
-    # 128-era snapshots (refresh-before-use) and are excluded as point-in-time
-    # artifacts, like docs/archive.
+    # D42 round-5/6: scan presentation HTML so future decks can't silently carry
+    # retired results. Coverage contract: docs/*.html is scanned; the SIX pre-D41
+    # decks excluded below are visibly banner-marked 128-era snapshots
+    # (refresh-before-use). The two July status decks were refreshed to 512 on
+    # 2026-07-02 and are scanned again; the as-sent June deck lives in
+    # docs/archive/ (excluded wholesale, like all archives).
     - docs/*.html
   exclude:
     - docs/archive/*
@@ -133,6 +135,11 @@ stale_text:
     # phrasing ("only the smallest model ... significant") without 128-scoping.
     - '^(?!.*128).*(?<!, )\+0\.055(?!\])'
     - '^(?!.*128)(?=.*only the smallest model)(?=.*significant)'
+    # D42 round-6: the retired headline also appears WITHOUT numbers ("the one
+    # significant safety regression moved/relocated ..."), which the numeric
+    # guards cannot catch. Negated forms ("no significant safety regression")
+    # and 128-scoped lines stay legal.
+    - '^(?!.*128).*(?<!no )(?<!no new )significant safety regression'
 
 report_worthy:
   changed_file_patterns:

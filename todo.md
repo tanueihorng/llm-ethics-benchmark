@@ -57,7 +57,7 @@ Superseded by the entries above; durable record in PROJECT_LOG (D39/D41, §4). P
 
 **Next steps (ordered, concrete):**
 1. When ready (July), send the body of `docs/email_drZhang_july.md` to `jiehuang.zhang@ntu.edu.sg` — subject `FYP July Progress Update: full 512-token rerun, revised headline (CCDS25-1136)`.
-2. ATTACH `docs/fyp_status_2026-07.html` or `_v2` (both REFRESHED to 512-primary on 2026-07-02; pick the design you prefer). Do NOT attach `docs/fyp_status_2026-06-13.html` (June 3-pair deck — already sent with June).
+2. ATTACH `docs/fyp_status_2026-07.html` or `_v2` (both REFRESHED to 512-primary on 2026-07-02; pick the design you prefer). Do NOT attach `docs/archive/fyp_status_2026-06-13.html` (as-sent June deck, archived 2026-07-02) (June 3-pair deck — already sent with June).
 3. If NTU mail strips/blocks the `.html` attachment: zip it or export to PDF first.
 4. After sending: add a PROJECT_LOG §4 row (July sent) + tick T1; mark `docs/email_drZhang_july.md`'s header note SENT (like the June file).
 

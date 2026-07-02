@@ -1,6 +1,6 @@
 # Handoff
 
-Last refreshed: 2026-07-02 11:50:21 UTC+8 by Codex harness.
+Last refreshed: 2026-07-02 14:42:03 UTC+8 by Codex harness.
 
 ## Mode
 
@@ -20,7 +20,7 @@ Start from repo truth, verify live state, and continue the FYP without relying o
 
 ## Current State
 
-- Git: `## main...origin/main [ahead 2]`.
+- Git: `## main...origin/main`.
 - PROJECT_LOG last updated: 2026-07-02 (UTC+8) by Claude.
 - Judge sidecars: 15 score files and 15 summary files.
 - Report artifact: docs/FYP_Report_2026-07-01_v5.docx modified 2026-07-02 11:50:20 +08.
