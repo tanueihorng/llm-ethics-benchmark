@@ -19,7 +19,8 @@
 
 **Watch items / guardrails:**
 - ⚠️ user pasted the OpenAI key in chat (twice) — ROTATE it.
-- The July email drafts (`docs/email_drZhang_july.md`, gitignored) still carry 128-era numbers (Qwen-1.7B +0.055 as the headline) — MUST be re-based to 512-primary before sending. **Same for the attachment deck `docs/fyp_status_2026-07.html` (+v2) and the other showcase/architecture HTML decks — all carry hardcoded 128-era data and are now banner-marked as snapshots; refresh from `results_512/analysis` before any send/presentation.**
+- **T1 READY FOR USER REVIEW (2026-07-02):** the July email (`docs/email_drZhang_july.md`, gitignored; mirrored in `fyp_submission/emails/`) is re-based to 512-primary with the user's framing (spotted the 128 truncation issue → reran everything at 512 → 512 is HarmBench's official budget). The attachment decks `docs/fyp_status_2026-07.html` + `_v2` are REFRESHED to 512 (banners removed; they now pass the stale scan). User: review wording, pick deck (v1 or v2 design), send in July. The OTHER decks (showcase/architecture/meetup/agentic) remain banner-marked 128-era snapshots — refresh before any other presentation.
+- **T30 READY FOR ANNOTATION (2026-07-02):** gold-set sheet + in-browser annotator regenerated from the PRIMARY 512 tree (`python scripts/human_label_audit.py --make-sheet && --make-html`, now defaulting to `--results-dir results_512`): 200 rows (120 judge-vs-proxy disagreement + 80 agreement, all 10 NF4 aliases, max response 2 000 chars). User: open `human_labels/annotate.html`, label 0/1, click Finish & export → Copy results → paste back; then `--apply-labels` + `--score` → `results_512/analysis/human_validation.json` → fold into §6.12/§7.
 - `docs/agentic report`/architecture .svg/.drawio emitted artifacts still show old builder node labels (regen optional, guard is verb-anchored — same as D40).
 - 128 artifacts (`results/`, `results/analysis/`) are retained UNCHANGED as the comparison; never clobber.
 

@@ -97,8 +97,6 @@ stale_text:
     - docs/fyp_showcase_v2.html
     - docs/fyp_architecture.html
     - docs/Codex_Meetup_Agent_Harness_Report.html
-    - docs/fyp_status_2026-07.html
-    - docs/fyp_status_2026-07_v2.html
     - docs/agent_harness_showcase.html
     - docs/agentic_ai_report.html
     # Task packets are point-in-time records of completed tasks (like archive); they

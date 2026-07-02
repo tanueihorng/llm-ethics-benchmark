@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!-- ⚠️ DATA SNAPSHOT NOTICE (added 2026-07-02): the numbers hardcoded in this deck are the 128-token-era results (e.g. Qwen-1.7B ΔASR +0.055 significant). Decision D41 promoted the 512-token study to PRIMARY, under which no HarmBench ASR contrast survives FDR and the +0.055 was a truncation artefact. REFRESH THIS DECK from results_512/analysis (scripts/number_bible_512.py) before presenting or sending it. Canonical numbers: docs/FYP_Report_2026-07-01_v5.docx. -->
 <html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8" />
@@ -250,7 +249,6 @@ p{color:var(--text-soft);line-height:1.62}
 </style>
 </head>
 <body>
-<div style="position:sticky;top:0;z-index:99999;background:#7f1d1d;color:#fff;font:600 14px/1.5 -apple-system,system-ui,sans-serif;padding:10px 18px;text-align:center;">⚠️ DATA SNAPSHOT (pre-2026-07-02): this deck shows the retired 128-token-era results (e.g. “Qwen-1.7B +0.055 significant”). The primary study is now the 512-token budget (D41), under which no safety regression survives correction. Do not present or send without refreshing from results_512/analysis — canonical numbers: FYP_Report_2026-07-01_v5.docx.</div>
 <div id="bg"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div></div>
 
 <div id="topbar">
@@ -292,7 +290,7 @@ p{color:var(--text-soft);line-height:1.62}
     <div class="panel-inner">
       <div class="eyebrow anim d1">Where June left off</div>
       <h2 class="anim d2" style="font-size:clamp(2rem,4.8vw,3.6rem);max-width:16ch">The June pattern, now <span class="accent">put to the test</span></h2>
-      <p class="lead anim d3" style="margin-top:18px">In June, three matched pairs told a clean three-way story: only the smallest model degraded on both safety and capability, one lost capability alone, and one came through intact.</p>
+      <p class="lead anim d3" style="margin-top:18px">In June, three matched pairs told a clean three-way story: only the smallest model degraded on both safety and capability, one lost capability alone, and one came through intact. That reading was measured at a 128-token generation cap — and, as it turned out, it was about to change.</p>
       <p class="anim d4" style="margin-top:16px;max-width:780px;font-size:1.05rem">The worry with three pairs is that the pattern is a coincidence of which models I picked. So I extended it: five pairs, four families, three precisions, a second judge, and a second capability test. This follow-up reports what survived.</p>
       <div class="src anim d5">All figures below are judge-primary (official HarmBench 13B classifier), with a GPT-4o second judge as a cross-check.</div>
     </div>
@@ -303,22 +301,22 @@ p{color:var(--text-soft);line-height:1.62}
     <div class="panel-inner">
       <div class="eyebrow anim d1">Generalisation across families</div>
       <h2 class="anim d2">Five pairs, four families, <span class="accent">one</span> outlier</h2>
-      <p class="lead anim d3">Adding Mistral-7B and Phi-4-mini produced no new safety regression. Qwen3-1.7B remains the only pair where 4-bit quantization significantly raises harmful compliance.</p>
+      <p class="lead anim d3">Adding Mistral-7B and Phi-4-mini produced no new safety regression — and a bigger correction followed. I found my 128-token generation cap was truncating ~60% of HarmBench responses mid-answer, so I reran the entire study at HarmBench's official 512-token budget. At the reference budget, <b>no pair significantly raises harmful compliance</b>: the June Qwen3-1.7B headline was a truncation artefact.</p>
       <div class="tblwrap anim d4">
       <table class="tbl">
         <thead><tr>
           <th>Model pair</th><th>Family</th><th>Δ Harmful compliance</th><th>Reading</th>
         </tr></thead>
         <tbody>
-          <tr><td><span class="model">Qwen3-1.7B<small>smallest</small></span></td><td class="mono">Qwen</td><td class="delta up">+5.5 pp <span class="star">✻</span></td><td><span class="verdict vHarm">degrades on both</span></td></tr>
-          <tr><td><span class="model">Qwen3-4B<small>4 B</small></span></td><td class="mono">Qwen</td><td class="delta flat">+2.5 pp</td><td><span class="verdict vSafe">essentially intact</span></td></tr>
-          <tr><td><span class="model">Llama-3.2-3B<small>3 B</small></span></td><td class="mono">Llama</td><td class="delta flat">0.0 pp</td><td><span class="verdict vCap">capability-only loss</span></td></tr>
-          <tr><td><span class="model">Mistral-7B<small>largest</small></span></td><td class="mono">Mistral</td><td class="delta flat">−4.0 pp</td><td><span class="verdict vSafe">no significant change</span></td></tr>
-          <tr><td><span class="model">Phi-4-mini<small>3.8 B</small></span></td><td class="mono">Phi</td><td class="delta flat">0.0 pp</td><td><span class="verdict vSafe">robust · fewer benign refusals</span></td></tr>
+          <tr><td><span class="model">Qwen3-1.7B<small>smallest</small></span></td><td class="mono">Qwen</td><td class="delta flat">0.0 pp</td><td><span class="verdict vCap">capability-only loss</span></td></tr>
+          <tr><td><span class="model">Qwen3-4B<small>4 B</small></span></td><td class="mono">Qwen</td><td class="delta flat">+4.0 pp</td><td><span class="verdict vSafe">essentially intact</span></td></tr>
+          <tr><td><span class="model">Llama-3.2-3B<small>3 B</small></span></td><td class="mono">Llama</td><td class="delta flat">−4.0 pp <span class="star">✻</span></td><td><span class="verdict vCap">significant <em>decrease</em> — capability-collapse reading</span></td></tr>
+          <tr><td><span class="model">Mistral-7B<small>largest</small></span></td><td class="mono">Mistral</td><td class="delta flat">−2.0 pp</td><td><span class="verdict vSafe">no significant change</span></td></tr>
+          <tr><td><span class="model">Phi-4-mini<small>3.8 B</small></span></td><td class="mono">Phi</td><td class="delta flat">+2.0 pp</td><td><span class="verdict vSafe">robust · fewer benign refusals</span></td></tr>
         </tbody>
       </table>
       </div>
-      <p class="tnote anim d5"><span class="star" style="color:var(--signal)">✻</span> = statistically significant (McNemar p = 0.027; bootstrap CI excludes 0). Δ is judge-primary (official 13B classifier). Only Qwen3-1.7B rises significantly; across all five pairs, 4-bit quantization never significantly <em>reduced</em> harmful compliance. Capability fell under quantization for every pair.</p>
+      <p class="tnote anim d5"><span class="star" style="color:var(--signal)">✻</span> = statistically significant (McNemar p = 0.021; bootstrap CI excludes 0). Δ is judge-primary (official 13B classifier) at HarmBench's 512-token reference budget. No pair rises significantly; the one significant move is Llama-3.2-3B's <em>decrease</em>, read as capability collapse rather than an alignment gain. After multiple-comparisons correction no safety contrast survives — the survivors are capability and over-refusal effects.</p>
     </div>
   </section>
 
@@ -329,10 +327,10 @@ p{color:var(--text-soft);line-height:1.62}
       <h2 class="anim d2">Two judges, <span class="accent">two</span> capability tests</h2>
       <p class="lead anim d3">The two things a reviewer would press on hardest: is the safety result an artifact of one scorer, and is the capability anchor an artifact of one benchmark?</p>
       <div class="grid2 anim d4">
-        <div class="card"><span class="edge eSig"></span><div class="ct">Second judge · GPT-4o</div><h3>Not scorer-dependent</h3><p>An independent judge scored every HarmBench response. It agrees with the official classifier at a Cohen's κ of 0.69 to 0.94 (against 0.19 to 0.37 for the old regex) and reproduces the Qwen3-1.7B rise in the same direction.</p></div>
-        <div class="card"><span class="edge eCap"></span><div class="ct">Second capability test · ARC</div><h3>Direction robust, magnitude overstated</h3><p>ARC-Challenge agrees with MMLU in direction (every pair loses capability) but the gaps are smaller: Qwen3-1.7B drops 1.3 pp on ARC versus 8.7 pp on MMLU. Capability loss is now reported as direction-robust but magnitude-uncertain.</p></div>
+        <div class="card"><span class="edge eSig"></span><div class="ct">Second judge · GPT-4o</div><h3>Not scorer-dependent</h3><p>An independent judge scored every HarmBench response. It agrees with the official classifier at a Cohen's κ of 0.68 to 0.95 (against 0.25 to 0.41 for the old regex on the hardest families) and confirms the null: at the 512-token budget both judges score the Qwen3-1.7B change as ≈0.</p></div>
+        <div class="card"><span class="edge eCap"></span><div class="ct">Second capability test · ARC</div><h3>Direction robust, magnitude overstated</h3><p>ARC-Challenge agrees with MMLU in direction for four of five pairs (Mistral ticks up 0.9 pp, not significant) and the gaps are smaller: Qwen3-1.7B drops 0.9 pp on ARC versus 9.0 pp on MMLU. Capability loss is reported as direction-robust but magnitude-uncertain.</p></div>
       </div>
-      <p class="src anim d5">Both judges and McNemar's test agree on the significant moves. The regex proxy disagreed most on Mistral (a sign flip), which is exactly why the classifier is primary.</p>
+      <p class="src anim d5">Both judges and McNemar's test agree on where the few significant moves are — and that none of them is a safety increase. The regex proxy disagreed most on Mistral (a sign flip), which is exactly why the classifier is primary.</p>
     </div>
   </section>
 
@@ -347,9 +345,9 @@ p{color:var(--text-soft);line-height:1.62}
         <div class="farrow">→</div>
         <div class="fnode"><div class="fi">INT8 · LLM.int8</div><h4>Capability intact</h4><p>No measurable capability hit. But Llama-3.2-3B's safety rises here (+4.0 pp, both judges + McNemar) and reverts at NF4.</p></div>
         <div class="farrow">→</div>
-        <div class="fnode"><div class="fi">NF4 · 4-bit</div><h4>The capability cliff</h4><p>Capability drops sharply. Qwen3-1.7B's safety rise lives here, not at INT8.</p></div>
+        <div class="fnode"><div class="fi">NF4 · 4-bit</div><h4>The capability cliff</h4><p>Capability drops sharply — the one robust precision effect. At the 512-token budget no safety move is significant at either precision.</p></div>
       </div>
-      <p class="src anim d5">Capability loss is a clean cliff at 4-bit; the safety axis is method-specific (Qwen3-1.7B at NF4, Llama-3.2-3B at INT8). Which quantization method you choose matters in its own right, not just how many bits you drop.</p>
+      <p class="src anim d5">Capability loss is a clean cliff at 4-bit. The safety moves that looked method-specific at 128 tokens (Qwen3-1.7B at NF4, Llama-3.2-3B at INT8) both dissolve at the 512-token reference budget — truncation artefacts. The method you choose still matters for capability, not just how many bits you drop.</p>
     </div>
   </section>
 
@@ -373,7 +371,7 @@ p{color:var(--text-soft);line-height:1.62}
       <div class="eyebrow anim d1">What it all says</div>
       <h2 class="anim d2" style="max-width:18ch">Quantization erodes <span class="accent">competence</span>, not guardrails</h2>
       <p class="lead anim d3" style="margin-top:18px">Across five pairs, four families, three precisions, two judges, and two capability benchmarks, the picture is consistent.</p>
-      <p class="anim d4" style="margin-top:16px;max-width:820px;font-size:1.06rem">4-bit quantization mostly degrades capability. Only the smallest model, Qwen3-1.7B, shows a genuine and modest safety regression on top of that. Everywhere else, an apparent safety change is better explained by lost capability, or the model is simply robust. Quantization does not quietly strip alignment; it wears down competence, and the safety effects follow from that.</p>
+      <p class="anim d4" style="margin-top:16px;max-width:820px;font-size:1.06rem">4-bit quantization degrades capability, not alignment. At HarmBench's official 512-token budget, no pair shows a significant rise in harmful compliance under either judge, and nothing on the safety axis survives multiple-comparisons correction — the capability losses do. The apparent safety regressions at the shorter budget were truncation artefacts. Quantization does not quietly strip alignment; it wears down competence, and evaluation artefacts can masquerade as safety effects.</p>
     </div>
   </section>
 

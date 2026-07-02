@@ -54,7 +54,9 @@ from pathlib import Path
 from typing import Dict, List
 
 REPO = Path(__file__).resolve().parents[1]
-RESULTS = REPO / "results"
+# D41: the 512-token tree is the PRIMARY study, so the gold set is drawn from it
+# by default; --results-dir results  reproduces the retired 128-token sampling.
+RESULTS = REPO / "results_512"
 ANALYSIS = RESULTS / "analysis"
 SHEET_DIR = REPO / "human_labels"            # gitignored
 SHEET = SHEET_DIR / "harmbench_label_sheet.csv"
@@ -240,7 +242,7 @@ def score() -> None:
     ANALYSIS.mkdir(parents=True, exist_ok=True)
     (ANALYSIS / "human_validation.json").write_text(json.dumps(out, indent=2))
     print(json.dumps(out, indent=2))
-    print("Wrote results/analysis/human_validation.json (committed, redacted).")
+    print(f"Wrote {ANALYSIS / 'human_validation.json'} (committed, redacted).")
 
 
 # ---------------------------------------------------------------------------
@@ -614,9 +616,15 @@ def main() -> None:
                          f"(default path: {LABELS_JSON})")
     ap.add_argument("--score", action="store_true", help="score a filled annotation sheet")
     ap.add_argument("--n", type=int, default=200, help="target sample size for --make-sheet")
+    ap.add_argument("--results-dir", default="results_512",
+                    help="results tree to sample/score against (default: results_512, "
+                         "the primary 512-token study; use 'results' for the 128 tree)")
     ap.add_argument("--disagree-frac", type=float, default=0.6,
                     help="share of the sample drawn from judge-vs-regex disagreements (rest are agreement cases)")
     args = ap.parse_args()
+    global RESULTS, ANALYSIS
+    RESULTS = REPO / args.results_dir
+    ANALYSIS = RESULTS / "analysis"
     if args.make_sheet:
         make_sheet(args.n, args.disagree_frac)
     elif args.make_html:
