@@ -654,6 +654,29 @@ def run_checks(checker: Checker | None = None) -> Checker:
         ["no GCG, PAIR, AutoDAN", "harmful compliance under direct requests",
          "512-token reference budget"],
     )
+    def thesis_ieee():
+        i0 = tt.find("const refs = [")
+        i1 = tt.find("];", i0)
+        nums = [int(n) for n in re.findall(r"REF\((\d+),", tt[i0:i1])]
+        if nums != list(range(1, len(nums) + 1)):
+            return False, f"ref list numbering broken: {nums[:6]}..."
+        body = tt[:i0] + tt[i1:]
+        seq, seen = [], set()
+        for m in re.finditer(r"\[(\d{1,2})\]", body):
+            n = int(m.group(1))
+            if n > len(nums):
+                return False, f"citation [{n}] exceeds reference count {len(nums)}"
+            if n not in seen:
+                seen.add(n)
+                seq.append(n)
+        uncited = [n for n in range(1, len(nums) + 1) if n not in seen]
+        ok = not uncited and seq == list(range(1, len(nums) + 1))
+        return ok, (f"{len(nums)} refs, all cited, first-use order strict"
+                    if ok else f"uncited={uncited}, seq starts {seq[:8]}")
+
+    tcheck("thesis: IEEE citations — every ref cited, strict first-use order",
+           [], thesis_ieee)
+
     tcheck(
         "thesis: no unscoped 128-era content",
         [],

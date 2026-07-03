@@ -74,6 +74,38 @@ endpoints differ by ≤ 0.005). Both are valid 95% paired-bootstrap intervals;
 the locked, reported values are the headline artifact's. Consumers of the other
 file (e.g. the dashboard) may show ±0.005 endpoint differences.
 
+## 2c. Citation-fitness pass — suitability / interpretation / application (2026-07-02 night)
+
+Beyond bibliographic correctness, every citation SITE in BOTH documents was
+audited for whether the cited paper actually supports the sentence it anchors
+(the class the Proskurina mis-attribution came from). Fixed:
+
+| # | Doc | Was (wrong suitability / interpretation / application) | Source says | Fix |
+|---|-----|--------------------------------------------------------|-------------|-----|
+| 1 | report §2.1 | TrustLLM/DecodingTrust/SafetyBench "each ... evaluates dozens of widely used models" | DecodingTrust focuses on GPT-3.5/GPT-4; TrustLLM = 16 LLMs / 30+ datasets / 6 dimensions; SafetyBench = 25 LLMs / 11,435 MC questions (all abstract-verified) | per-benchmark scopes stated individually |
+| 2 | report §2.2 | "HarmBench [4] and AdvBench provide..." — AdvBench named with no reference | — | AdvBench dropped (not used in the study; citing it would force a full renumber for no gain) |
+| 3 | report §7.7 | "That quantization can degrade safety alignment ... **matches** Kharinaev and Q-resafe; that the effect is non-uniform, **here** depending on model size, family, and harm category..." — a 128-era framing residual implying OUR findings show degradation | at 512 the study's headline is a power-bounded null on safety | reframed as a **boundary condition** the study contributes to the degradation literature |
+| 4 | thesis §2.1 | "some find that quantization degrades safety **or fairness** [3],[6]" | neither Kharinaev nor HarmLevelBench studies fairness | "can degrade safety alignment, with effects that vary by method and attack type" |
+| 5 | thesis §2.1 | "others find **no consistent trend across bit-widths** [4]" (Jin) | Jin finds headline scores largely retained at 4-bit; cautions that narrow evaluations miss behavioural shifts | restated to the abstract-verified finding |
+| 6 | thesis §2.3 | "Surveys [10] ... **recommend reporting Cohen's κ** rather than raw accuracy, using more than one judge" — over-specific attribution | the survey catalogues validity threats; Krumdick argues for human grounding | attribution softened; the κ/second-judge specifics remain stated as THIS study's choices |
+
+**Thesis IEEE mechanics (same pass):** all 21 references cited, none dangling;
+renumbered to strict first-use order (HarmBench→[3], Kharinaev→[4], Jin→[6],
+Egashira→[7], Efron→[14], McNemar→[15], Proskurina→[16], ...); first-use
+neighbors verified inside the rebuilt docx. The claim lock now enforces IEEE
+consistency for BOTH documents (55 checks total).
+
+**Sites audited and found sound (both documents):** all HarmBench uses (incl.
+the N=512 quote), XSTest, MMLU/ARC characterizations (ARC "resists retrieval
+shortcuts" matches the paper's design), QLoRA-introduces-NF4, LLM.int8 outlier
+decomposition, Kharinaev 66-variants, Egashira adversarial-worst-case framing
+(§7.7 explicitly contrasts it with this study's ordinary loading), Q-resafe
+patching, HarmLevelBench attack-type non-uniformity, Proskurina thin-margin
+hypothesis in §6.14 (matches "disproportionately harms low-confidence
+samples"), judge-literature uses, Llama Guard, Arditi, McNemar/Efron, HELM
+multi-metric framing, model TRs, and the reproducibility-practice refs
+(Pineau/Sandve/Wilson/JOSS).
+
 ## 3. The load-bearing external fact: 512 is HarmBench's own budget
 
 Claim (D41's foundation): *"HarmBench's 512-token reference budget."*
