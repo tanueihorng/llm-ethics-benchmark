@@ -24,7 +24,7 @@
 **Next steps (ordered):**
 1. ✅ ~~COMMIT + push~~ — DONE 2026-07-02: `77468e1` (D41 layer, 219 files; pre-commit review caught a .gitignore bug that would have leaked raw text) + `b7aa53f` (T1/T30 prep). main == origin/main.
 2. ✅ ~~T30 tooling~~ — sheet + annotator regenerated from `results_512` (see Watch items). **USER: annotate `human_labels/annotate.html`**, paste back, then `--apply-labels` + `--score` → fold into §6.12/§7.
-3. **Thesis mirror to 512 (NEXT BIG BLOCK):** `make thesis` still → `scripts/build_fyp_thesis.js` → `FYP_Thesis_2026-06-18.docx` (128-era). Mirror the v5 512-primary content (same D41 framing + D42 claim-surface sweep from the start) into a new thesis build + archive predecessors + extend the stale-text guard if the filename changes.
+3. ✅ ~~Thesis mirror to 512~~ — **DONE 2026-07-02 evening (D43 follow-up):** `make thesis` → `scripts/build_fyp_thesis_v4.js` → `docs/FYP_Thesis_2026-07-02_v4.docx` (512-primary throughout: DirectRequest threat model, N=512 standardization, Table 6.2/6.3 @512, budget-artefact section §6.3, BH survivors, INT8-vanish, multiseed, 339 tests). Claim lock extended to the thesis (10 checks; 53/53 total). v1–v3 docx (banner-marked) archived to `docs/archive/`; v4 builder added to the stale scan; retired thesis docx names guarded.
 4. T1 (READY — user reviews + sends in July; see Watch items), T15, T3.
 
 **Watch items / guardrails:**
@@ -87,7 +87,7 @@ Superseded by the entries above; durable record in PROJECT_LOG (D39/D41, §4). P
 
 **Do next, in order:**
 1. **T1 — email Dr. Zhang.** June update SENT 2026-06-13 (as-sent record `docs/email_drZhang_june.md`). Remaining: send the staged July follow-up + its deck — see the **[2026-06-26]** entry at the top.
-2. **T15 — submit.** Two documents exist: the interim report `docs/FYP_Report_2026-07-01_v5.docx` (`make report`; 512-primary, D41) and the NEW standalone thesis `docs/FYP_Thesis_2026-06-18.docx` (`make thesis`; IEEE-cited, sources verified). Decide which the milestone requires; the thesis cover says "Final Report — Thesis" (one-line change in `scripts/build_fyp_thesis.js` if it's actually the interim).
+2. **T15 — submit.** Two documents exist, both 512-primary and claim-locked: the interim report `docs/FYP_Report_2026-07-01_v5.docx` (`make report`, D41) and the standalone thesis `docs/FYP_Thesis_2026-07-02_v4.docx` (`make thesis`; IEEE-cited, sources verified, D43 mirror). Decide which the milestone requires; the thesis cover label is a one-line change in `scripts/build_fyp_thesis_v4.js` if needed.
 3. **T3 — `MyTCinfo`** on TC1 (storage quota). Quick, optional.
 
 **Optional disclosure polish (low; already partly covered in §7.5/Ch8 — do only if tightening for the viva):**

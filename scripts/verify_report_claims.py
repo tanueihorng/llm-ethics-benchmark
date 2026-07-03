@@ -264,7 +264,7 @@ def run_checks(checker: Checker | None = None) -> Checker:
         [],
         lambda: (
             all(("128" in line) for line in c.text.split("\n")
-                if re.search(r"0\.19 at baseline|κ 0\.60–0\.63|κ as low as 0\.11", line)),  # retired 128-era values
+                if re.search(r"0\.19 at baseline|κ 0\.60–0\.63|κ as low as 0\.11|0\.25–0\.41", line)),  # retired 128-era values + a range wrong at both budgets
             "every retired-kappa mention is 128-scoped on its line",
         ),
     )
@@ -512,6 +512,132 @@ def run_checks(checker: Checker | None = None) -> Checker:
                 f"{len(rows)} rows, {safe} benign")
 
     c.check("XSTest v2: 450 prompts, 250 benign evaluated", ["250"], xstest_counts)
+
+    # ================= thesis v4 mirror (same artifacts, same lock) ==========
+    tt = (ROOT / "scripts/build_fyp_thesis_v4.js").read_text(encoding="utf-8")
+
+    def tcheck(name, snippets, fn=lambda: (True, "text pinned")):
+        missing = [s for s in snippets if s not in tt]
+        if missing:
+            c.results.append(
+                ("FAIL", name, f"thesis text missing: {missing[0][:90]!r}"))
+            return
+        try:
+            ok, detail = fn()
+        except Exception as exc:  # noqa: BLE001
+            c.results.append(("FAIL", name, f"checker error: {exc!r}"))
+            return
+        c.results.append(("PASS" if ok else "FAIL", name, detail))
+
+    tcheck(
+        "thesis: Table 6.2 judge rows == headline artifact",
+        ['"0.000 [−0.055, +0.055]"', '"+0.040 [0.000, +0.080]"',
+         '"−0.040 [−0.075, −0.010]"', '"−0.020 [−0.080, +0.040]"',
+         '"+0.020 [−0.015, +0.055]"'],
+        lambda: (
+            near(0.0, hl512["qwen_2b"]["delta"]) and near(0.040, hl512["qwen_4b"]["delta"])
+            and near(-0.040, hl512["llama_3_2_3b"]["delta"]) and near(-0.075, hl512["llama_3_2_3b"]["ci"][0])
+            and near(-0.020, hl512["mistral_7b"]["delta"]) and near(0.020, hl512["phi4_mini"]["delta"]),
+            "all five CI cells match headline_512_vs_128.json",
+        ),
+    )
+    tcheck(
+        "thesis: Table 6.2 capability cells == pairwise_deltas",
+        ['"−0.090*"', '"−0.016*"', '"−0.032*"', '"−0.037"', '"+0.009"'],
+        lambda: (
+            near(-0.090, pdix[("qwen_2b", "mmlu")]["absolute_delta"])
+            and near(-0.016, pdix[("qwen_4b", "arc")]["absolute_delta"])
+            and near(-0.032, pdix[("llama_3_2_3b", "arc")]["absolute_delta"])
+            and near(-0.037, pdix[("llama_3_2_3b", "mmlu")]["absolute_delta"])
+            and near(0.009, pdix[("mistral_7b", "arc")]["absolute_delta"]),
+            "capability cells match",
+        ),
+    )
+    tcheck(
+        "thesis: kappa family table == judge_agreement",
+        ['"0.36 – 0.59"', '"0.25 – 0.28"', '"0.71 – 0.84"', '"0.67 – 0.77"'],
+        lambda: (
+            near(0.36, min(ja[k]["cohens_kappa"] for k in KAPPA if "qwen" in k), 2)
+            and near(0.59, max(ja[k]["cohens_kappa"] for k in KAPPA if "qwen" in k), 2)
+            and near(0.25, min(ja[k]["cohens_kappa"] for k in KAPPA if "mistral" in k), 2)
+            and near(0.28, max(ja[k]["cohens_kappa"] for k in KAPPA if "mistral" in k), 2)
+            and near(0.71, min(ja[k]["cohens_kappa"] for k in KAPPA if "llama" in k), 2)
+            and near(0.84, max(ja[k]["cohens_kappa"] for k in KAPPA if "llama" in k), 2)
+            and near(0.67, min(ja[k]["cohens_kappa"] for k in KAPPA if "phi" in k), 2)
+            and near(0.77, max(ja[k]["cohens_kappa"] for k in KAPPA if "phi" in k), 2),
+            "family ranges match",
+        ),
+    )
+    tcheck(
+        "thesis: sweep table rows == precision_sweep",
+        ['"0.255", "0.245", "0.255"', '"0.115", "0.125", "0.155"',
+         '"0.100", "0.105", "0.060"', '"0.585", "0.565", "0.565"',
+         '"0.070", "0.090", "0.090"'],
+        lambda: (
+            all(
+                near(v, ps512[pair]["metrics"]["harmbench_asr_judge"][prec])
+                for pair, vals in {
+                    "qwen_2b": (0.255, 0.245, 0.255), "qwen_4b": (0.115, 0.125, 0.155),
+                    "llama_3_2_3b": (0.100, 0.105, 0.060), "mistral_7b": (0.585, 0.565, 0.565),
+                    "phi4_mini": (0.070, 0.090, 0.090),
+                }.items()
+                for prec, v in zip(("fp16", "int8", "nf4"), vals)
+            ),
+            "all 15 sweep cells match precision_sweep.json",
+        ),
+    )
+    tcheck(
+        "thesis: truncation + budget artefact block",
+        ["60.3 percent of the 2,000 paired responses", "standardize the parameter to N = 512",
+         "0.000 under the classifier (p = 1.000) at 512, with the second judge at +0.005"],
+        lambda: (near(60.3, pt["pct_truncated"], 1) and pt["total"]["n"] == 2000,
+                 "prefix stats match genlen_robustness.json"),
+    )
+    tcheck(
+        "thesis: BH survivors + none-ASR",
+        ["q = 0.008", "q = 0.049", "Not one HarmBench ASR contrast survives"],
+        lambda: (
+            mc["n_bh_significant_q05"] == 3
+            and not any("asr" in s["metric"] for s in mc["bh_survivors"]),
+            "3 survivors, none ASR",
+        ),
+    )
+    tcheck(
+        "thesis: INT8 vanish @512 under both judges",
+        ["classifier Δ+0.005, McNemar p = 1.000; GPT-4o Δ+0.010, p = 0.688"],
+        lambda: (
+            near(0.005, ps512["llama_3_2_3b"]["metrics"]["harmbench_asr_judge"]["delta_int8_vs_fp16"])
+            and near(1.0, _mcn(ps512, "llama_3_2_3b", "harmbench_cls"))
+            and near(0.688, _mcn(ps512, "llama_3_2_3b", "api_judge")),
+            "INT8 llama values match",
+        ),
+    )
+    tcheck(
+        "thesis: multiseed + OR claims",
+        ["mean +0.013, range [0.000, +0.035]", "ΔOR = −0.044, CI [−0.072, −0.016]",
+         "−0.028, McNemar p = 0.065"],
+        lambda: (
+            near(0.013, smp["qwen_2b"]["judge_delta"]["mean"])
+            and near(-0.044, pdix[("phi4_mini", "xstest")]["absolute_delta"])
+            and near(-0.028, pdix[("qwen_2b", "xstest")]["absolute_delta"]),
+            "multiseed + OR values match",
+        ),
+    )
+    tcheck(
+        "thesis: threat model + budget scoping present",
+        ["no GCG, PAIR, AutoDAN", "harmful compliance under direct requests",
+         "512-token reference budget"],
+    )
+    tcheck(
+        "thesis: no unscoped 128-era content",
+        [],
+        lambda: (
+            all("128" in line for line in tt.split("\n") if re.search(r"\+0\.055(?!\])", line) and ", +0.055" not in line)
+            and "0.19 " not in tt and "two-peaked" not in tt
+            and "329" not in tt and "339 automated tests" in tt,
+            "every +0.055 line 128-scoped; no retired kappa/counts",
+        ),
+    )
 
     return c
 

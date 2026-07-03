@@ -336,7 +336,7 @@ Raw generations are written once and never overwritten. Post-hoc re-scoring and 
 - One-page results card — [`docs/RESULTS_CARD.md`](docs/RESULTS_CARD.md)
 
 **Academic write-up**
-- FYP thesis (standalone) — `docs/FYP_Thesis_2026-06-18.docx` (`make thesis`)
+- FYP thesis (standalone) — `docs/FYP_Thesis_2026-07-02_v4.docx` (512-token-primary mirror; `make thesis`; the 128-era v1–v3 docx are banner-marked in `docs/archive/`)
 - FYP interim report — `docs/FYP_Report_2026-07-01_v5.docx` (512-token-primary; `make report`)
 - Workshop paper / poster outline — [`docs/paper_outline.md`](docs/paper_outline.md)
 

@@ -92,9 +92,11 @@ report:
 verify-claims:
 	$(PYTHON) scripts/verify_report_claims.py
 
-# Standalone full thesis (separate from the interim report; not overwritten by `make report`)
+# Standalone full thesis (separate from the interim report; not overwritten by
+# `make report`). v4 = the 512-primary mirror (D41/D43); v1-v3 builders are
+# retained as 128-era history and their banner-marked docx live in docs/archive/.
 thesis:
-	NODE_PATH=$$(npm root -g) node scripts/build_fyp_thesis.js
+	NODE_PATH=$$(npm root -g) node scripts/build_fyp_thesis_v4.js
 
 # Standalone agentic-AI workflow / methods report (how agentic AI tools were used to
 # accelerate the project — separate deliverable; touches neither report nor thesis).

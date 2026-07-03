@@ -193,7 +193,7 @@ def fig_precision_sweep():
         ax.grid(axis="y", color="#e5e7eb", lw=0.6)
     axes[0].set_ylabel("rate / accuracy")
     axes[1].legend(loc="lower left", fontsize=7.5, frameon=False, ncol=1)
-    fig.suptitle("Precision sweep: capability cliff at four-bit; safety is method-specific",
+    fig.suptitle("Precision sweep: capability cliff at four-bit; no robust safety move at either step",
                  fontweight="bold", y=1.02)
     fig.savefig(FIGDIR / "precision_sweep.png")
     plt.close(fig)

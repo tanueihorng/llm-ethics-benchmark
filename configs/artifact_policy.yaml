@@ -114,10 +114,11 @@ stale_text:
     - docs/*.html
     # Audit P1 root cause (2026-07-02): the stale 128-era κ values in report
     # §6.13 survived every gate because the canonical report SOURCE (.js) was
-    # never in scan_paths — only .py/.md/.html were. The canonical builder is
-    # now scanned; retired v1–v4 and the thesis builders are excluded below
-    # as historical sources.
+    # never in scan_paths — only .py/.md/.html were. The canonical builders are
+    # now scanned; retired report v1–v4 and thesis v1–v3 builders are excluded
+    # below as historical sources.
     - scripts/build_fyp_report_v5.js
+    - scripts/build_fyp_thesis_v4.js
   exclude:
     - docs/archive/*
     - docs/fyp_showcase.html
@@ -186,6 +187,11 @@ stale_text:
     - '^(?!.*128).*0\.19 at baseline'
     - '^(?!.*128).*κ as low as 0\.11'
     - '^(?!.*128).*0\.60–0\.63'
+    # D43 thesis mirror (2026-07-02): the canonical thesis is
+    # docs/FYP_Thesis_2026-07-02_v4.docx (build_fyp_thesis_v4.js, `make thesis`).
+    # The retired 128-era thesis docx may only be named on lines scoped as
+    # superseded / archived / 128-era history.
+    - '^(?!.*(?:[Ss]uperseded|archive|128-era)).*FYP_Thesis_2026-06-'
 
 report_worthy:
   changed_file_patterns:

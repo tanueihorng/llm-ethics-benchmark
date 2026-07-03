@@ -15,7 +15,10 @@ trusting another prose surface that repeats the claim.
 
 ## 1. The numeric claim lock (machine-checked, permanent)
 
-`scripts/verify_report_claims.py` asserts **43 checks**, each in two
+`scripts/verify_report_claims.py` asserts **53 checks** (43 on the report; 10
+added for the 512-mirrored thesis `build_fyp_thesis_v4.js`, which pins its
+Table 6.2/6.3 cells, κ table, truncation block, BH survivors, INT8 point,
+multiseed values, and threat-model scoping to the same artifacts), each in two
 directions: (a) the report text still contains the claim, and (b) the value
 recomputed from the committed artifact equals the claim. It runs via
 `make verify-claims` and inside pytest (`tests/test_report_claims.py`), so the
@@ -47,6 +50,29 @@ found only when every value was mechanically compared to its artifact:
 values 0.19/0.11 and the 128-era cross-judge 0.60–0.63 → 512 values 0.28/0.25
 and 0.83/0.78; the κ-range lines 0.25–0.41 → 0.25–0.59; LOC ≈2,800/1,800 →
 ≈8,900/4,600; test counts.)
+
+## 2b. Thesis-mirror verification pass (2026-07-02 evening)
+
+The 512-mirrored thesis (`build_fyp_thesis_v4.js` → `FYP_Thesis_2026-07-02_v4.docx`)
+was adversarially verified by an independent agent against the artifacts after
+authoring. Every table cell and load-bearing number verified; zero stale-128
+residue. Prose findings, all fixed and re-locked:
+
+| # | Was | Artifact says | Fixed in |
+|---|-----|---------------|----------|
+| 1 | "every point lies below the diagonal" (Fig. 1 caption, both documents) | 8 of 10 points below; llama base (0.100 > 0.090) and phi 4-bit (0.090 > 0.075) sit marginally above | both captions |
+| 2 | qwen_2b @512 "ΔASR = 0.000 … under both judges" (thesis) | classifier 0.000; **gpt-4o +0.005** (p = 1.000 under both) | thesis abstract + §6.3 |
+| 3 | "relocated the study's single significant effect" (thesis §6.1) | 128-era regex had TWO CI-significant increases (qwen_4b +0.065, mistral +0.055) vs the classifier's one | thesis §6.1, with aggregate subset counts 29 vs 325 |
+| 4 | report prose/captions "κ ≈ 0.25–0.41 for Qwen/Mistral" (a 3rd occurrence surviving the earlier fix) | 0.25–0.59 | report §6.12 + caption; range added to the claim lock's banned list |
+| 5 | `precision_sweep.png` embedded title "safety is method-specific" (128-era framing baked into the figure) | @512 there is no robust safety move at either step | `make_figures.py` title + figure regenerated (both docx re-embed it; the other five figures re-rendered byte-identical) |
+| 6 | "no INT8 capability delta is significant" (thesis) | no committed artifact carries INT8 capability significance tests | softened to the artifact-backed point-estimate form (within ~1.3 pp of fp16) |
+
+**Known artifact-level nuance (documented, not an error):**
+`judge_agreement.json` per-pair bootstrap CIs come from a different resampling
+run than `headline_512_vs_128.json` (llama [−0.07, −0.01] vs [−0.075, −0.010];
+endpoints differ by ≤ 0.005). Both are valid 95% paired-bootstrap intervals;
+the locked, reported values are the headline artifact's. Consumers of the other
+file (e.g. the dashboard) may show ±0.005 endpoint differences.
 
 ## 3. The load-bearing external fact: 512 is HarmBench's own budget
 
