@@ -1,0 +1,4 @@
+[
+  { "date": "2026-07-02", "macrostructure": "Long Document", "theme": "Almanac", "enrichment": "none", "brief": "project_field_guide.html - author study/reference document (redesign)" },
+  { "date": "2026-07-02", "macrostructure": "journal-workbench", "theme": "custom (light paper, indigo+gold, Newsreader/Spline Sans)", "enrichment": "none", "brief": "Streamlit dashboard editorial redesign (dashboard/theme.py)" }
+]
