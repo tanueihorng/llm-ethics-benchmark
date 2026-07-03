@@ -370,7 +370,7 @@ const ch1 = [
   Bullet("RQ2 (Primary). Does four-bit quantization change over-refusal behaviour on benign prompts, as measured by XSTest?"),
   Bullet("RQ3 (Primary). Does four-bit quantization degrade general capability, as measured by accuracy on a curated MMLU subset?"),
   Bullet("RQ4 (Secondary, scale). Does the magnitude of the quantization effect differ between Qwen3-1.7B and Qwen3-4B within the same model family?"),
-  Bullet("RQ5 (Robustness). Does the pattern observed within the Qwen family replicate qualitatively in a different model family, namely Llama 3.2 3B?"),
+  Bullet("RQ5 (Robustness). Does the pattern observed within the Qwen family replicate qualitatively across other model families (Llama, Mistral, Phi) and across quantization precisions (INT8, NF4)?"),
 
   H2("1.4 Scope and Boundaries"),
   PJ("Explicit scoping is essential to make the study tractable within the constraints of an undergraduate Final Year Project and to keep the resulting claims defensible. The following boundaries are stated up front."),

@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>fyp_quant — The Complete Project Field Guide</title>
+<style>
+  :root{
+    --ink:#1a1a2e; --ink-soft:#44445c; --ink-faint:#8888a0;
+    --paper:#fbfaf7; --card:#ffffff; --line:#e4e1d8; --line-strong:#c9c5b8;
+    --accent:#3b3b98; --accent-soft:#eceafd; --gold:#8a6d1d; --gold-soft:#faf3dd;
+    --good:#1e6f50; --good-soft:#e3f2ea; --warn:#8a3324; --warn-soft:#fae8e3;
+    --mono:'SF Mono','Consolas','Menlo',monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;scroll-padding-top:16px}
+  body{background:var(--paper);color:var(--ink);font:16px/1.65 Georgia,'Times New Roman',serif}
+  .wrap{display:grid;grid-template-columns:270px 1fr;max-width:1280px;margin:0 auto}
+  nav{position:sticky;top:0;height:100vh;overflow-y:auto;padding:28px 18px;border-right:1px solid var(--line);background:var(--card);font-family:-apple-system,'Segoe UI',Helvetica,Arial,sans-serif}
+  nav h1{font-size:15px;letter-spacing:.04em;color:var(--accent);margin-bottom:2px}
+  nav .sub{font-size:11px;color:var(--ink-faint);margin-bottom:18px;line-height:1.4}
+  nav a{display:block;font-size:12.5px;color:var(--ink-soft);text-decoration:none;padding:4px 8px;border-radius:5px;line-height:1.35}
+  nav a:hover{background:var(--accent-soft);color:var(--accent)}
+  nav .grp{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);margin:14px 0 4px 8px}
+  main{padding:44px 56px 120px;min-width:0}
+  h2{font-size:27px;margin:56px 0 6px;color:var(--ink);border-bottom:3px double var(--line-strong);padding-bottom:8px}
+  h2 .no{color:var(--gold);font-size:16px;vertical-align:super;margin-right:6px;font-family:var(--mono)}
+  h3{font-size:19px;margin:30px 0 8px;color:var(--accent)}
+  h4{font-size:15.5px;margin:20px 0 6px;color:var(--ink)}
+  p{margin:10px 0;max-width:78ch}
+  .lead{font-size:17.5px;color:var(--ink-soft)}
+  ul,ol{margin:10px 0 10px 26px;max-width:76ch}
+  li{margin:5px 0}
+  code{font-family:var(--mono);font-size:.85em;background:var(--accent-soft);padding:1px 5px;border-radius:4px;color:var(--accent)}
+  pre{background:#23233b;color:#e8e8f2;font-family:var(--mono);font-size:12.5px;line-height:1.6;padding:14px 18px;border-radius:8px;overflow-x:auto;margin:12px 0}
+  table{border-collapse:collapse;width:100%;margin:14px 0;font-size:13.5px;font-family:-apple-system,'Segoe UI',sans-serif;background:var(--card)}
+  th{background:var(--ink);color:#fff;text-align:left;padding:7px 10px;font-weight:600;font-size:12.5px}
+  td{border:1px solid var(--line);padding:6px 10px;vertical-align:top}
+  tr:nth-child(even) td{background:#f6f5f0}
+  .tbl-scroll{overflow-x:auto}
+  .card{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:8px;padding:14px 18px;margin:14px 0}
+  .card.gold{border-left-color:var(--gold);background:var(--gold-soft)}
+  .card.good{border-left-color:var(--good);background:var(--good-soft)}
+  .card.warn{border-left-color:var(--warn);background:var(--warn-soft)}
+  .card h4{margin-top:0}
+  .kicker{font-family:-apple-system,'Segoe UI',sans-serif;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-top:40px}
+  .hero{border:1px solid var(--line-strong);border-top:6px solid var(--accent);background:var(--card);padding:34px 40px;border-radius:10px;margin-bottom:10px}
+  .hero h1{font-size:34px;line-height:1.2;margin-bottom:8px}
+  .hero .tag{font-family:-apple-system,'Segoe UI',sans-serif;font-size:13px;color:var(--ink-faint)}
+  .pill{display:inline-block;font-family:-apple-system,'Segoe UI',sans-serif;font-size:11px;font-weight:700;padding:2px 9px;border-radius:99px;background:var(--accent-soft);color:var(--accent);margin:2px 3px 2px 0}
+  dl{max-width:78ch}
+  dt{font-weight:700;margin-top:12px;font-family:-apple-system,'Segoe UI',sans-serif;font-size:14px}
+  dt code{font-size:.95em}
+  dd{margin-left:0;color:var(--ink-soft);font-size:15px}
+  .num{font-family:var(--mono);font-size:.9em}
+  .small{font-size:13px;color:var(--ink-faint)}
+  .flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-family:-apple-system,'Segoe UI',sans-serif;font-size:12.5px;margin:12px 0}
+  .flow .step{background:var(--card);border:1px solid var(--line-strong);border-radius:7px;padding:7px 11px;font-weight:600}
+  .flow .arr{color:var(--gold);font-weight:700}
+  mark{background:var(--gold-soft);padding:0 3px}
+  @media(max-width:900px){.wrap{grid-template-columns:1fr}nav{position:static;height:auto;border-right:none;border-bottom:1px solid var(--line)}main{padding:24px 18px 80px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav>
+  <h1>fyp_quant Field Guide</h1>
+  <div class="sub">Everything in this project, explained for its author. Written 2 July 2026 · reflects commit history through the D43 era.</div>
+  <div class="grp">Orientation</div>
+  <a href="#five-min">1 · The project in five minutes</a>
+  <a href="#timeline">2 · Timeline — what happened when</a>
+  <div class="grp">The machine</div>
+  <a href="#repo">3 · Repository map</a>
+  <a href="#stack">4 · Technical stack</a>
+  <a href="#apparatus">5 · The evaluation apparatus</a>
+  <a href="#benchmarks">6 · The four benchmarks + threat model</a>
+  <a href="#scoring">7 · Scoring: the three-scorer story</a>
+  <div class="grp">The science</div>
+  <a href="#stats">8 · The statistics, explained</a>
+  <a href="#budget">9 · The 128 → 512 story</a>
+  <a href="#results">10 · Results at 512, all numbers</a>
+  <div class="grp">The discipline</div>
+  <a href="#harness">11 · Agent harness &amp; the claim lock</a>
+  <a href="#audits">12 · The audit history</a>
+  <a href="#limits">13 · Limitations &amp; threat model</a>
+  <div class="grp">Your job</div>
+  <a href="#human">14 · What only you can judge</a>
+  <a href="#vetting">15 · Report-vetting checklist</a>
+  <a href="#glossary">16 · Glossary</a>
+  <a href="#commands">17 · Command crib sheet</a>
+</nav>
+<main>
+
+<div class="hero">
+  <div class="tag">CCDS25-1136 · NTU CCDS Final Year Project · Tan Uei Horng · Supervisor: Dr. Zhang Jiehuang</div>
+  <h1>The Complete Project Field Guide</h1>
+  <p class="lead">This document explains every folder, file, decision, date, number, and mechanism in <code>fyp_quant</code> — so that you can vet the report and thesis from first-hand understanding, not trust.</p>
+  <div>
+    <span class="pill">5 pairs / 10+5 models / 4 families</span><span class="pill">fp16 → INT8 → NF4</span><span class="pill">4 benchmarks</span><span class="pill">2 judges</span><span class="pill">512-token primary</span><span class="pill">339 tests</span><span class="pill">55-check claim lock</span>
+  </div>
+</div>
+
+<!-- ==================================================================== -->
+<div class="kicker">Orientation</div>
+<h2 id="five-min"><span class="no">01</span>The project in five minutes</h2>
+<p class="lead"><strong>Question.</strong> When a compact language model (1.7–7.2 B parameters) is quantized to 4-bit so it fits on consumer hardware, do the safety changes people report reflect a <em>genuine alignment shift</em> — or are they artefacts of capability loss, invalid scoring, or truncated generation?</p>
+<p><strong>Design.</strong> Matched pairs: the baseline and the quantized member of each pair load from the <em>identical</em> weights, with bitsandbytes quantization applied on the fly at load time. Nothing else differs — same tokenizer, same chat template, same prompts, same seed, same decoding. So any measured delta is attributable to quantization alone.</p>
+<p><strong>What was measured.</strong> Harmful compliance (HarmBench, ASR), over-refusal on benign prompts (XSTest), and general capability (MMLU subset + ARC-Challenge), for five pairs across four families, at three precisions (fp16, INT8, NF4), at two generation budgets (an initial 128-token run, then the full re-run at HarmBench's own standardized 512-token budget, which is the primary study).</p>
+<div class="card good">
+  <h4>The headline, at the 512-token primary budget</h4>
+  <ul>
+    <li><strong>No pair shows a significant increase in harmful compliance under direct requests.</strong> Not one of the 20 primary contrasts on the ASR axis survives the Benjamini–Hochberg multiplicity correction.</li>
+    <li>The only <em>individually</em> significant ΔASR is Llama-3.2-3B at <span class="num">−0.040</span> — a <em>decrease</em> (CI <span class="num">[−0.075, −0.010]</span>, McNemar p = 0.021) — and even it does not survive correction.</li>
+    <li>The three effects that <em>do</em> survive correction are capability and over-refusal changes: Qwen3-1.7B MMLU <span class="num">−0.090</span> (q = 0.008), Llama ARC <span class="num">−0.032</span> (q = 0.008), Phi over-refusal <span class="num">−0.044</span> (q = 0.049, and it is a decrease — a benign direction).</li>
+    <li><strong>Capability, not safety, is the robust cost of 4-bit quantization</strong> — and it is a cliff at 4-bit: INT8 is essentially free.</li>
+  </ul>
+</div>
+<div class="card gold">
+  <h4>The two methodological findings (arguably the most durable contributions)</h4>
+  <ol>
+    <li><strong>The scorer determines the conclusion.</strong> A refusal-counting regex over-counts "attack success" (its harmful set is a near-strict superset of the official classifier's: 325 regex-only labels vs 29 judge-only across the ten models). Judge-vs-regex agreement is family-dependent (Cohen's κ 0.25–0.84).</li>
+    <li><strong>The generation budget determines the conclusion.</strong> The initial 128-token run truncated 60.3% of generations mid-answer and thereby manufactured an apparent safety regression in the smallest model (Qwen3-1.7B, ΔASR +0.055 at 128 tokens, then statistically significant) that dissolves to exactly 0.000 at the 512-token reference budget. The HarmBench authors themselves show token count can swing ASR by up to 30% and standardize it to N = 512 for exactly this reason.</li>
+  </ol>
+</div>
+<p><strong>Threat-model boundary (say it before an examiner asks):</strong> HarmBench was run in its <code>standard</code> configuration — curated harmful behaviours presented <em>directly</em>, with no jailbreak/attack augmentation (no GCG, PAIR, AutoDAN). ASR here means <em>harmful compliance under direct requests</em>, the weakest threat model in HarmBench's taxonomy — not robustness to optimized attack.</p>
+
+<!-- ==================================================================== -->
+<h2 id="timeline"><span class="no">02</span>Timeline — what happened when</h2>
+<p>Dates are UTC+8, from <code>docs/PROJECT_LOG.md</code> (the single source of truth; every decision is a numbered "D", every change a changelog row). TC1 job IDs are the SLURM job numbers on the NTU cluster.</p>
+<div class="tbl-scroll"><table>
+<tr><th>When</th><th>Event</th><th>Decision / jobs</th></tr>
+<tr><td>2026-05-27</td><td>First full 3-pair matrix runs on TC1 (Qwen3-1.7B, Qwen3-4B, Llama-3.2-3B × 3 benchmarks) at the initial 128-token budget.</td><td>jobs 60976–60981</td></tr>
+<tr><td>2026-05-28</td><td>Paired bootstrap CIs added (T12). Refusal parser revised v1 → v2 after v1 missed modern refusal templates — the first "scorer changes the answer" moment: headline deltas flipped.</td><td>T13</td></tr>
+<tr><td>early June</td><td>Judge validation: the official HarmBench classifier run over all saved generations; it showed the v2 regex <em>over-counts</em> ASR. Classifier promoted to PRIMARY HarmBench scorer; regex demoted to a transparent non-refusal proxy.</td><td>D16 · job 61047</td></tr>
+<tr><td>2026-06-13</td><td>June status email sent to Dr. Zhang (as-sent record kept in gitignored drafts + archived deck).</td><td>T1 part 1</td></tr>
+<tr><td>2026-06-14</td><td>Robustness batch: multi-seed decoding arm at 128 tokens (T18), GPT-4o added as an architecturally independent second judge (T22), ARC-Challenge added as a second capability benchmark (T23), Ch6/7 strengthened (T21), "latent six" code-hardening (D22).</td><td>D23–D25 · jobs 61078–61084</td></tr>
+<tr><td>2026-06-15</td><td>Cross-family extension: Mistral-7B-Instruct-v0.3 and Phi-4-mini-instruct pairs run — five pairs, four families. Refusal-margin mechanism probe (T28/D33): flips concentrate at thin first-token margins, symmetric churn, capability-driven reading.</td><td>D32 · jobs 61121–61125, judge 61134</td></tr>
+<tr><td>2026-06-18</td><td>INT8 (LLM.int8) precision point run for all five pairs (T29): each pair now spans fp16 → INT8 → NF4. Standalone thesis v1 docx built (128-era; later superseded and archived).</td><td>D35</td></tr>
+<tr><td>2026-06-26/29</td><td>Report v3 (figure-rich) promoted canonical; thesis v2/v3 drafts (128-era; later superseded and archived). Test-inventory refresh.</td><td>D38, D40</td></tr>
+<tr><td>2026-06-30</td><td><strong>The turn:</strong> generation-length concern investigated → decision to re-run the FULL apparatus at the 512-token budget that HarmBench itself standardizes. 10-model matrix + 5 INT8 models + both judges + multi-seed arm all re-run at 512 on TC1.</td><td>D39 → D41 · judge job 61524 + INT8 follow-up</td></tr>
+<tr><td>2026-07-01/02</td><td><strong>512 promoted to PRIMARY (D41).</strong> Report rebuilt as v5; every claim surface swept (D42); 7 external Codex review rounds absorbed, every finding independently verified before fixing; dashboard redesigned; a <code>.gitignore</code> bug caught pre-commit that would have published raw harmful text to the public repo.</td><td>D41, D42 · commits 77468e1…3844789</td></tr>
+<tr><td>2026-07-02 (day)</td><td><strong>Adversarial validity audit (D43):</strong> 5 independent examiner agents + cross-verification. Findings fixed: DirectRequest threat-model disclosure, stale 128-era κ values in §6.13, thesis banners, dashboard guard case-bypass, and more. Two auditor findings <em>refuted</em> as hallucinations — proof that every external finding must be re-verified against primary artifacts.</td><td>D43 · commit 7f43432</td></tr>
+<tr><td>2026-07-02 (evening)</td><td><strong>Machine claim lock built</strong> (<code>verify_report_claims.py</code>): every load-bearing number asserted in both the document text and the artifacts. It immediately caught 6 more errors that 7 review rounds had missed. All 25 report references verified against primary sources. Thesis mirrored to 512 as v4 (128-era v1–v3 docx banner-marked and archived), then adversarially verified (6 more prose fixes, including a stale figure title).</td><td>commits 7f43432, d505202</td></tr>
+<tr><td>2026-07-02 (night)</td><td><strong>IEEE citation pass + citation-fitness pass:</strong> strict first-use renumbering in both documents; a genuine mis-attribution fixed (a calibration paper cited for an instruction-following claim); six "right paper, wrong use" residuals fixed; the lock extended to enforce citation consistency (55 checks).</td><td>commits 4adeeef, 99b92ce</td></tr>
+</table></div>
+<p class="small">Open items as of writing: T30 human gold-set annotation (your job — <code>human_labels/annotate.html</code>), T1 July email send, T15 milestone-document decision, optional T3 quota check. The OpenAI key pasted in chat must be rotated.</p>
+
+<!-- ==================================================================== -->
+<div class="kicker">The machine</div>
+<h2 id="repo"><span class="no">03</span>Repository map — every folder, every key file</h2>
+<h3>Top level</h3>
+<dl>
+<dt><code>ethical_benchmark/</code></dt><dd>The Python package — the entire experiment engine. Subfolders below.</dd>
+<dt><code>scripts/</code></dt><dd>Analysis and document tooling (each key script described below).</dd>
+<dt><code>configs/</code></dt><dd>YAML experiment configs, validated by a Pydantic schema, plus <code>artifact_policy.yaml</code> (the machine-readable harness contract).</dd>
+<dt><code>slurm/</code></dt><dd>Generated sbatch job scripts for the TC1 cluster (per-model matrix jobs, smoke jobs, judge jobs, at both budgets and for INT8/sensitivity).</dd>
+<dt><code>results/</code></dt><dd>The 128-token study tree — retained UNCHANGED as the generation-length comparison. Raw generations are gitignored; committed content is redacted sidecars + analysis JSON.</dd>
+<dt><code>results_512/</code></dt><dd><strong>The PRIMARY tree (D41).</strong> Same layout: per-alias <code>raw.jsonl</code>/<code>summary.json</code> (local-only, hash-pinned), committed judge sidecars, and <code>analysis/</code> — the JSON files every reported number comes from.</dd>
+<dt><code>results_sensitivity_512/</code></dt><dd>Multi-seed stochastic-decoding arm at 512 (5 seeds × 6 models); raw local-only, judge sidecars committed.</dd>
+<dt><code>results_dev/</code></dt><dd>Gitignored scratch tree — the ONLY place the dashboard's Run page may execute into (the canonical trees are guard-protected).</dd>
+<dt><code>data/</code></dt><dd>Bundled datasets: <code>xstest_v2_prompts.csv</code> (450 rows = 250 benign + 200 contrast) from the official XSTest release.</dd>
+<dt><code>docs/</code></dt><dd>All deliverables + documentation: the report/thesis docx, PROJECT_LOG.md, RESULTS_CARD.md, REPORT_CLAIM_AUDIT_v5.md (the citation/claim ledger), HANDOFF.md, figures/, HTML decks, this guide, and <code>archive/</code> for superseded artifacts.</dd>
+<dt><code>dashboard/</code></dt><dd>Streamlit GUI: <code>app.py</code> (pages), <code>data.py</code> (pure, unit-tested data layer + evidence-protection guard), <code>theme.py</code> (editorial design system).</dd>
+<dt><code>tests/</code></dt><dd>339 automated tests across 26 files (inventory in report Appendix D), including the claim lock wrapper.</dd>
+<dt><code>human_labels/</code></dt><dd>Gitignored: the T30 annotation sheet + in-browser annotator (200 rows from the 512 tree, awaiting your labels).</dd>
+<dt><code>fyp_cli.py</code></dt><dd>The CLI front door: <code>run</code>, <code>smoke</code>, <code>matrix</code>, <code>analyze</code>, <code>agent-status</code>, <code>agent-start</code>.</dd>
+<dt><code>run_quant_benchmark.py</code> / <code>run_quant_matrix.py</code></dt><dd>Thin root-level entrypoints into the pipeline package (single run / full matrix).</dd>
+<dt><code>Makefile</code></dt><dd>Every workflow verb: <code>smoke</code>, <code>run</code>, <code>matrix</code>, <code>analyze</code>, <code>report</code>, <code>thesis</code>, <code>verify-claims</code>, <code>dashboard</code>, <code>agent-check</code>, <code>agent-handoff</code>, cluster helpers.</dd>
+<dt><code>CLAUDE.md</code> / <code>AGENTS.md</code></dt><dd>Identical twin instruction files for coding agents (kept in sync by a gate). They encode the PROJECT_LOG discipline, the report-worthiness rule, D42, and TC1 policy.</dd>
+<dt><code>todo.md</code></dt><dd>Tactical resumable-work queue (never the source of truth — that is PROJECT_LOG).</dd>
+<dt><code>package.json</code></dt><dd>Node tooling: <code>docx</code> (pinned 9.6.1) for the report/thesis builders, <code>@resvg/resvg-js</code> for figure rasterisation.</dd>
+</dl>
+<h3>Inside <code>ethical_benchmark/</code></h3>
+<dl>
+<dt><code>benchmarks/</code></dt><dd>One plugin per benchmark (<code>harmbench.py</code>, <code>xstest.py</code>, <code>mmlu.py</code>, <code>arc.py</code>), all implementing the same 4-method contract (<code>base.py</code>): load items, build prompt, score response, aggregate. <code>registry.py</code> maps names to plugins.</dd>
+<dt><code>models/loader.py</code></dt><dd>HF model loading: dtype resolution (<code>auto</code> → float16 on CUDA, float32 on CPU), on-the-fly <code>BitsAndBytesConfig</code> for NF4/INT8 (NF4 compute dtype = the same resolved fp16), <code>attn_implementation</code> threading (Phi needs <code>eager</code> on V100), and the <strong>fail-loud guard</strong>: if quantization was requested but did not engage, the run refuses to continue rather than silently emitting fp16 results labelled as quantized.</dd>
+<dt><code>models/generator.py</code>-style module</dt><dd>Batched generation through the chat template with <code>enable_thinking=False</code> (critical for Qwen3 — otherwise the token budget is consumed by thinking blocks), greedy decoding, seed control.</dd>
+<dt><code>pipeline/</code></dt><dd><code>run_quant_benchmark.py</code> (one model × one benchmark: resume logic keyed on prompt_id, force-restart unlink, record schema validation, summary writing incl. provenance fields) and <code>run_quant_matrix.py</code> (loads each model once, runs all its benchmarks, frees GPU memory between models).</dd>
+<dt><code>cluster/</code></dt><dd>SLURM sbatch generation/submission/status for TC1, preserving the mandatory bootstrap block (module load, conda env, offline env vars).</dd>
+<dt><code>analysis/compare_quant_pairs.py</code></dt><dd>Pairwise deltas, paired bootstrap CIs (2,000 resamples, seed 42), and the rule-based interpretation labels.</dd>
+<dt><code>quant/config_schema.py</code></dt><dd>Pydantic schema: every pair needs ≥1 baseline + ≥1 quantized member; <code>quant_method</code> ∈ {nf4, int8}; benchmark references validated.</dd>
+<dt><code>metrics/</code></dt><dd>JSONL/CSV IO, bootstrap helpers, summary-CSV upsert.</dd>
+<dt><code>harness/agent.py</code></dt><dd>The agent-harness gates (see <a href="#harness">§11</a>): doc-sync, project-log, immutable-artifacts, redaction, stale-text, report-freshness, pytest.</dd>
+<dt><code>judges/</code> + <code>scripts/run_judge_validation.py</code></dt><dd>The judge layer: official HarmBench 13B classifier (fp16, pinned official prompt template with a byte-level regression test, batch scoring, redacted sidecar output) and the GPT-4o API judge.</dd>
+</dl>
+<h3>Key scripts</h3>
+<dl>
+<dt><code>scripts/build_fyp_report_v5.js</code> → <code>docs/FYP_Report_2026-07-01_v5.docx</code></dt><dd>The canonical interim report builder (docx-js). The docx is an artifact; the .js is the source — never hand-edit the docx. Earlier report builders v1–v4 are retained only as history for the superseded, archived docx.</dd>
+<dt><code>scripts/build_fyp_thesis_v4.js</code> → <code>docs/FYP_Thesis_2026-07-02_v4.docx</code></dt><dd>The canonical standalone thesis (512-primary mirror). Thesis builders v1–v3 are 128-era history; their banner-marked docx live in docs/archive/ (superseded).</dd>
+<dt><code>scripts/verify_report_claims.py</code></dt><dd><strong>The machine claim lock (55 checks)</strong> — see <a href="#harness">§11</a>.</dd>
+<dt><code>scripts/judge_agreement.py</code> / <code>judge_pairwise_agreement</code> outputs</dt><dd>Judge-vs-regex and judge-vs-judge agreement (Cohen's κ, agreement rates, per-pair deltas + McNemar).</dd>
+<dt><code>scripts/multiple_comparisons.py</code></dt><dd>The BH-FDR family: 20 contrasts (5 pairs × {ASR-judge, MMLU, ARC, over-refusal}), exact McNemar p per contrast, q-values, survivor list, MDE/power analysis.</dd>
+<dt><code>scripts/genlen_512_analysis.py</code> → <code>genlen_robustness.json</code></dt><dd>The 128-vs-512 comparison: per-pair ASR at both budgets with CIs and flip counts, response-length stats, and the direct prefix-truncation test.</dd>
+<dt><code>scripts/sensitivity_analysis.py</code></dt><dd>Multi-seed aggregation (mean/sd/min/max per pair, sign-consistency, greedy-in-range with float tolerance).</dd>
+<dt><code>scripts/precision_sweep_analysis.py</code> → <code>precision_sweep.json</code></dt><dd>fp16 → INT8 → NF4 per-metric traces, shape classification, INT8 McNemar under both judges.</dd>
+<dt><code>scripts/rescore_harmbench.py</code></dt><dd>Post-hoc re-scoring of saved generations (writes derived sidecars only; raws immutable).</dd>
+<dt><code>scripts/number_bible_512.py</code></dt><dd>Prints an authoritative digest of every headline number from <code>results_512/analysis/</code> — your quick cross-check tool.</dd>
+<dt><code>scripts/make_figures.py</code></dt><dd>Deterministically regenerates all six figures from analysis JSON (env-switchable between trees).</dd>
+<dt><code>scripts/human_label_audit.py</code></dt><dd>T30 tooling: builds the annotation sheet + HTML annotator; later applies your labels and scores classifier-vs-human and regex-vs-human agreement.</dd>
+<dt><code>scripts/prefetch_tc1.py</code></dt><dd>Head-node pre-caching of datasets/weights (TC1 compute nodes run fully offline).</dd>
+</dl>
+
+<!-- ==================================================================== -->
+<h2 id="stack"><span class="no">04</span>Technical stack</h2>
+<div class="tbl-scroll"><table>
+<tr><th>Layer</th><th>Technology</th><th>Notes</th></tr>
+<tr><td>Language</td><td>Python 3.11 (venv)</td><td>Dependencies pinned in <code>requirements.txt</code> (+ <code>requirements-dashboard.txt</code>).</td></tr>
+<tr><td>Model runtime</td><td>PyTorch + Hugging Face <code>transformers</code></td><td><code>dtype: auto</code> resolves to float16 on CUDA; <code>trust_remote_code: false</code> for every model (Phi loads via transformers' native Phi3 path).</td></tr>
+<tr><td>Quantization</td><td><code>bitsandbytes</code></td><td>NF4 4-bit (double quantization; compute dtype = fp16) and LLM.int8 (outlier columns kept high-precision). Applied on the fly via <code>BitsAndBytesConfig</code> at <code>from_pretrained</code> — no separate quantized checkpoints, which is what makes the pairs truly matched.</td></tr>
+<tr><td>Config/validation</td><td>Pydantic v2</td><td>Schema-validated YAML configs.</td></tr>
+<tr><td>Cluster</td><td>NTU TC1 · SLURM · NVIDIA V100-32GB</td><td>Partition UGGPU-TC1; 1 GPU/job, 6 h walltime, 10 GB host mem/job; strict no-compute-on-head-node policy; compute nodes offline (<code>HF_HUB_OFFLINE=1</code> etc.), everything pre-cached.</td></tr>
+<tr><td>Judges</td><td><code>cais/HarmBench-Llama-2-13b-cls</code> (fp16, on TC1) + GPT-4o (API, local)</td><td>Primary + independent second judge; both blind to which arm produced a generation.</td></tr>
+<tr><td>Statistics</td><td>NumPy/SciPy-style implementations in-repo</td><td>Paired bootstrap (2,000 resamples, seed 42), exact McNemar, BH-FDR, MDE/power. All unit-tested.</td></tr>
+<tr><td>Documents</td><td>Node 24 + <code>docx</code> 9.6.1 (pinned in package.json)</td><td>Report and thesis are <em>generated</em> — the .js builders are the editable sources.</td></tr>
+<tr><td>Figures</td><td>matplotlib</td><td>Deterministic regeneration from analysis JSON.</td></tr>
+<tr><td>Dashboard</td><td>Streamlit + Plotly</td><td>Read-only over the evidence trees; judge-primary numbers; editorial theme.</td></tr>
+<tr><td>Testing/CI discipline</td><td>pytest (339 tests) + the agent harness gates</td><td><code>make agent-check</code> = doc-sync, log discipline, immutable artifacts, redaction, stale-text, report freshness, pytest.</td></tr>
+<tr><td>Repo</td><td>Public GitHub</td><td>Which is why the redaction discipline exists: raw harmful text is never committed.</td></tr>
+</table></div>
+
+<!-- ==================================================================== -->
+<h2 id="apparatus"><span class="no">05</span>The evaluation apparatus, end to end</h2>
+<p>One benchmark run flows through these stages. The same apparatus ran twice in full — first at the initial 128-token budget, then (as the primary study) at 512.</p>
+<div class="flow">
+  <span class="step">YAML config</span><span class="arr">→</span>
+  <span class="step">Pydantic validation</span><span class="arr">→</span>
+  <span class="step">seed 42 (Python/NumPy/Torch)</span><span class="arr">→</span>
+  <span class="step">loader (fp16 or on-the-fly NF4/INT8)</span><span class="arr">→</span>
+  <span class="step">batched chat-template generation</span><span class="arr">→</span>
+  <span class="step">plugin scoring</span><span class="arr">→</span>
+  <span class="step">raw.jsonl + summary.json (immutable)</span><span class="arr">→</span>
+  <span class="step">judge sidecars (redacted)</span><span class="arr">→</span>
+  <span class="step">analysis JSON</span><span class="arr">→</span>
+  <span class="step">report / thesis / dashboard</span>
+</div>
+<h3>Stage details</h3>
+<ol>
+<li><strong>Config.</strong> <code>configs/tc1_512.yaml</code> declares the 10 aliases (5 pairs × base/4bit), decoding controls, benchmark sample budgets, and cluster parameters. Separate configs isolate the INT8 arm (<code>tc1_int8_512.yaml</code> — only the five <code>*_8bit</code> aliases run; they share the 512 fp16 baselines) and the multi-seed arm (<code>tc1_sensitivity_512.yaml</code>: temperature 0.7, top-p 0.8, seeds 1–5, three pairs).</li>
+<li><strong>Loading.</strong> Both pair members load from the identical HF snapshot. The quantized member differs only by a <code>BitsAndBytesConfig</code>. The fail-loud guard verifies quantization actually engaged. Provenance (quant method, resolved dtype) is persisted in summaries for future runs; for the committed studies it is fixed by study name + config + loader code.</li>
+<li><strong>Generation.</strong> Greedy (temperature 0.0, top-p 1.0), <code>max_new_tokens</code> 512 (primary) — the budget HarmBench standardizes — with <code>enable_thinking=False</code> so Qwen3's thinking mode cannot eat the budget. Batch size 4. Every prompt/response pair is written to <code>raw.jsonl</code> with full metadata (pair_id, alias, quantized flag, generation config, seed, timestamp) for auditability.</li>
+<li><strong>Plugin scoring.</strong> Each benchmark scores its own responses (details in <a href="#benchmarks">§6</a>). Post-hoc scorer revisions never touch raws — they write derived <code>scores.v2.jsonl</code>/<code>summary.v2.json</code> sidecars.</li>
+<li><strong>Judging.</strong> The official HarmBench classifier re-scores every HarmBench generation (fp16, greedy, max_new_tokens 1, the pinned official prompt template, zero parse errors across 3,000 classifications at 512). Output is a <em>redacted</em> sidecar: prompt IDs + yes/no booleans only — no text — so it can live in the public repo. GPT-4o applies the same rubric as the independent second judge. Both judges see only (behaviour, generation) — never which arm produced it.</li>
+<li><strong>Analysis.</strong> <code>make analyze</code> + the diagnostic scripts produce the <code>analysis/</code> JSON: pairwise deltas with bootstrap CIs, the 20-contrast McNemar + BH-FDR family, judge agreement (κ), the genlen comparison, the precision sweep, the multi-seed aggregates, and the six-label interpretation table.</li>
+<li><strong>Interpretation labels.</strong> A deterministic rule table over (Δsafety, Δcapability): <code>broad_degradation</code>, <code>alignment_degradation</code>, <code>alignment_improvement</code>, <code>capability_collapse_masquerading_as_safety</code>, <code>over_refusal_regression</code>, <code>robust_preservation</code> — each carrying a separate <code>evidence_status</code> (confirmed / directional / null) so a point-estimate label is never confused with a statistically confirmed one.</li>
+</ol>
+<div class="card">
+<h4>Immutability &amp; privacy invariants (worth internalising)</h4>
+<ul>
+<li><code>raw.jsonl</code> + <code>summary.json</code> are immutable TC1 originals — hash-pinned in a committed manifest (300 files across the 128, 512, and sensitivity trees). The gate fails on any mutation, any unmanifested new raw, and any partial local deletion.</li>
+<li>Nothing containing raw prompt/response text is ever committed (public repo). Committed evidence = redacted sidecars + aggregates; the redaction gate scans them.</li>
+<li>Resume logic keys on <code>prompt_id</code>, so interrupted cluster runs continue without double-counting.</li>
+</ul>
+</div>
+
+<!-- ==================================================================== -->
+<h2 id="benchmarks"><span class="no">06</span>The four benchmarks + the threat model</h2>
+<div class="tbl-scroll"><table>
+<tr><th>Benchmark</th><th>Axis</th><th>n / source</th><th>Metric &amp; scorer</th><th>What to know when vetting</th></tr>
+<tr><td><strong>HarmBench</strong></td><td>Harmful compliance</td><td>200 · walledai/HarmBench, <code>standard</code> config</td><td>Attack Success Rate; PRIMARY scorer = official HarmBench 13B classifier; v2 regex retained as a demoted non-refusal proxy; GPT-4o second judge</td><td><strong>Direct requests only</strong> — no attack augmentation. Absolute ASR is budget-dependent by construction; only the paired deltas carry claims.</td></tr>
+<tr><td><strong>XSTest</strong></td><td>Over-refusal</td><td>250 benign (of 450 in the v2 CSV; the 200 <code>contrast_*</code> unsafe prompts are not part of the over-refusal metric)</td><td>Over-refusal rate; deterministic v2 refusal parser (the judge covers HarmBench only)</td><td>Regex-scored by design — a disclosed weaker construct.</td></tr>
+<tr><td><strong>MMLU</strong></td><td>Capability (anchor)</td><td>300 = 6 subjects × 50 · cais/mmlu</td><td>Exact-match accuracy, zero-shot</td><td>A controlled subset anchor for within-pair comparison — NOT comparable to 5-shot leaderboard numbers (disclosed).</td></tr>
+<tr><td><strong>ARC-Challenge</strong></td><td>Capability (2nd axis)</td><td>1,172 (full test split) · allenai/ai2_arc</td><td>Exact-match accuracy</td><td>Structurally different second capability benchmark so capability claims never rest on one test.</td></tr>
+</table></div>
+<div class="card warn">
+<h4>The threat model, precisely</h4>
+<p>HarmBench is a red-teaming <em>framework</em>: its full pipeline feeds behaviours through 18 attack methods (GCG, PAIR, AutoDAN, …). This study evaluates the <code>standard</code> behaviours <em>presented directly</em>, with no attack applied — equivalent to HarmBench's DirectRequest baseline, the weakest threat model in its taxonomy. That is why even well-aligned baselines show non-trivial ASR (e.g. Mistral-7B at 0.585 under the classifier at 512: direct-request compliance of a weakly-guarded model, not "jailbreak success"). Every safety claim in both documents is scoped accordingly; an attack-augmented arm is the top future-work item.</p>
+</div>
+
+<!-- ==================================================================== -->
+<h2 id="scoring"><span class="no">07</span>Scoring: the three-scorer story</h2>
+<p>The single most important epistemic thread in this project. Scoring changed twice, and each change altered the conclusion — which became a finding in itself.</p>
+<ol>
+<li><strong>v1 regex (retired).</strong> A small refusal-pattern list. It missed modern refusal templates ("I can't fulfill this request…"), misclassifying clear refusals as harmful compliance. Fixed as T13.</li>
+<li><strong>v2 regex (demoted to proxy).</strong> Forty-plus patterns, apostrophe-normalised, regression-tested. Deterministic and reproducible — but it measures <em>non-refusal</em>, not harm: vague deflections, safety lectures, and benign on-topic answers all count as "attack success". Retained in Tables 6.1/6.2 as a transparent proxy so readers can see exactly where refusal-counting diverges.</li>
+<li><strong>Official HarmBench classifier (PRIMARY, D16).</strong> The benchmark's own fine-tuned 13B judge, run at full precision so the instrument is not itself confounded by quantization. The validation showed the regex <em>over-counts</em>, one-directionally (aggregate: 325 regex-only harmful labels vs 29 judge-only across ten models) and unevenly by family — judge-vs-regex κ at 512: Qwen 0.36–0.59, Mistral 0.25–0.28 (worst), Llama 0.71–0.84, Phi 0.67–0.77.</li>
+<li><strong>GPT-4o second judge (D25).</strong> Architecturally independent, same rubric, re-scores the same saved generations. Cross-judge κ 0.68–0.95 at 512 across all ten models — the finding does not depend on one classifier.</li>
+</ol>
+<p><strong>The honest residual:</strong> both judges are LLMs; no human gold set exists yet. That is exactly what T30 closes — your 200-row annotation upgrades "two judges agree" to human-grounded validation.</p>
+
+<!-- ==================================================================== -->
+<div class="kicker">The science</div>
+<h2 id="stats"><span class="no">08</span>The statistics, explained (what each test is and what to check)</h2>
+<dl>
+<dt>Paired design</dt>
+<dd>Both pair members answer the <em>identical</em> prompt set. Every contrast is within-pair, prompt-by-prompt — far more sensitive than comparing two independent samples, and the reason the specialized paired tests below apply.</dd>
+<dt>McNemar's exact test</dt>
+<dd>The textbook-correct test for paired binary outcomes. Ignore prompts where both members agree; look only at <em>discordant</em> prompts — b flipped safe→harmful, c flipped harmful→safe — and ask whether the split is more lopsided than a fair coin over b+c flips. Example to internalise: Qwen3-1.7B at 512 has 32 discordant prompts splitting exactly 16/16 → p = 1.000, delta exactly 0. <em>Vet check:</em> every ΔASR in the report should carry a McNemar p; symmetric flips = churn, not direction.</dd>
+<dt>Paired bootstrap 95% CI</dt>
+<dd>Resample the 200 prompt indices with replacement 2,000 times (seed 42), recompute the delta each time, take the 2.5th/97.5th percentiles. Reflects prompt-sampling variance only (decoding is greedy). <em>Nuance you should know:</em> bootstrap endpoints are stochastic across independent re-emissions — two committed artifacts differ by ≤0.005 on some endpoints (documented in the ledger); the claim-locked values come from <code>headline_512_vs_128.json</code>.</dd>
+<dt>Benjamini–Hochberg FDR correction</dt>
+<dd>The study makes 20 primary NF4-vs-fp16 comparisons (5 pairs × 4 metrics). At α = 0.05, one expects ~1 false positive among 20, so raw "significance" is not enough. BH controls the expected fraction of false discoveries: sort the 20 p-values, find the largest p ≤ (rank/20)·0.05. Exactly 3 survive — and none is a safety increase. <em>Vet check:</em> any claim of "significant" in the report should say whether it survives correction.</dd>
+<dt>MDE / power</dt>
+<dd>The minimum detectable effect: with n = 200 and the observed discordant rates (median ≈ 0.09), the smallest ΔASR detectable with 80% power is ≈ 0.06. So the safety nulls are <em>power-bounded</em> ("no detectable change at n = 200"), never "proven zero" — and the report says so. The multi-seed sign-consistency for the smallest pair (all five seed deltas ≥ 0, mean +0.013) is disclosed as compatible with a real sub-floor effect.</dd>
+<dt>Cohen's κ</dt>
+<dd>Agreement corrected for chance: κ = (observed − expected)/(1 − expected). Raw agreement can look high when one label dominates; κ punishes that. Rough reading: ≥0.8 almost perfect, 0.6–0.8 substantial, 0.4–0.6 moderate, below that poor.</dd>
+<dt>Evidence status (project convention, D19)</dt>
+<dd>Every interpretation label carries confirmed / directional / null depending on whether the keyed delta's CI excludes zero (and McNemar agrees, for HarmBench). This prevents a point-estimate label from masquerading as a confirmed finding.</dd>
+</dl>
+
+<!-- ==================================================================== -->
+<h2 id="budget"><span class="no">09</span>The 128 → 512 story (the project's turning point)</h2>
+<p>The study initially ran at a 128-token generation budget. At that 128 budget, the apparent headline was a statistically significant ΔASR of +0.055 in Qwen3-1.7B (McNemar p = 0.027) — and later, an INT8-specific increase on Llama-3B of +0.040, significant under both judges at 128.</p>
+<p><strong>The suspicion:</strong> responses looked short. <strong>The evidence:</strong> a direct prefix test over all 2,000 paired generations — if the 512-token generation continues past the exact point where the 128-token one stops, the 128 response was provably truncated mid-answer.</p>
+<div class="tbl-scroll"><table>
+<tr><th>Prefix-test outcome (n = 2,000)</th><th>Share</th><th>Meaning</th></tr>
+<tr><td>Provably truncated</td><td><span class="num">60.3%</span> (1,206)</td><td>The 128-token cap cut the answer off mid-generation; the classifier was scoring incomplete text, and where the cut fell could flip a label either way.</td></tr>
+<tr><td>Natural stop</td><td><span class="num">30.5%</span> (610)</td><td>The model finished on its own within 128 tokens.</td></tr>
+<tr><td>Prefix mismatch</td><td><span class="num">9.2%</span> (184)</td><td>The two nominally-greedy runs diverge early (cross-run kernel/batching non-determinism, Llama-concentrated). Conservatively excluded — so 60.3% is a floor. Within-run deltas are unaffected.</td></tr>
+</table></div>
+<p>Truncation is family-heterogeneous: Mistral 93.5–98.0%, Phi 73.5–78.5%, Qwen 54.5–70.0%, Llama only 3.0–4.0% at the 128 budget.</p>
+<div class="card gold">
+<h4>Why 512 is not an arbitrary choice</h4>
+<p>The HarmBench paper shows the number of generated tokens can change measured ASR by up to 30% and <em>standardizes the parameter to N = 512</em> ("we standardize this parameter to N = 512 to allow the metric to converge"); the official evaluation harness likewise clips completions to 512 tokens before classification. Rerunning at 512 is adopting the benchmark's own protocol — verified from the paper and the official repository.</p>
+</div>
+<p><strong>What happened at 512:</strong> the Qwen3-1.7B effect that was +0.055 at 128 became exactly 0.000 under the classifier (+0.005 under GPT-4o; McNemar p = 1.000 under both) — the discordant prompts split a perfectly symmetric 16/16. The Llama INT8 increase (+0.040 at 128) became +0.005 (p = 1.000) / +0.010 (p = 0.688). <strong>The capability deltas barely moved between budgets</strong> — truncation had manufactured the safety signal, not the capability one. That asymmetry is the cleanest evidence the 128-era signals were budget artefacts.</p>
+
+<!-- ==================================================================== -->
+<h2 id="results"><span class="no">10</span>Results at 512 — every number you need to vet against</h2>
+<p class="small">Every figure below is enforced by the claim lock against <code>results_512/analysis/</code>. If you want to recompute any of them: <code>python scripts/number_bible_512.py</code>.</p>
+<h3>Main study (fp16 vs NF4), judge-primary</h3>
+<div class="tbl-scroll"><table>
+<tr><th>Pair</th><th>ASR base→4bit</th><th>ΔASR (95% CI)</th><th>McNemar p</th><th>ΔMMLU</th><th>ΔARC</th><th>ΔOR</th><th>Label (evidence)</th></tr>
+<tr><td>qwen_2b (Qwen3-1.7B)</td><td class="num">0.255→0.255</td><td class="num">0.000 [−0.055, +0.055]</td><td class="num">1.000</td><td class="num">−0.090 ★</td><td class="num">−0.009</td><td class="num">−0.028</td><td>broad_degradation — capability-driven, harm flat (confirmed via MMLU)</td></tr>
+<tr><td>qwen_4b (Qwen3-4B)</td><td class="num">0.115→0.155</td><td class="num">+0.040 [0.000, +0.080]</td><td class="num">0.096</td><td class="num">−0.003</td><td class="num">−0.016 ★</td><td class="num">0.000</td><td>alignment_degradation (directional — not confirmed)</td></tr>
+<tr><td>llama_3_2_3b</td><td class="num">0.100→0.060</td><td class="num">−0.040 [−0.075, −0.010]</td><td class="num">0.021</td><td class="num">−0.037</td><td class="num">−0.032 ★</td><td class="num">+0.016</td><td>capability_collapse_masquerading_as_safety (directional)</td></tr>
+<tr><td>mistral_7b</td><td class="num">0.585→0.565</td><td class="num">−0.020 [−0.080, +0.040]</td><td class="num">0.627</td><td class="num">−0.020</td><td class="num">+0.009</td><td class="num">+0.004</td><td>alignment_improvement (directional)</td></tr>
+<tr><td>phi4_mini</td><td class="num">0.070→0.090</td><td class="num">+0.020 [−0.015, +0.055]</td><td class="num">0.424</td><td class="num">−0.027</td><td class="num">−0.015</td><td class="num">−0.044 ★</td><td>robust_preservation (null)</td></tr>
+</table></div>
+<p class="small">★ = CI excludes zero. BH-FDR survivors (q &lt; 0.05): qwen_2b MMLU (q=0.008), llama ARC (q=0.008), phi over-refusal (q=0.049). Zero ASR contrasts survive. Phi's is the only over-refusal delta significant under the exact test (qwen_2b's −0.028 is borderline, p=0.065) — and it is a <em>decrease</em>.</p>
+<h3>Judge agreement at 512</h3>
+<ul>
+<li><strong>Judge vs regex proxy (Cohen's κ):</strong> qwen_2b 0.36/0.41 · qwen_4b 0.49/0.59 · llama 0.71/0.84 · mistral 0.28/0.25 · phi 0.67/0.77 (base/4bit). Example of the over-count: Qwen3-1.7B base regex 0.595 vs judge 0.255; Mistral 4-bit regex 0.890 vs judge 0.565.</li>
+<li><strong>Judge vs GPT-4o (cross-judge κ):</strong> 0.68–0.95 across all ten models (floor = phi base 0.68; peak = llama 4bit 0.95). Per-pair deltas agree in direction; GPT-4o gives qwen_2b +0.005 and llama −0.035.</li>
+</ul>
+<h3>Precision sweep (judge ASR, fp16 / INT8 / NF4)</h3>
+<div class="tbl-scroll"><table>
+<tr><th>Pair</th><th>fp16</th><th>INT8</th><th>NF4</th><th>Reading</th></tr>
+<tr><td>qwen_2b</td><td class="num">0.255</td><td class="num">0.245</td><td class="num">0.255</td><td>flat; the capability cliff is at NF4 (MMLU 0.643→0.657→0.553)</td></tr>
+<tr><td>qwen_4b</td><td class="num">0.115</td><td class="num">0.125</td><td class="num">0.155</td><td>small graded drift, n.s. at each step</td></tr>
+<tr><td>llama_3_2_3b</td><td class="num">0.100</td><td class="num">0.105</td><td class="num">0.060</td><td>flat at INT8; the NF4 point is the −0.040 decrease</td></tr>
+<tr><td>mistral_7b</td><td class="num">0.585</td><td class="num">0.565</td><td class="num">0.565</td><td>small decrease, n.s.</td></tr>
+<tr><td>phi4_mini</td><td class="num">0.070</td><td class="num">0.090</td><td class="num">0.090</td><td>small increase, n.s.</td></tr>
+</table></div>
+<p>Every INT8 capability point estimate sits within ~1.3 pp of fp16 (INT8 is effectively free); every INT8 ASR contrast is non-significant under both judges at 512.</p>
+<h3>Multi-seed arm (512, temperature 0.7, seeds 1–5, three pairs)</h3>
+<ul>
+<li>qwen_2b: per-seed ΔASR mean <span class="num">+0.013</span>, range <span class="num">[0.000, +0.035]</span>, 0/5 individually significant, greedy 0.000 inside the range — <em>and</em> all five deltas non-negative (a sub-MDE directional signal, disclosed).</li>
+<li>qwen_4b: mean <span class="num">+0.029</span> (1/5 significant) — consistent with its directional primary delta.</li>
+<li>llama: mean <span class="num">−0.024</span>, no positive seed — consistent with its primary decrease.</li>
+</ul>
+<h3>Scale &amp; volume facts</h3>
+<p>15 aliases × 200 HarmBench prompts = 3,000 judge classifications at 512, zero parse errors. Sample sizes 200 / 250 / 300 / 1,172. All runs seed 42, greedy. Baseline MMLU anchors: 0.643 (Qwen3-1.7B), 0.747 (Qwen3-4B), 0.610 (Llama-3B).</p>
+
+<!-- ==================================================================== -->
+<div class="kicker">The discipline</div>
+<h2 id="harness"><span class="no">11</span>The agent harness &amp; the machine claim lock</h2>
+<p>This project is co-built with AI agents on a public repo, which creates two risks the harness exists to kill: <em>stale claims</em> (a number changes but old prose survives somewhere) and <em>evidence damage/leaks</em>. The harness is machine-checked, not prose-promised.</p>
+<h3>The lock ("agent lock"): <code>scripts/verify_report_claims.py</code> — 55 checks</h3>
+<div class="card">
+<p>Every load-bearing number in the report AND thesis builders is asserted in <strong>two directions</strong>: (a) the document text still contains the claim string (catches silent rewording), and (b) the value recomputed live from the committed analysis artifacts equals the claim (catches drift from evidence). Plus IEEE citation-consistency checks for both documents: every reference cited, no citation beyond the list, numbering strictly by first use. It runs via <code>make verify-claims</code> and inside pytest — so a drifted claim turns the whole 339-test suite red.</p>
+<p><strong>Why it exists:</strong> when it was first run, it immediately caught six errors that <em>seven external review rounds and a five-agent adversarial audit had all missed</em> — including a prose/table mismatch masked by an identical delta, a stale 128-era κ pair, and three drifted CI endpoints. Prose is not self-verifying. Never hand-verify a report number; run the lock.</p>
+</div>
+<h3>The gates: <code>make agent-check</code></h3>
+<div class="tbl-scroll"><table>
+<tr><th>Gate</th><th>What it catches</th><th>What it can NOT catch</th></tr>
+<tr><td>agent-doc-sync</td><td>CLAUDE.md / AGENTS.md drift (they must stay identical below the header).</td><td>Content errors both share.</td></tr>
+<tr><td>project-log-update</td><td>Repo changes without a PROJECT_LOG changelog row.</td><td>Wrong content in the row.</td></tr>
+<tr><td>immutable-artifacts</td><td>Any mutation of a hash-pinned raw file, any unmanifested new raw, any <em>partial</em> local deletion (300-file manifest). Full absence passes (fresh clone/CI).</td><td>Semantic errors inside legitimately-derived files.</td></tr>
+<tr><td>redaction</td><td>Raw-text field names (<code>"response":</code> etc.) anywhere in committed docs, sidecars, and analysis outputs (413 files scanned).</td><td>Leaks phrased outside the pattern list.</td></tr>
+<tr><td>stale-text</td><td>Retired claims cited as current: superseded docx names, un-scoped 128-era numbers (the +0.055 and retired-κ guards demand "128" on the same line), retired headline phrasings. Scans instruction files, docs, code, decks, AND the canonical report/thesis builder sources.</td><td>Stale numbers not matching a written pattern — which is why the claim lock exists as the complementary positive check.</td></tr>
+<tr><td>report-freshness</td><td>A report-worthy source change without a regenerated docx (the builder is a trigger, never a satisfier).</td><td>Report-worthiness of changes outside the pattern list.</td></tr>
+<tr><td>pytest</td><td>All 339 tests, including the claim lock, guard regressions (e.g. the case-variant evidence-dir bypass), redaction self-tests, and the schema/pipeline/stats layers.</td><td>Anything without a test.</td></tr>
+</table></div>
+<h3>The conventions (the "D" decisions that govern behaviour)</h3>
+<ul>
+<li><strong>PROJECT_LOG discipline:</strong> every change writes a changelog row; decisions go to §3; state changes to §1. When in doubt, write it down.</li>
+<li><strong>D42 — sweep the claim surface:</strong> when a change alters what is <em>true</em>, grep the whole repo for the old <em>numbers</em> (not just filenames), fix or scope every current-facing hit, and add a machine guard for the invariant. Never cite a passing gate for a property it does not test.</li>
+<li><strong>D43 — the audit conventions:</strong> disclose the threat model wherever the safety axis is claimed; stale-scan the document <em>sources</em>; banner point-in-time deliverables until mirrored; make evidence guards physical (inode-level), not lexical; and adversarially cross-verify every external finding (human or AI) against primary artifacts before acting — two confident audit findings were refuted this way.</li>
+</ul>
+
+<!-- ==================================================================== -->
+<h2 id="audits"><span class="no">12</span>The audit history — what each round caught (and why errors kept appearing)</h2>
+<p>You asked, reasonably, how errors kept surviving. The pattern across all rounds: <strong>each verification only ever covers its own perimeter.</strong> Diff-scoped review missed repo-wide staleness; repo-wide grep missed unscanned file types; a five-agent audit missed what only mechanical value-comparison finds. Each round therefore both fixed findings and widened the machine-checked perimeter.</p>
+<div class="tbl-scroll"><table>
+<tr><th>Round</th><th>Perimeter</th><th>Representative catches</th><th>Structural fix added</th></tr>
+<tr><td>Codex rounds 1–5 (v5 re-base)</td><td>Report content + instruction layer</td><td>Stale 128-era claims cited as current in surfaces outside the report; judge-prose lagging the 512 run; power-note hardcoding</td><td>D42 rule; stale-RESULT text guards, self-tested</td></tr>
+<tr><td>Codex round 6</td><td>State docs + decks</td><td>Post-commit state lag; an as-sent deck carrying the retired headline phrase without numbers</td><td>Phrase-level guard; archive discipline for as-sent artifacts</td></tr>
+<tr><td>Codex round 7</td><td>Dashboard</td><td>Run page could execute into the evidence tree; a label rebuilt from a rounded delta disagreed with the canonical artifact</td><td>Protected-dir guard + canonical-label preference + regression tests</td></tr>
+<tr><td>D43 five-agent adversarial audit</td><td>Methods, setup, stats, citations, code</td><td>DirectRequest framing undisclosed; stale 128-era κ in §6.13; thesis layer contradicting the report; case-variant guard bypass (verified live by inode)</td><td>Threat-model disclosure everywhere; builder sources stale-scanned; thesis banners; inode+casefold guard; gate fails on partial evidence deletion</td></tr>
+<tr><td>Claim lock, first run</td><td>Every number, mechanically</td><td>Six errors all previous rounds missed — e.g. a prose/table mismatch hidden by an identical delta (0.825/0.890 vs a mistyped pair), a 128-era cross-judge κ presented as current, three drifted CI endpoints</td><td>The 55-check lock riding pytest</td></tr>
+<tr><td>Independent verifier on thesis v4</td><td>The freshly-written mirror</td><td>"Every point lies below the diagonal" was false (8/10); a figure's <em>embedded title</em> still carried 128-era framing; an artifact-unbacked significance claim</td><td>Figure titles now sourced from the corrected generator; claims softened to artifact-backed forms</td></tr>
+<tr><td>References + fitness pass</td><td>Citations: existence, then <em>use</em></td><td>A real mis-attribution (calibration paper cited for an instruction-following claim); four listed-but-never-cited references; a 128-era "matches the degradation literature" framing; scope overstatement ("each evaluates dozens of models")</td><td>IEEE consistency checks in the lock; every citation site abstract-verified (ledger §2c)</td></tr>
+</table></div>
+<p><strong>The honest takeaway:</strong> the numbers now cannot drift silently (machine-locked), citations cannot dangle or disorder (machine-locked), and retired claims cannot be cited as current in scanned surfaces (guarded). What remains un-machine-checkable is judgment — framing, emphasis, flow — which is §14.</p>
+
+<!-- ==================================================================== -->
+<h2 id="limits"><span class="no">13</span>Limitations &amp; threat model — the honest list</h2>
+<ol>
+<li><strong>Threat model:</strong> direct requests only; nothing here speaks to jailbreak robustness under optimized attacks — which is precisely where some prior work reports quantization effects. (Top future-work item: a GCG/PAIR arm.)</li>
+<li><strong>Power:</strong> n = 200 → MDE ≈ 0.06 at 80% power. All safety nulls are power-bounded, not proven zeros; the smallest pair's all-non-negative seed deltas are compatible with a real sub-floor effect.</li>
+<li><strong>Judge grounding:</strong> both scorers are LLMs; human gold labels (T30) are prepared but unlabelled. Until then the claim is "judge-cross-checked", not human-validated.</li>
+<li><strong>Method coverage:</strong> bitsandbytes NF4 + INT8 only. GGUF (the dominant on-device format), GPTQ, AWQ untested — the null may be method-specific, and deployment guidance is hedged accordingly.</li>
+<li><strong>Decoding:</strong> greedy primary; the multi-seed arm covers three of five pairs.</li>
+<li><strong>Capability anchor:</strong> zero-shot MMLU subset + ARC — controlled within-pair anchors, not leaderboard reproductions.</li>
+<li><strong>Scope:</strong> English, text-only; five pairs; fp16 (not bf16) baselines on V100 — symmetric within pairs, so deltas stay clean, but absolute numbers are fp16 values.</li>
+<li><strong>Generation budget:</strong> absolute ASR is budget-dependent by construction; controlled by adopting HarmBench's standardized 512 and keeping the 128 run purely as the comparison.</li>
+</ol>
+
+<!-- ==================================================================== -->
+<div class="kicker">Your job</div>
+<h2 id="human"><span class="no">14</span>What only you can judge (the structural review no machine performs)</h2>
+<p>Everything numeric and bibliographic is machine-locked. What remains is judgment — and an examiner will probe exactly these:</p>
+<ol>
+<li><strong>Narrative arc &amp; redundancy.</strong> The report grew by accretion (v1→v5 over six weeks). The 512-null is stated in the abstract, §6.3, §6.5, §6.9, §6.16, §7 and Ch10 — deliberate reinforcement or repetitive? Only a human read-through can tell. Same for Chapter 6's length: 16 subsections is thorough but heavy; consider whether §6.7/§6.8-class diagnostics could compress.</li>
+<li><strong>Voice consistency.</strong> Chapters were written in different eras (pre-judge, judge-era, 512-era). The facts are consistent; the <em>tone and emphasis</em> may still seam at chapter boundaries. Read Ch1 → Ch6 → Ch10 in one sitting and ask: does the promise → evidence → conclusion feel like one author on one day?</li>
+<li><strong>The title's "Judge-Validated".</strong> Defensible (validated against the benchmark's own classifier + a second judge), but a picky examiner may push "validated against what ground truth?" until T30 lands. Options: keep and pre-empt in the viva, soften to "judge-cross-checked", or finish T30 and keep it with full backing. Your call — it is the project's public face.</li>
+<li><strong>Contribution calibration.</strong> The Gap-2 novelty claim survived a full literature check, but <em>you</em> must own the precise wording at the viva: the defensible core is compact-regime coverage + matched-pair provenance control + the generation-budget finding + judge validation. Don't let the text (or your talk) slide toward "first integrated evaluation ever".</li>
+<li><strong>Declarations.</strong> The Declaration of Originality and the AI-usage declaration are personal statements. Verify every sentence is one you can defend word-by-word to NTU's rules — including the extent-of-assistance description. No agent can (or should) own these.</li>
+<li><strong>Supervisor expectations.</strong> Whether the milestone wants the interim report or the thesis, cover labels, and whether Dr. Zhang expects the June→July narrative framed as "self-correction" (as the email drafts do) — social context machines don't have.</li>
+<li><strong>Figures at human eyeballs.</strong> The figure <em>data</em> is generated from artifacts, but composition judgments (legibility at print size, colour in grayscale printing, caption completeness) need your eyes on the printed page.</li>
+<li><strong>The one number-adjacent judgment call:</strong> the report keeps the 128-token study as a first-class comparison (§6.16). An alternative structure buries it in an appendix. Keeping it prominent is the honest "self-correction" story — but that is a framing choice you should consciously endorse, since it also advertises that the project's first headline was an artefact.</li>
+</ol>
+
+<!-- ==================================================================== -->
+<h2 id="vetting"><span class="no">15</span>Report-vetting checklist (chapter → what to verify → how)</h2>
+<div class="tbl-scroll"><table>
+<tr><th>Report part</th><th>What to check</th><th>How (command / artifact)</th></tr>
+<tr><td>Abstract</td><td>Every number appears later in Ch6 with identical value; threat-model scoping present ("direct requests")</td><td><code>make verify-claims</code> covers the values; read for scoping</td></tr>
+<tr><td>Ch2 related work</td><td>Each citation's characterization matches the paper (all sites audited — ledger §2c/§4); you can summarize each cited paper in one sentence yourself</td><td><code>docs/REPORT_CLAIM_AUDIT_v5.md</code></td></tr>
+<tr><td>Ch3 methodology</td><td>Threat-model paragraph present; N=512 justification quotes the HarmBench paper; decoding controls table matches <code>configs/tc1_512.yaml</code></td><td>diff the table against the YAML</td></tr>
+<tr><td>Ch4/Ch5 system &amp; setup</td><td>Architecture matches the repo map (§3 of this guide); TC1 numbers match <code>configs/tc1*.yaml</code> and sbatch files</td><td>spot-check Appendix A/B against the real files</td></tr>
+<tr><td>Ch6 results</td><td>Tables 6.1–6.4 against the artifacts; labels + evidence status; every "significant" carries test + correction status</td><td><code>python scripts/number_bible_512.py</code>; <code>make verify-claims</code> (55/55)</td></tr>
+<tr><td>§6.12/§6.13 judge sections</td><td>κ values (the historically riskiest spot — three separate stale-κ incidents were fixed here); 128-era values only ever appear with explicit 128 scoping</td><td>lock enforces; grep the docx for "128" near any κ that surprises you</td></tr>
+<tr><td>§6.16 genlen</td><td>The 60.3/30.5/9.2 breakdown, family heterogeneity, and the mismatch-class disclosure are present</td><td><code>results_512/analysis/genlen_robustness.json</code></td></tr>
+<tr><td>Ch7–Ch10</td><td>No sentence implies a safety <em>degradation</em> finding at 512; deployment advice hedged to bitsandbytes + direct requests</td><td>read with §14's eyes</td></tr>
+<tr><td>References</td><td>25 entries, all cited, strict first-use order, venues correct</td><td>lock enforces; ledger §4 has per-reference evidence</td></tr>
+<tr><td>Whole repo</td><td>All gates green at the commit you submit from</td><td><code>make agent-check</code> → 7/7; <code>git log --oneline -1</code> into your notes</td></tr>
+</table></div>
+
+<!-- ==================================================================== -->
+<h2 id="glossary"><span class="no">16</span>Glossary</h2>
+<dl>
+<dt>ASR</dt><dd>Attack Success Rate — fraction of harmful prompts producing a genuinely harmful, complying response (per the primary classifier). Under this study's threat model: harmful compliance under direct requests.</dd>
+<dt>NF4 / LLM.int8</dt><dd>bitsandbytes 4-bit "normal-float" quantization (with double quantization) / 8-bit mixed-precision scheme keeping outlier feature dimensions in higher precision.</dd>
+<dt>Matched pair</dt><dd>Baseline + quantized model loaded from identical weights; quantization applied at load time; the study's core internal-validity device.</dd>
+<dt>Judge / proxy</dt><dd>Judge = the official HarmBench 13B classifier (primary scorer). Proxy = the deterministic v2 refusal regex, demoted after validation showed it over-counts; retained for transparency.</dd>
+<dt>Direct request / DirectRequest</dt><dd>Presenting the harmful behaviour string as-is, with no adversarial attack transformation — HarmBench's weakest threat model, and this study's configuration.</dd>
+<dt>Discordant prompts / flips</dt><dd>Prompts scored harmful under exactly one pair member — the only prompts McNemar's test looks at. n01/n10 = flips in each direction.</dd>
+<dt>BH-FDR / q-value</dt><dd>Benjamini–Hochberg false-discovery-rate control over the 20-contrast family; q = the FDR-adjusted significance level at which the contrast would survive.</dd>
+<dt>MDE</dt><dd>Minimum detectable effect at 80% power — ≈0.06 ΔASR here; the floor below which this study cannot see.</dd>
+<dt>Evidence status</dt><dd>confirmed / directional / null — attached to every interpretation label so point-estimate labels can't impersonate confirmed findings.</dd>
+<dt>Sidecar</dt><dd>A derived, committed file (redacted scores, IDs + booleans) written alongside immutable raws — the mechanism that lets a public repo carry evidence without carrying harmful text.</dd>
+<dt>Claim lock</dt><dd><code>verify_report_claims.py</code>: 55 machine checks pinning both documents' numbers and citations to the committed artifacts.</dd>
+<dt>D-numbers / T-numbers</dt><dd>Decisions / tasks in PROJECT_LOG (e.g. D16 judge-primary, D41 512-primary, D42 claim-surface sweep, D43 audit conventions; T30 human gold set).</dd>
+</dl>
+
+<!-- ==================================================================== -->
+<h2 id="commands"><span class="no">17</span>Command crib sheet</h2>
+<pre>
+# --- verify everything (your pre-submission ritual) ---
+make verify-claims        # 55-check claim lock: numbers + citations vs artifacts
+pytest tests/ -q          # 339 tests (the lock rides inside)
+make agent-check          # all 7 harness gates
+python scripts/number_bible_512.py   # print every headline number from the artifacts
+
+# --- regenerate deliverables (sources are the .js builders) ---
+make report               # -> docs/FYP_Report_2026-07-01_v5.docx
+make thesis               # -> docs/FYP_Thesis_2026-07-02_v4.docx
+
+# --- explore ---
+make dashboard            # Streamlit GUI (read-only over evidence; runs go to results_dev/)
+make smoke                # 20-sample end-to-end sanity run (local)
+
+# --- the evidence chain, if you want to walk it by hand ---
+results_512/analysis/multiple_comparisons.json    # BH family, survivors, power
+results_512/analysis/headline_512_vs_128.json     # per-pair ASR at both budgets, CIs, flips
+results_512/analysis/judge_agreement.json         # judge-vs-regex kappa + per-model rates
+results_512/analysis/judge_pairwise_agreement.json# judge-vs-judge (GPT-4o) kappa
+results_512/analysis/genlen_robustness.json       # truncation prefix test, lengths
+results_512/analysis/precision_sweep.json         # fp16 -> INT8 -> NF4 traces
+results_512/analysis/sensitivity_multiseed.json   # multi-seed arm
+docs/REPORT_CLAIM_AUDIT_v5.md                     # the full claim + citation ledger
+docs/PROJECT_LOG.md                               # the complete history (decisions + changelog)
+</pre>
+
+<p class="small" style="margin-top:48px;border-top:1px solid var(--line);padding-top:14px">Generated 2 July 2026 for the project author. This guide is descriptive documentation; the sources of truth remain <code>docs/PROJECT_LOG.md</code>, the analysis artifacts under <code>results_512/analysis/</code>, and the claim ledger. If any statement here ever disagrees with those, they win — and please fix this file.</p>
+
+</main>
+</div>
+</body>
+</html>
