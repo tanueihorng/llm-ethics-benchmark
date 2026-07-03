@@ -513,6 +513,32 @@ def run_checks(checker: Checker | None = None) -> Checker:
 
     c.check("XSTest v2: 450 prompts, 250 benign evaluated", ["250"], xstest_counts)
 
+    def ieee_citations():
+        i0 = c.text.find("const refs = [")
+        i1 = c.text.find("];", i0)
+        entries = re.findall(r'\n    "((?:[^"\\\\]|\\\\.)+)",', c.text[i0:i1])
+        body = c.text[:i0] + c.text[i1:]
+        seq, seen = [], set()
+        for m in re.finditer(r"\[(\d{1,2})\]", body):
+            n = int(m.group(1))
+            if n > len(entries):
+                return False, f"citation [{n}] exceeds reference count {len(entries)}"
+            if n not in seen:
+                seen.add(n)
+                seq.append(n)
+        uncited = [n for n in range(1, len(entries) + 1) if n not in seen]
+        ok = not uncited and seq == list(range(1, len(entries) + 1))
+        return ok, (f"{len(entries)} refs, all cited, first-use order strict"
+                    if ok else f"uncited={uncited}, first-use seq starts {seq[:8]}")
+
+    c.check(
+        "IEEE citations: every ref cited, numbered strictly by first use",
+        ["Kharinaev et al. [12]", "Egashira et al. [13]", "Proskurina et al. [11]",
+         "McNemar's exact test [19]", "Bootstrap 95% confidence intervals [18]",
+         "R. Jin, J. Du, W. Huang"],
+        ieee_citations,
+    )
+
     # ================= thesis v4 mirror (same artifacts, same lock) ==========
     tt = (ROOT / "scripts/build_fyp_thesis_v4.js").read_text(encoding="utf-8")
 

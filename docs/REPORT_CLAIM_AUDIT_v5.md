@@ -15,7 +15,7 @@ trusting another prose surface that repeats the claim.
 
 ## 1. The numeric claim lock (machine-checked, permanent)
 
-`scripts/verify_report_claims.py` asserts **53 checks** (43 on the report; 10
+`scripts/verify_report_claims.py` asserts **54 checks** (44 on the report, including an IEEE citation-consistency check — every reference cited, numbering strictly by first use; 10
 added for the 512-mirrored thesis `build_fyp_thesis_v4.js`, which pins its
 Table 6.2/6.3 cells, κ table, truncation block, BH survivors, INT8 point,
 multiseed values, and threat-model scoping to the same artifacts), each in two
@@ -30,7 +30,7 @@ the Mistral proxy levels, the full truncation block (60.3 / 30.5 / 9.2,
 per-family ranges, medians, ceiling proxy), the multi-seed aggregates, the
 INT8 point at both budgets (deltas + both-judge McNemar), every capability /
 over-refusal delta and CI quoted in prose, sample sizes, judge volume, and the
-XSTest source file composition. Status at commit: **43 pass, 0 fail, 0 skipped**.
+XSTest source file composition. Status at commit: **54 pass, 0 fail, 0 skipped**.
 
 ## 2. Discrepancies found by this loop (all fixed, then re-locked)
 
@@ -90,13 +90,26 @@ Claim (D41's foundation): *"HarmBench's 512-token reference budget."*
   parameter* (per the paper) is 512, which is what the report now cites
   verbatim (§6.16).
 
-## 4. Citation ledger (all 24 references)
+## 4. Citation ledger (all 25 references)
 
 Verified against the arXiv export API (title, authors, year, venue-bearing
 comment fields) plus targeted venue checks. ✔ = every printed detail matches.
+**Numbering note (2026-07-02 late IEEE pass):** in-text citations were
+converted to strict IEEE first-use numbering and the list renumbered
+accordingly (the numbers below are the CURRENT ones); Jin et al. was added as
+[10]; the machine claim lock now enforces that every reference is cited and
+that numbering follows first use. One mis-attribution was found and fixed in
+that pass: the §2.4 behavioural-shift sentence cited Proskurina (a
+confidence-calibration paper) for an instruction-following/hallucination
+claim — the sentence was rewritten to what the sources verifiably support
+(Jin for multi-benchmark behavioural coverage; Proskurina for calibration)
+and the four model technical reports, previously listed but never cited, are
+now cited at their first mentions. Verified venue upgrades applied: Kharinaev
+→ IEEE Access 2025; HarmLevelBench → NeurIPS 2024 SafeGenAI workshop.
 
-| Ref | Verdict | Venue evidence |
+| Ref (current) | Verdict | Venue evidence |
 |---|---|---|
+| [10] Jin (2402.16775) | ✔ | "A comprehensive evaluation of quantization strategies for LLMs" — R. Jin et al., ACL Findings 2024 (arXiv abs page: "ACL 2024 Findings"); abstract confirms ten-benchmark knowledge/alignment/efficiency evaluation |
 | [1] TrustLLM (2401.05561) | ✔ after fix | ICML 2024 ✓ — PMLR v235 `huang24x`; first author corrected to Y. Huang |
 | [2] DecodingTrust (2306.11698) | ✔ | arXiv comment: "NeurIPS 2023 Outstanding Paper (Datasets and Benchmarks Track)" |
 | [3] SafetyBench (2309.07045) | ✔ | comment: "ACL 2024 Main Conference" |
@@ -106,21 +119,21 @@ comment fields) plus targeted venue checks. ✔ = every printed detail matches.
 | [7] ARC (1803.05457) | ✔ | arXiv-only citation, matches |
 | [8] QLoRA (2305.14314) | ✔ | S2 venue: NeurIPS (2023); introduces NF4 ✓ |
 | [9] LLM.int8 (2208.07339) | ✔ | comment: "Published at NeurIPS 2022" |
-| [10] Qwen3 TR (2505.09388) | ✔ | first author An Yang ✓ |
-| [11] Llama 3 (2407.21783) | ✔ | first author Grattafiori ✓ |
-| [12] Mistral 7B (2310.06825) | ✔ | A. Q. Jiang ✓ |
-| [13] Phi-4 TR (2412.08905) | ✔ (note) | M. Abdin ✓; *optional improvement:* the model evaluated is Phi-4-**mini**-instruct, which has its own TR (arXiv:2503.01743) — no in-text mis-attribution exists (checked), but adding the mini TR would be tighter |
-| [14] Kharinaev (2502.15799) | ✔ | cited arXiv-only ✓ (published venue: IEEE Access 2025, per Semantic Scholar — could be added); "66 quantized variants … no single method dominating" matches abstract verbatim |
+| [16] Qwen3 TR (2505.09388) | ✔ | first author An Yang ✓ |
+| [17] Llama 3 (2407.21783) | ✔ | first author Grattafiori ✓ |
+| [20] Mistral 7B (2310.06825) | ✔ | A. Q. Jiang ✓ |
+| [21] Phi-4 TR (2412.08905) | ✔ (note) | M. Abdin ✓; *optional improvement:* the model evaluated is Phi-4-**mini**-instruct, which has its own TR (arXiv:2503.01743) — no in-text mis-attribution exists (checked), but adding the mini TR would be tighter |
+| [12] Kharinaev (2502.15799) | ✔ | cited arXiv-only ✓ (published venue: IEEE Access 2025, per Semantic Scholar — could be added); "66 quantized variants … no single method dominating" matches abstract verbatim |
 | [15] Q-resafe (2506.20251) | ✔ | comment: "ICML 2025" |
-| [16] Egashira (2405.18137) | ✔ | **NeurIPS 2024 confirmed** ([poster page](https://neurips.cc/virtual/2024/poster/95767), [OpenReview](https://openreview.net/forum?id=ISa7mMe7Vg), [ETH SRI](https://www.sri.inf.ethz.ch/publications/egashira2024quantization)); **NF4-specificity confirmed** from the official attack code ([eth-sri/llm-quantization-attack](https://github.com/eth-sri/llm-quantization-attack): `compute_box_4bit(method="nf4")`, `compute_box_int8`) |
-| [17] HarmLevelBench (2411.06835) | ✔ | cited arXiv-only ✓ (venue: NeurIPS 2024 SafeGenAI workshop, per arXiv comment — could be added) |
-| [18] Proskurina (2405.00632) | ✔ | comment: "Accepted to NAACL 2024 Findings"; S2 venue NAACL-HLT |
-| [19] Arditi (2406.11717) | ✔ | **NeurIPS 2024 confirmed** ([proceedings PDF](https://proceedings.neurips.cc/paper_files/paper/2024/file/f545448535dfde4f9786555403ab7c49-Paper-Conference.pdf)) |
-| [20] LLM-judge survey (2411.15594) | ✔ | arXiv-only citation ✓ |
-| [21] Krumdick (2503.05061) | ✔ | arXiv-only citation ✓; first author Michael Krumdick ✓ |
-| [22] Llama Guard (2312.06674) | ✔ | Hakan Inan (Meta) ✓ |
-| [23] McNemar 1947 | ✔ canonical | Psychometrika 12(2), 153–157 — standard bibliographic record |
-| [24] Efron & Tibshirani 1993 | ✔ canonical | Chapman & Hall monograph — standard record |
+| [13] Egashira (2405.18137) | ✔ | **NeurIPS 2024 confirmed** ([poster page](https://neurips.cc/virtual/2024/poster/95767), [OpenReview](https://openreview.net/forum?id=ISa7mMe7Vg), [ETH SRI](https://www.sri.inf.ethz.ch/publications/egashira2024quantization)); **NF4-specificity confirmed** from the official attack code ([eth-sri/llm-quantization-attack](https://github.com/eth-sri/llm-quantization-attack): `compute_box_4bit(method="nf4")`, `compute_box_int8`) |
+| [14] HarmLevelBench (2411.06835) | ✔ | cited arXiv-only ✓ (venue: NeurIPS 2024 SafeGenAI workshop, per arXiv comment — could be added) |
+| [11] Proskurina (2405.00632) | ✔ | comment: "Accepted to NAACL 2024 Findings"; S2 venue NAACL-HLT |
+| [25] Arditi (2406.11717) | ✔ | **NeurIPS 2024 confirmed** ([proceedings PDF](https://proceedings.neurips.cc/paper_files/paper/2024/file/f545448535dfde4f9786555403ab7c49-Paper-Conference.pdf)) |
+| [22] LLM-judge survey (2411.15594) | ✔ | arXiv-only citation ✓ |
+| [23] Krumdick (2503.05061) | ✔ | arXiv-only citation ✓; first author Michael Krumdick ✓ |
+| [24] Llama Guard (2312.06674) | ✔ | Hakan Inan (Meta) ✓ |
+| [19] McNemar 1947 | ✔ canonical | Psychometrika 12(2), 153–157 — standard bibliographic record |
+| [18] Efron & Tibshirani 1993 | ✔ canonical | Chapman & Hall monograph — standard record |
 
 **Characterisation checks (in-text claims about what cited papers did):**
 Kharinaev's full text (ar5iv) uses **OpenSafetyMini, XSafety, SafetyBench,
