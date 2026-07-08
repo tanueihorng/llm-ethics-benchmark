@@ -1,0 +1,339 @@
+{
+ "nodes": [
+  {
+   "id": "file:ethical_benchmark/judges/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "ethical_benchmark/judges/__init__.py",
+   "summary": "Package barrel re-exporting the judge-validation API (backends, run_judge_validation, parsing helpers).",
+   "tags": [
+    "entry-point",
+    "barrel",
+    "judge"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:ethical_benchmark/judges/validation.py",
+   "type": "file",
+   "name": "validation.py",
+   "filePath": "ethical_benchmark/judges/validation.py",
+   "summary": "Judge-model validation layer (D16): JudgeBackend interface with HarmBench-Llama-2-13b-cls (primary ASR scorer), LlamaGuard, and OpenAI-compatible API backends; run_judge_validation reads raw.jsonl HarmBench outputs, classifies each response, and writes redacted scores.judge/summary.judge sidecars (IDs + booleans only) without ever mutating raw artifacts.",
+   "tags": [
+    "judge",
+    "scoring",
+    "validation"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:ethical_benchmark/judges/validation.py:resolve_precision",
+   "type": "function",
+   "name": "resolve_precision",
+   "filePath": "ethical_benchmark/judges/validation.py",
+   "summary": "Normalizes precision aliases (fp16/bf16/8bit) for judge loading.",
+   "tags": [
+    "judge",
+    "scoring",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    112,
+    130
+   ]
+  },
+  {
+   "id": "function:ethical_benchmark/judges/validation.py:approx_vram_gib",
+   "type": "function",
+   "name": "approx_vram_gib",
+   "filePath": "ethical_benchmark/judges/validation.py",
+   "summary": "Estimates VRAM needed for the judge at a given precision (13B sizing).",
+   "tags": [
+    "judge",
+    "scoring",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    133,
+    141
+   ]
+  },
+  {
+   "id": "function:ethical_benchmark/judges/validation.py:parse_yes_no",
+   "type": "function",
+   "name": "parse_yes_no",
+   "filePath": "ethical_benchmark/judges/validation.py",
+   "summary": "Parses the classifier's yes/no verdict robustly; flags unparseable outputs.",
+   "tags": [
+    "judge",
+    "scoring",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    196,
+    213
+   ]
+  },
+  {
+   "id": "function:ethical_benchmark/judges/validation.py:run_judge_validation",
+   "type": "function",
+   "name": "run_judge_validation",
+   "filePath": "ethical_benchmark/judges/validation.py",
+   "summary": "Core loop: builds inputs from raw.jsonl, batches them through the backend, asserts redaction, and writes idempotent judge sidecars with ASR aggregate + GPU/precision metadata.",
+   "tags": [
+    "judge",
+    "scoring",
+    "function"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    578,
+    719
+   ]
+  },
+  {
+   "id": "class:ethical_benchmark/judges/validation.py:JudgeBackend",
+   "type": "class",
+   "name": "JudgeBackend",
+   "filePath": "ethical_benchmark/judges/validation.py",
+   "summary": "Abstract judge interface: classify_batch over redacted inputs.",
+   "tags": [
+    "judge",
+    "scoring",
+    "class"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    182,
+    193
+   ]
+  },
+  {
+   "id": "class:ethical_benchmark/judges/validation.py:HarmBenchJudgeBackend",
+   "type": "class",
+   "name": "HarmBenchJudgeBackend",
+   "filePath": "ethical_benchmark/judges/validation.py",
+   "summary": "Official HarmBench 13B classifier backend (fp16 primary; 8-bit fallback), capturing device/precision metadata.",
+   "tags": [
+    "judge",
+    "scoring",
+    "class"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    221,
+    364
+   ]
+  },
+  {
+   "id": "class:ethical_benchmark/judges/validation.py:LlamaGuardJudgeBackend",
+   "type": "class",
+   "name": "LlamaGuardJudgeBackend",
+   "filePath": "ethical_benchmark/judges/validation.py",
+   "summary": "Optional LlamaGuard second-judge backend.",
+   "tags": [
+    "judge",
+    "scoring",
+    "class"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    372,
+    455
+   ]
+  },
+  {
+   "id": "class:ethical_benchmark/judges/validation.py:OpenAICompatibleJudgeBackend",
+   "type": "class",
+   "name": "OpenAICompatibleJudgeBackend",
+   "filePath": "ethical_benchmark/judges/validation.py",
+   "summary": "API-based second judge via an OpenAI-compatible endpoint (T22 cross-check).",
+   "tags": [
+    "judge",
+    "scoring",
+    "class"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    463,
+    538
+   ]
+  },
+  {
+   "id": "file:scripts/run_judge_validation.py",
+   "type": "file",
+   "name": "run_judge_validation.py",
+   "filePath": "scripts/run_judge_validation.py",
+   "summary": "CLI for the judge validation pipeline (TC1 sbatch entry): selects backend/precision/aliases and invokes run_judge_validation per model.",
+   "tags": [
+    "cli",
+    "judge",
+    "cluster"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:scripts/run_judge_validation.py:_build_backend",
+   "type": "function",
+   "name": "_build_backend",
+   "filePath": "scripts/run_judge_validation.py",
+   "summary": "Instantiates the requested judge backend (harmbench_cls, llamaguard, api_judge) with precision settings.",
+   "tags": [
+    "cli",
+    "judge",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    61,
+    92
+   ]
+  },
+  {
+   "id": "function:scripts/run_judge_validation.py:main",
+   "type": "function",
+   "name": "main",
+   "filePath": "scripts/run_judge_validation.py",
+   "summary": "Parses args, iterates target aliases, and runs judge validation for each.",
+   "tags": [
+    "cli",
+    "judge",
+    "function"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    95,
+    154
+   ]
+  },
+  {
+   "id": "file:tests/test_judge_pairwise.py",
+   "type": "file",
+   "name": "test_judge_pairwise.py",
+   "filePath": "tests/test_judge_pairwise.py",
+   "summary": "Tests for the API second-judge path and agreement math: yes/no mapping, model-id exposure, kappa values, and null-outcome skipping.",
+   "tags": [
+    "test",
+    "judge",
+    "statistics"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:tests/test_judge_validation.py",
+   "type": "file",
+   "name": "test_judge_validation.py",
+   "filePath": "tests/test_judge_validation.py",
+   "summary": "Judge-layer tests with a stub backend: official prompt fidelity, redaction enforcement, sidecar writing/idempotency, ASR math, error counting, and precision/VRAM helpers.",
+   "tags": [
+    "test",
+    "judge",
+    "redaction"
+   ],
+   "complexity": "complex"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:ethical_benchmark/judges/__init__.py",
+   "target": "file:ethical_benchmark/judges/validation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:ethical_benchmark/judges/validation.py",
+   "target": "function:ethical_benchmark/judges/validation.py:resolve_precision",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:ethical_benchmark/judges/validation.py",
+   "target": "function:ethical_benchmark/judges/validation.py:approx_vram_gib",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:ethical_benchmark/judges/validation.py",
+   "target": "function:ethical_benchmark/judges/validation.py:parse_yes_no",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:ethical_benchmark/judges/validation.py",
+   "target": "function:ethical_benchmark/judges/validation.py:run_judge_validation",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:ethical_benchmark/judges/validation.py",
+   "target": "class:ethical_benchmark/judges/validation.py:JudgeBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:ethical_benchmark/judges/validation.py",
+   "target": "class:ethical_benchmark/judges/validation.py:HarmBenchJudgeBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:ethical_benchmark/judges/validation.py",
+   "target": "class:ethical_benchmark/judges/validation.py:LlamaGuardJudgeBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:ethical_benchmark/judges/validation.py",
+   "target": "class:ethical_benchmark/judges/validation.py:OpenAICompatibleJudgeBackend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:scripts/run_judge_validation.py",
+   "target": "function:scripts/run_judge_validation.py:_build_backend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:scripts/run_judge_validation.py",
+   "target": "function:scripts/run_judge_validation.py:main",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:scripts/run_judge_validation.py",
+   "target": "file:ethical_benchmark/judges/validation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:tests/test_judge_pairwise.py",
+   "target": "file:ethical_benchmark/judges/validation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:tests/test_judge_validation.py",
+   "target": "file:ethical_benchmark/judges/validation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  }
+ ]
+}

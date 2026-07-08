@@ -1,0 +1,3960 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 12,
+  "filesSkipped": [],
+  "results": [
+    {
+      "path": "ethical_benchmark/config_schema.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 117,
+      "nonEmptyLines": 83,
+      "functions": [
+        {
+          "name": "validate_config",
+          "startLine": 104,
+          "endLine": 117,
+          "params": [
+            "raw_config"
+          ]
+        }
+      ],
+      "classes": [
+        {
+          "name": "ModelEntry",
+          "startLine": 14,
+          "endLine": 28,
+          "methods": [
+            "_validate_dtype"
+          ],
+          "properties": [
+            "hf_id",
+            "trust_remote_code",
+            "dtype",
+            "revision"
+          ]
+        },
+        {
+          "name": "DecodingSchema",
+          "startLine": 31,
+          "endLine": 39,
+          "methods": [],
+          "properties": [
+            "max_new_tokens",
+            "temperature",
+            "top_p",
+            "repetition_penalty",
+            "max_input_tokens",
+            "use_chat_template"
+          ]
+        },
+        {
+          "name": "ToxicityEvaluationSchema",
+          "startLine": 42,
+          "endLine": 57,
+          "methods": [
+            "_validate_backend"
+          ],
+          "properties": [
+            "threshold",
+            "classifier_type",
+            "classifier_model_name",
+            "classifier_batch_size",
+            "bootstrap_resamples"
+          ]
+        },
+        {
+          "name": "BiasEvaluationSchema",
+          "startLine": 60,
+          "endLine": 64,
+          "methods": [],
+          "properties": [
+            "answer_letter_pattern",
+            "bootstrap_resamples"
+          ]
+        },
+        {
+          "name": "FactualityEvaluationSchema",
+          "startLine": 67,
+          "endLine": 82,
+          "methods": [
+            "_scale_ordering"
+          ],
+          "properties": [
+            "enable_llm_judge",
+            "judge_scale_min",
+            "judge_scale_max"
+          ]
+        },
+        {
+          "name": "TaskSchema",
+          "startLine": 85,
+          "endLine": 93,
+          "methods": [],
+          "properties": [
+            "dataset_name",
+            "split",
+            "config_name",
+            "max_samples",
+            "batch_size",
+            "evaluation"
+          ]
+        },
+        {
+          "name": "BenchmarkConfig",
+          "startLine": 96,
+          "endLine": 101,
+          "methods": [],
+          "properties": [
+            "models",
+            "decoding",
+            "tasks"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "ModelEntry",
+          "line": 14,
+          "isDefault": false
+        },
+        {
+          "name": "DecodingSchema",
+          "line": 31,
+          "isDefault": false
+        },
+        {
+          "name": "ToxicityEvaluationSchema",
+          "line": 42,
+          "isDefault": false
+        },
+        {
+          "name": "BiasEvaluationSchema",
+          "line": 60,
+          "isDefault": false
+        },
+        {
+          "name": "FactualityEvaluationSchema",
+          "line": 67,
+          "isDefault": false
+        },
+        {
+          "name": "TaskSchema",
+          "line": 85,
+          "isDefault": false
+        },
+        {
+          "name": "BenchmarkConfig",
+          "line": 96,
+          "isDefault": false
+        },
+        {
+          "name": "validate_config",
+          "line": 104,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "_validate_dtype",
+          "callee": "value.strip().lower",
+          "lineNumber": 26
+        },
+        {
+          "caller": "_validate_dtype",
+          "callee": "value.strip",
+          "lineNumber": 26
+        },
+        {
+          "caller": "_validate_dtype",
+          "callee": "ValueError",
+          "lineNumber": 27
+        },
+        {
+          "caller": "_validate_dtype",
+          "callee": "sorted",
+          "lineNumber": 27
+        },
+        {
+          "caller": "_validate_backend",
+          "callee": "value.strip().lower",
+          "lineNumber": 55
+        },
+        {
+          "caller": "_validate_backend",
+          "callee": "value.strip",
+          "lineNumber": 55
+        },
+        {
+          "caller": "_validate_backend",
+          "callee": "ValueError",
+          "lineNumber": 56
+        },
+        {
+          "caller": "_validate_backend",
+          "callee": "sorted",
+          "lineNumber": 56
+        },
+        {
+          "caller": "_scale_ordering",
+          "callee": "info.data.get",
+          "lineNumber": 77
+        },
+        {
+          "caller": "_scale_ordering",
+          "callee": "ValueError",
+          "lineNumber": 79
+        },
+        {
+          "caller": "validate_config",
+          "callee": "BenchmarkConfig.model_validate",
+          "lineNumber": 117
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 8,
+        "functionCount": 1,
+        "classCount": 7
+      }
+    },
+    {
+      "path": "ethical_benchmark/datasets/bias.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 222,
+      "nonEmptyLines": 173,
+      "functions": [
+        {
+          "name": "load_bbq",
+          "startLine": 38,
+          "endLine": 132,
+          "params": [
+            "dataset_name",
+            "split",
+            "config_name",
+            "max_samples",
+            "seed"
+          ]
+        },
+        {
+          "name": "_extract_choices",
+          "startLine": 135,
+          "endLine": 159,
+          "params": [
+            "row"
+          ]
+        },
+        {
+          "name": "_parse_choice_index",
+          "startLine": 162,
+          "endLine": 200,
+          "params": [
+            "value",
+            "num_choices"
+          ]
+        },
+        {
+          "name": "_build_bbq_prompt",
+          "startLine": 203,
+          "endLine": 222,
+          "params": [
+            "context",
+            "question",
+            "choices"
+          ]
+        }
+      ],
+      "classes": [
+        {
+          "name": "BiasSample",
+          "startLine": 16,
+          "endLine": 35,
+          "methods": [],
+          "properties": [
+            "sample_id",
+            "prompt",
+            "question",
+            "choices",
+            "gold_index",
+            "axis",
+            "stereotyped_index"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "BiasSample",
+          "line": 15,
+          "isDefault": false
+        },
+        {
+          "name": "load_bbq",
+          "line": 38,
+          "isDefault": false
+        },
+        {
+          "name": "_extract_choices",
+          "line": 135,
+          "isDefault": false
+        },
+        {
+          "name": "_parse_choice_index",
+          "line": 162,
+          "isDefault": false
+        },
+        {
+          "name": "_build_bbq_prompt",
+          "line": 203,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "load_bbq",
+          "callee": "dataset_name.strip",
+          "lineNumber": 64
+        },
+        {
+          "caller": "load_bbq",
+          "callee": "ValueError",
+          "lineNumber": 65
+        },
+        {
+          "caller": "load_bbq",
+          "callee": "ValueError",
+          "lineNumber": 67
+        },
+        {
+          "caller": "load_bbq",
+          "callee": "split.strip",
+          "lineNumber": 68
+        },
+        {
+          "caller": "load_bbq",
+          "callee": "ValueError",
+          "lineNumber": 69
+        },
+        {
+          "caller": "load_bbq",
+          "callee": "load_dataset",
+          "lineNumber": 72
+        },
+        {
+          "caller": "load_bbq",
+          "callee": "load_dataset",
+          "lineNumber": 74
+        },
+        {
+          "caller": "load_bbq",
+          "callee": "dataset.shuffle",
+          "lineNumber": 76
+        },
+        {
+          "caller": "load_bbq",
+          "callee": "dataset.select",
+          "lineNumber": 78
+        },
+        {
+          "caller": "load_bbq",
+          "callee": "range",
+          "lineNumber": 78
+        },
+        {
+          "caller": "load_bbq",
+          "callee": "min",
+          "lineNumber": 78
+        },
+        {
+          "caller": "load_bbq",
+          "callee": "len",
+          "lineNumber": 78
+        },
+        {
+          "caller": "load_bbq",
+          "callee": "enumerate",
+          "lineNumber": 81
+        },
+        {
+          "caller": "load_bbq",
+          "callee": "str(row.get(\"question\", row.get(\"query\", \"\"))).strip",
+          "lineNumber": 82
+        },
+        {
+          "caller": "load_bbq",
+          "callee": "str",
+          "lineNumber": 82
+        },
+        {
+          "caller": "load_bbq",
+          "callee": "row.get",
+          "lineNumber": 82
+        },
+        {
+          "caller": "load_bbq",
+          "callee": "row.get",
+          "lineNumber": 82
+        },
+        {
+          "caller": "load_bbq",
+          "callee": "str(row.get(\"context\", \"\")).strip",
+          "lineNumber": 83
+        },
+        {
+          "caller": "load_bbq",
+          "callee": "str",
+          "lineNumber": 83
+        },
+        {
+          "caller": "load_bbq",
+          "callee": "row.get",
+          "lineNumber": 83
+        },
+        {
+          "caller": "load_bbq",
+          "callee": "_extract_choices",
+          "lineNumber": 84
+        },
+        {
+          "caller": "load_bbq",
+          "callee": "len",
+          "lineNumber": 85
+        },
+        {
+          "caller": "load_bbq",
+          "callee": "_parse_choice_index",
+          "lineNumber": 88
+        },
+        {
+          "caller": "load_bbq",
+          "callee": "row.get",
+          "lineNumber": 89
+        },
+        {
+          "caller": "load_bbq",
+          "callee": "row.get",
+          "lineNumber": 89
+        },
+        {
+          "caller": "load_bbq",
+          "callee": "row.get",
+          "lineNumber": 89
+        },
+        {
+          "caller": "load_bbq",
+          "callee": "len",
+          "lineNumber": 90
+        },
+        {
+          "caller": "load_bbq",
+          "callee": "_parse_choice_index",
+          "lineNumber": 95
+        },
+        {
+          "caller": "load_bbq",
+          "callee": "row.get",
+          "lineNumber": 96
+        },
+        {
+          "caller": "load_bbq",
+          "callee": "row.get",
+          "lineNumber": 98
+        },
+        {
+          "caller": "load_bbq",
+          "callee": "row.get",
+          "lineNumber": 98
+        },
+        {
+          "caller": "load_bbq",
+          "callee": "len",
+          "lineNumber": 100
+        },
+        {
+          "caller": "load_bbq",
+          "callee": "str",
+          "lineNumber": 103
+        },
+        {
+          "caller": "load_bbq",
+          "callee": "row.get",
+          "lineNumber": 104
+        },
+        {
+          "caller": "load_bbq",
+          "callee": "row.get",
+          "lineNumber": 106
+        },
+        {
+          "caller": "load_bbq",
+          "callee": "row.get",
+          "lineNumber": 106
+        },
+        {
+          "caller": "load_bbq",
+          "callee": "_build_bbq_prompt",
+          "lineNumber": 110
+        },
+        {
+          "caller": "load_bbq",
+          "callee": "samples.append",
+          "lineNumber": 112
+        },
+        {
+          "caller": "load_bbq",
+          "callee": "BiasSample",
+          "lineNumber": 113
+        },
+        {
+          "caller": "load_bbq",
+          "callee": "str",
+          "lineNumber": 114
+        },
+        {
+          "caller": "load_bbq",
+          "callee": "row.get",
+          "lineNumber": 114
+        },
+        {
+          "caller": "load_bbq",
+          "callee": "row.get",
+          "lineNumber": 114
+        },
+        {
+          "caller": "load_bbq",
+          "callee": "sum",
+          "lineNumber": 125
+        },
+        {
+          "caller": "load_bbq",
+          "callee": "LOGGER.info",
+          "lineNumber": 126
+        },
+        {
+          "caller": "load_bbq",
+          "callee": "len",
+          "lineNumber": 128
+        },
+        {
+          "caller": "load_bbq",
+          "callee": "len",
+          "lineNumber": 129
+        },
+        {
+          "caller": "_extract_choices",
+          "callee": "all",
+          "lineNumber": 145
+        },
+        {
+          "caller": "_extract_choices",
+          "callee": "str",
+          "lineNumber": 146
+        },
+        {
+          "caller": "_extract_choices",
+          "callee": "str",
+          "lineNumber": 146
+        },
+        {
+          "caller": "_extract_choices",
+          "callee": "str",
+          "lineNumber": 146
+        },
+        {
+          "caller": "_extract_choices",
+          "callee": "isinstance",
+          "lineNumber": 148
+        },
+        {
+          "caller": "_extract_choices",
+          "callee": "row.get",
+          "lineNumber": 148
+        },
+        {
+          "caller": "_extract_choices",
+          "callee": "str",
+          "lineNumber": 149
+        },
+        {
+          "caller": "_extract_choices",
+          "callee": "isinstance",
+          "lineNumber": 151
+        },
+        {
+          "caller": "_extract_choices",
+          "callee": "row.get",
+          "lineNumber": 151
+        },
+        {
+          "caller": "_extract_choices",
+          "callee": "str",
+          "lineNumber": 152
+        },
+        {
+          "caller": "_extract_choices",
+          "callee": "sorted",
+          "lineNumber": 155
+        },
+        {
+          "caller": "_extract_choices",
+          "callee": "re.fullmatch",
+          "lineNumber": 156
+        },
+        {
+          "caller": "_extract_choices",
+          "callee": "extracted.append",
+          "lineNumber": 157
+        },
+        {
+          "caller": "_extract_choices",
+          "callee": "str",
+          "lineNumber": 157
+        },
+        {
+          "caller": "_parse_choice_index",
+          "callee": "isinstance",
+          "lineNumber": 176
+        },
+        {
+          "caller": "_parse_choice_index",
+          "callee": "int",
+          "lineNumber": 177
+        },
+        {
+          "caller": "_parse_choice_index",
+          "callee": "isinstance",
+          "lineNumber": 179
+        },
+        {
+          "caller": "_parse_choice_index",
+          "callee": "str(value).strip",
+          "lineNumber": 184
+        },
+        {
+          "caller": "_parse_choice_index",
+          "callee": "str",
+          "lineNumber": 184
+        },
+        {
+          "caller": "_parse_choice_index",
+          "callee": "text.isdigit",
+          "lineNumber": 188
+        },
+        {
+          "caller": "_parse_choice_index",
+          "callee": "int",
+          "lineNumber": 189
+        },
+        {
+          "caller": "_parse_choice_index",
+          "callee": "re.search",
+          "lineNumber": 194
+        },
+        {
+          "caller": "_parse_choice_index",
+          "callee": "text.upper",
+          "lineNumber": 194
+        },
+        {
+          "caller": "_parse_choice_index",
+          "callee": "ord",
+          "lineNumber": 196
+        },
+        {
+          "caller": "_parse_choice_index",
+          "callee": "letter_match.group",
+          "lineNumber": 196
+        },
+        {
+          "caller": "_parse_choice_index",
+          "callee": "ord",
+          "lineNumber": 196
+        },
+        {
+          "caller": "_build_bbq_prompt",
+          "callee": "chr",
+          "lineNumber": 215
+        },
+        {
+          "caller": "_build_bbq_prompt",
+          "callee": "ord",
+          "lineNumber": 215
+        },
+        {
+          "caller": "_build_bbq_prompt",
+          "callee": "enumerate",
+          "lineNumber": 215
+        },
+        {
+          "caller": "_build_bbq_prompt",
+          "callee": "\"\\n\".join",
+          "lineNumber": 216
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 5,
+        "functionCount": 4,
+        "classCount": 1
+      }
+    },
+    {
+      "path": "ethical_benchmark/datasets/factuality.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 151,
+      "nonEmptyLines": 117,
+      "functions": [
+        {
+          "name": "load_truthfulqa",
+          "startLine": 33,
+          "endLine": 101,
+          "params": [
+            "dataset_name",
+            "config_name",
+            "split",
+            "max_samples",
+            "seed"
+          ]
+        },
+        {
+          "name": "_extract_mc_targets",
+          "startLine": 104,
+          "endLine": 131,
+          "params": [
+            "row"
+          ]
+        },
+        {
+          "name": "_build_truthfulqa_prompt",
+          "startLine": 134,
+          "endLine": 151,
+          "params": [
+            "question",
+            "choices"
+          ]
+        }
+      ],
+      "classes": [
+        {
+          "name": "FactualitySample",
+          "startLine": 15,
+          "endLine": 30,
+          "methods": [],
+          "properties": [
+            "sample_id",
+            "prompt",
+            "question",
+            "choices",
+            "gold_indices"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "FactualitySample",
+          "line": 14,
+          "isDefault": false
+        },
+        {
+          "name": "load_truthfulqa",
+          "line": 33,
+          "isDefault": false
+        },
+        {
+          "name": "_extract_mc_targets",
+          "line": 104,
+          "isDefault": false
+        },
+        {
+          "name": "_build_truthfulqa_prompt",
+          "line": 134,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "load_truthfulqa",
+          "callee": "dataset_name.strip",
+          "lineNumber": 59
+        },
+        {
+          "caller": "load_truthfulqa",
+          "callee": "ValueError",
+          "lineNumber": 60
+        },
+        {
+          "caller": "load_truthfulqa",
+          "callee": "ValueError",
+          "lineNumber": 62
+        },
+        {
+          "caller": "load_truthfulqa",
+          "callee": "split.strip",
+          "lineNumber": 63
+        },
+        {
+          "caller": "load_truthfulqa",
+          "callee": "ValueError",
+          "lineNumber": 64
+        },
+        {
+          "caller": "load_truthfulqa",
+          "callee": "load_dataset",
+          "lineNumber": 66
+        },
+        {
+          "caller": "load_truthfulqa",
+          "callee": "dataset.shuffle",
+          "lineNumber": 67
+        },
+        {
+          "caller": "load_truthfulqa",
+          "callee": "dataset.select",
+          "lineNumber": 70
+        },
+        {
+          "caller": "load_truthfulqa",
+          "callee": "range",
+          "lineNumber": 70
+        },
+        {
+          "caller": "load_truthfulqa",
+          "callee": "min",
+          "lineNumber": 70
+        },
+        {
+          "caller": "load_truthfulqa",
+          "callee": "len",
+          "lineNumber": 70
+        },
+        {
+          "caller": "load_truthfulqa",
+          "callee": "enumerate",
+          "lineNumber": 73
+        },
+        {
+          "caller": "load_truthfulqa",
+          "callee": "str(row.get(\"question\", \"\")).strip",
+          "lineNumber": 74
+        },
+        {
+          "caller": "load_truthfulqa",
+          "callee": "str",
+          "lineNumber": 74
+        },
+        {
+          "caller": "load_truthfulqa",
+          "callee": "row.get",
+          "lineNumber": 74
+        },
+        {
+          "caller": "load_truthfulqa",
+          "callee": "_extract_mc_targets",
+          "lineNumber": 75
+        },
+        {
+          "caller": "load_truthfulqa",
+          "callee": "_build_truthfulqa_prompt",
+          "lineNumber": 80
+        },
+        {
+          "caller": "load_truthfulqa",
+          "callee": "str",
+          "lineNumber": 81
+        },
+        {
+          "caller": "load_truthfulqa",
+          "callee": "row.get",
+          "lineNumber": 81
+        },
+        {
+          "caller": "load_truthfulqa",
+          "callee": "samples.append",
+          "lineNumber": 83
+        },
+        {
+          "caller": "load_truthfulqa",
+          "callee": "FactualitySample",
+          "lineNumber": 84
+        },
+        {
+          "caller": "load_truthfulqa",
+          "callee": "sum",
+          "lineNumber": 94
+        },
+        {
+          "caller": "load_truthfulqa",
+          "callee": "len",
+          "lineNumber": 94
+        },
+        {
+          "caller": "load_truthfulqa",
+          "callee": "len",
+          "lineNumber": 94
+        },
+        {
+          "caller": "load_truthfulqa",
+          "callee": "LOGGER.info",
+          "lineNumber": 96
+        },
+        {
+          "caller": "load_truthfulqa",
+          "callee": "len",
+          "lineNumber": 98
+        },
+        {
+          "caller": "_extract_mc_targets",
+          "callee": "row.get",
+          "lineNumber": 115
+        },
+        {
+          "caller": "_extract_mc_targets",
+          "callee": "isinstance",
+          "lineNumber": 116
+        },
+        {
+          "caller": "_extract_mc_targets",
+          "callee": "str",
+          "lineNumber": 117
+        },
+        {
+          "caller": "_extract_mc_targets",
+          "callee": "payload.get",
+          "lineNumber": 117
+        },
+        {
+          "caller": "_extract_mc_targets",
+          "callee": "payload.get",
+          "lineNumber": 118
+        },
+        {
+          "caller": "_extract_mc_targets",
+          "callee": "isinstance",
+          "lineNumber": 119
+        },
+        {
+          "caller": "_extract_mc_targets",
+          "callee": "enumerate",
+          "lineNumber": 120
+        },
+        {
+          "caller": "_extract_mc_targets",
+          "callee": "bool",
+          "lineNumber": 120
+        },
+        {
+          "caller": "_extract_mc_targets",
+          "callee": "row.get",
+          "lineNumber": 124
+        },
+        {
+          "caller": "_extract_mc_targets",
+          "callee": "row.get",
+          "lineNumber": 125
+        },
+        {
+          "caller": "_extract_mc_targets",
+          "callee": "isinstance",
+          "lineNumber": 126
+        },
+        {
+          "caller": "_extract_mc_targets",
+          "callee": "isinstance",
+          "lineNumber": 126
+        },
+        {
+          "caller": "_extract_mc_targets",
+          "callee": "len",
+          "lineNumber": 126
+        },
+        {
+          "caller": "_extract_mc_targets",
+          "callee": "len",
+          "lineNumber": 126
+        },
+        {
+          "caller": "_extract_mc_targets",
+          "callee": "enumerate",
+          "lineNumber": 127
+        },
+        {
+          "caller": "_extract_mc_targets",
+          "callee": "bool",
+          "lineNumber": 127
+        },
+        {
+          "caller": "_extract_mc_targets",
+          "callee": "str",
+          "lineNumber": 129
+        },
+        {
+          "caller": "_build_truthfulqa_prompt",
+          "callee": "chr",
+          "lineNumber": 145
+        },
+        {
+          "caller": "_build_truthfulqa_prompt",
+          "callee": "ord",
+          "lineNumber": 145
+        },
+        {
+          "caller": "_build_truthfulqa_prompt",
+          "callee": "enumerate",
+          "lineNumber": 145
+        },
+        {
+          "caller": "_build_truthfulqa_prompt",
+          "callee": "\"\\n\".join",
+          "lineNumber": 146
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 4,
+        "functionCount": 3,
+        "classCount": 1
+      }
+    },
+    {
+      "path": "ethical_benchmark/datasets/toxicity.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 118,
+      "nonEmptyLines": 91,
+      "functions": [
+        {
+          "name": "load_real_toxicity_prompts",
+          "startLine": 31,
+          "endLine": 100,
+          "params": [
+            "dataset_name",
+            "split",
+            "max_samples",
+            "seed"
+          ]
+        },
+        {
+          "name": "_safe_float",
+          "startLine": 103,
+          "endLine": 118,
+          "params": [
+            "value"
+          ]
+        }
+      ],
+      "classes": [
+        {
+          "name": "ToxicitySample",
+          "startLine": 15,
+          "endLine": 28,
+          "methods": [],
+          "properties": [
+            "sample_id",
+            "prompt",
+            "prompt_toxicity",
+            "metadata"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "ToxicitySample",
+          "line": 14,
+          "isDefault": false
+        },
+        {
+          "name": "load_real_toxicity_prompts",
+          "line": 31,
+          "isDefault": false
+        },
+        {
+          "name": "_safe_float",
+          "line": 103,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "load_real_toxicity_prompts",
+          "callee": "dataset_name.strip",
+          "lineNumber": 55
+        },
+        {
+          "caller": "load_real_toxicity_prompts",
+          "callee": "ValueError",
+          "lineNumber": 56
+        },
+        {
+          "caller": "load_real_toxicity_prompts",
+          "callee": "ValueError",
+          "lineNumber": 58
+        },
+        {
+          "caller": "load_real_toxicity_prompts",
+          "callee": "split.strip",
+          "lineNumber": 59
+        },
+        {
+          "caller": "load_real_toxicity_prompts",
+          "callee": "ValueError",
+          "lineNumber": 60
+        },
+        {
+          "caller": "load_real_toxicity_prompts",
+          "callee": "load_dataset",
+          "lineNumber": 62
+        },
+        {
+          "caller": "load_real_toxicity_prompts",
+          "callee": "dataset.shuffle",
+          "lineNumber": 63
+        },
+        {
+          "caller": "load_real_toxicity_prompts",
+          "callee": "dataset.select",
+          "lineNumber": 66
+        },
+        {
+          "caller": "load_real_toxicity_prompts",
+          "callee": "range",
+          "lineNumber": 66
+        },
+        {
+          "caller": "load_real_toxicity_prompts",
+          "callee": "min",
+          "lineNumber": 66
+        },
+        {
+          "caller": "load_real_toxicity_prompts",
+          "callee": "len",
+          "lineNumber": 66
+        },
+        {
+          "caller": "load_real_toxicity_prompts",
+          "callee": "enumerate",
+          "lineNumber": 69
+        },
+        {
+          "caller": "load_real_toxicity_prompts",
+          "callee": "row.get",
+          "lineNumber": 70
+        },
+        {
+          "caller": "load_real_toxicity_prompts",
+          "callee": "isinstance",
+          "lineNumber": 71
+        },
+        {
+          "caller": "load_real_toxicity_prompts",
+          "callee": "str(prompt_payload.get(\"text\", \"\")).strip",
+          "lineNumber": 72
+        },
+        {
+          "caller": "load_real_toxicity_prompts",
+          "callee": "str",
+          "lineNumber": 72
+        },
+        {
+          "caller": "load_real_toxicity_prompts",
+          "callee": "prompt_payload.get",
+          "lineNumber": 72
+        },
+        {
+          "caller": "load_real_toxicity_prompts",
+          "callee": "_safe_float",
+          "lineNumber": 73
+        },
+        {
+          "caller": "load_real_toxicity_prompts",
+          "callee": "prompt_payload.get",
+          "lineNumber": 73
+        },
+        {
+          "caller": "load_real_toxicity_prompts",
+          "callee": "str(prompt_payload).strip",
+          "lineNumber": 75
+        },
+        {
+          "caller": "load_real_toxicity_prompts",
+          "callee": "str",
+          "lineNumber": 75
+        },
+        {
+          "caller": "load_real_toxicity_prompts",
+          "callee": "_safe_float",
+          "lineNumber": 76
+        },
+        {
+          "caller": "load_real_toxicity_prompts",
+          "callee": "row.get",
+          "lineNumber": 76
+        },
+        {
+          "caller": "load_real_toxicity_prompts",
+          "callee": "row.get",
+          "lineNumber": 82
+        },
+        {
+          "caller": "load_real_toxicity_prompts",
+          "callee": "samples.append",
+          "lineNumber": 85
+        },
+        {
+          "caller": "load_real_toxicity_prompts",
+          "callee": "ToxicitySample",
+          "lineNumber": 86
+        },
+        {
+          "caller": "load_real_toxicity_prompts",
+          "callee": "str",
+          "lineNumber": 87
+        },
+        {
+          "caller": "load_real_toxicity_prompts",
+          "callee": "row.get",
+          "lineNumber": 87
+        },
+        {
+          "caller": "load_real_toxicity_prompts",
+          "callee": "row.get",
+          "lineNumber": 87
+        },
+        {
+          "caller": "load_real_toxicity_prompts",
+          "callee": "sum",
+          "lineNumber": 94
+        },
+        {
+          "caller": "load_real_toxicity_prompts",
+          "callee": "LOGGER.info",
+          "lineNumber": 95
+        },
+        {
+          "caller": "load_real_toxicity_prompts",
+          "callee": "len",
+          "lineNumber": 97
+        },
+        {
+          "caller": "_safe_float",
+          "callee": "float",
+          "lineNumber": 116
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 3,
+        "functionCount": 2,
+        "classCount": 1
+      }
+    },
+    {
+      "path": "ethical_benchmark/evaluators/bias_eval.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 233,
+      "nonEmptyLines": 180,
+      "classes": [
+        {
+          "name": "BiasEvalConfig",
+          "startLine": 15,
+          "endLine": 43,
+          "methods": [
+            "from_dict"
+          ],
+          "properties": [
+            "answer_letter_pattern",
+            "bootstrap_resamples"
+          ]
+        },
+        {
+          "name": "BiasEvaluator",
+          "startLine": 46,
+          "endLine": 233,
+          "methods": [
+            "__init__",
+            "evaluate_batch",
+            "summarize",
+            "_parse_answer_index",
+            "_build_axis_breakdown"
+          ],
+          "properties": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "BiasEvalConfig",
+          "line": 14,
+          "isDefault": false
+        },
+        {
+          "name": "BiasEvaluator",
+          "line": 46,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "from_dict",
+          "callee": "cls",
+          "lineNumber": 40
+        },
+        {
+          "caller": "from_dict",
+          "callee": "str",
+          "lineNumber": 41
+        },
+        {
+          "caller": "from_dict",
+          "callee": "data.get",
+          "lineNumber": 41
+        },
+        {
+          "caller": "from_dict",
+          "callee": "int",
+          "lineNumber": 42
+        },
+        {
+          "caller": "from_dict",
+          "callee": "data.get",
+          "lineNumber": 42
+        },
+        {
+          "caller": "evaluate_batch",
+          "callee": "zip",
+          "lineNumber": 76
+        },
+        {
+          "caller": "evaluate_batch",
+          "callee": "self._parse_answer_index",
+          "lineNumber": 77
+        },
+        {
+          "caller": "evaluate_batch",
+          "callee": "len",
+          "lineNumber": 77
+        },
+        {
+          "caller": "evaluate_batch",
+          "callee": "records.append",
+          "lineNumber": 85
+        },
+        {
+          "caller": "summarize",
+          "callee": "float",
+          "lineNumber": 125
+        },
+        {
+          "caller": "summarize",
+          "callee": "np.mean",
+          "lineNumber": 125
+        },
+        {
+          "caller": "summarize",
+          "callee": "float",
+          "lineNumber": 125
+        },
+        {
+          "caller": "summarize",
+          "callee": "float",
+          "lineNumber": 134
+        },
+        {
+          "caller": "summarize",
+          "callee": "np.mean",
+          "lineNumber": 135
+        },
+        {
+          "caller": "summarize",
+          "callee": "float",
+          "lineNumber": 135
+        },
+        {
+          "caller": "summarize",
+          "callee": "float",
+          "lineNumber": 137
+        },
+        {
+          "caller": "summarize",
+          "callee": "np.mean",
+          "lineNumber": 138
+        },
+        {
+          "caller": "summarize",
+          "callee": "float",
+          "lineNumber": 140
+        },
+        {
+          "caller": "summarize",
+          "callee": "self._build_axis_breakdown",
+          "lineNumber": 154
+        },
+        {
+          "caller": "summarize",
+          "callee": "len",
+          "lineNumber": 157
+        },
+        {
+          "caller": "_parse_answer_index",
+          "callee": "response.strip().upper",
+          "lineNumber": 176
+        },
+        {
+          "caller": "_parse_answer_index",
+          "callee": "response.strip",
+          "lineNumber": 176
+        },
+        {
+          "caller": "_parse_answer_index",
+          "callee": "re.search",
+          "lineNumber": 178
+        },
+        {
+          "caller": "_parse_answer_index",
+          "callee": "ord",
+          "lineNumber": 180
+        },
+        {
+          "caller": "_parse_answer_index",
+          "callee": "letter_match.group",
+          "lineNumber": 180
+        },
+        {
+          "caller": "_parse_answer_index",
+          "callee": "ord",
+          "lineNumber": 180
+        },
+        {
+          "caller": "_parse_answer_index",
+          "callee": "re.search",
+          "lineNumber": 184
+        },
+        {
+          "caller": "_parse_answer_index",
+          "callee": "int",
+          "lineNumber": 186
+        },
+        {
+          "caller": "_parse_answer_index",
+          "callee": "digit_match.group",
+          "lineNumber": 186
+        },
+        {
+          "caller": "_build_axis_breakdown",
+          "callee": "grouped.setdefault(str(item.get(\"axis\", \"unknown\")), []).append",
+          "lineNumber": 205
+        },
+        {
+          "caller": "_build_axis_breakdown",
+          "callee": "grouped.setdefault",
+          "lineNumber": 205
+        },
+        {
+          "caller": "_build_axis_breakdown",
+          "callee": "str",
+          "lineNumber": 205
+        },
+        {
+          "caller": "_build_axis_breakdown",
+          "callee": "item.get",
+          "lineNumber": 205
+        },
+        {
+          "caller": "_build_axis_breakdown",
+          "callee": "grouped.items",
+          "lineNumber": 208
+        },
+        {
+          "caller": "_build_axis_breakdown",
+          "callee": "len",
+          "lineNumber": 209
+        },
+        {
+          "caller": "_build_axis_breakdown",
+          "callee": "int",
+          "lineNumber": 210
+        },
+        {
+          "caller": "_build_axis_breakdown",
+          "callee": "sum",
+          "lineNumber": 210
+        },
+        {
+          "caller": "_build_axis_breakdown",
+          "callee": "int",
+          "lineNumber": 210
+        },
+        {
+          "caller": "_build_axis_breakdown",
+          "callee": "str",
+          "lineNumber": 217
+        },
+        {
+          "caller": "_build_axis_breakdown",
+          "callee": "str",
+          "lineNumber": 218
+        },
+        {
+          "caller": "_build_axis_breakdown",
+          "callee": "pred_counts.get",
+          "lineNumber": 221
+        },
+        {
+          "caller": "_build_axis_breakdown",
+          "callee": "gold_counts.get",
+          "lineNumber": 222
+        },
+        {
+          "caller": "_build_axis_breakdown",
+          "callee": "confusion_counts.get",
+          "lineNumber": 223
+        },
+        {
+          "caller": "_build_axis_breakdown",
+          "callee": "float",
+          "lineNumber": 227
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 2,
+        "functionCount": 0,
+        "classCount": 2
+      }
+    },
+    {
+      "path": "ethical_benchmark/evaluators/factuality_eval.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 211,
+      "nonEmptyLines": 160,
+      "functions": [
+        {
+          "name": "_parse_answer_index",
+          "startLine": 186,
+          "endLine": 211,
+          "params": [
+            "response",
+            "num_choices"
+          ]
+        }
+      ],
+      "classes": [
+        {
+          "name": "FactualityEvalConfig",
+          "startLine": 15,
+          "endLine": 46,
+          "methods": [
+            "from_dict"
+          ],
+          "properties": [
+            "enable_llm_judge",
+            "judge_scale_min",
+            "judge_scale_max"
+          ]
+        },
+        {
+          "name": "FactualityEvaluator",
+          "startLine": 49,
+          "endLine": 183,
+          "methods": [
+            "__init__",
+            "evaluate_batch",
+            "summarize",
+            "_llm_judge"
+          ],
+          "properties": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "FactualityEvalConfig",
+          "line": 14,
+          "isDefault": false
+        },
+        {
+          "name": "FactualityEvaluator",
+          "line": 49,
+          "isDefault": false
+        },
+        {
+          "name": "_parse_answer_index",
+          "line": 186,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "from_dict",
+          "callee": "cls",
+          "lineNumber": 42
+        },
+        {
+          "caller": "from_dict",
+          "callee": "bool",
+          "lineNumber": 43
+        },
+        {
+          "caller": "from_dict",
+          "callee": "data.get",
+          "lineNumber": 43
+        },
+        {
+          "caller": "from_dict",
+          "callee": "int",
+          "lineNumber": 44
+        },
+        {
+          "caller": "from_dict",
+          "callee": "data.get",
+          "lineNumber": 44
+        },
+        {
+          "caller": "from_dict",
+          "callee": "int",
+          "lineNumber": 45
+        },
+        {
+          "caller": "from_dict",
+          "callee": "data.get",
+          "lineNumber": 45
+        },
+        {
+          "caller": "evaluate_batch",
+          "callee": "zip",
+          "lineNumber": 86
+        },
+        {
+          "caller": "evaluate_batch",
+          "callee": "_parse_answer_index",
+          "lineNumber": 87
+        },
+        {
+          "caller": "evaluate_batch",
+          "callee": "len",
+          "lineNumber": 87
+        },
+        {
+          "caller": "evaluate_batch",
+          "callee": "self._llm_judge",
+          "lineNumber": 93
+        },
+        {
+          "caller": "evaluate_batch",
+          "callee": "records.append",
+          "lineNumber": 95
+        },
+        {
+          "caller": "summarize",
+          "callee": "float",
+          "lineNumber": 130
+        },
+        {
+          "caller": "summarize",
+          "callee": "np.mean",
+          "lineNumber": 130
+        },
+        {
+          "caller": "summarize",
+          "callee": "float",
+          "lineNumber": 130
+        },
+        {
+          "caller": "summarize",
+          "callee": "float",
+          "lineNumber": 134
+        },
+        {
+          "caller": "summarize",
+          "callee": "np.mean",
+          "lineNumber": 134
+        },
+        {
+          "caller": "summarize",
+          "callee": "len",
+          "lineNumber": 143
+        },
+        {
+          "caller": "_llm_judge",
+          "callee": "self.judge_generator.generate_batch",
+          "lineNumber": 175
+        },
+        {
+          "caller": "_llm_judge",
+          "callee": "re.search",
+          "lineNumber": 176
+        },
+        {
+          "caller": "_llm_judge",
+          "callee": "int",
+          "lineNumber": 180
+        },
+        {
+          "caller": "_llm_judge",
+          "callee": "match.group",
+          "lineNumber": 180
+        },
+        {
+          "caller": "_llm_judge",
+          "callee": "float",
+          "lineNumber": 182
+        },
+        {
+          "caller": "_parse_answer_index",
+          "callee": "response.strip().upper",
+          "lineNumber": 197
+        },
+        {
+          "caller": "_parse_answer_index",
+          "callee": "response.strip",
+          "lineNumber": 197
+        },
+        {
+          "caller": "_parse_answer_index",
+          "callee": "re.search",
+          "lineNumber": 199
+        },
+        {
+          "caller": "_parse_answer_index",
+          "callee": "ord",
+          "lineNumber": 201
+        },
+        {
+          "caller": "_parse_answer_index",
+          "callee": "letter_match.group",
+          "lineNumber": 201
+        },
+        {
+          "caller": "_parse_answer_index",
+          "callee": "ord",
+          "lineNumber": 201
+        },
+        {
+          "caller": "_parse_answer_index",
+          "callee": "re.search",
+          "lineNumber": 205
+        },
+        {
+          "caller": "_parse_answer_index",
+          "callee": "int",
+          "lineNumber": 207
+        },
+        {
+          "caller": "_parse_answer_index",
+          "callee": "digit_match.group",
+          "lineNumber": 207
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 3,
+        "functionCount": 1,
+        "classCount": 2
+      }
+    },
+    {
+      "path": "ethical_benchmark/evaluators/toxicity_eval.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 339,
+      "nonEmptyLines": 253,
+      "functions": [
+        {
+          "name": "_extract_toxicity_probability",
+          "startLine": 174,
+          "endLine": 201,
+          "params": [
+            "output"
+          ]
+        },
+        {
+          "name": "_score_from_label_dict",
+          "startLine": 204,
+          "endLine": 220,
+          "params": [
+            "entry"
+          ]
+        }
+      ],
+      "classes": [
+        {
+          "name": "ToxicityScorer",
+          "startLine": 18,
+          "endLine": 32,
+          "methods": [
+            "score_batch"
+          ],
+          "properties": []
+        },
+        {
+          "name": "ToxicityEvalConfig",
+          "startLine": 36,
+          "endLine": 73,
+          "methods": [
+            "from_dict"
+          ],
+          "properties": [
+            "threshold",
+            "classifier_type",
+            "classifier_model_name",
+            "classifier_batch_size",
+            "bootstrap_resamples"
+          ]
+        },
+        {
+          "name": "DetoxifyScorer",
+          "startLine": 76,
+          "endLine": 120,
+          "methods": [
+            "__init__",
+            "score_batch"
+          ],
+          "properties": []
+        },
+        {
+          "name": "HFClassifierScorer",
+          "startLine": 123,
+          "endLine": 171,
+          "methods": [
+            "__init__",
+            "score_batch"
+          ],
+          "properties": []
+        },
+        {
+          "name": "ToxicityEvaluator",
+          "startLine": 223,
+          "endLine": 339,
+          "methods": [
+            "__init__",
+            "evaluate_batch",
+            "summarize",
+            "_build_scorer"
+          ],
+          "properties": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "ToxicityScorer",
+          "line": 18,
+          "isDefault": false
+        },
+        {
+          "name": "ToxicityEvalConfig",
+          "line": 35,
+          "isDefault": false
+        },
+        {
+          "name": "DetoxifyScorer",
+          "line": 76,
+          "isDefault": false
+        },
+        {
+          "name": "HFClassifierScorer",
+          "line": 123,
+          "isDefault": false
+        },
+        {
+          "name": "_extract_toxicity_probability",
+          "line": 174,
+          "isDefault": false
+        },
+        {
+          "name": "_score_from_label_dict",
+          "line": 204,
+          "isDefault": false
+        },
+        {
+          "name": "ToxicityEvaluator",
+          "line": 223,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "from_dict",
+          "callee": "cls",
+          "lineNumber": 67
+        },
+        {
+          "caller": "from_dict",
+          "callee": "float",
+          "lineNumber": 68
+        },
+        {
+          "caller": "from_dict",
+          "callee": "data.get",
+          "lineNumber": 68
+        },
+        {
+          "caller": "from_dict",
+          "callee": "str",
+          "lineNumber": 69
+        },
+        {
+          "caller": "from_dict",
+          "callee": "data.get",
+          "lineNumber": 69
+        },
+        {
+          "caller": "from_dict",
+          "callee": "str",
+          "lineNumber": 70
+        },
+        {
+          "caller": "from_dict",
+          "callee": "data.get",
+          "lineNumber": 70
+        },
+        {
+          "caller": "from_dict",
+          "callee": "int",
+          "lineNumber": 71
+        },
+        {
+          "caller": "from_dict",
+          "callee": "data.get",
+          "lineNumber": 71
+        },
+        {
+          "caller": "from_dict",
+          "callee": "int",
+          "lineNumber": 72
+        },
+        {
+          "caller": "from_dict",
+          "callee": "data.get",
+          "lineNumber": 72
+        },
+        {
+          "caller": "__init__",
+          "callee": "ImportError",
+          "lineNumber": 96
+        },
+        {
+          "caller": "__init__",
+          "callee": "Detoxify",
+          "lineNumber": 101
+        },
+        {
+          "caller": "score_batch",
+          "callee": "self._model.predict",
+          "lineNumber": 118
+        },
+        {
+          "caller": "score_batch",
+          "callee": "outputs.get",
+          "lineNumber": 119
+        },
+        {
+          "caller": "score_batch",
+          "callee": "float",
+          "lineNumber": 120
+        },
+        {
+          "caller": "__init__",
+          "callee": "pipeline",
+          "lineNumber": 142
+        },
+        {
+          "caller": "score_batch",
+          "callee": "self._pipe",
+          "lineNumber": 167
+        },
+        {
+          "caller": "score_batch",
+          "callee": "scores.append",
+          "lineNumber": 170
+        },
+        {
+          "caller": "score_batch",
+          "callee": "_extract_toxicity_probability",
+          "lineNumber": 170
+        },
+        {
+          "caller": "_extract_toxicity_probability",
+          "callee": "isinstance",
+          "lineNumber": 186
+        },
+        {
+          "caller": "_extract_toxicity_probability",
+          "callee": "_score_from_label_dict",
+          "lineNumber": 187
+        },
+        {
+          "caller": "_extract_toxicity_probability",
+          "callee": "isinstance",
+          "lineNumber": 189
+        },
+        {
+          "caller": "_extract_toxicity_probability",
+          "callee": "str(candidate.get(\"label\", \"\")).lower",
+          "lineNumber": 192
+        },
+        {
+          "caller": "_extract_toxicity_probability",
+          "callee": "str",
+          "lineNumber": 192
+        },
+        {
+          "caller": "_extract_toxicity_probability",
+          "callee": "candidate.get",
+          "lineNumber": 192
+        },
+        {
+          "caller": "_extract_toxicity_probability",
+          "callee": "float",
+          "lineNumber": 194
+        },
+        {
+          "caller": "_extract_toxicity_probability",
+          "callee": "candidate.get",
+          "lineNumber": 194
+        },
+        {
+          "caller": "_extract_toxicity_probability",
+          "callee": "max",
+          "lineNumber": 198
+        },
+        {
+          "caller": "_extract_toxicity_probability",
+          "callee": "float",
+          "lineNumber": 198
+        },
+        {
+          "caller": "_extract_toxicity_probability",
+          "callee": "c.get",
+          "lineNumber": 198
+        },
+        {
+          "caller": "_extract_toxicity_probability",
+          "callee": "_score_from_label_dict",
+          "lineNumber": 199
+        },
+        {
+          "caller": "_score_from_label_dict",
+          "callee": "str(entry.get(\"label\", \"\")).lower",
+          "lineNumber": 214
+        },
+        {
+          "caller": "_score_from_label_dict",
+          "callee": "str",
+          "lineNumber": 214
+        },
+        {
+          "caller": "_score_from_label_dict",
+          "callee": "entry.get",
+          "lineNumber": 214
+        },
+        {
+          "caller": "_score_from_label_dict",
+          "callee": "float",
+          "lineNumber": 215
+        },
+        {
+          "caller": "_score_from_label_dict",
+          "callee": "entry.get",
+          "lineNumber": 215
+        },
+        {
+          "caller": "__init__",
+          "callee": "self._build_scorer",
+          "lineNumber": 238
+        },
+        {
+          "caller": "evaluate_batch",
+          "callee": "self.scorer.score_batch",
+          "lineNumber": 258
+        },
+        {
+          "caller": "evaluate_batch",
+          "callee": "zip",
+          "lineNumber": 261
+        },
+        {
+          "caller": "evaluate_batch",
+          "callee": "float",
+          "lineNumber": 262
+        },
+        {
+          "caller": "evaluate_batch",
+          "callee": "records.append",
+          "lineNumber": 263
+        },
+        {
+          "caller": "summarize",
+          "callee": "float",
+          "lineNumber": 290
+        },
+        {
+          "caller": "summarize",
+          "callee": "mean",
+          "lineNumber": 300
+        },
+        {
+          "caller": "summarize",
+          "callee": "float",
+          "lineNumber": 300
+        },
+        {
+          "caller": "summarize",
+          "callee": "compute_bootstrap_ci",
+          "lineNumber": 301
+        },
+        {
+          "caller": "summarize",
+          "callee": "np.array",
+          "lineNumber": 302
+        },
+        {
+          "caller": "summarize",
+          "callee": "len",
+          "lineNumber": 307
+        },
+        {
+          "caller": "summarize",
+          "callee": "float",
+          "lineNumber": 308
+        },
+        {
+          "caller": "summarize",
+          "callee": "np.mean",
+          "lineNumber": 308
+        },
+        {
+          "caller": "summarize",
+          "callee": "float",
+          "lineNumber": 309
+        },
+        {
+          "caller": "summarize",
+          "callee": "np.std",
+          "lineNumber": 309
+        },
+        {
+          "caller": "_build_scorer",
+          "callee": "self.config.classifier_type.strip().lower",
+          "lineNumber": 328
+        },
+        {
+          "caller": "_build_scorer",
+          "callee": "self.config.classifier_type.strip",
+          "lineNumber": 328
+        },
+        {
+          "caller": "_build_scorer",
+          "callee": "DetoxifyScorer",
+          "lineNumber": 330
+        },
+        {
+          "caller": "_build_scorer",
+          "callee": "HFClassifierScorer",
+          "lineNumber": 332
+        },
+        {
+          "caller": "_build_scorer",
+          "callee": "ValueError",
+          "lineNumber": 337
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 7,
+        "functionCount": 2,
+        "classCount": 5
+      }
+    },
+    {
+      "path": "ethical_benchmark/pipeline/run_benchmark.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 517,
+      "nonEmptyLines": 416,
+      "functions": [
+        {
+          "name": "parse_args",
+          "startLine": 34,
+          "endLine": 87,
+          "params": []
+        },
+        {
+          "name": "setup_logging",
+          "startLine": 90,
+          "endLine": 103,
+          "params": [
+            "level"
+          ]
+        },
+        {
+          "name": "load_config",
+          "startLine": 106,
+          "endLine": 120,
+          "params": [
+            "path"
+          ]
+        },
+        {
+          "name": "main",
+          "startLine": 123,
+          "endLine": 193,
+          "params": []
+        },
+        {
+          "name": "_persist_results",
+          "startLine": 196,
+          "endLine": 267,
+          "params": [
+            "task",
+            "model_alias",
+            "model_spec",
+            "runtime_device",
+            "decoding_cfg",
+            "task_config",
+            "seed",
+            "evaluator",
+            "raw_path",
+            "summary_json_path",
+            "summary_csv_path",
+            "radar_csv_path"
+          ]
+        },
+        {
+          "name": "build_output_paths",
+          "startLine": 270,
+          "endLine": 294,
+          "params": [
+            "output_root",
+            "task",
+            "model_alias"
+          ]
+        },
+        {
+          "name": "load_samples",
+          "startLine": 297,
+          "endLine": 349,
+          "params": [
+            "task",
+            "task_config",
+            "max_samples",
+            "seed"
+          ]
+        },
+        {
+          "name": "build_evaluator",
+          "startLine": 352,
+          "endLine": 382,
+          "params": [
+            "task",
+            "task_config",
+            "runtime_device"
+          ]
+        },
+        {
+          "name": "run_generation_loop",
+          "startLine": 385,
+          "endLine": 459,
+          "params": [
+            "task",
+            "samples",
+            "generator",
+            "evaluator",
+            "raw_path",
+            "batch_size",
+            "resume"
+          ]
+        },
+        {
+          "name": "batched",
+          "startLine": 462,
+          "endLine": 477,
+          "params": [
+            "items",
+            "batch_size"
+          ]
+        },
+        {
+          "name": "build_radar_dimensions",
+          "startLine": 480,
+          "endLine": 513,
+          "params": [
+            "task",
+            "metrics"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "parse_args",
+          "line": 34,
+          "isDefault": false
+        },
+        {
+          "name": "setup_logging",
+          "line": 90,
+          "isDefault": false
+        },
+        {
+          "name": "load_config",
+          "line": 106,
+          "isDefault": false
+        },
+        {
+          "name": "main",
+          "line": 123,
+          "isDefault": false
+        },
+        {
+          "name": "_persist_results",
+          "line": 196,
+          "isDefault": false
+        },
+        {
+          "name": "build_output_paths",
+          "line": 270,
+          "isDefault": false
+        },
+        {
+          "name": "load_samples",
+          "line": 297,
+          "isDefault": false
+        },
+        {
+          "name": "build_evaluator",
+          "line": 352,
+          "isDefault": false
+        },
+        {
+          "name": "run_generation_loop",
+          "line": 385,
+          "isDefault": false
+        },
+        {
+          "name": "batched",
+          "line": 462,
+          "isDefault": false
+        },
+        {
+          "name": "build_radar_dimensions",
+          "line": 480,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "parse_args",
+          "callee": "argparse.ArgumentParser",
+          "lineNumber": 44
+        },
+        {
+          "caller": "parse_args",
+          "callee": "parser.add_argument",
+          "lineNumber": 45
+        },
+        {
+          "caller": "parse_args",
+          "callee": "parser.add_argument",
+          "lineNumber": 46
+        },
+        {
+          "caller": "parse_args",
+          "callee": "parser.add_argument",
+          "lineNumber": 52
+        },
+        {
+          "caller": "parse_args",
+          "callee": "parser.add_argument",
+          "lineNumber": 53
+        },
+        {
+          "caller": "parse_args",
+          "callee": "parser.add_argument",
+          "lineNumber": 54
+        },
+        {
+          "caller": "parse_args",
+          "callee": "parser.add_argument",
+          "lineNumber": 55
+        },
+        {
+          "caller": "parse_args",
+          "callee": "parser.add_argument",
+          "lineNumber": 56
+        },
+        {
+          "caller": "parse_args",
+          "callee": "parser.add_argument",
+          "lineNumber": 57
+        },
+        {
+          "caller": "parse_args",
+          "callee": "parser.add_argument",
+          "lineNumber": 63
+        },
+        {
+          "caller": "parse_args",
+          "callee": "parser.add_argument",
+          "lineNumber": 70
+        },
+        {
+          "caller": "parse_args",
+          "callee": "parser.add_argument",
+          "lineNumber": 76
+        },
+        {
+          "caller": "parse_args",
+          "callee": "parser.add_argument",
+          "lineNumber": 81
+        },
+        {
+          "caller": "parse_args",
+          "callee": "parser.parse_args",
+          "lineNumber": 87
+        },
+        {
+          "caller": "setup_logging",
+          "callee": "logging.basicConfig",
+          "lineNumber": 100
+        },
+        {
+          "caller": "setup_logging",
+          "callee": "getattr",
+          "lineNumber": 101
+        },
+        {
+          "caller": "setup_logging",
+          "callee": "level.upper",
+          "lineNumber": 101
+        },
+        {
+          "caller": "load_config",
+          "callee": "path.open",
+          "lineNumber": 119
+        },
+        {
+          "caller": "load_config",
+          "callee": "yaml.safe_load",
+          "lineNumber": 120
+        },
+        {
+          "caller": "main",
+          "callee": "parse_args",
+          "lineNumber": 130
+        },
+        {
+          "caller": "main",
+          "callee": "setup_logging",
+          "lineNumber": 131
+        },
+        {
+          "caller": "main",
+          "callee": "Path",
+          "lineNumber": 133
+        },
+        {
+          "caller": "main",
+          "callee": "load_config",
+          "lineNumber": 134
+        },
+        {
+          "caller": "main",
+          "callee": "validate_config",
+          "lineNumber": 138
+        },
+        {
+          "caller": "main",
+          "callee": "LOGGER.warning",
+          "lineNumber": 140
+        },
+        {
+          "caller": "main",
+          "callee": "set_global_seed",
+          "lineNumber": 142
+        },
+        {
+          "caller": "main",
+          "callee": "build_model_spec",
+          "lineNumber": 144
+        },
+        {
+          "caller": "main",
+          "callee": "DecodingConfig.from_dict",
+          "lineNumber": 147
+        },
+        {
+          "caller": "main",
+          "callee": "config.get",
+          "lineNumber": 147
+        },
+        {
+          "caller": "main",
+          "callee": "int",
+          "lineNumber": 149
+        },
+        {
+          "caller": "main",
+          "callee": "HFModelLoader",
+          "lineNumber": 151
+        },
+        {
+          "caller": "main",
+          "callee": "loader.load",
+          "lineNumber": 152
+        },
+        {
+          "caller": "main",
+          "callee": "TextGenerator",
+          "lineNumber": 153
+        },
+        {
+          "caller": "main",
+          "callee": "Path",
+          "lineNumber": 155
+        },
+        {
+          "caller": "main",
+          "callee": "build_output_paths",
+          "lineNumber": 156
+        },
+        {
+          "caller": "main",
+          "callee": "raw_path.exists",
+          "lineNumber": 162
+        },
+        {
+          "caller": "main",
+          "callee": "LOGGER.warning",
+          "lineNumber": 163
+        },
+        {
+          "caller": "main",
+          "callee": "raw_path.unlink",
+          "lineNumber": 164
+        },
+        {
+          "caller": "main",
+          "callee": "load_samples",
+          "lineNumber": 166
+        },
+        {
+          "caller": "main",
+          "callee": "LOGGER.info",
+          "lineNumber": 167
+        },
+        {
+          "caller": "main",
+          "callee": "len",
+          "lineNumber": 167
+        },
+        {
+          "caller": "main",
+          "callee": "build_evaluator",
+          "lineNumber": 169
+        },
+        {
+          "caller": "main",
+          "callee": "run_generation_loop",
+          "lineNumber": 170
+        },
+        {
+          "caller": "main",
+          "callee": "int",
+          "lineNumber": 176
+        },
+        {
+          "caller": "main",
+          "callee": "task_config.get",
+          "lineNumber": 176
+        },
+        {
+          "caller": "main",
+          "callee": "_persist_results",
+          "lineNumber": 180
+        },
+        {
+          "caller": "_persist_results",
+          "callee": "read_jsonl",
+          "lineNumber": 230
+        },
+        {
+          "caller": "_persist_results",
+          "callee": "evaluator.summarize",
+          "lineNumber": 231
+        },
+        {
+          "caller": "_persist_results",
+          "callee": "len",
+          "lineNumber": 245
+        },
+        {
+          "caller": "_persist_results",
+          "callee": "write_json",
+          "lineNumber": 249
+        },
+        {
+          "caller": "_persist_results",
+          "callee": "len",
+          "lineNumber": 256
+        },
+        {
+          "caller": "_persist_results",
+          "callee": "csv_row.update",
+          "lineNumber": 258
+        },
+        {
+          "caller": "_persist_results",
+          "callee": "flatten_for_csv",
+          "lineNumber": 258
+        },
+        {
+          "caller": "_persist_results",
+          "callee": "append_summary_csv",
+          "lineNumber": 259
+        },
+        {
+          "caller": "_persist_results",
+          "callee": "build_radar_dimensions",
+          "lineNumber": 261
+        },
+        {
+          "caller": "_persist_results",
+          "callee": "export_radar_csv",
+          "lineNumber": 262
+        },
+        {
+          "caller": "_persist_results",
+          "callee": "LOGGER.info",
+          "lineNumber": 264
+        },
+        {
+          "caller": "_persist_results",
+          "callee": "LOGGER.info",
+          "lineNumber": 265
+        },
+        {
+          "caller": "_persist_results",
+          "callee": "LOGGER.info",
+          "lineNumber": 266
+        },
+        {
+          "caller": "_persist_results",
+          "callee": "LOGGER.info",
+          "lineNumber": 267
+        },
+        {
+          "caller": "build_output_paths",
+          "callee": "model_alias.replace",
+          "lineNumber": 289
+        },
+        {
+          "caller": "load_samples",
+          "callee": "task_config.get",
+          "lineNumber": 321
+        },
+        {
+          "caller": "load_samples",
+          "callee": "load_real_toxicity_prompts",
+          "lineNumber": 324
+        },
+        {
+          "caller": "load_samples",
+          "callee": "task_config.get",
+          "lineNumber": 325
+        },
+        {
+          "caller": "load_samples",
+          "callee": "task_config.get",
+          "lineNumber": 326
+        },
+        {
+          "caller": "load_samples",
+          "callee": "load_bbq",
+          "lineNumber": 332
+        },
+        {
+          "caller": "load_samples",
+          "callee": "task_config.get",
+          "lineNumber": 333
+        },
+        {
+          "caller": "load_samples",
+          "callee": "task_config.get",
+          "lineNumber": 334
+        },
+        {
+          "caller": "load_samples",
+          "callee": "task_config.get",
+          "lineNumber": 335
+        },
+        {
+          "caller": "load_samples",
+          "callee": "load_truthfulqa",
+          "lineNumber": 341
+        },
+        {
+          "caller": "load_samples",
+          "callee": "task_config.get",
+          "lineNumber": 342
+        },
+        {
+          "caller": "load_samples",
+          "callee": "task_config.get",
+          "lineNumber": 343
+        },
+        {
+          "caller": "load_samples",
+          "callee": "task_config.get",
+          "lineNumber": 344
+        },
+        {
+          "caller": "load_samples",
+          "callee": "ValueError",
+          "lineNumber": 349
+        },
+        {
+          "caller": "build_evaluator",
+          "callee": "ToxicityEvalConfig.from_dict",
+          "lineNumber": 371
+        },
+        {
+          "caller": "build_evaluator",
+          "callee": "task_config.get",
+          "lineNumber": 371
+        },
+        {
+          "caller": "build_evaluator",
+          "callee": "ToxicityEvaluator",
+          "lineNumber": 372
+        },
+        {
+          "caller": "build_evaluator",
+          "callee": "BiasEvalConfig.from_dict",
+          "lineNumber": 375
+        },
+        {
+          "caller": "build_evaluator",
+          "callee": "task_config.get",
+          "lineNumber": 375
+        },
+        {
+          "caller": "build_evaluator",
+          "callee": "BiasEvaluator",
+          "lineNumber": 376
+        },
+        {
+          "caller": "build_evaluator",
+          "callee": "FactualityEvalConfig.from_dict",
+          "lineNumber": 379
+        },
+        {
+          "caller": "build_evaluator",
+          "callee": "task_config.get",
+          "lineNumber": 379
+        },
+        {
+          "caller": "build_evaluator",
+          "callee": "FactualityEvaluator",
+          "lineNumber": 380
+        },
+        {
+          "caller": "build_evaluator",
+          "callee": "ValueError",
+          "lineNumber": 382
+        },
+        {
+          "caller": "run_generation_loop",
+          "callee": "read_jsonl",
+          "lineNumber": 409
+        },
+        {
+          "caller": "run_generation_loop",
+          "callee": "str",
+          "lineNumber": 410
+        },
+        {
+          "caller": "run_generation_loop",
+          "callee": "str",
+          "lineNumber": 412
+        },
+        {
+          "caller": "run_generation_loop",
+          "callee": "LOGGER.info",
+          "lineNumber": 413
+        },
+        {
+          "caller": "run_generation_loop",
+          "callee": "len",
+          "lineNumber": 416
+        },
+        {
+          "caller": "run_generation_loop",
+          "callee": "len",
+          "lineNumber": 417
+        },
+        {
+          "caller": "run_generation_loop",
+          "callee": "len",
+          "lineNumber": 420
+        },
+        {
+          "caller": "run_generation_loop",
+          "callee": "len",
+          "lineNumber": 421
+        },
+        {
+          "caller": "run_generation_loop",
+          "callee": "list",
+          "lineNumber": 424
+        },
+        {
+          "caller": "run_generation_loop",
+          "callee": "batched",
+          "lineNumber": 424
+        },
+        {
+          "caller": "run_generation_loop",
+          "callee": "max",
+          "lineNumber": 424
+        },
+        {
+          "caller": "run_generation_loop",
+          "callee": "tqdm",
+          "lineNumber": 425
+        },
+        {
+          "caller": "run_generation_loop",
+          "callee": "len",
+          "lineNumber": 429
+        },
+        {
+          "caller": "run_generation_loop",
+          "callee": "max",
+          "lineNumber": 429
+        },
+        {
+          "caller": "run_generation_loop",
+          "callee": "len",
+          "lineNumber": 430
+        },
+        {
+          "caller": "run_generation_loop",
+          "callee": "max",
+          "lineNumber": 430
+        },
+        {
+          "caller": "run_generation_loop",
+          "callee": "len",
+          "lineNumber": 430
+        },
+        {
+          "caller": "run_generation_loop",
+          "callee": "generator.generate_batch",
+          "lineNumber": 436
+        },
+        {
+          "caller": "run_generation_loop",
+          "callee": "evaluator.evaluate_batch",
+          "lineNumber": 437
+        },
+        {
+          "caller": "run_generation_loop",
+          "callee": "append_jsonl",
+          "lineNumber": 438
+        },
+        {
+          "caller": "run_generation_loop",
+          "callee": "len",
+          "lineNumber": 440
+        },
+        {
+          "caller": "run_generation_loop",
+          "callee": "progress_bar.set_postfix",
+          "lineNumber": 441
+        },
+        {
+          "caller": "run_generation_loop",
+          "callee": "str",
+          "lineNumber": 444
+        },
+        {
+          "caller": "run_generation_loop",
+          "callee": "LOGGER.error",
+          "lineNumber": 445
+        },
+        {
+          "caller": "run_generation_loop",
+          "callee": "progress_bar.set_postfix",
+          "lineNumber": 450
+        },
+        {
+          "caller": "run_generation_loop",
+          "callee": "LOGGER.warning",
+          "lineNumber": 454
+        },
+        {
+          "caller": "run_generation_loop",
+          "callee": "len",
+          "lineNumber": 458
+        },
+        {
+          "caller": "batched",
+          "callee": "range",
+          "lineNumber": 476
+        },
+        {
+          "caller": "batched",
+          "callee": "len",
+          "lineNumber": 476
+        },
+        {
+          "caller": "build_radar_dimensions",
+          "callee": "metrics.get",
+          "lineNumber": 495
+        },
+        {
+          "caller": "build_radar_dimensions",
+          "callee": "float",
+          "lineNumber": 496
+        },
+        {
+          "caller": "build_radar_dimensions",
+          "callee": "max",
+          "lineNumber": 497
+        },
+        {
+          "caller": "build_radar_dimensions",
+          "callee": "min",
+          "lineNumber": 497
+        },
+        {
+          "caller": "build_radar_dimensions",
+          "callee": "float",
+          "lineNumber": 500
+        },
+        {
+          "caller": "build_radar_dimensions",
+          "callee": "metrics.get",
+          "lineNumber": 500
+        },
+        {
+          "caller": "build_radar_dimensions",
+          "callee": "float",
+          "lineNumber": 501
+        },
+        {
+          "caller": "build_radar_dimensions",
+          "callee": "metrics.get",
+          "lineNumber": 501
+        },
+        {
+          "caller": "build_radar_dimensions",
+          "callee": "min",
+          "lineNumber": 502
+        },
+        {
+          "caller": "build_radar_dimensions",
+          "callee": "abs",
+          "lineNumber": 502
+        },
+        {
+          "caller": "build_radar_dimensions",
+          "callee": "max",
+          "lineNumber": 504
+        },
+        {
+          "caller": "build_radar_dimensions",
+          "callee": "min",
+          "lineNumber": 504
+        },
+        {
+          "caller": "build_radar_dimensions",
+          "callee": "max",
+          "lineNumber": 505
+        },
+        {
+          "caller": "build_radar_dimensions",
+          "callee": "min",
+          "lineNumber": 505
+        },
+        {
+          "caller": "build_radar_dimensions",
+          "callee": "metrics.get",
+          "lineNumber": 509
+        },
+        {
+          "caller": "build_radar_dimensions",
+          "callee": "float",
+          "lineNumber": 510
+        },
+        {
+          "caller": "build_radar_dimensions",
+          "callee": "objective.get",
+          "lineNumber": 510
+        },
+        {
+          "caller": "build_radar_dimensions",
+          "callee": "max",
+          "lineNumber": 511
+        },
+        {
+          "caller": "build_radar_dimensions",
+          "callee": "min",
+          "lineNumber": 511
+        }
+      ],
+      "metrics": {
+        "importCount": 10,
+        "exportCount": 11,
+        "functionCount": 11,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "tests/conftest.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 196,
+      "nonEmptyLines": 181,
+      "functions": [
+        {
+          "name": "toxicity_samples",
+          "startLine": 15,
+          "endLine": 21,
+          "params": []
+        },
+        {
+          "name": "bias_samples",
+          "startLine": 25,
+          "endLine": 46,
+          "params": []
+        },
+        {
+          "name": "factuality_samples",
+          "startLine": 50,
+          "endLine": 67,
+          "params": []
+        },
+        {
+          "name": "default_config",
+          "startLine": 71,
+          "endLine": 126,
+          "params": []
+        },
+        {
+          "name": "quant_config_dict",
+          "startLine": 130,
+          "endLine": 196,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "toxicity_samples",
+          "line": 14,
+          "isDefault": false
+        },
+        {
+          "name": "bias_samples",
+          "line": 24,
+          "isDefault": false
+        },
+        {
+          "name": "factuality_samples",
+          "line": 49,
+          "isDefault": false
+        },
+        {
+          "name": "default_config",
+          "line": 70,
+          "isDefault": false
+        },
+        {
+          "name": "quant_config_dict",
+          "line": 129,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "toxicity_samples",
+          "callee": "ToxicitySample",
+          "lineNumber": 18
+        },
+        {
+          "caller": "toxicity_samples",
+          "callee": "ToxicitySample",
+          "lineNumber": 19
+        },
+        {
+          "caller": "toxicity_samples",
+          "callee": "ToxicitySample",
+          "lineNumber": 20
+        },
+        {
+          "caller": "bias_samples",
+          "callee": "BiasSample",
+          "lineNumber": 28
+        },
+        {
+          "caller": "bias_samples",
+          "callee": "BiasSample",
+          "lineNumber": 37
+        },
+        {
+          "caller": "factuality_samples",
+          "callee": "FactualitySample",
+          "lineNumber": 53
+        },
+        {
+          "caller": "factuality_samples",
+          "callee": "FactualitySample",
+          "lineNumber": 60
+        }
+      ],
+      "metrics": {
+        "importCount": 3,
+        "exportCount": 5,
+        "functionCount": 5,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "tests/test_datasets.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 193,
+      "nonEmptyLines": 135,
+      "classes": [
+        {
+          "name": "TestSafeFloat",
+          "startLine": 17,
+          "endLine": 33,
+          "methods": [
+            "test_none_returns_none",
+            "test_valid_float",
+            "test_int_conversion",
+            "test_string_conversion",
+            "test_invalid_string_returns_none"
+          ],
+          "properties": []
+        },
+        {
+          "name": "TestToxicitySample",
+          "startLine": 36,
+          "endLine": 49,
+          "methods": [
+            "test_creation",
+            "test_immutability"
+          ],
+          "properties": []
+        },
+        {
+          "name": "TestExtractChoices",
+          "startLine": 57,
+          "endLine": 73,
+          "methods": [
+            "test_ans_keys",
+            "test_choices_list",
+            "test_answers_list",
+            "test_empty_returns_empty"
+          ],
+          "properties": []
+        },
+        {
+          "name": "TestParseChoiceIndex",
+          "startLine": 76,
+          "endLine": 93,
+          "methods": [
+            "test_integer_valid",
+            "test_integer_out_of_range",
+            "test_letter_string",
+            "test_none_returns_none",
+            "test_bool_converts_to_int"
+          ],
+          "properties": []
+        },
+        {
+          "name": "TestExtractMCTargets",
+          "startLine": 101,
+          "endLine": 127,
+          "methods": [
+            "test_mc1_targets",
+            "test_flat_choices_labels",
+            "test_empty_row"
+          ],
+          "properties": []
+        },
+        {
+          "name": "TestFactualitySample",
+          "startLine": 130,
+          "endLine": 148,
+          "methods": [
+            "test_creation",
+            "test_immutability"
+          ],
+          "properties": []
+        },
+        {
+          "name": "TestLoaderValidation",
+          "startLine": 156,
+          "endLine": 193,
+          "methods": [
+            "test_toxicity_negative_samples",
+            "test_toxicity_empty_dataset_name",
+            "test_bias_negative_samples",
+            "test_bias_empty_split",
+            "test_factuality_negative_samples",
+            "test_factuality_empty_dataset_name"
+          ],
+          "properties": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "TestSafeFloat",
+          "line": 17,
+          "isDefault": false
+        },
+        {
+          "name": "TestToxicitySample",
+          "line": 36,
+          "isDefault": false
+        },
+        {
+          "name": "TestExtractChoices",
+          "line": 57,
+          "isDefault": false
+        },
+        {
+          "name": "TestParseChoiceIndex",
+          "line": 76,
+          "isDefault": false
+        },
+        {
+          "name": "TestExtractMCTargets",
+          "line": 101,
+          "isDefault": false
+        },
+        {
+          "name": "TestFactualitySample",
+          "line": 130,
+          "isDefault": false
+        },
+        {
+          "name": "TestLoaderValidation",
+          "line": 156,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "test_none_returns_none",
+          "callee": "_safe_float",
+          "lineNumber": 21
+        },
+        {
+          "caller": "test_valid_float",
+          "callee": "_safe_float",
+          "lineNumber": 24
+        },
+        {
+          "caller": "test_int_conversion",
+          "callee": "_safe_float",
+          "lineNumber": 27
+        },
+        {
+          "caller": "test_string_conversion",
+          "callee": "_safe_float",
+          "lineNumber": 30
+        },
+        {
+          "caller": "test_invalid_string_returns_none",
+          "callee": "_safe_float",
+          "lineNumber": 33
+        },
+        {
+          "caller": "test_creation",
+          "callee": "ToxicitySample",
+          "lineNumber": 40
+        },
+        {
+          "caller": "test_immutability",
+          "callee": "ToxicitySample",
+          "lineNumber": 47
+        },
+        {
+          "caller": "test_immutability",
+          "callee": "pytest.raises",
+          "lineNumber": 48
+        },
+        {
+          "caller": "test_ans_keys",
+          "callee": "_extract_choices",
+          "lineNumber": 62
+        },
+        {
+          "caller": "test_choices_list",
+          "callee": "_extract_choices",
+          "lineNumber": 66
+        },
+        {
+          "caller": "test_answers_list",
+          "callee": "_extract_choices",
+          "lineNumber": 70
+        },
+        {
+          "caller": "test_empty_returns_empty",
+          "callee": "_extract_choices",
+          "lineNumber": 73
+        },
+        {
+          "caller": "test_integer_valid",
+          "callee": "_parse_choice_index",
+          "lineNumber": 80
+        },
+        {
+          "caller": "test_integer_out_of_range",
+          "callee": "_parse_choice_index",
+          "lineNumber": 83
+        },
+        {
+          "caller": "test_letter_string",
+          "callee": "_parse_choice_index",
+          "lineNumber": 86
+        },
+        {
+          "caller": "test_none_returns_none",
+          "callee": "_parse_choice_index",
+          "lineNumber": 89
+        },
+        {
+          "caller": "test_bool_converts_to_int",
+          "callee": "_parse_choice_index",
+          "lineNumber": 92
+        },
+        {
+          "caller": "test_bool_converts_to_int",
+          "callee": "_parse_choice_index",
+          "lineNumber": 93
+        },
+        {
+          "caller": "test_mc1_targets",
+          "callee": "_extract_mc_targets",
+          "lineNumber": 111
+        },
+        {
+          "caller": "test_flat_choices_labels",
+          "callee": "_extract_mc_targets",
+          "lineNumber": 120
+        },
+        {
+          "caller": "test_empty_row",
+          "callee": "_extract_mc_targets",
+          "lineNumber": 125
+        },
+        {
+          "caller": "test_creation",
+          "callee": "FactualitySample",
+          "lineNumber": 134
+        },
+        {
+          "caller": "test_immutability",
+          "callee": "FactualitySample",
+          "lineNumber": 144
+        },
+        {
+          "caller": "test_immutability",
+          "callee": "pytest.raises",
+          "lineNumber": 147
+        },
+        {
+          "caller": "test_toxicity_negative_samples",
+          "callee": "pytest.raises",
+          "lineNumber": 162
+        },
+        {
+          "caller": "test_toxicity_negative_samples",
+          "callee": "load_real_toxicity_prompts",
+          "lineNumber": 163
+        },
+        {
+          "caller": "test_toxicity_empty_dataset_name",
+          "callee": "pytest.raises",
+          "lineNumber": 168
+        },
+        {
+          "caller": "test_toxicity_empty_dataset_name",
+          "callee": "load_real_toxicity_prompts",
+          "lineNumber": 169
+        },
+        {
+          "caller": "test_bias_negative_samples",
+          "callee": "pytest.raises",
+          "lineNumber": 174
+        },
+        {
+          "caller": "test_bias_negative_samples",
+          "callee": "load_bbq",
+          "lineNumber": 175
+        },
+        {
+          "caller": "test_bias_empty_split",
+          "callee": "pytest.raises",
+          "lineNumber": 180
+        },
+        {
+          "caller": "test_bias_empty_split",
+          "callee": "load_bbq",
+          "lineNumber": 181
+        },
+        {
+          "caller": "test_factuality_negative_samples",
+          "callee": "pytest.raises",
+          "lineNumber": 186
+        },
+        {
+          "caller": "test_factuality_negative_samples",
+          "callee": "load_truthfulqa",
+          "lineNumber": 187
+        },
+        {
+          "caller": "test_factuality_empty_dataset_name",
+          "callee": "pytest.raises",
+          "lineNumber": 192
+        },
+        {
+          "caller": "test_factuality_empty_dataset_name",
+          "callee": "load_truthfulqa",
+          "lineNumber": 193
+        }
+      ],
+      "metrics": {
+        "importCount": 3,
+        "exportCount": 7,
+        "functionCount": 0,
+        "classCount": 7
+      }
+    },
+    {
+      "path": "tests/test_evaluators.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 162,
+      "nonEmptyLines": 116,
+      "classes": [
+        {
+          "name": "TestBiasAnswerParsing",
+          "startLine": 26,
+          "endLine": 49,
+          "methods": [
+            "setup_method",
+            "test_parse_single_letter",
+            "test_parse_letter_in_sentence",
+            "test_parse_digit",
+            "test_parse_returns_none_on_gibberish",
+            "test_parse_out_of_range",
+            "test_parse_empty_string"
+          ],
+          "properties": []
+        },
+        {
+          "name": "TestFactualityAnswerParsing",
+          "startLine": 52,
+          "endLine": 65,
+          "methods": [
+            "test_parse_single_letter",
+            "test_parse_letter_with_period",
+            "test_parse_digit_fallback",
+            "test_parse_none_on_empty"
+          ],
+          "properties": []
+        },
+        {
+          "name": "TestExtractToxicityProbability",
+          "startLine": 73,
+          "endLine": 101,
+          "methods": [
+            "test_dict_toxic_label",
+            "test_dict_non_toxic_label",
+            "test_list_output",
+            "test_list_no_toxic_label",
+            "test_fallback_on_unexpected_type"
+          ],
+          "properties": []
+        },
+        {
+          "name": "TestBiasEvaluator",
+          "startLine": 109,
+          "endLine": 133,
+          "methods": [
+            "test_evaluate_batch",
+            "test_summarize_empty",
+            "test_summarize_computes_accuracy"
+          ],
+          "properties": []
+        },
+        {
+          "name": "TestFactualityEvaluator",
+          "startLine": 141,
+          "endLine": 162,
+          "methods": [
+            "test_evaluate_batch",
+            "test_summarize_computes_accuracy",
+            "test_summarize_empty"
+          ],
+          "properties": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "TestBiasAnswerParsing",
+          "line": 26,
+          "isDefault": false
+        },
+        {
+          "name": "TestFactualityAnswerParsing",
+          "line": 52,
+          "isDefault": false
+        },
+        {
+          "name": "TestExtractToxicityProbability",
+          "line": 73,
+          "isDefault": false
+        },
+        {
+          "name": "TestBiasEvaluator",
+          "line": 109,
+          "isDefault": false
+        },
+        {
+          "name": "TestFactualityEvaluator",
+          "line": 141,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "setup_method",
+          "callee": "BiasEvaluator",
+          "lineNumber": 30
+        },
+        {
+          "caller": "setup_method",
+          "callee": "BiasEvalConfig",
+          "lineNumber": 30
+        },
+        {
+          "caller": "test_parse_single_letter",
+          "callee": "self.evaluator._parse_answer_index",
+          "lineNumber": 33
+        },
+        {
+          "caller": "test_parse_letter_in_sentence",
+          "callee": "self.evaluator._parse_answer_index",
+          "lineNumber": 36
+        },
+        {
+          "caller": "test_parse_digit",
+          "callee": "self.evaluator._parse_answer_index",
+          "lineNumber": 39
+        },
+        {
+          "caller": "test_parse_returns_none_on_gibberish",
+          "callee": "self.evaluator._parse_answer_index",
+          "lineNumber": 42
+        },
+        {
+          "caller": "test_parse_out_of_range",
+          "callee": "self.evaluator._parse_answer_index",
+          "lineNumber": 46
+        },
+        {
+          "caller": "test_parse_empty_string",
+          "callee": "self.evaluator._parse_answer_index",
+          "lineNumber": 49
+        },
+        {
+          "caller": "test_parse_single_letter",
+          "callee": "factuality_parse",
+          "lineNumber": 56
+        },
+        {
+          "caller": "test_parse_letter_with_period",
+          "callee": "factuality_parse",
+          "lineNumber": 59
+        },
+        {
+          "caller": "test_parse_digit_fallback",
+          "callee": "factuality_parse",
+          "lineNumber": 62
+        },
+        {
+          "caller": "test_parse_none_on_empty",
+          "callee": "factuality_parse",
+          "lineNumber": 65
+        },
+        {
+          "caller": "test_dict_toxic_label",
+          "callee": "_extract_toxicity_probability",
+          "lineNumber": 78
+        },
+        {
+          "caller": "test_dict_non_toxic_label",
+          "callee": "abs",
+          "lineNumber": 83
+        },
+        {
+          "caller": "test_dict_non_toxic_label",
+          "callee": "_extract_toxicity_probability",
+          "lineNumber": 83
+        },
+        {
+          "caller": "test_list_output",
+          "callee": "_extract_toxicity_probability",
+          "lineNumber": 90
+        },
+        {
+          "caller": "test_list_no_toxic_label",
+          "callee": "_extract_toxicity_probability",
+          "lineNumber": 97
+        },
+        {
+          "caller": "test_list_no_toxic_label",
+          "callee": "isinstance",
+          "lineNumber": 98
+        },
+        {
+          "caller": "test_fallback_on_unexpected_type",
+          "callee": "_extract_toxicity_probability",
+          "lineNumber": 101
+        },
+        {
+          "caller": "test_evaluate_batch",
+          "callee": "BiasEvaluator",
+          "lineNumber": 113
+        },
+        {
+          "caller": "test_evaluate_batch",
+          "callee": "BiasEvalConfig",
+          "lineNumber": 113
+        },
+        {
+          "caller": "test_evaluate_batch",
+          "callee": "evaluator.evaluate_batch",
+          "lineNumber": 115
+        },
+        {
+          "caller": "test_evaluate_batch",
+          "callee": "len",
+          "lineNumber": 117
+        },
+        {
+          "caller": "test_summarize_empty",
+          "callee": "BiasEvaluator",
+          "lineNumber": 123
+        },
+        {
+          "caller": "test_summarize_empty",
+          "callee": "BiasEvalConfig",
+          "lineNumber": 123
+        },
+        {
+          "caller": "test_summarize_empty",
+          "callee": "evaluator.summarize",
+          "lineNumber": 124
+        },
+        {
+          "caller": "test_summarize_computes_accuracy",
+          "callee": "BiasEvaluator",
+          "lineNumber": 129
+        },
+        {
+          "caller": "test_summarize_computes_accuracy",
+          "callee": "BiasEvalConfig",
+          "lineNumber": 129
+        },
+        {
+          "caller": "test_summarize_computes_accuracy",
+          "callee": "evaluator.evaluate_batch",
+          "lineNumber": 131
+        },
+        {
+          "caller": "test_summarize_computes_accuracy",
+          "callee": "evaluator.summarize",
+          "lineNumber": 132
+        },
+        {
+          "caller": "test_evaluate_batch",
+          "callee": "FactualityEvaluator",
+          "lineNumber": 145
+        },
+        {
+          "caller": "test_evaluate_batch",
+          "callee": "FactualityEvalConfig",
+          "lineNumber": 145
+        },
+        {
+          "caller": "test_evaluate_batch",
+          "callee": "evaluator.evaluate_batch",
+          "lineNumber": 147
+        },
+        {
+          "caller": "test_evaluate_batch",
+          "callee": "len",
+          "lineNumber": 149
+        },
+        {
+          "caller": "test_evaluate_batch",
+          "callee": "all",
+          "lineNumber": 150
+        },
+        {
+          "caller": "test_summarize_computes_accuracy",
+          "callee": "FactualityEvaluator",
+          "lineNumber": 153
+        },
+        {
+          "caller": "test_summarize_computes_accuracy",
+          "callee": "FactualityEvalConfig",
+          "lineNumber": 153
+        },
+        {
+          "caller": "test_summarize_computes_accuracy",
+          "callee": "evaluator.evaluate_batch",
+          "lineNumber": 155
+        },
+        {
+          "caller": "test_summarize_computes_accuracy",
+          "callee": "evaluator.summarize",
+          "lineNumber": 156
+        },
+        {
+          "caller": "test_summarize_empty",
+          "callee": "FactualityEvaluator",
+          "lineNumber": 160
+        },
+        {
+          "caller": "test_summarize_empty",
+          "callee": "FactualityEvalConfig",
+          "lineNumber": 160
+        },
+        {
+          "caller": "test_summarize_empty",
+          "callee": "evaluator.summarize",
+          "lineNumber": 161
+        }
+      ],
+      "metrics": {
+        "importCount": 3,
+        "exportCount": 5,
+        "functionCount": 0,
+        "classCount": 5
+      }
+    },
+    {
+      "path": "tests/test_pipeline.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 111,
+      "nonEmptyLines": 83,
+      "classes": [
+        {
+          "name": "TestBatched",
+          "startLine": 22,
+          "endLine": 46,
+          "methods": [
+            "test_exact_division",
+            "test_remainder",
+            "test_empty_input",
+            "test_single_element",
+            "test_batch_size_larger_than_input"
+          ],
+          "properties": []
+        },
+        {
+          "name": "TestBuildOutputPaths",
+          "startLine": 54,
+          "endLine": 75,
+          "methods": [
+            "test_paths_contain_task_and_alias",
+            "test_slash_in_alias_sanitized"
+          ],
+          "properties": []
+        },
+        {
+          "name": "TestBuildRadarDimensions",
+          "startLine": 83,
+          "endLine": 111,
+          "methods": [
+            "test_toxicity_dimensions",
+            "test_bias_dimensions",
+            "test_factuality_dimensions",
+            "test_unknown_task_empty",
+            "test_clamping"
+          ],
+          "properties": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "TestBatched",
+          "line": 22,
+          "isDefault": false
+        },
+        {
+          "name": "TestBuildOutputPaths",
+          "line": 54,
+          "isDefault": false
+        },
+        {
+          "name": "TestBuildRadarDimensions",
+          "line": 83,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "test_exact_division",
+          "callee": "list",
+          "lineNumber": 26
+        },
+        {
+          "caller": "test_exact_division",
+          "callee": "range",
+          "lineNumber": 26
+        },
+        {
+          "caller": "test_exact_division",
+          "callee": "list",
+          "lineNumber": 27
+        },
+        {
+          "caller": "test_exact_division",
+          "callee": "batched",
+          "lineNumber": 27
+        },
+        {
+          "caller": "test_remainder",
+          "callee": "list",
+          "lineNumber": 31
+        },
+        {
+          "caller": "test_remainder",
+          "callee": "range",
+          "lineNumber": 31
+        },
+        {
+          "caller": "test_remainder",
+          "callee": "list",
+          "lineNumber": 32
+        },
+        {
+          "caller": "test_remainder",
+          "callee": "batched",
+          "lineNumber": 32
+        },
+        {
+          "caller": "test_remainder",
+          "callee": "len",
+          "lineNumber": 33
+        },
+        {
+          "caller": "test_empty_input",
+          "callee": "list",
+          "lineNumber": 37
+        },
+        {
+          "caller": "test_empty_input",
+          "callee": "batched",
+          "lineNumber": 37
+        },
+        {
+          "caller": "test_single_element",
+          "callee": "list",
+          "lineNumber": 40
+        },
+        {
+          "caller": "test_single_element",
+          "callee": "batched",
+          "lineNumber": 40
+        },
+        {
+          "caller": "test_batch_size_larger_than_input",
+          "callee": "list",
+          "lineNumber": 45
+        },
+        {
+          "caller": "test_batch_size_larger_than_input",
+          "callee": "batched",
+          "lineNumber": 45
+        },
+        {
+          "caller": "test_paths_contain_task_and_alias",
+          "callee": "build_output_paths",
+          "lineNumber": 58
+        },
+        {
+          "caller": "test_paths_contain_task_and_alias",
+          "callee": "Path",
+          "lineNumber": 59
+        },
+        {
+          "caller": "test_paths_contain_task_and_alias",
+          "callee": "str",
+          "lineNumber": 63
+        },
+        {
+          "caller": "test_slash_in_alias_sanitized",
+          "callee": "build_output_paths",
+          "lineNumber": 70
+        },
+        {
+          "caller": "test_slash_in_alias_sanitized",
+          "callee": "Path",
+          "lineNumber": 71
+        },
+        {
+          "caller": "test_toxicity_dimensions",
+          "callee": "build_radar_dimensions",
+          "lineNumber": 88
+        },
+        {
+          "caller": "test_toxicity_dimensions",
+          "callee": "abs",
+          "lineNumber": 91
+        },
+        {
+          "caller": "test_bias_dimensions",
+          "callee": "build_radar_dimensions",
+          "lineNumber": 95
+        },
+        {
+          "caller": "test_factuality_dimensions",
+          "callee": "build_radar_dimensions",
+          "lineNumber": 101
+        },
+        {
+          "caller": "test_factuality_dimensions",
+          "callee": "abs",
+          "lineNumber": 103
+        },
+        {
+          "caller": "test_unknown_task_empty",
+          "callee": "build_radar_dimensions",
+          "lineNumber": 106
+        },
+        {
+          "caller": "test_clamping",
+          "callee": "build_radar_dimensions",
+          "lineNumber": 110
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 3,
+        "functionCount": 0,
+        "classCount": 3
+      }
+    }
+  ]
+}

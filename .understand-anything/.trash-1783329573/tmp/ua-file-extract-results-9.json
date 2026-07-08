@@ -1,0 +1,1938 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 5,
+  "filesSkipped": [],
+  "results": [
+    {
+      "path": "ethical_benchmark/judges/__init__.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 34,
+      "nonEmptyLines": 31,
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "ethical_benchmark/judges/validation.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 719,
+      "nonEmptyLines": 606,
+      "functions": [
+        {
+          "name": "resolve_precision",
+          "startLine": 112,
+          "endLine": 130,
+          "params": [
+            "precision"
+          ]
+        },
+        {
+          "name": "approx_vram_gib",
+          "startLine": 133,
+          "endLine": 141,
+          "params": [
+            "num_params_billion",
+            "precision"
+          ]
+        },
+        {
+          "name": "parse_yes_no",
+          "startLine": 196,
+          "endLine": 213,
+          "params": [
+            "prompt_id",
+            "decoded"
+          ]
+        },
+        {
+          "name": "_read_raw_records",
+          "startLine": 552,
+          "endLine": 559,
+          "params": [
+            "raw_path"
+          ]
+        },
+        {
+          "name": "_build_inputs",
+          "startLine": 562,
+          "endLine": 569,
+          "params": [
+            "records"
+          ]
+        },
+        {
+          "name": "_assert_redacted",
+          "startLine": 572,
+          "endLine": 575,
+          "params": [
+            "record"
+          ]
+        },
+        {
+          "name": "run_judge_validation",
+          "startLine": 578,
+          "endLine": 719,
+          "params": [
+            "results_dir",
+            "model_alias",
+            "benchmark",
+            "backend",
+            "judge_name",
+            "extra_metadata"
+          ]
+        }
+      ],
+      "classes": [
+        {
+          "name": "JudgeInput",
+          "startLine": 150,
+          "endLine": 155,
+          "methods": [],
+          "properties": [
+            "prompt_id",
+            "behavior",
+            "generation"
+          ]
+        },
+        {
+          "name": "JudgeResult",
+          "startLine": 159,
+          "endLine": 174,
+          "methods": [],
+          "properties": [
+            "prompt_id",
+            "harmful",
+            "raw_label",
+            "status"
+          ]
+        },
+        {
+          "name": "JudgeBackend",
+          "startLine": 182,
+          "endLine": 193,
+          "methods": [
+            "classify_batch",
+            "close"
+          ],
+          "properties": [
+            "name"
+          ]
+        },
+        {
+          "name": "HarmBenchJudgeBackend",
+          "startLine": 221,
+          "endLine": 364,
+          "methods": [
+            "__init__",
+            "_ensure_loaded",
+            "_capture_device_info",
+            "classify_batch",
+            "close"
+          ],
+          "properties": []
+        },
+        {
+          "name": "LlamaGuardJudgeBackend",
+          "startLine": 372,
+          "endLine": 455,
+          "methods": [
+            "__init__",
+            "_ensure_loaded",
+            "classify_batch"
+          ],
+          "properties": []
+        },
+        {
+          "name": "OpenAICompatibleJudgeBackend",
+          "startLine": 463,
+          "endLine": 538,
+          "methods": [
+            "__init__",
+            "_ensure_client",
+            "classify_batch"
+          ],
+          "properties": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "resolve_precision",
+          "line": 112,
+          "isDefault": false
+        },
+        {
+          "name": "approx_vram_gib",
+          "line": 133,
+          "isDefault": false
+        },
+        {
+          "name": "JudgeInput",
+          "line": 149,
+          "isDefault": false
+        },
+        {
+          "name": "JudgeResult",
+          "line": 158,
+          "isDefault": false
+        },
+        {
+          "name": "JudgeBackend",
+          "line": 182,
+          "isDefault": false
+        },
+        {
+          "name": "parse_yes_no",
+          "line": 196,
+          "isDefault": false
+        },
+        {
+          "name": "HarmBenchJudgeBackend",
+          "line": 221,
+          "isDefault": false
+        },
+        {
+          "name": "LlamaGuardJudgeBackend",
+          "line": 372,
+          "isDefault": false
+        },
+        {
+          "name": "OpenAICompatibleJudgeBackend",
+          "line": 463,
+          "isDefault": false
+        },
+        {
+          "name": "_read_raw_records",
+          "line": 552,
+          "isDefault": false
+        },
+        {
+          "name": "_build_inputs",
+          "line": 562,
+          "isDefault": false
+        },
+        {
+          "name": "_assert_redacted",
+          "line": 572,
+          "isDefault": false
+        },
+        {
+          "name": "run_judge_validation",
+          "line": 578,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "resolve_precision",
+          "callee": "(precision or \"\").strip().lower",
+          "lineNumber": 121
+        },
+        {
+          "caller": "resolve_precision",
+          "callee": "(precision or \"\").strip",
+          "lineNumber": 121
+        },
+        {
+          "caller": "resolve_precision",
+          "callee": "ValueError",
+          "lineNumber": 128
+        },
+        {
+          "caller": "approx_vram_gib",
+          "callee": "resolve_precision",
+          "lineNumber": 140
+        },
+        {
+          "caller": "parse_yes_no",
+          "callee": "decoded.strip().lower",
+          "lineNumber": 203
+        },
+        {
+          "caller": "parse_yes_no",
+          "callee": "decoded.strip",
+          "lineNumber": 203
+        },
+        {
+          "caller": "parse_yes_no",
+          "callee": "token.startswith",
+          "lineNumber": 204
+        },
+        {
+          "caller": "parse_yes_no",
+          "callee": "JudgeResult",
+          "lineNumber": 205
+        },
+        {
+          "caller": "parse_yes_no",
+          "callee": "token.startswith",
+          "lineNumber": 206
+        },
+        {
+          "caller": "parse_yes_no",
+          "callee": "JudgeResult",
+          "lineNumber": 207
+        },
+        {
+          "caller": "parse_yes_no",
+          "callee": "token.replace(\"\\n\", \" \").split",
+          "lineNumber": 209
+        },
+        {
+          "caller": "parse_yes_no",
+          "callee": "token.replace",
+          "lineNumber": 209
+        },
+        {
+          "caller": "parse_yes_no",
+          "callee": "word.strip",
+          "lineNumber": 210
+        },
+        {
+          "caller": "parse_yes_no",
+          "callee": "JudgeResult",
+          "lineNumber": 212
+        },
+        {
+          "caller": "parse_yes_no",
+          "callee": "JudgeResult",
+          "lineNumber": 213
+        },
+        {
+          "caller": "__init__",
+          "callee": "resolve_precision",
+          "lineNumber": 247
+        },
+        {
+          "caller": "_ensure_loaded",
+          "callee": "AutoTokenizer.from_pretrained",
+          "lineNumber": 265
+        },
+        {
+          "caller": "_ensure_loaded",
+          "callee": "BitsAndBytesConfig",
+          "lineNumber": 280
+        },
+        {
+          "caller": "_ensure_loaded",
+          "callee": "BitsAndBytesConfig",
+          "lineNumber": 284
+        },
+        {
+          "caller": "_ensure_loaded",
+          "callee": "self._capture_device_info",
+          "lineNumber": 292
+        },
+        {
+          "caller": "_ensure_loaded",
+          "callee": "approx_vram_gib",
+          "lineNumber": 293
+        },
+        {
+          "caller": "_ensure_loaded",
+          "callee": "print",
+          "lineNumber": 294
+        },
+        {
+          "caller": "_ensure_loaded",
+          "callee": "self.device_info.get",
+          "lineNumber": 296
+        },
+        {
+          "caller": "_ensure_loaded",
+          "callee": "self.device_info.get",
+          "lineNumber": 297
+        },
+        {
+          "caller": "_ensure_loaded",
+          "callee": "AutoModelForCausalLM.from_pretrained",
+          "lineNumber": 301
+        },
+        {
+          "caller": "_ensure_loaded",
+          "callee": "model.eval",
+          "lineNumber": 302
+        },
+        {
+          "caller": "_capture_device_info",
+          "callee": "torch_mod.cuda.is_available",
+          "lineNumber": 309
+        },
+        {
+          "caller": "_capture_device_info",
+          "callee": "torch_mod.cuda.get_device_properties",
+          "lineNumber": 310
+        },
+        {
+          "caller": "_capture_device_info",
+          "callee": "round",
+          "lineNumber": 312
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "self._ensure_loaded",
+          "lineNumber": 318
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "range",
+          "lineNumber": 326
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "len",
+          "lineNumber": 326
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "HARMBENCH_CLS_PROMPT.format",
+          "lineNumber": 329
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "item.behavior.strip",
+          "lineNumber": 330
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "item.generation.strip",
+          "lineNumber": 331
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "tok",
+          "lineNumber": 335
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "v.to",
+          "lineNumber": 336
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "enc.items",
+          "lineNumber": 336
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "torch.no_grad",
+          "lineNumber": 337
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "model.generate",
+          "lineNumber": 338
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "tok.batch_decode",
+          "lineNumber": 345
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "zip",
+          "lineNumber": 346
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "results.append",
+          "lineNumber": 347
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "parse_yes_no",
+          "lineNumber": 347
+        },
+        {
+          "caller": "close",
+          "callee": "gc.collect",
+          "lineNumber": 360
+        },
+        {
+          "caller": "close",
+          "callee": "torch.cuda.is_available",
+          "lineNumber": 361
+        },
+        {
+          "caller": "close",
+          "callee": "torch.cuda.empty_cache",
+          "lineNumber": 362
+        },
+        {
+          "caller": "__init__",
+          "callee": "resolve_precision",
+          "lineNumber": 395
+        },
+        {
+          "caller": "_ensure_loaded",
+          "callee": "AutoTokenizer.from_pretrained",
+          "lineNumber": 407
+        },
+        {
+          "caller": "_ensure_loaded",
+          "callee": "BitsAndBytesConfig",
+          "lineNumber": 417
+        },
+        {
+          "caller": "_ensure_loaded",
+          "callee": "BitsAndBytesConfig",
+          "lineNumber": 421
+        },
+        {
+          "caller": "_ensure_loaded",
+          "callee": "AutoModelForCausalLM.from_pretrained",
+          "lineNumber": 426
+        },
+        {
+          "caller": "_ensure_loaded",
+          "callee": "model.eval",
+          "lineNumber": 427
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "self._ensure_loaded",
+          "lineNumber": 432
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "item.behavior.strip",
+          "lineNumber": 441
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "item.generation.strip",
+          "lineNumber": 442
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "tok.apply_chat_template(convo, return_tensors=\"pt\").to",
+          "lineNumber": 444
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "tok.apply_chat_template",
+          "lineNumber": 444
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "torch.no_grad",
+          "lineNumber": 445
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "model.generate",
+          "lineNumber": 446
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "tok.decode(out[0][input_ids.shape[-1] :], skip_special_tokens=True).strip().lower",
+          "lineNumber": 447
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "tok.decode(out[0][input_ids.shape[-1] :], skip_special_tokens=True).strip",
+          "lineNumber": 447
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "tok.decode",
+          "lineNumber": 447
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "decoded.startswith",
+          "lineNumber": 449
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "results.append",
+          "lineNumber": 450
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "JudgeResult",
+          "lineNumber": 450
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "decoded.startswith",
+          "lineNumber": 451
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "results.append",
+          "lineNumber": 452
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "JudgeResult",
+          "lineNumber": 452
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "results.append",
+          "lineNumber": 454
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "JudgeResult",
+          "lineNumber": 454
+        },
+        {
+          "caller": "_ensure_client",
+          "callee": "OpenAI",
+          "lineNumber": 502
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "self._ensure_client",
+          "lineNumber": 505
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "item.behavior.strip",
+          "lineNumber": 512
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "item.generation.strip",
+          "lineNumber": 513
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "range",
+          "lineNumber": 519
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "self._client.chat.completions.create",
+          "lineNumber": 521
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "(resp.choices[0].message.content or \"\").strip",
+          "lineNumber": 530
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "time.sleep",
+          "lineNumber": 533
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "results.append",
+          "lineNumber": 535
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "JudgeResult",
+          "lineNumber": 535
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "results.append",
+          "lineNumber": 537
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "parse_yes_no",
+          "lineNumber": 537
+        },
+        {
+          "caller": "_read_raw_records",
+          "callee": "raw_path.open",
+          "lineNumber": 554
+        },
+        {
+          "caller": "_read_raw_records",
+          "callee": "line.strip",
+          "lineNumber": 556
+        },
+        {
+          "caller": "_read_raw_records",
+          "callee": "records.append",
+          "lineNumber": 558
+        },
+        {
+          "caller": "_read_raw_records",
+          "callee": "json.loads",
+          "lineNumber": 558
+        },
+        {
+          "caller": "_build_inputs",
+          "callee": "str",
+          "lineNumber": 565
+        },
+        {
+          "caller": "_build_inputs",
+          "callee": "rec.get",
+          "lineNumber": 565
+        },
+        {
+          "caller": "_build_inputs",
+          "callee": "str",
+          "lineNumber": 566
+        },
+        {
+          "caller": "_build_inputs",
+          "callee": "rec.get",
+          "lineNumber": 566
+        },
+        {
+          "caller": "_build_inputs",
+          "callee": "str",
+          "lineNumber": 567
+        },
+        {
+          "caller": "_build_inputs",
+          "callee": "rec.get",
+          "lineNumber": 567
+        },
+        {
+          "caller": "_build_inputs",
+          "callee": "inputs.append",
+          "lineNumber": 568
+        },
+        {
+          "caller": "_build_inputs",
+          "callee": "JudgeInput",
+          "lineNumber": 568
+        },
+        {
+          "caller": "_assert_redacted",
+          "callee": "set",
+          "lineNumber": 573
+        },
+        {
+          "caller": "_assert_redacted",
+          "callee": "record.keys",
+          "lineNumber": 573
+        },
+        {
+          "caller": "_assert_redacted",
+          "callee": "ValueError",
+          "lineNumber": 575
+        },
+        {
+          "caller": "_assert_redacted",
+          "callee": "sorted",
+          "lineNumber": 575
+        },
+        {
+          "caller": "run_judge_validation",
+          "callee": "build_run_paths",
+          "lineNumber": 614
+        },
+        {
+          "caller": "run_judge_validation",
+          "callee": "raw_path.exists",
+          "lineNumber": 617
+        },
+        {
+          "caller": "run_judge_validation",
+          "callee": "FileNotFoundError",
+          "lineNumber": 618
+        },
+        {
+          "caller": "run_judge_validation",
+          "callee": "_read_raw_records",
+          "lineNumber": 620
+        },
+        {
+          "caller": "run_judge_validation",
+          "callee": "_build_inputs",
+          "lineNumber": 621
+        },
+        {
+          "caller": "run_judge_validation",
+          "callee": "backend.classify_batch",
+          "lineNumber": 622
+        },
+        {
+          "caller": "run_judge_validation",
+          "callee": "meta_first.get",
+          "lineNumber": 627
+        },
+        {
+          "caller": "run_judge_validation",
+          "callee": "meta_first.get",
+          "lineNumber": 628
+        },
+        {
+          "caller": "run_judge_validation",
+          "callee": "meta_first.get",
+          "lineNumber": 629
+        },
+        {
+          "caller": "run_judge_validation",
+          "callee": "str",
+          "lineNumber": 640
+        },
+        {
+          "caller": "run_judge_validation",
+          "callee": "rec.get",
+          "lineNumber": 640
+        },
+        {
+          "caller": "run_judge_validation",
+          "callee": "by_id.get",
+          "lineNumber": 641
+        },
+        {
+          "caller": "run_judge_validation",
+          "callee": "JudgeResult",
+          "lineNumber": 643
+        },
+        {
+          "caller": "run_judge_validation",
+          "callee": "rec.get",
+          "lineNumber": 661
+        },
+        {
+          "caller": "run_judge_validation",
+          "callee": "rec.get",
+          "lineNumber": 662
+        },
+        {
+          "caller": "run_judge_validation",
+          "callee": "_assert_redacted",
+          "lineNumber": 669
+        },
+        {
+          "caller": "run_judge_validation",
+          "callee": "out_records.append",
+          "lineNumber": 670
+        },
+        {
+          "caller": "run_judge_validation",
+          "callee": "len",
+          "lineNumber": 672
+        },
+        {
+          "caller": "run_judge_validation",
+          "callee": "meta_first.get",
+          "lineNumber": 684
+        },
+        {
+          "caller": "run_judge_validation",
+          "callee": "meta_first.get",
+          "lineNumber": 686
+        },
+        {
+          "caller": "run_judge_validation",
+          "callee": "meta_first.get",
+          "lineNumber": 687
+        },
+        {
+          "caller": "run_judge_validation",
+          "callee": "meta_first.get",
+          "lineNumber": 688
+        },
+        {
+          "caller": "run_judge_validation",
+          "callee": "getattr",
+          "lineNumber": 694
+        },
+        {
+          "caller": "run_judge_validation",
+          "callee": "getattr",
+          "lineNumber": 695
+        },
+        {
+          "caller": "run_judge_validation",
+          "callee": "summary.update",
+          "lineNumber": 710
+        },
+        {
+          "caller": "run_judge_validation",
+          "callee": "run_dir.mkdir",
+          "lineNumber": 712
+        },
+        {
+          "caller": "run_judge_validation",
+          "callee": "scores_path.open",
+          "lineNumber": 713
+        },
+        {
+          "caller": "run_judge_validation",
+          "callee": "handle.write",
+          "lineNumber": 715
+        },
+        {
+          "caller": "run_judge_validation",
+          "callee": "json.dumps",
+          "lineNumber": 715
+        },
+        {
+          "caller": "run_judge_validation",
+          "callee": "summary_path.open",
+          "lineNumber": 716
+        },
+        {
+          "caller": "run_judge_validation",
+          "callee": "json.dump",
+          "lineNumber": 717
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 13,
+        "functionCount": 7,
+        "classCount": 6
+      }
+    },
+    {
+      "path": "scripts/run_judge_validation.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 158,
+      "nonEmptyLines": 136,
+      "functions": [
+        {
+          "name": "_build_backend",
+          "startLine": 61,
+          "endLine": 92,
+          "params": [
+            "args"
+          ]
+        },
+        {
+          "name": "main",
+          "startLine": 95,
+          "endLine": 154,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "_build_backend",
+          "line": 61,
+          "isDefault": false
+        },
+        {
+          "name": "main",
+          "line": 95,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "_build_backend",
+          "callee": "HarmBenchJudgeBackend",
+          "lineNumber": 67
+        },
+        {
+          "caller": "_build_backend",
+          "callee": "LlamaGuardJudgeBackend",
+          "lineNumber": 74
+        },
+        {
+          "caller": "_build_backend",
+          "callee": "OpenAICompatibleJudgeBackend",
+          "lineNumber": 87
+        },
+        {
+          "caller": "_build_backend",
+          "callee": "ValueError",
+          "lineNumber": 92
+        },
+        {
+          "caller": "main",
+          "callee": "argparse.ArgumentParser",
+          "lineNumber": 96
+        },
+        {
+          "caller": "main",
+          "callee": "parser.add_argument",
+          "lineNumber": 97
+        },
+        {
+          "caller": "main",
+          "callee": "parser.add_argument",
+          "lineNumber": 98
+        },
+        {
+          "caller": "main",
+          "callee": "parser.add_argument",
+          "lineNumber": 99
+        },
+        {
+          "caller": "main",
+          "callee": "parser.add_argument",
+          "lineNumber": 101
+        },
+        {
+          "caller": "main",
+          "callee": "parser.add_argument",
+          "lineNumber": 103
+        },
+        {
+          "caller": "main",
+          "callee": "parser.add_argument",
+          "lineNumber": 108
+        },
+        {
+          "caller": "main",
+          "callee": "parser.add_argument",
+          "lineNumber": 112
+        },
+        {
+          "caller": "main",
+          "callee": "parser.add_argument",
+          "lineNumber": 113
+        },
+        {
+          "caller": "main",
+          "callee": "parser.add_argument",
+          "lineNumber": 118
+        },
+        {
+          "caller": "main",
+          "callee": "parser.parse_args",
+          "lineNumber": 119
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 122
+        },
+        {
+          "caller": "main",
+          "callee": "Path(args.results_dir).resolve",
+          "lineNumber": 126
+        },
+        {
+          "caller": "main",
+          "callee": "Path",
+          "lineNumber": 126
+        },
+        {
+          "caller": "main",
+          "callee": "_build_backend",
+          "lineNumber": 127
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 129
+        },
+        {
+          "caller": "main",
+          "callee": "getattr",
+          "lineNumber": 130
+        },
+        {
+          "caller": "main",
+          "callee": "getattr",
+          "lineNumber": 130
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 131
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 132
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 133
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 134
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 135
+        },
+        {
+          "caller": "main",
+          "callee": "run_judge_validation",
+          "lineNumber": 139
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 144
+        },
+        {
+          "caller": "main",
+          "callee": "backend.close",
+          "lineNumber": 148
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 150
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 151
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 152
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 153
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 2,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "tests/test_judge_pairwise.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 96,
+      "nonEmptyLines": 72,
+      "functions": [
+        {
+          "name": "_load_script",
+          "startLine": 22,
+          "endLine": 28,
+          "params": [
+            "name"
+          ]
+        },
+        {
+          "name": "test_api_judge_maps_yes_no_and_unparseable",
+          "startLine": 50,
+          "endLine": 56,
+          "params": []
+        },
+        {
+          "name": "test_api_judge_exposes_model_id_for_summary",
+          "startLine": 59,
+          "endLine": 64,
+          "params": []
+        },
+        {
+          "name": "test_agreement_and_kappa_values",
+          "startLine": 70,
+          "endLine": 82,
+          "params": []
+        },
+        {
+          "name": "test_load_judge_outcomes_skips_null",
+          "startLine": 85,
+          "endLine": 96,
+          "params": [
+            "tmp_path"
+          ]
+        }
+      ],
+      "classes": [
+        {
+          "name": "_FakeCompletions",
+          "startLine": 34,
+          "endLine": 42,
+          "methods": [
+            "__init__",
+            "create"
+          ],
+          "properties": []
+        },
+        {
+          "name": "_FakeClient",
+          "startLine": 45,
+          "endLine": 47,
+          "methods": [
+            "__init__"
+          ],
+          "properties": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "_load_script",
+          "line": 22,
+          "isDefault": false
+        },
+        {
+          "name": "_FakeCompletions",
+          "line": 34,
+          "isDefault": false
+        },
+        {
+          "name": "_FakeClient",
+          "line": 45,
+          "isDefault": false
+        },
+        {
+          "name": "test_api_judge_maps_yes_no_and_unparseable",
+          "line": 50,
+          "isDefault": false
+        },
+        {
+          "name": "test_api_judge_exposes_model_id_for_summary",
+          "line": 59,
+          "isDefault": false
+        },
+        {
+          "name": "test_agreement_and_kappa_values",
+          "line": 70,
+          "isDefault": false
+        },
+        {
+          "name": "test_load_judge_outcomes_skips_null",
+          "line": 85,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "_load_script",
+          "callee": "importlib.util.spec_from_file_location",
+          "lineNumber": 24
+        },
+        {
+          "caller": "_load_script",
+          "callee": "importlib.util.module_from_spec",
+          "lineNumber": 26
+        },
+        {
+          "caller": "_load_script",
+          "callee": "spec.loader.exec_module",
+          "lineNumber": 27
+        },
+        {
+          "caller": "create",
+          "callee": "SimpleNamespace",
+          "lineNumber": 42
+        },
+        {
+          "caller": "create",
+          "callee": "SimpleNamespace",
+          "lineNumber": 42
+        },
+        {
+          "caller": "create",
+          "callee": "SimpleNamespace",
+          "lineNumber": 42
+        },
+        {
+          "caller": "__init__",
+          "callee": "SimpleNamespace",
+          "lineNumber": 47
+        },
+        {
+          "caller": "__init__",
+          "callee": "_FakeCompletions",
+          "lineNumber": 47
+        },
+        {
+          "caller": "test_api_judge_maps_yes_no_and_unparseable",
+          "callee": "OpenAICompatibleJudgeBackend",
+          "lineNumber": 51
+        },
+        {
+          "caller": "test_api_judge_maps_yes_no_and_unparseable",
+          "callee": "_FakeClient",
+          "lineNumber": 52
+        },
+        {
+          "caller": "test_api_judge_maps_yes_no_and_unparseable",
+          "callee": "JudgeInput",
+          "lineNumber": 53
+        },
+        {
+          "caller": "test_api_judge_maps_yes_no_and_unparseable",
+          "callee": "range",
+          "lineNumber": 53
+        },
+        {
+          "caller": "test_api_judge_maps_yes_no_and_unparseable",
+          "callee": "backend.classify_batch",
+          "lineNumber": 54
+        },
+        {
+          "caller": "test_api_judge_exposes_model_id_for_summary",
+          "callee": "OpenAICompatibleJudgeBackend",
+          "lineNumber": 63
+        },
+        {
+          "caller": "test_api_judge_exposes_model_id_for_summary",
+          "callee": "getattr",
+          "lineNumber": 64
+        },
+        {
+          "caller": "test_agreement_and_kappa_values",
+          "callee": "_load_script",
+          "lineNumber": 71
+        },
+        {
+          "caller": "test_agreement_and_kappa_values",
+          "callee": "mod.agreement_and_kappa",
+          "lineNumber": 73
+        },
+        {
+          "caller": "test_agreement_and_kappa_values",
+          "callee": "mod.agreement_and_kappa",
+          "lineNumber": 76
+        },
+        {
+          "caller": "test_agreement_and_kappa_values",
+          "callee": "mod.agreement_and_kappa",
+          "lineNumber": 81
+        },
+        {
+          "caller": "test_load_judge_outcomes_skips_null",
+          "callee": "_load_script",
+          "lineNumber": 86
+        },
+        {
+          "caller": "test_load_judge_outcomes_skips_null",
+          "callee": "mdir.mkdir",
+          "lineNumber": 88
+        },
+        {
+          "caller": "test_load_judge_outcomes_skips_null",
+          "callee": "(mdir / \"scores.judge.api_judge.jsonl\").write_text",
+          "lineNumber": 89
+        },
+        {
+          "caller": "test_load_judge_outcomes_skips_null",
+          "callee": "mod.load_judge_outcomes",
+          "lineNumber": 95
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 7,
+        "functionCount": 5,
+        "classCount": 2
+      }
+    },
+    {
+      "path": "tests/test_judge_validation.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 270,
+      "nonEmptyLines": 216,
+      "functions": [
+        {
+          "name": "_write_raw",
+          "startLine": 45,
+          "endLine": 67,
+          "params": [
+            "tmp",
+            "model_alias",
+            "benchmark",
+            "n"
+          ]
+        },
+        {
+          "name": "test_parse_yes_no_variants",
+          "startLine": 70,
+          "endLine": 76,
+          "params": []
+        },
+        {
+          "name": "test_harmbench_prompt_has_placeholders",
+          "startLine": 79,
+          "endLine": 83,
+          "params": []
+        },
+        {
+          "name": "test_harmbench_prompt_matches_official",
+          "startLine": 113,
+          "endLine": 122,
+          "params": []
+        },
+        {
+          "name": "test_assert_redacted_blocks_text_fields",
+          "startLine": 125,
+          "endLine": 129,
+          "params": []
+        },
+        {
+          "name": "test_run_judge_validation_writes_redacted_sidecars",
+          "startLine": 132,
+          "endLine": 157,
+          "params": [
+            "tmp_path"
+          ]
+        },
+        {
+          "name": "test_run_judge_validation_asr_math",
+          "startLine": 160,
+          "endLine": 168,
+          "params": [
+            "tmp_path"
+          ]
+        },
+        {
+          "name": "test_run_judge_validation_counts_error_and_skipped",
+          "startLine": 190,
+          "endLine": 206,
+          "params": [
+            "tmp_path"
+          ]
+        },
+        {
+          "name": "test_run_judge_validation_does_not_mutate_raw",
+          "startLine": 209,
+          "endLine": 214,
+          "params": [
+            "tmp_path"
+          ]
+        },
+        {
+          "name": "test_run_judge_validation_idempotent",
+          "startLine": 217,
+          "endLine": 225,
+          "params": [
+            "tmp_path"
+          ]
+        },
+        {
+          "name": "test_run_judge_validation_missing_raw_raises",
+          "startLine": 228,
+          "endLine": 230,
+          "params": [
+            "tmp_path"
+          ]
+        },
+        {
+          "name": "test_resolve_precision_aliases",
+          "startLine": 236,
+          "endLine": 244,
+          "params": []
+        },
+        {
+          "name": "test_approx_vram_for_13b",
+          "startLine": 247,
+          "endLine": 254,
+          "params": []
+        },
+        {
+          "name": "test_harmbench_backend_defaults_to_fp16",
+          "startLine": 257,
+          "endLine": 261,
+          "params": []
+        },
+        {
+          "name": "test_harmbench_backend_precision_and_compat",
+          "startLine": 264,
+          "endLine": 270,
+          "params": []
+        }
+      ],
+      "classes": [
+        {
+          "name": "StubJudgeBackend",
+          "startLine": 25,
+          "endLine": 42,
+          "methods": [
+            "__init__",
+            "classify_batch"
+          ],
+          "properties": []
+        },
+        {
+          "name": "_MixedStatusBackend",
+          "startLine": 171,
+          "endLine": 187,
+          "methods": [
+            "classify_batch"
+          ],
+          "properties": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "StubJudgeBackend",
+          "line": 25,
+          "isDefault": false
+        },
+        {
+          "name": "_write_raw",
+          "line": 45,
+          "isDefault": false
+        },
+        {
+          "name": "test_parse_yes_no_variants",
+          "line": 70,
+          "isDefault": false
+        },
+        {
+          "name": "test_harmbench_prompt_has_placeholders",
+          "line": 79,
+          "isDefault": false
+        },
+        {
+          "name": "test_harmbench_prompt_matches_official",
+          "line": 113,
+          "isDefault": false
+        },
+        {
+          "name": "test_assert_redacted_blocks_text_fields",
+          "line": 125,
+          "isDefault": false
+        },
+        {
+          "name": "test_run_judge_validation_writes_redacted_sidecars",
+          "line": 132,
+          "isDefault": false
+        },
+        {
+          "name": "test_run_judge_validation_asr_math",
+          "line": 160,
+          "isDefault": false
+        },
+        {
+          "name": "_MixedStatusBackend",
+          "line": 171,
+          "isDefault": false
+        },
+        {
+          "name": "test_run_judge_validation_counts_error_and_skipped",
+          "line": 190,
+          "isDefault": false
+        },
+        {
+          "name": "test_run_judge_validation_does_not_mutate_raw",
+          "line": 209,
+          "isDefault": false
+        },
+        {
+          "name": "test_run_judge_validation_idempotent",
+          "line": 217,
+          "isDefault": false
+        },
+        {
+          "name": "test_run_judge_validation_missing_raw_raises",
+          "line": 228,
+          "isDefault": false
+        },
+        {
+          "name": "test_resolve_precision_aliases",
+          "line": 236,
+          "isDefault": false
+        },
+        {
+          "name": "test_approx_vram_for_13b",
+          "line": 247,
+          "isDefault": false
+        },
+        {
+          "name": "test_harmbench_backend_defaults_to_fp16",
+          "line": 257,
+          "isDefault": false
+        },
+        {
+          "name": "test_harmbench_backend_precision_and_compat",
+          "line": 264,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "classify_batch",
+          "callee": "digit.isdigit",
+          "lineNumber": 40
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "int",
+          "lineNumber": 40
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "results.append",
+          "lineNumber": 41
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "JudgeResult",
+          "lineNumber": 41
+        },
+        {
+          "caller": "_write_raw",
+          "callee": "run_dir.mkdir",
+          "lineNumber": 47
+        },
+        {
+          "caller": "_write_raw",
+          "callee": "raw_path.open",
+          "lineNumber": 49
+        },
+        {
+          "caller": "_write_raw",
+          "callee": "range",
+          "lineNumber": 50
+        },
+        {
+          "caller": "_write_raw",
+          "callee": "model_alias.endswith",
+          "lineNumber": 58
+        },
+        {
+          "caller": "_write_raw",
+          "callee": "handle.write",
+          "lineNumber": 66
+        },
+        {
+          "caller": "_write_raw",
+          "callee": "json.dumps",
+          "lineNumber": 66
+        },
+        {
+          "caller": "test_parse_yes_no_variants",
+          "callee": "parse_yes_no",
+          "lineNumber": 71
+        },
+        {
+          "caller": "test_parse_yes_no_variants",
+          "callee": "parse_yes_no",
+          "lineNumber": 72
+        },
+        {
+          "caller": "test_parse_yes_no_variants",
+          "callee": "parse_yes_no",
+          "lineNumber": 73
+        },
+        {
+          "caller": "test_parse_yes_no_variants",
+          "callee": "parse_yes_no",
+          "lineNumber": 74
+        },
+        {
+          "caller": "test_parse_yes_no_variants",
+          "callee": "parse_yes_no",
+          "lineNumber": 75
+        },
+        {
+          "caller": "test_assert_redacted_blocks_text_fields",
+          "callee": "_assert_redacted",
+          "lineNumber": 126
+        },
+        {
+          "caller": "test_assert_redacted_blocks_text_fields",
+          "callee": "pytest.raises",
+          "lineNumber": 128
+        },
+        {
+          "caller": "test_assert_redacted_blocks_text_fields",
+          "callee": "_assert_redacted",
+          "lineNumber": 129
+        },
+        {
+          "caller": "test_run_judge_validation_writes_redacted_sidecars",
+          "callee": "_write_raw",
+          "lineNumber": 133
+        },
+        {
+          "caller": "test_run_judge_validation_writes_redacted_sidecars",
+          "callee": "StubJudgeBackend",
+          "lineNumber": 134
+        },
+        {
+          "caller": "test_run_judge_validation_writes_redacted_sidecars",
+          "callee": "run_judge_validation",
+          "lineNumber": 136
+        },
+        {
+          "caller": "test_run_judge_validation_writes_redacted_sidecars",
+          "callee": "scores_path.exists",
+          "lineNumber": 140
+        },
+        {
+          "caller": "test_run_judge_validation_writes_redacted_sidecars",
+          "callee": "summary_path.exists",
+          "lineNumber": 140
+        },
+        {
+          "caller": "test_run_judge_validation_writes_redacted_sidecars",
+          "callee": "scores_path.read_text",
+          "lineNumber": 145
+        },
+        {
+          "caller": "test_run_judge_validation_writes_redacted_sidecars",
+          "callee": "text_blob.splitlines",
+          "lineNumber": 152
+        },
+        {
+          "caller": "test_run_judge_validation_writes_redacted_sidecars",
+          "callee": "json.loads",
+          "lineNumber": 153
+        },
+        {
+          "caller": "test_run_judge_validation_writes_redacted_sidecars",
+          "callee": "set",
+          "lineNumber": 154
+        },
+        {
+          "caller": "test_run_judge_validation_writes_redacted_sidecars",
+          "callee": "rec.keys",
+          "lineNumber": 154
+        },
+        {
+          "caller": "test_run_judge_validation_asr_math",
+          "callee": "_write_raw",
+          "lineNumber": 161
+        },
+        {
+          "caller": "test_run_judge_validation_asr_math",
+          "callee": "run_judge_validation",
+          "lineNumber": 162
+        },
+        {
+          "caller": "test_run_judge_validation_asr_math",
+          "callee": "StubJudgeBackend",
+          "lineNumber": 162
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "int",
+          "lineNumber": 179
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "item.prompt_id.split",
+          "lineNumber": 179
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "out.append",
+          "lineNumber": 181
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "JudgeResult",
+          "lineNumber": 181
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "out.append",
+          "lineNumber": 183
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "JudgeResult",
+          "lineNumber": 183
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "out.append",
+          "lineNumber": 185
+        },
+        {
+          "caller": "classify_batch",
+          "callee": "JudgeResult",
+          "lineNumber": 185
+        },
+        {
+          "caller": "test_run_judge_validation_counts_error_and_skipped",
+          "callee": "_write_raw",
+          "lineNumber": 198
+        },
+        {
+          "caller": "test_run_judge_validation_counts_error_and_skipped",
+          "callee": "run_judge_validation",
+          "lineNumber": 199
+        },
+        {
+          "caller": "test_run_judge_validation_counts_error_and_skipped",
+          "callee": "_MixedStatusBackend",
+          "lineNumber": 199
+        },
+        {
+          "caller": "test_run_judge_validation_does_not_mutate_raw",
+          "callee": "_write_raw",
+          "lineNumber": 210
+        },
+        {
+          "caller": "test_run_judge_validation_does_not_mutate_raw",
+          "callee": "raw_path.read_bytes",
+          "lineNumber": 211
+        },
+        {
+          "caller": "test_run_judge_validation_does_not_mutate_raw",
+          "callee": "run_judge_validation",
+          "lineNumber": 212
+        },
+        {
+          "caller": "test_run_judge_validation_does_not_mutate_raw",
+          "callee": "StubJudgeBackend",
+          "lineNumber": 212
+        },
+        {
+          "caller": "test_run_judge_validation_does_not_mutate_raw",
+          "callee": "raw_path.read_bytes",
+          "lineNumber": 213
+        },
+        {
+          "caller": "test_run_judge_validation_idempotent",
+          "callee": "_write_raw",
+          "lineNumber": 218
+        },
+        {
+          "caller": "test_run_judge_validation_idempotent",
+          "callee": "run_judge_validation",
+          "lineNumber": 219
+        },
+        {
+          "caller": "test_run_judge_validation_idempotent",
+          "callee": "StubJudgeBackend",
+          "lineNumber": 219
+        },
+        {
+          "caller": "test_run_judge_validation_idempotent",
+          "callee": "scores_path.read_text",
+          "lineNumber": 221
+        },
+        {
+          "caller": "test_run_judge_validation_idempotent",
+          "callee": "run_judge_validation",
+          "lineNumber": 222
+        },
+        {
+          "caller": "test_run_judge_validation_idempotent",
+          "callee": "StubJudgeBackend",
+          "lineNumber": 222
+        },
+        {
+          "caller": "test_run_judge_validation_idempotent",
+          "callee": "scores_path.read_text",
+          "lineNumber": 223
+        },
+        {
+          "caller": "test_run_judge_validation_missing_raw_raises",
+          "callee": "pytest.raises",
+          "lineNumber": 229
+        },
+        {
+          "caller": "test_run_judge_validation_missing_raw_raises",
+          "callee": "run_judge_validation",
+          "lineNumber": 230
+        },
+        {
+          "caller": "test_run_judge_validation_missing_raw_raises",
+          "callee": "StubJudgeBackend",
+          "lineNumber": 230
+        },
+        {
+          "caller": "test_resolve_precision_aliases",
+          "callee": "resolve_precision",
+          "lineNumber": 237
+        },
+        {
+          "caller": "test_resolve_precision_aliases",
+          "callee": "resolve_precision",
+          "lineNumber": 238
+        },
+        {
+          "caller": "test_resolve_precision_aliases",
+          "callee": "resolve_precision",
+          "lineNumber": 239
+        },
+        {
+          "caller": "test_resolve_precision_aliases",
+          "callee": "resolve_precision",
+          "lineNumber": 240
+        },
+        {
+          "caller": "test_resolve_precision_aliases",
+          "callee": "resolve_precision",
+          "lineNumber": 241
+        },
+        {
+          "caller": "test_resolve_precision_aliases",
+          "callee": "resolve_precision",
+          "lineNumber": 242
+        },
+        {
+          "caller": "test_resolve_precision_aliases",
+          "callee": "pytest.raises",
+          "lineNumber": 243
+        },
+        {
+          "caller": "test_resolve_precision_aliases",
+          "callee": "resolve_precision",
+          "lineNumber": 244
+        },
+        {
+          "caller": "test_approx_vram_for_13b",
+          "callee": "approx_vram_gib",
+          "lineNumber": 249
+        },
+        {
+          "caller": "test_approx_vram_for_13b",
+          "callee": "approx_vram_gib",
+          "lineNumber": 250
+        },
+        {
+          "caller": "test_approx_vram_for_13b",
+          "callee": "approx_vram_gib",
+          "lineNumber": 251
+        },
+        {
+          "caller": "test_approx_vram_for_13b",
+          "callee": "approx_vram_gib",
+          "lineNumber": 253
+        },
+        {
+          "caller": "test_approx_vram_for_13b",
+          "callee": "approx_vram_gib",
+          "lineNumber": 254
+        },
+        {
+          "caller": "test_harmbench_backend_defaults_to_fp16",
+          "callee": "HarmBenchJudgeBackend",
+          "lineNumber": 259
+        },
+        {
+          "caller": "test_harmbench_backend_precision_and_compat",
+          "callee": "HarmBenchJudgeBackend",
+          "lineNumber": 265
+        },
+        {
+          "caller": "test_harmbench_backend_precision_and_compat",
+          "callee": "HarmBenchJudgeBackend",
+          "lineNumber": 266
+        },
+        {
+          "caller": "test_harmbench_backend_precision_and_compat",
+          "callee": "HarmBenchJudgeBackend",
+          "lineNumber": 268
+        },
+        {
+          "caller": "test_harmbench_backend_precision_and_compat",
+          "callee": "pytest.raises",
+          "lineNumber": 269
+        },
+        {
+          "caller": "test_harmbench_backend_precision_and_compat",
+          "callee": "HarmBenchJudgeBackend",
+          "lineNumber": 270
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 17,
+        "functionCount": 15,
+        "classCount": 2
+      }
+    }
+  ]
+}

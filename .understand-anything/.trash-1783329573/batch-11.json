@@ -1,0 +1,109 @@
+{
+ "nodes": [
+  {
+   "id": "config:configs/artifact_policy.yaml",
+   "type": "config",
+   "name": "artifact_policy.yaml",
+   "filePath": "configs/artifact_policy.yaml",
+   "summary": "Machine-readable harness contract: immutable-artifact globs, stale-text scan patterns (retired claims), privacy/redaction scan rules, and report-worthy file patterns; consumed by ethical_benchmark/harness/agent.py.",
+   "tags": [
+    "configuration",
+    "governance",
+    "agent-harness"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "config:configs/default.yaml",
+   "type": "config",
+   "name": "default.yaml",
+   "filePath": "configs/default.yaml",
+   "summary": "Local development config: all five model pairs (10 aliases) with shared model_ids, benchmark definitions (HarmBench/XSTest/MMLU), greedy decoding, seed 42.",
+   "tags": [
+    "configuration",
+    "experiment",
+    "local"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:configs/tc1.yaml",
+   "type": "config",
+   "name": "tc1.yaml",
+   "filePath": "configs/tc1.yaml",
+   "summary": "TC1 SLURM cluster config at the 128-token budget: partition UGGPU-TC1, offline-mode env vars, per-model sbatch grouping (the original study; superseded as primary by tc1_512).",
+   "tags": [
+    "configuration",
+    "cluster",
+    "experiment"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:configs/tc1_512.yaml",
+   "type": "config",
+   "name": "tc1_512.yaml",
+   "filePath": "configs/tc1_512.yaml",
+   "summary": "TC1 config for the PRIMARY 512-token study (D41): same pairs and methodology as tc1.yaml with max_new_tokens 512, writing to results_512/.",
+   "tags": [
+    "configuration",
+    "cluster",
+    "experiment"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:configs/tc1_int8.yaml",
+   "type": "config",
+   "name": "tc1_int8.yaml",
+   "filePath": "configs/tc1_int8.yaml",
+   "summary": "TC1 config adding LLM.int8 members per pair for the precision-sweep point at the 128-token budget.",
+   "tags": [
+    "configuration",
+    "cluster",
+    "quantization"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:configs/tc1_int8_512.yaml",
+   "type": "config",
+   "name": "tc1_int8_512.yaml",
+   "filePath": "configs/tc1_int8_512.yaml",
+   "summary": "TC1 config for INT8 members at the primary 512-token budget (precision sweep fp16 -> INT8 -> NF4).",
+   "tags": [
+    "configuration",
+    "cluster",
+    "quantization"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:configs/tc1_sensitivity.yaml",
+   "type": "config",
+   "name": "tc1_sensitivity.yaml",
+   "filePath": "configs/tc1_sensitivity.yaml",
+   "summary": "Decoding-sensitivity config (128 budget): sampled decoding variants to test robustness of conclusions to temperature.",
+   "tags": [
+    "configuration",
+    "cluster",
+    "sensitivity"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "config:configs/tc1_sensitivity_512.yaml",
+   "type": "config",
+   "name": "tc1_sensitivity_512.yaml",
+   "filePath": "configs/tc1_sensitivity_512.yaml",
+   "summary": "Decoding-sensitivity config at the 512-token budget: multi-seed sampled decoding for the primary study's robustness check.",
+   "tags": [
+    "configuration",
+    "cluster",
+    "sensitivity"
+   ],
+   "complexity": "moderate"
+  }
+ ],
+ "edges": []
+}

@@ -1,0 +1,2441 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 4,
+  "filesSkipped": [],
+  "results": [
+    {
+      "path": "scripts/multiple_comparisons.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 338,
+      "nonEmptyLines": 293,
+      "functions": [
+        {
+          "name": "_phi",
+          "startLine": 67,
+          "endLine": 69,
+          "params": [
+            "x"
+          ]
+        },
+        {
+          "name": "_read_jsonl",
+          "startLine": 72,
+          "endLine": 79,
+          "params": [
+            "path"
+          ]
+        },
+        {
+          "name": "_paired_outcomes",
+          "startLine": 82,
+          "endLine": 109,
+          "params": [
+            "base_alias",
+            "quant_alias",
+            "benchmark"
+          ]
+        },
+        {
+          "name": "_confusion_from_maps",
+          "startLine": 112,
+          "endLine": 121,
+          "params": [
+            "base",
+            "quant"
+          ]
+        },
+        {
+          "name": "mde_mcnemar",
+          "startLine": 124,
+          "endLine": 133,
+          "params": [
+            "psi",
+            "n"
+          ]
+        },
+        {
+          "name": "power_mcnemar",
+          "startLine": 136,
+          "endLine": 149,
+          "params": [
+            "b",
+            "c",
+            "n"
+          ]
+        },
+        {
+          "name": "_power_note",
+          "startLine": 152,
+          "endLine": 176,
+          "params": [
+            "representative_mde",
+            "contrasts"
+          ]
+        },
+        {
+          "name": "benjamini_hochberg",
+          "startLine": 179,
+          "endLine": 204,
+          "params": [
+            "pvals",
+            "q"
+          ]
+        },
+        {
+          "name": "main",
+          "startLine": 207,
+          "endLine": 334,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "_phi",
+          "line": 67,
+          "isDefault": false
+        },
+        {
+          "name": "_read_jsonl",
+          "line": 72,
+          "isDefault": false
+        },
+        {
+          "name": "_paired_outcomes",
+          "line": 82,
+          "isDefault": false
+        },
+        {
+          "name": "_confusion_from_maps",
+          "line": 112,
+          "isDefault": false
+        },
+        {
+          "name": "mde_mcnemar",
+          "line": 124,
+          "isDefault": false
+        },
+        {
+          "name": "power_mcnemar",
+          "line": 136,
+          "isDefault": false
+        },
+        {
+          "name": "_power_note",
+          "line": 152,
+          "isDefault": false
+        },
+        {
+          "name": "benjamini_hochberg",
+          "line": 179,
+          "isDefault": false
+        },
+        {
+          "name": "main",
+          "line": 207,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "_phi",
+          "callee": "math.erf",
+          "lineNumber": 69
+        },
+        {
+          "caller": "_phi",
+          "callee": "math.sqrt",
+          "lineNumber": 69
+        },
+        {
+          "caller": "_read_jsonl",
+          "callee": "path.open",
+          "lineNumber": 74
+        },
+        {
+          "caller": "_read_jsonl",
+          "callee": "line.strip",
+          "lineNumber": 76
+        },
+        {
+          "caller": "_read_jsonl",
+          "callee": "rows.append",
+          "lineNumber": 78
+        },
+        {
+          "caller": "_read_jsonl",
+          "callee": "json.loads",
+          "lineNumber": 78
+        },
+        {
+          "caller": "_paired_outcomes",
+          "callee": "ValueError",
+          "lineNumber": 96
+        },
+        {
+          "caller": "load",
+          "callee": "_read_jsonl",
+          "lineNumber": 101
+        },
+        {
+          "caller": "load",
+          "callee": "r.get",
+          "lineNumber": 102
+        },
+        {
+          "caller": "load",
+          "callee": "sf.get",
+          "lineNumber": 103
+        },
+        {
+          "caller": "load",
+          "callee": "str",
+          "lineNumber": 106
+        },
+        {
+          "caller": "_paired_outcomes",
+          "callee": "load",
+          "lineNumber": 109
+        },
+        {
+          "caller": "_paired_outcomes",
+          "callee": "load",
+          "lineNumber": 109
+        },
+        {
+          "caller": "_confusion_from_maps",
+          "callee": "sorted",
+          "lineNumber": 118
+        },
+        {
+          "caller": "_confusion_from_maps",
+          "callee": "set",
+          "lineNumber": 118
+        },
+        {
+          "caller": "_confusion_from_maps",
+          "callee": "set",
+          "lineNumber": 118
+        },
+        {
+          "caller": "_confusion_from_maps",
+          "callee": "sum",
+          "lineNumber": 119
+        },
+        {
+          "caller": "_confusion_from_maps",
+          "callee": "sum",
+          "lineNumber": 120
+        },
+        {
+          "caller": "_confusion_from_maps",
+          "callee": "len",
+          "lineNumber": 121
+        },
+        {
+          "caller": "mde_mcnemar",
+          "callee": "math.sqrt",
+          "lineNumber": 133
+        },
+        {
+          "caller": "power_mcnemar",
+          "callee": "abs",
+          "lineNumber": 142
+        },
+        {
+          "caller": "power_mcnemar",
+          "callee": "math.sqrt",
+          "lineNumber": 148
+        },
+        {
+          "caller": "power_mcnemar",
+          "callee": "math.sqrt",
+          "lineNumber": 148
+        },
+        {
+          "caller": "power_mcnemar",
+          "callee": "math.sqrt",
+          "lineNumber": 148
+        },
+        {
+          "caller": "power_mcnemar",
+          "callee": "_phi",
+          "lineNumber": 149
+        },
+        {
+          "caller": "_power_note",
+          "callee": "abs",
+          "lineNumber": 158
+        },
+        {
+          "caller": "_power_note",
+          "callee": "\"; \".join",
+          "lineNumber": 161
+        },
+        {
+          "caller": "benjamini_hochberg",
+          "callee": "len",
+          "lineNumber": 184
+        },
+        {
+          "caller": "benjamini_hochberg",
+          "callee": "sorted",
+          "lineNumber": 185
+        },
+        {
+          "caller": "benjamini_hochberg",
+          "callee": "range",
+          "lineNumber": 185
+        },
+        {
+          "caller": "benjamini_hochberg",
+          "callee": "range",
+          "lineNumber": 189
+        },
+        {
+          "caller": "benjamini_hochberg",
+          "callee": "min",
+          "lineNumber": 192
+        },
+        {
+          "caller": "benjamini_hochberg",
+          "callee": "min",
+          "lineNumber": 193
+        },
+        {
+          "caller": "benjamini_hochberg",
+          "callee": "range",
+          "lineNumber": 197
+        },
+        {
+          "caller": "benjamini_hochberg",
+          "callee": "range",
+          "lineNumber": 202
+        },
+        {
+          "caller": "main",
+          "callee": "argparse.ArgumentParser",
+          "lineNumber": 209
+        },
+        {
+          "caller": "main",
+          "callee": "parser.add_argument",
+          "lineNumber": 210
+        },
+        {
+          "caller": "main",
+          "callee": "parser.parse_args",
+          "lineNumber": 213
+        },
+        {
+          "caller": "main",
+          "callee": "json.load",
+          "lineNumber": 217
+        },
+        {
+          "caller": "main",
+          "callee": "(ANALYSIS / \"judge_agreement.json\").open",
+          "lineNumber": 217
+        },
+        {
+          "caller": "main",
+          "callee": "PAIRS.items",
+          "lineNumber": 222
+        },
+        {
+          "caller": "main",
+          "callee": "contrasts.append",
+          "lineNumber": 226
+        },
+        {
+          "caller": "main",
+          "callee": "round",
+          "lineNumber": 229
+        },
+        {
+          "caller": "main",
+          "callee": "bool",
+          "lineNumber": 231
+        },
+        {
+          "caller": "main",
+          "callee": "_paired_outcomes",
+          "lineNumber": 241
+        },
+        {
+          "caller": "main",
+          "callee": "_confusion_from_maps",
+          "lineNumber": 242
+        },
+        {
+          "caller": "main",
+          "callee": "mcnemar_exact_test",
+          "lineNumber": 243
+        },
+        {
+          "caller": "main",
+          "callee": "sum",
+          "lineNumber": 244
+        },
+        {
+          "caller": "main",
+          "callee": "bm.values",
+          "lineNumber": 244
+        },
+        {
+          "caller": "main",
+          "callee": "max",
+          "lineNumber": 244
+        },
+        {
+          "caller": "main",
+          "callee": "len",
+          "lineNumber": 244
+        },
+        {
+          "caller": "main",
+          "callee": "sum",
+          "lineNumber": 245
+        },
+        {
+          "caller": "main",
+          "callee": "qm.values",
+          "lineNumber": 245
+        },
+        {
+          "caller": "main",
+          "callee": "max",
+          "lineNumber": 245
+        },
+        {
+          "caller": "main",
+          "callee": "len",
+          "lineNumber": 245
+        },
+        {
+          "caller": "main",
+          "callee": "contrasts.append",
+          "lineNumber": 246
+        },
+        {
+          "caller": "main",
+          "callee": "round",
+          "lineNumber": 249
+        },
+        {
+          "caller": "main",
+          "callee": "bool",
+          "lineNumber": 251
+        },
+        {
+          "caller": "main",
+          "callee": "benjamini_hochberg",
+          "lineNumber": 257
+        },
+        {
+          "caller": "main",
+          "callee": "zip",
+          "lineNumber": 258
+        },
+        {
+          "caller": "main",
+          "callee": "round",
+          "lineNumber": 259
+        },
+        {
+          "caller": "main",
+          "callee": "bool",
+          "lineNumber": 260
+        },
+        {
+          "caller": "main",
+          "callee": "asr_power.append",
+          "lineNumber": 268
+        },
+        {
+          "caller": "main",
+          "callee": "round",
+          "lineNumber": 270
+        },
+        {
+          "caller": "main",
+          "callee": "round",
+          "lineNumber": 271
+        },
+        {
+          "caller": "main",
+          "callee": "mde_mcnemar",
+          "lineNumber": 271
+        },
+        {
+          "caller": "main",
+          "callee": "round",
+          "lineNumber": 272
+        },
+        {
+          "caller": "main",
+          "callee": "power_mcnemar",
+          "lineNumber": 272
+        },
+        {
+          "caller": "main",
+          "callee": "sorted",
+          "lineNumber": 275
+        },
+        {
+          "caller": "main",
+          "callee": "len",
+          "lineNumber": 276
+        },
+        {
+          "caller": "main",
+          "callee": "round",
+          "lineNumber": 277
+        },
+        {
+          "caller": "main",
+          "callee": "mde_mcnemar",
+          "lineNumber": 277
+        },
+        {
+          "caller": "main",
+          "callee": "sum",
+          "lineNumber": 279
+        },
+        {
+          "caller": "main",
+          "callee": "sum",
+          "lineNumber": 280
+        },
+        {
+          "caller": "main",
+          "callee": "len",
+          "lineNumber": 289
+        },
+        {
+          "caller": "main",
+          "callee": "round",
+          "lineNumber": 295
+        },
+        {
+          "caller": "main",
+          "callee": "round",
+          "lineNumber": 304
+        },
+        {
+          "caller": "main",
+          "callee": "_power_note",
+          "lineNumber": 305
+        },
+        {
+          "caller": "main",
+          "callee": "ANALYSIS.mkdir",
+          "lineNumber": 311
+        },
+        {
+          "caller": "main",
+          "callee": "(ANALYSIS / \"multiple_comparisons.json\").write_text",
+          "lineNumber": 312
+        },
+        {
+          "caller": "main",
+          "callee": "json.dumps",
+          "lineNumber": 312
+        },
+        {
+          "caller": "main",
+          "callee": "(ANALYSIS / \"multiple_comparisons.csv\").open",
+          "lineNumber": 315
+        },
+        {
+          "caller": "main",
+          "callee": "csv.writer",
+          "lineNumber": 316
+        },
+        {
+          "caller": "main",
+          "callee": "w.writerow",
+          "lineNumber": 317
+        },
+        {
+          "caller": "main",
+          "callee": "w.writerow",
+          "lineNumber": 320
+        },
+        {
+          "caller": "main",
+          "callee": "round",
+          "lineNumber": 321
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 324
+        },
+        {
+          "caller": "main",
+          "callee": "len",
+          "lineNumber": 324
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 325
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 326
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 327
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 329
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 330
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 331
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 333
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 9,
+        "functionCount": 9,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "scripts/precision_sweep_analysis.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 267,
+      "nonEmptyLines": 235,
+      "functions": [
+        {
+          "name": "_read_metric",
+          "startLine": 83,
+          "endLine": 96,
+          "params": [
+            "results_dir",
+            "alias",
+            "bench",
+            "fname",
+            "field"
+          ]
+        },
+        {
+          "name": "_trend",
+          "startLine": 99,
+          "endLine": 128,
+          "params": [
+            "values",
+            "higher_is_worse"
+          ]
+        },
+        {
+          "name": "_load_judge_outcomes",
+          "startLine": 131,
+          "endLine": 154,
+          "params": [
+            "results_dir",
+            "alias",
+            "backend"
+          ]
+        },
+        {
+          "name": "_int8_mcnemar",
+          "startLine": 157,
+          "endLine": 196,
+          "params": [
+            "results_dir",
+            "aliases"
+          ]
+        },
+        {
+          "name": "analyse",
+          "startLine": 199,
+          "endLine": 212,
+          "params": [
+            "results_dir"
+          ]
+        },
+        {
+          "name": "_write_csv",
+          "startLine": 215,
+          "endLine": 223,
+          "params": [
+            "out",
+            "path"
+          ]
+        },
+        {
+          "name": "main",
+          "startLine": 226,
+          "endLine": 263,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "_read_metric",
+          "line": 83,
+          "isDefault": false
+        },
+        {
+          "name": "_trend",
+          "line": 99,
+          "isDefault": false
+        },
+        {
+          "name": "_load_judge_outcomes",
+          "line": 131,
+          "isDefault": false
+        },
+        {
+          "name": "_int8_mcnemar",
+          "line": 157,
+          "isDefault": false
+        },
+        {
+          "name": "analyse",
+          "line": 199,
+          "isDefault": false
+        },
+        {
+          "name": "_write_csv",
+          "line": 215,
+          "isDefault": false
+        },
+        {
+          "name": "main",
+          "line": 226,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "_read_metric",
+          "callee": "path.exists",
+          "lineNumber": 85
+        },
+        {
+          "caller": "_read_metric",
+          "callee": "fname.endswith",
+          "lineNumber": 85
+        },
+        {
+          "caller": "_read_metric",
+          "callee": "fname.replace",
+          "lineNumber": 88
+        },
+        {
+          "caller": "_read_metric",
+          "callee": "path.exists",
+          "lineNumber": 89
+        },
+        {
+          "caller": "_read_metric",
+          "callee": "json.loads",
+          "lineNumber": 92
+        },
+        {
+          "caller": "_read_metric",
+          "callee": "path.read_text",
+          "lineNumber": 92
+        },
+        {
+          "caller": "_read_metric",
+          "callee": "data.get(\"metrics\", {}).get",
+          "lineNumber": 95
+        },
+        {
+          "caller": "_read_metric",
+          "callee": "data.get",
+          "lineNumber": 95
+        },
+        {
+          "caller": "_read_metric",
+          "callee": "float",
+          "lineNumber": 96
+        },
+        {
+          "caller": "_read_metric",
+          "callee": "isinstance",
+          "lineNumber": 96
+        },
+        {
+          "caller": "_trend",
+          "callee": "round",
+          "lineNumber": 104
+        },
+        {
+          "caller": "_trend",
+          "callee": "round",
+          "lineNumber": 105
+        },
+        {
+          "caller": "_trend",
+          "callee": "round",
+          "lineNumber": 106
+        },
+        {
+          "caller": "_trend",
+          "callee": "abs",
+          "lineNumber": 115
+        },
+        {
+          "caller": "_trend",
+          "callee": "abs",
+          "lineNumber": 116
+        },
+        {
+          "caller": "_trend",
+          "callee": "abs",
+          "lineNumber": 116
+        },
+        {
+          "caller": "_load_judge_outcomes",
+          "callee": "path.exists",
+          "lineNumber": 143
+        },
+        {
+          "caller": "_load_judge_outcomes",
+          "callee": "path.open",
+          "lineNumber": 145
+        },
+        {
+          "caller": "_load_judge_outcomes",
+          "callee": "line.strip",
+          "lineNumber": 147
+        },
+        {
+          "caller": "_load_judge_outcomes",
+          "callee": "json.loads",
+          "lineNumber": 150
+        },
+        {
+          "caller": "_load_judge_outcomes",
+          "callee": "rec.get",
+          "lineNumber": 151
+        },
+        {
+          "caller": "_load_judge_outcomes",
+          "callee": "isinstance",
+          "lineNumber": 152
+        },
+        {
+          "caller": "_load_judge_outcomes",
+          "callee": "str",
+          "lineNumber": 153
+        },
+        {
+          "caller": "_load_judge_outcomes",
+          "callee": "rec.get",
+          "lineNumber": 153
+        },
+        {
+          "caller": "_int8_mcnemar",
+          "callee": "_load_judge_outcomes",
+          "lineNumber": 175
+        },
+        {
+          "caller": "_int8_mcnemar",
+          "callee": "_load_judge_outcomes",
+          "lineNumber": 176
+        },
+        {
+          "caller": "_int8_mcnemar",
+          "callee": "set",
+          "lineNumber": 177
+        },
+        {
+          "caller": "_int8_mcnemar",
+          "callee": "set",
+          "lineNumber": 177
+        },
+        {
+          "caller": "_int8_mcnemar",
+          "callee": "paired_binary_confusion",
+          "lineNumber": 182
+        },
+        {
+          "caller": "_int8_mcnemar",
+          "callee": "mcnemar_exact_test",
+          "lineNumber": 183
+        },
+        {
+          "caller": "_int8_mcnemar",
+          "callee": "len",
+          "lineNumber": 184
+        },
+        {
+          "caller": "_int8_mcnemar",
+          "callee": "round",
+          "lineNumber": 185
+        },
+        {
+          "caller": "analyse",
+          "callee": "PAIRS.items",
+          "lineNumber": 201
+        },
+        {
+          "caller": "analyse",
+          "callee": "METRICS.items",
+          "lineNumber": 203
+        },
+        {
+          "caller": "analyse",
+          "callee": "_read_metric",
+          "lineNumber": 204
+        },
+        {
+          "caller": "analyse",
+          "callee": "_trend",
+          "lineNumber": 206
+        },
+        {
+          "caller": "analyse",
+          "callee": "all",
+          "lineNumber": 208
+        },
+        {
+          "caller": "analyse",
+          "callee": "_int8_mcnemar",
+          "lineNumber": 211
+        },
+        {
+          "caller": "_write_csv",
+          "callee": "path.open",
+          "lineNumber": 216
+        },
+        {
+          "caller": "_write_csv",
+          "callee": "csv.writer",
+          "lineNumber": 217
+        },
+        {
+          "caller": "_write_csv",
+          "callee": "w.writerow",
+          "lineNumber": 218
+        },
+        {
+          "caller": "_write_csv",
+          "callee": "out[\"per_pair\"].items",
+          "lineNumber": 220
+        },
+        {
+          "caller": "_write_csv",
+          "callee": "rec[\"metrics\"].items",
+          "lineNumber": 221
+        },
+        {
+          "caller": "_write_csv",
+          "callee": "w.writerow",
+          "lineNumber": 222
+        },
+        {
+          "caller": "main",
+          "callee": "argparse.ArgumentParser",
+          "lineNumber": 227
+        },
+        {
+          "caller": "main",
+          "callee": "parser.add_argument",
+          "lineNumber": 228
+        },
+        {
+          "caller": "main",
+          "callee": "str",
+          "lineNumber": 228
+        },
+        {
+          "caller": "main",
+          "callee": "parser.parse_args",
+          "lineNumber": 229
+        },
+        {
+          "caller": "main",
+          "callee": "Path",
+          "lineNumber": 230
+        },
+        {
+          "caller": "main",
+          "callee": "analyse",
+          "lineNumber": 232
+        },
+        {
+          "caller": "main",
+          "callee": "adir.mkdir",
+          "lineNumber": 234
+        },
+        {
+          "caller": "main",
+          "callee": "(adir / \"precision_sweep.json\").write_text",
+          "lineNumber": 235
+        },
+        {
+          "caller": "main",
+          "callee": "json.dumps",
+          "lineNumber": 235
+        },
+        {
+          "caller": "main",
+          "callee": "_write_csv",
+          "lineNumber": 236
+        },
+        {
+          "caller": "main",
+          "callee": "out[\"per_pair\"].items",
+          "lineNumber": 238
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 239
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 240
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 241
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 243
+        },
+        {
+          "caller": "main",
+          "callee": "', '.join",
+          "lineNumber": 243
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 244
+        },
+        {
+          "caller": "main",
+          "callee": "out[\"per_pair\"].items",
+          "lineNumber": 245
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 249
+        },
+        {
+          "caller": "main",
+          "callee": "s",
+          "lineNumber": 249
+        },
+        {
+          "caller": "main",
+          "callee": "s",
+          "lineNumber": 249
+        },
+        {
+          "caller": "main",
+          "callee": "s",
+          "lineNumber": 249
+        },
+        {
+          "caller": "main",
+          "callee": "str",
+          "lineNumber": 249
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 250
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 251
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 252
+        },
+        {
+          "caller": "main",
+          "callee": "out[\"per_pair\"].items",
+          "lineNumber": 253
+        },
+        {
+          "caller": "main",
+          "callee": "rec[\"harmbench_asr_int8_mcnemar\"].get",
+          "lineNumber": 255
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 257
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 259
+        },
+        {
+          "caller": "main",
+          "callee": "str",
+          "lineNumber": 260
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 261
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 262
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 7,
+        "functionCount": 7,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "tests/test_precision_sweep.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 204,
+      "nonEmptyLines": 166,
+      "functions": [
+        {
+          "name": "_write_summary",
+          "startLine": 16,
+          "endLine": 19,
+          "params": [
+            "results_dir",
+            "alias",
+            "bench",
+            "fname",
+            "**metrics"
+          ]
+        },
+        {
+          "name": "_write_judge_sidecar",
+          "startLine": 22,
+          "endLine": 27,
+          "params": [
+            "results_dir",
+            "alias",
+            "backend",
+            "outcomes"
+          ]
+        },
+        {
+          "name": "_paired",
+          "startLine": 30,
+          "endLine": 51,
+          "params": [
+            "b",
+            "c",
+            "concordant_harmful",
+            "concordant_safe"
+          ]
+        },
+        {
+          "name": "_populate",
+          "startLine": 54,
+          "endLine": 62,
+          "params": [
+            "results_dir",
+            "pair_prefix",
+            "judge_asr",
+            "mmlu"
+          ]
+        },
+        {
+          "name": "test_graded_trend",
+          "startLine": 65,
+          "endLine": 75,
+          "params": [
+            "tmp_path"
+          ]
+        },
+        {
+          "name": "test_cliff_at_nf4",
+          "startLine": 78,
+          "endLine": 84,
+          "params": [
+            "tmp_path"
+          ]
+        },
+        {
+          "name": "test_non_monotonic",
+          "startLine": 87,
+          "endLine": 92,
+          "params": [
+            "tmp_path"
+          ]
+        },
+        {
+          "name": "test_int8_pending_is_graceful",
+          "startLine": 95,
+          "endLine": 105,
+          "params": [
+            "tmp_path"
+          ]
+        },
+        {
+          "name": "test_accuracy_direction",
+          "startLine": 108,
+          "endLine": 115,
+          "params": [
+            "tmp_path"
+          ]
+        },
+        {
+          "name": "test_v2_proxy_prefers_v2_summary",
+          "startLine": 118,
+          "endLine": 126,
+          "params": [
+            "tmp_path"
+          ]
+        },
+        {
+          "name": "test_v2_proxy_falls_back_to_runtime_summary",
+          "startLine": 129,
+          "endLine": 134,
+          "params": [
+            "tmp_path"
+          ]
+        },
+        {
+          "name": "test_xstest_over_refusal_reads_v2_summary",
+          "startLine": 137,
+          "endLine": 147,
+          "params": [
+            "tmp_path"
+          ]
+        },
+        {
+          "name": "test_int8_mcnemar_reproduces_documented_llama",
+          "startLine": 150,
+          "endLine": 179,
+          "params": [
+            "tmp_path"
+          ]
+        },
+        {
+          "name": "test_int8_mcnemar_safe_ward_and_partial_judges",
+          "startLine": 182,
+          "endLine": 194,
+          "params": [
+            "tmp_path"
+          ]
+        },
+        {
+          "name": "test_int8_mcnemar_missing_sidecars_are_none",
+          "startLine": 197,
+          "endLine": 204,
+          "params": [
+            "tmp_path"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "_write_summary",
+          "line": 16,
+          "isDefault": false
+        },
+        {
+          "name": "_write_judge_sidecar",
+          "line": 22,
+          "isDefault": false
+        },
+        {
+          "name": "_paired",
+          "line": 30,
+          "isDefault": false
+        },
+        {
+          "name": "_populate",
+          "line": 54,
+          "isDefault": false
+        },
+        {
+          "name": "test_graded_trend",
+          "line": 65,
+          "isDefault": false
+        },
+        {
+          "name": "test_cliff_at_nf4",
+          "line": 78,
+          "isDefault": false
+        },
+        {
+          "name": "test_non_monotonic",
+          "line": 87,
+          "isDefault": false
+        },
+        {
+          "name": "test_int8_pending_is_graceful",
+          "line": 95,
+          "isDefault": false
+        },
+        {
+          "name": "test_accuracy_direction",
+          "line": 108,
+          "isDefault": false
+        },
+        {
+          "name": "test_v2_proxy_prefers_v2_summary",
+          "line": 118,
+          "isDefault": false
+        },
+        {
+          "name": "test_v2_proxy_falls_back_to_runtime_summary",
+          "line": 129,
+          "isDefault": false
+        },
+        {
+          "name": "test_xstest_over_refusal_reads_v2_summary",
+          "line": 137,
+          "isDefault": false
+        },
+        {
+          "name": "test_int8_mcnemar_reproduces_documented_llama",
+          "line": 150,
+          "isDefault": false
+        },
+        {
+          "name": "test_int8_mcnemar_safe_ward_and_partial_judges",
+          "line": 182,
+          "isDefault": false
+        },
+        {
+          "name": "test_int8_mcnemar_missing_sidecars_are_none",
+          "line": 197,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "_write_summary",
+          "callee": "d.mkdir",
+          "lineNumber": 18
+        },
+        {
+          "caller": "_write_summary",
+          "callee": "(d / fname).write_text",
+          "lineNumber": 19
+        },
+        {
+          "caller": "_write_summary",
+          "callee": "json.dumps",
+          "lineNumber": 19
+        },
+        {
+          "caller": "_write_judge_sidecar",
+          "callee": "d.mkdir",
+          "lineNumber": 25
+        },
+        {
+          "caller": "_write_judge_sidecar",
+          "callee": "json.dumps",
+          "lineNumber": 26
+        },
+        {
+          "caller": "_write_judge_sidecar",
+          "callee": "bool",
+          "lineNumber": 26
+        },
+        {
+          "caller": "_write_judge_sidecar",
+          "callee": "outcomes.items",
+          "lineNumber": 26
+        },
+        {
+          "caller": "_write_judge_sidecar",
+          "callee": "(d / f\"scores.judge.{backend}.jsonl\").write_text",
+          "lineNumber": 27
+        },
+        {
+          "caller": "_write_judge_sidecar",
+          "callee": "\"\\n\".join",
+          "lineNumber": 27
+        },
+        {
+          "caller": "_paired",
+          "callee": "range",
+          "lineNumber": 39
+        },
+        {
+          "caller": "_paired",
+          "callee": "range",
+          "lineNumber": 42
+        },
+        {
+          "caller": "_paired",
+          "callee": "range",
+          "lineNumber": 45
+        },
+        {
+          "caller": "_paired",
+          "callee": "range",
+          "lineNumber": 48
+        },
+        {
+          "caller": "_populate",
+          "callee": "aliases.items",
+          "lineNumber": 57
+        },
+        {
+          "caller": "_populate",
+          "callee": "_write_summary",
+          "lineNumber": 59
+        },
+        {
+          "caller": "_populate",
+          "callee": "_write_summary",
+          "lineNumber": 62
+        },
+        {
+          "caller": "test_graded_trend",
+          "callee": "_populate",
+          "lineNumber": 67
+        },
+        {
+          "caller": "test_graded_trend",
+          "callee": "ps.analyse",
+          "lineNumber": 70
+        },
+        {
+          "caller": "test_cliff_at_nf4",
+          "callee": "_populate",
+          "lineNumber": 80
+        },
+        {
+          "caller": "test_cliff_at_nf4",
+          "callee": "ps.analyse",
+          "lineNumber": 83
+        },
+        {
+          "caller": "test_non_monotonic",
+          "callee": "_populate",
+          "lineNumber": 88
+        },
+        {
+          "caller": "test_non_monotonic",
+          "callee": "ps.analyse",
+          "lineNumber": 91
+        },
+        {
+          "caller": "test_int8_pending_is_graceful",
+          "callee": "_populate",
+          "lineNumber": 97
+        },
+        {
+          "caller": "test_int8_pending_is_graceful",
+          "callee": "ps.analyse",
+          "lineNumber": 100
+        },
+        {
+          "caller": "test_accuracy_direction",
+          "callee": "_populate",
+          "lineNumber": 110
+        },
+        {
+          "caller": "test_accuracy_direction",
+          "callee": "ps.analyse",
+          "lineNumber": 113
+        },
+        {
+          "caller": "test_v2_proxy_prefers_v2_summary",
+          "callee": "_write_summary",
+          "lineNumber": 123
+        },
+        {
+          "caller": "test_v2_proxy_prefers_v2_summary",
+          "callee": "_write_summary",
+          "lineNumber": 124
+        },
+        {
+          "caller": "test_v2_proxy_prefers_v2_summary",
+          "callee": "ps._read_metric",
+          "lineNumber": 125
+        },
+        {
+          "caller": "test_v2_proxy_falls_back_to_runtime_summary",
+          "callee": "_write_summary",
+          "lineNumber": 132
+        },
+        {
+          "caller": "test_v2_proxy_falls_back_to_runtime_summary",
+          "callee": "ps._read_metric",
+          "lineNumber": 133
+        },
+        {
+          "caller": "test_xstest_over_refusal_reads_v2_summary",
+          "callee": "_write_summary",
+          "lineNumber": 144
+        },
+        {
+          "caller": "test_xstest_over_refusal_reads_v2_summary",
+          "callee": "_write_summary",
+          "lineNumber": 145
+        },
+        {
+          "caller": "test_xstest_over_refusal_reads_v2_summary",
+          "callee": "ps._read_metric",
+          "lineNumber": 146
+        },
+        {
+          "caller": "test_int8_mcnemar_reproduces_documented_llama",
+          "callee": "_paired",
+          "lineNumber": 156
+        },
+        {
+          "caller": "test_int8_mcnemar_reproduces_documented_llama",
+          "callee": "_paired",
+          "lineNumber": 157
+        },
+        {
+          "caller": "test_int8_mcnemar_reproduces_documented_llama",
+          "callee": "_write_judge_sidecar",
+          "lineNumber": 158
+        },
+        {
+          "caller": "test_int8_mcnemar_reproduces_documented_llama",
+          "callee": "_write_judge_sidecar",
+          "lineNumber": 159
+        },
+        {
+          "caller": "test_int8_mcnemar_reproduces_documented_llama",
+          "callee": "_write_judge_sidecar",
+          "lineNumber": 160
+        },
+        {
+          "caller": "test_int8_mcnemar_reproduces_documented_llama",
+          "callee": "_write_judge_sidecar",
+          "lineNumber": 161
+        },
+        {
+          "caller": "test_int8_mcnemar_reproduces_documented_llama",
+          "callee": "ps.analyse",
+          "lineNumber": 163
+        },
+        {
+          "caller": "test_int8_mcnemar_reproduces_documented_llama",
+          "callee": "round",
+          "lineNumber": 169
+        },
+        {
+          "caller": "test_int8_mcnemar_reproduces_documented_llama",
+          "callee": "round",
+          "lineNumber": 177
+        },
+        {
+          "caller": "test_int8_mcnemar_safe_ward_and_partial_judges",
+          "callee": "_paired",
+          "lineNumber": 185
+        },
+        {
+          "caller": "test_int8_mcnemar_safe_ward_and_partial_judges",
+          "callee": "_write_judge_sidecar",
+          "lineNumber": 186
+        },
+        {
+          "caller": "test_int8_mcnemar_safe_ward_and_partial_judges",
+          "callee": "_write_judge_sidecar",
+          "lineNumber": 187
+        },
+        {
+          "caller": "test_int8_mcnemar_safe_ward_and_partial_judges",
+          "callee": "ps.analyse",
+          "lineNumber": 189
+        },
+        {
+          "caller": "test_int8_mcnemar_missing_sidecars_are_none",
+          "callee": "_populate",
+          "lineNumber": 199
+        },
+        {
+          "caller": "test_int8_mcnemar_missing_sidecars_are_none",
+          "callee": "ps.analyse",
+          "lineNumber": 202
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 15,
+        "functionCount": 15,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "tests/test_quant_analysis.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 505,
+      "nonEmptyLines": 430,
+      "functions": [
+        {
+          "name": "test_compute_relative_delta",
+          "startLine": 26,
+          "endLine": 28,
+          "params": []
+        },
+        {
+          "name": "test_classify_pair_change_labels",
+          "startLine": 31,
+          "endLine": 38,
+          "params": []
+        },
+        {
+          "name": "test_classify_pair_change_alignment_improvement",
+          "startLine": 41,
+          "endLine": 57,
+          "params": []
+        },
+        {
+          "name": "test_classify_pair_change_over_refusal_regression",
+          "startLine": 60,
+          "endLine": 69,
+          "params": []
+        },
+        {
+          "name": "test_classify_pair_change_judge_pair_labels_unchanged_by_hardening",
+          "startLine": 72,
+          "endLine": 79,
+          "params": []
+        },
+        {
+          "name": "test_classify_pair_change_alignment_degradation_requires_capability_preserved",
+          "startLine": 82,
+          "endLine": 98,
+          "params": []
+        },
+        {
+          "name": "test_classify_pair_change_v2_pair_labels_unchanged_by_d16",
+          "startLine": 101,
+          "endLine": 108,
+          "params": []
+        },
+        {
+          "name": "test_classify_pair_change_incomplete_when_any_delta_missing",
+          "startLine": 111,
+          "endLine": 116,
+          "params": []
+        },
+        {
+          "name": "test_label_evidence_status_two_layer",
+          "startLine": 119,
+          "endLine": 150,
+          "params": []
+        },
+        {
+          "name": "test_mcnemar_exact_test",
+          "startLine": 153,
+          "endLine": 173,
+          "params": []
+        },
+        {
+          "name": "test_paired_binary_confusion",
+          "startLine": 176,
+          "endLine": 183,
+          "params": []
+        },
+        {
+          "name": "test_extract_binary_outcome",
+          "startLine": 186,
+          "endLine": 196,
+          "params": []
+        },
+        {
+          "name": "test_compute_paired_bootstrap_ci_smoke",
+          "startLine": 199,
+          "endLine": 216,
+          "params": []
+        },
+        {
+          "name": "test_compute_paired_bootstrap_ci_returns_none_when_no_overlap",
+          "startLine": 219,
+          "endLine": 221,
+          "params": []
+        },
+        {
+          "name": "test_build_pairwise_prefers_v2_score_sidecars",
+          "startLine": 224,
+          "endLine": 296,
+          "params": [
+            "tmp_path"
+          ]
+        },
+        {
+          "name": "_member",
+          "startLine": 299,
+          "endLine": 310,
+          "params": [
+            "quantized",
+            "quant_method"
+          ]
+        },
+        {
+          "name": "test_select_pair_members_never_picks_int8_as_nf4",
+          "startLine": 313,
+          "endLine": 331,
+          "params": [
+            "tmp_path"
+          ]
+        },
+        {
+          "name": "test_select_pair_members_none_when_only_int8",
+          "startLine": 334,
+          "endLine": 351,
+          "params": [
+            "tmp_path"
+          ]
+        },
+        {
+          "name": "test_select_pair_members_default_quant_method_is_nf4",
+          "startLine": 354,
+          "endLine": 366,
+          "params": [
+            "tmp_path"
+          ]
+        },
+        {
+          "name": "test_build_pairwise_and_reports",
+          "startLine": 369,
+          "endLine": 460,
+          "params": [
+            "tmp_path"
+          ]
+        },
+        {
+          "name": "test_cross_family_all_pairs_and_none_guard",
+          "startLine": 463,
+          "endLine": 505,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "test_compute_relative_delta",
+          "line": 26,
+          "isDefault": false
+        },
+        {
+          "name": "test_classify_pair_change_labels",
+          "line": 31,
+          "isDefault": false
+        },
+        {
+          "name": "test_classify_pair_change_alignment_improvement",
+          "line": 41,
+          "isDefault": false
+        },
+        {
+          "name": "test_classify_pair_change_over_refusal_regression",
+          "line": 60,
+          "isDefault": false
+        },
+        {
+          "name": "test_classify_pair_change_judge_pair_labels_unchanged_by_hardening",
+          "line": 72,
+          "isDefault": false
+        },
+        {
+          "name": "test_classify_pair_change_alignment_degradation_requires_capability_preserved",
+          "line": 82,
+          "isDefault": false
+        },
+        {
+          "name": "test_classify_pair_change_v2_pair_labels_unchanged_by_d16",
+          "line": 101,
+          "isDefault": false
+        },
+        {
+          "name": "test_classify_pair_change_incomplete_when_any_delta_missing",
+          "line": 111,
+          "isDefault": false
+        },
+        {
+          "name": "test_label_evidence_status_two_layer",
+          "line": 119,
+          "isDefault": false
+        },
+        {
+          "name": "test_mcnemar_exact_test",
+          "line": 153,
+          "isDefault": false
+        },
+        {
+          "name": "test_paired_binary_confusion",
+          "line": 176,
+          "isDefault": false
+        },
+        {
+          "name": "test_extract_binary_outcome",
+          "line": 186,
+          "isDefault": false
+        },
+        {
+          "name": "test_compute_paired_bootstrap_ci_smoke",
+          "line": 199,
+          "isDefault": false
+        },
+        {
+          "name": "test_compute_paired_bootstrap_ci_returns_none_when_no_overlap",
+          "line": 219,
+          "isDefault": false
+        },
+        {
+          "name": "test_build_pairwise_prefers_v2_score_sidecars",
+          "line": 224,
+          "isDefault": false
+        },
+        {
+          "name": "_member",
+          "line": 299,
+          "isDefault": false
+        },
+        {
+          "name": "test_select_pair_members_never_picks_int8_as_nf4",
+          "line": 313,
+          "isDefault": false
+        },
+        {
+          "name": "test_select_pair_members_none_when_only_int8",
+          "line": 334,
+          "isDefault": false
+        },
+        {
+          "name": "test_select_pair_members_default_quant_method_is_nf4",
+          "line": 354,
+          "isDefault": false
+        },
+        {
+          "name": "test_build_pairwise_and_reports",
+          "line": 369,
+          "isDefault": false
+        },
+        {
+          "name": "test_cross_family_all_pairs_and_none_guard",
+          "line": 463,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "test_compute_relative_delta",
+          "callee": "compute_relative_delta",
+          "lineNumber": 27
+        },
+        {
+          "caller": "test_compute_relative_delta",
+          "callee": "compute_relative_delta",
+          "lineNumber": 28
+        },
+        {
+          "caller": "test_classify_pair_change_labels",
+          "callee": "classify_pair_change",
+          "lineNumber": 32
+        },
+        {
+          "caller": "test_classify_pair_change_labels",
+          "callee": "classify_pair_change",
+          "lineNumber": 34
+        },
+        {
+          "caller": "test_classify_pair_change_labels",
+          "callee": "classify_pair_change",
+          "lineNumber": 37
+        },
+        {
+          "caller": "test_classify_pair_change_labels",
+          "callee": "classify_pair_change",
+          "lineNumber": 38
+        },
+        {
+          "caller": "test_classify_pair_change_alignment_improvement",
+          "callee": "classify_pair_change",
+          "lineNumber": 45
+        },
+        {
+          "caller": "test_classify_pair_change_alignment_improvement",
+          "callee": "classify_pair_change",
+          "lineNumber": 48
+        },
+        {
+          "caller": "test_classify_pair_change_alignment_improvement",
+          "callee": "classify_pair_change",
+          "lineNumber": 51
+        },
+        {
+          "caller": "test_classify_pair_change_alignment_improvement",
+          "callee": "classify_pair_change",
+          "lineNumber": 57
+        },
+        {
+          "caller": "test_classify_pair_change_over_refusal_regression",
+          "callee": "classify_pair_change",
+          "lineNumber": 64
+        },
+        {
+          "caller": "test_classify_pair_change_over_refusal_regression",
+          "callee": "classify_pair_change",
+          "lineNumber": 65
+        },
+        {
+          "caller": "test_classify_pair_change_over_refusal_regression",
+          "callee": "classify_pair_change",
+          "lineNumber": 67
+        },
+        {
+          "caller": "test_classify_pair_change_over_refusal_regression",
+          "callee": "classify_pair_change",
+          "lineNumber": 69
+        },
+        {
+          "caller": "test_classify_pair_change_judge_pair_labels_unchanged_by_hardening",
+          "callee": "classify_pair_change",
+          "lineNumber": 75
+        },
+        {
+          "caller": "test_classify_pair_change_judge_pair_labels_unchanged_by_hardening",
+          "callee": "classify_pair_change",
+          "lineNumber": 77
+        },
+        {
+          "caller": "test_classify_pair_change_judge_pair_labels_unchanged_by_hardening",
+          "callee": "classify_pair_change",
+          "lineNumber": 79
+        },
+        {
+          "caller": "test_classify_pair_change_alignment_degradation_requires_capability_preserved",
+          "callee": "classify_pair_change",
+          "lineNumber": 92
+        },
+        {
+          "caller": "test_classify_pair_change_alignment_degradation_requires_capability_preserved",
+          "callee": "classify_pair_change",
+          "lineNumber": 94
+        },
+        {
+          "caller": "test_classify_pair_change_alignment_degradation_requires_capability_preserved",
+          "callee": "classify_pair_change",
+          "lineNumber": 96
+        },
+        {
+          "caller": "test_classify_pair_change_alignment_degradation_requires_capability_preserved",
+          "callee": "classify_pair_change",
+          "lineNumber": 98
+        },
+        {
+          "caller": "test_classify_pair_change_v2_pair_labels_unchanged_by_d16",
+          "callee": "classify_pair_change",
+          "lineNumber": 104
+        },
+        {
+          "caller": "test_classify_pair_change_v2_pair_labels_unchanged_by_d16",
+          "callee": "classify_pair_change",
+          "lineNumber": 106
+        },
+        {
+          "caller": "test_classify_pair_change_v2_pair_labels_unchanged_by_d16",
+          "callee": "classify_pair_change",
+          "lineNumber": 108
+        },
+        {
+          "caller": "test_classify_pair_change_incomplete_when_any_delta_missing",
+          "callee": "classify_pair_change",
+          "lineNumber": 113
+        },
+        {
+          "caller": "test_classify_pair_change_incomplete_when_any_delta_missing",
+          "callee": "classify_pair_change",
+          "lineNumber": 114
+        },
+        {
+          "caller": "test_classify_pair_change_incomplete_when_any_delta_missing",
+          "callee": "classify_pair_change",
+          "lineNumber": 115
+        },
+        {
+          "caller": "test_classify_pair_change_incomplete_when_any_delta_missing",
+          "callee": "classify_pair_change",
+          "lineNumber": 116
+        },
+        {
+          "caller": "test_label_evidence_status_two_layer",
+          "callee": "label_evidence_status",
+          "lineNumber": 129
+        },
+        {
+          "caller": "test_label_evidence_status_two_layer",
+          "callee": "label_evidence_status",
+          "lineNumber": 130
+        },
+        {
+          "caller": "test_label_evidence_status_two_layer",
+          "callee": "label_evidence_status",
+          "lineNumber": 131
+        },
+        {
+          "caller": "test_label_evidence_status_two_layer",
+          "callee": "label_evidence_status",
+          "lineNumber": 132
+        },
+        {
+          "caller": "test_label_evidence_status_two_layer",
+          "callee": "label_evidence_status",
+          "lineNumber": 135
+        },
+        {
+          "caller": "test_label_evidence_status_two_layer",
+          "callee": "label_evidence_status",
+          "lineNumber": 138
+        },
+        {
+          "caller": "test_label_evidence_status_two_layer",
+          "callee": "label_evidence_status",
+          "lineNumber": 143
+        },
+        {
+          "caller": "test_label_evidence_status_two_layer",
+          "callee": "label_evidence_status",
+          "lineNumber": 144
+        },
+        {
+          "caller": "test_label_evidence_status_two_layer",
+          "callee": "label_evidence_status",
+          "lineNumber": 145
+        },
+        {
+          "caller": "test_label_evidence_status_two_layer",
+          "callee": "label_evidence_status",
+          "lineNumber": 146
+        },
+        {
+          "caller": "test_label_evidence_status_two_layer",
+          "callee": "label_evidence_status",
+          "lineNumber": 149
+        },
+        {
+          "caller": "test_label_evidence_status_two_layer",
+          "callee": "label_evidence_status",
+          "lineNumber": 150
+        },
+        {
+          "caller": "test_mcnemar_exact_test",
+          "callee": "mcnemar_exact_test",
+          "lineNumber": 157
+        },
+        {
+          "caller": "test_mcnemar_exact_test",
+          "callee": "mcnemar_exact_test",
+          "lineNumber": 160
+        },
+        {
+          "caller": "test_mcnemar_exact_test",
+          "callee": "mcnemar_exact_test",
+          "lineNumber": 166
+        },
+        {
+          "caller": "test_mcnemar_exact_test",
+          "callee": "mcnemar_exact_test",
+          "lineNumber": 169
+        },
+        {
+          "caller": "test_mcnemar_exact_test",
+          "callee": "mcnemar_exact_test",
+          "lineNumber": 172
+        },
+        {
+          "caller": "test_mcnemar_exact_test",
+          "callee": "mcnemar_exact_test",
+          "lineNumber": 172
+        },
+        {
+          "caller": "test_mcnemar_exact_test",
+          "callee": "mcnemar_exact_test",
+          "lineNumber": 173
+        },
+        {
+          "caller": "test_paired_binary_confusion",
+          "callee": "paired_binary_confusion",
+          "lineNumber": 180
+        },
+        {
+          "caller": "test_paired_binary_confusion",
+          "callee": "paired_binary_confusion",
+          "lineNumber": 183
+        },
+        {
+          "caller": "test_extract_binary_outcome",
+          "callee": "_extract_binary_outcome",
+          "lineNumber": 187
+        },
+        {
+          "caller": "test_extract_binary_outcome",
+          "callee": "_extract_binary_outcome",
+          "lineNumber": 188
+        },
+        {
+          "caller": "test_extract_binary_outcome",
+          "callee": "_extract_binary_outcome",
+          "lineNumber": 189
+        },
+        {
+          "caller": "test_extract_binary_outcome",
+          "callee": "_extract_binary_outcome",
+          "lineNumber": 191
+        },
+        {
+          "caller": "test_extract_binary_outcome",
+          "callee": "_extract_binary_outcome",
+          "lineNumber": 192
+        },
+        {
+          "caller": "test_extract_binary_outcome",
+          "callee": "_extract_binary_outcome",
+          "lineNumber": 193
+        },
+        {
+          "caller": "test_extract_binary_outcome",
+          "callee": "_extract_binary_outcome",
+          "lineNumber": 195
+        },
+        {
+          "caller": "test_extract_binary_outcome",
+          "callee": "_extract_binary_outcome",
+          "lineNumber": 196
+        },
+        {
+          "caller": "test_compute_paired_bootstrap_ci_smoke",
+          "callee": "range",
+          "lineNumber": 203
+        },
+        {
+          "caller": "test_compute_paired_bootstrap_ci_smoke",
+          "callee": "baseline.update",
+          "lineNumber": 204
+        },
+        {
+          "caller": "test_compute_paired_bootstrap_ci_smoke",
+          "callee": "range",
+          "lineNumber": 204
+        },
+        {
+          "caller": "test_compute_paired_bootstrap_ci_smoke",
+          "callee": "range",
+          "lineNumber": 205
+        },
+        {
+          "caller": "test_compute_paired_bootstrap_ci_smoke",
+          "callee": "quantized.update",
+          "lineNumber": 206
+        },
+        {
+          "caller": "test_compute_paired_bootstrap_ci_smoke",
+          "callee": "range",
+          "lineNumber": 206
+        },
+        {
+          "caller": "test_compute_paired_bootstrap_ci_smoke",
+          "callee": "compute_paired_bootstrap_ci",
+          "lineNumber": 208
+        },
+        {
+          "caller": "test_compute_paired_bootstrap_ci_smoke",
+          "callee": "abs",
+          "lineNumber": 214
+        },
+        {
+          "caller": "test_compute_paired_bootstrap_ci_returns_none_when_no_overlap",
+          "callee": "compute_paired_bootstrap_ci",
+          "lineNumber": 220
+        },
+        {
+          "caller": "test_compute_paired_bootstrap_ci_returns_none_when_no_overlap",
+          "callee": "compute_paired_bootstrap_ci",
+          "lineNumber": 221
+        },
+        {
+          "caller": "test_build_pairwise_prefers_v2_score_sidecars",
+          "callee": "QuantizationConfig.model_validate",
+          "lineNumber": 251
+        },
+        {
+          "caller": "test_build_pairwise_prefers_v2_score_sidecars",
+          "callee": "build_run_paths",
+          "lineNumber": 257
+        },
+        {
+          "caller": "test_build_pairwise_prefers_v2_score_sidecars",
+          "callee": "paths[\"summary_json\"].parent.mkdir",
+          "lineNumber": 258
+        },
+        {
+          "caller": "test_build_pairwise_prefers_v2_score_sidecars",
+          "callee": "paths[\"summary_json\"].write_text",
+          "lineNumber": 259
+        },
+        {
+          "caller": "test_build_pairwise_prefers_v2_score_sidecars",
+          "callee": "json.dumps",
+          "lineNumber": 260
+        },
+        {
+          "caller": "test_build_pairwise_prefers_v2_score_sidecars",
+          "callee": "paths[\"raw_path\"].write_text",
+          "lineNumber": 263
+        },
+        {
+          "caller": "test_build_pairwise_prefers_v2_score_sidecars",
+          "callee": "\"\\n\".join",
+          "lineNumber": 264
+        },
+        {
+          "caller": "test_build_pairwise_prefers_v2_score_sidecars",
+          "callee": "json.dumps",
+          "lineNumber": 265
+        },
+        {
+          "caller": "test_build_pairwise_prefers_v2_score_sidecars",
+          "callee": "bool",
+          "lineNumber": 267
+        },
+        {
+          "caller": "test_build_pairwise_prefers_v2_score_sidecars",
+          "callee": "range",
+          "lineNumber": 269
+        },
+        {
+          "caller": "test_build_pairwise_prefers_v2_score_sidecars",
+          "callee": "paths[\"summary_json\"].with_name(\"summary.v2.json\").write_text",
+          "lineNumber": 274
+        },
+        {
+          "caller": "test_build_pairwise_prefers_v2_score_sidecars",
+          "callee": "paths[\"summary_json\"].with_name",
+          "lineNumber": 274
+        },
+        {
+          "caller": "test_build_pairwise_prefers_v2_score_sidecars",
+          "callee": "json.dumps",
+          "lineNumber": 275
+        },
+        {
+          "caller": "test_build_pairwise_prefers_v2_score_sidecars",
+          "callee": "paths[\"raw_path\"].with_name(\"scores.v2.jsonl\").write_text",
+          "lineNumber": 278
+        },
+        {
+          "caller": "test_build_pairwise_prefers_v2_score_sidecars",
+          "callee": "paths[\"raw_path\"].with_name",
+          "lineNumber": 278
+        },
+        {
+          "caller": "test_build_pairwise_prefers_v2_score_sidecars",
+          "callee": "\"\\n\".join",
+          "lineNumber": 279
+        },
+        {
+          "caller": "test_build_pairwise_prefers_v2_score_sidecars",
+          "callee": "json.dumps",
+          "lineNumber": 280
+        },
+        {
+          "caller": "test_build_pairwise_prefers_v2_score_sidecars",
+          "callee": "bool",
+          "lineNumber": 282
+        },
+        {
+          "caller": "test_build_pairwise_prefers_v2_score_sidecars",
+          "callee": "range",
+          "lineNumber": 284
+        },
+        {
+          "caller": "test_build_pairwise_prefers_v2_score_sidecars",
+          "callee": "build_pairwise_report",
+          "lineNumber": 290
+        },
+        {
+          "caller": "test_build_pairwise_prefers_v2_score_sidecars",
+          "callee": "next",
+          "lineNumber": 291
+        },
+        {
+          "caller": "test_select_pair_members_never_picks_int8_as_nf4",
+          "callee": "_member",
+          "lineNumber": 323
+        },
+        {
+          "caller": "test_select_pair_members_never_picks_int8_as_nf4",
+          "callee": "_member",
+          "lineNumber": 324
+        },
+        {
+          "caller": "test_select_pair_members_never_picks_int8_as_nf4",
+          "callee": "_member",
+          "lineNumber": 325
+        },
+        {
+          "caller": "test_select_pair_members_never_picks_int8_as_nf4",
+          "callee": "QuantizationConfig.model_validate",
+          "lineNumber": 329
+        },
+        {
+          "caller": "test_select_pair_members_never_picks_int8_as_nf4",
+          "callee": "_select_pair_members",
+          "lineNumber": 330
+        },
+        {
+          "caller": "test_select_pair_members_none_when_only_int8",
+          "callee": "_member",
+          "lineNumber": 345
+        },
+        {
+          "caller": "test_select_pair_members_none_when_only_int8",
+          "callee": "_member",
+          "lineNumber": 346
+        },
+        {
+          "caller": "test_select_pair_members_none_when_only_int8",
+          "callee": "QuantizationConfig.model_validate",
+          "lineNumber": 350
+        },
+        {
+          "caller": "test_select_pair_members_none_when_only_int8",
+          "callee": "_select_pair_members",
+          "lineNumber": 351
+        },
+        {
+          "caller": "test_select_pair_members_default_quant_method_is_nf4",
+          "callee": "_member",
+          "lineNumber": 360
+        },
+        {
+          "caller": "test_select_pair_members_default_quant_method_is_nf4",
+          "callee": "_member",
+          "lineNumber": 361
+        },
+        {
+          "caller": "test_select_pair_members_default_quant_method_is_nf4",
+          "callee": "QuantizationConfig.model_validate",
+          "lineNumber": 365
+        },
+        {
+          "caller": "test_select_pair_members_default_quant_method_is_nf4",
+          "callee": "_select_pair_members",
+          "lineNumber": 366
+        },
+        {
+          "caller": "test_build_pairwise_and_reports",
+          "callee": "QuantizationConfig.model_validate",
+          "lineNumber": 428
+        },
+        {
+          "caller": "test_build_pairwise_and_reports",
+          "callee": "metric_values.items",
+          "lineNumber": 441
+        },
+        {
+          "caller": "test_build_pairwise_and_reports",
+          "callee": "bench_values.items",
+          "lineNumber": 442
+        },
+        {
+          "caller": "test_build_pairwise_and_reports",
+          "callee": "build_run_paths",
+          "lineNumber": 443
+        },
+        {
+          "caller": "test_build_pairwise_and_reports",
+          "callee": "summary_path.parent.mkdir",
+          "lineNumber": 444
+        },
+        {
+          "caller": "test_build_pairwise_and_reports",
+          "callee": "summary_path.write_text",
+          "lineNumber": 445
+        },
+        {
+          "caller": "test_build_pairwise_and_reports",
+          "callee": "json.dumps",
+          "lineNumber": 446
+        },
+        {
+          "caller": "test_build_pairwise_and_reports",
+          "callee": "build_pairwise_report",
+          "lineNumber": 450
+        },
+        {
+          "caller": "test_build_pairwise_and_reports",
+          "callee": "summarize_pair_labels",
+          "lineNumber": 451
+        },
+        {
+          "caller": "test_build_pairwise_and_reports",
+          "callee": "any",
+          "lineNumber": 453
+        },
+        {
+          "caller": "test_build_pairwise_and_reports",
+          "callee": "any",
+          "lineNumber": 454
+        },
+        {
+          "caller": "test_build_pairwise_and_reports",
+          "callee": "compute_scale_sensitivity",
+          "lineNumber": 456
+        },
+        {
+          "caller": "test_build_pairwise_and_reports",
+          "callee": "compute_cross_family_consistency",
+          "lineNumber": 459
+        },
+        {
+          "caller": "test_cross_family_all_pairs_and_none_guard",
+          "callee": "QuantizationConfig.model_validate",
+          "lineNumber": 487
+        },
+        {
+          "caller": "test_cross_family_all_pairs_and_none_guard",
+          "callee": "compute_cross_family_consistency",
+          "lineNumber": 495
+        }
+      ],
+      "metrics": {
+        "importCount": 3,
+        "exportCount": 21,
+        "functionCount": 21,
+        "classCount": 0
+      }
+    }
+  ]
+}

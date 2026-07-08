@@ -1,0 +1,82 @@
+{
+ "projectRoot": "/Users/tanueihorng/fyp_quant",
+ "batchFiles": [
+  {
+   "path": "compare_quant_pairs.py",
+   "language": "python",
+   "sizeLines": 7,
+   "fileCategory": "code"
+  },
+  {
+   "path": "ethical_benchmark/analysis/compare_quant_pairs.py",
+   "language": "python",
+   "sizeLines": 926,
+   "fileCategory": "code"
+  },
+  {
+   "path": "scripts/judge_agreement.py",
+   "language": "python",
+   "sizeLines": 363,
+   "fileCategory": "code"
+  },
+  {
+   "path": "scripts/judge_pairwise_agreement.py",
+   "language": "python",
+   "sizeLines": 285,
+   "fileCategory": "code"
+  },
+  {
+   "path": "scripts/multiple_comparisons.py",
+   "language": "python",
+   "sizeLines": 338,
+   "fileCategory": "code"
+  },
+  {
+   "path": "scripts/precision_sweep_analysis.py",
+   "language": "python",
+   "sizeLines": 267,
+   "fileCategory": "code"
+  },
+  {
+   "path": "tests/test_precision_sweep.py",
+   "language": "python",
+   "sizeLines": 204,
+   "fileCategory": "code"
+  },
+  {
+   "path": "tests/test_quant_analysis.py",
+   "language": "python",
+   "sizeLines": 505,
+   "fileCategory": "code"
+  }
+ ],
+ "batchImportData": {
+  "compare_quant_pairs.py": [
+   "ethical_benchmark/analysis/compare_quant_pairs.py"
+  ],
+  "ethical_benchmark/analysis/compare_quant_pairs.py": [
+   "ethical_benchmark/pipeline/run_quant_benchmark.py",
+   "ethical_benchmark/quant/config_schema.py"
+  ],
+  "scripts/judge_agreement.py": [
+   "ethical_benchmark/analysis/compare_quant_pairs.py"
+  ],
+  "scripts/judge_pairwise_agreement.py": [
+   "ethical_benchmark/analysis/compare_quant_pairs.py"
+  ],
+  "scripts/multiple_comparisons.py": [
+   "ethical_benchmark/analysis/compare_quant_pairs.py"
+  ],
+  "scripts/precision_sweep_analysis.py": [
+   "ethical_benchmark/analysis/compare_quant_pairs.py"
+  ],
+  "tests/test_precision_sweep.py": [
+   "scripts/precision_sweep_analysis.py"
+  ],
+  "tests/test_quant_analysis.py": [
+   "ethical_benchmark/analysis/compare_quant_pairs.py",
+   "ethical_benchmark/pipeline/run_quant_benchmark.py",
+   "ethical_benchmark/quant/config_schema.py"
+  ]
+ }
+}

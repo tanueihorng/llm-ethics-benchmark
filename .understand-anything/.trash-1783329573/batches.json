@@ -1,0 +1,3042 @@
+{
+  "schemaVersion": 1,
+  "algorithm": "louvain",
+  "totalFiles": 139,
+  "totalBatches": 13,
+  "exportsByPath": {
+    "check_slurm_runs.py": [],
+    "CITATION.bib": [],
+    "CITATION.cff": [],
+    "compare_quant_pairs.py": [],
+    "dashboard/__init__.py": [],
+    "dashboard/app.py": [
+      "page_overview",
+      "page_results",
+      "page_add_model",
+      "page_run",
+      "page_raw"
+    ],
+    "dashboard/data.py": [
+      "label_color",
+      "label_gloss",
+      "analysis_dir",
+      "configs_dir",
+      "is_protected_results_dir",
+      "ProtectedResultsDirError",
+      "resolve_execution_dir",
+      "safe_generated_config_name",
+      "load_json",
+      "list_config_files",
+      "load_interpretations",
+      "load_pairwise",
+      "pairwise_df",
+      "load_summary",
+      "load_precision_sweep",
+      "precision_sweep_long",
+      "load_judge_agreement",
+      "judge_agreement_df",
+      "load_multiple_comparisons",
+      "load_sensitivity",
+      "contrasts_index",
+      "mc_metric_df",
+      "judge_primary_interpretations",
+      "run_summary",
+      "available_runs",
+      "read_config_models",
+      "quant_suffix",
+      "build_new_pair_config"
+    ],
+    "dashboard/theme.py": [
+      "style_fig",
+      "_mix_hex",
+      "badge",
+      "hero_html",
+      "verdict_html",
+      "section_head_html",
+      "footnote_html",
+      "stat_tiles_html",
+      "_fmt_pp",
+      "_delta_block",
+      "pair_card_html"
+    ],
+    "ethical_benchmark/__init__.py": [],
+    "ethical_benchmark/analysis/__init__.py": [],
+    "ethical_benchmark/analysis/compare_quant_pairs.py": [
+      "parse_args",
+      "setup_logging",
+      "_read_json",
+      "_select_pair_members",
+      "_extract_metric",
+      "compute_relative_delta",
+      "classify_pair_change",
+      "label_evidence_status",
+      "paired_binary_confusion",
+      "mcnemar_exact_test",
+      "_extract_binary_outcome",
+      "_read_per_prompt_outcomes",
+      "_prefer_corrected_score_paths",
+      "compute_paired_bootstrap_ci",
+      "build_pairwise_report",
+      "summarize_pair_labels",
+      "compute_scale_sensitivity",
+      "compute_cross_family_consistency",
+      "write_csv",
+      "main"
+    ],
+    "ethical_benchmark/analysis/refusal_margin.py": [
+      "_as_1d_float",
+      "_logsumexp",
+      "log_prob_of_set",
+      "refusal_margin",
+      "decision_entropy",
+      "top1_top2_gap",
+      "first_token_id",
+      "build_token_sets"
+    ],
+    "ethical_benchmark/benchmarks/__init__.py": [],
+    "ethical_benchmark/benchmarks/arc.py": [
+      "ARCConfig",
+      "ARCChallengePlugin",
+      "_gold_index_from_label",
+      "_build_mc_prompt"
+    ],
+    "ethical_benchmark/benchmarks/base.py": [
+      "BenchmarkItem",
+      "BenchmarkPlugin"
+    ],
+    "ethical_benchmark/benchmarks/harmbench.py": [
+      "HarmBenchConfig",
+      "HarmBenchPlugin",
+      "_extract_prompt_text"
+    ],
+    "ethical_benchmark/benchmarks/mmlu.py": [
+      "MMLUConfig",
+      "MMLUPlugin",
+      "_parse_gold_index",
+      "_build_mc_prompt"
+    ],
+    "ethical_benchmark/benchmarks/registry.py": [
+      "build_benchmark_plugin"
+    ],
+    "ethical_benchmark/benchmarks/utils.py": [
+      "shuffle_and_limit",
+      "is_malformed_response",
+      "_normalise_for_refusal",
+      "match_refusal_pattern",
+      "is_refusal_response",
+      "parse_choice_index"
+    ],
+    "ethical_benchmark/benchmarks/xstest.py": [
+      "XSTestConfig",
+      "XSTestPlugin",
+      "_extract_prompt_text",
+      "_classify_benign",
+      "_is_benign_prompt"
+    ],
+    "ethical_benchmark/cluster/__init__.py": [],
+    "ethical_benchmark/cluster/check_runs.py": [
+      "parse_args",
+      "setup_logging",
+      "_load_submissions",
+      "_current_squeue_job_ids",
+      "check_status",
+      "main"
+    ],
+    "ethical_benchmark/cluster/generate_jobs.py": [
+      "parse_args",
+      "setup_logging",
+      "_sbatch_text",
+      "generate_job_scripts",
+      "main"
+    ],
+    "ethical_benchmark/cluster/submit_jobs.py": [
+      "parse_args",
+      "setup_logging",
+      "load_manifest",
+      "submit_all",
+      "main"
+    ],
+    "ethical_benchmark/config_schema.py": [
+      "ModelEntry",
+      "DecodingSchema",
+      "ToxicityEvaluationSchema",
+      "BiasEvaluationSchema",
+      "FactualityEvaluationSchema",
+      "TaskSchema",
+      "BenchmarkConfig",
+      "validate_config"
+    ],
+    "ethical_benchmark/constants.py": [],
+    "ethical_benchmark/datasets/__init__.py": [],
+    "ethical_benchmark/datasets/bias.py": [
+      "BiasSample",
+      "load_bbq",
+      "_extract_choices",
+      "_parse_choice_index",
+      "_build_bbq_prompt"
+    ],
+    "ethical_benchmark/datasets/factuality.py": [
+      "FactualitySample",
+      "load_truthfulqa",
+      "_extract_mc_targets",
+      "_build_truthfulqa_prompt"
+    ],
+    "ethical_benchmark/datasets/toxicity.py": [
+      "ToxicitySample",
+      "load_real_toxicity_prompts",
+      "_safe_float"
+    ],
+    "ethical_benchmark/evaluators/__init__.py": [
+      "__getattr__"
+    ],
+    "ethical_benchmark/evaluators/bias_eval.py": [
+      "BiasEvalConfig",
+      "BiasEvaluator"
+    ],
+    "ethical_benchmark/evaluators/factuality_eval.py": [
+      "FactualityEvalConfig",
+      "FactualityEvaluator",
+      "_parse_answer_index"
+    ],
+    "ethical_benchmark/evaluators/toxicity_eval.py": [
+      "ToxicityScorer",
+      "ToxicityEvalConfig",
+      "DetoxifyScorer",
+      "HFClassifierScorer",
+      "_extract_toxicity_probability",
+      "_score_from_label_dict",
+      "ToxicityEvaluator"
+    ],
+    "ethical_benchmark/harness/__init__.py": [],
+    "ethical_benchmark/harness/agent.py": [
+      "CheckResult",
+      "_run",
+      "_repo_rel",
+      "_now_local",
+      "_ascii_safe",
+      "load_policy",
+      "_iter_paths",
+      "_sha256",
+      "_manifest_entries",
+      "write_immutable_manifest",
+      "_read_manifest",
+      "_changed_files",
+      "_tracked_changed_files",
+      "_match_any",
+      "_project_overview_tail",
+      "_line_matches",
+      "check_agent_docs_sync",
+      "check_project_log_updated",
+      "check_immutable_artifacts",
+      "_scan_policy_group",
+      "check_report_freshness",
+      "check_git_diff_clean",
+      "check_pytest",
+      "run_agent_checks",
+      "_git_status",
+      "_project_log_status",
+      "_file_info",
+      "_judge_sidecar_status",
+      "_analysis_status",
+      "_heading",
+      "_section_excerpt",
+      "_task_packets",
+      "_agent_profiles",
+      "_select_named",
+      "build_agent_start_packet",
+      "format_agent_start_packet",
+      "_suggest_next_action",
+      "build_agent_status",
+      "format_agent_status",
+      "_check_summary_lines",
+      "render_handoff",
+      "render_agent_dashboard",
+      "render_tc1_checklist",
+      "dump_status_json"
+    ],
+    "ethical_benchmark/judges/__init__.py": [],
+    "ethical_benchmark/judges/validation.py": [
+      "resolve_precision",
+      "approx_vram_gib",
+      "JudgeInput",
+      "JudgeResult",
+      "JudgeBackend",
+      "parse_yes_no",
+      "HarmBenchJudgeBackend",
+      "LlamaGuardJudgeBackend",
+      "OpenAICompatibleJudgeBackend",
+      "_read_raw_records",
+      "_build_inputs",
+      "_assert_redacted",
+      "run_judge_validation"
+    ],
+    "ethical_benchmark/metrics/__init__.py": [],
+    "ethical_benchmark/metrics/aggregate.py": [
+      "compute_bootstrap_ci",
+      "append_jsonl",
+      "read_jsonl",
+      "write_json",
+      "append_summary_csv",
+      "flatten_for_csv",
+      "export_radar_csv"
+    ],
+    "ethical_benchmark/models/__init__.py": [
+      "__getattr__"
+    ],
+    "ethical_benchmark/models/generation.py": [
+      "_get_torch",
+      "DecodingConfig",
+      "set_global_seed",
+      "TextGenerator"
+    ],
+    "ethical_benchmark/models/loader.py": [
+      "_get_torch",
+      "_get_transformer_classes",
+      "_build_bnb_4bit_config",
+      "_build_bnb_8bit_config",
+      "_quantization_active",
+      "_require_quantization_engaged",
+      "ModelSpec",
+      "HFModelLoader",
+      "build_model_spec"
+    ],
+    "ethical_benchmark/pipeline/__init__.py": [],
+    "ethical_benchmark/pipeline/run_benchmark.py": [
+      "parse_args",
+      "setup_logging",
+      "load_config",
+      "main",
+      "_persist_results",
+      "build_output_paths",
+      "load_samples",
+      "build_evaluator",
+      "run_generation_loop",
+      "batched",
+      "build_radar_dimensions"
+    ],
+    "ethical_benchmark/pipeline/run_quant_benchmark.py": [
+      "get_model_stack",
+      "parse_args",
+      "setup_logging",
+      "normalize_model_key",
+      "_resolved_dtype_name",
+      "build_run_paths",
+      "validate_record_schema",
+      "get_processed_prompt_ids",
+      "prepare_remaining_items",
+      "batched",
+      "execute_quant_benchmark_loaded",
+      "execute_quant_benchmark",
+      "main"
+    ],
+    "ethical_benchmark/pipeline/run_quant_matrix.py": [
+      "parse_args",
+      "_resolve_models",
+      "_selected_benchmarks_for_model",
+      "_release_model_memory",
+      "run_quant_matrix",
+      "main"
+    ],
+    "ethical_benchmark/quant/__init__.py": [],
+    "ethical_benchmark/quant/config_schema.py": [
+      "DecodingSchema",
+      "ModelEntry",
+      "BenchmarkEntry",
+      "SlurmConfig",
+      "QuantizationConfig",
+      "load_quant_config"
+    ],
+    "fyp_cli.py": [
+      "_setup_logging",
+      "_add_common_options",
+      "_base_parser",
+      "parse_args",
+      "_run_analysis",
+      "main"
+    ],
+    "generate_slurm_jobs.py": [],
+    "run_benchmark.py": [],
+    "run_quant_benchmark.py": [],
+    "run_quant_matrix.py": [],
+    "scripts/agent_check.py": [
+      "_print_results",
+      "main"
+    ],
+    "scripts/build_agent_harness_architecture_doc.py": [
+      "set_cell_shading",
+      "set_cell_border",
+      "set_cell_margins",
+      "set_table_width",
+      "style_run",
+      "add_para",
+      "add_heading",
+      "add_bullets",
+      "add_numbered",
+      "add_step_blocks",
+      "add_callout",
+      "add_two_column_cards",
+      "add_scenario_table",
+      "configure_document",
+      "build_doc"
+    ],
+    "scripts/build_agentic_report.js": [],
+    "scripts/build_fyp_report_v2.js": [],
+    "scripts/build_fyp_report_v3.js": [],
+    "scripts/build_fyp_report_v4.js": [],
+    "scripts/build_fyp_report_v5.js": [],
+    "scripts/build_fyp_report.js": [],
+    "scripts/build_fyp_thesis_v2.js": [],
+    "scripts/build_fyp_thesis_v3.js": [],
+    "scripts/build_fyp_thesis_v4.js": [],
+    "scripts/build_fyp_thesis.js": [],
+    "scripts/capture_refusal_margin.py": [
+      "_read_jsonl",
+      "_decision_logits",
+      "_sequence_margins",
+      "_capture_model",
+      "main"
+    ],
+    "scripts/generate_agent_dashboard.py": [
+      "main"
+    ],
+    "scripts/generate_agent_harness_architecture_diagram.py": [
+      "Card",
+      "_marker_id",
+      "_wrap",
+      "_text",
+      "_pill",
+      "_card_svg",
+      "_center",
+      "_right_mid",
+      "_left_mid",
+      "_bottom_mid",
+      "_top_mid",
+      "_edge_svg",
+      "_down_arrow",
+      "render_svg",
+      "_mx_cell",
+      "_node_label",
+      "_style",
+      "render_drawio",
+      "main"
+    ],
+    "scripts/generate_architecture_diagram.py": [
+      "Card",
+      "Section",
+      "_svg_text",
+      "_wrap",
+      "_card_svg",
+      "_section_svg",
+      "_center",
+      "_edge_svg",
+      "_marker_id",
+      "render_svg",
+      "_mx_cell",
+      "_drawio_label",
+      "_style",
+      "render_drawio",
+      "main"
+    ],
+    "scripts/generate_handoff.py": [
+      "main"
+    ],
+    "scripts/generate_integrated_architecture_diagram.py": [
+      "Card",
+      "Section",
+      "_marker_id",
+      "_wrap",
+      "_text",
+      "_section_svg",
+      "_card_svg",
+      "_mini_card",
+      "_center",
+      "_right",
+      "_left",
+      "_top",
+      "_bottom",
+      "_arrow",
+      "_render_folder_tree",
+      "_render_checks",
+      "_render_skills",
+      "_render_contract_band",
+      "render_svg",
+      "_mx_cell",
+      "_drawio_label",
+      "_drawio_style",
+      "render_drawio",
+      "main"
+    ],
+    "scripts/generate_repo_hierarchy_diagram.py": [
+      "Node",
+      "_marker_id",
+      "_wrap",
+      "_text",
+      "_node_svg",
+      "_center_bottom",
+      "_center_top",
+      "_edge_svg",
+      "render_svg",
+      "_mx_cell",
+      "_node_label",
+      "_style",
+      "render_drawio",
+      "main"
+    ],
+    "scripts/generate_sensitivity_jobs.py": [
+      "_gen_sbatch",
+      "_judge_sbatch",
+      "main"
+    ],
+    "scripts/generate_tc1_checklist.py": [
+      "main"
+    ],
+    "scripts/genlen_512_analysis.py": [
+      "_sidecar",
+      "_kappa",
+      "_mcnemar",
+      "_bootci",
+      "_bh_fdr",
+      "asr_block",
+      "cap_block",
+      "length_block",
+      "kappa_block",
+      "prefix_truncation_block",
+      "main"
+    ],
+    "scripts/harmbench_category_breakdown.py": [
+      "_prompt_categories",
+      "_judge_labels",
+      "_category_counts",
+      "_asr",
+      "main"
+    ],
+    "scripts/harness_eval.py": [
+      "main"
+    ],
+    "scripts/human_label_audit.py": [
+      "_read_jsonl",
+      "_judge_map",
+      "_regex_map",
+      "_candidates",
+      "_draw",
+      "make_sheet",
+      "_kappa",
+      "_prf",
+      "score",
+      "make_html",
+      "apply_labels",
+      "main"
+    ],
+    "scripts/judge_agreement.py": [
+      "_load_jsonl_flag",
+      "_load_judge_outcomes",
+      "_load_v2_harmful",
+      "_cohens_kappa",
+      "_confusion",
+      "_read_summary_metric",
+      "main"
+    ],
+    "scripts/judge_pairwise_agreement.py": [
+      "load_judge_outcomes",
+      "agreement_and_kappa",
+      "_asr",
+      "_sign",
+      "_pair_delta",
+      "main"
+    ],
+    "scripts/make_figures.py": [
+      "load",
+      "pairwise_lookup",
+      "fig_capability_anchor",
+      "fig_asr_forest",
+      "fig_precision_sweep",
+      "fig_judge_vs_proxy",
+      "fig_category_asr",
+      "fig_multiseed",
+      "main"
+    ],
+    "scripts/mmlu_subject_breakdown.py": [
+      "_subject_counts",
+      "_accuracy",
+      "main"
+    ],
+    "scripts/multiple_comparisons.py": [
+      "_phi",
+      "_read_jsonl",
+      "_paired_outcomes",
+      "_confusion_from_maps",
+      "mde_mcnemar",
+      "power_mcnemar",
+      "_power_note",
+      "benjamini_hochberg",
+      "main"
+    ],
+    "scripts/number_bible_512.py": [
+      "j"
+    ],
+    "scripts/precision_sweep_analysis.py": [
+      "_read_metric",
+      "_trend",
+      "_load_judge_outcomes",
+      "_int8_mcnemar",
+      "analyse",
+      "_write_csv",
+      "main"
+    ],
+    "scripts/prefetch_tc1.py": [
+      "_setup_logging",
+      "_load_config",
+      "_collect_dataset_targets",
+      "_collect_model_targets",
+      "_prefetch_datasets",
+      "_prefetch_models",
+      "parse_args",
+      "main"
+    ],
+    "scripts/refusal_margin_analysis.py": [
+      "_read_jsonl",
+      "_margin",
+      "_judge",
+      "_control_entropy",
+      "_auc",
+      "_bootstrap_ci",
+      "_paired_shift",
+      "analyse_pair",
+      "main"
+    ],
+    "scripts/rescore_harmbench.py": [
+      "_rescore_harmbench_record",
+      "_rescore_xstest_record",
+      "_aggregate_harmbench",
+      "_aggregate_xstest",
+      "_score_sidecar_row",
+      "_rescore_benchmark",
+      "rescore_model",
+      "main"
+    ],
+    "scripts/run_judge_validation.py": [
+      "_build_backend",
+      "main"
+    ],
+    "scripts/sensitivity_analysis.py": [
+      "summarise_deltas",
+      "_v2_asr",
+      "_judge_asr",
+      "_greedy_judge_deltas",
+      "main"
+    ],
+    "scripts/verify_report_claims.py": [
+      "_load",
+      "near",
+      "Checker",
+      "run_checks",
+      "main"
+    ],
+    "submit_slurm_jobs.py": [],
+    "tests/__init__.py": [],
+    "tests/conftest.py": [
+      "toxicity_samples",
+      "bias_samples",
+      "factuality_samples",
+      "default_config",
+      "quant_config_dict"
+    ],
+    "tests/test_agent_harness.py": [
+      "_run",
+      "_init_harness_repo",
+      "_result_by_name",
+      "test_agent_harness_passes_on_clean_fixture",
+      "test_agent_harness_catches_agent_doc_drift",
+      "test_agent_harness_requires_project_log_when_repo_changes",
+      "test_agent_harness_catches_stale_text",
+      "test_real_policy_stale_kappa_guards_fire_and_exempt",
+      "test_real_policy_redaction_covers_committed_sidecars",
+      "test_agent_harness_catches_redaction_leak",
+      "test_agent_harness_catches_immutable_artifact_mutation",
+      "test_agent_harness_immutable_tolerates_absent_artifacts",
+      "test_agent_harness_immutable_fails_on_partial_deletion",
+      "test_agent_status_and_renderers_are_redaction_safe",
+      "test_agent_start_packet_selects_task_and_subagent",
+      "test_report_freshness_fails_on_source_edit_without_docx",
+      "test_real_policy_report_source_is_not_a_freshness_satisfier"
+    ],
+    "tests/test_arc.py": [
+      "test_gold_index_letter_numeric_and_missing",
+      "test_load_items_parses_arc_schema",
+      "test_score_response_exact_match",
+      "test_aggregate_accuracy",
+      "test_registry_builds_arc"
+    ],
+    "tests/test_dashboard_data.py": [
+      "test_loaders_return_empty_on_missing_dir",
+      "test_load_json_missing_and_malformed",
+      "test_interpretations_shape_if_present",
+      "test_pairwise_df_columns_if_present",
+      "test_precision_sweep_long_if_present",
+      "test_build_new_pair_config_valid_round_trip",
+      "test_build_new_pair_config_int8_suffix",
+      "test_build_new_pair_config_rejects_bad_benchmark",
+      "test_quant_suffix",
+      "test_judge_primary_empty_without_artifact",
+      "test_judge_primary_matches_committed_headline",
+      "test_judge_primary_differs_from_v2_proxy",
+      "test_phi_label_matches_canonical_judge_artifact",
+      "test_safe_generated_config_name_blocks_path_escape",
+      "test_protected_results_dirs_are_refused",
+      "test_protected_results_dirs_refuse_case_variants",
+      "test_resolve_execution_dir_blocks_protected_and_defaults"
+    ],
+    "tests/test_dashboard_theme.py": [
+      "test_css_declares_brand_fonts_and_tokens",
+      "test_hero_html_structure",
+      "test_stat_tiles_html_count",
+      "test_badge_uses_label_colour",
+      "test_mix_hex_endpoints",
+      "test_pair_card_judge_primary_renders_stat_line",
+      "test_pair_card_v2_has_no_stat_line",
+      "test_style_fig_applies_theme"
+    ],
+    "tests/test_datasets.py": [
+      "TestSafeFloat",
+      "TestToxicitySample",
+      "TestExtractChoices",
+      "TestParseChoiceIndex",
+      "TestExtractMCTargets",
+      "TestFactualitySample",
+      "TestLoaderValidation"
+    ],
+    "tests/test_evaluators.py": [
+      "TestBiasAnswerParsing",
+      "TestFactualityAnswerParsing",
+      "TestExtractToxicityProbability",
+      "TestBiasEvaluator",
+      "TestFactualityEvaluator"
+    ],
+    "tests/test_int8_scoping.py": [
+      "_load_script",
+      "_write_jsonl",
+      "_judge_sidecar",
+      "_v2_sidecar",
+      "_hb_raw",
+      "_mmlu_raw",
+      "_run",
+      "test_judge_agreement_int8_scoping",
+      "test_judge_pairwise_int8_scoping",
+      "test_category_breakdown_int8_scoping",
+      "test_subject_breakdown_int8_scoping",
+      "test_default_run_uses_full_alias_list"
+    ],
+    "tests/test_judge_agreement.py": [
+      "_load_script",
+      "test_kappa_known_value",
+      "test_kappa_perfect_non_degenerate",
+      "test_kappa_total_disagreement_is_zero",
+      "test_kappa_degenerate_returns_none",
+      "test_kappa_empty_returns_none"
+    ],
+    "tests/test_judge_pairwise.py": [
+      "_load_script",
+      "_FakeCompletions",
+      "_FakeClient",
+      "test_api_judge_maps_yes_no_and_unparseable",
+      "test_api_judge_exposes_model_id_for_summary",
+      "test_agreement_and_kappa_values",
+      "test_load_judge_outcomes_skips_null"
+    ],
+    "tests/test_judge_validation.py": [
+      "StubJudgeBackend",
+      "_write_raw",
+      "test_parse_yes_no_variants",
+      "test_harmbench_prompt_has_placeholders",
+      "test_harmbench_prompt_matches_official",
+      "test_assert_redacted_blocks_text_fields",
+      "test_run_judge_validation_writes_redacted_sidecars",
+      "test_run_judge_validation_asr_math",
+      "_MixedStatusBackend",
+      "test_run_judge_validation_counts_error_and_skipped",
+      "test_run_judge_validation_does_not_mutate_raw",
+      "test_run_judge_validation_idempotent",
+      "test_run_judge_validation_missing_raw_raises",
+      "test_resolve_precision_aliases",
+      "test_approx_vram_for_13b",
+      "test_harmbench_backend_defaults_to_fp16",
+      "test_harmbench_backend_precision_and_compat"
+    ],
+    "tests/test_matrix_reuse.py": [
+      "_DummyDecodingConfig",
+      "_DummyModelSpec",
+      "_DummyLoader",
+      "_DummyGenerator",
+      "_dummy_stack",
+      "test_matrix_reuse_loads_once_per_model",
+      "test_matrix_no_reuse_calls_single_runner"
+    ],
+    "tests/test_metrics_and_config.py": [
+      "TestBootstrapCI",
+      "TestFlattenForCSV",
+      "TestJSONLRoundTrip",
+      "TestWriteJSON",
+      "TestSummaryCSV",
+      "TestRadarCSV",
+      "TestConfigValidation"
+    ],
+    "tests/test_models.py": [
+      "_FakeCuda",
+      "_FakeCudnn",
+      "_FakeBackends",
+      "_FakeTorch",
+      "fake_torch",
+      "TestModelSpec",
+      "TestBuildModelSpec",
+      "TestDecodingConfig",
+      "TestDeviceResolution",
+      "TestDtypeResolution",
+      "TestSetGlobalSeed",
+      "_FakeModel",
+      "_ThinkingAwareTokenizer",
+      "_LegacyTokenizer",
+      "TestPromptFormatting",
+      "_WrappingTokenizer",
+      "TestPromptProvenance",
+      "_FakeModel",
+      "TestQuantizationActive",
+      "_LoadedFakeModel",
+      "_FakeTokenizerInstance",
+      "_FakeAutoTokenizer",
+      "_CapturingAutoModel",
+      "TestModelSpecAttnImplementation",
+      "TestAttnImplementationLoading"
+    ],
+    "tests/test_pipeline.py": [
+      "TestBatched",
+      "TestBuildOutputPaths",
+      "TestBuildRadarDimensions"
+    ],
+    "tests/test_precision_sweep.py": [
+      "_write_summary",
+      "_write_judge_sidecar",
+      "_paired",
+      "_populate",
+      "test_graded_trend",
+      "test_cliff_at_nf4",
+      "test_non_monotonic",
+      "test_int8_pending_is_graceful",
+      "test_accuracy_direction",
+      "test_v2_proxy_prefers_v2_summary",
+      "test_v2_proxy_falls_back_to_runtime_summary",
+      "test_xstest_over_refusal_reads_v2_summary",
+      "test_int8_mcnemar_reproduces_documented_llama",
+      "test_int8_mcnemar_safe_ward_and_partial_judges",
+      "test_int8_mcnemar_missing_sidecars_are_none"
+    ],
+    "tests/test_quant_analysis.py": [
+      "test_compute_relative_delta",
+      "test_classify_pair_change_labels",
+      "test_classify_pair_change_alignment_improvement",
+      "test_classify_pair_change_over_refusal_regression",
+      "test_classify_pair_change_judge_pair_labels_unchanged_by_hardening",
+      "test_classify_pair_change_alignment_degradation_requires_capability_preserved",
+      "test_classify_pair_change_v2_pair_labels_unchanged_by_d16",
+      "test_classify_pair_change_incomplete_when_any_delta_missing",
+      "test_label_evidence_status_two_layer",
+      "test_mcnemar_exact_test",
+      "test_paired_binary_confusion",
+      "test_extract_binary_outcome",
+      "test_compute_paired_bootstrap_ci_smoke",
+      "test_compute_paired_bootstrap_ci_returns_none_when_no_overlap",
+      "test_build_pairwise_prefers_v2_score_sidecars",
+      "_member",
+      "test_select_pair_members_never_picks_int8_as_nf4",
+      "test_select_pair_members_none_when_only_int8",
+      "test_select_pair_members_default_quant_method_is_nf4",
+      "test_build_pairwise_and_reports",
+      "test_cross_family_all_pairs_and_none_guard"
+    ],
+    "tests/test_quant_config_schema.py": [
+      "TestLiveConfigShape",
+      "TestAttnImplementationField"
+    ],
+    "tests/test_quant_int8.py": [
+      "TestQuantMethodSchema",
+      "TestModelSpecQuantMethod",
+      "TestEightBitDetection",
+      "TestQuantizationGuard",
+      "_Cuda",
+      "_Torch",
+      "_Loaded",
+      "_Tok",
+      "_FakeTokClass",
+      "_CapturingModel",
+      "TestLoaderQuantBranch",
+      "TestInt8Config"
+    ],
+    "tests/test_quant_pipeline_utils.py": [
+      "_valid_record",
+      "test_validate_record_schema_ok",
+      "test_validate_record_schema_missing_field",
+      "test_prepare_remaining_items",
+      "test_get_processed_prompt_ids"
+    ],
+    "tests/test_quant_smoke.py": [
+      "_DummyLoader",
+      "_DummyDecodingConfig",
+      "_DummyModelSpec",
+      "_DummyGenerator",
+      "_DummyPlugin",
+      "_patched_plugin_factory",
+      "_patched_model_stack",
+      "test_smoke_each_benchmark",
+      "test_reproducible_order_same_seed"
+    ],
+    "tests/test_refusal_margin.py": [
+      "TestMarginMath",
+      "TestConfidenceDiagnostics",
+      "_StubTokenizer",
+      "TestTokenSets"
+    ],
+    "tests/test_refusal_parser.py": [
+      "test_refusal_detection_positive",
+      "test_refusal_detection_negative",
+      "test_malformed_detection",
+      "test_choice_index_parser",
+      "test_refusal_parser_v2_positive",
+      "test_refusal_parser_v2_negative",
+      "test_refusal_parser_handles_curly_apostrophes",
+      "test_match_refusal_pattern_returns_pattern_string",
+      "test_parse_choice_leading_letter",
+      "test_parse_choice_answer_declaration_recovers_verbose",
+      "test_parse_choice_leading_letter_wins_over_later_text",
+      "test_parse_choice_out_of_range_letter_skipped",
+      "test_parse_choice_number_fallback_unchanged",
+      "test_parse_choice_markdown_emphasis_recovered_by_intentional_rule"
+    ],
+    "tests/test_report_claims.py": [
+      "test_report_claims_match_artifacts"
+    ],
+    "tests/test_sensitivity.py": [
+      "_load_script",
+      "test_sensitivity_config_is_valid_and_stochastic",
+      "test_summarise_deltas_stability",
+      "test_generator_emits_expected_files",
+      "test_v2_asr_prefers_v2_summary",
+      "test_v2_asr_falls_back_to_runtime_summary"
+    ],
+    "tests/test_slurm_helpers.py": [
+      "test_generate_jobs_count",
+      "test_generate_jobs_group_by_model_reuses_matrix_runner",
+      "test_submit_all_dry_run",
+      "test_generate_jobs_include_workdir_and_setup_commands",
+      "test_generate_jobs_resolves_relative_script_under_workdir",
+      "test_generate_jobs_includes_log_dir_mkdir",
+      "test_slurm_time_rejects_bare_minutes",
+      "test_slurm_time_accepts_colon_forms"
+    ],
+    "tests/test_xstest_benign.py": [
+      "test_contrast_type_is_unsafe",
+      "test_plain_category_is_safe_by_convention",
+      "test_explicit_labels",
+      "test_id_contrast_cue",
+      "test_no_signal_returns_none",
+      "test_is_benign_prompt_defaults_unrecognised_to_true"
+    ]
+  },
+  "batches": [
+    {
+      "batchIndex": 1,
+      "files": [
+        {
+          "path": "ethical_benchmark/benchmarks/__init__.py",
+          "language": "python",
+          "sizeLines": 16,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ethical_benchmark/benchmarks/arc.py",
+          "language": "python",
+          "sizeLines": 242,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ethical_benchmark/benchmarks/base.py",
+          "language": "python",
+          "sizeLines": 91,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ethical_benchmark/benchmarks/harmbench.py",
+          "language": "python",
+          "sizeLines": 192,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ethical_benchmark/benchmarks/mmlu.py",
+          "language": "python",
+          "sizeLines": 242,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ethical_benchmark/benchmarks/registry.py",
+          "language": "python",
+          "sizeLines": 41,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ethical_benchmark/benchmarks/utils.py",
+          "language": "python",
+          "sizeLines": 274,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ethical_benchmark/benchmarks/xstest.py",
+          "language": "python",
+          "sizeLines": 362,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ethical_benchmark/datasets/__init__.py",
+          "language": "python",
+          "sizeLines": 14,
+          "fileCategory": "code"
+        },
+        {
+          "path": "scripts/rescore_harmbench.py",
+          "language": "python",
+          "sizeLines": 487,
+          "fileCategory": "code"
+        },
+        {
+          "path": "tests/test_arc.py",
+          "language": "python",
+          "sizeLines": 83,
+          "fileCategory": "code"
+        },
+        {
+          "path": "tests/test_refusal_parser.py",
+          "language": "python",
+          "sizeLines": 184,
+          "fileCategory": "code"
+        },
+        {
+          "path": "tests/test_xstest_benign.py",
+          "language": "python",
+          "sizeLines": 39,
+          "fileCategory": "code"
+        }
+      ],
+      "batchImportData": {
+        "ethical_benchmark/benchmarks/__init__.py": [
+          "ethical_benchmark/benchmarks/arc.py",
+          "ethical_benchmark/benchmarks/base.py",
+          "ethical_benchmark/benchmarks/harmbench.py",
+          "ethical_benchmark/benchmarks/mmlu.py",
+          "ethical_benchmark/benchmarks/xstest.py"
+        ],
+        "ethical_benchmark/benchmarks/arc.py": [
+          "ethical_benchmark/benchmarks/base.py",
+          "ethical_benchmark/benchmarks/utils.py",
+          "ethical_benchmark/datasets/__init__.py"
+        ],
+        "ethical_benchmark/benchmarks/base.py": [],
+        "ethical_benchmark/benchmarks/harmbench.py": [
+          "ethical_benchmark/benchmarks/base.py",
+          "ethical_benchmark/benchmarks/utils.py",
+          "ethical_benchmark/datasets/__init__.py"
+        ],
+        "ethical_benchmark/benchmarks/mmlu.py": [
+          "ethical_benchmark/benchmarks/base.py",
+          "ethical_benchmark/benchmarks/utils.py",
+          "ethical_benchmark/datasets/__init__.py"
+        ],
+        "ethical_benchmark/benchmarks/registry.py": [
+          "ethical_benchmark/benchmarks/arc.py",
+          "ethical_benchmark/benchmarks/base.py",
+          "ethical_benchmark/benchmarks/harmbench.py",
+          "ethical_benchmark/benchmarks/mmlu.py",
+          "ethical_benchmark/benchmarks/xstest.py"
+        ],
+        "ethical_benchmark/benchmarks/utils.py": [],
+        "ethical_benchmark/benchmarks/xstest.py": [
+          "ethical_benchmark/benchmarks/base.py",
+          "ethical_benchmark/benchmarks/utils.py"
+        ],
+        "ethical_benchmark/datasets/__init__.py": [
+          "ethical_benchmark/datasets/bias.py",
+          "ethical_benchmark/datasets/factuality.py",
+          "ethical_benchmark/datasets/toxicity.py"
+        ],
+        "scripts/rescore_harmbench.py": [
+          "ethical_benchmark/benchmarks/utils.py"
+        ],
+        "tests/test_arc.py": [
+          "ethical_benchmark/benchmarks/arc.py",
+          "ethical_benchmark/benchmarks/base.py",
+          "ethical_benchmark/benchmarks/registry.py"
+        ],
+        "tests/test_refusal_parser.py": [
+          "ethical_benchmark/benchmarks/utils.py"
+        ],
+        "tests/test_xstest_benign.py": [
+          "ethical_benchmark/benchmarks/xstest.py"
+        ]
+      },
+      "neighborMap": {
+        "ethical_benchmark/benchmarks/base.py": [
+          {
+            "path": "ethical_benchmark/pipeline/run_quant_benchmark.py",
+            "batchIndex": 4,
+            "symbols": [
+              "get_model_stack",
+              "parse_args",
+              "setup_logging",
+              "normalize_model_key",
+              "_resolved_dtype_name",
+              "build_run_paths",
+              "validate_record_schema",
+              "get_processed_prompt_ids",
+              "prepare_remaining_items",
+              "batched",
+              "execute_quant_benchmark_loaded",
+              "execute_quant_benchmark",
+              "main"
+            ]
+          },
+          {
+            "path": "tests/test_quant_pipeline_utils.py",
+            "batchIndex": 4,
+            "symbols": [
+              "_valid_record",
+              "test_validate_record_schema_ok",
+              "test_validate_record_schema_missing_field",
+              "test_prepare_remaining_items",
+              "test_get_processed_prompt_ids"
+            ]
+          },
+          {
+            "path": "tests/test_quant_smoke.py",
+            "batchIndex": 4,
+            "symbols": [
+              "_DummyLoader",
+              "_DummyDecodingConfig",
+              "_DummyModelSpec",
+              "_DummyGenerator",
+              "_DummyPlugin",
+              "_patched_plugin_factory",
+              "_patched_model_stack",
+              "test_smoke_each_benchmark",
+              "test_reproducible_order_same_seed"
+            ]
+          }
+        ],
+        "ethical_benchmark/benchmarks/registry.py": [
+          {
+            "path": "ethical_benchmark/pipeline/run_quant_benchmark.py",
+            "batchIndex": 4,
+            "symbols": [
+              "get_model_stack",
+              "parse_args",
+              "setup_logging",
+              "normalize_model_key",
+              "_resolved_dtype_name",
+              "build_run_paths",
+              "validate_record_schema",
+              "get_processed_prompt_ids",
+              "prepare_remaining_items",
+              "batched",
+              "execute_quant_benchmark_loaded",
+              "execute_quant_benchmark",
+              "main"
+            ]
+          }
+        ],
+        "ethical_benchmark/datasets/__init__.py": [
+          {
+            "path": "ethical_benchmark/datasets/bias.py",
+            "batchIndex": 3,
+            "symbols": [
+              "BiasSample",
+              "load_bbq",
+              "_extract_choices",
+              "_parse_choice_index",
+              "_build_bbq_prompt"
+            ]
+          },
+          {
+            "path": "ethical_benchmark/datasets/factuality.py",
+            "batchIndex": 3,
+            "symbols": [
+              "FactualitySample",
+              "load_truthfulqa",
+              "_extract_mc_targets",
+              "_build_truthfulqa_prompt"
+            ]
+          },
+          {
+            "path": "ethical_benchmark/datasets/toxicity.py",
+            "batchIndex": 3,
+            "symbols": [
+              "ToxicitySample",
+              "load_real_toxicity_prompts",
+              "_safe_float"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "batchIndex": 2,
+      "files": [
+        {
+          "path": "check_slurm_runs.py",
+          "language": "python",
+          "sizeLines": 7,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ethical_benchmark/cluster/check_runs.py",
+          "language": "python",
+          "sizeLines": 194,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ethical_benchmark/cluster/generate_jobs.py",
+          "language": "python",
+          "sizeLines": 303,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ethical_benchmark/cluster/submit_jobs.py",
+          "language": "python",
+          "sizeLines": 142,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ethical_benchmark/quant/__init__.py",
+          "language": "python",
+          "sizeLines": 5,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ethical_benchmark/quant/config_schema.py",
+          "language": "python",
+          "sizeLines": 240,
+          "fileCategory": "code"
+        },
+        {
+          "path": "fyp_cli.py",
+          "language": "python",
+          "sizeLines": 337,
+          "fileCategory": "code"
+        },
+        {
+          "path": "generate_slurm_jobs.py",
+          "language": "python",
+          "sizeLines": 7,
+          "fileCategory": "code"
+        },
+        {
+          "path": "submit_slurm_jobs.py",
+          "language": "python",
+          "sizeLines": 7,
+          "fileCategory": "code"
+        },
+        {
+          "path": "tests/test_quant_config_schema.py",
+          "language": "python",
+          "sizeLines": 106,
+          "fileCategory": "code"
+        },
+        {
+          "path": "tests/test_sensitivity.py",
+          "language": "python",
+          "sizeLines": 113,
+          "fileCategory": "code"
+        },
+        {
+          "path": "tests/test_slurm_helpers.py",
+          "language": "python",
+          "sizeLines": 178,
+          "fileCategory": "code"
+        }
+      ],
+      "batchImportData": {
+        "check_slurm_runs.py": [
+          "ethical_benchmark/cluster/check_runs.py"
+        ],
+        "ethical_benchmark/cluster/check_runs.py": [
+          "ethical_benchmark/pipeline/run_quant_benchmark.py",
+          "ethical_benchmark/quant/config_schema.py"
+        ],
+        "ethical_benchmark/cluster/generate_jobs.py": [
+          "ethical_benchmark/quant/config_schema.py"
+        ],
+        "ethical_benchmark/cluster/submit_jobs.py": [],
+        "ethical_benchmark/quant/__init__.py": [
+          "ethical_benchmark/quant/config_schema.py"
+        ],
+        "ethical_benchmark/quant/config_schema.py": [],
+        "fyp_cli.py": [
+          "ethical_benchmark/analysis/compare_quant_pairs.py",
+          "ethical_benchmark/cluster/check_runs.py",
+          "ethical_benchmark/cluster/generate_jobs.py",
+          "ethical_benchmark/cluster/submit_jobs.py",
+          "ethical_benchmark/harness/__init__.py",
+          "ethical_benchmark/pipeline/run_quant_benchmark.py",
+          "ethical_benchmark/pipeline/run_quant_matrix.py",
+          "ethical_benchmark/quant/config_schema.py"
+        ],
+        "generate_slurm_jobs.py": [
+          "ethical_benchmark/cluster/generate_jobs.py"
+        ],
+        "submit_slurm_jobs.py": [
+          "ethical_benchmark/cluster/submit_jobs.py"
+        ],
+        "tests/test_quant_config_schema.py": [
+          "ethical_benchmark/quant/config_schema.py"
+        ],
+        "tests/test_sensitivity.py": [
+          "ethical_benchmark/quant/config_schema.py"
+        ],
+        "tests/test_slurm_helpers.py": [
+          "ethical_benchmark/cluster/generate_jobs.py",
+          "ethical_benchmark/cluster/submit_jobs.py",
+          "ethical_benchmark/quant/config_schema.py"
+        ]
+      },
+      "neighborMap": {
+        "ethical_benchmark/cluster/check_runs.py": [
+          {
+            "path": "ethical_benchmark/pipeline/run_quant_benchmark.py",
+            "batchIndex": 4,
+            "symbols": [
+              "get_model_stack",
+              "parse_args",
+              "setup_logging",
+              "normalize_model_key",
+              "_resolved_dtype_name",
+              "build_run_paths",
+              "validate_record_schema",
+              "get_processed_prompt_ids",
+              "prepare_remaining_items",
+              "batched",
+              "execute_quant_benchmark_loaded",
+              "execute_quant_benchmark",
+              "main"
+            ]
+          }
+        ],
+        "ethical_benchmark/quant/config_schema.py": [
+          {
+            "path": "ethical_benchmark/analysis/compare_quant_pairs.py",
+            "batchIndex": 5,
+            "symbols": [
+              "parse_args",
+              "setup_logging",
+              "_read_json",
+              "_select_pair_members",
+              "_extract_metric",
+              "compute_relative_delta",
+              "classify_pair_change",
+              "label_evidence_status",
+              "paired_binary_confusion",
+              "mcnemar_exact_test",
+              "_extract_binary_outcome",
+              "_read_per_prompt_outcomes",
+              "_prefer_corrected_score_paths",
+              "compute_paired_bootstrap_ci",
+              "build_pairwise_report",
+              "summarize_pair_labels",
+              "compute_scale_sensitivity",
+              "compute_cross_family_consistency",
+              "write_csv",
+              "main"
+            ]
+          },
+          {
+            "path": "ethical_benchmark/pipeline/run_quant_benchmark.py",
+            "batchIndex": 4,
+            "symbols": [
+              "get_model_stack",
+              "parse_args",
+              "setup_logging",
+              "normalize_model_key",
+              "_resolved_dtype_name",
+              "build_run_paths",
+              "validate_record_schema",
+              "get_processed_prompt_ids",
+              "prepare_remaining_items",
+              "batched",
+              "execute_quant_benchmark_loaded",
+              "execute_quant_benchmark",
+              "main"
+            ]
+          },
+          {
+            "path": "ethical_benchmark/pipeline/run_quant_matrix.py",
+            "batchIndex": 4,
+            "symbols": [
+              "parse_args",
+              "_resolve_models",
+              "_selected_benchmarks_for_model",
+              "_release_model_memory",
+              "run_quant_matrix",
+              "main"
+            ]
+          },
+          {
+            "path": "scripts/capture_refusal_margin.py",
+            "batchIndex": 6,
+            "symbols": [
+              "_read_jsonl",
+              "_decision_logits",
+              "_sequence_margins",
+              "_capture_model",
+              "main"
+            ]
+          },
+          {
+            "path": "tests/test_dashboard_data.py",
+            "batchIndex": 8,
+            "symbols": [
+              "test_loaders_return_empty_on_missing_dir",
+              "test_load_json_missing_and_malformed",
+              "test_interpretations_shape_if_present",
+              "test_pairwise_df_columns_if_present",
+              "test_precision_sweep_long_if_present",
+              "test_build_new_pair_config_valid_round_trip",
+              "test_build_new_pair_config_int8_suffix",
+              "test_build_new_pair_config_rejects_bad_benchmark",
+              "test_quant_suffix",
+              "test_judge_primary_empty_without_artifact",
+              "test_judge_primary_matches_committed_headline",
+              "test_judge_primary_differs_from_v2_proxy",
+              "test_phi_label_matches_canonical_judge_artifact",
+              "test_safe_generated_config_name_blocks_path_escape",
+              "test_protected_results_dirs_are_refused",
+              "test_protected_results_dirs_refuse_case_variants",
+              "test_resolve_execution_dir_blocks_protected_and_defaults"
+            ]
+          },
+          {
+            "path": "tests/test_matrix_reuse.py",
+            "batchIndex": 4,
+            "symbols": [
+              "_DummyDecodingConfig",
+              "_DummyModelSpec",
+              "_DummyLoader",
+              "_DummyGenerator",
+              "_dummy_stack",
+              "test_matrix_reuse_loads_once_per_model",
+              "test_matrix_no_reuse_calls_single_runner"
+            ]
+          },
+          {
+            "path": "tests/test_quant_analysis.py",
+            "batchIndex": 5,
+            "symbols": [
+              "test_compute_relative_delta",
+              "test_classify_pair_change_labels",
+              "test_classify_pair_change_alignment_improvement",
+              "test_classify_pair_change_over_refusal_regression",
+              "test_classify_pair_change_judge_pair_labels_unchanged_by_hardening",
+              "test_classify_pair_change_alignment_degradation_requires_capability_preserved",
+              "test_classify_pair_change_v2_pair_labels_unchanged_by_d16",
+              "test_classify_pair_change_incomplete_when_any_delta_missing",
+              "test_label_evidence_status_two_layer",
+              "test_mcnemar_exact_test",
+              "test_paired_binary_confusion",
+              "test_extract_binary_outcome",
+              "test_compute_paired_bootstrap_ci_smoke",
+              "test_compute_paired_bootstrap_ci_returns_none_when_no_overlap",
+              "test_build_pairwise_prefers_v2_score_sidecars",
+              "_member",
+              "test_select_pair_members_never_picks_int8_as_nf4",
+              "test_select_pair_members_none_when_only_int8",
+              "test_select_pair_members_default_quant_method_is_nf4",
+              "test_build_pairwise_and_reports",
+              "test_cross_family_all_pairs_and_none_guard"
+            ]
+          },
+          {
+            "path": "tests/test_quant_int8.py",
+            "batchIndex": 6,
+            "symbols": [
+              "TestQuantMethodSchema",
+              "TestModelSpecQuantMethod",
+              "TestEightBitDetection",
+              "TestQuantizationGuard",
+              "_Cuda",
+              "_Torch",
+              "_Loaded",
+              "_Tok",
+              "_FakeTokClass",
+              "_CapturingModel",
+              "TestLoaderQuantBranch",
+              "TestInt8Config"
+            ]
+          },
+          {
+            "path": "tests/test_quant_smoke.py",
+            "batchIndex": 4,
+            "symbols": [
+              "_DummyLoader",
+              "_DummyDecodingConfig",
+              "_DummyModelSpec",
+              "_DummyGenerator",
+              "_DummyPlugin",
+              "_patched_plugin_factory",
+              "_patched_model_stack",
+              "test_smoke_each_benchmark",
+              "test_reproducible_order_same_seed"
+            ]
+          }
+        ],
+        "fyp_cli.py": [
+          {
+            "path": "ethical_benchmark/analysis/compare_quant_pairs.py",
+            "batchIndex": 5,
+            "symbols": [
+              "parse_args",
+              "setup_logging",
+              "_read_json",
+              "_select_pair_members",
+              "_extract_metric",
+              "compute_relative_delta",
+              "classify_pair_change",
+              "label_evidence_status",
+              "paired_binary_confusion",
+              "mcnemar_exact_test",
+              "_extract_binary_outcome",
+              "_read_per_prompt_outcomes",
+              "_prefer_corrected_score_paths",
+              "compute_paired_bootstrap_ci",
+              "build_pairwise_report",
+              "summarize_pair_labels",
+              "compute_scale_sensitivity",
+              "compute_cross_family_consistency",
+              "write_csv",
+              "main"
+            ]
+          },
+          {
+            "path": "ethical_benchmark/harness/__init__.py",
+            "batchIndex": 7,
+            "symbols": []
+          },
+          {
+            "path": "ethical_benchmark/pipeline/run_quant_benchmark.py",
+            "batchIndex": 4,
+            "symbols": [
+              "get_model_stack",
+              "parse_args",
+              "setup_logging",
+              "normalize_model_key",
+              "_resolved_dtype_name",
+              "build_run_paths",
+              "validate_record_schema",
+              "get_processed_prompt_ids",
+              "prepare_remaining_items",
+              "batched",
+              "execute_quant_benchmark_loaded",
+              "execute_quant_benchmark",
+              "main"
+            ]
+          },
+          {
+            "path": "ethical_benchmark/pipeline/run_quant_matrix.py",
+            "batchIndex": 4,
+            "symbols": [
+              "parse_args",
+              "_resolve_models",
+              "_selected_benchmarks_for_model",
+              "_release_model_memory",
+              "run_quant_matrix",
+              "main"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "batchIndex": 3,
+      "files": [
+        {
+          "path": "ethical_benchmark/config_schema.py",
+          "language": "python",
+          "sizeLines": 117,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ethical_benchmark/datasets/bias.py",
+          "language": "python",
+          "sizeLines": 222,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ethical_benchmark/datasets/factuality.py",
+          "language": "python",
+          "sizeLines": 151,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ethical_benchmark/datasets/toxicity.py",
+          "language": "python",
+          "sizeLines": 118,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ethical_benchmark/evaluators/bias_eval.py",
+          "language": "python",
+          "sizeLines": 233,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ethical_benchmark/evaluators/factuality_eval.py",
+          "language": "python",
+          "sizeLines": 211,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ethical_benchmark/evaluators/toxicity_eval.py",
+          "language": "python",
+          "sizeLines": 339,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ethical_benchmark/pipeline/run_benchmark.py",
+          "language": "python",
+          "sizeLines": 517,
+          "fileCategory": "code"
+        },
+        {
+          "path": "tests/conftest.py",
+          "language": "python",
+          "sizeLines": 196,
+          "fileCategory": "code"
+        },
+        {
+          "path": "tests/test_datasets.py",
+          "language": "python",
+          "sizeLines": 193,
+          "fileCategory": "code"
+        },
+        {
+          "path": "tests/test_evaluators.py",
+          "language": "python",
+          "sizeLines": 162,
+          "fileCategory": "code"
+        },
+        {
+          "path": "tests/test_pipeline.py",
+          "language": "python",
+          "sizeLines": 111,
+          "fileCategory": "code"
+        }
+      ],
+      "batchImportData": {
+        "ethical_benchmark/config_schema.py": [],
+        "ethical_benchmark/datasets/bias.py": [
+          "ethical_benchmark/datasets/__init__.py"
+        ],
+        "ethical_benchmark/datasets/factuality.py": [
+          "ethical_benchmark/datasets/__init__.py"
+        ],
+        "ethical_benchmark/datasets/toxicity.py": [
+          "ethical_benchmark/datasets/__init__.py"
+        ],
+        "ethical_benchmark/evaluators/bias_eval.py": [
+          "ethical_benchmark/datasets/bias.py"
+        ],
+        "ethical_benchmark/evaluators/factuality_eval.py": [
+          "ethical_benchmark/datasets/factuality.py"
+        ],
+        "ethical_benchmark/evaluators/toxicity_eval.py": [
+          "ethical_benchmark/datasets/toxicity.py",
+          "ethical_benchmark/metrics/aggregate.py"
+        ],
+        "ethical_benchmark/pipeline/run_benchmark.py": [
+          "ethical_benchmark/config_schema.py",
+          "ethical_benchmark/datasets/bias.py",
+          "ethical_benchmark/datasets/factuality.py",
+          "ethical_benchmark/datasets/toxicity.py",
+          "ethical_benchmark/evaluators/bias_eval.py",
+          "ethical_benchmark/evaluators/factuality_eval.py",
+          "ethical_benchmark/evaluators/toxicity_eval.py",
+          "ethical_benchmark/metrics/aggregate.py",
+          "ethical_benchmark/models/generation.py",
+          "ethical_benchmark/models/loader.py"
+        ],
+        "tests/conftest.py": [
+          "ethical_benchmark/datasets/bias.py",
+          "ethical_benchmark/datasets/factuality.py",
+          "ethical_benchmark/datasets/toxicity.py"
+        ],
+        "tests/test_datasets.py": [
+          "ethical_benchmark/datasets/bias.py",
+          "ethical_benchmark/datasets/factuality.py",
+          "ethical_benchmark/datasets/toxicity.py"
+        ],
+        "tests/test_evaluators.py": [
+          "ethical_benchmark/evaluators/bias_eval.py",
+          "ethical_benchmark/evaluators/factuality_eval.py",
+          "ethical_benchmark/evaluators/toxicity_eval.py"
+        ],
+        "tests/test_pipeline.py": [
+          "ethical_benchmark/pipeline/run_benchmark.py"
+        ]
+      },
+      "neighborMap": {
+        "ethical_benchmark/datasets/bias.py": [
+          {
+            "path": "ethical_benchmark/datasets/__init__.py",
+            "batchIndex": 1,
+            "symbols": []
+          }
+        ],
+        "ethical_benchmark/datasets/factuality.py": [
+          {
+            "path": "ethical_benchmark/datasets/__init__.py",
+            "batchIndex": 1,
+            "symbols": []
+          }
+        ],
+        "ethical_benchmark/datasets/toxicity.py": [
+          {
+            "path": "ethical_benchmark/datasets/__init__.py",
+            "batchIndex": 1,
+            "symbols": []
+          }
+        ],
+        "ethical_benchmark/evaluators/toxicity_eval.py": [
+          {
+            "path": "ethical_benchmark/metrics/aggregate.py",
+            "batchIndex": 4,
+            "symbols": [
+              "compute_bootstrap_ci",
+              "append_jsonl",
+              "read_jsonl",
+              "write_json",
+              "append_summary_csv",
+              "flatten_for_csv",
+              "export_radar_csv"
+            ]
+          }
+        ],
+        "ethical_benchmark/pipeline/run_benchmark.py": [
+          {
+            "path": "ethical_benchmark/metrics/aggregate.py",
+            "batchIndex": 4,
+            "symbols": [
+              "compute_bootstrap_ci",
+              "append_jsonl",
+              "read_jsonl",
+              "write_json",
+              "append_summary_csv",
+              "flatten_for_csv",
+              "export_radar_csv"
+            ]
+          },
+          {
+            "path": "ethical_benchmark/models/generation.py",
+            "batchIndex": 6,
+            "symbols": [
+              "_get_torch",
+              "DecodingConfig",
+              "set_global_seed",
+              "TextGenerator"
+            ]
+          },
+          {
+            "path": "ethical_benchmark/models/loader.py",
+            "batchIndex": 6,
+            "symbols": [
+              "_get_torch",
+              "_get_transformer_classes",
+              "_build_bnb_4bit_config",
+              "_build_bnb_8bit_config",
+              "_quantization_active",
+              "_require_quantization_engaged",
+              "ModelSpec",
+              "HFModelLoader",
+              "build_model_spec"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "batchIndex": 4,
+      "files": [
+        {
+          "path": "ethical_benchmark/metrics/__init__.py",
+          "language": "python",
+          "sizeLines": 21,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ethical_benchmark/metrics/aggregate.py",
+          "language": "python",
+          "sizeLines": 223,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ethical_benchmark/pipeline/__init__.py",
+          "language": "python",
+          "sizeLines": 9,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ethical_benchmark/pipeline/run_quant_benchmark.py",
+          "language": "python",
+          "sizeLines": 559,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ethical_benchmark/pipeline/run_quant_matrix.py",
+          "language": "python",
+          "sizeLines": 331,
+          "fileCategory": "code"
+        },
+        {
+          "path": "run_benchmark.py",
+          "language": "python",
+          "sizeLines": 10,
+          "fileCategory": "code"
+        },
+        {
+          "path": "run_quant_benchmark.py",
+          "language": "python",
+          "sizeLines": 7,
+          "fileCategory": "code"
+        },
+        {
+          "path": "run_quant_matrix.py",
+          "language": "python",
+          "sizeLines": 7,
+          "fileCategory": "code"
+        },
+        {
+          "path": "tests/test_matrix_reuse.py",
+          "language": "python",
+          "sizeLines": 119,
+          "fileCategory": "code"
+        },
+        {
+          "path": "tests/test_metrics_and_config.py",
+          "language": "python",
+          "sizeLines": 237,
+          "fileCategory": "code"
+        },
+        {
+          "path": "tests/test_quant_pipeline_utils.py",
+          "language": "python",
+          "sizeLines": 61,
+          "fileCategory": "code"
+        },
+        {
+          "path": "tests/test_quant_smoke.py",
+          "language": "python",
+          "sizeLines": 224,
+          "fileCategory": "code"
+        }
+      ],
+      "batchImportData": {
+        "ethical_benchmark/metrics/__init__.py": [
+          "ethical_benchmark/metrics/aggregate.py"
+        ],
+        "ethical_benchmark/metrics/aggregate.py": [],
+        "ethical_benchmark/pipeline/__init__.py": [
+          "ethical_benchmark/pipeline/run_quant_benchmark.py",
+          "ethical_benchmark/pipeline/run_quant_matrix.py"
+        ],
+        "ethical_benchmark/pipeline/run_quant_benchmark.py": [
+          "ethical_benchmark/benchmarks/base.py",
+          "ethical_benchmark/benchmarks/registry.py",
+          "ethical_benchmark/metrics/aggregate.py",
+          "ethical_benchmark/quant/config_schema.py"
+        ],
+        "ethical_benchmark/pipeline/run_quant_matrix.py": [
+          "ethical_benchmark/pipeline/run_quant_benchmark.py",
+          "ethical_benchmark/quant/config_schema.py"
+        ],
+        "run_benchmark.py": [
+          "ethical_benchmark/pipeline/run_quant_benchmark.py"
+        ],
+        "run_quant_benchmark.py": [
+          "ethical_benchmark/pipeline/run_quant_benchmark.py"
+        ],
+        "run_quant_matrix.py": [
+          "ethical_benchmark/pipeline/run_quant_matrix.py"
+        ],
+        "tests/test_matrix_reuse.py": [
+          "ethical_benchmark/pipeline/__init__.py",
+          "ethical_benchmark/quant/config_schema.py"
+        ],
+        "tests/test_metrics_and_config.py": [
+          "ethical_benchmark/metrics/aggregate.py"
+        ],
+        "tests/test_quant_pipeline_utils.py": [
+          "ethical_benchmark/benchmarks/base.py",
+          "ethical_benchmark/metrics/aggregate.py",
+          "ethical_benchmark/pipeline/run_quant_benchmark.py"
+        ],
+        "tests/test_quant_smoke.py": [
+          "ethical_benchmark/benchmarks/base.py",
+          "ethical_benchmark/metrics/aggregate.py",
+          "ethical_benchmark/pipeline/__init__.py",
+          "ethical_benchmark/quant/config_schema.py"
+        ]
+      },
+      "neighborMap": {
+        "ethical_benchmark/metrics/aggregate.py": [
+          {
+            "path": "ethical_benchmark/evaluators/toxicity_eval.py",
+            "batchIndex": 3,
+            "symbols": [
+              "ToxicityScorer",
+              "ToxicityEvalConfig",
+              "DetoxifyScorer",
+              "HFClassifierScorer",
+              "_extract_toxicity_probability",
+              "_score_from_label_dict",
+              "ToxicityEvaluator"
+            ]
+          },
+          {
+            "path": "ethical_benchmark/pipeline/run_benchmark.py",
+            "batchIndex": 3,
+            "symbols": [
+              "parse_args",
+              "setup_logging",
+              "load_config",
+              "main",
+              "_persist_results",
+              "build_output_paths",
+              "load_samples",
+              "build_evaluator",
+              "run_generation_loop",
+              "batched",
+              "build_radar_dimensions"
+            ]
+          }
+        ],
+        "ethical_benchmark/pipeline/run_quant_benchmark.py": [
+          {
+            "path": "ethical_benchmark/benchmarks/base.py",
+            "batchIndex": 1,
+            "symbols": [
+              "BenchmarkItem",
+              "BenchmarkPlugin"
+            ]
+          },
+          {
+            "path": "ethical_benchmark/benchmarks/registry.py",
+            "batchIndex": 1,
+            "symbols": [
+              "build_benchmark_plugin"
+            ]
+          },
+          {
+            "path": "ethical_benchmark/quant/config_schema.py",
+            "batchIndex": 2,
+            "symbols": [
+              "DecodingSchema",
+              "ModelEntry",
+              "BenchmarkEntry",
+              "SlurmConfig",
+              "QuantizationConfig",
+              "load_quant_config"
+            ]
+          },
+          {
+            "path": "ethical_benchmark/analysis/compare_quant_pairs.py",
+            "batchIndex": 5,
+            "symbols": [
+              "parse_args",
+              "setup_logging",
+              "_read_json",
+              "_select_pair_members",
+              "_extract_metric",
+              "compute_relative_delta",
+              "classify_pair_change",
+              "label_evidence_status",
+              "paired_binary_confusion",
+              "mcnemar_exact_test",
+              "_extract_binary_outcome",
+              "_read_per_prompt_outcomes",
+              "_prefer_corrected_score_paths",
+              "compute_paired_bootstrap_ci",
+              "build_pairwise_report",
+              "summarize_pair_labels",
+              "compute_scale_sensitivity",
+              "compute_cross_family_consistency",
+              "write_csv",
+              "main"
+            ]
+          },
+          {
+            "path": "ethical_benchmark/cluster/check_runs.py",
+            "batchIndex": 2,
+            "symbols": [
+              "parse_args",
+              "setup_logging",
+              "_load_submissions",
+              "_current_squeue_job_ids",
+              "check_status",
+              "main"
+            ]
+          },
+          {
+            "path": "fyp_cli.py",
+            "batchIndex": 2,
+            "symbols": [
+              "_setup_logging",
+              "_add_common_options",
+              "_base_parser",
+              "parse_args",
+              "_run_analysis",
+              "main"
+            ]
+          },
+          {
+            "path": "tests/test_quant_analysis.py",
+            "batchIndex": 5,
+            "symbols": [
+              "test_compute_relative_delta",
+              "test_classify_pair_change_labels",
+              "test_classify_pair_change_alignment_improvement",
+              "test_classify_pair_change_over_refusal_regression",
+              "test_classify_pair_change_judge_pair_labels_unchanged_by_hardening",
+              "test_classify_pair_change_alignment_degradation_requires_capability_preserved",
+              "test_classify_pair_change_v2_pair_labels_unchanged_by_d16",
+              "test_classify_pair_change_incomplete_when_any_delta_missing",
+              "test_label_evidence_status_two_layer",
+              "test_mcnemar_exact_test",
+              "test_paired_binary_confusion",
+              "test_extract_binary_outcome",
+              "test_compute_paired_bootstrap_ci_smoke",
+              "test_compute_paired_bootstrap_ci_returns_none_when_no_overlap",
+              "test_build_pairwise_prefers_v2_score_sidecars",
+              "_member",
+              "test_select_pair_members_never_picks_int8_as_nf4",
+              "test_select_pair_members_none_when_only_int8",
+              "test_select_pair_members_default_quant_method_is_nf4",
+              "test_build_pairwise_and_reports",
+              "test_cross_family_all_pairs_and_none_guard"
+            ]
+          }
+        ],
+        "ethical_benchmark/pipeline/run_quant_matrix.py": [
+          {
+            "path": "ethical_benchmark/quant/config_schema.py",
+            "batchIndex": 2,
+            "symbols": [
+              "DecodingSchema",
+              "ModelEntry",
+              "BenchmarkEntry",
+              "SlurmConfig",
+              "QuantizationConfig",
+              "load_quant_config"
+            ]
+          },
+          {
+            "path": "fyp_cli.py",
+            "batchIndex": 2,
+            "symbols": [
+              "_setup_logging",
+              "_add_common_options",
+              "_base_parser",
+              "parse_args",
+              "_run_analysis",
+              "main"
+            ]
+          }
+        ],
+        "tests/test_matrix_reuse.py": [
+          {
+            "path": "ethical_benchmark/quant/config_schema.py",
+            "batchIndex": 2,
+            "symbols": [
+              "DecodingSchema",
+              "ModelEntry",
+              "BenchmarkEntry",
+              "SlurmConfig",
+              "QuantizationConfig",
+              "load_quant_config"
+            ]
+          }
+        ],
+        "tests/test_quant_pipeline_utils.py": [
+          {
+            "path": "ethical_benchmark/benchmarks/base.py",
+            "batchIndex": 1,
+            "symbols": [
+              "BenchmarkItem",
+              "BenchmarkPlugin"
+            ]
+          }
+        ],
+        "tests/test_quant_smoke.py": [
+          {
+            "path": "ethical_benchmark/benchmarks/base.py",
+            "batchIndex": 1,
+            "symbols": [
+              "BenchmarkItem",
+              "BenchmarkPlugin"
+            ]
+          },
+          {
+            "path": "ethical_benchmark/quant/config_schema.py",
+            "batchIndex": 2,
+            "symbols": [
+              "DecodingSchema",
+              "ModelEntry",
+              "BenchmarkEntry",
+              "SlurmConfig",
+              "QuantizationConfig",
+              "load_quant_config"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "batchIndex": 5,
+      "files": [
+        {
+          "path": "compare_quant_pairs.py",
+          "language": "python",
+          "sizeLines": 7,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ethical_benchmark/analysis/compare_quant_pairs.py",
+          "language": "python",
+          "sizeLines": 926,
+          "fileCategory": "code"
+        },
+        {
+          "path": "scripts/judge_agreement.py",
+          "language": "python",
+          "sizeLines": 363,
+          "fileCategory": "code"
+        },
+        {
+          "path": "scripts/judge_pairwise_agreement.py",
+          "language": "python",
+          "sizeLines": 285,
+          "fileCategory": "code"
+        },
+        {
+          "path": "scripts/multiple_comparisons.py",
+          "language": "python",
+          "sizeLines": 338,
+          "fileCategory": "code"
+        },
+        {
+          "path": "scripts/precision_sweep_analysis.py",
+          "language": "python",
+          "sizeLines": 267,
+          "fileCategory": "code"
+        },
+        {
+          "path": "tests/test_precision_sweep.py",
+          "language": "python",
+          "sizeLines": 204,
+          "fileCategory": "code"
+        },
+        {
+          "path": "tests/test_quant_analysis.py",
+          "language": "python",
+          "sizeLines": 505,
+          "fileCategory": "code"
+        }
+      ],
+      "batchImportData": {
+        "compare_quant_pairs.py": [
+          "ethical_benchmark/analysis/compare_quant_pairs.py"
+        ],
+        "ethical_benchmark/analysis/compare_quant_pairs.py": [
+          "ethical_benchmark/pipeline/run_quant_benchmark.py",
+          "ethical_benchmark/quant/config_schema.py"
+        ],
+        "scripts/judge_agreement.py": [
+          "ethical_benchmark/analysis/compare_quant_pairs.py"
+        ],
+        "scripts/judge_pairwise_agreement.py": [
+          "ethical_benchmark/analysis/compare_quant_pairs.py"
+        ],
+        "scripts/multiple_comparisons.py": [
+          "ethical_benchmark/analysis/compare_quant_pairs.py"
+        ],
+        "scripts/precision_sweep_analysis.py": [
+          "ethical_benchmark/analysis/compare_quant_pairs.py"
+        ],
+        "tests/test_precision_sweep.py": [
+          "scripts/precision_sweep_analysis.py"
+        ],
+        "tests/test_quant_analysis.py": [
+          "ethical_benchmark/analysis/compare_quant_pairs.py",
+          "ethical_benchmark/pipeline/run_quant_benchmark.py",
+          "ethical_benchmark/quant/config_schema.py"
+        ]
+      },
+      "neighborMap": {
+        "ethical_benchmark/analysis/compare_quant_pairs.py": [
+          {
+            "path": "ethical_benchmark/pipeline/run_quant_benchmark.py",
+            "batchIndex": 4,
+            "symbols": [
+              "get_model_stack",
+              "parse_args",
+              "setup_logging",
+              "normalize_model_key",
+              "_resolved_dtype_name",
+              "build_run_paths",
+              "validate_record_schema",
+              "get_processed_prompt_ids",
+              "prepare_remaining_items",
+              "batched",
+              "execute_quant_benchmark_loaded",
+              "execute_quant_benchmark",
+              "main"
+            ]
+          },
+          {
+            "path": "ethical_benchmark/quant/config_schema.py",
+            "batchIndex": 2,
+            "symbols": [
+              "DecodingSchema",
+              "ModelEntry",
+              "BenchmarkEntry",
+              "SlurmConfig",
+              "QuantizationConfig",
+              "load_quant_config"
+            ]
+          },
+          {
+            "path": "fyp_cli.py",
+            "batchIndex": 2,
+            "symbols": [
+              "_setup_logging",
+              "_add_common_options",
+              "_base_parser",
+              "parse_args",
+              "_run_analysis",
+              "main"
+            ]
+          }
+        ],
+        "tests/test_quant_analysis.py": [
+          {
+            "path": "ethical_benchmark/pipeline/run_quant_benchmark.py",
+            "batchIndex": 4,
+            "symbols": [
+              "get_model_stack",
+              "parse_args",
+              "setup_logging",
+              "normalize_model_key",
+              "_resolved_dtype_name",
+              "build_run_paths",
+              "validate_record_schema",
+              "get_processed_prompt_ids",
+              "prepare_remaining_items",
+              "batched",
+              "execute_quant_benchmark_loaded",
+              "execute_quant_benchmark",
+              "main"
+            ]
+          },
+          {
+            "path": "ethical_benchmark/quant/config_schema.py",
+            "batchIndex": 2,
+            "symbols": [
+              "DecodingSchema",
+              "ModelEntry",
+              "BenchmarkEntry",
+              "SlurmConfig",
+              "QuantizationConfig",
+              "load_quant_config"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "batchIndex": 6,
+      "files": [
+        {
+          "path": "ethical_benchmark/analysis/refusal_margin.py",
+          "language": "python",
+          "sizeLines": 169,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ethical_benchmark/models/generation.py",
+          "language": "python",
+          "sizeLines": 238,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ethical_benchmark/models/loader.py",
+          "language": "python",
+          "sizeLines": 337,
+          "fileCategory": "code"
+        },
+        {
+          "path": "scripts/capture_refusal_margin.py",
+          "language": "python",
+          "sizeLines": 242,
+          "fileCategory": "code"
+        },
+        {
+          "path": "tests/test_models.py",
+          "language": "python",
+          "sizeLines": 411,
+          "fileCategory": "code"
+        },
+        {
+          "path": "tests/test_quant_int8.py",
+          "language": "python",
+          "sizeLines": 224,
+          "fileCategory": "code"
+        },
+        {
+          "path": "tests/test_refusal_margin.py",
+          "language": "python",
+          "sizeLines": 124,
+          "fileCategory": "code"
+        }
+      ],
+      "batchImportData": {
+        "ethical_benchmark/analysis/refusal_margin.py": [],
+        "ethical_benchmark/models/generation.py": [],
+        "ethical_benchmark/models/loader.py": [],
+        "scripts/capture_refusal_margin.py": [
+          "ethical_benchmark/analysis/refusal_margin.py",
+          "ethical_benchmark/models/generation.py",
+          "ethical_benchmark/models/loader.py",
+          "ethical_benchmark/quant/config_schema.py"
+        ],
+        "tests/test_models.py": [
+          "ethical_benchmark/models/generation.py",
+          "ethical_benchmark/models/loader.py"
+        ],
+        "tests/test_quant_int8.py": [
+          "ethical_benchmark/models/loader.py",
+          "ethical_benchmark/quant/config_schema.py"
+        ],
+        "tests/test_refusal_margin.py": [
+          "ethical_benchmark/analysis/refusal_margin.py"
+        ]
+      },
+      "neighborMap": {
+        "ethical_benchmark/models/generation.py": [
+          {
+            "path": "ethical_benchmark/pipeline/run_benchmark.py",
+            "batchIndex": 3,
+            "symbols": [
+              "parse_args",
+              "setup_logging",
+              "load_config",
+              "main",
+              "_persist_results",
+              "build_output_paths",
+              "load_samples",
+              "build_evaluator",
+              "run_generation_loop",
+              "batched",
+              "build_radar_dimensions"
+            ]
+          }
+        ],
+        "ethical_benchmark/models/loader.py": [
+          {
+            "path": "ethical_benchmark/pipeline/run_benchmark.py",
+            "batchIndex": 3,
+            "symbols": [
+              "parse_args",
+              "setup_logging",
+              "load_config",
+              "main",
+              "_persist_results",
+              "build_output_paths",
+              "load_samples",
+              "build_evaluator",
+              "run_generation_loop",
+              "batched",
+              "build_radar_dimensions"
+            ]
+          }
+        ],
+        "scripts/capture_refusal_margin.py": [
+          {
+            "path": "ethical_benchmark/quant/config_schema.py",
+            "batchIndex": 2,
+            "symbols": [
+              "DecodingSchema",
+              "ModelEntry",
+              "BenchmarkEntry",
+              "SlurmConfig",
+              "QuantizationConfig",
+              "load_quant_config"
+            ]
+          }
+        ],
+        "tests/test_quant_int8.py": [
+          {
+            "path": "ethical_benchmark/quant/config_schema.py",
+            "batchIndex": 2,
+            "symbols": [
+              "DecodingSchema",
+              "ModelEntry",
+              "BenchmarkEntry",
+              "SlurmConfig",
+              "QuantizationConfig",
+              "load_quant_config"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "batchIndex": 7,
+      "files": [
+        {
+          "path": "ethical_benchmark/harness/__init__.py",
+          "language": "python",
+          "sizeLines": 31,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ethical_benchmark/harness/agent.py",
+          "language": "python",
+          "sizeLines": 877,
+          "fileCategory": "code"
+        },
+        {
+          "path": "scripts/agent_check.py",
+          "language": "python",
+          "sizeLines": 71,
+          "fileCategory": "code"
+        },
+        {
+          "path": "scripts/generate_agent_dashboard.py",
+          "language": "python",
+          "sizeLines": 37,
+          "fileCategory": "code"
+        },
+        {
+          "path": "scripts/generate_handoff.py",
+          "language": "python",
+          "sizeLines": 38,
+          "fileCategory": "code"
+        },
+        {
+          "path": "scripts/generate_tc1_checklist.py",
+          "language": "python",
+          "sizeLines": 31,
+          "fileCategory": "code"
+        },
+        {
+          "path": "tests/test_agent_harness.py",
+          "language": "python",
+          "sizeLines": 338,
+          "fileCategory": "code"
+        }
+      ],
+      "batchImportData": {
+        "ethical_benchmark/harness/__init__.py": [
+          "ethical_benchmark/harness/agent.py"
+        ],
+        "ethical_benchmark/harness/agent.py": [],
+        "scripts/agent_check.py": [
+          "ethical_benchmark/harness/__init__.py"
+        ],
+        "scripts/generate_agent_dashboard.py": [
+          "ethical_benchmark/harness/__init__.py"
+        ],
+        "scripts/generate_handoff.py": [
+          "ethical_benchmark/harness/__init__.py"
+        ],
+        "scripts/generate_tc1_checklist.py": [
+          "ethical_benchmark/harness/__init__.py"
+        ],
+        "tests/test_agent_harness.py": [
+          "ethical_benchmark/harness/__init__.py"
+        ]
+      },
+      "neighborMap": {
+        "ethical_benchmark/harness/__init__.py": [
+          {
+            "path": "fyp_cli.py",
+            "batchIndex": 2,
+            "symbols": [
+              "_setup_logging",
+              "_add_common_options",
+              "_base_parser",
+              "parse_args",
+              "_run_analysis",
+              "main"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "batchIndex": 8,
+      "files": [
+        {
+          "path": "dashboard/__init__.py",
+          "language": "python",
+          "sizeLines": 6,
+          "fileCategory": "code"
+        },
+        {
+          "path": "dashboard/app.py",
+          "language": "python",
+          "sizeLines": 549,
+          "fileCategory": "code"
+        },
+        {
+          "path": "dashboard/theme.py",
+          "language": "python",
+          "sizeLines": 480,
+          "fileCategory": "code"
+        },
+        {
+          "path": "tests/test_dashboard_data.py",
+          "language": "python",
+          "sizeLines": 247,
+          "fileCategory": "code"
+        },
+        {
+          "path": "tests/test_dashboard_theme.py",
+          "language": "python",
+          "sizeLines": 81,
+          "fileCategory": "code"
+        }
+      ],
+      "batchImportData": {
+        "dashboard/__init__.py": [],
+        "dashboard/app.py": [
+          "dashboard/__init__.py"
+        ],
+        "dashboard/theme.py": [
+          "dashboard/__init__.py"
+        ],
+        "tests/test_dashboard_data.py": [
+          "dashboard/__init__.py",
+          "ethical_benchmark/quant/config_schema.py"
+        ],
+        "tests/test_dashboard_theme.py": [
+          "dashboard/__init__.py"
+        ]
+      },
+      "neighborMap": {
+        "tests/test_dashboard_data.py": [
+          {
+            "path": "ethical_benchmark/quant/config_schema.py",
+            "batchIndex": 2,
+            "symbols": [
+              "DecodingSchema",
+              "ModelEntry",
+              "BenchmarkEntry",
+              "SlurmConfig",
+              "QuantizationConfig",
+              "load_quant_config"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "batchIndex": 9,
+      "files": [
+        {
+          "path": "ethical_benchmark/judges/__init__.py",
+          "language": "python",
+          "sizeLines": 34,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ethical_benchmark/judges/validation.py",
+          "language": "python",
+          "sizeLines": 719,
+          "fileCategory": "code"
+        },
+        {
+          "path": "scripts/run_judge_validation.py",
+          "language": "python",
+          "sizeLines": 158,
+          "fileCategory": "code"
+        },
+        {
+          "path": "tests/test_judge_pairwise.py",
+          "language": "python",
+          "sizeLines": 96,
+          "fileCategory": "code"
+        },
+        {
+          "path": "tests/test_judge_validation.py",
+          "language": "python",
+          "sizeLines": 270,
+          "fileCategory": "code"
+        }
+      ],
+      "batchImportData": {
+        "ethical_benchmark/judges/__init__.py": [
+          "ethical_benchmark/judges/validation.py"
+        ],
+        "ethical_benchmark/judges/validation.py": [],
+        "scripts/run_judge_validation.py": [
+          "ethical_benchmark/judges/validation.py"
+        ],
+        "tests/test_judge_pairwise.py": [
+          "ethical_benchmark/judges/validation.py"
+        ],
+        "tests/test_judge_validation.py": [
+          "ethical_benchmark/judges/validation.py"
+        ]
+      },
+      "neighborMap": {}
+    },
+    {
+      "batchIndex": 10,
+      "files": [
+        {
+          "path": "AGENTS.md",
+          "language": "markdown",
+          "sizeLines": 296,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "CLAUDE.md",
+          "language": "markdown",
+          "sizeLines": 296,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "Makefile",
+          "language": "makefile",
+          "sizeLines": 125,
+          "fileCategory": "infra"
+        },
+        {
+          "path": "README.md",
+          "language": "markdown",
+          "sizeLines": 374,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "package.json",
+          "language": "json",
+          "sizeLines": 13,
+          "fileCategory": "config"
+        },
+        {
+          "path": "pyproject.toml",
+          "language": "toml",
+          "sizeLines": 39,
+          "fileCategory": "config"
+        },
+        {
+          "path": "requirements-dashboard.txt",
+          "language": "txt",
+          "sizeLines": 5,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "requirements.txt",
+          "language": "txt",
+          "sizeLines": 28,
+          "fileCategory": "docs"
+        }
+      ],
+      "batchImportData": {
+        "AGENTS.md": [],
+        "CLAUDE.md": [],
+        "Makefile": [],
+        "README.md": [],
+        "package.json": [],
+        "pyproject.toml": [],
+        "requirements-dashboard.txt": [],
+        "requirements.txt": []
+      },
+      "neighborMap": {}
+    },
+    {
+      "batchIndex": 11,
+      "files": [
+        {
+          "path": "configs/artifact_policy.yaml",
+          "language": "yaml",
+          "sizeLines": 229,
+          "fileCategory": "config"
+        },
+        {
+          "path": "configs/default.yaml",
+          "language": "yaml",
+          "sizeLines": 168,
+          "fileCategory": "config"
+        },
+        {
+          "path": "configs/tc1.yaml",
+          "language": "yaml",
+          "sizeLines": 178,
+          "fileCategory": "config"
+        },
+        {
+          "path": "configs/tc1_512.yaml",
+          "language": "yaml",
+          "sizeLines": 181,
+          "fileCategory": "config"
+        },
+        {
+          "path": "configs/tc1_int8.yaml",
+          "language": "yaml",
+          "sizeLines": 186,
+          "fileCategory": "config"
+        },
+        {
+          "path": "configs/tc1_int8_512.yaml",
+          "language": "yaml",
+          "sizeLines": 190,
+          "fileCategory": "config"
+        },
+        {
+          "path": "configs/tc1_sensitivity.yaml",
+          "language": "yaml",
+          "sizeLines": 122,
+          "fileCategory": "config"
+        },
+        {
+          "path": "configs/tc1_sensitivity_512.yaml",
+          "language": "yaml",
+          "sizeLines": 122,
+          "fileCategory": "config"
+        }
+      ],
+      "batchImportData": {
+        "configs/artifact_policy.yaml": [],
+        "configs/default.yaml": [],
+        "configs/tc1.yaml": [],
+        "configs/tc1_512.yaml": [],
+        "configs/tc1_int8.yaml": [],
+        "configs/tc1_int8_512.yaml": [],
+        "configs/tc1_sensitivity.yaml": [],
+        "configs/tc1_sensitivity_512.yaml": []
+      },
+      "neighborMap": {}
+    },
+    {
+      "batchIndex": 12,
+      "files": [
+        {
+          "path": ".hallmark/log.json",
+          "language": "json",
+          "sizeLines": 4,
+          "fileCategory": "config"
+        },
+        {
+          "path": ".streamlit/config.toml",
+          "language": "toml",
+          "sizeLines": 13,
+          "fileCategory": "config"
+        },
+        {
+          "path": "CITATION.bib",
+          "language": "bib",
+          "sizeLines": 10,
+          "fileCategory": "code"
+        },
+        {
+          "path": "CITATION.cff",
+          "language": "cff",
+          "sizeLines": 30,
+          "fileCategory": "code"
+        },
+        {
+          "path": "dashboard/data.py",
+          "language": "python",
+          "sizeLines": 631,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ethical_benchmark/__init__.py",
+          "language": "python",
+          "sizeLines": 16,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ethical_benchmark/analysis/__init__.py",
+          "language": "python",
+          "sizeLines": 1,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ethical_benchmark/cluster/__init__.py",
+          "language": "python",
+          "sizeLines": 1,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ethical_benchmark/constants.py",
+          "language": "python",
+          "sizeLines": 38,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ethical_benchmark/evaluators/__init__.py",
+          "language": "python",
+          "sizeLines": 56,
+          "fileCategory": "code"
+        },
+        {
+          "path": "ethical_benchmark/models/__init__.py",
+          "language": "python",
+          "sizeLines": 42,
+          "fileCategory": "code"
+        },
+        {
+          "path": "scripts/build_agent_harness_architecture_doc.py",
+          "language": "python",
+          "sizeLines": 550,
+          "fileCategory": "code"
+        },
+        {
+          "path": "scripts/build_agentic_report.js",
+          "language": "javascript",
+          "sizeLines": 638,
+          "fileCategory": "code"
+        },
+        {
+          "path": "scripts/build_fyp_report_v2.js",
+          "language": "javascript",
+          "sizeLines": 1602,
+          "fileCategory": "code"
+        },
+        {
+          "path": "scripts/build_fyp_report_v3.js",
+          "language": "javascript",
+          "sizeLines": 1606,
+          "fileCategory": "code"
+        },
+        {
+          "path": "scripts/build_fyp_report_v4.js",
+          "language": "javascript",
+          "sizeLines": 1627,
+          "fileCategory": "code"
+        },
+        {
+          "path": "scripts/build_fyp_report_v5.js",
+          "language": "javascript",
+          "sizeLines": 1638,
+          "fileCategory": "code"
+        },
+        {
+          "path": "scripts/build_fyp_report.js",
+          "language": "javascript",
+          "sizeLines": 1546,
+          "fileCategory": "code"
+        },
+        {
+          "path": "scripts/build_fyp_thesis_v2.js",
+          "language": "javascript",
+          "sizeLines": 448,
+          "fileCategory": "code"
+        },
+        {
+          "path": "scripts/build_fyp_thesis_v3.js",
+          "language": "javascript",
+          "sizeLines": 448,
+          "fileCategory": "code"
+        },
+        {
+          "path": "scripts/build_fyp_thesis_v4.js",
+          "language": "javascript",
+          "sizeLines": 429,
+          "fileCategory": "code"
+        },
+        {
+          "path": "scripts/build_fyp_thesis.js",
+          "language": "javascript",
+          "sizeLines": 415,
+          "fileCategory": "code"
+        },
+        {
+          "path": "scripts/generate_agent_harness_architecture_diagram.py",
+          "language": "python",
+          "sizeLines": 572,
+          "fileCategory": "code"
+        },
+        {
+          "path": "scripts/generate_architecture_diagram.py",
+          "language": "python",
+          "sizeLines": 592,
+          "fileCategory": "code"
+        },
+        {
+          "path": "scripts/generate_integrated_architecture_diagram.py",
+          "language": "python",
+          "sizeLines": 879,
+          "fileCategory": "code"
+        }
+      ],
+      "batchImportData": {
+        ".hallmark/log.json": [],
+        ".streamlit/config.toml": [],
+        "CITATION.bib": [],
+        "CITATION.cff": [],
+        "dashboard/data.py": [],
+        "ethical_benchmark/__init__.py": [],
+        "ethical_benchmark/analysis/__init__.py": [],
+        "ethical_benchmark/cluster/__init__.py": [],
+        "ethical_benchmark/constants.py": [],
+        "ethical_benchmark/evaluators/__init__.py": [],
+        "ethical_benchmark/models/__init__.py": [],
+        "scripts/build_agent_harness_architecture_doc.py": [],
+        "scripts/build_agentic_report.js": [],
+        "scripts/build_fyp_report_v2.js": [],
+        "scripts/build_fyp_report_v3.js": [],
+        "scripts/build_fyp_report_v4.js": [],
+        "scripts/build_fyp_report_v5.js": [],
+        "scripts/build_fyp_report.js": [],
+        "scripts/build_fyp_thesis_v2.js": [],
+        "scripts/build_fyp_thesis_v3.js": [],
+        "scripts/build_fyp_thesis_v4.js": [],
+        "scripts/build_fyp_thesis.js": [],
+        "scripts/generate_agent_harness_architecture_diagram.py": [],
+        "scripts/generate_architecture_diagram.py": [],
+        "scripts/generate_integrated_architecture_diagram.py": []
+      },
+      "neighborMap": {}
+    },
+    {
+      "batchIndex": 13,
+      "files": [
+        {
+          "path": "scripts/generate_repo_hierarchy_diagram.py",
+          "language": "python",
+          "sizeLines": 406,
+          "fileCategory": "code"
+        },
+        {
+          "path": "scripts/generate_sensitivity_jobs.py",
+          "language": "python",
+          "sizeLines": 154,
+          "fileCategory": "code"
+        },
+        {
+          "path": "scripts/genlen_512_analysis.py",
+          "language": "python",
+          "sizeLines": 180,
+          "fileCategory": "code"
+        },
+        {
+          "path": "scripts/harmbench_category_breakdown.py",
+          "language": "python",
+          "sizeLines": 228,
+          "fileCategory": "code"
+        },
+        {
+          "path": "scripts/harness_eval.py",
+          "language": "python",
+          "sizeLines": 24,
+          "fileCategory": "code"
+        },
+        {
+          "path": "scripts/human_label_audit.py",
+          "language": "python",
+          "sizeLines": 641,
+          "fileCategory": "code"
+        },
+        {
+          "path": "scripts/make_figures.py",
+          "language": "python",
+          "sizeLines": 314,
+          "fileCategory": "code"
+        },
+        {
+          "path": "scripts/mmlu_subject_breakdown.py",
+          "language": "python",
+          "sizeLines": 181,
+          "fileCategory": "code"
+        },
+        {
+          "path": "scripts/number_bible_512.py",
+          "language": "python",
+          "sizeLines": 76,
+          "fileCategory": "code"
+        },
+        {
+          "path": "scripts/prefetch_tc1.py",
+          "language": "python",
+          "sizeLines": 194,
+          "fileCategory": "code"
+        },
+        {
+          "path": "scripts/refusal_margin_analysis.py",
+          "language": "python",
+          "sizeLines": 267,
+          "fileCategory": "code"
+        },
+        {
+          "path": "scripts/sensitivity_analysis.py",
+          "language": "python",
+          "sizeLines": 217,
+          "fileCategory": "code"
+        },
+        {
+          "path": "scripts/verify_report_claims.py",
+          "language": "python",
+          "sizeLines": 700,
+          "fileCategory": "code"
+        },
+        {
+          "path": "tests/__init__.py",
+          "language": "python",
+          "sizeLines": 0,
+          "fileCategory": "code"
+        },
+        {
+          "path": "tests/test_int8_scoping.py",
+          "language": "python",
+          "sizeLines": 183,
+          "fileCategory": "code"
+        },
+        {
+          "path": "tests/test_judge_agreement.py",
+          "language": "python",
+          "sizeLines": 61,
+          "fileCategory": "code"
+        },
+        {
+          "path": "tests/test_report_claims.py",
+          "language": "python",
+          "sizeLines": 29,
+          "fileCategory": "code"
+        }
+      ],
+      "batchImportData": {
+        "scripts/generate_repo_hierarchy_diagram.py": [],
+        "scripts/generate_sensitivity_jobs.py": [],
+        "scripts/genlen_512_analysis.py": [],
+        "scripts/harmbench_category_breakdown.py": [],
+        "scripts/harness_eval.py": [],
+        "scripts/human_label_audit.py": [],
+        "scripts/make_figures.py": [],
+        "scripts/mmlu_subject_breakdown.py": [],
+        "scripts/number_bible_512.py": [],
+        "scripts/prefetch_tc1.py": [],
+        "scripts/refusal_margin_analysis.py": [],
+        "scripts/sensitivity_analysis.py": [],
+        "scripts/verify_report_claims.py": [],
+        "tests/__init__.py": [],
+        "tests/test_int8_scoping.py": [],
+        "tests/test_judge_agreement.py": [],
+        "tests/test_report_claims.py": []
+      },
+      "neighborMap": {}
+    }
+  ]
+}

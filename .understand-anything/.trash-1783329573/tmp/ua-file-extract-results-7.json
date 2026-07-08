@@ -1,0 +1,3386 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 7,
+  "filesSkipped": [],
+  "results": [
+    {
+      "path": "ethical_benchmark/harness/__init__.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 31,
+      "nonEmptyLines": 29,
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "ethical_benchmark/harness/agent.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 877,
+      "nonEmptyLines": 765,
+      "functions": [
+        {
+          "name": "_run",
+          "startLine": 45,
+          "endLine": 59,
+          "params": [
+            "args",
+            "repo_root",
+            "check",
+            "timeout"
+          ]
+        },
+        {
+          "name": "_repo_rel",
+          "startLine": 62,
+          "endLine": 66,
+          "params": [
+            "path",
+            "repo_root"
+          ]
+        },
+        {
+          "name": "_now_local",
+          "startLine": 69,
+          "endLine": 70,
+          "params": []
+        },
+        {
+          "name": "_ascii_safe",
+          "startLine": 73,
+          "endLine": 87,
+          "params": [
+            "text"
+          ]
+        },
+        {
+          "name": "load_policy",
+          "startLine": 90,
+          "endLine": 106,
+          "params": [
+            "repo_root",
+            "policy_path"
+          ]
+        },
+        {
+          "name": "_iter_paths",
+          "startLine": 109,
+          "endLine": 120,
+          "params": [
+            "repo_root",
+            "patterns",
+            "excludes"
+          ]
+        },
+        {
+          "name": "_sha256",
+          "startLine": 123,
+          "endLine": 128,
+          "params": [
+            "path"
+          ]
+        },
+        {
+          "name": "_manifest_entries",
+          "startLine": 131,
+          "endLine": 137,
+          "params": [
+            "repo_root",
+            "policy"
+          ]
+        },
+        {
+          "name": "write_immutable_manifest",
+          "startLine": 140,
+          "endLine": 149,
+          "params": [
+            "repo_root",
+            "policy"
+          ]
+        },
+        {
+          "name": "_read_manifest",
+          "startLine": 152,
+          "endLine": 163,
+          "params": [
+            "path"
+          ]
+        },
+        {
+          "name": "_changed_files",
+          "startLine": 166,
+          "endLine": 177,
+          "params": [
+            "repo_root"
+          ]
+        },
+        {
+          "name": "_tracked_changed_files",
+          "startLine": 180,
+          "endLine": 186,
+          "params": [
+            "repo_root"
+          ]
+        },
+        {
+          "name": "_match_any",
+          "startLine": 189,
+          "endLine": 190,
+          "params": [
+            "path",
+            "patterns"
+          ]
+        },
+        {
+          "name": "_project_overview_tail",
+          "startLine": 193,
+          "endLine": 199,
+          "params": [
+            "path"
+          ]
+        },
+        {
+          "name": "_line_matches",
+          "startLine": 202,
+          "endLine": 213,
+          "params": [
+            "path",
+            "regexes"
+          ]
+        },
+        {
+          "name": "check_agent_docs_sync",
+          "startLine": 216,
+          "endLine": 228,
+          "params": [
+            "repo_root"
+          ]
+        },
+        {
+          "name": "check_project_log_updated",
+          "startLine": 231,
+          "endLine": 242,
+          "params": [
+            "repo_root"
+          ]
+        },
+        {
+          "name": "check_immutable_artifacts",
+          "startLine": 245,
+          "endLine": 306,
+          "params": [
+            "repo_root",
+            "policy"
+          ]
+        },
+        {
+          "name": "_scan_policy_group",
+          "startLine": 309,
+          "endLine": 319,
+          "params": [
+            "repo_root",
+            "group",
+            "name"
+          ]
+        },
+        {
+          "name": "check_report_freshness",
+          "startLine": 322,
+          "endLine": 345,
+          "params": [
+            "repo_root",
+            "policy"
+          ]
+        },
+        {
+          "name": "check_git_diff_clean",
+          "startLine": 348,
+          "endLine": 352,
+          "params": [
+            "repo_root"
+          ]
+        },
+        {
+          "name": "check_pytest",
+          "startLine": 355,
+          "endLine": 361,
+          "params": [
+            "repo_root",
+            "pytest_args"
+          ]
+        },
+        {
+          "name": "run_agent_checks",
+          "startLine": 364,
+          "endLine": 387,
+          "params": [
+            "repo_root",
+            "include_pytest",
+            "include_diff_check",
+            "pytest_args",
+            "policy"
+          ]
+        },
+        {
+          "name": "_git_status",
+          "startLine": 390,
+          "endLine": 398,
+          "params": [
+            "repo_root"
+          ]
+        },
+        {
+          "name": "_project_log_status",
+          "startLine": 401,
+          "endLine": 420,
+          "params": [
+            "repo_root"
+          ]
+        },
+        {
+          "name": "_file_info",
+          "startLine": 423,
+          "endLine": 432,
+          "params": [
+            "path",
+            "repo_root"
+          ]
+        },
+        {
+          "name": "_judge_sidecar_status",
+          "startLine": 435,
+          "endLine": 442,
+          "params": [
+            "repo_root"
+          ]
+        },
+        {
+          "name": "_analysis_status",
+          "startLine": 445,
+          "endLine": 453,
+          "params": [
+            "repo_root"
+          ]
+        },
+        {
+          "name": "_heading",
+          "startLine": 456,
+          "endLine": 460,
+          "params": [
+            "text",
+            "fallback"
+          ]
+        },
+        {
+          "name": "_section_excerpt",
+          "startLine": 463,
+          "endLine": 474,
+          "params": [
+            "text",
+            "heading"
+          ]
+        },
+        {
+          "name": "_task_packets",
+          "startLine": 477,
+          "endLine": 494,
+          "params": [
+            "repo_root"
+          ]
+        },
+        {
+          "name": "_agent_profiles",
+          "startLine": 497,
+          "endLine": 512,
+          "params": [
+            "repo_root"
+          ]
+        },
+        {
+          "name": "_select_named",
+          "startLine": 515,
+          "endLine": 527,
+          "params": [
+            "items",
+            "query"
+          ]
+        },
+        {
+          "name": "build_agent_start_packet",
+          "startLine": 530,
+          "endLine": 553,
+          "params": [
+            "repo_root",
+            "task",
+            "agent",
+            "policy"
+          ]
+        },
+        {
+          "name": "format_agent_start_packet",
+          "startLine": 556,
+          "endLine": 623,
+          "params": [
+            "packet"
+          ]
+        },
+        {
+          "name": "_suggest_next_action",
+          "startLine": 626,
+          "endLine": 638,
+          "params": [
+            "status"
+          ]
+        },
+        {
+          "name": "build_agent_status",
+          "startLine": 641,
+          "endLine": 667,
+          "params": [
+            "repo_root",
+            "policy"
+          ]
+        },
+        {
+          "name": "format_agent_status",
+          "startLine": 670,
+          "endLine": 694,
+          "params": [
+            "status"
+          ]
+        },
+        {
+          "name": "_check_summary_lines",
+          "startLine": 697,
+          "endLine": 703,
+          "params": [
+            "results"
+          ]
+        },
+        {
+          "name": "render_handoff",
+          "startLine": 706,
+          "endLine": 776,
+          "params": [
+            "status",
+            "results"
+          ]
+        },
+        {
+          "name": "render_agent_dashboard",
+          "startLine": 779,
+          "endLine": 816,
+          "params": [
+            "status",
+            "results"
+          ]
+        },
+        {
+          "name": "render_tc1_checklist",
+          "startLine": 819,
+          "endLine": 873,
+          "params": [
+            "status"
+          ]
+        },
+        {
+          "name": "dump_status_json",
+          "startLine": 876,
+          "endLine": 877,
+          "params": [
+            "status"
+          ]
+        }
+      ],
+      "classes": [
+        {
+          "name": "CheckResult",
+          "startLine": 32,
+          "endLine": 42,
+          "methods": [
+            "ok"
+          ],
+          "properties": [
+            "name",
+            "status",
+            "message",
+            "details"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "CheckResult",
+          "line": 31,
+          "isDefault": false
+        },
+        {
+          "name": "_run",
+          "line": 45,
+          "isDefault": false
+        },
+        {
+          "name": "_repo_rel",
+          "line": 62,
+          "isDefault": false
+        },
+        {
+          "name": "_now_local",
+          "line": 69,
+          "isDefault": false
+        },
+        {
+          "name": "_ascii_safe",
+          "line": 73,
+          "isDefault": false
+        },
+        {
+          "name": "load_policy",
+          "line": 90,
+          "isDefault": false
+        },
+        {
+          "name": "_iter_paths",
+          "line": 109,
+          "isDefault": false
+        },
+        {
+          "name": "_sha256",
+          "line": 123,
+          "isDefault": false
+        },
+        {
+          "name": "_manifest_entries",
+          "line": 131,
+          "isDefault": false
+        },
+        {
+          "name": "write_immutable_manifest",
+          "line": 140,
+          "isDefault": false
+        },
+        {
+          "name": "_read_manifest",
+          "line": 152,
+          "isDefault": false
+        },
+        {
+          "name": "_changed_files",
+          "line": 166,
+          "isDefault": false
+        },
+        {
+          "name": "_tracked_changed_files",
+          "line": 180,
+          "isDefault": false
+        },
+        {
+          "name": "_match_any",
+          "line": 189,
+          "isDefault": false
+        },
+        {
+          "name": "_project_overview_tail",
+          "line": 193,
+          "isDefault": false
+        },
+        {
+          "name": "_line_matches",
+          "line": 202,
+          "isDefault": false
+        },
+        {
+          "name": "check_agent_docs_sync",
+          "line": 216,
+          "isDefault": false
+        },
+        {
+          "name": "check_project_log_updated",
+          "line": 231,
+          "isDefault": false
+        },
+        {
+          "name": "check_immutable_artifacts",
+          "line": 245,
+          "isDefault": false
+        },
+        {
+          "name": "_scan_policy_group",
+          "line": 309,
+          "isDefault": false
+        },
+        {
+          "name": "check_report_freshness",
+          "line": 322,
+          "isDefault": false
+        },
+        {
+          "name": "check_git_diff_clean",
+          "line": 348,
+          "isDefault": false
+        },
+        {
+          "name": "check_pytest",
+          "line": 355,
+          "isDefault": false
+        },
+        {
+          "name": "run_agent_checks",
+          "line": 364,
+          "isDefault": false
+        },
+        {
+          "name": "_git_status",
+          "line": 390,
+          "isDefault": false
+        },
+        {
+          "name": "_project_log_status",
+          "line": 401,
+          "isDefault": false
+        },
+        {
+          "name": "_file_info",
+          "line": 423,
+          "isDefault": false
+        },
+        {
+          "name": "_judge_sidecar_status",
+          "line": 435,
+          "isDefault": false
+        },
+        {
+          "name": "_analysis_status",
+          "line": 445,
+          "isDefault": false
+        },
+        {
+          "name": "_heading",
+          "line": 456,
+          "isDefault": false
+        },
+        {
+          "name": "_section_excerpt",
+          "line": 463,
+          "isDefault": false
+        },
+        {
+          "name": "_task_packets",
+          "line": 477,
+          "isDefault": false
+        },
+        {
+          "name": "_agent_profiles",
+          "line": 497,
+          "isDefault": false
+        },
+        {
+          "name": "_select_named",
+          "line": 515,
+          "isDefault": false
+        },
+        {
+          "name": "build_agent_start_packet",
+          "line": 530,
+          "isDefault": false
+        },
+        {
+          "name": "format_agent_start_packet",
+          "line": 556,
+          "isDefault": false
+        },
+        {
+          "name": "_suggest_next_action",
+          "line": 626,
+          "isDefault": false
+        },
+        {
+          "name": "build_agent_status",
+          "line": 641,
+          "isDefault": false
+        },
+        {
+          "name": "format_agent_status",
+          "line": 670,
+          "isDefault": false
+        },
+        {
+          "name": "_check_summary_lines",
+          "line": 697,
+          "isDefault": false
+        },
+        {
+          "name": "render_handoff",
+          "line": 706,
+          "isDefault": false
+        },
+        {
+          "name": "render_agent_dashboard",
+          "line": 779,
+          "isDefault": false
+        },
+        {
+          "name": "render_tc1_checklist",
+          "line": 819,
+          "isDefault": false
+        },
+        {
+          "name": "dump_status_json",
+          "line": 876,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "_run",
+          "callee": "subprocess.run",
+          "lineNumber": 52
+        },
+        {
+          "caller": "_run",
+          "callee": "list",
+          "lineNumber": 53
+        },
+        {
+          "caller": "_repo_rel",
+          "callee": "path.resolve().relative_to(repo_root.resolve()).as_posix",
+          "lineNumber": 64
+        },
+        {
+          "caller": "_repo_rel",
+          "callee": "path.resolve().relative_to",
+          "lineNumber": 64
+        },
+        {
+          "caller": "_repo_rel",
+          "callee": "path.resolve",
+          "lineNumber": 64
+        },
+        {
+          "caller": "_repo_rel",
+          "callee": "repo_root.resolve",
+          "lineNumber": 64
+        },
+        {
+          "caller": "_repo_rel",
+          "callee": "path.as_posix",
+          "lineNumber": 66
+        },
+        {
+          "caller": "_now_local",
+          "callee": "datetime.now",
+          "lineNumber": 70
+        },
+        {
+          "caller": "_ascii_safe",
+          "callee": "replacements.items",
+          "lineNumber": 85
+        },
+        {
+          "caller": "_ascii_safe",
+          "callee": "text.replace",
+          "lineNumber": 86
+        },
+        {
+          "caller": "load_policy",
+          "callee": "path.exists",
+          "lineNumber": 94
+        },
+        {
+          "caller": "load_policy",
+          "callee": "yaml.safe_load",
+          "lineNumber": 103
+        },
+        {
+          "caller": "load_policy",
+          "callee": "path.read_text",
+          "lineNumber": 103
+        },
+        {
+          "caller": "load_policy",
+          "callee": "isinstance",
+          "lineNumber": 104
+        },
+        {
+          "caller": "load_policy",
+          "callee": "ValueError",
+          "lineNumber": 105
+        },
+        {
+          "caller": "_iter_paths",
+          "callee": "set",
+          "lineNumber": 111
+        },
+        {
+          "caller": "_iter_paths",
+          "callee": "repo_root.glob",
+          "lineNumber": 113
+        },
+        {
+          "caller": "_iter_paths",
+          "callee": "_repo_rel",
+          "lineNumber": 114
+        },
+        {
+          "caller": "_iter_paths",
+          "callee": "path.is_dir",
+          "lineNumber": 115
+        },
+        {
+          "caller": "_iter_paths",
+          "callee": "any",
+          "lineNumber": 115
+        },
+        {
+          "caller": "_iter_paths",
+          "callee": "fnmatch",
+          "lineNumber": 115
+        },
+        {
+          "caller": "_iter_paths",
+          "callee": "output.append",
+          "lineNumber": 118
+        },
+        {
+          "caller": "_iter_paths",
+          "callee": "seen.add",
+          "lineNumber": 119
+        },
+        {
+          "caller": "_iter_paths",
+          "callee": "sorted",
+          "lineNumber": 120
+        },
+        {
+          "caller": "_sha256",
+          "callee": "hashlib.sha256",
+          "lineNumber": 124
+        },
+        {
+          "caller": "_sha256",
+          "callee": "path.open",
+          "lineNumber": 125
+        },
+        {
+          "caller": "_sha256",
+          "callee": "iter",
+          "lineNumber": 126
+        },
+        {
+          "caller": "_sha256",
+          "callee": "handle.read",
+          "lineNumber": 126
+        },
+        {
+          "caller": "_sha256",
+          "callee": "h.update",
+          "lineNumber": 127
+        },
+        {
+          "caller": "_sha256",
+          "callee": "h.hexdigest",
+          "lineNumber": 128
+        },
+        {
+          "caller": "_manifest_entries",
+          "callee": "_iter_paths",
+          "lineNumber": 132
+        },
+        {
+          "caller": "_manifest_entries",
+          "callee": "policy.get",
+          "lineNumber": 134
+        },
+        {
+          "caller": "_manifest_entries",
+          "callee": "policy.get",
+          "lineNumber": 135
+        },
+        {
+          "caller": "_manifest_entries",
+          "callee": "_repo_rel",
+          "lineNumber": 137
+        },
+        {
+          "caller": "_manifest_entries",
+          "callee": "_sha256",
+          "lineNumber": 137
+        },
+        {
+          "caller": "write_immutable_manifest",
+          "callee": "load_policy",
+          "lineNumber": 143
+        },
+        {
+          "caller": "write_immutable_manifest",
+          "callee": "policy.get",
+          "lineNumber": 144
+        },
+        {
+          "caller": "write_immutable_manifest",
+          "callee": "_manifest_entries",
+          "lineNumber": 145
+        },
+        {
+          "caller": "write_immutable_manifest",
+          "callee": "manifest_path.parent.mkdir",
+          "lineNumber": 146
+        },
+        {
+          "caller": "write_immutable_manifest",
+          "callee": "\"\\n\".join",
+          "lineNumber": 147
+        },
+        {
+          "caller": "write_immutable_manifest",
+          "callee": "sorted",
+          "lineNumber": 147
+        },
+        {
+          "caller": "write_immutable_manifest",
+          "callee": "entries.items",
+          "lineNumber": 147
+        },
+        {
+          "caller": "write_immutable_manifest",
+          "callee": "manifest_path.write_text",
+          "lineNumber": 148
+        },
+        {
+          "caller": "_read_manifest",
+          "callee": "path.exists",
+          "lineNumber": 153
+        },
+        {
+          "caller": "_read_manifest",
+          "callee": "path.read_text(encoding=\"utf-8\").splitlines",
+          "lineNumber": 156
+        },
+        {
+          "caller": "_read_manifest",
+          "callee": "path.read_text",
+          "lineNumber": 156
+        },
+        {
+          "caller": "_read_manifest",
+          "callee": "line.strip",
+          "lineNumber": 157
+        },
+        {
+          "caller": "_read_manifest",
+          "callee": "stripped.startswith",
+          "lineNumber": 158
+        },
+        {
+          "caller": "_read_manifest",
+          "callee": "stripped.partition",
+          "lineNumber": 160
+        },
+        {
+          "caller": "_changed_files",
+          "callee": "set",
+          "lineNumber": 167
+        },
+        {
+          "caller": "_changed_files",
+          "callee": "_run",
+          "lineNumber": 174
+        },
+        {
+          "caller": "_changed_files",
+          "callee": "files.update",
+          "lineNumber": 176
+        },
+        {
+          "caller": "_changed_files",
+          "callee": "line.strip",
+          "lineNumber": 176
+        },
+        {
+          "caller": "_changed_files",
+          "callee": "result.stdout.splitlines",
+          "lineNumber": 176
+        },
+        {
+          "caller": "_changed_files",
+          "callee": "line.strip",
+          "lineNumber": 176
+        },
+        {
+          "caller": "_changed_files",
+          "callee": "sorted",
+          "lineNumber": 177
+        },
+        {
+          "caller": "_tracked_changed_files",
+          "callee": "set",
+          "lineNumber": 181
+        },
+        {
+          "caller": "_tracked_changed_files",
+          "callee": "_run",
+          "lineNumber": 183
+        },
+        {
+          "caller": "_tracked_changed_files",
+          "callee": "files.update",
+          "lineNumber": 185
+        },
+        {
+          "caller": "_tracked_changed_files",
+          "callee": "line.strip",
+          "lineNumber": 185
+        },
+        {
+          "caller": "_tracked_changed_files",
+          "callee": "result.stdout.splitlines",
+          "lineNumber": 185
+        },
+        {
+          "caller": "_tracked_changed_files",
+          "callee": "line.strip",
+          "lineNumber": 185
+        },
+        {
+          "caller": "_tracked_changed_files",
+          "callee": "sorted",
+          "lineNumber": 186
+        },
+        {
+          "caller": "_match_any",
+          "callee": "any",
+          "lineNumber": 190
+        },
+        {
+          "caller": "_match_any",
+          "callee": "fnmatch",
+          "lineNumber": 190
+        },
+        {
+          "caller": "_project_overview_tail",
+          "callee": "path.read_text",
+          "lineNumber": 194
+        },
+        {
+          "caller": "_project_overview_tail",
+          "callee": "text.find",
+          "lineNumber": 196
+        },
+        {
+          "caller": "_line_matches",
+          "callee": "path.read_text(encoding=\"utf-8\").splitlines",
+          "lineNumber": 205
+        },
+        {
+          "caller": "_line_matches",
+          "callee": "path.read_text",
+          "lineNumber": 205
+        },
+        {
+          "caller": "_line_matches",
+          "callee": "enumerate",
+          "lineNumber": 208
+        },
+        {
+          "caller": "_line_matches",
+          "callee": "regex.search",
+          "lineNumber": 210
+        },
+        {
+          "caller": "_line_matches",
+          "callee": "hits.append",
+          "lineNumber": 211
+        },
+        {
+          "caller": "_line_matches",
+          "callee": "path.as_posix",
+          "lineNumber": 211
+        },
+        {
+          "caller": "check_agent_docs_sync",
+          "callee": "agents.exists",
+          "lineNumber": 219
+        },
+        {
+          "caller": "check_agent_docs_sync",
+          "callee": "claude.exists",
+          "lineNumber": 219
+        },
+        {
+          "caller": "check_agent_docs_sync",
+          "callee": "CheckResult",
+          "lineNumber": 220
+        },
+        {
+          "caller": "check_agent_docs_sync",
+          "callee": "_project_overview_tail",
+          "lineNumber": 221
+        },
+        {
+          "caller": "check_agent_docs_sync",
+          "callee": "_project_overview_tail",
+          "lineNumber": 221
+        },
+        {
+          "caller": "check_agent_docs_sync",
+          "callee": "CheckResult",
+          "lineNumber": 222
+        },
+        {
+          "caller": "check_agent_docs_sync",
+          "callee": "CheckResult",
+          "lineNumber": 228
+        },
+        {
+          "caller": "check_project_log_updated",
+          "callee": "_changed_files",
+          "lineNumber": 232
+        },
+        {
+          "caller": "check_project_log_updated",
+          "callee": "CheckResult",
+          "lineNumber": 234
+        },
+        {
+          "caller": "check_project_log_updated",
+          "callee": "CheckResult",
+          "lineNumber": 236
+        },
+        {
+          "caller": "check_project_log_updated",
+          "callee": "CheckResult",
+          "lineNumber": 237
+        },
+        {
+          "caller": "check_immutable_artifacts",
+          "callee": "policy.get",
+          "lineNumber": 246
+        },
+        {
+          "caller": "check_immutable_artifacts",
+          "callee": "_read_manifest",
+          "lineNumber": 247
+        },
+        {
+          "caller": "check_immutable_artifacts",
+          "callee": "_manifest_entries",
+          "lineNumber": 248
+        },
+        {
+          "caller": "check_immutable_artifacts",
+          "callee": "CheckResult",
+          "lineNumber": 250
+        },
+        {
+          "caller": "check_immutable_artifacts",
+          "callee": "_repo_rel",
+          "lineNumber": 253
+        },
+        {
+          "caller": "check_immutable_artifacts",
+          "callee": "sorted",
+          "lineNumber": 257
+        },
+        {
+          "caller": "check_immutable_artifacts",
+          "callee": "sorted",
+          "lineNumber": 258
+        },
+        {
+          "caller": "check_immutable_artifacts",
+          "callee": "expected.items",
+          "lineNumber": 258
+        },
+        {
+          "caller": "check_immutable_artifacts",
+          "callee": "current.get",
+          "lineNumber": 258
+        },
+        {
+          "caller": "check_immutable_artifacts",
+          "callee": "sorted",
+          "lineNumber": 259
+        },
+        {
+          "caller": "check_immutable_artifacts",
+          "callee": "CheckResult",
+          "lineNumber": 271
+        },
+        {
+          "caller": "check_immutable_artifacts",
+          "callee": "len",
+          "lineNumber": 278
+        },
+        {
+          "caller": "check_immutable_artifacts",
+          "callee": "len",
+          "lineNumber": 278
+        },
+        {
+          "caller": "check_immutable_artifacts",
+          "callee": "CheckResult",
+          "lineNumber": 282
+        },
+        {
+          "caller": "check_immutable_artifacts",
+          "callee": "len",
+          "lineNumber": 285
+        },
+        {
+          "caller": "check_immutable_artifacts",
+          "callee": "CheckResult",
+          "lineNumber": 294
+        },
+        {
+          "caller": "check_immutable_artifacts",
+          "callee": "len",
+          "lineNumber": 298
+        },
+        {
+          "caller": "check_immutable_artifacts",
+          "callee": "CheckResult",
+          "lineNumber": 302
+        },
+        {
+          "caller": "check_immutable_artifacts",
+          "callee": "len",
+          "lineNumber": 305
+        },
+        {
+          "caller": "_scan_policy_group",
+          "callee": "re.compile",
+          "lineNumber": 310
+        },
+        {
+          "caller": "_scan_policy_group",
+          "callee": "group.get",
+          "lineNumber": 310
+        },
+        {
+          "caller": "_scan_policy_group",
+          "callee": "CheckResult",
+          "lineNumber": 312
+        },
+        {
+          "caller": "_scan_policy_group",
+          "callee": "_iter_paths",
+          "lineNumber": 313
+        },
+        {
+          "caller": "_scan_policy_group",
+          "callee": "group.get",
+          "lineNumber": 313
+        },
+        {
+          "caller": "_scan_policy_group",
+          "callee": "group.get",
+          "lineNumber": 313
+        },
+        {
+          "caller": "_scan_policy_group",
+          "callee": "hits.extend",
+          "lineNumber": 316
+        },
+        {
+          "caller": "_scan_policy_group",
+          "callee": "_line_matches",
+          "lineNumber": 316
+        },
+        {
+          "caller": "_scan_policy_group",
+          "callee": "CheckResult",
+          "lineNumber": 318
+        },
+        {
+          "caller": "_scan_policy_group",
+          "callee": "len",
+          "lineNumber": 318
+        },
+        {
+          "caller": "_scan_policy_group",
+          "callee": "CheckResult",
+          "lineNumber": 319
+        },
+        {
+          "caller": "_scan_policy_group",
+          "callee": "len",
+          "lineNumber": 319
+        },
+        {
+          "caller": "check_report_freshness",
+          "callee": "_changed_files",
+          "lineNumber": 323
+        },
+        {
+          "caller": "check_report_freshness",
+          "callee": "policy.get",
+          "lineNumber": 324
+        },
+        {
+          "caller": "check_report_freshness",
+          "callee": "_match_any",
+          "lineNumber": 327
+        },
+        {
+          "caller": "check_report_freshness",
+          "callee": "report_policy.get",
+          "lineNumber": 327
+        },
+        {
+          "caller": "check_report_freshness",
+          "callee": "CheckResult",
+          "lineNumber": 330
+        },
+        {
+          "caller": "check_report_freshness",
+          "callee": "report_policy.get",
+          "lineNumber": 331
+        },
+        {
+          "caller": "check_report_freshness",
+          "callee": "_match_any",
+          "lineNumber": 332
+        },
+        {
+          "caller": "check_report_freshness",
+          "callee": "CheckResult",
+          "lineNumber": 334
+        },
+        {
+          "caller": "check_report_freshness",
+          "callee": "CheckResult",
+          "lineNumber": 340
+        },
+        {
+          "caller": "check_git_diff_clean",
+          "callee": "_run",
+          "lineNumber": 349
+        },
+        {
+          "caller": "check_git_diff_clean",
+          "callee": "CheckResult",
+          "lineNumber": 351
+        },
+        {
+          "caller": "check_git_diff_clean",
+          "callee": "result.stdout.splitlines",
+          "lineNumber": 351
+        },
+        {
+          "caller": "check_git_diff_clean",
+          "callee": "CheckResult",
+          "lineNumber": 352
+        },
+        {
+          "caller": "check_pytest",
+          "callee": "_run",
+          "lineNumber": 357
+        },
+        {
+          "caller": "check_pytest",
+          "callee": "(result.stdout + result.stderr).splitlines",
+          "lineNumber": 358
+        },
+        {
+          "caller": "check_pytest",
+          "callee": "CheckResult",
+          "lineNumber": 360
+        },
+        {
+          "caller": "check_pytest",
+          "callee": "' '.join",
+          "lineNumber": 360
+        },
+        {
+          "caller": "check_pytest",
+          "callee": "CheckResult",
+          "lineNumber": 361
+        },
+        {
+          "caller": "check_pytest",
+          "callee": "' '.join",
+          "lineNumber": 361
+        },
+        {
+          "caller": "run_agent_checks",
+          "callee": "load_policy",
+          "lineNumber": 374
+        },
+        {
+          "caller": "run_agent_checks",
+          "callee": "check_agent_docs_sync",
+          "lineNumber": 376
+        },
+        {
+          "caller": "run_agent_checks",
+          "callee": "check_project_log_updated",
+          "lineNumber": 377
+        },
+        {
+          "caller": "run_agent_checks",
+          "callee": "check_immutable_artifacts",
+          "lineNumber": 378
+        },
+        {
+          "caller": "run_agent_checks",
+          "callee": "_scan_policy_group",
+          "lineNumber": 379
+        },
+        {
+          "caller": "run_agent_checks",
+          "callee": "policy.get",
+          "lineNumber": 379
+        },
+        {
+          "caller": "run_agent_checks",
+          "callee": "_scan_policy_group",
+          "lineNumber": 380
+        },
+        {
+          "caller": "run_agent_checks",
+          "callee": "policy.get",
+          "lineNumber": 380
+        },
+        {
+          "caller": "run_agent_checks",
+          "callee": "check_report_freshness",
+          "lineNumber": 381
+        },
+        {
+          "caller": "run_agent_checks",
+          "callee": "results.append",
+          "lineNumber": 384
+        },
+        {
+          "caller": "run_agent_checks",
+          "callee": "check_git_diff_clean",
+          "lineNumber": 384
+        },
+        {
+          "caller": "run_agent_checks",
+          "callee": "results.append",
+          "lineNumber": 386
+        },
+        {
+          "caller": "run_agent_checks",
+          "callee": "check_pytest",
+          "lineNumber": 386
+        },
+        {
+          "caller": "_git_status",
+          "callee": "_run([\"git\", \"status\", \"-sb\"], repo_root).stdout.splitlines",
+          "lineNumber": 391
+        },
+        {
+          "caller": "_git_status",
+          "callee": "_run",
+          "lineNumber": 391
+        },
+        {
+          "caller": "_git_status",
+          "callee": "_run",
+          "lineNumber": 392
+        },
+        {
+          "caller": "_git_status",
+          "callee": "_changed_files",
+          "lineNumber": 395
+        },
+        {
+          "caller": "_git_status",
+          "callee": "_tracked_changed_files",
+          "lineNumber": 396
+        },
+        {
+          "caller": "_git_status",
+          "callee": "ahead.stdout.splitlines",
+          "lineNumber": 397
+        },
+        {
+          "caller": "_git_status",
+          "callee": "line.strip",
+          "lineNumber": 397
+        },
+        {
+          "caller": "_project_log_status",
+          "callee": "path.read_text",
+          "lineNumber": 403
+        },
+        {
+          "caller": "_project_log_status",
+          "callee": "path.exists",
+          "lineNumber": 403
+        },
+        {
+          "caller": "_project_log_status",
+          "callee": "text.splitlines",
+          "lineNumber": 406
+        },
+        {
+          "caller": "_project_log_status",
+          "callee": "line.startswith",
+          "lineNumber": 407
+        },
+        {
+          "caller": "_project_log_status",
+          "callee": "line.split(\"|\")[2].strip",
+          "lineNumber": 408
+        },
+        {
+          "caller": "_project_log_status",
+          "callee": "line.split",
+          "lineNumber": 408
+        },
+        {
+          "caller": "_project_log_status",
+          "callee": "line.startswith",
+          "lineNumber": 409
+        },
+        {
+          "caller": "_project_log_status",
+          "callee": "line.split(\"|\")[2].strip",
+          "lineNumber": 410
+        },
+        {
+          "caller": "_project_log_status",
+          "callee": "line.split",
+          "lineNumber": 410
+        },
+        {
+          "caller": "_project_log_status",
+          "callee": "text.splitlines",
+          "lineNumber": 412
+        },
+        {
+          "caller": "_project_log_status",
+          "callee": "line.startswith",
+          "lineNumber": 413
+        },
+        {
+          "caller": "_project_log_status",
+          "callee": "open_actions.append",
+          "lineNumber": 414
+        },
+        {
+          "caller": "_project_log_status",
+          "callee": "re.sub(r\"\\s+\", \" \", line).strip",
+          "lineNumber": 414
+        },
+        {
+          "caller": "_project_log_status",
+          "callee": "re.sub",
+          "lineNumber": 414
+        },
+        {
+          "caller": "_file_info",
+          "callee": "path.exists",
+          "lineNumber": 424
+        },
+        {
+          "caller": "_file_info",
+          "callee": "_repo_rel",
+          "lineNumber": 425
+        },
+        {
+          "caller": "_file_info",
+          "callee": "path.stat",
+          "lineNumber": 426
+        },
+        {
+          "caller": "_file_info",
+          "callee": "_repo_rel",
+          "lineNumber": 428
+        },
+        {
+          "caller": "_file_info",
+          "callee": "datetime.fromtimestamp(stat.st_mtime, LOCAL_TZ).strftime",
+          "lineNumber": 431
+        },
+        {
+          "caller": "_file_info",
+          "callee": "datetime.fromtimestamp",
+          "lineNumber": 431
+        },
+        {
+          "caller": "_judge_sidecar_status",
+          "callee": "sorted",
+          "lineNumber": 436
+        },
+        {
+          "caller": "_judge_sidecar_status",
+          "callee": "repo_root.glob",
+          "lineNumber": 436
+        },
+        {
+          "caller": "_judge_sidecar_status",
+          "callee": "sorted",
+          "lineNumber": 437
+        },
+        {
+          "caller": "_judge_sidecar_status",
+          "callee": "repo_root.glob",
+          "lineNumber": 437
+        },
+        {
+          "caller": "_judge_sidecar_status",
+          "callee": "len",
+          "lineNumber": 439
+        },
+        {
+          "caller": "_judge_sidecar_status",
+          "callee": "len",
+          "lineNumber": 440
+        },
+        {
+          "caller": "_judge_sidecar_status",
+          "callee": "_repo_rel",
+          "lineNumber": 441
+        },
+        {
+          "caller": "_analysis_status",
+          "callee": "_file_info",
+          "lineNumber": 453
+        },
+        {
+          "caller": "_heading",
+          "callee": "text.splitlines",
+          "lineNumber": 457
+        },
+        {
+          "caller": "_heading",
+          "callee": "line.startswith",
+          "lineNumber": 458
+        },
+        {
+          "caller": "_heading",
+          "callee": "line[2:].strip",
+          "lineNumber": 459
+        },
+        {
+          "caller": "_section_excerpt",
+          "callee": "text.splitlines",
+          "lineNumber": 464
+        },
+        {
+          "caller": "_section_excerpt",
+          "callee": "enumerate",
+          "lineNumber": 465
+        },
+        {
+          "caller": "_section_excerpt",
+          "callee": "line.strip().lower",
+          "lineNumber": 466
+        },
+        {
+          "caller": "_section_excerpt",
+          "callee": "line.strip",
+          "lineNumber": 466
+        },
+        {
+          "caller": "_section_excerpt",
+          "callee": "heading.lower",
+          "lineNumber": 466
+        },
+        {
+          "caller": "_section_excerpt",
+          "callee": "item.startswith",
+          "lineNumber": 469
+        },
+        {
+          "caller": "_section_excerpt",
+          "callee": "item.strip",
+          "lineNumber": 471
+        },
+        {
+          "caller": "_section_excerpt",
+          "callee": "body.append",
+          "lineNumber": 472
+        },
+        {
+          "caller": "_section_excerpt",
+          "callee": "item.rstrip",
+          "lineNumber": 472
+        },
+        {
+          "caller": "_section_excerpt",
+          "callee": "\"\\n\".join(body).strip",
+          "lineNumber": 473
+        },
+        {
+          "caller": "_section_excerpt",
+          "callee": "\"\\n\".join",
+          "lineNumber": 473
+        },
+        {
+          "caller": "_task_packets",
+          "callee": "sorted",
+          "lineNumber": 479
+        },
+        {
+          "caller": "_task_packets",
+          "callee": "(repo_root / \"docs/agent_tasks\").glob",
+          "lineNumber": 479
+        },
+        {
+          "caller": "_task_packets",
+          "callee": "path.read_text",
+          "lineNumber": 480
+        },
+        {
+          "caller": "_task_packets",
+          "callee": "key.split",
+          "lineNumber": 483
+        },
+        {
+          "caller": "_task_packets",
+          "callee": "aliases.append",
+          "lineNumber": 485
+        },
+        {
+          "caller": "_task_packets",
+          "callee": "packets.append",
+          "lineNumber": 486
+        },
+        {
+          "caller": "_task_packets",
+          "callee": "sorted",
+          "lineNumber": 488
+        },
+        {
+          "caller": "_task_packets",
+          "callee": "set",
+          "lineNumber": 488
+        },
+        {
+          "caller": "_task_packets",
+          "callee": "_repo_rel",
+          "lineNumber": 489
+        },
+        {
+          "caller": "_task_packets",
+          "callee": "_heading",
+          "lineNumber": 490
+        },
+        {
+          "caller": "_task_packets",
+          "callee": "_section_excerpt",
+          "lineNumber": 491
+        },
+        {
+          "caller": "_agent_profiles",
+          "callee": "sorted",
+          "lineNumber": 499
+        },
+        {
+          "caller": "_agent_profiles",
+          "callee": "(repo_root / \".codex/agents\").glob",
+          "lineNumber": 499
+        },
+        {
+          "caller": "_agent_profiles",
+          "callee": "tomllib.loads",
+          "lineNumber": 501
+        },
+        {
+          "caller": "_agent_profiles",
+          "callee": "path.read_text",
+          "lineNumber": 501
+        },
+        {
+          "caller": "_agent_profiles",
+          "callee": "str",
+          "lineNumber": 504
+        },
+        {
+          "caller": "_agent_profiles",
+          "callee": "data.get",
+          "lineNumber": 504
+        },
+        {
+          "caller": "_agent_profiles",
+          "callee": "profiles.append",
+          "lineNumber": 505
+        },
+        {
+          "caller": "_agent_profiles",
+          "callee": "sorted",
+          "lineNumber": 507
+        },
+        {
+          "caller": "_agent_profiles",
+          "callee": "_repo_rel",
+          "lineNumber": 508
+        },
+        {
+          "caller": "_agent_profiles",
+          "callee": "str",
+          "lineNumber": 509
+        },
+        {
+          "caller": "_agent_profiles",
+          "callee": "data.get",
+          "lineNumber": 509
+        },
+        {
+          "caller": "_agent_profiles",
+          "callee": "data.get",
+          "lineNumber": 510
+        },
+        {
+          "caller": "_select_named",
+          "callee": "query.lower",
+          "lineNumber": 518
+        },
+        {
+          "caller": "_select_named",
+          "callee": "str(alias).lower",
+          "lineNumber": 520
+        },
+        {
+          "caller": "_select_named",
+          "callee": "str",
+          "lineNumber": 520
+        },
+        {
+          "caller": "_select_named",
+          "callee": "item.get",
+          "lineNumber": 520
+        },
+        {
+          "caller": "_select_named",
+          "callee": "\" \".join([str(item.get(\"key\", \"\")), str(item.get(\"name\", \"\")), str(item.get(\"title\", \"\"))]).lower",
+          "lineNumber": 524
+        },
+        {
+          "caller": "_select_named",
+          "callee": "\" \".join",
+          "lineNumber": 524
+        },
+        {
+          "caller": "_select_named",
+          "callee": "str",
+          "lineNumber": 524
+        },
+        {
+          "caller": "_select_named",
+          "callee": "item.get",
+          "lineNumber": 524
+        },
+        {
+          "caller": "_select_named",
+          "callee": "str",
+          "lineNumber": 524
+        },
+        {
+          "caller": "_select_named",
+          "callee": "item.get",
+          "lineNumber": 524
+        },
+        {
+          "caller": "_select_named",
+          "callee": "str",
+          "lineNumber": 524
+        },
+        {
+          "caller": "_select_named",
+          "callee": "item.get",
+          "lineNumber": 524
+        },
+        {
+          "caller": "build_agent_start_packet",
+          "callee": "load_policy",
+          "lineNumber": 539
+        },
+        {
+          "caller": "build_agent_start_packet",
+          "callee": "_task_packets",
+          "lineNumber": 540
+        },
+        {
+          "caller": "build_agent_start_packet",
+          "callee": "_agent_profiles",
+          "lineNumber": 541
+        },
+        {
+          "caller": "build_agent_start_packet",
+          "callee": "_select_named",
+          "lineNumber": 542
+        },
+        {
+          "caller": "build_agent_start_packet",
+          "callee": "_select_named",
+          "lineNumber": 543
+        },
+        {
+          "caller": "build_agent_start_packet",
+          "callee": "build_agent_status",
+          "lineNumber": 544
+        },
+        {
+          "caller": "build_agent_start_packet",
+          "callee": "str",
+          "lineNumber": 547
+        },
+        {
+          "caller": "format_agent_start_packet",
+          "callee": "packet.get",
+          "lineNumber": 560
+        },
+        {
+          "caller": "format_agent_start_packet",
+          "callee": "packet.get",
+          "lineNumber": 561
+        },
+        {
+          "caller": "format_agent_start_packet",
+          "callee": "lines.append",
+          "lineNumber": 576
+        },
+        {
+          "caller": "format_agent_start_packet",
+          "callee": "lines.append",
+          "lineNumber": 578
+        },
+        {
+          "caller": "format_agent_start_packet",
+          "callee": "lines.extend",
+          "lineNumber": 579
+        },
+        {
+          "caller": "format_agent_start_packet",
+          "callee": "lines.extend",
+          "lineNumber": 581
+        },
+        {
+          "caller": "format_agent_start_packet",
+          "callee": "lines.extend",
+          "lineNumber": 587
+        },
+        {
+          "caller": "format_agent_start_packet",
+          "callee": "lines.append",
+          "lineNumber": 592
+        },
+        {
+          "caller": "format_agent_start_packet",
+          "callee": "lines.extend",
+          "lineNumber": 595
+        },
+        {
+          "caller": "format_agent_start_packet",
+          "callee": "task[\"content\"].strip",
+          "lineNumber": 595
+        },
+        {
+          "caller": "format_agent_start_packet",
+          "callee": "lines.extend",
+          "lineNumber": 597
+        },
+        {
+          "caller": "format_agent_start_packet",
+          "callee": "lines.append",
+          "lineNumber": 600
+        },
+        {
+          "caller": "format_agent_start_packet",
+          "callee": "lines.extend",
+          "lineNumber": 603
+        },
+        {
+          "caller": "format_agent_start_packet",
+          "callee": "lines.extend",
+          "lineNumber": 611
+        },
+        {
+          "caller": "format_agent_start_packet",
+          "callee": "lines.append",
+          "lineNumber": 613
+        },
+        {
+          "caller": "format_agent_start_packet",
+          "callee": "lines.extend",
+          "lineNumber": 615
+        },
+        {
+          "caller": "format_agent_start_packet",
+          "callee": "\"\\n\".join",
+          "lineNumber": 623
+        },
+        {
+          "caller": "build_agent_status",
+          "callee": "load_policy",
+          "lineNumber": 644
+        },
+        {
+          "caller": "build_agent_status",
+          "callee": "_now_local().strftime",
+          "lineNumber": 646
+        },
+        {
+          "caller": "build_agent_status",
+          "callee": "_now_local",
+          "lineNumber": 646
+        },
+        {
+          "caller": "build_agent_status",
+          "callee": "str",
+          "lineNumber": 647
+        },
+        {
+          "caller": "build_agent_status",
+          "callee": "_git_status",
+          "lineNumber": 648
+        },
+        {
+          "caller": "build_agent_status",
+          "callee": "_project_log_status",
+          "lineNumber": 649
+        },
+        {
+          "caller": "build_agent_status",
+          "callee": "_file_info",
+          "lineNumber": 650
+        },
+        {
+          "caller": "build_agent_status",
+          "callee": "max",
+          "lineNumber": 651
+        },
+        {
+          "caller": "build_agent_status",
+          "callee": "repo_root.glob",
+          "lineNumber": 652
+        },
+        {
+          "caller": "build_agent_status",
+          "callee": "_file_info",
+          "lineNumber": 657
+        },
+        {
+          "caller": "build_agent_status",
+          "callee": "_file_info",
+          "lineNumber": 658
+        },
+        {
+          "caller": "build_agent_status",
+          "callee": "_file_info",
+          "lineNumber": 659
+        },
+        {
+          "caller": "build_agent_status",
+          "callee": "policy.get",
+          "lineNumber": 660
+        },
+        {
+          "caller": "build_agent_status",
+          "callee": "_judge_sidecar_status",
+          "lineNumber": 663
+        },
+        {
+          "caller": "build_agent_status",
+          "callee": "_analysis_status",
+          "lineNumber": 664
+        },
+        {
+          "caller": "build_agent_status",
+          "callee": "_suggest_next_action",
+          "lineNumber": 666
+        },
+        {
+          "caller": "format_agent_status",
+          "callee": "len",
+          "lineNumber": 678
+        },
+        {
+          "caller": "format_agent_status",
+          "callee": "len",
+          "lineNumber": 680
+        },
+        {
+          "caller": "format_agent_status",
+          "callee": "status['report'].get",
+          "lineNumber": 681
+        },
+        {
+          "caller": "format_agent_status",
+          "callee": "status['report'].get",
+          "lineNumber": 681
+        },
+        {
+          "caller": "format_agent_status",
+          "callee": "status['immutable_manifest'].get",
+          "lineNumber": 683
+        },
+        {
+          "caller": "format_agent_status",
+          "callee": "lines.append",
+          "lineNumber": 687
+        },
+        {
+          "caller": "format_agent_status",
+          "callee": "lines.append",
+          "lineNumber": 688
+        },
+        {
+          "caller": "format_agent_status",
+          "callee": "lines.extend",
+          "lineNumber": 689
+        },
+        {
+          "caller": "format_agent_status",
+          "callee": "lines.append",
+          "lineNumber": 691
+        },
+        {
+          "caller": "format_agent_status",
+          "callee": "lines.append",
+          "lineNumber": 692
+        },
+        {
+          "caller": "format_agent_status",
+          "callee": "lines.extend",
+          "lineNumber": 693
+        },
+        {
+          "caller": "format_agent_status",
+          "callee": "\"\\n\".join",
+          "lineNumber": 694
+        },
+        {
+          "caller": "_check_summary_lines",
+          "callee": "lines.append",
+          "lineNumber": 701
+        },
+        {
+          "caller": "_check_summary_lines",
+          "callee": "lines.extend",
+          "lineNumber": 702
+        },
+        {
+          "caller": "render_handoff",
+          "callee": "status['report'].get",
+          "lineNumber": 735
+        },
+        {
+          "caller": "render_handoff",
+          "callee": "status['report'].get",
+          "lineNumber": 735
+        },
+        {
+          "caller": "render_handoff",
+          "callee": "status['immutable_manifest'].get",
+          "lineNumber": 736
+        },
+        {
+          "caller": "render_handoff",
+          "callee": "status['immutable_manifest'].get",
+          "lineNumber": 736
+        },
+        {
+          "caller": "render_handoff",
+          "callee": "lines.append",
+          "lineNumber": 751
+        },
+        {
+          "caller": "render_handoff",
+          "callee": "lines.extend",
+          "lineNumber": 753
+        },
+        {
+          "caller": "render_handoff",
+          "callee": "_check_summary_lines",
+          "lineNumber": 753
+        },
+        {
+          "caller": "render_handoff",
+          "callee": "lines.extend",
+          "lineNumber": 754
+        },
+        {
+          "caller": "render_handoff",
+          "callee": "\"\\n\".join",
+          "lineNumber": 776
+        },
+        {
+          "caller": "render_agent_dashboard",
+          "callee": "len",
+          "lineNumber": 790
+        },
+        {
+          "caller": "render_agent_dashboard",
+          "callee": "status['report'].get",
+          "lineNumber": 792
+        },
+        {
+          "caller": "render_agent_dashboard",
+          "callee": "status['report'].get",
+          "lineNumber": 792
+        },
+        {
+          "caller": "render_agent_dashboard",
+          "callee": "status['handoff'].get",
+          "lineNumber": 793
+        },
+        {
+          "caller": "render_agent_dashboard",
+          "callee": "status['immutable_manifest'].get",
+          "lineNumber": 794
+        },
+        {
+          "caller": "render_agent_dashboard",
+          "callee": "lines.extend",
+          "lineNumber": 805
+        },
+        {
+          "caller": "render_agent_dashboard",
+          "callee": "_ascii_safe",
+          "lineNumber": 805
+        },
+        {
+          "caller": "render_agent_dashboard",
+          "callee": "lines.extend",
+          "lineNumber": 806
+        },
+        {
+          "caller": "render_agent_dashboard",
+          "callee": "artifact.get",
+          "lineNumber": 808
+        },
+        {
+          "caller": "render_agent_dashboard",
+          "callee": "lines.append",
+          "lineNumber": 809
+        },
+        {
+          "caller": "render_agent_dashboard",
+          "callee": "lines.extend",
+          "lineNumber": 810
+        },
+        {
+          "caller": "render_agent_dashboard",
+          "callee": "lines.append",
+          "lineNumber": 812
+        },
+        {
+          "caller": "render_agent_dashboard",
+          "callee": "lines.extend",
+          "lineNumber": 814
+        },
+        {
+          "caller": "render_agent_dashboard",
+          "callee": "_check_summary_lines",
+          "lineNumber": 814
+        },
+        {
+          "caller": "render_agent_dashboard",
+          "callee": "lines.extend",
+          "lineNumber": 815
+        },
+        {
+          "caller": "render_agent_dashboard",
+          "callee": "\"\\n\".join",
+          "lineNumber": 816
+        },
+        {
+          "caller": "render_tc1_checklist",
+          "callee": "\"\\n\".join",
+          "lineNumber": 822
+        },
+        {
+          "caller": "dump_status_json",
+          "callee": "json.dumps",
+          "lineNumber": 877
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 44,
+        "functionCount": 43,
+        "classCount": 1
+      }
+    },
+    {
+      "path": "scripts/agent_check.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 71,
+      "nonEmptyLines": 56,
+      "functions": [
+        {
+          "name": "_print_results",
+          "startLine": 21,
+          "endLine": 26,
+          "params": [
+            "results"
+          ]
+        },
+        {
+          "name": "main",
+          "startLine": 29,
+          "endLine": 67,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "_print_results",
+          "line": 21,
+          "isDefault": false
+        },
+        {
+          "name": "main",
+          "line": 29,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "_print_results",
+          "callee": "print",
+          "lineNumber": 24
+        },
+        {
+          "caller": "_print_results",
+          "callee": "print",
+          "lineNumber": 26
+        },
+        {
+          "caller": "main",
+          "callee": "argparse.ArgumentParser",
+          "lineNumber": 30
+        },
+        {
+          "caller": "main",
+          "callee": "parser.add_argument",
+          "lineNumber": 31
+        },
+        {
+          "caller": "main",
+          "callee": "str",
+          "lineNumber": 31
+        },
+        {
+          "caller": "main",
+          "callee": "parser.add_argument",
+          "lineNumber": 32
+        },
+        {
+          "caller": "main",
+          "callee": "parser.add_argument",
+          "lineNumber": 33
+        },
+        {
+          "caller": "main",
+          "callee": "parser.add_argument",
+          "lineNumber": 34
+        },
+        {
+          "caller": "main",
+          "callee": "parser.add_argument",
+          "lineNumber": 35
+        },
+        {
+          "caller": "main",
+          "callee": "parser.add_argument",
+          "lineNumber": 40
+        },
+        {
+          "caller": "main",
+          "callee": "parser.parse_args",
+          "lineNumber": 45
+        },
+        {
+          "caller": "main",
+          "callee": "Path(args.repo_root).resolve",
+          "lineNumber": 47
+        },
+        {
+          "caller": "main",
+          "callee": "Path",
+          "lineNumber": 47
+        },
+        {
+          "caller": "main",
+          "callee": "load_policy",
+          "lineNumber": 48
+        },
+        {
+          "caller": "main",
+          "callee": "Path",
+          "lineNumber": 48
+        },
+        {
+          "caller": "main",
+          "callee": "write_immutable_manifest",
+          "lineNumber": 51
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 52
+        },
+        {
+          "caller": "main",
+          "callee": "run_agent_checks",
+          "lineNumber": 59
+        },
+        {
+          "caller": "main",
+          "callee": "_print_results",
+          "lineNumber": 66
+        },
+        {
+          "caller": "main",
+          "callee": "all",
+          "lineNumber": 67
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 2,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "scripts/generate_agent_dashboard.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 37,
+      "nonEmptyLines": 28,
+      "functions": [
+        {
+          "name": "main",
+          "startLine": 16,
+          "endLine": 33,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "main",
+          "line": 16,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "main",
+          "callee": "argparse.ArgumentParser",
+          "lineNumber": 17
+        },
+        {
+          "caller": "main",
+          "callee": "parser.add_argument",
+          "lineNumber": 18
+        },
+        {
+          "caller": "main",
+          "callee": "str",
+          "lineNumber": 18
+        },
+        {
+          "caller": "main",
+          "callee": "parser.add_argument",
+          "lineNumber": 19
+        },
+        {
+          "caller": "main",
+          "callee": "parser.add_argument",
+          "lineNumber": 20
+        },
+        {
+          "caller": "main",
+          "callee": "parser.add_argument",
+          "lineNumber": 21
+        },
+        {
+          "caller": "main",
+          "callee": "parser.parse_args",
+          "lineNumber": 22
+        },
+        {
+          "caller": "main",
+          "callee": "Path(args.repo_root).resolve",
+          "lineNumber": 24
+        },
+        {
+          "caller": "main",
+          "callee": "Path",
+          "lineNumber": 24
+        },
+        {
+          "caller": "main",
+          "callee": "load_policy",
+          "lineNumber": 25
+        },
+        {
+          "caller": "main",
+          "callee": "build_agent_status",
+          "lineNumber": 26
+        },
+        {
+          "caller": "main",
+          "callee": "run_agent_checks",
+          "lineNumber": 29
+        },
+        {
+          "caller": "main",
+          "callee": "output.write_text",
+          "lineNumber": 31
+        },
+        {
+          "caller": "main",
+          "callee": "render_agent_dashboard",
+          "lineNumber": 31
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 32
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "scripts/generate_handoff.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 38,
+      "nonEmptyLines": 28,
+      "functions": [
+        {
+          "name": "main",
+          "startLine": 16,
+          "endLine": 34,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "main",
+          "line": 16,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "main",
+          "callee": "argparse.ArgumentParser",
+          "lineNumber": 17
+        },
+        {
+          "caller": "main",
+          "callee": "parser.add_argument",
+          "lineNumber": 18
+        },
+        {
+          "caller": "main",
+          "callee": "str",
+          "lineNumber": 18
+        },
+        {
+          "caller": "main",
+          "callee": "parser.add_argument",
+          "lineNumber": 19
+        },
+        {
+          "caller": "main",
+          "callee": "parser.add_argument",
+          "lineNumber": 20
+        },
+        {
+          "caller": "main",
+          "callee": "parser.add_argument",
+          "lineNumber": 21
+        },
+        {
+          "caller": "main",
+          "callee": "parser.parse_args",
+          "lineNumber": 22
+        },
+        {
+          "caller": "main",
+          "callee": "Path(args.repo_root).resolve",
+          "lineNumber": 24
+        },
+        {
+          "caller": "main",
+          "callee": "Path",
+          "lineNumber": 24
+        },
+        {
+          "caller": "main",
+          "callee": "load_policy",
+          "lineNumber": 25
+        },
+        {
+          "caller": "main",
+          "callee": "build_agent_status",
+          "lineNumber": 26
+        },
+        {
+          "caller": "main",
+          "callee": "run_agent_checks",
+          "lineNumber": 29
+        },
+        {
+          "caller": "main",
+          "callee": "output.write_text",
+          "lineNumber": 32
+        },
+        {
+          "caller": "main",
+          "callee": "render_handoff",
+          "lineNumber": 32
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 33
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "scripts/generate_tc1_checklist.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 31,
+      "nonEmptyLines": 22,
+      "functions": [
+        {
+          "name": "main",
+          "startLine": 16,
+          "endLine": 27,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "main",
+          "line": 16,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "main",
+          "callee": "argparse.ArgumentParser",
+          "lineNumber": 17
+        },
+        {
+          "caller": "main",
+          "callee": "parser.add_argument",
+          "lineNumber": 18
+        },
+        {
+          "caller": "main",
+          "callee": "str",
+          "lineNumber": 18
+        },
+        {
+          "caller": "main",
+          "callee": "parser.add_argument",
+          "lineNumber": 19
+        },
+        {
+          "caller": "main",
+          "callee": "parser.parse_args",
+          "lineNumber": 20
+        },
+        {
+          "caller": "main",
+          "callee": "Path(args.repo_root).resolve",
+          "lineNumber": 22
+        },
+        {
+          "caller": "main",
+          "callee": "Path",
+          "lineNumber": 22
+        },
+        {
+          "caller": "main",
+          "callee": "build_agent_status",
+          "lineNumber": 23
+        },
+        {
+          "caller": "main",
+          "callee": "load_policy",
+          "lineNumber": 23
+        },
+        {
+          "caller": "main",
+          "callee": "output.write_text",
+          "lineNumber": 25
+        },
+        {
+          "caller": "main",
+          "callee": "render_tc1_checklist",
+          "lineNumber": 25
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 26
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "tests/test_agent_harness.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 338,
+      "nonEmptyLines": 261,
+      "functions": [
+        {
+          "name": "_run",
+          "startLine": 32,
+          "endLine": 33,
+          "params": [
+            "cmd",
+            "cwd"
+          ]
+        },
+        {
+          "name": "_init_harness_repo",
+          "startLine": 36,
+          "endLine": 121,
+          "params": [
+            "tmp_path"
+          ]
+        },
+        {
+          "name": "_result_by_name",
+          "startLine": 124,
+          "endLine": 125,
+          "params": [
+            "results",
+            "name"
+          ]
+        },
+        {
+          "name": "test_agent_harness_passes_on_clean_fixture",
+          "startLine": 128,
+          "endLine": 133,
+          "params": [
+            "tmp_path"
+          ]
+        },
+        {
+          "name": "test_agent_harness_catches_agent_doc_drift",
+          "startLine": 136,
+          "endLine": 142,
+          "params": [
+            "tmp_path"
+          ]
+        },
+        {
+          "name": "test_agent_harness_requires_project_log_when_repo_changes",
+          "startLine": 145,
+          "endLine": 151,
+          "params": [
+            "tmp_path"
+          ]
+        },
+        {
+          "name": "test_agent_harness_catches_stale_text",
+          "startLine": 154,
+          "endLine": 161,
+          "params": [
+            "tmp_path"
+          ]
+        },
+        {
+          "name": "test_real_policy_stale_kappa_guards_fire_and_exempt",
+          "startLine": 164,
+          "endLine": 194,
+          "params": [
+            "tmp_path"
+          ]
+        },
+        {
+          "name": "test_real_policy_redaction_covers_committed_sidecars",
+          "startLine": 197,
+          "endLine": 219,
+          "params": [
+            "tmp_path"
+          ]
+        },
+        {
+          "name": "test_agent_harness_catches_redaction_leak",
+          "startLine": 222,
+          "endLine": 229,
+          "params": [
+            "tmp_path"
+          ]
+        },
+        {
+          "name": "test_agent_harness_catches_immutable_artifact_mutation",
+          "startLine": 232,
+          "endLine": 238,
+          "params": [
+            "tmp_path"
+          ]
+        },
+        {
+          "name": "test_agent_harness_immutable_tolerates_absent_artifacts",
+          "startLine": 241,
+          "endLine": 259,
+          "params": [
+            "tmp_path"
+          ]
+        },
+        {
+          "name": "test_agent_harness_immutable_fails_on_partial_deletion",
+          "startLine": 262,
+          "endLine": 275,
+          "params": [
+            "tmp_path"
+          ]
+        },
+        {
+          "name": "test_agent_status_and_renderers_are_redaction_safe",
+          "startLine": 278,
+          "endLine": 288,
+          "params": [
+            "tmp_path"
+          ]
+        },
+        {
+          "name": "test_agent_start_packet_selects_task_and_subagent",
+          "startLine": 291,
+          "endLine": 300,
+          "params": [
+            "tmp_path"
+          ]
+        },
+        {
+          "name": "test_report_freshness_fails_on_source_edit_without_docx",
+          "startLine": 303,
+          "endLine": 324,
+          "params": [
+            "tmp_path",
+            "monkeypatch"
+          ]
+        },
+        {
+          "name": "test_real_policy_report_source_is_not_a_freshness_satisfier",
+          "startLine": 327,
+          "endLine": 338,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "_run",
+          "line": 32,
+          "isDefault": false
+        },
+        {
+          "name": "_init_harness_repo",
+          "line": 36,
+          "isDefault": false
+        },
+        {
+          "name": "_result_by_name",
+          "line": 124,
+          "isDefault": false
+        },
+        {
+          "name": "test_agent_harness_passes_on_clean_fixture",
+          "line": 128,
+          "isDefault": false
+        },
+        {
+          "name": "test_agent_harness_catches_agent_doc_drift",
+          "line": 136,
+          "isDefault": false
+        },
+        {
+          "name": "test_agent_harness_requires_project_log_when_repo_changes",
+          "line": 145,
+          "isDefault": false
+        },
+        {
+          "name": "test_agent_harness_catches_stale_text",
+          "line": 154,
+          "isDefault": false
+        },
+        {
+          "name": "test_real_policy_stale_kappa_guards_fire_and_exempt",
+          "line": 164,
+          "isDefault": false
+        },
+        {
+          "name": "test_real_policy_redaction_covers_committed_sidecars",
+          "line": 197,
+          "isDefault": false
+        },
+        {
+          "name": "test_agent_harness_catches_redaction_leak",
+          "line": 222,
+          "isDefault": false
+        },
+        {
+          "name": "test_agent_harness_catches_immutable_artifact_mutation",
+          "line": 232,
+          "isDefault": false
+        },
+        {
+          "name": "test_agent_harness_immutable_tolerates_absent_artifacts",
+          "line": 241,
+          "isDefault": false
+        },
+        {
+          "name": "test_agent_harness_immutable_fails_on_partial_deletion",
+          "line": 262,
+          "isDefault": false
+        },
+        {
+          "name": "test_agent_status_and_renderers_are_redaction_safe",
+          "line": 278,
+          "isDefault": false
+        },
+        {
+          "name": "test_agent_start_packet_selects_task_and_subagent",
+          "line": 291,
+          "isDefault": false
+        },
+        {
+          "name": "test_report_freshness_fails_on_source_edit_without_docx",
+          "line": 303,
+          "isDefault": false
+        },
+        {
+          "name": "test_real_policy_report_source_is_not_a_freshness_satisfier",
+          "line": 327,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "_run",
+          "callee": "subprocess.run",
+          "lineNumber": 33
+        },
+        {
+          "caller": "_init_harness_repo",
+          "callee": "repo.mkdir",
+          "lineNumber": 38
+        },
+        {
+          "caller": "_init_harness_repo",
+          "callee": "(repo / \"docs\").mkdir",
+          "lineNumber": 39
+        },
+        {
+          "caller": "_init_harness_repo",
+          "callee": "(repo / \"docs/agent_tasks\").mkdir",
+          "lineNumber": 40
+        },
+        {
+          "caller": "_init_harness_repo",
+          "callee": "(repo / \".codex/agents\").mkdir",
+          "lineNumber": 41
+        },
+        {
+          "caller": "_init_harness_repo",
+          "callee": "(repo / \"configs\").mkdir",
+          "lineNumber": 42
+        },
+        {
+          "caller": "_init_harness_repo",
+          "callee": "(repo / \"results/model/harmbench\").mkdir",
+          "lineNumber": 43
+        },
+        {
+          "caller": "_init_harness_repo",
+          "callee": "(repo / \"AGENTS.md\").write_text",
+          "lineNumber": 45
+        },
+        {
+          "caller": "_init_harness_repo",
+          "callee": "SHARED_AGENT_BODY.replace",
+          "lineNumber": 45
+        },
+        {
+          "caller": "_init_harness_repo",
+          "callee": "(repo / \"CLAUDE.md\").write_text",
+          "lineNumber": 46
+        },
+        {
+          "caller": "_init_harness_repo",
+          "callee": "SHARED_AGENT_BODY.replace",
+          "lineNumber": 46
+        },
+        {
+          "caller": "_init_harness_repo",
+          "callee": "(repo / \"README.md\").write_text",
+          "lineNumber": 47
+        },
+        {
+          "caller": "_init_harness_repo",
+          "callee": "(repo / \"docs/PROJECT_LOG.md\").write_text",
+          "lineNumber": 48
+        },
+        {
+          "caller": "_init_harness_repo",
+          "callee": "\"\\n\".join",
+          "lineNumber": 49
+        },
+        {
+          "caller": "_init_harness_repo",
+          "callee": "(repo / \"docs/HANDOFF.md\").write_text",
+          "lineNumber": 64
+        },
+        {
+          "caller": "_init_harness_repo",
+          "callee": "(repo / \"docs/agent_tasks/T99-test-task.md\").write_text",
+          "lineNumber": 65
+        },
+        {
+          "caller": "_init_harness_repo",
+          "callee": "\"\\n\".join",
+          "lineNumber": 66
+        },
+        {
+          "caller": "_init_harness_repo",
+          "callee": "(repo / \".codex/agents/fyp-test-agent.toml\").write_text",
+          "lineNumber": 76
+        },
+        {
+          "caller": "_init_harness_repo",
+          "callee": "\"\\n\".join",
+          "lineNumber": 77
+        },
+        {
+          "caller": "_init_harness_repo",
+          "callee": "(repo / \"configs/artifact_policy.yaml\").write_text",
+          "lineNumber": 85
+        },
+        {
+          "caller": "_init_harness_repo",
+          "callee": "\"\\n\".join",
+          "lineNumber": 86
+        },
+        {
+          "caller": "_init_harness_repo",
+          "callee": "(repo / \"results/model/harmbench/raw.jsonl\").write_text",
+          "lineNumber": 112
+        },
+        {
+          "caller": "_init_harness_repo",
+          "callee": "(repo / \"results/model/harmbench/summary.json\").write_text",
+          "lineNumber": 113
+        },
+        {
+          "caller": "_init_harness_repo",
+          "callee": "_run",
+          "lineNumber": 115
+        },
+        {
+          "caller": "_init_harness_repo",
+          "callee": "_run",
+          "lineNumber": 116
+        },
+        {
+          "caller": "_init_harness_repo",
+          "callee": "_run",
+          "lineNumber": 117
+        },
+        {
+          "caller": "_init_harness_repo",
+          "callee": "write_immutable_manifest",
+          "lineNumber": 118
+        },
+        {
+          "caller": "_init_harness_repo",
+          "callee": "load_policy",
+          "lineNumber": 118
+        },
+        {
+          "caller": "_init_harness_repo",
+          "callee": "_run",
+          "lineNumber": 119
+        },
+        {
+          "caller": "_init_harness_repo",
+          "callee": "_run",
+          "lineNumber": 120
+        },
+        {
+          "caller": "_result_by_name",
+          "callee": "next",
+          "lineNumber": 125
+        },
+        {
+          "caller": "test_agent_harness_passes_on_clean_fixture",
+          "callee": "_init_harness_repo",
+          "lineNumber": 129
+        },
+        {
+          "caller": "test_agent_harness_passes_on_clean_fixture",
+          "callee": "run_agent_checks",
+          "lineNumber": 131
+        },
+        {
+          "caller": "test_agent_harness_passes_on_clean_fixture",
+          "callee": "all",
+          "lineNumber": 133
+        },
+        {
+          "caller": "test_agent_harness_catches_agent_doc_drift",
+          "callee": "_init_harness_repo",
+          "lineNumber": 137
+        },
+        {
+          "caller": "test_agent_harness_catches_agent_doc_drift",
+          "callee": "(repo / \"CLAUDE.md\").write_text",
+          "lineNumber": 138
+        },
+        {
+          "caller": "test_agent_harness_catches_agent_doc_drift",
+          "callee": "run_agent_checks",
+          "lineNumber": 140
+        },
+        {
+          "caller": "test_agent_harness_catches_agent_doc_drift",
+          "callee": "_result_by_name",
+          "lineNumber": 142
+        },
+        {
+          "caller": "test_agent_harness_requires_project_log_when_repo_changes",
+          "callee": "_init_harness_repo",
+          "lineNumber": 146
+        },
+        {
+          "caller": "test_agent_harness_requires_project_log_when_repo_changes",
+          "callee": "(repo / \"README.md\").write_text",
+          "lineNumber": 147
+        },
+        {
+          "caller": "test_agent_harness_requires_project_log_when_repo_changes",
+          "callee": "run_agent_checks",
+          "lineNumber": 149
+        },
+        {
+          "caller": "test_agent_harness_requires_project_log_when_repo_changes",
+          "callee": "_result_by_name",
+          "lineNumber": 151
+        },
+        {
+          "caller": "test_agent_harness_catches_stale_text",
+          "callee": "_init_harness_repo",
+          "lineNumber": 155
+        },
+        {
+          "caller": "test_agent_harness_catches_stale_text",
+          "callee": "(repo / \"docs/HANDOFF.md\").write_text",
+          "lineNumber": 156
+        },
+        {
+          "caller": "test_agent_harness_catches_stale_text",
+          "callee": "(repo / \"docs/PROJECT_LOG.md\").write_text",
+          "lineNumber": 157
+        },
+        {
+          "caller": "test_agent_harness_catches_stale_text",
+          "callee": "(repo / \"docs/PROJECT_LOG.md\").read_text",
+          "lineNumber": 157
+        },
+        {
+          "caller": "test_agent_harness_catches_stale_text",
+          "callee": "run_agent_checks",
+          "lineNumber": 159
+        },
+        {
+          "caller": "test_agent_harness_catches_stale_text",
+          "callee": "_result_by_name",
+          "lineNumber": 161
+        },
+        {
+          "caller": "test_real_policy_stale_kappa_guards_fire_and_exempt",
+          "callee": "Path(__file__).resolve",
+          "lineNumber": 172
+        },
+        {
+          "caller": "test_real_policy_stale_kappa_guards_fire_and_exempt",
+          "callee": "Path",
+          "lineNumber": 172
+        },
+        {
+          "caller": "test_real_policy_stale_kappa_guards_fire_and_exempt",
+          "callee": "load_policy",
+          "lineNumber": 173
+        },
+        {
+          "caller": "scan",
+          "callee": "(tmp_path / \"README.md\").write_text",
+          "lineNumber": 180
+        },
+        {
+          "caller": "scan",
+          "callee": "_scan_policy_group",
+          "lineNumber": 181
+        },
+        {
+          "caller": "test_real_policy_stale_kappa_guards_fire_and_exempt",
+          "callee": "scan",
+          "lineNumber": 188
+        },
+        {
+          "caller": "test_real_policy_stale_kappa_guards_fire_and_exempt",
+          "callee": "scan",
+          "lineNumber": 194
+        },
+        {
+          "caller": "test_real_policy_redaction_covers_committed_sidecars",
+          "callee": "Path(__file__).resolve",
+          "lineNumber": 204
+        },
+        {
+          "caller": "test_real_policy_redaction_covers_committed_sidecars",
+          "callee": "Path",
+          "lineNumber": 204
+        },
+        {
+          "caller": "test_real_policy_redaction_covers_committed_sidecars",
+          "callee": "load_policy",
+          "lineNumber": 205
+        },
+        {
+          "caller": "test_real_policy_redaction_covers_committed_sidecars",
+          "callee": "side.mkdir",
+          "lineNumber": 207
+        },
+        {
+          "caller": "test_real_policy_redaction_covers_committed_sidecars",
+          "callee": "leaky.write_text",
+          "lineNumber": 209
+        },
+        {
+          "caller": "test_real_policy_redaction_covers_committed_sidecars",
+          "callee": "_scan_policy_group",
+          "lineNumber": 213
+        },
+        {
+          "caller": "test_real_policy_redaction_covers_committed_sidecars",
+          "callee": "leaky.write_text",
+          "lineNumber": 215
+        },
+        {
+          "caller": "test_real_policy_redaction_covers_committed_sidecars",
+          "callee": "_scan_policy_group",
+          "lineNumber": 219
+        },
+        {
+          "caller": "test_agent_harness_catches_redaction_leak",
+          "callee": "_init_harness_repo",
+          "lineNumber": 223
+        },
+        {
+          "caller": "test_agent_harness_catches_redaction_leak",
+          "callee": "(repo / \"docs/HANDOFF.md\").write_text",
+          "lineNumber": 224
+        },
+        {
+          "caller": "test_agent_harness_catches_redaction_leak",
+          "callee": "(repo / \"docs/PROJECT_LOG.md\").write_text",
+          "lineNumber": 225
+        },
+        {
+          "caller": "test_agent_harness_catches_redaction_leak",
+          "callee": "(repo / \"docs/PROJECT_LOG.md\").read_text",
+          "lineNumber": 225
+        },
+        {
+          "caller": "test_agent_harness_catches_redaction_leak",
+          "callee": "run_agent_checks",
+          "lineNumber": 227
+        },
+        {
+          "caller": "test_agent_harness_catches_redaction_leak",
+          "callee": "_result_by_name",
+          "lineNumber": 229
+        },
+        {
+          "caller": "test_agent_harness_catches_immutable_artifact_mutation",
+          "callee": "_init_harness_repo",
+          "lineNumber": 233
+        },
+        {
+          "caller": "test_agent_harness_catches_immutable_artifact_mutation",
+          "callee": "(repo / \"results/model/harmbench/raw.jsonl\").write_text",
+          "lineNumber": 234
+        },
+        {
+          "caller": "test_agent_harness_catches_immutable_artifact_mutation",
+          "callee": "run_agent_checks",
+          "lineNumber": 236
+        },
+        {
+          "caller": "test_agent_harness_catches_immutable_artifact_mutation",
+          "callee": "_result_by_name",
+          "lineNumber": 238
+        },
+        {
+          "caller": "test_agent_harness_immutable_tolerates_absent_artifacts",
+          "callee": "_init_harness_repo",
+          "lineNumber": 251
+        },
+        {
+          "caller": "test_agent_harness_immutable_tolerates_absent_artifacts",
+          "callee": "(repo / \"results/model/harmbench/raw.jsonl\").unlink",
+          "lineNumber": 252
+        },
+        {
+          "caller": "test_agent_harness_immutable_tolerates_absent_artifacts",
+          "callee": "(repo / \"results/model/harmbench/summary.json\").unlink",
+          "lineNumber": 253
+        },
+        {
+          "caller": "test_agent_harness_immutable_tolerates_absent_artifacts",
+          "callee": "run_agent_checks",
+          "lineNumber": 255
+        },
+        {
+          "caller": "test_agent_harness_immutable_tolerates_absent_artifacts",
+          "callee": "_result_by_name",
+          "lineNumber": 257
+        },
+        {
+          "caller": "test_agent_harness_immutable_fails_on_partial_deletion",
+          "callee": "_init_harness_repo",
+          "lineNumber": 269
+        },
+        {
+          "caller": "test_agent_harness_immutable_fails_on_partial_deletion",
+          "callee": "(repo / \"results/model/harmbench/raw.jsonl\").unlink",
+          "lineNumber": 270
+        },
+        {
+          "caller": "test_agent_harness_immutable_fails_on_partial_deletion",
+          "callee": "run_agent_checks",
+          "lineNumber": 272
+        },
+        {
+          "caller": "test_agent_harness_immutable_fails_on_partial_deletion",
+          "callee": "_result_by_name",
+          "lineNumber": 274
+        },
+        {
+          "caller": "test_agent_status_and_renderers_are_redaction_safe",
+          "callee": "_init_harness_repo",
+          "lineNumber": 279
+        },
+        {
+          "caller": "test_agent_status_and_renderers_are_redaction_safe",
+          "callee": "build_agent_status",
+          "lineNumber": 281
+        },
+        {
+          "caller": "test_agent_status_and_renderers_are_redaction_safe",
+          "callee": "render_handoff",
+          "lineNumber": 282
+        },
+        {
+          "caller": "test_agent_status_and_renderers_are_redaction_safe",
+          "callee": "render_agent_dashboard",
+          "lineNumber": 283
+        },
+        {
+          "caller": "test_agent_start_packet_selects_task_and_subagent",
+          "callee": "_init_harness_repo",
+          "lineNumber": 292
+        },
+        {
+          "caller": "test_agent_start_packet_selects_task_and_subagent",
+          "callee": "build_agent_start_packet",
+          "lineNumber": 294
+        },
+        {
+          "caller": "test_agent_start_packet_selects_task_and_subagent",
+          "callee": "format_agent_start_packet",
+          "lineNumber": 295
+        },
+        {
+          "caller": "test_report_freshness_fails_on_source_edit_without_docx",
+          "callee": "_init_harness_repo",
+          "lineNumber": 312
+        },
+        {
+          "caller": "test_report_freshness_fails_on_source_edit_without_docx",
+          "callee": "load_policy",
+          "lineNumber": 313
+        },
+        {
+          "caller": "test_report_freshness_fails_on_source_edit_without_docx",
+          "callee": "monkeypatch.setattr",
+          "lineNumber": 316
+        },
+        {
+          "caller": "test_report_freshness_fails_on_source_edit_without_docx",
+          "callee": "harness_agent.check_report_freshness",
+          "lineNumber": 317
+        },
+        {
+          "caller": "test_report_freshness_fails_on_source_edit_without_docx",
+          "callee": "monkeypatch.setattr",
+          "lineNumber": 320
+        },
+        {
+          "caller": "test_report_freshness_fails_on_source_edit_without_docx",
+          "callee": "harness_agent.check_report_freshness",
+          "lineNumber": 324
+        },
+        {
+          "caller": "test_real_policy_report_source_is_not_a_freshness_satisfier",
+          "callee": "Path(__file__).resolve",
+          "lineNumber": 333
+        },
+        {
+          "caller": "test_real_policy_report_source_is_not_a_freshness_satisfier",
+          "callee": "Path",
+          "lineNumber": 333
+        },
+        {
+          "caller": "test_real_policy_report_source_is_not_a_freshness_satisfier",
+          "callee": "load_policy",
+          "lineNumber": 334
+        },
+        {
+          "caller": "test_real_policy_report_source_is_not_a_freshness_satisfier",
+          "callee": "any",
+          "lineNumber": 338
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 17,
+        "functionCount": 17,
+        "classCount": 0
+      }
+    }
+  ]
+}

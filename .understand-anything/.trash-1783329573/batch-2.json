@@ -1,0 +1,1148 @@
+{
+  "nodes": [
+    {
+      "id": "file:check_slurm_runs.py",
+      "type": "file",
+      "name": "check_slurm_runs.py",
+      "filePath": "check_slurm_runs.py",
+      "summary": "Root-level convenience entrypoint that simply invokes the SLURM run status checker's main() from ethical_benchmark.cluster.check_runs.",
+      "tags": ["entry-point", "wrapper", "cluster", "slurm"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:ethical_benchmark/cluster/check_runs.py",
+      "type": "file",
+      "name": "check_runs.py",
+      "filePath": "ethical_benchmark/cluster/check_runs.py",
+      "summary": "SLURM run status checker: cross-references expected (model, benchmark) result paths from the quantization config against completed summary.json files, submitted-job manifests, and live squeue output to report completed, running, and missing runs.",
+      "tags": ["cluster", "slurm", "monitoring", "cli", "status-report"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ethical_benchmark/cluster/check_runs.py:parse_args",
+      "type": "function",
+      "name": "parse_args",
+      "filePath": "ethical_benchmark/cluster/check_runs.py",
+      "lineRange": [20, 42],
+      "summary": "Builds the argparse CLI for the status checker: config path, results dir, jobs dir, output path, squeue skip flag, and log level.",
+      "tags": ["cli", "argument-parsing", "utility"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:ethical_benchmark/cluster/check_runs.py:setup_logging",
+      "type": "function",
+      "name": "setup_logging",
+      "filePath": "ethical_benchmark/cluster/check_runs.py",
+      "lineRange": [45, 58],
+      "summary": "Configures root logging with a level parsed from the CLI string argument.",
+      "tags": ["logging", "utility", "boilerplate"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:ethical_benchmark/cluster/check_runs.py:_load_submissions",
+      "type": "function",
+      "name": "_load_submissions",
+      "filePath": "ethical_benchmark/cluster/check_runs.py",
+      "lineRange": [61, 78],
+      "summary": "Reads submitted_jobs.json from the jobs directory (if present) to recover job-name to SLURM-job-id mappings recorded at submission time.",
+      "tags": ["io", "json", "cluster", "utility"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:ethical_benchmark/cluster/check_runs.py:_current_squeue_job_ids",
+      "type": "function",
+      "name": "_current_squeue_job_ids",
+      "filePath": "ethical_benchmark/cluster/check_runs.py",
+      "lineRange": [81, 103],
+      "summary": "Polls squeue via subprocess for the current user and returns the set of active SLURM job ids, tolerating environments where squeue is unavailable.",
+      "tags": ["slurm", "subprocess", "monitoring", "cluster"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:ethical_benchmark/cluster/check_runs.py:check_status",
+      "type": "function",
+      "name": "check_status",
+      "filePath": "ethical_benchmark/cluster/check_runs.py",
+      "lineRange": [106, 161],
+      "summary": "Core status routine: loads the validated quantization config, enumerates every expected model x benchmark run, and classifies each as completed (summary.json exists), running (job id still in squeue), or missing, returning an aggregate report dict.",
+      "tags": ["cluster", "status-report", "orchestration", "slurm"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ethical_benchmark/cluster/check_runs.py:main",
+      "type": "function",
+      "name": "main",
+      "filePath": "ethical_benchmark/cluster/check_runs.py",
+      "lineRange": [164, 190],
+      "summary": "CLI entrypoint: parses args, runs check_status, optionally writes the JSON status report to disk, and logs a summary line.",
+      "tags": ["entry-point", "cli", "cluster"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:ethical_benchmark/cluster/generate_jobs.py",
+      "type": "file",
+      "name": "generate_jobs.py",
+      "filePath": "ethical_benchmark/cluster/generate_jobs.py",
+      "summary": "Generates per-model or per-(model,benchmark) SLURM sbatch scripts from the validated quantization config, embedding the TC1 bootstrap prologue (work_dir cd, setup_commands, log dir mkdir) and writing a manifest.json used by the submitter.",
+      "tags": ["cluster", "slurm", "code-generation", "cli", "sbatch"],
+      "complexity": "complex",
+      "languageNotes": "Uses shlex.quote throughout when assembling shell command lines, and supports group_by=model to emit matrix jobs that load each model once."
+    },
+    {
+      "id": "function:ethical_benchmark/cluster/generate_jobs.py:parse_args",
+      "type": "function",
+      "name": "parse_args",
+      "filePath": "ethical_benchmark/cluster/generate_jobs.py",
+      "lineRange": [17, 48],
+      "summary": "Builds the argparse CLI for job generation: config, results/jobs dirs, python binary, runner script, seed, device, max samples, and group-by mode.",
+      "tags": ["cli", "argument-parsing", "utility"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:ethical_benchmark/cluster/generate_jobs.py:setup_logging",
+      "type": "function",
+      "name": "setup_logging",
+      "filePath": "ethical_benchmark/cluster/generate_jobs.py",
+      "lineRange": [51, 64],
+      "summary": "Configures root logging with a level parsed from the CLI string argument.",
+      "tags": ["logging", "utility", "boilerplate"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:ethical_benchmark/cluster/generate_jobs.py:_sbatch_text",
+      "type": "function",
+      "name": "_sbatch_text",
+      "filePath": "ethical_benchmark/cluster/generate_jobs.py",
+      "lineRange": [67, 122],
+      "summary": "Renders the full sbatch script text: SBATCH directives from SlurmConfig (partition, qos, gpus, mem, time) plus a prologue that cds into work_dir, mkdirs the log dir, and runs setup_commands before the benchmark command.",
+      "tags": ["template", "sbatch", "slurm", "code-generation"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ethical_benchmark/cluster/generate_jobs.py:generate_job_scripts",
+      "type": "function",
+      "name": "generate_job_scripts",
+      "filePath": "ethical_benchmark/cluster/generate_jobs.py",
+      "lineRange": [125, 270],
+      "summary": "Main generation routine: for each configured model (grouped by model for matrix jobs, or per model-benchmark pair), builds the runner command line, writes an sbatch file into jobs_dir, and records every job in manifest.json.",
+      "tags": ["code-generation", "orchestration", "slurm", "cluster"],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:ethical_benchmark/cluster/generate_jobs.py:main",
+      "type": "function",
+      "name": "main",
+      "filePath": "ethical_benchmark/cluster/generate_jobs.py",
+      "lineRange": [273, 299],
+      "summary": "CLI entrypoint: parses args, loads and validates the quantization config, and calls generate_job_scripts, logging how many sbatch files were written.",
+      "tags": ["entry-point", "cli", "cluster"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:ethical_benchmark/cluster/submit_jobs.py",
+      "type": "file",
+      "name": "submit_jobs.py",
+      "filePath": "ethical_benchmark/cluster/submit_jobs.py",
+      "summary": "Submits generated sbatch scripts to SLURM: reads manifest.json from the jobs directory, runs sbatch for each entry (or logs in dry-run mode), parses returned job ids, and persists submissions to submitted_jobs.json.",
+      "tags": ["cluster", "slurm", "job-submission", "cli", "subprocess"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ethical_benchmark/cluster/submit_jobs.py:parse_args",
+      "type": "function",
+      "name": "parse_args",
+      "filePath": "ethical_benchmark/cluster/submit_jobs.py",
+      "lineRange": [19, 38],
+      "summary": "Builds the argparse CLI for job submission: jobs directory, dry-run flag, and log level.",
+      "tags": ["cli", "argument-parsing", "utility"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:ethical_benchmark/cluster/submit_jobs.py:setup_logging",
+      "type": "function",
+      "name": "setup_logging",
+      "filePath": "ethical_benchmark/cluster/submit_jobs.py",
+      "lineRange": [41, 54],
+      "summary": "Configures root logging with a level parsed from the CLI string argument.",
+      "tags": ["logging", "utility", "boilerplate"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:ethical_benchmark/cluster/submit_jobs.py:load_manifest",
+      "type": "function",
+      "name": "load_manifest",
+      "filePath": "ethical_benchmark/cluster/submit_jobs.py",
+      "lineRange": [57, 72],
+      "summary": "Loads and returns the manifest.json job list written by generate_jobs, raising if the manifest is absent from the jobs directory.",
+      "tags": ["io", "json", "cluster", "utility"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:ethical_benchmark/cluster/submit_jobs.py:submit_all",
+      "type": "function",
+      "name": "submit_all",
+      "filePath": "ethical_benchmark/cluster/submit_jobs.py",
+      "lineRange": [75, 123],
+      "summary": "Iterates the manifest and invokes sbatch per job via subprocess, extracting the SLURM job id with a regex, recording success/failure per submission, and writing submitted_jobs.json; dry-run mode records without submitting.",
+      "tags": ["job-submission", "subprocess", "slurm", "orchestration"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ethical_benchmark/cluster/submit_jobs.py:main",
+      "type": "function",
+      "name": "main",
+      "filePath": "ethical_benchmark/cluster/submit_jobs.py",
+      "lineRange": [126, 138],
+      "summary": "CLI entrypoint: parses args, calls submit_all on the jobs directory, and logs how many submissions succeeded.",
+      "tags": ["entry-point", "cli", "cluster"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:ethical_benchmark/quant/__init__.py",
+      "type": "file",
+      "name": "__init__.py",
+      "filePath": "ethical_benchmark/quant/__init__.py",
+      "summary": "Package barrel for the quant module re-exporting QuantizationConfig and load_quant_config from config_schema.",
+      "tags": ["entry-point", "barrel", "package-init"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:ethical_benchmark/quant/config_schema.py",
+      "type": "file",
+      "name": "config_schema.py",
+      "filePath": "ethical_benchmark/quant/config_schema.py",
+      "summary": "Pydantic schema layer for the whole study: defines decoding, model-entry, benchmark, and SLURM config models plus cross-validation (every pair_id needs a baseline and a quantized member; model benchmark lists must reference declared benchmarks) and the load_quant_config YAML loader.",
+      "tags": ["data-model", "validation", "configuration", "pydantic", "schema-definition"],
+      "complexity": "complex",
+      "languageNotes": "Uses Pydantic field/model validators extensively, including a model-level cross-validation pass that enforces pair completeness and quant_method/quantized consistency."
+    },
+    {
+      "id": "class:ethical_benchmark/quant/config_schema.py:DecodingSchema",
+      "type": "class",
+      "name": "DecodingSchema",
+      "filePath": "ethical_benchmark/quant/config_schema.py",
+      "lineRange": [21, 38],
+      "summary": "Pydantic model for decoding controls: max_new_tokens, temperature, top_p, repetition_penalty, max_input_tokens, and chat-template usage.",
+      "tags": ["data-model", "configuration", "decoding"],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:ethical_benchmark/quant/config_schema.py:ModelEntry",
+      "type": "class",
+      "name": "ModelEntry",
+      "filePath": "ethical_benchmark/quant/config_schema.py",
+      "lineRange": [41, 123],
+      "summary": "Pydantic model for one model alias: family, size, pair_id, HF model_id, benchmark list, dtype, attn_implementation, and quantization flags, with validators normalizing/rejecting bad values and enforcing quant_method consistency with the quantized flag.",
+      "tags": ["data-model", "validation", "configuration", "quantization"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:ethical_benchmark/quant/config_schema.py:BenchmarkEntry",
+      "type": "class",
+      "name": "BenchmarkEntry",
+      "filePath": "ethical_benchmark/quant/config_schema.py",
+      "lineRange": [126, 137],
+      "summary": "Pydantic model for one benchmark's dataset settings: dataset name/split/config, optional local CSV, sample and batch limits, MMLU subjects, refusal patterns, and benign-only filtering.",
+      "tags": ["data-model", "configuration", "benchmark"],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:ethical_benchmark/quant/config_schema.py:SlurmConfig",
+      "type": "class",
+      "name": "SlurmConfig",
+      "filePath": "ethical_benchmark/quant/config_schema.py",
+      "lineRange": [140, 168],
+      "summary": "Pydantic model for SLURM job parameters (partition, qos, gpus, cpus, mem, walltime, log/work dirs, setup_commands) with a regex validator that rejects bare-minute time strings in favor of colon forms.",
+      "tags": ["data-model", "configuration", "slurm", "validation"],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:ethical_benchmark/quant/config_schema.py:QuantizationConfig",
+      "type": "class",
+      "name": "QuantizationConfig",
+      "filePath": "ethical_benchmark/quant/config_schema.py",
+      "lineRange": [171, 211],
+      "summary": "Top-level study config aggregating models, benchmarks, decoding, and SLURM sections; cross-validates that model benchmark lists reference declared benchmark keys and that every pair_id has at least one baseline and one quantized member.",
+      "tags": ["data-model", "validation", "configuration", "orchestration"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ethical_benchmark/quant/config_schema.py:load_quant_config",
+      "type": "function",
+      "name": "load_quant_config",
+      "filePath": "ethical_benchmark/quant/config_schema.py",
+      "lineRange": [214, 240],
+      "summary": "Loads a YAML config file with yaml.safe_load, rejects non-mapping documents with a synthesized ValidationError, and returns a validated QuantizationConfig.",
+      "tags": ["io", "yaml", "validation", "configuration"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:fyp_cli.py",
+      "type": "file",
+      "name": "fyp_cli.py",
+      "filePath": "fyp_cli.py",
+      "summary": "Unified project CLI with subcommands for smoke runs, single benchmark runs, the full model x benchmark matrix, pairwise analysis, SLURM cluster generate/submit/check, and agent-harness status/start packets, dispatching into the pipeline, analysis, cluster, and harness modules.",
+      "tags": ["entry-point", "cli", "orchestration", "dispatcher"],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:fyp_cli.py:_add_common_options",
+      "type": "function",
+      "name": "_add_common_options",
+      "filePath": "fyp_cli.py",
+      "lineRange": [44, 74],
+      "summary": "Attaches the shared --config, --log-level, and results-dir options (optionally with defaults) to a parser or subparser.",
+      "tags": ["cli", "argument-parsing", "utility"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:fyp_cli.py:parse_args",
+      "type": "function",
+      "name": "parse_args",
+      "filePath": "fyp_cli.py",
+      "lineRange": [83, 171],
+      "summary": "Builds the full subcommand tree (smoke, run, matrix, analyze, cluster-generate, cluster-submit, cluster-check, agent-status, agent-start) with per-command arguments and defaults.",
+      "tags": ["cli", "argument-parsing", "dispatcher"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:fyp_cli.py:_run_analysis",
+      "type": "function",
+      "name": "_run_analysis",
+      "filePath": "fyp_cli.py",
+      "lineRange": [174, 210],
+      "summary": "Runs the pairwise analysis pipeline: builds the pairwise delta report, pair-label summary, scale sensitivity, and cross-family consistency, then writes the JSON and CSV outputs into the analysis directory.",
+      "tags": ["analysis", "orchestration", "io"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:fyp_cli.py:main",
+      "type": "function",
+      "name": "main",
+      "filePath": "fyp_cli.py",
+      "lineRange": [213, 333],
+      "summary": "Command dispatcher: routes each subcommand to execute_quant_benchmark, run_quant_matrix, _run_analysis, generate_job_scripts, submit_all, check_status, or the agent-harness status/start-packet builders.",
+      "tags": ["entry-point", "dispatcher", "orchestration", "cli"],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:generate_slurm_jobs.py",
+      "type": "file",
+      "name": "generate_slurm_jobs.py",
+      "filePath": "generate_slurm_jobs.py",
+      "summary": "Root-level convenience entrypoint that simply invokes the SLURM job generator's main() from ethical_benchmark.cluster.generate_jobs.",
+      "tags": ["entry-point", "wrapper", "cluster", "slurm"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:submit_slurm_jobs.py",
+      "type": "file",
+      "name": "submit_slurm_jobs.py",
+      "filePath": "submit_slurm_jobs.py",
+      "summary": "Root-level convenience entrypoint that simply invokes the SLURM submission helper's main() from ethical_benchmark.cluster.submit_jobs.",
+      "tags": ["entry-point", "wrapper", "cluster", "slurm"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:tests/test_quant_config_schema.py",
+      "type": "file",
+      "name": "test_quant_config_schema.py",
+      "filePath": "tests/test_quant_config_schema.py",
+      "summary": "Tests locking down the live config shape (10 models, 5 pairs, 4 families; Phi eager attention, Mistral defaults, shared methodology across new pairs) and the ModelEntry attn_implementation validator.",
+      "tags": ["test", "configuration", "validation", "regression"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:tests/test_quant_config_schema.py:TestLiveConfigShape",
+      "type": "class",
+      "name": "TestLiveConfigShape",
+      "filePath": "tests/test_quant_config_schema.py",
+      "lineRange": [26, 77],
+      "summary": "Asserts invariants of the committed default config: ten models forming five baseline/4-bit pairs across four families, Phi/Mistral flag settings, methodology parity for the T26 pairs, and unchanged legacy models.",
+      "tags": ["test", "configuration", "regression"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:tests/test_quant_config_schema.py:TestAttnImplementationField",
+      "type": "class",
+      "name": "TestAttnImplementationField",
+      "filePath": "tests/test_quant_config_schema.py",
+      "lineRange": [80, 106],
+      "summary": "Unit tests for ModelEntry.attn_implementation: defaults to None, accepts and case-normalizes 'eager', and rejects typos with a validation error.",
+      "tags": ["test", "validation", "data-model"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:tests/test_sensitivity.py",
+      "type": "file",
+      "name": "test_sensitivity.py",
+      "filePath": "tests/test_sensitivity.py",
+      "summary": "Tests for the decoding-sensitivity study tooling: validates the sensitivity config is stochastic and schema-valid, checks delta-summary stability math, and verifies the sensitivity sbatch generator and v2-summary-preferring ASR reader loaded dynamically from scripts/.",
+      "tags": ["test", "sensitivity-analysis", "configuration", "slurm"],
+      "complexity": "moderate",
+      "languageNotes": "Loads standalone scripts as modules via importlib.util.spec_from_file_location rather than package imports."
+    },
+    {
+      "id": "function:tests/test_sensitivity.py:test_sensitivity_config_is_valid_and_stochastic",
+      "type": "function",
+      "name": "test_sensitivity_config_is_valid_and_stochastic",
+      "filePath": "tests/test_sensitivity.py",
+      "lineRange": [25, 45],
+      "summary": "Validates the sensitivity YAML config through load_quant_config and asserts it uses stochastic decoding settings distinct from the primary greedy study.",
+      "tags": ["test", "configuration", "validation"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_sensitivity.py:test_summarise_deltas_stability",
+      "type": "function",
+      "name": "test_summarise_deltas_stability",
+      "filePath": "tests/test_sensitivity.py",
+      "lineRange": [48, 69],
+      "summary": "Exercises the sensitivity script's summarise_deltas over synthetic seed deltas to confirm stability classification behaves as expected.",
+      "tags": ["test", "analysis", "sensitivity-analysis"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_sensitivity.py:test_generator_emits_expected_files",
+      "type": "function",
+      "name": "test_generator_emits_expected_files",
+      "filePath": "tests/test_sensitivity.py",
+      "lineRange": [72, 89],
+      "summary": "Checks the sensitivity sbatch generator writes the expected set of job files, including the judge sbatch, into a temp directory.",
+      "tags": ["test", "code-generation", "slurm"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_sensitivity.py:test_v2_asr_prefers_v2_summary",
+      "type": "function",
+      "name": "test_v2_asr_prefers_v2_summary",
+      "filePath": "tests/test_sensitivity.py",
+      "lineRange": [92, 104],
+      "summary": "Asserts the sensitivity analyzer reads ASR from summary.v2.json when both it and the runtime summary.json exist.",
+      "tags": ["test", "analysis", "io"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:tests/test_slurm_helpers.py",
+      "type": "file",
+      "name": "test_slurm_helpers.py",
+      "filePath": "tests/test_slurm_helpers.py",
+      "summary": "Tests for SLURM job generation and submission: job counts per grouping mode, matrix-runner reuse under group_by=model, dry-run submission with submitted_jobs.json output, work_dir/setup_commands/log-dir prologue content, relative script resolution, and walltime format validation.",
+      "tags": ["test", "slurm", "cluster", "code-generation"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:tests/test_slurm_helpers.py:test_generate_jobs_count",
+      "type": "function",
+      "name": "test_generate_jobs_count",
+      "filePath": "tests/test_slurm_helpers.py",
+      "lineRange": [16, 34],
+      "summary": "Verifies generate_job_scripts writes one sbatch per model-benchmark pair plus a manifest.json in the default grouping mode.",
+      "tags": ["test", "code-generation", "slurm"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_slurm_helpers.py:test_generate_jobs_group_by_model_reuses_matrix_runner",
+      "type": "function",
+      "name": "test_generate_jobs_group_by_model_reuses_matrix_runner",
+      "filePath": "tests/test_slurm_helpers.py",
+      "lineRange": [37, 60],
+      "summary": "Asserts group_by=model emits one sbatch per model that invokes the matrix runner (loading the model once for all its benchmarks).",
+      "tags": ["test", "slurm", "code-generation", "optimization"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_slurm_helpers.py:test_submit_all_dry_run",
+      "type": "function",
+      "name": "test_submit_all_dry_run",
+      "filePath": "tests/test_slurm_helpers.py",
+      "lineRange": [63, 82],
+      "summary": "Runs submit_all in dry-run mode over generated jobs and checks all submissions are recorded without invoking sbatch, with submitted_jobs.json written.",
+      "tags": ["test", "job-submission", "slurm"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_slurm_helpers.py:test_generate_jobs_include_workdir_and_setup_commands",
+      "type": "function",
+      "name": "test_generate_jobs_include_workdir_and_setup_commands",
+      "filePath": "tests/test_slurm_helpers.py",
+      "lineRange": [85, 111],
+      "summary": "Checks the generated sbatch text contains the cd-into-work_dir line and every configured setup command in the prologue.",
+      "tags": ["test", "sbatch", "slurm"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_slurm_helpers.py:test_generate_jobs_resolves_relative_script_under_workdir",
+      "type": "function",
+      "name": "test_generate_jobs_resolves_relative_script_under_workdir",
+      "filePath": "tests/test_slurm_helpers.py",
+      "lineRange": [114, 137],
+      "summary": "Asserts a relative runner script path is resolved under the configured SLURM work_dir in the generated command line.",
+      "tags": ["test", "path-resolution", "slurm"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_slurm_helpers.py:test_generate_jobs_includes_log_dir_mkdir",
+      "type": "function",
+      "name": "test_generate_jobs_includes_log_dir_mkdir",
+      "filePath": "tests/test_slurm_helpers.py",
+      "lineRange": [140, 163],
+      "summary": "Checks the sbatch prologue mkdirs the log directory so SLURM output/error paths exist before the job writes to them.",
+      "tags": ["test", "sbatch", "slurm"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:check_slurm_runs.py",
+      "target": "file:ethical_benchmark/cluster/check_runs.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ethical_benchmark/cluster/check_runs.py",
+      "target": "file:ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ethical_benchmark/cluster/check_runs.py",
+      "target": "file:ethical_benchmark/quant/config_schema.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ethical_benchmark/cluster/generate_jobs.py",
+      "target": "file:ethical_benchmark/quant/config_schema.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ethical_benchmark/quant/__init__.py",
+      "target": "file:ethical_benchmark/quant/config_schema.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:fyp_cli.py",
+      "target": "file:ethical_benchmark/analysis/compare_quant_pairs.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:fyp_cli.py",
+      "target": "file:ethical_benchmark/cluster/check_runs.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:fyp_cli.py",
+      "target": "file:ethical_benchmark/cluster/generate_jobs.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:fyp_cli.py",
+      "target": "file:ethical_benchmark/cluster/submit_jobs.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:fyp_cli.py",
+      "target": "file:ethical_benchmark/harness/__init__.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:fyp_cli.py",
+      "target": "file:ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:fyp_cli.py",
+      "target": "file:ethical_benchmark/pipeline/run_quant_matrix.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:fyp_cli.py",
+      "target": "file:ethical_benchmark/quant/config_schema.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:generate_slurm_jobs.py",
+      "target": "file:ethical_benchmark/cluster/generate_jobs.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:submit_slurm_jobs.py",
+      "target": "file:ethical_benchmark/cluster/submit_jobs.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:tests/test_quant_config_schema.py",
+      "target": "file:ethical_benchmark/quant/config_schema.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:tests/test_sensitivity.py",
+      "target": "file:ethical_benchmark/quant/config_schema.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:tests/test_slurm_helpers.py",
+      "target": "file:ethical_benchmark/cluster/generate_jobs.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:tests/test_slurm_helpers.py",
+      "target": "file:ethical_benchmark/cluster/submit_jobs.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:tests/test_slurm_helpers.py",
+      "target": "file:ethical_benchmark/quant/config_schema.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ethical_benchmark/cluster/check_runs.py",
+      "target": "function:ethical_benchmark/cluster/check_runs.py:parse_args",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ethical_benchmark/cluster/check_runs.py",
+      "target": "function:ethical_benchmark/cluster/check_runs.py:setup_logging",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ethical_benchmark/cluster/check_runs.py",
+      "target": "function:ethical_benchmark/cluster/check_runs.py:_load_submissions",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ethical_benchmark/cluster/check_runs.py",
+      "target": "function:ethical_benchmark/cluster/check_runs.py:_current_squeue_job_ids",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ethical_benchmark/cluster/check_runs.py",
+      "target": "function:ethical_benchmark/cluster/check_runs.py:check_status",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ethical_benchmark/cluster/check_runs.py",
+      "target": "function:ethical_benchmark/cluster/check_runs.py:main",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ethical_benchmark/cluster/generate_jobs.py",
+      "target": "function:ethical_benchmark/cluster/generate_jobs.py:parse_args",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ethical_benchmark/cluster/generate_jobs.py",
+      "target": "function:ethical_benchmark/cluster/generate_jobs.py:setup_logging",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ethical_benchmark/cluster/generate_jobs.py",
+      "target": "function:ethical_benchmark/cluster/generate_jobs.py:_sbatch_text",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ethical_benchmark/cluster/generate_jobs.py",
+      "target": "function:ethical_benchmark/cluster/generate_jobs.py:generate_job_scripts",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ethical_benchmark/cluster/generate_jobs.py",
+      "target": "function:ethical_benchmark/cluster/generate_jobs.py:main",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ethical_benchmark/cluster/submit_jobs.py",
+      "target": "function:ethical_benchmark/cluster/submit_jobs.py:parse_args",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ethical_benchmark/cluster/submit_jobs.py",
+      "target": "function:ethical_benchmark/cluster/submit_jobs.py:setup_logging",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ethical_benchmark/cluster/submit_jobs.py",
+      "target": "function:ethical_benchmark/cluster/submit_jobs.py:load_manifest",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ethical_benchmark/cluster/submit_jobs.py",
+      "target": "function:ethical_benchmark/cluster/submit_jobs.py:submit_all",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ethical_benchmark/cluster/submit_jobs.py",
+      "target": "function:ethical_benchmark/cluster/submit_jobs.py:main",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ethical_benchmark/quant/config_schema.py",
+      "target": "class:ethical_benchmark/quant/config_schema.py:DecodingSchema",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ethical_benchmark/quant/config_schema.py",
+      "target": "class:ethical_benchmark/quant/config_schema.py:ModelEntry",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ethical_benchmark/quant/config_schema.py",
+      "target": "class:ethical_benchmark/quant/config_schema.py:BenchmarkEntry",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ethical_benchmark/quant/config_schema.py",
+      "target": "class:ethical_benchmark/quant/config_schema.py:SlurmConfig",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ethical_benchmark/quant/config_schema.py",
+      "target": "class:ethical_benchmark/quant/config_schema.py:QuantizationConfig",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ethical_benchmark/quant/config_schema.py",
+      "target": "function:ethical_benchmark/quant/config_schema.py:load_quant_config",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:fyp_cli.py",
+      "target": "function:fyp_cli.py:_add_common_options",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:fyp_cli.py",
+      "target": "function:fyp_cli.py:parse_args",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:fyp_cli.py",
+      "target": "function:fyp_cli.py:_run_analysis",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:fyp_cli.py",
+      "target": "function:fyp_cli.py:main",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_quant_config_schema.py",
+      "target": "class:tests/test_quant_config_schema.py:TestLiveConfigShape",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_quant_config_schema.py",
+      "target": "class:tests/test_quant_config_schema.py:TestAttnImplementationField",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_sensitivity.py",
+      "target": "function:tests/test_sensitivity.py:test_sensitivity_config_is_valid_and_stochastic",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_sensitivity.py",
+      "target": "function:tests/test_sensitivity.py:test_summarise_deltas_stability",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_sensitivity.py",
+      "target": "function:tests/test_sensitivity.py:test_generator_emits_expected_files",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_sensitivity.py",
+      "target": "function:tests/test_sensitivity.py:test_v2_asr_prefers_v2_summary",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_slurm_helpers.py",
+      "target": "function:tests/test_slurm_helpers.py:test_generate_jobs_count",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_slurm_helpers.py",
+      "target": "function:tests/test_slurm_helpers.py:test_generate_jobs_group_by_model_reuses_matrix_runner",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_slurm_helpers.py",
+      "target": "function:tests/test_slurm_helpers.py:test_submit_all_dry_run",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_slurm_helpers.py",
+      "target": "function:tests/test_slurm_helpers.py:test_generate_jobs_include_workdir_and_setup_commands",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_slurm_helpers.py",
+      "target": "function:tests/test_slurm_helpers.py:test_generate_jobs_resolves_relative_script_under_workdir",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_slurm_helpers.py",
+      "target": "function:tests/test_slurm_helpers.py:test_generate_jobs_includes_log_dir_mkdir",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ethical_benchmark/cluster/check_runs.py",
+      "target": "function:ethical_benchmark/cluster/check_runs.py:check_status",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ethical_benchmark/cluster/check_runs.py",
+      "target": "function:ethical_benchmark/cluster/check_runs.py:main",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ethical_benchmark/cluster/generate_jobs.py",
+      "target": "function:ethical_benchmark/cluster/generate_jobs.py:generate_job_scripts",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ethical_benchmark/cluster/generate_jobs.py",
+      "target": "function:ethical_benchmark/cluster/generate_jobs.py:main",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ethical_benchmark/cluster/submit_jobs.py",
+      "target": "function:ethical_benchmark/cluster/submit_jobs.py:load_manifest",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ethical_benchmark/cluster/submit_jobs.py",
+      "target": "function:ethical_benchmark/cluster/submit_jobs.py:submit_all",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ethical_benchmark/cluster/submit_jobs.py",
+      "target": "function:ethical_benchmark/cluster/submit_jobs.py:main",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ethical_benchmark/quant/config_schema.py",
+      "target": "class:ethical_benchmark/quant/config_schema.py:DecodingSchema",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ethical_benchmark/quant/config_schema.py",
+      "target": "class:ethical_benchmark/quant/config_schema.py:ModelEntry",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ethical_benchmark/quant/config_schema.py",
+      "target": "class:ethical_benchmark/quant/config_schema.py:BenchmarkEntry",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ethical_benchmark/quant/config_schema.py",
+      "target": "class:ethical_benchmark/quant/config_schema.py:SlurmConfig",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ethical_benchmark/quant/config_schema.py",
+      "target": "class:ethical_benchmark/quant/config_schema.py:QuantizationConfig",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ethical_benchmark/quant/config_schema.py",
+      "target": "function:ethical_benchmark/quant/config_schema.py:load_quant_config",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:fyp_cli.py",
+      "target": "function:fyp_cli.py:main",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:ethical_benchmark/cluster/check_runs.py:check_status",
+      "target": "function:ethical_benchmark/quant/config_schema.py:load_quant_config",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:ethical_benchmark/cluster/check_runs.py:check_status",
+      "target": "function:ethical_benchmark/pipeline/run_quant_benchmark.py:build_run_paths",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:ethical_benchmark/cluster/generate_jobs.py:main",
+      "target": "function:ethical_benchmark/quant/config_schema.py:load_quant_config",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:fyp_cli.py:main",
+      "target": "function:ethical_benchmark/pipeline/run_quant_benchmark.py:execute_quant_benchmark",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:fyp_cli.py:main",
+      "target": "function:ethical_benchmark/pipeline/run_quant_matrix.py:run_quant_matrix",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:fyp_cli.py:main",
+      "target": "function:ethical_benchmark/cluster/generate_jobs.py:generate_job_scripts",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:fyp_cli.py:main",
+      "target": "function:ethical_benchmark/cluster/submit_jobs.py:submit_all",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:fyp_cli.py:main",
+      "target": "function:ethical_benchmark/cluster/check_runs.py:check_status",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:fyp_cli.py:main",
+      "target": "function:ethical_benchmark/quant/config_schema.py:load_quant_config",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:fyp_cli.py:_run_analysis",
+      "target": "function:ethical_benchmark/analysis/compare_quant_pairs.py:build_pairwise_report",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:fyp_cli.py:_run_analysis",
+      "target": "function:ethical_benchmark/analysis/compare_quant_pairs.py:summarize_pair_labels",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:fyp_cli.py:_run_analysis",
+      "target": "function:ethical_benchmark/analysis/compare_quant_pairs.py:compute_scale_sensitivity",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:fyp_cli.py:_run_analysis",
+      "target": "function:ethical_benchmark/analysis/compare_quant_pairs.py:compute_cross_family_consistency",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:check_slurm_runs.py",
+      "target": "function:ethical_benchmark/cluster/check_runs.py:main",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:generate_slurm_jobs.py",
+      "target": "function:ethical_benchmark/cluster/generate_jobs.py:main",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:submit_slurm_jobs.py",
+      "target": "function:ethical_benchmark/cluster/submit_jobs.py:main",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ethical_benchmark/quant/config_schema.py",
+      "target": "file:tests/test_quant_config_schema.py",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:ethical_benchmark/quant/config_schema.py",
+      "target": "file:tests/test_sensitivity.py",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:ethical_benchmark/quant/config_schema.py",
+      "target": "file:tests/test_slurm_helpers.py",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:ethical_benchmark/cluster/generate_jobs.py",
+      "target": "file:tests/test_slurm_helpers.py",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:ethical_benchmark/cluster/submit_jobs.py",
+      "target": "file:tests/test_slurm_helpers.py",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    }
+  ]
+}

@@ -1,0 +1,139 @@
+{
+ "projectRoot": "/Users/tanueihorng/fyp_quant",
+ "batchFiles": [
+  {
+   "path": "ethical_benchmark/benchmarks/__init__.py",
+   "language": "python",
+   "sizeLines": 16,
+   "fileCategory": "code"
+  },
+  {
+   "path": "ethical_benchmark/benchmarks/arc.py",
+   "language": "python",
+   "sizeLines": 242,
+   "fileCategory": "code"
+  },
+  {
+   "path": "ethical_benchmark/benchmarks/base.py",
+   "language": "python",
+   "sizeLines": 91,
+   "fileCategory": "code"
+  },
+  {
+   "path": "ethical_benchmark/benchmarks/harmbench.py",
+   "language": "python",
+   "sizeLines": 192,
+   "fileCategory": "code"
+  },
+  {
+   "path": "ethical_benchmark/benchmarks/mmlu.py",
+   "language": "python",
+   "sizeLines": 242,
+   "fileCategory": "code"
+  },
+  {
+   "path": "ethical_benchmark/benchmarks/registry.py",
+   "language": "python",
+   "sizeLines": 41,
+   "fileCategory": "code"
+  },
+  {
+   "path": "ethical_benchmark/benchmarks/utils.py",
+   "language": "python",
+   "sizeLines": 274,
+   "fileCategory": "code"
+  },
+  {
+   "path": "ethical_benchmark/benchmarks/xstest.py",
+   "language": "python",
+   "sizeLines": 362,
+   "fileCategory": "code"
+  },
+  {
+   "path": "ethical_benchmark/datasets/__init__.py",
+   "language": "python",
+   "sizeLines": 14,
+   "fileCategory": "code"
+  },
+  {
+   "path": "scripts/rescore_harmbench.py",
+   "language": "python",
+   "sizeLines": 487,
+   "fileCategory": "code"
+  },
+  {
+   "path": "tests/test_arc.py",
+   "language": "python",
+   "sizeLines": 83,
+   "fileCategory": "code"
+  },
+  {
+   "path": "tests/test_refusal_parser.py",
+   "language": "python",
+   "sizeLines": 184,
+   "fileCategory": "code"
+  },
+  {
+   "path": "tests/test_xstest_benign.py",
+   "language": "python",
+   "sizeLines": 39,
+   "fileCategory": "code"
+  }
+ ],
+ "batchImportData": {
+  "ethical_benchmark/benchmarks/__init__.py": [
+   "ethical_benchmark/benchmarks/arc.py",
+   "ethical_benchmark/benchmarks/base.py",
+   "ethical_benchmark/benchmarks/harmbench.py",
+   "ethical_benchmark/benchmarks/mmlu.py",
+   "ethical_benchmark/benchmarks/xstest.py"
+  ],
+  "ethical_benchmark/benchmarks/arc.py": [
+   "ethical_benchmark/benchmarks/base.py",
+   "ethical_benchmark/benchmarks/utils.py",
+   "ethical_benchmark/datasets/__init__.py"
+  ],
+  "ethical_benchmark/benchmarks/base.py": [],
+  "ethical_benchmark/benchmarks/harmbench.py": [
+   "ethical_benchmark/benchmarks/base.py",
+   "ethical_benchmark/benchmarks/utils.py",
+   "ethical_benchmark/datasets/__init__.py"
+  ],
+  "ethical_benchmark/benchmarks/mmlu.py": [
+   "ethical_benchmark/benchmarks/base.py",
+   "ethical_benchmark/benchmarks/utils.py",
+   "ethical_benchmark/datasets/__init__.py"
+  ],
+  "ethical_benchmark/benchmarks/registry.py": [
+   "ethical_benchmark/benchmarks/arc.py",
+   "ethical_benchmark/benchmarks/base.py",
+   "ethical_benchmark/benchmarks/harmbench.py",
+   "ethical_benchmark/benchmarks/mmlu.py",
+   "ethical_benchmark/benchmarks/xstest.py"
+  ],
+  "ethical_benchmark/benchmarks/utils.py": [],
+  "ethical_benchmark/benchmarks/xstest.py": [
+   "ethical_benchmark/benchmarks/base.py",
+   "ethical_benchmark/benchmarks/utils.py"
+  ],
+  "ethical_benchmark/datasets/__init__.py": [
+   "ethical_benchmark/datasets/bias.py",
+   "ethical_benchmark/datasets/factuality.py",
+   "ethical_benchmark/datasets/toxicity.py"
+  ],
+  "scripts/rescore_harmbench.py": [
+   "ethical_benchmark/benchmarks/utils.py"
+  ],
+  "tests/test_arc.py": [
+   "ethical_benchmark/benchmarks/arc.py",
+   "ethical_benchmark/benchmarks/base.py",
+   "ethical_benchmark/benchmarks/registry.py"
+  ],
+  "tests/test_refusal_parser.py": [
+   "ethical_benchmark/benchmarks/utils.py"
+  ],
+  "tests/test_xstest_benign.py": [
+   "ethical_benchmark/benchmarks/xstest.py"
+  ]
+ }
+}

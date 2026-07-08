@@ -116,8 +116,9 @@ def page_overview() -> None:
             T.verdict_html(
                 "The reading",
                 "At the reference budget, <em>no pair significantly raises harmful compliance</em> — "
-                "the multiplicity-robust costs of 4-bit quantization are capability and over-refusal, "
-                "not safety. The only significant ΔASR is a <em>decrease</em> (Llama-3.2-3B).",
+                "the multiplicity-robust effects of 4-bit quantization are capability losses (MMLU, ARC) "
+                "and a single over-refusal <em>decrease</em>, not a safety change. The only significant "
+                "ΔASR is itself a <em>decrease</em> (Llama-3.2-3B).",
             ),
             unsafe_allow_html=True,
         )
@@ -251,7 +252,7 @@ def page_results() -> None:
                 st.plotly_chart(T.style_fig(fig, height=340), use_container_width=True)
                 st.caption(
                     "For HarmBench, these regex-proxy values disagree with the judge (e.g. Qwen-1.7B reads ~0.6 "
-                    "here vs ~0.14 under the classifier) — the demonstration that *scorer choice changes the conclusion*."
+                    "here vs ~0.26 under the classifier at the 512-token budget) — the demonstration that *scorer choice changes the conclusion*."
                 )
 
     # --- Tab 2: precision sweep -------------------------------------------- #
@@ -274,7 +275,8 @@ def page_results() -> None:
             st.plotly_chart(T.style_fig(fig, height=440), use_container_width=True)
             st.caption(
                 "If the effect were bit-width-graded, lines would fall monotonically left→right. "
-                "Capability metrics show a cliff at NF4; the safety axis is method-specific (two-peaked)."
+                "Capability metrics show a cliff at NF4; the safety axis shows no robust move at either "
+                "precision step (the 128-token INT8 Llama peak does not replicate at 512)."
             )
 
     # --- Tab 3: judge vs proxy -------------------------------------------- #

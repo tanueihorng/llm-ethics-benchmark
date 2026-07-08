@@ -1,0 +1,129 @@
+{
+ "projectRoot": "/Users/tanueihorng/fyp_quant",
+ "batchFiles": [
+  {
+   "path": "ethical_benchmark/config_schema.py",
+   "language": "python",
+   "sizeLines": 117,
+   "fileCategory": "code"
+  },
+  {
+   "path": "ethical_benchmark/datasets/bias.py",
+   "language": "python",
+   "sizeLines": 222,
+   "fileCategory": "code"
+  },
+  {
+   "path": "ethical_benchmark/datasets/factuality.py",
+   "language": "python",
+   "sizeLines": 151,
+   "fileCategory": "code"
+  },
+  {
+   "path": "ethical_benchmark/datasets/toxicity.py",
+   "language": "python",
+   "sizeLines": 118,
+   "fileCategory": "code"
+  },
+  {
+   "path": "ethical_benchmark/evaluators/bias_eval.py",
+   "language": "python",
+   "sizeLines": 233,
+   "fileCategory": "code"
+  },
+  {
+   "path": "ethical_benchmark/evaluators/factuality_eval.py",
+   "language": "python",
+   "sizeLines": 211,
+   "fileCategory": "code"
+  },
+  {
+   "path": "ethical_benchmark/evaluators/toxicity_eval.py",
+   "language": "python",
+   "sizeLines": 339,
+   "fileCategory": "code"
+  },
+  {
+   "path": "ethical_benchmark/pipeline/run_benchmark.py",
+   "language": "python",
+   "sizeLines": 517,
+   "fileCategory": "code"
+  },
+  {
+   "path": "tests/conftest.py",
+   "language": "python",
+   "sizeLines": 196,
+   "fileCategory": "code"
+  },
+  {
+   "path": "tests/test_datasets.py",
+   "language": "python",
+   "sizeLines": 193,
+   "fileCategory": "code"
+  },
+  {
+   "path": "tests/test_evaluators.py",
+   "language": "python",
+   "sizeLines": 162,
+   "fileCategory": "code"
+  },
+  {
+   "path": "tests/test_pipeline.py",
+   "language": "python",
+   "sizeLines": 111,
+   "fileCategory": "code"
+  }
+ ],
+ "batchImportData": {
+  "ethical_benchmark/config_schema.py": [],
+  "ethical_benchmark/datasets/bias.py": [
+   "ethical_benchmark/datasets/__init__.py"
+  ],
+  "ethical_benchmark/datasets/factuality.py": [
+   "ethical_benchmark/datasets/__init__.py"
+  ],
+  "ethical_benchmark/datasets/toxicity.py": [
+   "ethical_benchmark/datasets/__init__.py"
+  ],
+  "ethical_benchmark/evaluators/bias_eval.py": [
+   "ethical_benchmark/datasets/bias.py"
+  ],
+  "ethical_benchmark/evaluators/factuality_eval.py": [
+   "ethical_benchmark/datasets/factuality.py"
+  ],
+  "ethical_benchmark/evaluators/toxicity_eval.py": [
+   "ethical_benchmark/datasets/toxicity.py",
+   "ethical_benchmark/metrics/aggregate.py"
+  ],
+  "ethical_benchmark/pipeline/run_benchmark.py": [
+   "ethical_benchmark/config_schema.py",
+   "ethical_benchmark/datasets/bias.py",
+   "ethical_benchmark/datasets/factuality.py",
+   "ethical_benchmark/datasets/toxicity.py",
+   "ethical_benchmark/evaluators/bias_eval.py",
+   "ethical_benchmark/evaluators/factuality_eval.py",
+   "ethical_benchmark/evaluators/toxicity_eval.py",
+   "ethical_benchmark/metrics/aggregate.py",
+   "ethical_benchmark/models/generation.py",
+   "ethical_benchmark/models/loader.py"
+  ],
+  "tests/conftest.py": [
+   "ethical_benchmark/datasets/bias.py",
+   "ethical_benchmark/datasets/factuality.py",
+   "ethical_benchmark/datasets/toxicity.py"
+  ],
+  "tests/test_datasets.py": [
+   "ethical_benchmark/datasets/bias.py",
+   "ethical_benchmark/datasets/factuality.py",
+   "ethical_benchmark/datasets/toxicity.py"
+  ],
+  "tests/test_evaluators.py": [
+   "ethical_benchmark/evaluators/bias_eval.py",
+   "ethical_benchmark/evaluators/factuality_eval.py",
+   "ethical_benchmark/evaluators/toxicity_eval.py"
+  ],
+  "tests/test_pipeline.py": [
+   "ethical_benchmark/pipeline/run_benchmark.py"
+  ]
+ }
+}

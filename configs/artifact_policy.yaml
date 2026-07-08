@@ -121,7 +121,8 @@ stale_text:
     - scripts/build_fyp_thesis_v4.js
   exclude:
     - docs/archive/*
-    - docs/fyp_showcase.html
+    # fyp_showcase.html was refreshed to the 512-primary results on 2026-07-03
+    # (banner removed) and is scanned again; v2 remains a banner-marked snapshot.
     - docs/fyp_showcase_v2.html
     - docs/fyp_architecture.html
     - docs/Codex_Meetup_Agent_Harness_Report.html
@@ -192,6 +193,17 @@ stale_text:
     # The retired 128-era thesis docx may only be named on lines scoped as
     # superseded / archived / 128-era history.
     - '^(?!.*(?:[Ss]uperseded|archive|128-era)).*FYP_Thesis_2026-06-'
+    # D44 (2026-07-08 pre-submission audit): the Qwen3-1.7B XSTest over-refusal
+    # decrease (−0.028) is BORDERLINE, not significant — its bootstrap CI excludes
+    # zero but McNemar's exact test gives p = 0.065 on 11 discordant prompts, and
+    # the report/thesis significance criterion is the exact test (report §3.7).
+    # Guard the retired "two significant over-refusal deltas" framing, the old
+    # Table 6.1 "yes" verdict for that row, and prose asserting the −0.028 delta
+    # as significant on a line without borderline/not-significant/128 scoping.
+    # Self-tested to fire (and caught one live residual on first run).
+    - 'two significant over-refusal deltas'
+    - '−0\.028 \[−0\.052, −0\.004\]", "yes"'
+    - '^(?!.*(?:[Bb]orderline|not significant|128))(?=.*(?:over-refus|ΔOR|XSTest)).*−0\.028.{0,100}?(?<!in)significant'
 
 report_worthy:
   changed_file_patterns:

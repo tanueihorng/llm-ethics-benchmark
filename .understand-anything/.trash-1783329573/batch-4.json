@@ -1,0 +1,1273 @@
+{
+  "nodes": [
+    {
+      "id": "file:ethical_benchmark/metrics/__init__.py",
+      "type": "file",
+      "name": "__init__.py",
+      "filePath": "ethical_benchmark/metrics/__init__.py",
+      "summary": "Package barrel re-exporting the metrics I/O and bootstrap-CI helpers from aggregate.py for use across the pipeline and analysis layers.",
+      "tags": ["entry-point", "barrel", "metrics"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:ethical_benchmark/metrics/aggregate.py",
+      "type": "file",
+      "name": "aggregate.py",
+      "filePath": "ethical_benchmark/metrics/aggregate.py",
+      "summary": "Core metrics I/O utilities: JSONL append/read (with gzip support), JSON writing, summary CSV upsert, nested-dict flattening for CSV, radar CSV export, and a bootstrap confidence-interval estimator used by benchmark aggregation.",
+      "tags": ["utility", "serialization", "metrics", "statistics"],
+      "complexity": "moderate",
+      "languageNotes": "Pure-stdlib + NumPy module with no project-internal imports, making it the leaf dependency of the pipeline layer."
+    },
+    {
+      "id": "function:ethical_benchmark/metrics/aggregate.py:compute_bootstrap_ci",
+      "type": "function",
+      "name": "compute_bootstrap_ci",
+      "filePath": "ethical_benchmark/metrics/aggregate.py",
+      "lineRange": [17, 58],
+      "summary": "Computes a seeded bootstrap confidence interval (mean plus lower/upper quantiles) over an array of metric values, returning None for empty input.",
+      "tags": ["statistics", "bootstrap", "confidence-interval"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ethical_benchmark/metrics/aggregate.py:append_jsonl",
+      "type": "function",
+      "name": "append_jsonl",
+      "filePath": "ethical_benchmark/metrics/aggregate.py",
+      "lineRange": [61, 83],
+      "summary": "Appends record dicts to a JSONL file, creating parent directories and transparently handling .gz-compressed paths.",
+      "tags": ["serialization", "jsonl", "io"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:ethical_benchmark/metrics/aggregate.py:read_jsonl",
+      "type": "function",
+      "name": "read_jsonl",
+      "filePath": "ethical_benchmark/metrics/aggregate.py",
+      "lineRange": [86, 120],
+      "summary": "Reads a JSONL (optionally gzipped) file into a list of dicts, returning an empty list when the file does not exist; used by resume logic to recover processed prompts.",
+      "tags": ["serialization", "jsonl", "io"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:ethical_benchmark/metrics/aggregate.py:write_json",
+      "type": "function",
+      "name": "write_json",
+      "filePath": "ethical_benchmark/metrics/aggregate.py",
+      "lineRange": [123, 136],
+      "summary": "Writes a dict to a JSON file, creating parent directories as needed; used for per-run summary.json artifacts.",
+      "tags": ["serialization", "json", "io"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:ethical_benchmark/metrics/aggregate.py:append_summary_csv",
+      "type": "function",
+      "name": "append_summary_csv",
+      "filePath": "ethical_benchmark/metrics/aggregate.py",
+      "lineRange": [139, 180],
+      "summary": "Upserts a flattened summary row into the cross-run CSV, replacing an existing row with the same run identity so resumed runs do not duplicate entries.",
+      "tags": ["serialization", "csv", "upsert"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ethical_benchmark/metrics/aggregate.py:flatten_for_csv",
+      "type": "function",
+      "name": "flatten_for_csv",
+      "filePath": "ethical_benchmark/metrics/aggregate.py",
+      "lineRange": [183, 204],
+      "summary": "Recursively flattens nested dicts into dot/underscore-prefixed scalar keys so summary metrics can be written as flat CSV columns.",
+      "tags": ["utility", "csv", "data-transform"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:ethical_benchmark/metrics/aggregate.py:export_radar_csv",
+      "type": "function",
+      "name": "export_radar_csv",
+      "filePath": "ethical_benchmark/metrics/aggregate.py",
+      "lineRange": [207, 223],
+      "summary": "Writes a two-column dimension/score CSV from a summary dict for radar-chart visualization.",
+      "tags": ["csv", "visualization", "export"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:ethical_benchmark/pipeline/__init__.py",
+      "type": "file",
+      "name": "__init__.py",
+      "filePath": "ethical_benchmark/pipeline/__init__.py",
+      "summary": "Package barrel exposing the single-run (run_quant_benchmark) and matrix (run_quant_matrix) orchestration modules of the quantization pipeline.",
+      "tags": ["entry-point", "barrel", "pipeline"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "type": "file",
+      "name": "run_quant_benchmark.py",
+      "filePath": "ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "summary": "Single-run orchestrator: loads a (possibly NF4/INT8-quantized) HF model per the validated config, batches benchmark prompts through the generator, scores each response via the benchmark plugin, and persists raw.jsonl, summary.json, and summary CSV artifacts with resume support based on processed prompt IDs.",
+      "tags": ["pipeline", "orchestration", "entry-point", "benchmark-runner"],
+      "complexity": "complex",
+      "languageNotes": "Model-loading classes (HFModelLoader, TextGenerator, DecodingConfig) are resolved lazily via get_model_stack() so tests can monkeypatch the stack without importing torch/transformers."
+    },
+    {
+      "id": "function:ethical_benchmark/pipeline/run_quant_benchmark.py:get_model_stack",
+      "type": "function",
+      "name": "get_model_stack",
+      "filePath": "ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "lineRange": [41, 54],
+      "summary": "Lazily imports and returns the model-loading stack (loader, generator, spec, decoding config, seed function) so heavy ML dependencies load only when actually running a benchmark.",
+      "tags": ["factory", "lazy-import", "model-loading"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:ethical_benchmark/pipeline/run_quant_benchmark.py:parse_args",
+      "type": "function",
+      "name": "parse_args",
+      "filePath": "ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "lineRange": [61, 113],
+      "summary": "Builds the argparse CLI for a single benchmark run: config path, model alias, benchmark name, device, sample/batch overrides, seed, and resume/force-restart flags.",
+      "tags": ["cli", "argument-parsing", "configuration"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ethical_benchmark/pipeline/run_quant_benchmark.py:setup_logging",
+      "type": "function",
+      "name": "setup_logging",
+      "filePath": "ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "lineRange": [116, 129],
+      "summary": "Configures root logging at the requested level with a consistent timestamped format for pipeline runs.",
+      "tags": ["logging", "utility", "setup"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:ethical_benchmark/pipeline/run_quant_benchmark.py:normalize_model_key",
+      "type": "function",
+      "name": "normalize_model_key",
+      "filePath": "ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "lineRange": [132, 147],
+      "summary": "Normalizes a model alias into a lowercase, underscore-safe key used for output directory names.",
+      "tags": ["utility", "normalization", "naming"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:ethical_benchmark/pipeline/run_quant_benchmark.py:_resolved_dtype_name",
+      "type": "function",
+      "name": "_resolved_dtype_name",
+      "filePath": "ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "lineRange": [150, 171],
+      "summary": "Resolves a config dtype string (including 'auto') to the concrete dtype name given the runtime device (float16 on CUDA, float32 on CPU) for recording in summary metadata.",
+      "tags": ["utility", "dtype-resolution", "metadata"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:ethical_benchmark/pipeline/run_quant_benchmark.py:build_run_paths",
+      "type": "function",
+      "name": "build_run_paths",
+      "filePath": "ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "lineRange": [174, 196],
+      "summary": "Constructs the canonical output paths (raw.jsonl, summary.json, summary CSV) for a model-alias/benchmark run under the results directory.",
+      "tags": ["utility", "paths", "output-layout"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:ethical_benchmark/pipeline/run_quant_benchmark.py:validate_record_schema",
+      "type": "function",
+      "name": "validate_record_schema",
+      "filePath": "ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "lineRange": [199, 217],
+      "summary": "Validates that a per-prompt result record carries the full audit schema (pair_id, quantized flag, seed, generation config, timestamp, etc.), raising ValueError on missing or malformed fields.",
+      "tags": ["validation", "schema", "auditability"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:ethical_benchmark/pipeline/run_quant_benchmark.py:get_processed_prompt_ids",
+      "type": "function",
+      "name": "get_processed_prompt_ids",
+      "filePath": "ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "lineRange": [220, 233],
+      "summary": "Reads an existing raw.jsonl and returns the set of prompt IDs already processed, enabling interrupted runs to resume without re-generating.",
+      "tags": ["resume", "jsonl", "idempotency"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:ethical_benchmark/pipeline/run_quant_benchmark.py:prepare_remaining_items",
+      "type": "function",
+      "name": "prepare_remaining_items",
+      "filePath": "ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "lineRange": [236, 250],
+      "summary": "Filters the benchmark item list down to items whose prompt IDs have not yet been processed, preserving order for deterministic resumes.",
+      "tags": ["resume", "filtering", "determinism"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:ethical_benchmark/pipeline/run_quant_benchmark.py:batched",
+      "type": "function",
+      "name": "batched",
+      "filePath": "ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "lineRange": [253, 268],
+      "summary": "Yields fixed-size batches from the item list for batched generation, guarding against non-positive batch sizes.",
+      "tags": ["utility", "batching", "generator"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:ethical_benchmark/pipeline/run_quant_benchmark.py:execute_quant_benchmark_loaded",
+      "type": "function",
+      "name": "execute_quant_benchmark_loaded",
+      "filePath": "ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "lineRange": [271, 446],
+      "summary": "Core run loop given an already-loaded generator: builds the benchmark plugin, resolves resume state, batches prompts through generation, scores and schema-validates each record, appends raw.jsonl, aggregates metrics, and writes summary.json plus the flattened summary CSV row.",
+      "tags": ["orchestration", "benchmark-runner", "scoring", "persistence"],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:ethical_benchmark/pipeline/run_quant_benchmark.py:execute_quant_benchmark",
+      "type": "function",
+      "name": "execute_quant_benchmark",
+      "filePath": "ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "lineRange": [449, 530],
+      "summary": "Full single-run entry: seeds all RNGs, builds the ModelSpec from the config entry (including on-the-fly quantization flags), loads model and tokenizer via HFModelLoader, constructs the TextGenerator, then delegates to execute_quant_benchmark_loaded.",
+      "tags": ["orchestration", "model-loading", "quantization", "entry-point"],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:ethical_benchmark/pipeline/run_quant_benchmark.py:main",
+      "type": "function",
+      "name": "main",
+      "filePath": "ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "lineRange": [533, 555],
+      "summary": "CLI entry point: parses arguments, sets up logging, loads and validates the quantization config, and runs the selected model/benchmark combination.",
+      "tags": ["entry-point", "cli", "orchestration"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:ethical_benchmark/pipeline/run_quant_matrix.py",
+      "type": "file",
+      "name": "run_quant_matrix.py",
+      "filePath": "ethical_benchmark/pipeline/run_quant_matrix.py",
+      "summary": "Matrix orchestrator that runs every configured model across its benchmarks; in reuse mode it loads each model once, runs all its benchmarks sequentially via execute_quant_benchmark_loaded, and releases GPU memory (gc + cuda.empty_cache) in a try/finally between models.",
+      "tags": ["pipeline", "orchestration", "matrix-runner", "memory-management"],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:ethical_benchmark/pipeline/run_quant_matrix.py:parse_args",
+      "type": "function",
+      "name": "parse_args",
+      "filePath": "ethical_benchmark/pipeline/run_quant_matrix.py",
+      "lineRange": [27, 92],
+      "summary": "Builds the argparse CLI for matrix runs: config path, model/benchmark filters, device, sample/batch overrides, resume flags, and the model-reuse toggle.",
+      "tags": ["cli", "argument-parsing", "configuration"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:ethical_benchmark/pipeline/run_quant_matrix.py:_resolve_models",
+      "type": "function",
+      "name": "_resolve_models",
+      "filePath": "ethical_benchmark/pipeline/run_quant_matrix.py",
+      "lineRange": [95, 119],
+      "summary": "Resolves the user's model selection against the configured model aliases, raising KeyError for unknown aliases and defaulting to all models.",
+      "tags": ["utility", "validation", "model-selection"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:ethical_benchmark/pipeline/run_quant_matrix.py:_selected_benchmarks_for_model",
+      "type": "function",
+      "name": "_selected_benchmarks_for_model",
+      "filePath": "ethical_benchmark/pipeline/run_quant_matrix.py",
+      "lineRange": [122, 144],
+      "summary": "Computes the benchmark list for a model by intersecting its configured benchmarks with an optional CLI benchmark filter.",
+      "tags": ["utility", "filtering", "benchmark-selection"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:ethical_benchmark/pipeline/run_quant_matrix.py:_release_model_memory",
+      "type": "function",
+      "name": "_release_model_memory",
+      "filePath": "ethical_benchmark/pipeline/run_quant_matrix.py",
+      "lineRange": [147, 168],
+      "summary": "Frees model memory between matrix entries via gc.collect and, when torch/CUDA are present, torch.cuda.empty_cache — accessed defensively through sys.modules so the module works without torch installed.",
+      "tags": ["memory-management", "gpu", "cleanup"],
+      "complexity": "simple",
+      "languageNotes": "Looks torch up via sys.modules.get instead of importing it, keeping the matrix module importable in torch-free test environments."
+    },
+    {
+      "id": "function:ethical_benchmark/pipeline/run_quant_matrix.py:run_quant_matrix",
+      "type": "function",
+      "name": "run_quant_matrix",
+      "filePath": "ethical_benchmark/pipeline/run_quant_matrix.py",
+      "lineRange": [171, 296],
+      "summary": "Runs the full model-by-benchmark matrix: without reuse it delegates each (model, benchmark) pair to execute_quant_benchmark; with reuse it loads each model once, runs all its benchmarks through execute_quant_benchmark_loaded, and releases memory in a try/finally.",
+      "tags": ["orchestration", "matrix-runner", "model-reuse", "gpu"],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:ethical_benchmark/pipeline/run_quant_matrix.py:main",
+      "type": "function",
+      "name": "main",
+      "filePath": "ethical_benchmark/pipeline/run_quant_matrix.py",
+      "lineRange": [299, 327],
+      "summary": "CLI entry point: parses arguments, loads the validated config, resolves model selection, and launches the matrix run.",
+      "tags": ["entry-point", "cli", "orchestration"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:run_benchmark.py",
+      "type": "file",
+      "name": "run_benchmark.py",
+      "filePath": "run_benchmark.py",
+      "summary": "Thin repo-root launcher that delegates to the pipeline's single-run benchmark entry point for backwards-compatible invocation.",
+      "tags": ["entry-point", "shim", "cli"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:run_quant_benchmark.py",
+      "type": "file",
+      "name": "run_quant_benchmark.py",
+      "filePath": "run_quant_benchmark.py",
+      "summary": "Repo-root shim that invokes ethical_benchmark.pipeline.run_quant_benchmark.main so a single quantized benchmark run can be launched directly (e.g. from sbatch scripts).",
+      "tags": ["entry-point", "shim", "cli"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:run_quant_matrix.py",
+      "type": "file",
+      "name": "run_quant_matrix.py",
+      "filePath": "run_quant_matrix.py",
+      "summary": "Repo-root shim that invokes ethical_benchmark.pipeline.run_quant_matrix.main to launch the full model-by-benchmark matrix (used by SLURM matrix jobs).",
+      "tags": ["entry-point", "shim", "cli"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:tests/test_matrix_reuse.py",
+      "type": "file",
+      "name": "test_matrix_reuse.py",
+      "filePath": "tests/test_matrix_reuse.py",
+      "summary": "Tests the matrix runner's model-reuse logic with monkeypatched dummy loader/generator stacks: reuse mode must load each model exactly once across its benchmarks, while no-reuse mode must delegate to the single-run entry per (model, benchmark).",
+      "tags": ["test", "pipeline", "model-reuse", "mocking"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:tests/test_matrix_reuse.py:_DummyLoader",
+      "type": "class",
+      "name": "_DummyLoader",
+      "filePath": "tests/test_matrix_reuse.py",
+      "lineRange": [29, 47],
+      "summary": "Test double for HFModelLoader that records how many times load() is called per model, letting the reuse test assert one load per model.",
+      "tags": ["test", "mock", "model-loading"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_matrix_reuse.py:test_matrix_reuse_loads_once_per_model",
+      "type": "function",
+      "name": "test_matrix_reuse_loads_once_per_model",
+      "filePath": "tests/test_matrix_reuse.py",
+      "lineRange": [65, 92],
+      "summary": "Asserts that with reuse_loaded_model enabled, run_quant_matrix loads each model exactly once and executes every configured benchmark through the loaded-model path.",
+      "tags": ["test", "model-reuse", "matrix-runner"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:tests/test_matrix_reuse.py:test_matrix_no_reuse_calls_single_runner",
+      "type": "function",
+      "name": "test_matrix_no_reuse_calls_single_runner",
+      "filePath": "tests/test_matrix_reuse.py",
+      "lineRange": [95, 119],
+      "summary": "Asserts that with reuse disabled, run_quant_matrix falls back to calling the single-run execute_quant_benchmark once per (model, benchmark) combination.",
+      "tags": ["test", "matrix-runner", "fallback"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:tests/test_metrics_and_config.py",
+      "type": "file",
+      "name": "test_metrics_and_config.py",
+      "filePath": "tests/test_metrics_and_config.py",
+      "summary": "Unit tests for the metrics I/O layer (bootstrap CI, CSV flattening, JSONL round-trips, JSON writing, summary-CSV upsert, radar CSV) plus config validation failure modes (missing models, invalid dtype, negative token counts, out-of-range temperature).",
+      "tags": ["test", "metrics", "configuration", "validation"],
+      "complexity": "complex"
+    },
+    {
+      "id": "class:tests/test_metrics_and_config.py:TestBootstrapCI",
+      "type": "class",
+      "name": "TestBootstrapCI",
+      "filePath": "tests/test_metrics_and_config.py",
+      "lineRange": [28, 54],
+      "summary": "Verifies compute_bootstrap_ci behavior on normal arrays, empty input (returns None), configurable confidence levels, and single-value degenerate cases.",
+      "tags": ["test", "statistics", "bootstrap"],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:tests/test_metrics_and_config.py:TestFlattenForCSV",
+      "type": "class",
+      "name": "TestFlattenForCSV",
+      "filePath": "tests/test_metrics_and_config.py",
+      "lineRange": [62, 80],
+      "summary": "Verifies flatten_for_csv on flat, nested, deeply nested, and mixed-type dicts.",
+      "tags": ["test", "csv", "data-transform"],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:tests/test_metrics_and_config.py:TestJSONLRoundTrip",
+      "type": "class",
+      "name": "TestJSONLRoundTrip",
+      "filePath": "tests/test_metrics_and_config.py",
+      "lineRange": [88, 110],
+      "summary": "Round-trip tests for append_jsonl/read_jsonl covering write-then-read, append preserving existing records, and reading nonexistent files.",
+      "tags": ["test", "jsonl", "io"],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:tests/test_metrics_and_config.py:TestWriteJSON",
+      "type": "class",
+      "name": "TestWriteJSON",
+      "filePath": "tests/test_metrics_and_config.py",
+      "lineRange": [118, 128],
+      "summary": "Verifies write_json persists a dict that reads back identically.",
+      "tags": ["test", "json", "io"],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:tests/test_metrics_and_config.py:TestSummaryCSV",
+      "type": "class",
+      "name": "TestSummaryCSV",
+      "filePath": "tests/test_metrics_and_config.py",
+      "lineRange": [136, 175],
+      "summary": "Verifies append_summary_csv creates headers, appends distinct rows, and upserts (replaces) the row for the same run identity on resume rather than duplicating it.",
+      "tags": ["test", "csv", "upsert", "resume"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:tests/test_metrics_and_config.py:TestRadarCSV",
+      "type": "class",
+      "name": "TestRadarCSV",
+      "filePath": "tests/test_metrics_and_config.py",
+      "lineRange": [178, 187],
+      "summary": "Verifies export_radar_csv writes the expected header and one row per summary dimension.",
+      "tags": ["test", "csv", "visualization"],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:tests/test_metrics_and_config.py:TestConfigValidation",
+      "type": "class",
+      "name": "TestConfigValidation",
+      "filePath": "tests/test_metrics_and_config.py",
+      "lineRange": [195, 237],
+      "summary": "Negative-path tests for config validation: a valid config passes while missing models, invalid dtype, negative max_new_tokens, and out-of-range temperature all raise.",
+      "tags": ["test", "configuration", "validation", "schema"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:tests/test_quant_pipeline_utils.py",
+      "type": "file",
+      "name": "test_quant_pipeline_utils.py",
+      "filePath": "tests/test_quant_pipeline_utils.py",
+      "summary": "Unit tests for the single-run pipeline's helper functions: record schema validation (accept/reject), resume filtering via prepare_remaining_items, and processed-prompt-ID recovery from raw.jsonl.",
+      "tags": ["test", "pipeline", "validation", "resume"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_quant_pipeline_utils.py:_valid_record",
+      "type": "function",
+      "name": "_valid_record",
+      "filePath": "tests/test_quant_pipeline_utils.py",
+      "lineRange": [16, 31],
+      "summary": "Factory returning a fully-populated per-prompt record dict that satisfies the pipeline's audit schema, used as the baseline fixture for validation tests.",
+      "tags": ["test", "fixture", "schema"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:tests/test_quant_smoke.py",
+      "type": "file",
+      "name": "test_quant_smoke.py",
+      "filePath": "tests/test_quant_smoke.py",
+      "summary": "End-to-end smoke tests of the single-run pipeline using dummy model/plugin doubles: each benchmark type runs through execute_quant_benchmark producing raw.jsonl and summary.json, and identical seeds yield identical prompt ordering across runs.",
+      "tags": ["test", "smoke-test", "pipeline", "determinism"],
+      "complexity": "complex"
+    },
+    {
+      "id": "class:tests/test_quant_smoke.py:_DummyPlugin",
+      "type": "class",
+      "name": "_DummyPlugin",
+      "filePath": "tests/test_quant_smoke.py",
+      "lineRange": [58, 138],
+      "summary": "Stub BenchmarkPlugin that emits seeded, shuffled BenchmarkItems and computes benchmark-specific aggregate metrics (ASR, over-refusal, accuracy) so the pipeline can be exercised without datasets or models.",
+      "tags": ["test", "mock", "benchmark-plugin"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:tests/test_quant_smoke.py:test_smoke_each_benchmark",
+      "type": "function",
+      "name": "test_smoke_each_benchmark",
+      "filePath": "tests/test_quant_smoke.py",
+      "lineRange": [155, 183],
+      "summary": "Runs execute_quant_benchmark for each configured benchmark with the dummy stack and asserts the raw.jsonl and summary.json artifacts are produced at the expected paths.",
+      "tags": ["test", "smoke-test", "artifacts"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:tests/test_quant_smoke.py:test_reproducible_order_same_seed",
+      "type": "function",
+      "name": "test_reproducible_order_same_seed",
+      "filePath": "tests/test_quant_smoke.py",
+      "lineRange": [186, 224],
+      "summary": "Runs the same benchmark twice with the same seed into separate output dirs and asserts the per-prompt record order in raw.jsonl is identical, proving deterministic item ordering.",
+      "tags": ["test", "determinism", "seeding"],
+      "complexity": "moderate"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:ethical_benchmark/metrics/__init__.py",
+      "target": "file:ethical_benchmark/metrics/aggregate.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/__init__.py",
+      "target": "file:ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/__init__.py",
+      "target": "file:ethical_benchmark/pipeline/run_quant_matrix.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "target": "file:ethical_benchmark/benchmarks/base.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "target": "file:ethical_benchmark/benchmarks/registry.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "target": "file:ethical_benchmark/metrics/aggregate.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "target": "file:ethical_benchmark/quant/config_schema.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_matrix.py",
+      "target": "file:ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_matrix.py",
+      "target": "file:ethical_benchmark/quant/config_schema.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:run_benchmark.py",
+      "target": "file:ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:run_quant_benchmark.py",
+      "target": "file:ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:run_quant_matrix.py",
+      "target": "file:ethical_benchmark/pipeline/run_quant_matrix.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:tests/test_matrix_reuse.py",
+      "target": "file:ethical_benchmark/pipeline/__init__.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:tests/test_matrix_reuse.py",
+      "target": "file:ethical_benchmark/quant/config_schema.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:tests/test_metrics_and_config.py",
+      "target": "file:ethical_benchmark/metrics/aggregate.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:tests/test_quant_pipeline_utils.py",
+      "target": "file:ethical_benchmark/benchmarks/base.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:tests/test_quant_pipeline_utils.py",
+      "target": "file:ethical_benchmark/metrics/aggregate.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:tests/test_quant_pipeline_utils.py",
+      "target": "file:ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:tests/test_quant_smoke.py",
+      "target": "file:ethical_benchmark/benchmarks/base.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:tests/test_quant_smoke.py",
+      "target": "file:ethical_benchmark/metrics/aggregate.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:tests/test_quant_smoke.py",
+      "target": "file:ethical_benchmark/pipeline/__init__.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:tests/test_quant_smoke.py",
+      "target": "file:ethical_benchmark/quant/config_schema.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:ethical_benchmark/metrics/aggregate.py",
+      "target": "function:ethical_benchmark/metrics/aggregate.py:compute_bootstrap_ci",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ethical_benchmark/metrics/aggregate.py",
+      "target": "function:ethical_benchmark/metrics/aggregate.py:append_jsonl",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ethical_benchmark/metrics/aggregate.py",
+      "target": "function:ethical_benchmark/metrics/aggregate.py:read_jsonl",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ethical_benchmark/metrics/aggregate.py",
+      "target": "function:ethical_benchmark/metrics/aggregate.py:write_json",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ethical_benchmark/metrics/aggregate.py",
+      "target": "function:ethical_benchmark/metrics/aggregate.py:append_summary_csv",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ethical_benchmark/metrics/aggregate.py",
+      "target": "function:ethical_benchmark/metrics/aggregate.py:flatten_for_csv",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ethical_benchmark/metrics/aggregate.py",
+      "target": "function:ethical_benchmark/metrics/aggregate.py:export_radar_csv",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ethical_benchmark/metrics/aggregate.py",
+      "target": "function:ethical_benchmark/metrics/aggregate.py:compute_bootstrap_ci",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ethical_benchmark/metrics/aggregate.py",
+      "target": "function:ethical_benchmark/metrics/aggregate.py:append_jsonl",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ethical_benchmark/metrics/aggregate.py",
+      "target": "function:ethical_benchmark/metrics/aggregate.py:read_jsonl",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ethical_benchmark/metrics/aggregate.py",
+      "target": "function:ethical_benchmark/metrics/aggregate.py:write_json",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ethical_benchmark/metrics/aggregate.py",
+      "target": "function:ethical_benchmark/metrics/aggregate.py:append_summary_csv",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ethical_benchmark/metrics/aggregate.py",
+      "target": "function:ethical_benchmark/metrics/aggregate.py:flatten_for_csv",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ethical_benchmark/metrics/aggregate.py",
+      "target": "function:ethical_benchmark/metrics/aggregate.py:export_radar_csv",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "target": "function:ethical_benchmark/pipeline/run_quant_benchmark.py:get_model_stack",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "target": "function:ethical_benchmark/pipeline/run_quant_benchmark.py:parse_args",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "target": "function:ethical_benchmark/pipeline/run_quant_benchmark.py:setup_logging",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "target": "function:ethical_benchmark/pipeline/run_quant_benchmark.py:normalize_model_key",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "target": "function:ethical_benchmark/pipeline/run_quant_benchmark.py:_resolved_dtype_name",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "target": "function:ethical_benchmark/pipeline/run_quant_benchmark.py:build_run_paths",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "target": "function:ethical_benchmark/pipeline/run_quant_benchmark.py:validate_record_schema",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "target": "function:ethical_benchmark/pipeline/run_quant_benchmark.py:get_processed_prompt_ids",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "target": "function:ethical_benchmark/pipeline/run_quant_benchmark.py:prepare_remaining_items",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "target": "function:ethical_benchmark/pipeline/run_quant_benchmark.py:batched",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "target": "function:ethical_benchmark/pipeline/run_quant_benchmark.py:execute_quant_benchmark_loaded",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "target": "function:ethical_benchmark/pipeline/run_quant_benchmark.py:execute_quant_benchmark",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "target": "function:ethical_benchmark/pipeline/run_quant_benchmark.py:main",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "target": "function:ethical_benchmark/pipeline/run_quant_benchmark.py:get_model_stack",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "target": "function:ethical_benchmark/pipeline/run_quant_benchmark.py:parse_args",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "target": "function:ethical_benchmark/pipeline/run_quant_benchmark.py:setup_logging",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "target": "function:ethical_benchmark/pipeline/run_quant_benchmark.py:normalize_model_key",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "target": "function:ethical_benchmark/pipeline/run_quant_benchmark.py:build_run_paths",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "target": "function:ethical_benchmark/pipeline/run_quant_benchmark.py:validate_record_schema",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "target": "function:ethical_benchmark/pipeline/run_quant_benchmark.py:get_processed_prompt_ids",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "target": "function:ethical_benchmark/pipeline/run_quant_benchmark.py:prepare_remaining_items",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "target": "function:ethical_benchmark/pipeline/run_quant_benchmark.py:batched",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "target": "function:ethical_benchmark/pipeline/run_quant_benchmark.py:execute_quant_benchmark_loaded",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "target": "function:ethical_benchmark/pipeline/run_quant_benchmark.py:execute_quant_benchmark",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "target": "function:ethical_benchmark/pipeline/run_quant_benchmark.py:main",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_matrix.py",
+      "target": "function:ethical_benchmark/pipeline/run_quant_matrix.py:parse_args",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_matrix.py",
+      "target": "function:ethical_benchmark/pipeline/run_quant_matrix.py:_resolve_models",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_matrix.py",
+      "target": "function:ethical_benchmark/pipeline/run_quant_matrix.py:_selected_benchmarks_for_model",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_matrix.py",
+      "target": "function:ethical_benchmark/pipeline/run_quant_matrix.py:_release_model_memory",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_matrix.py",
+      "target": "function:ethical_benchmark/pipeline/run_quant_matrix.py:run_quant_matrix",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_matrix.py",
+      "target": "function:ethical_benchmark/pipeline/run_quant_matrix.py:main",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_matrix.py",
+      "target": "function:ethical_benchmark/pipeline/run_quant_matrix.py:parse_args",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_matrix.py",
+      "target": "function:ethical_benchmark/pipeline/run_quant_matrix.py:run_quant_matrix",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_matrix.py",
+      "target": "function:ethical_benchmark/pipeline/run_quant_matrix.py:main",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_matrix_reuse.py",
+      "target": "class:tests/test_matrix_reuse.py:_DummyLoader",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_matrix_reuse.py",
+      "target": "function:tests/test_matrix_reuse.py:test_matrix_reuse_loads_once_per_model",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_matrix_reuse.py",
+      "target": "function:tests/test_matrix_reuse.py:test_matrix_no_reuse_calls_single_runner",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_metrics_and_config.py",
+      "target": "class:tests/test_metrics_and_config.py:TestBootstrapCI",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_metrics_and_config.py",
+      "target": "class:tests/test_metrics_and_config.py:TestFlattenForCSV",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_metrics_and_config.py",
+      "target": "class:tests/test_metrics_and_config.py:TestJSONLRoundTrip",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_metrics_and_config.py",
+      "target": "class:tests/test_metrics_and_config.py:TestWriteJSON",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_metrics_and_config.py",
+      "target": "class:tests/test_metrics_and_config.py:TestSummaryCSV",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_metrics_and_config.py",
+      "target": "class:tests/test_metrics_and_config.py:TestRadarCSV",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_metrics_and_config.py",
+      "target": "class:tests/test_metrics_and_config.py:TestConfigValidation",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_quant_pipeline_utils.py",
+      "target": "function:tests/test_quant_pipeline_utils.py:_valid_record",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_quant_smoke.py",
+      "target": "class:tests/test_quant_smoke.py:_DummyPlugin",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_quant_smoke.py",
+      "target": "function:tests/test_quant_smoke.py:test_smoke_each_benchmark",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_quant_smoke.py",
+      "target": "function:tests/test_quant_smoke.py:test_reproducible_order_same_seed",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "target": "function:ethical_benchmark/benchmarks/registry.py:build_benchmark_plugin",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "target": "function:ethical_benchmark/quant/config_schema.py:load_quant_config",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "target": "function:ethical_benchmark/metrics/aggregate.py:read_jsonl",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "target": "function:ethical_benchmark/metrics/aggregate.py:append_jsonl",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "target": "function:ethical_benchmark/metrics/aggregate.py:write_json",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "target": "function:ethical_benchmark/metrics/aggregate.py:append_summary_csv",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "target": "function:ethical_benchmark/metrics/aggregate.py:flatten_for_csv",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_matrix.py",
+      "target": "function:ethical_benchmark/pipeline/run_quant_benchmark.py:execute_quant_benchmark",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_matrix.py",
+      "target": "function:ethical_benchmark/pipeline/run_quant_benchmark.py:execute_quant_benchmark_loaded",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_matrix.py",
+      "target": "function:ethical_benchmark/pipeline/run_quant_benchmark.py:get_model_stack",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_matrix.py",
+      "target": "function:ethical_benchmark/pipeline/run_quant_benchmark.py:setup_logging",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_matrix.py",
+      "target": "function:ethical_benchmark/quant/config_schema.py:load_quant_config",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_metrics_and_config.py",
+      "target": "function:ethical_benchmark/metrics/aggregate.py:compute_bootstrap_ci",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_metrics_and_config.py",
+      "target": "function:ethical_benchmark/metrics/aggregate.py:append_summary_csv",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_quant_pipeline_utils.py",
+      "target": "function:ethical_benchmark/pipeline/run_quant_benchmark.py:validate_record_schema",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_quant_pipeline_utils.py",
+      "target": "function:ethical_benchmark/pipeline/run_quant_benchmark.py:prepare_remaining_items",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_quant_pipeline_utils.py",
+      "target": "function:ethical_benchmark/pipeline/run_quant_benchmark.py:get_processed_prompt_ids",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_quant_smoke.py",
+      "target": "function:ethical_benchmark/pipeline/run_quant_benchmark.py:execute_quant_benchmark",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_matrix_reuse.py",
+      "target": "function:ethical_benchmark/pipeline/run_quant_matrix.py:run_quant_matrix",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:ethical_benchmark/metrics/aggregate.py",
+      "target": "file:tests/test_metrics_and_config.py",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:ethical_benchmark/metrics/aggregate.py",
+      "target": "file:tests/test_quant_smoke.py",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "target": "file:tests/test_quant_pipeline_utils.py",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "target": "file:tests/test_quant_smoke.py",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:ethical_benchmark/pipeline/run_quant_matrix.py",
+      "target": "file:tests/test_matrix_reuse.py",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    }
+  ]
+}

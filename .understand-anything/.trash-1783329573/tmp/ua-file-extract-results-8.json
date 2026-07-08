@@ -1,0 +1,2688 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 5,
+  "filesSkipped": [],
+  "results": [
+    {
+      "path": "dashboard/__init__.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 6,
+      "nonEmptyLines": 5,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "dashboard/app.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 549,
+      "nonEmptyLines": 493,
+      "functions": [
+        {
+          "name": "page_overview",
+          "startLine": 85,
+          "endLine": 178,
+          "params": []
+        },
+        {
+          "name": "page_results",
+          "startLine": 184,
+          "endLine": 328,
+          "params": []
+        },
+        {
+          "name": "page_add_model",
+          "startLine": 334,
+          "endLine": 425,
+          "params": []
+        },
+        {
+          "name": "page_run",
+          "startLine": 431,
+          "endLine": 511,
+          "params": []
+        },
+        {
+          "name": "page_raw",
+          "startLine": 517,
+          "endLine": 536,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "page_overview",
+          "line": 85,
+          "isDefault": false
+        },
+        {
+          "name": "page_results",
+          "line": 184,
+          "isDefault": false
+        },
+        {
+          "name": "page_add_model",
+          "line": 334,
+          "isDefault": false
+        },
+        {
+          "name": "page_run",
+          "line": 431,
+          "isDefault": false
+        },
+        {
+          "name": "page_raw",
+          "line": 517,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "page_overview",
+          "callee": "st.markdown",
+          "lineNumber": 86
+        },
+        {
+          "caller": "page_overview",
+          "callee": "T.hero_html",
+          "lineNumber": 87
+        },
+        {
+          "caller": "page_overview",
+          "callee": "D.load_summary",
+          "lineNumber": 97
+        },
+        {
+          "caller": "page_overview",
+          "callee": "D.load_multiple_comparisons",
+          "lineNumber": 98
+        },
+        {
+          "caller": "page_overview",
+          "callee": "D.judge_primary_interpretations",
+          "lineNumber": 102
+        },
+        {
+          "caller": "page_overview",
+          "callee": "bool",
+          "lineNumber": 103
+        },
+        {
+          "caller": "page_overview",
+          "callee": "D.load_interpretations",
+          "lineNumber": 105
+        },
+        {
+          "caller": "page_overview",
+          "callee": "st.warning",
+          "lineNumber": 108
+        },
+        {
+          "caller": "page_overview",
+          "callee": "st.markdown",
+          "lineNumber": 115
+        },
+        {
+          "caller": "page_overview",
+          "callee": "T.verdict_html",
+          "lineNumber": 116
+        },
+        {
+          "caller": "page_overview",
+          "callee": "st.warning",
+          "lineNumber": 126
+        },
+        {
+          "caller": "page_overview",
+          "callee": "len",
+          "lineNumber": 132
+        },
+        {
+          "caller": "page_overview",
+          "callee": "tiles.append",
+          "lineNumber": 134
+        },
+        {
+          "caller": "page_overview",
+          "callee": "tiles.append",
+          "lineNumber": 135
+        },
+        {
+          "caller": "page_overview",
+          "callee": "mc.get",
+          "lineNumber": 135
+        },
+        {
+          "caller": "page_overview",
+          "callee": "tiles.append",
+          "lineNumber": 136
+        },
+        {
+          "caller": "page_overview",
+          "callee": "str",
+          "lineNumber": 136
+        },
+        {
+          "caller": "page_overview",
+          "callee": "mc.get",
+          "lineNumber": 136
+        },
+        {
+          "caller": "page_overview",
+          "callee": "tiles.append",
+          "lineNumber": 138
+        },
+        {
+          "caller": "page_overview",
+          "callee": "str",
+          "lineNumber": 138
+        },
+        {
+          "caller": "page_overview",
+          "callee": "summary.get",
+          "lineNumber": 138
+        },
+        {
+          "caller": "page_overview",
+          "callee": "st.markdown",
+          "lineNumber": 139
+        },
+        {
+          "caller": "page_overview",
+          "callee": "T.stat_tiles_html",
+          "lineNumber": 139
+        },
+        {
+          "caller": "page_overview",
+          "callee": "st.markdown",
+          "lineNumber": 141
+        },
+        {
+          "caller": "page_overview",
+          "callee": "T.section_head_html",
+          "lineNumber": 142
+        },
+        {
+          "caller": "page_overview",
+          "callee": "st.markdown",
+          "lineNumber": 152
+        },
+        {
+          "caller": "page_overview",
+          "callee": "T.pair_card_html",
+          "lineNumber": 152
+        },
+        {
+          "caller": "page_overview",
+          "callee": "st.markdown",
+          "lineNumber": 155
+        },
+        {
+          "caller": "page_overview",
+          "callee": "T.section_head_html",
+          "lineNumber": 155
+        },
+        {
+          "caller": "page_overview",
+          "callee": "st.caption",
+          "lineNumber": 157
+        },
+        {
+          "caller": "page_overview",
+          "callee": "mc.get",
+          "lineNumber": 157
+        },
+        {
+          "caller": "page_overview",
+          "callee": "mc.get",
+          "lineNumber": 158
+        },
+        {
+          "caller": "page_overview",
+          "callee": "isinstance",
+          "lineNumber": 159
+        },
+        {
+          "caller": "page_overview",
+          "callee": "st.markdown",
+          "lineNumber": 160
+        },
+        {
+          "caller": "page_overview",
+          "callee": "isinstance",
+          "lineNumber": 162
+        },
+        {
+          "caller": "page_overview",
+          "callee": "s.get",
+          "lineNumber": 163
+        },
+        {
+          "caller": "page_overview",
+          "callee": "s.get",
+          "lineNumber": 163
+        },
+        {
+          "caller": "page_overview",
+          "callee": "s.get",
+          "lineNumber": 163
+        },
+        {
+          "caller": "page_overview",
+          "callee": "str(s.get(\"metric\") or s.get(\"label\") or \"\").replace",
+          "lineNumber": 164
+        },
+        {
+          "caller": "page_overview",
+          "callee": "str",
+          "lineNumber": 164
+        },
+        {
+          "caller": "page_overview",
+          "callee": "s.get",
+          "lineNumber": 164
+        },
+        {
+          "caller": "page_overview",
+          "callee": "s.get",
+          "lineNumber": 164
+        },
+        {
+          "caller": "page_overview",
+          "callee": "s.get",
+          "lineNumber": 165
+        },
+        {
+          "caller": "page_overview",
+          "callee": "s.get",
+          "lineNumber": 165
+        },
+        {
+          "caller": "page_overview",
+          "callee": "s.get",
+          "lineNumber": 165
+        },
+        {
+          "caller": "page_overview",
+          "callee": "s.get",
+          "lineNumber": 166
+        },
+        {
+          "caller": "page_overview",
+          "callee": "isinstance",
+          "lineNumber": 168
+        },
+        {
+          "caller": "page_overview",
+          "callee": "bits.append",
+          "lineNumber": 169
+        },
+        {
+          "caller": "page_overview",
+          "callee": "isinstance",
+          "lineNumber": 170
+        },
+        {
+          "caller": "page_overview",
+          "callee": "bits.append",
+          "lineNumber": 171
+        },
+        {
+          "caller": "page_overview",
+          "callee": "st.markdown",
+          "lineNumber": 172
+        },
+        {
+          "caller": "page_overview",
+          "callee": "\" · \".join",
+          "lineNumber": 172
+        },
+        {
+          "caller": "page_overview",
+          "callee": "st.markdown",
+          "lineNumber": 174
+        },
+        {
+          "caller": "page_overview",
+          "callee": "st.info",
+          "lineNumber": 175
+        },
+        {
+          "caller": "page_results",
+          "callee": "st.markdown",
+          "lineNumber": 185
+        },
+        {
+          "caller": "page_results",
+          "callee": "T.hero_html",
+          "lineNumber": 186
+        },
+        {
+          "caller": "page_results",
+          "callee": "st.tabs",
+          "lineNumber": 191
+        },
+        {
+          "caller": "page_results",
+          "callee": "st.selectbox",
+          "lineNumber": 203
+        },
+        {
+          "caller": "page_results",
+          "callee": "list",
+          "lineNumber": 203
+        },
+        {
+          "caller": "page_results",
+          "callee": "AXES.keys",
+          "lineNumber": 203
+        },
+        {
+          "caller": "page_results",
+          "callee": "D.mc_metric_df",
+          "lineNumber": 204
+        },
+        {
+          "caller": "page_results",
+          "callee": "st.warning",
+          "lineNumber": 206
+        },
+        {
+          "caller": "page_results",
+          "callee": "mdf.sort_values",
+          "lineNumber": 208
+        },
+        {
+          "caller": "page_results",
+          "callee": "st.subheader",
+          "lineNumber": 209
+        },
+        {
+          "caller": "page_results",
+          "callee": "mdf.iterrows",
+          "lineNumber": 213
+        },
+        {
+          "caller": "page_results",
+          "callee": "r.get",
+          "lineNumber": 214
+        },
+        {
+          "caller": "page_results",
+          "callee": "r.get",
+          "lineNumber": 215
+        },
+        {
+          "caller": "page_results",
+          "callee": "text.append",
+          "lineNumber": 216
+        },
+        {
+          "caller": "page_results",
+          "callee": "go.Figure",
+          "lineNumber": 217
+        },
+        {
+          "caller": "page_results",
+          "callee": "go.Bar",
+          "lineNumber": 217
+        },
+        {
+          "caller": "page_results",
+          "callee": "figd.add_vline",
+          "lineNumber": 223
+        },
+        {
+          "caller": "page_results",
+          "callee": "figd.update_layout",
+          "lineNumber": 224
+        },
+        {
+          "caller": "page_results",
+          "callee": "st.plotly_chart",
+          "lineNumber": 225
+        },
+        {
+          "caller": "page_results",
+          "callee": "T.style_fig",
+          "lineNumber": 225
+        },
+        {
+          "caller": "page_results",
+          "callee": "st.caption",
+          "lineNumber": 226
+        },
+        {
+          "caller": "page_results",
+          "callee": "st.expander",
+          "lineNumber": 227
+        },
+        {
+          "caller": "page_results",
+          "callee": "st.dataframe",
+          "lineNumber": 228
+        },
+        {
+          "caller": "page_results",
+          "callee": "st.expander",
+          "lineNumber": 231
+        },
+        {
+          "caller": "page_results",
+          "callee": "D.pairwise_df",
+          "lineNumber": 232
+        },
+        {
+          "caller": "page_results",
+          "callee": "st.info",
+          "lineNumber": 234
+        },
+        {
+          "caller": "page_results",
+          "callee": "st.selectbox",
+          "lineNumber": 236
+        },
+        {
+          "caller": "page_results",
+          "callee": "sorted",
+          "lineNumber": 236
+        },
+        {
+          "caller": "page_results",
+          "callee": "df[\"benchmark\"].unique",
+          "lineNumber": 236
+        },
+        {
+          "caller": "page_results",
+          "callee": "df[df[\"benchmark\"] == bench].copy",
+          "lineNumber": 238
+        },
+        {
+          "caller": "page_results",
+          "callee": "go.Figure",
+          "lineNumber": 239
+        },
+        {
+          "caller": "page_results",
+          "callee": "fig.add_trace",
+          "lineNumber": 240
+        },
+        {
+          "caller": "page_results",
+          "callee": "go.Scatter",
+          "lineNumber": 240
+        },
+        {
+          "caller": "page_results",
+          "callee": "dict",
+          "lineNumber": 242
+        },
+        {
+          "caller": "page_results",
+          "callee": "dict",
+          "lineNumber": 243
+        },
+        {
+          "caller": "page_results",
+          "callee": "fig.add_trace",
+          "lineNumber": 245
+        },
+        {
+          "caller": "page_results",
+          "callee": "go.Scatter",
+          "lineNumber": 245
+        },
+        {
+          "caller": "page_results",
+          "callee": "dict",
+          "lineNumber": 247
+        },
+        {
+          "caller": "page_results",
+          "callee": "dict",
+          "lineNumber": 248
+        },
+        {
+          "caller": "page_results",
+          "callee": "fig.update_layout",
+          "lineNumber": 250
+        },
+        {
+          "caller": "page_results",
+          "callee": "dict",
+          "lineNumber": 251
+        },
+        {
+          "caller": "page_results",
+          "callee": "st.plotly_chart",
+          "lineNumber": 252
+        },
+        {
+          "caller": "page_results",
+          "callee": "T.style_fig",
+          "lineNumber": 252
+        },
+        {
+          "caller": "page_results",
+          "callee": "st.caption",
+          "lineNumber": 253
+        },
+        {
+          "caller": "page_results",
+          "callee": "D.precision_sweep_long",
+          "lineNumber": 260
+        },
+        {
+          "caller": "page_results",
+          "callee": "st.warning",
+          "lineNumber": 262
+        },
+        {
+          "caller": "page_results",
+          "callee": "sorted",
+          "lineNumber": 264
+        },
+        {
+          "caller": "page_results",
+          "callee": "sweep[\"metric\"].unique",
+          "lineNumber": 264
+        },
+        {
+          "caller": "page_results",
+          "callee": "st.selectbox",
+          "lineNumber": 266
+        },
+        {
+          "caller": "page_results",
+          "callee": "metrics.index",
+          "lineNumber": 266
+        },
+        {
+          "caller": "page_results",
+          "callee": "sweep[sweep[\"metric\"] == metric].copy",
+          "lineNumber": 267
+        },
+        {
+          "caller": "page_results",
+          "callee": "pd.Categorical",
+          "lineNumber": 269
+        },
+        {
+          "caller": "page_results",
+          "callee": "sm.sort_values",
+          "lineNumber": 270
+        },
+        {
+          "caller": "page_results",
+          "callee": "st.subheader",
+          "lineNumber": 271
+        },
+        {
+          "caller": "page_results",
+          "callee": "px.line",
+          "lineNumber": 272
+        },
+        {
+          "caller": "page_results",
+          "callee": "list",
+          "lineNumber": 273
+        },
+        {
+          "caller": "page_results",
+          "callee": "fig.update_traces",
+          "lineNumber": 274
+        },
+        {
+          "caller": "page_results",
+          "callee": "dict",
+          "lineNumber": 274
+        },
+        {
+          "caller": "page_results",
+          "callee": "dict",
+          "lineNumber": 274
+        },
+        {
+          "caller": "page_results",
+          "callee": "st.plotly_chart",
+          "lineNumber": 275
+        },
+        {
+          "caller": "page_results",
+          "callee": "T.style_fig",
+          "lineNumber": 275
+        },
+        {
+          "caller": "page_results",
+          "callee": "st.caption",
+          "lineNumber": 276
+        },
+        {
+          "caller": "page_results",
+          "callee": "D.judge_agreement_df",
+          "lineNumber": 284
+        },
+        {
+          "caller": "page_results",
+          "callee": "st.warning",
+          "lineNumber": 286
+        },
+        {
+          "caller": "page_results",
+          "callee": "st.subheader",
+          "lineNumber": 288
+        },
+        {
+          "caller": "page_results",
+          "callee": "ja.melt",
+          "lineNumber": 289
+        },
+        {
+          "caller": "page_results",
+          "callee": "melt[\"scorer\"].map",
+          "lineNumber": 291
+        },
+        {
+          "caller": "page_results",
+          "callee": "px.bar",
+          "lineNumber": 292
+        },
+        {
+          "caller": "page_results",
+          "callee": "fig.update_layout",
+          "lineNumber": 294
+        },
+        {
+          "caller": "page_results",
+          "callee": "st.plotly_chart",
+          "lineNumber": 295
+        },
+        {
+          "caller": "page_results",
+          "callee": "T.style_fig",
+          "lineNumber": 295
+        },
+        {
+          "caller": "page_results",
+          "callee": "st.subheader",
+          "lineNumber": 296
+        },
+        {
+          "caller": "page_results",
+          "callee": "px.bar",
+          "lineNumber": 297
+        },
+        {
+          "caller": "page_results",
+          "callee": "ja.sort_values",
+          "lineNumber": 297
+        },
+        {
+          "caller": "page_results",
+          "callee": "figk.update_traces",
+          "lineNumber": 298
+        },
+        {
+          "caller": "page_results",
+          "callee": "figk.update_layout",
+          "lineNumber": 299
+        },
+        {
+          "caller": "page_results",
+          "callee": "st.plotly_chart",
+          "lineNumber": 300
+        },
+        {
+          "caller": "page_results",
+          "callee": "T.style_fig",
+          "lineNumber": 300
+        },
+        {
+          "caller": "page_results",
+          "callee": "st.caption",
+          "lineNumber": 301
+        },
+        {
+          "caller": "page_results",
+          "callee": "D.load_sensitivity",
+          "lineNumber": 305
+        },
+        {
+          "caller": "page_results",
+          "callee": "st.warning",
+          "lineNumber": 307
+        },
+        {
+          "caller": "page_results",
+          "callee": "sens.get",
+          "lineNumber": 310
+        },
+        {
+          "caller": "page_results",
+          "callee": "pp.get",
+          "lineNumber": 311
+        },
+        {
+          "caller": "page_results",
+          "callee": "rows.append",
+          "lineNumber": 312
+        },
+        {
+          "caller": "page_results",
+          "callee": "pp.get",
+          "lineNumber": 313
+        },
+        {
+          "caller": "page_results",
+          "callee": "pp.get",
+          "lineNumber": 314
+        },
+        {
+          "caller": "page_results",
+          "callee": "jd.get",
+          "lineNumber": 315
+        },
+        {
+          "caller": "page_results",
+          "callee": "jd.get",
+          "lineNumber": 316
+        },
+        {
+          "caller": "page_results",
+          "callee": "jd.get",
+          "lineNumber": 317
+        },
+        {
+          "caller": "page_results",
+          "callee": "jd.get",
+          "lineNumber": 318
+        },
+        {
+          "caller": "page_results",
+          "callee": "pd.DataFrame",
+          "lineNumber": 320
+        },
+        {
+          "caller": "page_results",
+          "callee": "st.subheader",
+          "lineNumber": 322
+        },
+        {
+          "caller": "page_results",
+          "callee": "go.Figure",
+          "lineNumber": 323
+        },
+        {
+          "caller": "page_results",
+          "callee": "fig.add_trace",
+          "lineNumber": 324
+        },
+        {
+          "caller": "page_results",
+          "callee": "go.Bar",
+          "lineNumber": 324
+        },
+        {
+          "caller": "page_results",
+          "callee": "fig.add_trace",
+          "lineNumber": 325
+        },
+        {
+          "caller": "page_results",
+          "callee": "go.Bar",
+          "lineNumber": 325
+        },
+        {
+          "caller": "page_results",
+          "callee": "fig.update_layout",
+          "lineNumber": 326
+        },
+        {
+          "caller": "page_results",
+          "callee": "st.plotly_chart",
+          "lineNumber": 327
+        },
+        {
+          "caller": "page_results",
+          "callee": "T.style_fig",
+          "lineNumber": 327
+        },
+        {
+          "caller": "page_results",
+          "callee": "st.dataframe",
+          "lineNumber": 328
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "st.markdown",
+          "lineNumber": 335
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "T.hero_html",
+          "lineNumber": 336
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "st.form",
+          "lineNumber": 343
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "st.columns",
+          "lineNumber": 344
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "st.text_input(\"pair_id (alias prefix)\", value=\"gemma_2b\",\n                                    help=\"Members become <pair_id>_base and <pair_id>_4bit/_8bit\").strip",
+          "lineNumber": 346
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "st.text_input",
+          "lineNumber": 346
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "st.text_input(\"family\", value=\"gemma\").strip",
+          "lineNumber": 348
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "st.text_input",
+          "lineNumber": 348
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "st.text_input(\"model_id (HF repo)\", value=\"google/gemma-2-2b-it\").strip",
+          "lineNumber": 349
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "st.text_input",
+          "lineNumber": 349
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "st.number_input",
+          "lineNumber": 350
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "st.selectbox",
+          "lineNumber": 352
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "st.selectbox",
+          "lineNumber": 353
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "st.selectbox",
+          "lineNumber": 354
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "st.checkbox",
+          "lineNumber": 355
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "st.multiselect",
+          "lineNumber": 356
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "st.text_input(\"Output config filename\", value=f\"{pair_id or 'new_pair'}.yaml\").strip",
+          "lineNumber": 358
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "st.text_input",
+          "lineNumber": 358
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "st.form_submit_button",
+          "lineNumber": 359
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "all",
+          "lineNumber": 364
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "st.error",
+          "lineNumber": 365
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "D.build_new_pair_config",
+          "lineNumber": 368
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "float",
+          "lineNumber": 372
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "st.error",
+          "lineNumber": 382
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "st.code",
+          "lineNumber": 383
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "st.success",
+          "lineNumber": 386
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "D.quant_suffix",
+          "lineNumber": 386
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "st.code",
+          "lineNumber": 387
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "(D.configs_dir(REPO_ROOT) / \"generated\").resolve",
+          "lineNumber": 389
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "D.configs_dir",
+          "lineNumber": 389
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "gen_dir.mkdir",
+          "lineNumber": 390
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "D.safe_generated_config_name",
+          "lineNumber": 391
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "(gen_dir / safe_name).resolve",
+          "lineNumber": 392
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "st.error",
+          "lineNumber": 394
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "st.columns",
+          "lineNumber": 397
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "st.download_button",
+          "lineNumber": 399
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "st.button",
+          "lineNumber": 401
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "out_path.write_text",
+          "lineNumber": 402
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "st.success",
+          "lineNumber": 403
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "out_path.relative_to",
+          "lineNumber": 403
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "st.divider",
+          "lineNumber": 405
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "st.subheader",
+          "lineNumber": 406
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "st.caption",
+          "lineNumber": 407
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "st.button",
+          "lineNumber": 408
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "out_path.exists",
+          "lineNumber": 409
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "out_path.write_text",
+          "lineNumber": 410
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "str",
+          "lineNumber": 413
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "str",
+          "lineNumber": 414
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "str",
+          "lineNumber": 414
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "subprocess.run",
+          "lineNumber": 417
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "str",
+          "lineNumber": 417
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "sorted",
+          "lineNumber": 419
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "jobs_dir.glob",
+          "lineNumber": 419
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "st.success",
+          "lineNumber": 420
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "len",
+          "lineNumber": 420
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "st.markdown",
+          "lineNumber": 422
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "f.relative_to",
+          "lineNumber": 422
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "st.error",
+          "lineNumber": 424
+        },
+        {
+          "caller": "page_add_model",
+          "callee": "st.code",
+          "lineNumber": 425
+        },
+        {
+          "caller": "page_run",
+          "callee": "st.markdown",
+          "lineNumber": 432
+        },
+        {
+          "caller": "page_run",
+          "callee": "T.hero_html",
+          "lineNumber": 433
+        },
+        {
+          "caller": "page_run",
+          "callee": "D.read_config_models",
+          "lineNumber": 439
+        },
+        {
+          "caller": "page_run",
+          "callee": "st.warning",
+          "lineNumber": 441
+        },
+        {
+          "caller": "page_run",
+          "callee": "st.columns",
+          "lineNumber": 444
+        },
+        {
+          "caller": "page_run",
+          "callee": "st.selectbox",
+          "lineNumber": 446
+        },
+        {
+          "caller": "page_run",
+          "callee": "sorted",
+          "lineNumber": 446
+        },
+        {
+          "caller": "page_run",
+          "callee": "models.keys",
+          "lineNumber": 446
+        },
+        {
+          "caller": "page_run",
+          "callee": "models.get(alias, {}).get",
+          "lineNumber": 447
+        },
+        {
+          "caller": "page_run",
+          "callee": "models.get",
+          "lineNumber": 447
+        },
+        {
+          "caller": "page_run",
+          "callee": "st.selectbox",
+          "lineNumber": 449
+        },
+        {
+          "caller": "page_run",
+          "callee": "sorted",
+          "lineNumber": 449
+        },
+        {
+          "caller": "page_run",
+          "callee": "st.radio",
+          "lineNumber": 451
+        },
+        {
+          "caller": "page_run",
+          "callee": "st.columns",
+          "lineNumber": 453
+        },
+        {
+          "caller": "page_run",
+          "callee": "st.selectbox",
+          "lineNumber": 455
+        },
+        {
+          "caller": "page_run",
+          "callee": "st.number_input",
+          "lineNumber": 457
+        },
+        {
+          "caller": "page_run",
+          "callee": "mode.startswith",
+          "lineNumber": 457
+        },
+        {
+          "caller": "page_run",
+          "callee": "st.number_input",
+          "lineNumber": 459
+        },
+        {
+          "caller": "page_run",
+          "callee": "st.number_input",
+          "lineNumber": 461
+        },
+        {
+          "caller": "page_run",
+          "callee": "st.warning",
+          "lineNumber": 463
+        },
+        {
+          "caller": "page_run",
+          "callee": "st.text_input",
+          "lineNumber": 469
+        },
+        {
+          "caller": "page_run",
+          "callee": "st.button",
+          "lineNumber": 474
+        },
+        {
+          "caller": "page_run",
+          "callee": "D.resolve_execution_dir",
+          "lineNumber": 476
+        },
+        {
+          "caller": "page_run",
+          "callee": "st.error",
+          "lineNumber": 478
+        },
+        {
+          "caller": "page_run",
+          "callee": "str",
+          "lineNumber": 478
+        },
+        {
+          "caller": "page_run",
+          "callee": "st.stop",
+          "lineNumber": 479
+        },
+        {
+          "caller": "page_run",
+          "callee": "mode.startswith",
+          "lineNumber": 480
+        },
+        {
+          "caller": "page_run",
+          "callee": "str",
+          "lineNumber": 482
+        },
+        {
+          "caller": "page_run",
+          "callee": "str",
+          "lineNumber": 483
+        },
+        {
+          "caller": "page_run",
+          "callee": "str",
+          "lineNumber": 483
+        },
+        {
+          "caller": "page_run",
+          "callee": "str",
+          "lineNumber": 484
+        },
+        {
+          "caller": "page_run",
+          "callee": "int",
+          "lineNumber": 484
+        },
+        {
+          "caller": "page_run",
+          "callee": "str",
+          "lineNumber": 485
+        },
+        {
+          "caller": "page_run",
+          "callee": "int",
+          "lineNumber": 485
+        },
+        {
+          "caller": "page_run",
+          "callee": "str",
+          "lineNumber": 485
+        },
+        {
+          "caller": "page_run",
+          "callee": "int",
+          "lineNumber": 485
+        },
+        {
+          "caller": "page_run",
+          "callee": "st.code",
+          "lineNumber": 487
+        },
+        {
+          "caller": "page_run",
+          "callee": "\" \".join",
+          "lineNumber": 487
+        },
+        {
+          "caller": "page_run",
+          "callee": "st.empty",
+          "lineNumber": 489
+        },
+        {
+          "caller": "page_run",
+          "callee": "st.spinner",
+          "lineNumber": 491
+        },
+        {
+          "caller": "page_run",
+          "callee": "subprocess.Popen",
+          "lineNumber": 492
+        },
+        {
+          "caller": "page_run",
+          "callee": "str",
+          "lineNumber": 494
+        },
+        {
+          "caller": "page_run",
+          "callee": "lines.append",
+          "lineNumber": 498
+        },
+        {
+          "caller": "page_run",
+          "callee": "line.rstrip",
+          "lineNumber": 498
+        },
+        {
+          "caller": "page_run",
+          "callee": "log_box.code",
+          "lineNumber": 499
+        },
+        {
+          "caller": "page_run",
+          "callee": "\"\\n\".join",
+          "lineNumber": 499
+        },
+        {
+          "caller": "page_run",
+          "callee": "proc.wait",
+          "lineNumber": 500
+        },
+        {
+          "caller": "page_run",
+          "callee": "st.success",
+          "lineNumber": 503
+        },
+        {
+          "caller": "page_run",
+          "callee": "D.run_summary",
+          "lineNumber": 504
+        },
+        {
+          "caller": "page_run",
+          "callee": "st.subheader",
+          "lineNumber": 506
+        },
+        {
+          "caller": "page_run",
+          "callee": "st.json",
+          "lineNumber": 507
+        },
+        {
+          "caller": "page_run",
+          "callee": "st.info",
+          "lineNumber": 509
+        },
+        {
+          "caller": "page_run",
+          "callee": "st.error",
+          "lineNumber": 511
+        },
+        {
+          "caller": "page_raw",
+          "callee": "st.markdown",
+          "lineNumber": 518
+        },
+        {
+          "caller": "page_raw",
+          "callee": "T.hero_html",
+          "lineNumber": 519
+        },
+        {
+          "caller": "page_raw",
+          "callee": "D.available_runs",
+          "lineNumber": 522
+        },
+        {
+          "caller": "page_raw",
+          "callee": "st.warning",
+          "lineNumber": 524
+        },
+        {
+          "caller": "page_raw",
+          "callee": "sorted",
+          "lineNumber": 526
+        },
+        {
+          "caller": "page_raw",
+          "callee": "st.selectbox",
+          "lineNumber": 527
+        },
+        {
+          "caller": "page_raw",
+          "callee": "sorted",
+          "lineNumber": 528
+        },
+        {
+          "caller": "page_raw",
+          "callee": "st.selectbox",
+          "lineNumber": 529
+        },
+        {
+          "caller": "page_raw",
+          "callee": "D.run_summary",
+          "lineNumber": 530
+        },
+        {
+          "caller": "page_raw",
+          "callee": "summ.items",
+          "lineNumber": 532
+        },
+        {
+          "caller": "page_raw",
+          "callee": "isinstance",
+          "lineNumber": 532
+        },
+        {
+          "caller": "page_raw",
+          "callee": "st.dataframe",
+          "lineNumber": 534
+        },
+        {
+          "caller": "page_raw",
+          "callee": "pd.DataFrame([flat]).T.rename",
+          "lineNumber": 534
+        },
+        {
+          "caller": "page_raw",
+          "callee": "pd.DataFrame",
+          "lineNumber": 534
+        },
+        {
+          "caller": "page_raw",
+          "callee": "st.subheader",
+          "lineNumber": 535
+        },
+        {
+          "caller": "page_raw",
+          "callee": "st.json",
+          "lineNumber": 536
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 5,
+        "functionCount": 5,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "dashboard/theme.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 480,
+      "nonEmptyLines": 424,
+      "functions": [
+        {
+          "name": "style_fig",
+          "startLine": 323,
+          "endLine": 351,
+          "params": [
+            "fig",
+            "height"
+          ]
+        },
+        {
+          "name": "_mix_hex",
+          "startLine": 357,
+          "endLine": 368,
+          "params": [
+            "c1",
+            "c2",
+            "w"
+          ]
+        },
+        {
+          "name": "badge",
+          "startLine": 371,
+          "endLine": 379,
+          "params": [
+            "label"
+          ]
+        },
+        {
+          "name": "hero_html",
+          "startLine": 382,
+          "endLine": 392,
+          "params": [
+            "title",
+            "dek",
+            "eyebrow"
+          ]
+        },
+        {
+          "name": "verdict_html",
+          "startLine": 395,
+          "endLine": 399,
+          "params": [
+            "kicker",
+            "statement"
+          ]
+        },
+        {
+          "name": "section_head_html",
+          "startLine": 402,
+          "endLine": 409,
+          "params": [
+            "kicker",
+            "title",
+            "note"
+          ]
+        },
+        {
+          "name": "footnote_html",
+          "startLine": 412,
+          "endLine": 414,
+          "params": [
+            "text"
+          ]
+        },
+        {
+          "name": "stat_tiles_html",
+          "startLine": 417,
+          "endLine": 424,
+          "params": [
+            "items"
+          ]
+        },
+        {
+          "name": "_fmt_pp",
+          "startLine": 427,
+          "endLine": 428,
+          "params": [
+            "val"
+          ]
+        },
+        {
+          "name": "_delta_block",
+          "startLine": 431,
+          "endLine": 438,
+          "params": [
+            "label",
+            "val",
+            "sig"
+          ]
+        },
+        {
+          "name": "pair_card_html",
+          "startLine": 441,
+          "endLine": 480,
+          "params": [
+            "row",
+            "judge_primary"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "style_fig",
+          "line": 323,
+          "isDefault": false
+        },
+        {
+          "name": "_mix_hex",
+          "line": 357,
+          "isDefault": false
+        },
+        {
+          "name": "badge",
+          "line": 371,
+          "isDefault": false
+        },
+        {
+          "name": "hero_html",
+          "line": 382,
+          "isDefault": false
+        },
+        {
+          "name": "verdict_html",
+          "line": 395,
+          "isDefault": false
+        },
+        {
+          "name": "section_head_html",
+          "line": 402,
+          "isDefault": false
+        },
+        {
+          "name": "footnote_html",
+          "line": 412,
+          "isDefault": false
+        },
+        {
+          "name": "stat_tiles_html",
+          "line": 417,
+          "isDefault": false
+        },
+        {
+          "name": "_fmt_pp",
+          "line": 427,
+          "isDefault": false
+        },
+        {
+          "name": "_delta_block",
+          "line": 431,
+          "isDefault": false
+        },
+        {
+          "name": "pair_card_html",
+          "line": 441,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "style_fig",
+          "callee": "dict",
+          "lineNumber": 325
+        },
+        {
+          "caller": "style_fig",
+          "callee": "dict",
+          "lineNumber": 327
+        },
+        {
+          "caller": "style_fig",
+          "callee": "dict",
+          "lineNumber": 328
+        },
+        {
+          "caller": "style_fig",
+          "callee": "fig.update_layout",
+          "lineNumber": 330
+        },
+        {
+          "caller": "style_fig",
+          "callee": "dict",
+          "lineNumber": 331
+        },
+        {
+          "caller": "style_fig",
+          "callee": "list",
+          "lineNumber": 334
+        },
+        {
+          "caller": "style_fig",
+          "callee": "dict",
+          "lineNumber": 335
+        },
+        {
+          "caller": "style_fig",
+          "callee": "dict",
+          "lineNumber": 336
+        },
+        {
+          "caller": "style_fig",
+          "callee": "dict",
+          "lineNumber": 336
+        },
+        {
+          "caller": "style_fig",
+          "callee": "dict",
+          "lineNumber": 338
+        },
+        {
+          "caller": "style_fig",
+          "callee": "fig.update_layout",
+          "lineNumber": 346
+        },
+        {
+          "caller": "style_fig",
+          "callee": "dict",
+          "lineNumber": 346
+        },
+        {
+          "caller": "style_fig",
+          "callee": "fig.update_layout",
+          "lineNumber": 350
+        },
+        {
+          "caller": "_mix_hex",
+          "callee": "c1.lstrip",
+          "lineNumber": 364
+        },
+        {
+          "caller": "_mix_hex",
+          "callee": "c2.lstrip",
+          "lineNumber": 364
+        },
+        {
+          "caller": "_mix_hex",
+          "callee": "\"\".join",
+          "lineNumber": 365
+        },
+        {
+          "caller": "_mix_hex",
+          "callee": "round",
+          "lineNumber": 366
+        },
+        {
+          "caller": "_mix_hex",
+          "callee": "int",
+          "lineNumber": 366
+        },
+        {
+          "caller": "_mix_hex",
+          "callee": "int",
+          "lineNumber": 366
+        },
+        {
+          "caller": "badge",
+          "callee": "D.label_color",
+          "lineNumber": 373
+        },
+        {
+          "caller": "badge",
+          "callee": "_mix_hex",
+          "lineNumber": 374
+        },
+        {
+          "caller": "badge",
+          "callee": "_mix_hex",
+          "lineNumber": 375
+        },
+        {
+          "caller": "badge",
+          "callee": "_mix_hex",
+          "lineNumber": 376
+        },
+        {
+          "caller": "badge",
+          "callee": "(label or \"—\").replace",
+          "lineNumber": 378
+        },
+        {
+          "caller": "hero_html",
+          "callee": "parts.append",
+          "lineNumber": 386
+        },
+        {
+          "caller": "hero_html",
+          "callee": "parts.append",
+          "lineNumber": 387
+        },
+        {
+          "caller": "hero_html",
+          "callee": "parts.append",
+          "lineNumber": 388
+        },
+        {
+          "caller": "hero_html",
+          "callee": "parts.append",
+          "lineNumber": 390
+        },
+        {
+          "caller": "hero_html",
+          "callee": "parts.append",
+          "lineNumber": 391
+        },
+        {
+          "caller": "hero_html",
+          "callee": "\"\".join",
+          "lineNumber": 392
+        },
+        {
+          "caller": "stat_tiles_html",
+          "callee": "\"\".join",
+          "lineNumber": 419
+        },
+        {
+          "caller": "_delta_block",
+          "callee": "_fmt_pp",
+          "lineNumber": 436
+        },
+        {
+          "caller": "pair_card_html",
+          "callee": "row.get",
+          "lineNumber": 443
+        },
+        {
+          "caller": "pair_card_html",
+          "callee": "D.label_color",
+          "lineNumber": 444
+        },
+        {
+          "caller": "pair_card_html",
+          "callee": "str(row.get(\"pair_id\", \"\")).split",
+          "lineNumber": 445
+        },
+        {
+          "caller": "pair_card_html",
+          "callee": "str",
+          "lineNumber": 445
+        },
+        {
+          "caller": "pair_card_html",
+          "callee": "row.get",
+          "lineNumber": 445
+        },
+        {
+          "caller": "pair_card_html",
+          "callee": "row.get",
+          "lineNumber": 447
+        },
+        {
+          "caller": "pair_card_html",
+          "callee": "badge",
+          "lineNumber": 449
+        },
+        {
+          "caller": "pair_card_html",
+          "callee": "row.get",
+          "lineNumber": 452
+        },
+        {
+          "caller": "pair_card_html",
+          "callee": "D.label_gloss",
+          "lineNumber": 453
+        },
+        {
+          "caller": "pair_card_html",
+          "callee": "row.get",
+          "lineNumber": 456
+        },
+        {
+          "caller": "pair_card_html",
+          "callee": "row.get",
+          "lineNumber": 458
+        },
+        {
+          "caller": "pair_card_html",
+          "callee": "bits.append",
+          "lineNumber": 459
+        },
+        {
+          "caller": "pair_card_html",
+          "callee": "row.get",
+          "lineNumber": 460
+        },
+        {
+          "caller": "pair_card_html",
+          "callee": "isinstance",
+          "lineNumber": 461
+        },
+        {
+          "caller": "pair_card_html",
+          "callee": "bits.append",
+          "lineNumber": 462
+        },
+        {
+          "caller": "pair_card_html",
+          "callee": "row.get",
+          "lineNumber": 463
+        },
+        {
+          "caller": "pair_card_html",
+          "callee": "isinstance",
+          "lineNumber": 464
+        },
+        {
+          "caller": "pair_card_html",
+          "callee": "row.get",
+          "lineNumber": 465
+        },
+        {
+          "caller": "pair_card_html",
+          "callee": "bits.append",
+          "lineNumber": 466
+        },
+        {
+          "caller": "pair_card_html",
+          "callee": "\" · \".join",
+          "lineNumber": 468
+        },
+        {
+          "caller": "pair_card_html",
+          "callee": "_delta_block",
+          "lineNumber": 472
+        },
+        {
+          "caller": "pair_card_html",
+          "callee": "row.get",
+          "lineNumber": 472
+        },
+        {
+          "caller": "pair_card_html",
+          "callee": "row.get",
+          "lineNumber": 472
+        },
+        {
+          "caller": "pair_card_html",
+          "callee": "_delta_block",
+          "lineNumber": 473
+        },
+        {
+          "caller": "pair_card_html",
+          "callee": "row.get",
+          "lineNumber": 473
+        },
+        {
+          "caller": "pair_card_html",
+          "callee": "row.get",
+          "lineNumber": 473
+        },
+        {
+          "caller": "pair_card_html",
+          "callee": "_delta_block",
+          "lineNumber": 474
+        },
+        {
+          "caller": "pair_card_html",
+          "callee": "row.get",
+          "lineNumber": 474
+        },
+        {
+          "caller": "pair_card_html",
+          "callee": "row.get",
+          "lineNumber": 474
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 11,
+        "functionCount": 11,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "tests/test_dashboard_data.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 247,
+      "nonEmptyLines": 199,
+      "functions": [
+        {
+          "name": "test_loaders_return_empty_on_missing_dir",
+          "startLine": 25,
+          "endLine": 33,
+          "params": [
+            "tmp_path"
+          ]
+        },
+        {
+          "name": "test_load_json_missing_and_malformed",
+          "startLine": 36,
+          "endLine": 40,
+          "params": [
+            "tmp_path"
+          ]
+        },
+        {
+          "name": "test_interpretations_shape_if_present",
+          "startLine": 47,
+          "endLine": 55,
+          "params": []
+        },
+        {
+          "name": "test_pairwise_df_columns_if_present",
+          "startLine": 58,
+          "endLine": 63,
+          "params": []
+        },
+        {
+          "name": "test_precision_sweep_long_if_present",
+          "startLine": 66,
+          "endLine": 71,
+          "params": []
+        },
+        {
+          "name": "test_build_new_pair_config_valid_round_trip",
+          "startLine": 78,
+          "endLine": 95,
+          "params": [
+            "tmp_path"
+          ]
+        },
+        {
+          "name": "test_build_new_pair_config_int8_suffix",
+          "startLine": 98,
+          "endLine": 109,
+          "params": []
+        },
+        {
+          "name": "test_build_new_pair_config_rejects_bad_benchmark",
+          "startLine": 112,
+          "endLine": 122,
+          "params": []
+        },
+        {
+          "name": "test_quant_suffix",
+          "startLine": 125,
+          "endLine": 127,
+          "params": []
+        },
+        {
+          "name": "test_judge_primary_empty_without_artifact",
+          "startLine": 134,
+          "endLine": 136,
+          "params": [
+            "tmp_path"
+          ]
+        },
+        {
+          "name": "test_judge_primary_matches_committed_headline",
+          "startLine": 139,
+          "endLine": 167,
+          "params": []
+        },
+        {
+          "name": "test_judge_primary_differs_from_v2_proxy",
+          "startLine": 170,
+          "endLine": 179,
+          "params": []
+        },
+        {
+          "name": "test_phi_label_matches_canonical_judge_artifact",
+          "startLine": 182,
+          "endLine": 197,
+          "params": []
+        },
+        {
+          "name": "test_safe_generated_config_name_blocks_path_escape",
+          "startLine": 200,
+          "endLine": 208,
+          "params": []
+        },
+        {
+          "name": "test_protected_results_dirs_are_refused",
+          "startLine": 211,
+          "endLine": 219,
+          "params": []
+        },
+        {
+          "name": "test_protected_results_dirs_refuse_case_variants",
+          "startLine": 222,
+          "endLine": 231,
+          "params": []
+        },
+        {
+          "name": "test_resolve_execution_dir_blocks_protected_and_defaults",
+          "startLine": 234,
+          "endLine": 247,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "test_loaders_return_empty_on_missing_dir",
+          "line": 25,
+          "isDefault": false
+        },
+        {
+          "name": "test_load_json_missing_and_malformed",
+          "line": 36,
+          "isDefault": false
+        },
+        {
+          "name": "test_interpretations_shape_if_present",
+          "line": 47,
+          "isDefault": false
+        },
+        {
+          "name": "test_pairwise_df_columns_if_present",
+          "line": 58,
+          "isDefault": false
+        },
+        {
+          "name": "test_precision_sweep_long_if_present",
+          "line": 66,
+          "isDefault": false
+        },
+        {
+          "name": "test_build_new_pair_config_valid_round_trip",
+          "line": 78,
+          "isDefault": false
+        },
+        {
+          "name": "test_build_new_pair_config_int8_suffix",
+          "line": 98,
+          "isDefault": false
+        },
+        {
+          "name": "test_build_new_pair_config_rejects_bad_benchmark",
+          "line": 112,
+          "isDefault": false
+        },
+        {
+          "name": "test_quant_suffix",
+          "line": 125,
+          "isDefault": false
+        },
+        {
+          "name": "test_judge_primary_empty_without_artifact",
+          "line": 134,
+          "isDefault": false
+        },
+        {
+          "name": "test_judge_primary_matches_committed_headline",
+          "line": 139,
+          "isDefault": false
+        },
+        {
+          "name": "test_judge_primary_differs_from_v2_proxy",
+          "line": 170,
+          "isDefault": false
+        },
+        {
+          "name": "test_phi_label_matches_canonical_judge_artifact",
+          "line": 182,
+          "isDefault": false
+        },
+        {
+          "name": "test_safe_generated_config_name_blocks_path_escape",
+          "line": 200,
+          "isDefault": false
+        },
+        {
+          "name": "test_protected_results_dirs_are_refused",
+          "line": 211,
+          "isDefault": false
+        },
+        {
+          "name": "test_protected_results_dirs_refuse_case_variants",
+          "line": 222,
+          "isDefault": false
+        },
+        {
+          "name": "test_resolve_execution_dir_blocks_protected_and_defaults",
+          "line": 234,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "test_loaders_return_empty_on_missing_dir",
+          "callee": "D.load_interpretations",
+          "lineNumber": 26
+        },
+        {
+          "caller": "test_loaders_return_empty_on_missing_dir",
+          "callee": "D.load_pairwise",
+          "lineNumber": 27
+        },
+        {
+          "caller": "test_loaders_return_empty_on_missing_dir",
+          "callee": "D.pairwise_df",
+          "lineNumber": 28
+        },
+        {
+          "caller": "test_loaders_return_empty_on_missing_dir",
+          "callee": "D.precision_sweep_long",
+          "lineNumber": 29
+        },
+        {
+          "caller": "test_loaders_return_empty_on_missing_dir",
+          "callee": "D.judge_agreement_df",
+          "lineNumber": 30
+        },
+        {
+          "caller": "test_loaders_return_empty_on_missing_dir",
+          "callee": "D.load_summary",
+          "lineNumber": 31
+        },
+        {
+          "caller": "test_loaders_return_empty_on_missing_dir",
+          "callee": "D.load_multiple_comparisons",
+          "lineNumber": 32
+        },
+        {
+          "caller": "test_loaders_return_empty_on_missing_dir",
+          "callee": "D.available_runs",
+          "lineNumber": 33
+        },
+        {
+          "caller": "test_load_json_missing_and_malformed",
+          "callee": "D.load_json",
+          "lineNumber": 37
+        },
+        {
+          "caller": "test_load_json_missing_and_malformed",
+          "callee": "bad.write_text",
+          "lineNumber": 39
+        },
+        {
+          "caller": "test_load_json_missing_and_malformed",
+          "callee": "D.load_json",
+          "lineNumber": 40
+        },
+        {
+          "caller": "test_interpretations_shape_if_present",
+          "callee": "D.load_interpretations",
+          "lineNumber": 48
+        },
+        {
+          "caller": "test_interpretations_shape_if_present",
+          "callee": "pytest.skip",
+          "lineNumber": 50
+        },
+        {
+          "caller": "test_interpretations_shape_if_present",
+          "callee": "D.label_color",
+          "lineNumber": 55
+        },
+        {
+          "caller": "test_interpretations_shape_if_present",
+          "callee": "r.get",
+          "lineNumber": 55
+        },
+        {
+          "caller": "test_pairwise_df_columns_if_present",
+          "callee": "D.pairwise_df",
+          "lineNumber": 59
+        },
+        {
+          "caller": "test_pairwise_df_columns_if_present",
+          "callee": "pytest.skip",
+          "lineNumber": 61
+        },
+        {
+          "caller": "test_precision_sweep_long_if_present",
+          "callee": "D.precision_sweep_long",
+          "lineNumber": 67
+        },
+        {
+          "caller": "test_precision_sweep_long_if_present",
+          "callee": "pytest.skip",
+          "lineNumber": 69
+        },
+        {
+          "caller": "test_precision_sweep_long_if_present",
+          "callee": "set",
+          "lineNumber": 70
+        },
+        {
+          "caller": "test_precision_sweep_long_if_present",
+          "callee": "set",
+          "lineNumber": 71
+        },
+        {
+          "caller": "test_precision_sweep_long_if_present",
+          "callee": "long[\"precision\"].unique",
+          "lineNumber": 71
+        },
+        {
+          "caller": "test_build_new_pair_config_valid_round_trip",
+          "callee": "D.build_new_pair_config",
+          "lineNumber": 79
+        },
+        {
+          "caller": "test_build_new_pair_config_valid_round_trip",
+          "callee": "out.write_text",
+          "lineNumber": 90
+        },
+        {
+          "caller": "test_build_new_pair_config_valid_round_trip",
+          "callee": "load_quant_config",
+          "lineNumber": 91
+        },
+        {
+          "caller": "test_build_new_pair_config_int8_suffix",
+          "callee": "D.build_new_pair_config",
+          "lineNumber": 99
+        },
+        {
+          "caller": "test_build_new_pair_config_rejects_bad_benchmark",
+          "callee": "D.build_new_pair_config",
+          "lineNumber": 113
+        },
+        {
+          "caller": "test_build_new_pair_config_rejects_bad_benchmark",
+          "callee": "err.lower",
+          "lineNumber": 122
+        },
+        {
+          "caller": "test_quant_suffix",
+          "callee": "D.quant_suffix",
+          "lineNumber": 126
+        },
+        {
+          "caller": "test_quant_suffix",
+          "callee": "D.quant_suffix",
+          "lineNumber": 127
+        },
+        {
+          "caller": "test_judge_primary_empty_without_artifact",
+          "callee": "D.judge_primary_interpretations",
+          "lineNumber": 135
+        },
+        {
+          "caller": "test_judge_primary_empty_without_artifact",
+          "callee": "D.mc_metric_df",
+          "lineNumber": 136
+        },
+        {
+          "caller": "test_judge_primary_matches_committed_headline",
+          "callee": "D.judge_primary_interpretations",
+          "lineNumber": 140
+        },
+        {
+          "caller": "test_judge_primary_matches_committed_headline",
+          "callee": "pytest.skip",
+          "lineNumber": 142
+        },
+        {
+          "caller": "test_judge_primary_matches_committed_headline",
+          "callee": "pytest.approx",
+          "lineNumber": 152
+        },
+        {
+          "caller": "test_judge_primary_matches_committed_headline",
+          "callee": "pytest.approx",
+          "lineNumber": 158
+        },
+        {
+          "caller": "test_judge_primary_matches_committed_headline",
+          "callee": "all",
+          "lineNumber": 167
+        },
+        {
+          "caller": "test_judge_primary_differs_from_v2_proxy",
+          "callee": "D.judge_primary_interpretations",
+          "lineNumber": 172
+        },
+        {
+          "caller": "test_judge_primary_differs_from_v2_proxy",
+          "callee": "D.load_interpretations",
+          "lineNumber": 173
+        },
+        {
+          "caller": "test_judge_primary_differs_from_v2_proxy",
+          "callee": "pytest.skip",
+          "lineNumber": 175
+        },
+        {
+          "caller": "test_phi_label_matches_canonical_judge_artifact",
+          "callee": "D.judge_primary_interpretations",
+          "lineNumber": 187
+        },
+        {
+          "caller": "test_phi_label_matches_canonical_judge_artifact",
+          "callee": "pytest.skip",
+          "lineNumber": 189
+        },
+        {
+          "caller": "test_phi_label_matches_canonical_judge_artifact",
+          "callee": "D.load_judge_agreement",
+          "lineNumber": 193
+        },
+        {
+          "caller": "test_phi_label_matches_canonical_judge_artifact",
+          "callee": "rows.items",
+          "lineNumber": 195
+        },
+        {
+          "caller": "test_safe_generated_config_name_blocks_path_escape",
+          "callee": "D.safe_generated_config_name",
+          "lineNumber": 203
+        },
+        {
+          "caller": "test_safe_generated_config_name_blocks_path_escape",
+          "callee": "D.safe_generated_config_name",
+          "lineNumber": 204
+        },
+        {
+          "caller": "test_safe_generated_config_name_blocks_path_escape",
+          "callee": "D.safe_generated_config_name",
+          "lineNumber": 205
+        },
+        {
+          "caller": "test_safe_generated_config_name_blocks_path_escape",
+          "callee": "D.safe_generated_config_name",
+          "lineNumber": 206
+        },
+        {
+          "caller": "test_safe_generated_config_name_blocks_path_escape",
+          "callee": "D.safe_generated_config_name",
+          "lineNumber": 207
+        },
+        {
+          "caller": "test_safe_generated_config_name_blocks_path_escape",
+          "callee": "D.safe_generated_config_name",
+          "lineNumber": 208
+        },
+        {
+          "caller": "test_protected_results_dirs_are_refused",
+          "callee": "D.is_protected_results_dir",
+          "lineNumber": 217
+        },
+        {
+          "caller": "test_protected_results_dirs_are_refused",
+          "callee": "D.is_protected_results_dir",
+          "lineNumber": 219
+        },
+        {
+          "caller": "test_protected_results_dirs_refuse_case_variants",
+          "callee": "D.is_protected_results_dir",
+          "lineNumber": 231
+        },
+        {
+          "caller": "test_resolve_execution_dir_blocks_protected_and_defaults",
+          "callee": "pytest.raises",
+          "lineNumber": 240
+        },
+        {
+          "caller": "test_resolve_execution_dir_blocks_protected_and_defaults",
+          "callee": "D.resolve_execution_dir",
+          "lineNumber": 241
+        },
+        {
+          "caller": "test_resolve_execution_dir_blocks_protected_and_defaults",
+          "callee": "D.resolve_execution_dir",
+          "lineNumber": 243
+        },
+        {
+          "caller": "test_resolve_execution_dir_blocks_protected_and_defaults",
+          "callee": "Path(REPO_ROOT).resolve",
+          "lineNumber": 244
+        },
+        {
+          "caller": "test_resolve_execution_dir_blocks_protected_and_defaults",
+          "callee": "Path",
+          "lineNumber": 244
+        },
+        {
+          "caller": "test_resolve_execution_dir_blocks_protected_and_defaults",
+          "callee": "D.resolve_execution_dir",
+          "lineNumber": 247
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 17,
+        "functionCount": 17,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "tests/test_dashboard_theme.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 81,
+      "nonEmptyLines": 62,
+      "functions": [
+        {
+          "name": "test_css_declares_brand_fonts_and_tokens",
+          "startLine": 10,
+          "endLine": 13,
+          "params": []
+        },
+        {
+          "name": "test_hero_html_structure",
+          "startLine": 16,
+          "endLine": 23,
+          "params": []
+        },
+        {
+          "name": "test_stat_tiles_html_count",
+          "startLine": 26,
+          "endLine": 29,
+          "params": []
+        },
+        {
+          "name": "test_badge_uses_label_colour",
+          "startLine": 32,
+          "endLine": 38,
+          "params": []
+        },
+        {
+          "name": "test_mix_hex_endpoints",
+          "startLine": 41,
+          "endLine": 43,
+          "params": []
+        },
+        {
+          "name": "test_pair_card_judge_primary_renders_stat_line",
+          "startLine": 46,
+          "endLine": 61,
+          "params": []
+        },
+        {
+          "name": "test_pair_card_v2_has_no_stat_line",
+          "startLine": 64,
+          "endLine": 73,
+          "params": []
+        },
+        {
+          "name": "test_style_fig_applies_theme",
+          "startLine": 76,
+          "endLine": 81,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "test_css_declares_brand_fonts_and_tokens",
+          "line": 10,
+          "isDefault": false
+        },
+        {
+          "name": "test_hero_html_structure",
+          "line": 16,
+          "isDefault": false
+        },
+        {
+          "name": "test_stat_tiles_html_count",
+          "line": 26,
+          "isDefault": false
+        },
+        {
+          "name": "test_badge_uses_label_colour",
+          "line": 32,
+          "isDefault": false
+        },
+        {
+          "name": "test_mix_hex_endpoints",
+          "line": 41,
+          "isDefault": false
+        },
+        {
+          "name": "test_pair_card_judge_primary_renders_stat_line",
+          "line": 46,
+          "isDefault": false
+        },
+        {
+          "name": "test_pair_card_v2_has_no_stat_line",
+          "line": 64,
+          "isDefault": false
+        },
+        {
+          "name": "test_style_fig_applies_theme",
+          "line": 76,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "test_hero_html_structure",
+          "callee": "T.hero_html",
+          "lineNumber": 17
+        },
+        {
+          "caller": "test_hero_html_structure",
+          "callee": "T.hero_html",
+          "lineNumber": 22
+        },
+        {
+          "caller": "test_stat_tiles_html_count",
+          "callee": "T.stat_tiles_html",
+          "lineNumber": 27
+        },
+        {
+          "caller": "test_stat_tiles_html_count",
+          "callee": "html.count",
+          "lineNumber": 28
+        },
+        {
+          "caller": "test_badge_uses_label_colour",
+          "callee": "T.badge",
+          "lineNumber": 35
+        },
+        {
+          "caller": "test_badge_uses_label_colour",
+          "callee": "T._mix_hex",
+          "lineNumber": 36
+        },
+        {
+          "caller": "test_badge_uses_label_colour",
+          "callee": "T._mix_hex",
+          "lineNumber": 37
+        },
+        {
+          "caller": "test_badge_uses_label_colour",
+          "callee": "T.badge",
+          "lineNumber": 38
+        },
+        {
+          "caller": "test_mix_hex_endpoints",
+          "callee": "T._mix_hex",
+          "lineNumber": 42
+        },
+        {
+          "caller": "test_mix_hex_endpoints",
+          "callee": "T._mix_hex",
+          "lineNumber": 43
+        },
+        {
+          "caller": "test_pair_card_judge_primary_renders_stat_line",
+          "callee": "T.pair_card_html",
+          "lineNumber": 56
+        },
+        {
+          "caller": "test_pair_card_v2_has_no_stat_line",
+          "callee": "T.pair_card_html",
+          "lineNumber": 71
+        },
+        {
+          "caller": "test_style_fig_applies_theme",
+          "callee": "T.style_fig",
+          "lineNumber": 77
+        },
+        {
+          "caller": "test_style_fig_applies_theme",
+          "callee": "go.Figure",
+          "lineNumber": 77
+        },
+        {
+          "caller": "test_style_fig_applies_theme",
+          "callee": "go.Bar",
+          "lineNumber": 77
+        },
+        {
+          "caller": "test_style_fig_applies_theme",
+          "callee": "tuple",
+          "lineNumber": 81
+        },
+        {
+          "caller": "test_style_fig_applies_theme",
+          "callee": "tuple",
+          "lineNumber": 81
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 8,
+        "functionCount": 8,
+        "classCount": 0
+      }
+    }
+  ]
+}

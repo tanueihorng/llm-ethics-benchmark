@@ -1,0 +1,292 @@
+{
+ "nodes": [
+  {
+   "id": "file:scripts/multiple_comparisons.py",
+   "type": "file",
+   "name": "multiple_comparisons.py",
+   "filePath": "scripts/multiple_comparisons.py",
+   "summary": "Statistical-rigour layer for the pairwise study: McNemar exact tests on paired judge outcomes, paired bootstrap CIs, Benjamini-Hochberg FDR correction across all pair-by-benchmark contrasts, plus MDE/power notes; writes analysis/multiple_comparisons.json consumed by the dashboard and report.",
+   "tags": [
+    "statistics",
+    "analysis",
+    "hypothesis-testing"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:scripts/multiple_comparisons.py:_paired_outcomes",
+   "type": "function",
+   "name": "_paired_outcomes",
+   "filePath": "scripts/multiple_comparisons.py",
+   "summary": "Aligns baseline and quantized per-prompt judge outcomes by prompt_id into paired binary vectors.",
+   "tags": [
+    "statistics",
+    "analysis",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    82,
+    109
+   ]
+  },
+  {
+   "id": "function:scripts/multiple_comparisons.py:mde_mcnemar",
+   "type": "function",
+   "name": "mde_mcnemar",
+   "filePath": "scripts/multiple_comparisons.py",
+   "summary": "Computes the minimum detectable effect for a McNemar test at the observed discordant-pair count.",
+   "tags": [
+    "statistics",
+    "analysis",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    124,
+    133
+   ]
+  },
+  {
+   "id": "function:scripts/multiple_comparisons.py:power_mcnemar",
+   "type": "function",
+   "name": "power_mcnemar",
+   "filePath": "scripts/multiple_comparisons.py",
+   "summary": "Estimates statistical power of the McNemar contrast given discordant counts and alpha.",
+   "tags": [
+    "statistics",
+    "analysis",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    136,
+    149
+   ]
+  },
+  {
+   "id": "function:scripts/multiple_comparisons.py:benjamini_hochberg",
+   "type": "function",
+   "name": "benjamini_hochberg",
+   "filePath": "scripts/multiple_comparisons.py",
+   "summary": "Applies BH-FDR correction across all pairwise contrasts and flags which survive.",
+   "tags": [
+    "statistics",
+    "analysis",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    179,
+    204
+   ]
+  },
+  {
+   "id": "function:scripts/multiple_comparisons.py:main",
+   "type": "function",
+   "name": "main",
+   "filePath": "scripts/multiple_comparisons.py",
+   "summary": "Builds every pair-by-benchmark contrast from judge/v2 sidecars and emits multiple_comparisons.json with tests, CIs, and FDR verdicts.",
+   "tags": [
+    "statistics",
+    "analysis",
+    "function"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    207,
+    334
+   ]
+  },
+  {
+   "id": "file:scripts/precision_sweep_analysis.py",
+   "type": "file",
+   "name": "precision_sweep_analysis.py",
+   "filePath": "scripts/precision_sweep_analysis.py",
+   "summary": "Builds the fp16 -> INT8 -> NF4 precision-sweep table per pair and benchmark: metric trend classification (graded/cliff/non-monotonic) and INT8 McNemar significance; feeds the report's precision-point section.",
+   "tags": [
+    "analysis",
+    "quantization",
+    "statistics"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:scripts/precision_sweep_analysis.py:_trend",
+   "type": "function",
+   "name": "_trend",
+   "filePath": "scripts/precision_sweep_analysis.py",
+   "summary": "Classifies the fp16->INT8->NF4 metric trajectory as graded, cliff-at-NF4, or non-monotonic.",
+   "tags": [
+    "analysis",
+    "quantization",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    99,
+    128
+   ]
+  },
+  {
+   "id": "function:scripts/precision_sweep_analysis.py:_int8_mcnemar",
+   "type": "function",
+   "name": "_int8_mcnemar",
+   "filePath": "scripts/precision_sweep_analysis.py",
+   "summary": "Runs McNemar on paired judge outcomes between baseline and INT8 members.",
+   "tags": [
+    "analysis",
+    "quantization",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    157,
+    196
+   ]
+  },
+  {
+   "id": "function:scripts/precision_sweep_analysis.py:main",
+   "type": "function",
+   "name": "main",
+   "filePath": "scripts/precision_sweep_analysis.py",
+   "summary": "Assembles the precision sweep across pairs and writes JSON + CSV outputs.",
+   "tags": [
+    "analysis",
+    "quantization",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    226,
+    263
+   ]
+  },
+  {
+   "id": "file:tests/test_precision_sweep.py",
+   "type": "file",
+   "name": "test_precision_sweep.py",
+   "filePath": "tests/test_precision_sweep.py",
+   "summary": "Tests for precision_sweep_analysis: trend classification, graceful handling of pending INT8 runs, v2-sidecar preference, and reproduction of the documented Llama INT8 McNemar result.",
+   "tags": [
+    "test",
+    "analysis",
+    "quantization"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:tests/test_quant_analysis.py",
+   "type": "file",
+   "name": "test_quant_analysis.py",
+   "filePath": "tests/test_quant_analysis.py",
+   "summary": "Unit tests for the pairwise delta/interpretation engine: classify_pair_change labels, two-layer evidence status, McNemar and bootstrap helpers, v2-sidecar preference, and NF4/INT8 member selection guards.",
+   "tags": [
+    "test",
+    "analysis",
+    "interpretation"
+   ],
+   "complexity": "complex"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:scripts/multiple_comparisons.py",
+   "target": "function:scripts/multiple_comparisons.py:_paired_outcomes",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:scripts/multiple_comparisons.py",
+   "target": "function:scripts/multiple_comparisons.py:mde_mcnemar",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:scripts/multiple_comparisons.py",
+   "target": "function:scripts/multiple_comparisons.py:power_mcnemar",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:scripts/multiple_comparisons.py",
+   "target": "function:scripts/multiple_comparisons.py:benjamini_hochberg",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:scripts/multiple_comparisons.py",
+   "target": "function:scripts/multiple_comparisons.py:main",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:scripts/multiple_comparisons.py",
+   "target": "file:ethical_benchmark/analysis/compare_quant_pairs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:scripts/precision_sweep_analysis.py",
+   "target": "function:scripts/precision_sweep_analysis.py:_trend",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:scripts/precision_sweep_analysis.py",
+   "target": "function:scripts/precision_sweep_analysis.py:_int8_mcnemar",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:scripts/precision_sweep_analysis.py",
+   "target": "function:scripts/precision_sweep_analysis.py:main",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:scripts/precision_sweep_analysis.py",
+   "target": "file:ethical_benchmark/analysis/compare_quant_pairs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:tests/test_precision_sweep.py",
+   "target": "file:scripts/precision_sweep_analysis.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:tests/test_quant_analysis.py",
+   "target": "file:ethical_benchmark/analysis/compare_quant_pairs.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:tests/test_quant_analysis.py",
+   "target": "file:ethical_benchmark/pipeline/run_quant_benchmark.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:tests/test_quant_analysis.py",
+   "target": "file:ethical_benchmark/quant/config_schema.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  }
+ ]
+}

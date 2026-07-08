@@ -1,0 +1,45 @@
+# .understandignore — patterns for files/dirs to exclude from analysis
+# Focus the knowledge graph on the code: pipeline, benchmarks, analysis,
+# dashboard, cluster tooling, tests. Exclude data artifacts and generated files.
+
+# Results trees (immutable TC1 artifacts + analysis outputs — data, not code)
+results/
+results_512/
+results_sensitivity/
+results_sensitivity_512/
+results_dev/
+
+# Generated SLURM job files (produced by ethical_benchmark/cluster — artifacts)
+slurm/
+
+# Docs: reports, decks, logs (reference material, not system structure)
+docs/
+*.docx
+*.html
+pdfthumbs/
+
+# Data files
+data/
+human_labels/
+fyp_submission/
+configs/generated/
+slurm/jobs_generated/
+
+# Env / caches / agent tooling
+.venv/
+.pytest_cache/
+.swift-cache/
+.claude/
+.codex/
+.agents/
+.github/
+.understand-anything/
+node_modules/
+
+# Misc
+*.py[cod]
+.DS_Store
+terminal_log*.txt
+~$*.docx
+*.egg-info/
+todo.md

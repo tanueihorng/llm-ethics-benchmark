@@ -1,0 +1,592 @@
+{
+ "nodes": [
+  {
+   "id": "file:ethical_benchmark/analysis/refusal_margin.py",
+   "type": "file",
+   "name": "refusal_margin.py",
+   "filePath": "ethical_benchmark/analysis/refusal_margin.py",
+   "summary": "Token-level refusal-margin diagnostics: log-probability margin between refusal and compliance first-token sets, decision entropy, and top1-top2 gap, used to test whether quantization shifts the refusal decision boundary mechanistically.",
+   "tags": [
+    "analysis",
+    "interpretability",
+    "refusal"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:ethical_benchmark/analysis/refusal_margin.py:log_prob_of_set",
+   "type": "function",
+   "name": "log_prob_of_set",
+   "filePath": "ethical_benchmark/analysis/refusal_margin.py",
+   "summary": "Log-sum-exp probability mass assigned to a set of token ids from first-token logits.",
+   "tags": [
+    "analysis",
+    "interpretability",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    72,
+    79
+   ]
+  },
+  {
+   "id": "function:ethical_benchmark/analysis/refusal_margin.py:refusal_margin",
+   "type": "function",
+   "name": "refusal_margin",
+   "filePath": "ethical_benchmark/analysis/refusal_margin.py",
+   "summary": "Signed log-prob margin between refusal-token and compliance-token sets for one generation step.",
+   "tags": [
+    "analysis",
+    "interpretability",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    82,
+    96
+   ]
+  },
+  {
+   "id": "function:ethical_benchmark/analysis/refusal_margin.py:decision_entropy",
+   "type": "function",
+   "name": "decision_entropy",
+   "filePath": "ethical_benchmark/analysis/refusal_margin.py",
+   "summary": "Entropy of the first-token distribution as a decision-confidence diagnostic.",
+   "tags": [
+    "analysis",
+    "interpretability",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    99,
+    108
+   ]
+  },
+  {
+   "id": "function:ethical_benchmark/analysis/refusal_margin.py:top1_top2_gap",
+   "type": "function",
+   "name": "top1_top2_gap",
+   "filePath": "ethical_benchmark/analysis/refusal_margin.py",
+   "summary": "Probability gap between the top-1 and top-2 first tokens.",
+   "tags": [
+    "analysis",
+    "interpretability",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    111,
+    120
+   ]
+  },
+  {
+   "id": "function:ethical_benchmark/analysis/refusal_margin.py:build_token_sets",
+   "type": "function",
+   "name": "build_token_sets",
+   "filePath": "ethical_benchmark/analysis/refusal_margin.py",
+   "summary": "Builds refusal vs compliance first-token id sets from a tokenizer, handling leading-space variants and dropping ambiguous tokens.",
+   "tags": [
+    "analysis",
+    "interpretability",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    137,
+    169
+   ]
+  },
+  {
+   "id": "file:ethical_benchmark/models/generation.py",
+   "type": "file",
+   "name": "generation.py",
+   "filePath": "ethical_benchmark/models/generation.py",
+   "summary": "Batched text generation over loaded HF models: DecodingConfig (greedy, temperature 0.0 defaults), TextGenerator that applies the native chat template with enable_thinking=False and records prompt provenance, plus global seeding for determinism.",
+   "tags": [
+    "generation",
+    "model",
+    "determinism"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:ethical_benchmark/models/generation.py:set_global_seed",
+   "type": "function",
+   "name": "set_global_seed",
+   "filePath": "ethical_benchmark/models/generation.py",
+   "summary": "Seeds Python, NumPy, and Torch (incl. CUDA) for deterministic runs.",
+   "tags": [
+    "generation",
+    "model",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    66,
+    84
+   ]
+  },
+  {
+   "id": "class:ethical_benchmark/models/generation.py:DecodingConfig",
+   "type": "class",
+   "name": "DecodingConfig",
+   "filePath": "ethical_benchmark/models/generation.py",
+   "summary": "Frozen decoding parameters (max_new_tokens, temperature, sampling flags) built from config dicts.",
+   "tags": [
+    "generation",
+    "model",
+    "class"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    23,
+    63
+   ]
+  },
+  {
+   "id": "class:ethical_benchmark/models/generation.py:TextGenerator",
+   "type": "class",
+   "name": "TextGenerator",
+   "filePath": "ethical_benchmark/models/generation.py",
+   "summary": "Batches prompts through the model: chat-template formatting (enable_thinking=False), generation, and post-processing; flags whether each prompt was genuinely templated.",
+   "tags": [
+    "generation",
+    "model",
+    "class"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    87,
+    238
+   ]
+  },
+  {
+   "id": "file:ethical_benchmark/models/loader.py",
+   "type": "file",
+   "name": "loader.py",
+   "filePath": "ethical_benchmark/models/loader.py",
+   "summary": "HF model + tokenizer loading with dtype/device resolution and on-the-fly quantization: builds BitsAndBytesConfig for NF4 4-bit or LLM.int8, verifies quantization actually engaged after load (hard fail otherwise), and defines the ModelSpec contract.",
+   "tags": [
+    "model",
+    "quantization",
+    "loader"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:ethical_benchmark/models/loader.py:_build_bnb_4bit_config",
+   "type": "function",
+   "name": "_build_bnb_4bit_config",
+   "filePath": "ethical_benchmark/models/loader.py",
+   "summary": "Constructs the NF4 BitsAndBytesConfig with compute dtype following the resolved model dtype.",
+   "tags": [
+    "model",
+    "quantization",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    26,
+    45
+   ]
+  },
+  {
+   "id": "function:ethical_benchmark/models/loader.py:_build_bnb_8bit_config",
+   "type": "function",
+   "name": "_build_bnb_8bit_config",
+   "filePath": "ethical_benchmark/models/loader.py",
+   "summary": "Constructs the LLM.int8 BitsAndBytesConfig for the INT8 precision point.",
+   "tags": [
+    "model",
+    "quantization",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    48,
+    65
+   ]
+  },
+  {
+   "id": "function:ethical_benchmark/models/loader.py:_quantization_active",
+   "type": "function",
+   "name": "_quantization_active",
+   "filePath": "ethical_benchmark/models/loader.py",
+   "summary": "Detects whether a loaded model is actually quantized (is_loaded_in_4bit/8bit, hf_quantizer signals).",
+   "tags": [
+    "model",
+    "quantization",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    68,
+    92
+   ]
+  },
+  {
+   "id": "function:ethical_benchmark/models/loader.py:_require_quantization_engaged",
+   "type": "function",
+   "name": "_require_quantization_engaged",
+   "filePath": "ethical_benchmark/models/loader.py",
+   "summary": "Raises if a member configured as quantized silently loaded in fp16 \u2014 guards against methodology-invalidating fallbacks.",
+   "tags": [
+    "model",
+    "quantization",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    95,
+    117
+   ]
+  },
+  {
+   "id": "function:ethical_benchmark/models/loader.py:build_model_spec",
+   "type": "function",
+   "name": "build_model_spec",
+   "filePath": "ethical_benchmark/models/loader.py",
+   "summary": "Resolves a config model alias into a ModelSpec (model_id, quantized flag, quant_method, dtype, attn_implementation).",
+   "tags": [
+    "model",
+    "quantization",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    307,
+    337
+   ]
+  },
+  {
+   "id": "class:ethical_benchmark/models/loader.py:ModelSpec",
+   "type": "class",
+   "name": "ModelSpec",
+   "filePath": "ethical_benchmark/models/loader.py",
+   "summary": "Immutable specification of one model member (alias, model_id, quantization method, dtype, device, attention implementation).",
+   "tags": [
+    "model",
+    "quantization",
+    "class"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    121,
+    144
+   ]
+  },
+  {
+   "id": "class:ethical_benchmark/models/loader.py:HFModelLoader",
+   "type": "class",
+   "name": "HFModelLoader",
+   "filePath": "ethical_benchmark/models/loader.py",
+   "summary": "Loads model+tokenizer from the spec with device/dtype resolution and optional BitsAndBytes quantization.",
+   "tags": [
+    "model",
+    "quantization",
+    "class"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    147,
+    304
+   ]
+  },
+  {
+   "id": "file:scripts/capture_refusal_margin.py",
+   "type": "file",
+   "name": "capture_refusal_margin.py",
+   "filePath": "scripts/capture_refusal_margin.py",
+   "summary": "TC1 capture script that re-runs HarmBench prompts through each model recording first-token logits and refusal-margin diagnostics as redacted sidecars for the mechanistic refusal analysis.",
+   "tags": [
+    "analysis",
+    "refusal",
+    "cluster"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:scripts/capture_refusal_margin.py:_sequence_margins",
+   "type": "function",
+   "name": "_sequence_margins",
+   "filePath": "scripts/capture_refusal_margin.py",
+   "summary": "Computes per-step refusal margins over a generated sequence's logits.",
+   "tags": [
+    "analysis",
+    "refusal",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    94,
+    123
+   ]
+  },
+  {
+   "id": "function:scripts/capture_refusal_margin.py:_capture_model",
+   "type": "function",
+   "name": "_capture_model",
+   "filePath": "scripts/capture_refusal_margin.py",
+   "summary": "Loads one model member, replays its HarmBench prompts, and captures margin/entropy/gap diagnostics.",
+   "tags": [
+    "analysis",
+    "refusal",
+    "function"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    126,
+    204
+   ]
+  },
+  {
+   "id": "function:scripts/capture_refusal_margin.py:main",
+   "type": "function",
+   "name": "main",
+   "filePath": "scripts/capture_refusal_margin.py",
+   "summary": "CLI: iterates configured members and writes redacted refusal-margin sidecars.",
+   "tags": [
+    "analysis",
+    "refusal",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    207,
+    238
+   ]
+  },
+  {
+   "id": "file:tests/test_models.py",
+   "type": "file",
+   "name": "test_models.py",
+   "filePath": "tests/test_models.py",
+   "summary": "Unit tests for the model layer using fake torch/transformers doubles: ModelSpec immutability, device/dtype resolution, chat-template thinking-flag handling, prompt provenance, quantization-active detection, and attn_implementation propagation.",
+   "tags": [
+    "test",
+    "model",
+    "loader"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:tests/test_quant_int8.py",
+   "type": "file",
+   "name": "test_quant_int8.py",
+   "filePath": "tests/test_quant_int8.py",
+   "summary": "Tests for the INT8 precision point: quant_method schema validation, ModelSpec propagation, 8-bit detection, quantization-engaged guard, loader branch selection (int8 vs nf4), and the tc1_int8 config contents.",
+   "tags": [
+    "test",
+    "quantization",
+    "config"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:tests/test_refusal_margin.py",
+   "type": "file",
+   "name": "test_refusal_margin.py",
+   "filePath": "tests/test_refusal_margin.py",
+   "summary": "Math-level tests for refusal-margin diagnostics: sign/symmetry/shift-invariance of the margin, entropy and top1-top2 gap behaviour, and token-set construction edge cases.",
+   "tags": [
+    "test",
+    "refusal",
+    "analysis"
+   ],
+   "complexity": "moderate"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:ethical_benchmark/analysis/refusal_margin.py",
+   "target": "function:ethical_benchmark/analysis/refusal_margin.py:log_prob_of_set",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:ethical_benchmark/analysis/refusal_margin.py",
+   "target": "function:ethical_benchmark/analysis/refusal_margin.py:refusal_margin",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:ethical_benchmark/analysis/refusal_margin.py",
+   "target": "function:ethical_benchmark/analysis/refusal_margin.py:decision_entropy",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:ethical_benchmark/analysis/refusal_margin.py",
+   "target": "function:ethical_benchmark/analysis/refusal_margin.py:top1_top2_gap",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:ethical_benchmark/analysis/refusal_margin.py",
+   "target": "function:ethical_benchmark/analysis/refusal_margin.py:build_token_sets",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:ethical_benchmark/models/generation.py",
+   "target": "function:ethical_benchmark/models/generation.py:set_global_seed",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:ethical_benchmark/models/generation.py",
+   "target": "class:ethical_benchmark/models/generation.py:DecodingConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:ethical_benchmark/models/generation.py",
+   "target": "class:ethical_benchmark/models/generation.py:TextGenerator",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:ethical_benchmark/models/loader.py",
+   "target": "function:ethical_benchmark/models/loader.py:_build_bnb_4bit_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:ethical_benchmark/models/loader.py",
+   "target": "function:ethical_benchmark/models/loader.py:_build_bnb_8bit_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:ethical_benchmark/models/loader.py",
+   "target": "function:ethical_benchmark/models/loader.py:_quantization_active",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:ethical_benchmark/models/loader.py",
+   "target": "function:ethical_benchmark/models/loader.py:_require_quantization_engaged",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:ethical_benchmark/models/loader.py",
+   "target": "function:ethical_benchmark/models/loader.py:build_model_spec",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:ethical_benchmark/models/loader.py",
+   "target": "class:ethical_benchmark/models/loader.py:ModelSpec",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:ethical_benchmark/models/loader.py",
+   "target": "class:ethical_benchmark/models/loader.py:HFModelLoader",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:scripts/capture_refusal_margin.py",
+   "target": "function:scripts/capture_refusal_margin.py:_sequence_margins",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:scripts/capture_refusal_margin.py",
+   "target": "function:scripts/capture_refusal_margin.py:_capture_model",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:scripts/capture_refusal_margin.py",
+   "target": "function:scripts/capture_refusal_margin.py:main",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:scripts/capture_refusal_margin.py",
+   "target": "file:ethical_benchmark/analysis/refusal_margin.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:scripts/capture_refusal_margin.py",
+   "target": "file:ethical_benchmark/models/generation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:scripts/capture_refusal_margin.py",
+   "target": "file:ethical_benchmark/models/loader.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:scripts/capture_refusal_margin.py",
+   "target": "file:ethical_benchmark/quant/config_schema.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:tests/test_models.py",
+   "target": "file:ethical_benchmark/models/generation.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:tests/test_models.py",
+   "target": "file:ethical_benchmark/models/loader.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:tests/test_quant_int8.py",
+   "target": "file:ethical_benchmark/models/loader.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:tests/test_quant_int8.py",
+   "target": "file:ethical_benchmark/quant/config_schema.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:tests/test_refusal_margin.py",
+   "target": "file:ethical_benchmark/analysis/refusal_margin.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  }
+ ]
+}

@@ -1,0 +1,239 @@
+[
+ {
+  "id": "layer:entry-points",
+  "name": "CLI & Orchestration Entry Points",
+  "description": "Top-level commands a researcher actually runs: the unified fyp_cli, single-run and matrix runners, pairwise analysis wrapper, SLURM helpers, and the Makefile that fronts them all.",
+  "nodeIds": [
+   "file:check_slurm_runs.py",
+   "file:compare_quant_pairs.py",
+   "file:fyp_cli.py",
+   "file:generate_slurm_jobs.py",
+   "file:run_benchmark.py",
+   "file:run_quant_benchmark.py",
+   "file:run_quant_matrix.py",
+   "file:submit_slurm_jobs.py",
+   "pipeline:Makefile"
+  ]
+ },
+ {
+  "id": "layer:benchmarks",
+  "name": "Benchmark Plugins",
+  "description": "BenchmarkPlugin ABC and its implementations: HarmBench (harmful compliance / ASR), XSTest (over-refusal), MMLU (capability), ARC; each handles dataset loading, prompt formatting, and per-response scoring.",
+  "nodeIds": [
+   "file:ethical_benchmark/benchmarks/__init__.py",
+   "file:ethical_benchmark/benchmarks/arc.py",
+   "file:ethical_benchmark/benchmarks/base.py",
+   "file:ethical_benchmark/benchmarks/harmbench.py",
+   "file:ethical_benchmark/benchmarks/mmlu.py",
+   "file:ethical_benchmark/benchmarks/registry.py",
+   "file:ethical_benchmark/benchmarks/utils.py",
+   "file:ethical_benchmark/benchmarks/xstest.py"
+  ]
+ },
+ {
+  "id": "layer:models",
+  "name": "Model Loading & Generation",
+  "description": "HF model/tokenizer loading with dtype-device resolution and on-the-fly NF4/INT8 quantization (with an engagement guard), plus deterministic batched chat-template generation.",
+  "nodeIds": [
+   "file:ethical_benchmark/models/__init__.py",
+   "file:ethical_benchmark/models/generation.py",
+   "file:ethical_benchmark/models/loader.py"
+  ]
+ },
+ {
+  "id": "layer:core-pipeline",
+  "name": "Core Pipeline, Schema & Metrics",
+  "description": "Run orchestration (single run and model-reusing matrix), Pydantic config schema enforcing pair integrity, shared constants, and JSONL/CSV metrics I/O with bootstrap CIs.",
+  "nodeIds": [
+   "file:ethical_benchmark/__init__.py",
+   "file:ethical_benchmark/config_schema.py",
+   "file:ethical_benchmark/constants.py",
+   "file:ethical_benchmark/metrics/__init__.py",
+   "file:ethical_benchmark/metrics/aggregate.py",
+   "file:ethical_benchmark/pipeline/__init__.py",
+   "file:ethical_benchmark/pipeline/run_benchmark.py",
+   "file:ethical_benchmark/pipeline/run_quant_benchmark.py",
+   "file:ethical_benchmark/pipeline/run_quant_matrix.py",
+   "file:ethical_benchmark/quant/__init__.py",
+   "file:ethical_benchmark/quant/config_schema.py"
+  ]
+ },
+ {
+  "id": "layer:judging",
+  "name": "Judge Scoring & Human Validation",
+  "description": "The primary HarmBench ASR scorer (official 13B classifier) and second-judge backends, redacted sidecar writing, judge-vs-regex agreement stats, and the human-label audit tooling.",
+  "nodeIds": [
+   "file:ethical_benchmark/judges/__init__.py",
+   "file:ethical_benchmark/judges/validation.py",
+   "file:scripts/human_label_audit.py",
+   "file:scripts/judge_agreement.py",
+   "file:scripts/judge_pairwise_agreement.py",
+   "file:scripts/rescore_harmbench.py",
+   "file:scripts/run_judge_validation.py"
+  ]
+ },
+ {
+  "id": "layer:analysis",
+  "name": "Analysis & Statistics",
+  "description": "Everything that turns raw run artifacts into claims: pairwise deltas and interpretation labels, McNemar + BH-FDR multiple comparisons, precision sweep, generation-length study, sensitivity checks, refusal-margin mechanistics, breakdowns, and report figures.",
+  "nodeIds": [
+   "file:ethical_benchmark/analysis/__init__.py",
+   "file:ethical_benchmark/analysis/compare_quant_pairs.py",
+   "file:ethical_benchmark/analysis/refusal_margin.py",
+   "file:scripts/capture_refusal_margin.py",
+   "file:scripts/genlen_512_analysis.py",
+   "file:scripts/harmbench_category_breakdown.py",
+   "file:scripts/make_figures.py",
+   "file:scripts/mmlu_subject_breakdown.py",
+   "file:scripts/multiple_comparisons.py",
+   "file:scripts/number_bible_512.py",
+   "file:scripts/precision_sweep_analysis.py",
+   "file:scripts/refusal_margin_analysis.py",
+   "file:scripts/sensitivity_analysis.py"
+  ]
+ },
+ {
+  "id": "layer:cluster",
+  "name": "TC1 Cluster Operations",
+  "description": "SLURM job generation/submission/status for the TC1 cluster, offline-mode prefetching of models and datasets on the head node, and sensitivity-job generation.",
+  "nodeIds": [
+   "file:ethical_benchmark/cluster/__init__.py",
+   "file:ethical_benchmark/cluster/check_runs.py",
+   "file:ethical_benchmark/cluster/generate_jobs.py",
+   "file:ethical_benchmark/cluster/submit_jobs.py",
+   "file:scripts/generate_sensitivity_jobs.py",
+   "file:scripts/prefetch_tc1.py"
+  ]
+ },
+ {
+  "id": "layer:dashboard",
+  "name": "Interactive Dashboard",
+  "description": "Streamlit GUI over the results trees: judge-primary results explorer, add-model form, run launcher; data.py is the Streamlit-free tested data layer; themed by an editorial design system.",
+  "nodeIds": [
+   "config:.streamlit/config.toml",
+   "file:dashboard/__init__.py",
+   "file:dashboard/app.py",
+   "file:dashboard/data.py",
+   "file:dashboard/theme.py"
+  ]
+ },
+ {
+  "id": "layer:agent-harness",
+  "name": "Agent Harness & Governance",
+  "description": "Repo-native agent continuity and verification: policy-driven checks (immutable artifacts, doc sync, PROJECT_LOG discipline, stale-text and redaction scans), status/handoff renderers, and the machine claim lock pinning report numbers to artifacts.",
+  "nodeIds": [
+   "config:configs/artifact_policy.yaml",
+   "file:ethical_benchmark/harness/__init__.py",
+   "file:ethical_benchmark/harness/agent.py",
+   "file:scripts/agent_check.py",
+   "file:scripts/generate_agent_dashboard.py",
+   "file:scripts/generate_handoff.py",
+   "file:scripts/generate_tc1_checklist.py",
+   "file:scripts/harness_eval.py",
+   "file:scripts/verify_report_claims.py"
+  ]
+ },
+ {
+  "id": "layer:reporting",
+  "name": "Report & Diagram Builders",
+  "description": "docx-js/python-docx builders for the FYP report (v5 canonical) and thesis (v4 canonical) plus archived predecessors, and SVG/draw.io architecture-diagram generators.",
+  "nodeIds": [
+   "file:scripts/build_agent_harness_architecture_doc.py",
+   "file:scripts/build_agentic_report.js",
+   "file:scripts/build_fyp_report.js",
+   "file:scripts/build_fyp_report_v2.js",
+   "file:scripts/build_fyp_report_v3.js",
+   "file:scripts/build_fyp_report_v4.js",
+   "file:scripts/build_fyp_report_v5.js",
+   "file:scripts/build_fyp_thesis.js",
+   "file:scripts/build_fyp_thesis_v2.js",
+   "file:scripts/build_fyp_thesis_v3.js",
+   "file:scripts/build_fyp_thesis_v4.js",
+   "file:scripts/generate_agent_harness_architecture_diagram.py",
+   "file:scripts/generate_architecture_diagram.py",
+   "file:scripts/generate_integrated_architecture_diagram.py",
+   "file:scripts/generate_repo_hierarchy_diagram.py"
+  ]
+ },
+ {
+  "id": "layer:configuration",
+  "name": "Experiment & Tooling Configuration",
+  "description": "YAML experiment configs (local, TC1 128/512, INT8, sensitivity), Python/Node manifests, and dependency pins.",
+  "nodeIds": [
+   "config:.hallmark/log.json",
+   "config:configs/default.yaml",
+   "config:configs/tc1.yaml",
+   "config:configs/tc1_512.yaml",
+   "config:configs/tc1_int8.yaml",
+   "config:configs/tc1_int8_512.yaml",
+   "config:configs/tc1_sensitivity.yaml",
+   "config:configs/tc1_sensitivity_512.yaml",
+   "config:package.json",
+   "config:pyproject.toml",
+   "document:requirements-dashboard.txt",
+   "document:requirements.txt"
+  ]
+ },
+ {
+  "id": "layer:documentation",
+  "name": "Documentation & Citation",
+  "description": "Project README, the twin agent-instruction files (CLAUDE.md/AGENTS.md), and citation metadata.",
+  "nodeIds": [
+   "document:AGENTS.md",
+   "document:CLAUDE.md",
+   "document:README.md",
+   "file:CITATION.bib",
+   "file:CITATION.cff"
+  ]
+ },
+ {
+  "id": "layer:legacy",
+  "name": "Legacy Evaluators & Datasets",
+  "description": "Pre-quantization-study toxicity/bias/factuality evaluators and dataset loaders; retained but not part of the default pipeline.",
+  "nodeIds": [
+   "file:ethical_benchmark/datasets/__init__.py",
+   "file:ethical_benchmark/datasets/bias.py",
+   "file:ethical_benchmark/datasets/factuality.py",
+   "file:ethical_benchmark/datasets/toxicity.py",
+   "file:ethical_benchmark/evaluators/__init__.py",
+   "file:ethical_benchmark/evaluators/bias_eval.py",
+   "file:ethical_benchmark/evaluators/factuality_eval.py",
+   "file:ethical_benchmark/evaluators/toxicity_eval.py"
+  ]
+ },
+ {
+  "id": "layer:tests",
+  "name": "Test Suite",
+  "description": "339 tests covering every layer: pipeline smoke, analysis math, judge redaction, dashboard data, harness self-evaluation, and claim-lock bridging.",
+  "nodeIds": [
+   "file:tests/__init__.py",
+   "file:tests/conftest.py",
+   "file:tests/test_agent_harness.py",
+   "file:tests/test_arc.py",
+   "file:tests/test_dashboard_data.py",
+   "file:tests/test_dashboard_theme.py",
+   "file:tests/test_datasets.py",
+   "file:tests/test_evaluators.py",
+   "file:tests/test_int8_scoping.py",
+   "file:tests/test_judge_agreement.py",
+   "file:tests/test_judge_pairwise.py",
+   "file:tests/test_judge_validation.py",
+   "file:tests/test_matrix_reuse.py",
+   "file:tests/test_metrics_and_config.py",
+   "file:tests/test_models.py",
+   "file:tests/test_pipeline.py",
+   "file:tests/test_precision_sweep.py",
+   "file:tests/test_quant_analysis.py",
+   "file:tests/test_quant_config_schema.py",
+   "file:tests/test_quant_int8.py",
+   "file:tests/test_quant_pipeline_utils.py",
+   "file:tests/test_quant_smoke.py",
+   "file:tests/test_refusal_margin.py",
+   "file:tests/test_refusal_parser.py",
+   "file:tests/test_report_claims.py",
+   "file:tests/test_sensitivity.py",
+   "file:tests/test_slurm_helpers.py",
+   "file:tests/test_xstest_benign.py"
+  ]
+ }
+]

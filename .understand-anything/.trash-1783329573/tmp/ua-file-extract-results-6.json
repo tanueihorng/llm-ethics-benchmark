@@ -1,0 +1,3454 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 7,
+  "filesSkipped": [],
+  "results": [
+    {
+      "path": "ethical_benchmark/analysis/refusal_margin.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 169,
+      "nonEmptyLines": 133,
+      "functions": [
+        {
+          "name": "_as_1d_float",
+          "startLine": 52,
+          "endLine": 58,
+          "params": [
+            "logits"
+          ]
+        },
+        {
+          "name": "_logsumexp",
+          "startLine": 61,
+          "endLine": 69,
+          "params": [
+            "values"
+          ]
+        },
+        {
+          "name": "log_prob_of_set",
+          "startLine": 72,
+          "endLine": 79,
+          "params": [
+            "logits",
+            "token_ids"
+          ]
+        },
+        {
+          "name": "refusal_margin",
+          "startLine": 82,
+          "endLine": 96,
+          "params": [
+            "logits",
+            "refusal_ids",
+            "comply_ids"
+          ]
+        },
+        {
+          "name": "decision_entropy",
+          "startLine": 99,
+          "endLine": 108,
+          "params": [
+            "logits"
+          ]
+        },
+        {
+          "name": "top1_top2_gap",
+          "startLine": 111,
+          "endLine": 120,
+          "params": [
+            "logits"
+          ]
+        },
+        {
+          "name": "first_token_id",
+          "startLine": 123,
+          "endLine": 134,
+          "params": [
+            "tokenizer",
+            "text"
+          ]
+        },
+        {
+          "name": "build_token_sets",
+          "startLine": 137,
+          "endLine": 169,
+          "params": [
+            "tokenizer",
+            "refusal_seeds",
+            "comply_seeds"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "_as_1d_float",
+          "line": 52,
+          "isDefault": false
+        },
+        {
+          "name": "_logsumexp",
+          "line": 61,
+          "isDefault": false
+        },
+        {
+          "name": "log_prob_of_set",
+          "line": 72,
+          "isDefault": false
+        },
+        {
+          "name": "refusal_margin",
+          "line": 82,
+          "isDefault": false
+        },
+        {
+          "name": "decision_entropy",
+          "line": 99,
+          "isDefault": false
+        },
+        {
+          "name": "top1_top2_gap",
+          "line": 111,
+          "isDefault": false
+        },
+        {
+          "name": "first_token_id",
+          "line": 123,
+          "isDefault": false
+        },
+        {
+          "name": "build_token_sets",
+          "line": 137,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "_as_1d_float",
+          "callee": "np.asarray",
+          "lineNumber": 55
+        },
+        {
+          "caller": "_as_1d_float",
+          "callee": "ValueError",
+          "lineNumber": 57
+        },
+        {
+          "caller": "_logsumexp",
+          "callee": "float",
+          "lineNumber": 65
+        },
+        {
+          "caller": "_logsumexp",
+          "callee": "float",
+          "lineNumber": 66
+        },
+        {
+          "caller": "_logsumexp",
+          "callee": "np.max",
+          "lineNumber": 66
+        },
+        {
+          "caller": "_logsumexp",
+          "callee": "np.isfinite",
+          "lineNumber": 67
+        },
+        {
+          "caller": "_logsumexp",
+          "callee": "float",
+          "lineNumber": 69
+        },
+        {
+          "caller": "_logsumexp",
+          "callee": "np.log",
+          "lineNumber": 69
+        },
+        {
+          "caller": "_logsumexp",
+          "callee": "np.sum",
+          "lineNumber": 69
+        },
+        {
+          "caller": "_logsumexp",
+          "callee": "np.exp",
+          "lineNumber": 69
+        },
+        {
+          "caller": "log_prob_of_set",
+          "callee": "_as_1d_float",
+          "lineNumber": 75
+        },
+        {
+          "caller": "log_prob_of_set",
+          "callee": "int",
+          "lineNumber": 76
+        },
+        {
+          "caller": "log_prob_of_set",
+          "callee": "int",
+          "lineNumber": 76
+        },
+        {
+          "caller": "log_prob_of_set",
+          "callee": "float",
+          "lineNumber": 78
+        },
+        {
+          "caller": "log_prob_of_set",
+          "callee": "_logsumexp",
+          "lineNumber": 79
+        },
+        {
+          "caller": "log_prob_of_set",
+          "callee": "_logsumexp",
+          "lineNumber": 79
+        },
+        {
+          "caller": "refusal_margin",
+          "callee": "_as_1d_float",
+          "lineNumber": 91
+        },
+        {
+          "caller": "refusal_margin",
+          "callee": "int",
+          "lineNumber": 92
+        },
+        {
+          "caller": "refusal_margin",
+          "callee": "int",
+          "lineNumber": 92
+        },
+        {
+          "caller": "refusal_margin",
+          "callee": "int",
+          "lineNumber": 93
+        },
+        {
+          "caller": "refusal_margin",
+          "callee": "int",
+          "lineNumber": 93
+        },
+        {
+          "caller": "refusal_margin",
+          "callee": "float",
+          "lineNumber": 95
+        },
+        {
+          "caller": "refusal_margin",
+          "callee": "_logsumexp",
+          "lineNumber": 96
+        },
+        {
+          "caller": "refusal_margin",
+          "callee": "_logsumexp",
+          "lineNumber": 96
+        },
+        {
+          "caller": "decision_entropy",
+          "callee": "_as_1d_float",
+          "lineNumber": 104
+        },
+        {
+          "caller": "decision_entropy",
+          "callee": "_logsumexp",
+          "lineNumber": 105
+        },
+        {
+          "caller": "decision_entropy",
+          "callee": "np.exp",
+          "lineNumber": 107
+        },
+        {
+          "caller": "decision_entropy",
+          "callee": "float",
+          "lineNumber": 108
+        },
+        {
+          "caller": "decision_entropy",
+          "callee": "np.sum",
+          "lineNumber": 108
+        },
+        {
+          "caller": "top1_top2_gap",
+          "callee": "_as_1d_float",
+          "lineNumber": 115
+        },
+        {
+          "caller": "top1_top2_gap",
+          "callee": "_logsumexp",
+          "lineNumber": 116
+        },
+        {
+          "caller": "top1_top2_gap",
+          "callee": "np.sort",
+          "lineNumber": 117
+        },
+        {
+          "caller": "top1_top2_gap",
+          "callee": "np.exp",
+          "lineNumber": 117
+        },
+        {
+          "caller": "top1_top2_gap",
+          "callee": "float",
+          "lineNumber": 119
+        },
+        {
+          "caller": "top1_top2_gap",
+          "callee": "float",
+          "lineNumber": 119
+        },
+        {
+          "caller": "top1_top2_gap",
+          "callee": "float",
+          "lineNumber": 120
+        },
+        {
+          "caller": "first_token_id",
+          "callee": "tokenizer.encode",
+          "lineNumber": 127
+        },
+        {
+          "caller": "first_token_id",
+          "callee": "tokenizer.encode",
+          "lineNumber": 129
+        },
+        {
+          "caller": "first_token_id",
+          "callee": "set",
+          "lineNumber": 130
+        },
+        {
+          "caller": "first_token_id",
+          "callee": "getattr",
+          "lineNumber": 130
+        },
+        {
+          "caller": "first_token_id",
+          "callee": "int",
+          "lineNumber": 132
+        },
+        {
+          "caller": "first_token_id",
+          "callee": "int",
+          "lineNumber": 133
+        },
+        {
+          "caller": "collect",
+          "callee": "set",
+          "lineNumber": 152
+        },
+        {
+          "caller": "collect",
+          "callee": "first_token_id",
+          "lineNumber": 155
+        },
+        {
+          "caller": "collect",
+          "callee": "ids.add",
+          "lineNumber": 157
+        },
+        {
+          "caller": "build_token_sets",
+          "callee": "collect",
+          "lineNumber": 160
+        },
+        {
+          "caller": "build_token_sets",
+          "callee": "collect",
+          "lineNumber": 161
+        },
+        {
+          "caller": "build_token_sets",
+          "callee": "sorted",
+          "lineNumber": 162
+        },
+        {
+          "caller": "build_token_sets",
+          "callee": "set",
+          "lineNumber": 163
+        },
+        {
+          "caller": "build_token_sets",
+          "callee": "set",
+          "lineNumber": 164
+        },
+        {
+          "caller": "build_token_sets",
+          "callee": "sorted",
+          "lineNumber": 166
+        },
+        {
+          "caller": "build_token_sets",
+          "callee": "sorted",
+          "lineNumber": 167
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 8,
+        "functionCount": 8,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "ethical_benchmark/models/generation.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 238,
+      "nonEmptyLines": 187,
+      "functions": [
+        {
+          "name": "_get_torch",
+          "startLine": 16,
+          "endLine": 19,
+          "params": []
+        },
+        {
+          "name": "set_global_seed",
+          "startLine": 66,
+          "endLine": 84,
+          "params": [
+            "seed"
+          ]
+        }
+      ],
+      "classes": [
+        {
+          "name": "DecodingConfig",
+          "startLine": 23,
+          "endLine": 63,
+          "methods": [
+            "from_dict"
+          ],
+          "properties": [
+            "max_new_tokens",
+            "temperature",
+            "top_p",
+            "repetition_penalty",
+            "max_input_tokens",
+            "use_chat_template"
+          ]
+        },
+        {
+          "name": "TextGenerator",
+          "startLine": 87,
+          "endLine": 238,
+          "methods": [
+            "__init__",
+            "generate_batch",
+            "_format_prompt",
+            "prompt_was_templated",
+            "_postprocess"
+          ],
+          "properties": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "_get_torch",
+          "line": 16,
+          "isDefault": false
+        },
+        {
+          "name": "DecodingConfig",
+          "line": 22,
+          "isDefault": false
+        },
+        {
+          "name": "set_global_seed",
+          "line": 66,
+          "isDefault": false
+        },
+        {
+          "name": "TextGenerator",
+          "line": 87,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "_get_torch",
+          "callee": "import_module",
+          "lineNumber": 19
+        },
+        {
+          "caller": "from_dict",
+          "callee": "cls",
+          "lineNumber": 56
+        },
+        {
+          "caller": "from_dict",
+          "callee": "int",
+          "lineNumber": 57
+        },
+        {
+          "caller": "from_dict",
+          "callee": "data.get",
+          "lineNumber": 57
+        },
+        {
+          "caller": "from_dict",
+          "callee": "float",
+          "lineNumber": 58
+        },
+        {
+          "caller": "from_dict",
+          "callee": "data.get",
+          "lineNumber": 58
+        },
+        {
+          "caller": "from_dict",
+          "callee": "float",
+          "lineNumber": 59
+        },
+        {
+          "caller": "from_dict",
+          "callee": "data.get",
+          "lineNumber": 59
+        },
+        {
+          "caller": "from_dict",
+          "callee": "float",
+          "lineNumber": 60
+        },
+        {
+          "caller": "from_dict",
+          "callee": "data.get",
+          "lineNumber": 60
+        },
+        {
+          "caller": "from_dict",
+          "callee": "int",
+          "lineNumber": 61
+        },
+        {
+          "caller": "from_dict",
+          "callee": "data.get",
+          "lineNumber": 61
+        },
+        {
+          "caller": "from_dict",
+          "callee": "bool",
+          "lineNumber": 62
+        },
+        {
+          "caller": "from_dict",
+          "callee": "data.get",
+          "lineNumber": 62
+        },
+        {
+          "caller": "set_global_seed",
+          "callee": "_get_torch",
+          "lineNumber": 76
+        },
+        {
+          "caller": "set_global_seed",
+          "callee": "random.seed",
+          "lineNumber": 77
+        },
+        {
+          "caller": "set_global_seed",
+          "callee": "np.random.seed",
+          "lineNumber": 78
+        },
+        {
+          "caller": "set_global_seed",
+          "callee": "torch.manual_seed",
+          "lineNumber": 79
+        },
+        {
+          "caller": "set_global_seed",
+          "callee": "torch.cuda.is_available",
+          "lineNumber": 80
+        },
+        {
+          "caller": "set_global_seed",
+          "callee": "torch.cuda.manual_seed_all",
+          "lineNumber": 81
+        },
+        {
+          "caller": "generate_batch",
+          "callee": "self._format_prompt",
+          "lineNumber": 126
+        },
+        {
+          "caller": "generate_batch",
+          "callee": "self.tokenizer",
+          "lineNumber": 135
+        },
+        {
+          "caller": "generate_batch",
+          "callee": "value.to",
+          "lineNumber": 144
+        },
+        {
+          "caller": "generate_batch",
+          "callee": "inputs.items",
+          "lineNumber": 144
+        },
+        {
+          "caller": "generate_batch",
+          "callee": "generation_kwargs.items",
+          "lineNumber": 156
+        },
+        {
+          "caller": "generate_batch",
+          "callee": "_get_torch",
+          "lineNumber": 158
+        },
+        {
+          "caller": "generate_batch",
+          "callee": "torch.no_grad",
+          "lineNumber": 159
+        },
+        {
+          "caller": "generate_batch",
+          "callee": "self.model.generate",
+          "lineNumber": 160
+        },
+        {
+          "caller": "generate_batch",
+          "callee": "self.tokenizer.decode(new_token_ids, skip_special_tokens=True).strip",
+          "lineNumber": 166
+        },
+        {
+          "caller": "generate_batch",
+          "callee": "self.tokenizer.decode",
+          "lineNumber": 166
+        },
+        {
+          "caller": "generate_batch",
+          "callee": "outputs.append",
+          "lineNumber": 167
+        },
+        {
+          "caller": "generate_batch",
+          "callee": "self._postprocess",
+          "lineNumber": 167
+        },
+        {
+          "caller": "_format_prompt",
+          "callee": "hasattr",
+          "lineNumber": 181
+        },
+        {
+          "caller": "_format_prompt",
+          "callee": "self.tokenizer.apply_chat_template",
+          "lineNumber": 183
+        },
+        {
+          "caller": "_format_prompt",
+          "callee": "self.tokenizer.apply_chat_template",
+          "lineNumber": 191
+        },
+        {
+          "caller": "_format_prompt",
+          "callee": "LOGGER.warning",
+          "lineNumber": 197
+        },
+        {
+          "caller": "_format_prompt",
+          "callee": "LOGGER.warning",
+          "lineNumber": 202
+        },
+        {
+          "caller": "prompt_was_templated",
+          "callee": "bool",
+          "lineNumber": 220
+        },
+        {
+          "caller": "prompt_was_templated",
+          "callee": "self._format_prompt",
+          "lineNumber": 220
+        },
+        {
+          "caller": "_postprocess",
+          "callee": "text.strip",
+          "lineNumber": 233
+        },
+        {
+          "caller": "_postprocess",
+          "callee": "cleaned.startswith",
+          "lineNumber": 236
+        },
+        {
+          "caller": "_postprocess",
+          "callee": "cleaned.split(\":\", 1)[1].strip",
+          "lineNumber": 237
+        },
+        {
+          "caller": "_postprocess",
+          "callee": "cleaned.split",
+          "lineNumber": 237
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 4,
+        "functionCount": 2,
+        "classCount": 2
+      }
+    },
+    {
+      "path": "ethical_benchmark/models/loader.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 337,
+      "nonEmptyLines": 258,
+      "functions": [
+        {
+          "name": "_get_torch",
+          "startLine": 13,
+          "endLine": 16,
+          "params": []
+        },
+        {
+          "name": "_get_transformer_classes",
+          "startLine": 19,
+          "endLine": 23,
+          "params": []
+        },
+        {
+          "name": "_build_bnb_4bit_config",
+          "startLine": 26,
+          "endLine": 45,
+          "params": [
+            "compute_dtype"
+          ]
+        },
+        {
+          "name": "_build_bnb_8bit_config",
+          "startLine": 48,
+          "endLine": 65,
+          "params": []
+        },
+        {
+          "name": "_quantization_active",
+          "startLine": 68,
+          "endLine": 92,
+          "params": [
+            "model"
+          ]
+        },
+        {
+          "name": "_require_quantization_engaged",
+          "startLine": 95,
+          "endLine": 117,
+          "params": [
+            "spec",
+            "model"
+          ]
+        },
+        {
+          "name": "build_model_spec",
+          "startLine": 307,
+          "endLine": 337,
+          "params": [
+            "alias",
+            "registry"
+          ]
+        }
+      ],
+      "classes": [
+        {
+          "name": "ModelSpec",
+          "startLine": 121,
+          "endLine": 144,
+          "methods": [],
+          "properties": [
+            "alias",
+            "hf_id",
+            "trust_remote_code",
+            "revision",
+            "dtype",
+            "quantized",
+            "attn_implementation",
+            "quant_method"
+          ]
+        },
+        {
+          "name": "HFModelLoader",
+          "startLine": 147,
+          "endLine": 304,
+          "methods": [
+            "__init__",
+            "load",
+            "_resolve_runtime_device",
+            "_resolve_dtype"
+          ],
+          "properties": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "_get_torch",
+          "line": 13,
+          "isDefault": false
+        },
+        {
+          "name": "_get_transformer_classes",
+          "line": 19,
+          "isDefault": false
+        },
+        {
+          "name": "_build_bnb_4bit_config",
+          "line": 26,
+          "isDefault": false
+        },
+        {
+          "name": "_build_bnb_8bit_config",
+          "line": 48,
+          "isDefault": false
+        },
+        {
+          "name": "_quantization_active",
+          "line": 68,
+          "isDefault": false
+        },
+        {
+          "name": "_require_quantization_engaged",
+          "line": 95,
+          "isDefault": false
+        },
+        {
+          "name": "ModelSpec",
+          "line": 120,
+          "isDefault": false
+        },
+        {
+          "name": "HFModelLoader",
+          "line": 147,
+          "isDefault": false
+        },
+        {
+          "name": "build_model_spec",
+          "line": 307,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "_get_torch",
+          "callee": "import_module",
+          "lineNumber": 16
+        },
+        {
+          "caller": "_get_transformer_classes",
+          "callee": "import_module",
+          "lineNumber": 22
+        },
+        {
+          "caller": "_build_bnb_4bit_config",
+          "callee": "import_module",
+          "lineNumber": 39
+        },
+        {
+          "caller": "_build_bnb_4bit_config",
+          "callee": "transformers.BitsAndBytesConfig",
+          "lineNumber": 40
+        },
+        {
+          "caller": "_build_bnb_8bit_config",
+          "callee": "import_module",
+          "lineNumber": 64
+        },
+        {
+          "caller": "_build_bnb_8bit_config",
+          "callee": "transformers.BitsAndBytesConfig",
+          "lineNumber": 65
+        },
+        {
+          "caller": "_quantization_active",
+          "callee": "bool",
+          "lineNumber": 88
+        },
+        {
+          "caller": "_quantization_active",
+          "callee": "getattr",
+          "lineNumber": 88
+        },
+        {
+          "caller": "_quantization_active",
+          "callee": "bool",
+          "lineNumber": 89
+        },
+        {
+          "caller": "_quantization_active",
+          "callee": "getattr",
+          "lineNumber": 89
+        },
+        {
+          "caller": "_quantization_active",
+          "callee": "bool",
+          "lineNumber": 90
+        },
+        {
+          "caller": "_quantization_active",
+          "callee": "getattr",
+          "lineNumber": 90
+        },
+        {
+          "caller": "_quantization_active",
+          "callee": "getattr",
+          "lineNumber": 91
+        },
+        {
+          "caller": "_require_quantization_engaged",
+          "callee": "_quantization_active",
+          "lineNumber": 109
+        },
+        {
+          "caller": "_require_quantization_engaged",
+          "callee": "getattr",
+          "lineNumber": 110
+        },
+        {
+          "caller": "_require_quantization_engaged",
+          "callee": "RuntimeError",
+          "lineNumber": 111
+        },
+        {
+          "caller": "_require_quantization_engaged",
+          "callee": "getattr",
+          "lineNumber": 112
+        },
+        {
+          "caller": "load",
+          "callee": "self._resolve_runtime_device",
+          "lineNumber": 184
+        },
+        {
+          "caller": "load",
+          "callee": "self._resolve_dtype",
+          "lineNumber": 185
+        },
+        {
+          "caller": "load",
+          "callee": "_get_transformer_classes",
+          "lineNumber": 186
+        },
+        {
+          "caller": "load",
+          "callee": "LOGGER.info",
+          "lineNumber": 188
+        },
+        {
+          "caller": "load",
+          "callee": "AutoTokenizer.from_pretrained",
+          "lineNumber": 196
+        },
+        {
+          "caller": "load",
+          "callee": "RuntimeError",
+          "lineNumber": 220
+        },
+        {
+          "caller": "load",
+          "callee": "(spec.quant_method or \"nf4\").lower",
+          "lineNumber": 226
+        },
+        {
+          "caller": "load",
+          "callee": "_build_bnb_8bit_config",
+          "lineNumber": 228
+        },
+        {
+          "caller": "load",
+          "callee": "LOGGER.info",
+          "lineNumber": 229
+        },
+        {
+          "caller": "load",
+          "callee": "_build_bnb_4bit_config",
+          "lineNumber": 231
+        },
+        {
+          "caller": "load",
+          "callee": "LOGGER.info",
+          "lineNumber": 232
+        },
+        {
+          "caller": "load",
+          "callee": "LOGGER.info",
+          "lineNumber": 239
+        },
+        {
+          "caller": "load",
+          "callee": "AutoModelForCausalLM.from_pretrained",
+          "lineNumber": 243
+        },
+        {
+          "caller": "load",
+          "callee": "_require_quantization_engaged",
+          "lineNumber": 248
+        },
+        {
+          "caller": "load",
+          "callee": "model.to",
+          "lineNumber": 251
+        },
+        {
+          "caller": "load",
+          "callee": "model.eval",
+          "lineNumber": 253
+        },
+        {
+          "caller": "_resolve_runtime_device",
+          "callee": "_get_torch",
+          "lineNumber": 263
+        },
+        {
+          "caller": "_resolve_runtime_device",
+          "callee": "torch.cuda.is_available",
+          "lineNumber": 267
+        },
+        {
+          "caller": "_resolve_runtime_device",
+          "callee": "torch.cuda.is_available",
+          "lineNumber": 268
+        },
+        {
+          "caller": "_resolve_dtype",
+          "callee": "_get_torch",
+          "lineNumber": 285
+        },
+        {
+          "caller": "_resolve_dtype",
+          "callee": "dtype.strip().lower",
+          "lineNumber": 286
+        },
+        {
+          "caller": "_resolve_dtype",
+          "callee": "dtype.strip",
+          "lineNumber": 286
+        },
+        {
+          "caller": "_resolve_dtype",
+          "callee": "ValueError",
+          "lineNumber": 302
+        },
+        {
+          "caller": "build_model_spec",
+          "callee": "KeyError",
+          "lineNumber": 325
+        },
+        {
+          "caller": "build_model_spec",
+          "callee": "sorted",
+          "lineNumber": 325
+        },
+        {
+          "caller": "build_model_spec",
+          "callee": "registry.keys",
+          "lineNumber": 325
+        },
+        {
+          "caller": "build_model_spec",
+          "callee": "ModelSpec",
+          "lineNumber": 328
+        },
+        {
+          "caller": "build_model_spec",
+          "callee": "bool",
+          "lineNumber": 331
+        },
+        {
+          "caller": "build_model_spec",
+          "callee": "entry.get",
+          "lineNumber": 331
+        },
+        {
+          "caller": "build_model_spec",
+          "callee": "entry.get",
+          "lineNumber": 332
+        },
+        {
+          "caller": "build_model_spec",
+          "callee": "entry.get",
+          "lineNumber": 333
+        },
+        {
+          "caller": "build_model_spec",
+          "callee": "bool",
+          "lineNumber": 334
+        },
+        {
+          "caller": "build_model_spec",
+          "callee": "entry.get",
+          "lineNumber": 334
+        },
+        {
+          "caller": "build_model_spec",
+          "callee": "entry.get",
+          "lineNumber": 335
+        },
+        {
+          "caller": "build_model_spec",
+          "callee": "entry.get",
+          "lineNumber": 336
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 9,
+        "functionCount": 7,
+        "classCount": 2
+      }
+    },
+    {
+      "path": "scripts/capture_refusal_margin.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 242,
+      "nonEmptyLines": 210,
+      "functions": [
+        {
+          "name": "_read_jsonl",
+          "startLine": 71,
+          "endLine": 78,
+          "params": [
+            "path"
+          ]
+        },
+        {
+          "name": "_decision_logits",
+          "startLine": 81,
+          "endLine": 91,
+          "params": [
+            "model",
+            "tokenizer",
+            "templated_prompt",
+            "max_input_tokens"
+          ]
+        },
+        {
+          "name": "_sequence_margins",
+          "startLine": 94,
+          "endLine": 123,
+          "params": [
+            "model",
+            "tokenizer",
+            "templated_prompt",
+            "response",
+            "refusal_ids",
+            "comply_ids",
+            "max_input_tokens"
+          ]
+        },
+        {
+          "name": "_capture_model",
+          "startLine": 126,
+          "endLine": 204,
+          "params": [
+            "alias",
+            "config",
+            "results_dir",
+            "device",
+            "precision_tag",
+            "control_n"
+          ]
+        },
+        {
+          "name": "main",
+          "startLine": 207,
+          "endLine": 238,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "_read_jsonl",
+          "line": 71,
+          "isDefault": false
+        },
+        {
+          "name": "_decision_logits",
+          "line": 81,
+          "isDefault": false
+        },
+        {
+          "name": "_sequence_margins",
+          "line": 94,
+          "isDefault": false
+        },
+        {
+          "name": "_capture_model",
+          "line": 126,
+          "isDefault": false
+        },
+        {
+          "name": "main",
+          "line": 207,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "_read_jsonl",
+          "callee": "path.open",
+          "lineNumber": 73
+        },
+        {
+          "caller": "_read_jsonl",
+          "callee": "line.strip",
+          "lineNumber": 75
+        },
+        {
+          "caller": "_read_jsonl",
+          "callee": "rows.append",
+          "lineNumber": 77
+        },
+        {
+          "caller": "_read_jsonl",
+          "callee": "json.loads",
+          "lineNumber": 77
+        },
+        {
+          "caller": "_decision_logits",
+          "callee": "import_module",
+          "lineNumber": 84
+        },
+        {
+          "caller": "_decision_logits",
+          "callee": "tokenizer",
+          "lineNumber": 85
+        },
+        {
+          "caller": "_decision_logits",
+          "callee": "v.to",
+          "lineNumber": 88
+        },
+        {
+          "caller": "_decision_logits",
+          "callee": "inputs.items",
+          "lineNumber": 88
+        },
+        {
+          "caller": "_decision_logits",
+          "callee": "torch.no_grad",
+          "lineNumber": 89
+        },
+        {
+          "caller": "_decision_logits",
+          "callee": "model",
+          "lineNumber": 90
+        },
+        {
+          "caller": "_decision_logits",
+          "callee": "out.logits[0, -1, :].float().cpu().numpy",
+          "lineNumber": 91
+        },
+        {
+          "caller": "_decision_logits",
+          "callee": "out.logits[0, -1, :].float().cpu",
+          "lineNumber": 91
+        },
+        {
+          "caller": "_decision_logits",
+          "callee": "out.logits[0, -1, :].float",
+          "lineNumber": 91
+        },
+        {
+          "caller": "_sequence_margins",
+          "callee": "import_module",
+          "lineNumber": 98
+        },
+        {
+          "caller": "_sequence_margins",
+          "callee": "tokenizer",
+          "lineNumber": 99
+        },
+        {
+          "caller": "_sequence_margins",
+          "callee": "tokenizer",
+          "lineNumber": 101
+        },
+        {
+          "caller": "_sequence_margins",
+          "callee": "float",
+          "lineNumber": 103
+        },
+        {
+          "caller": "_sequence_margins",
+          "callee": "float",
+          "lineNumber": 103
+        },
+        {
+          "caller": "_sequence_margins",
+          "callee": "float",
+          "lineNumber": 104
+        },
+        {
+          "caller": "_sequence_margins",
+          "callee": "torch.tensor",
+          "lineNumber": 106
+        },
+        {
+          "caller": "_sequence_margins",
+          "callee": "torch.no_grad",
+          "lineNumber": 107
+        },
+        {
+          "caller": "_sequence_margins",
+          "callee": "model",
+          "lineNumber": 108
+        },
+        {
+          "caller": "_sequence_margins",
+          "callee": "out.logits[0].float().cpu().numpy",
+          "lineNumber": 109
+        },
+        {
+          "caller": "_sequence_margins",
+          "callee": "out.logits[0].float().cpu",
+          "lineNumber": 109
+        },
+        {
+          "caller": "_sequence_margins",
+          "callee": "out.logits[0].float",
+          "lineNumber": 109
+        },
+        {
+          "caller": "_sequence_margins",
+          "callee": "len",
+          "lineNumber": 112
+        },
+        {
+          "caller": "_sequence_margins",
+          "callee": "enumerate",
+          "lineNumber": 113
+        },
+        {
+          "caller": "_sequence_margins",
+          "callee": "margins.append",
+          "lineNumber": 115
+        },
+        {
+          "caller": "_sequence_margins",
+          "callee": "refusal_margin",
+          "lineNumber": 115
+        },
+        {
+          "caller": "_sequence_margins",
+          "callee": "z.max",
+          "lineNumber": 116
+        },
+        {
+          "caller": "_sequence_margins",
+          "callee": "np.log",
+          "lineNumber": 116
+        },
+        {
+          "caller": "_sequence_margins",
+          "callee": "np.exp(z - z.max()).sum",
+          "lineNumber": 116
+        },
+        {
+          "caller": "_sequence_margins",
+          "callee": "np.exp",
+          "lineNumber": 116
+        },
+        {
+          "caller": "_sequence_margins",
+          "callee": "z.max",
+          "lineNumber": 116
+        },
+        {
+          "caller": "_sequence_margins",
+          "callee": "logps.append",
+          "lineNumber": 117
+        },
+        {
+          "caller": "_sequence_margins",
+          "callee": "float",
+          "lineNumber": 117
+        },
+        {
+          "caller": "_sequence_margins",
+          "callee": "np.array",
+          "lineNumber": 118
+        },
+        {
+          "caller": "_sequence_margins",
+          "callee": "np.isnan",
+          "lineNumber": 118
+        },
+        {
+          "caller": "_sequence_margins",
+          "callee": "float",
+          "lineNumber": 120
+        },
+        {
+          "caller": "_sequence_margins",
+          "callee": "margins_arr.min",
+          "lineNumber": 120
+        },
+        {
+          "caller": "_sequence_margins",
+          "callee": "float",
+          "lineNumber": 120
+        },
+        {
+          "caller": "_sequence_margins",
+          "callee": "float",
+          "lineNumber": 121
+        },
+        {
+          "caller": "_sequence_margins",
+          "callee": "margins_arr.mean",
+          "lineNumber": 121
+        },
+        {
+          "caller": "_sequence_margins",
+          "callee": "float",
+          "lineNumber": 121
+        },
+        {
+          "caller": "_sequence_margins",
+          "callee": "float",
+          "lineNumber": 122
+        },
+        {
+          "caller": "_sequence_margins",
+          "callee": "np.mean",
+          "lineNumber": 122
+        },
+        {
+          "caller": "_sequence_margins",
+          "callee": "float",
+          "lineNumber": 122
+        },
+        {
+          "caller": "_capture_model",
+          "callee": "DecodingConfig.from_dict",
+          "lineNumber": 129
+        },
+        {
+          "caller": "_capture_model",
+          "callee": "config.decoding.model_dump",
+          "lineNumber": 129
+        },
+        {
+          "caller": "_capture_model",
+          "callee": "set_global_seed",
+          "lineNumber": 130
+        },
+        {
+          "caller": "_capture_model",
+          "callee": "ModelSpec",
+          "lineNumber": 131
+        },
+        {
+          "caller": "_capture_model",
+          "callee": "HFModelLoader",
+          "lineNumber": 136
+        },
+        {
+          "caller": "_capture_model",
+          "callee": "loader.load",
+          "lineNumber": 137
+        },
+        {
+          "caller": "_capture_model",
+          "callee": "TextGenerator",
+          "lineNumber": 138
+        },
+        {
+          "caller": "_capture_model",
+          "callee": "build_token_sets",
+          "lineNumber": 143
+        },
+        {
+          "caller": "_capture_model",
+          "callee": "_read_jsonl",
+          "lineNumber": 149
+        },
+        {
+          "caller": "_capture_model",
+          "callee": "generator._format_prompt",
+          "lineNumber": 150
+        },
+        {
+          "caller": "_capture_model",
+          "callee": "_decision_logits",
+          "lineNumber": 151
+        },
+        {
+          "caller": "_capture_model",
+          "callee": "refusal_margin",
+          "lineNumber": 154
+        },
+        {
+          "caller": "_capture_model",
+          "callee": "decision_entropy",
+          "lineNumber": 155
+        },
+        {
+          "caller": "_capture_model",
+          "callee": "top1_top2_gap",
+          "lineNumber": 156
+        },
+        {
+          "caller": "_capture_model",
+          "callee": "rec.update",
+          "lineNumber": 158
+        },
+        {
+          "caller": "_capture_model",
+          "callee": "_sequence_margins",
+          "lineNumber": 158
+        },
+        {
+          "caller": "_capture_model",
+          "callee": "row.get",
+          "lineNumber": 159
+        },
+        {
+          "caller": "_capture_model",
+          "callee": "records.append",
+          "lineNumber": 160
+        },
+        {
+          "caller": "_capture_model",
+          "callee": "margin_path.open",
+          "lineNumber": 162
+        },
+        {
+          "caller": "_capture_model",
+          "callee": "f.write",
+          "lineNumber": 164
+        },
+        {
+          "caller": "_capture_model",
+          "callee": "json.dumps",
+          "lineNumber": 164
+        },
+        {
+          "caller": "_capture_model",
+          "callee": "cpath.exists",
+          "lineNumber": 170
+        },
+        {
+          "caller": "_capture_model",
+          "callee": "_read_jsonl",
+          "lineNumber": 172
+        },
+        {
+          "caller": "_capture_model",
+          "callee": "generator._format_prompt",
+          "lineNumber": 173
+        },
+        {
+          "caller": "_capture_model",
+          "callee": "_decision_logits",
+          "lineNumber": 174
+        },
+        {
+          "caller": "_capture_model",
+          "callee": "control.append",
+          "lineNumber": 175
+        },
+        {
+          "caller": "_capture_model",
+          "callee": "decision_entropy",
+          "lineNumber": 177
+        },
+        {
+          "caller": "_capture_model",
+          "callee": "top1_top2_gap",
+          "lineNumber": 177
+        },
+        {
+          "caller": "_capture_model",
+          "callee": "control_path.open",
+          "lineNumber": 180
+        },
+        {
+          "caller": "_capture_model",
+          "callee": "f.write",
+          "lineNumber": 182
+        },
+        {
+          "caller": "_capture_model",
+          "callee": "json.dumps",
+          "lineNumber": 182
+        },
+        {
+          "caller": "_capture_model",
+          "callee": "import_module",
+          "lineNumber": 185
+        },
+        {
+          "caller": "_capture_model",
+          "callee": "torch.cuda.get_device_name",
+          "lineNumber": 186
+        },
+        {
+          "caller": "_capture_model",
+          "callee": "torch.cuda.is_available",
+          "lineNumber": 186
+        },
+        {
+          "caller": "_capture_model",
+          "callee": "len",
+          "lineNumber": 191
+        },
+        {
+          "caller": "_capture_model",
+          "callee": "len",
+          "lineNumber": 191
+        },
+        {
+          "caller": "_capture_model",
+          "callee": "summary_path.open",
+          "lineNumber": 196
+        },
+        {
+          "caller": "_capture_model",
+          "callee": "json.dump",
+          "lineNumber": 197
+        },
+        {
+          "caller": "_capture_model",
+          "callee": "gc.collect",
+          "lineNumber": 201
+        },
+        {
+          "caller": "_capture_model",
+          "callee": "torch.cuda.is_available",
+          "lineNumber": 202
+        },
+        {
+          "caller": "_capture_model",
+          "callee": "torch.cuda.empty_cache",
+          "lineNumber": 203
+        },
+        {
+          "caller": "main",
+          "callee": "argparse.ArgumentParser",
+          "lineNumber": 208
+        },
+        {
+          "caller": "main",
+          "callee": "parser.add_argument",
+          "lineNumber": 209
+        },
+        {
+          "caller": "main",
+          "callee": "parser.add_argument",
+          "lineNumber": 210
+        },
+        {
+          "caller": "main",
+          "callee": "parser.add_argument",
+          "lineNumber": 211
+        },
+        {
+          "caller": "main",
+          "callee": "parser.add_argument",
+          "lineNumber": 212
+        },
+        {
+          "caller": "main",
+          "callee": "parser.add_argument",
+          "lineNumber": 213
+        },
+        {
+          "caller": "main",
+          "callee": "parser.add_argument",
+          "lineNumber": 216
+        },
+        {
+          "caller": "main",
+          "callee": "parser.parse_args",
+          "lineNumber": 218
+        },
+        {
+          "caller": "main",
+          "callee": "load_quant_config",
+          "lineNumber": 220
+        },
+        {
+          "caller": "main",
+          "callee": "Path(args.results_dir).resolve",
+          "lineNumber": 221
+        },
+        {
+          "caller": "main",
+          "callee": "Path",
+          "lineNumber": 221
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 223
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 224
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 225
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 226
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 229
+        },
+        {
+          "caller": "main",
+          "callee": "_capture_model",
+          "lineNumber": 231
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 233
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 234
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 235
+        },
+        {
+          "caller": "main",
+          "callee": "print",
+          "lineNumber": 237
+        }
+      ],
+      "metrics": {
+        "importCount": 4,
+        "exportCount": 5,
+        "functionCount": 5,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "tests/test_models.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 411,
+      "nonEmptyLines": 297,
+      "functions": [
+        {
+          "name": "fake_torch",
+          "startLine": 47,
+          "endLine": 50,
+          "params": [
+            "monkeypatch"
+          ]
+        }
+      ],
+      "classes": [
+        {
+          "name": "_FakeCuda",
+          "startLine": 15,
+          "endLine": 22,
+          "methods": [
+            "is_available",
+            "manual_seed_all"
+          ],
+          "properties": []
+        },
+        {
+          "name": "_FakeCudnn",
+          "startLine": 25,
+          "endLine": 27,
+          "methods": [],
+          "properties": []
+        },
+        {
+          "name": "_FakeBackends",
+          "startLine": 30,
+          "endLine": 31,
+          "methods": [],
+          "properties": []
+        },
+        {
+          "name": "_FakeTorch",
+          "startLine": 34,
+          "endLine": 43,
+          "methods": [
+            "manual_seed"
+          ],
+          "properties": []
+        },
+        {
+          "name": "TestModelSpec",
+          "startLine": 58,
+          "endLine": 71,
+          "methods": [
+            "test_defaults",
+            "test_immutability"
+          ],
+          "properties": []
+        },
+        {
+          "name": "TestBuildModelSpec",
+          "startLine": 79,
+          "endLine": 108,
+          "methods": [
+            "test_valid_alias",
+            "test_quantized_flag_is_propagated",
+            "test_unknown_alias_raises"
+          ],
+          "properties": []
+        },
+        {
+          "name": "TestDecodingConfig",
+          "startLine": 116,
+          "endLine": 131,
+          "methods": [
+            "test_from_dict_defaults",
+            "test_from_dict_custom_values"
+          ],
+          "properties": []
+        },
+        {
+          "name": "TestDeviceResolution",
+          "startLine": 139,
+          "endLine": 149,
+          "methods": [
+            "test_cpu_forced",
+            "test_auto_resolves"
+          ],
+          "properties": []
+        },
+        {
+          "name": "TestDtypeResolution",
+          "startLine": 157,
+          "endLine": 178,
+          "methods": [
+            "test_auto_cpu",
+            "test_explicit_float16",
+            "test_alias_fp16",
+            "test_bfloat16",
+            "test_unsupported_raises"
+          ],
+          "properties": []
+        },
+        {
+          "name": "TestSetGlobalSeed",
+          "startLine": 186,
+          "endLine": 199,
+          "methods": [
+            "test_does_not_raise",
+            "test_determinism"
+          ],
+          "properties": []
+        },
+        {
+          "name": "_FakeModel",
+          "startLine": 202,
+          "endLine": 203,
+          "methods": [],
+          "properties": []
+        },
+        {
+          "name": "_ThinkingAwareTokenizer",
+          "startLine": 206,
+          "endLine": 218,
+          "methods": [
+            "__init__",
+            "apply_chat_template"
+          ],
+          "properties": []
+        },
+        {
+          "name": "_LegacyTokenizer",
+          "startLine": 221,
+          "endLine": 226,
+          "methods": [
+            "apply_chat_template"
+          ],
+          "properties": []
+        },
+        {
+          "name": "TestPromptFormatting",
+          "startLine": 229,
+          "endLine": 254,
+          "methods": [
+            "test_disables_thinking_when_template_supports_it",
+            "test_falls_back_for_legacy_chat_templates"
+          ],
+          "properties": []
+        },
+        {
+          "name": "_WrappingTokenizer",
+          "startLine": 257,
+          "endLine": 262,
+          "methods": [
+            "apply_chat_template"
+          ],
+          "properties": []
+        },
+        {
+          "name": "TestPromptProvenance",
+          "startLine": 265,
+          "endLine": 279,
+          "methods": [
+            "test_flags_a_genuinely_templated_prompt",
+            "test_not_flagged_when_templating_disabled"
+          ],
+          "properties": []
+        },
+        {
+          "name": "_FakeModel",
+          "startLine": 287,
+          "endLine": 292,
+          "methods": [
+            "__init__"
+          ],
+          "properties": []
+        },
+        {
+          "name": "TestQuantizationActive",
+          "startLine": 295,
+          "endLine": 315,
+          "methods": [
+            "test_is_loaded_in_4bit",
+            "test_is_quantized",
+            "test_hf_quantizer_present",
+            "test_no_signal_is_false"
+          ],
+          "properties": []
+        },
+        {
+          "name": "_LoadedFakeModel",
+          "startLine": 323,
+          "endLine": 330,
+          "methods": [
+            "to",
+            "eval"
+          ],
+          "properties": []
+        },
+        {
+          "name": "_FakeTokenizerInstance",
+          "startLine": 333,
+          "endLine": 335,
+          "methods": [],
+          "properties": []
+        },
+        {
+          "name": "_FakeAutoTokenizer",
+          "startLine": 338,
+          "endLine": 341,
+          "methods": [
+            "from_pretrained"
+          ],
+          "properties": []
+        },
+        {
+          "name": "_CapturingAutoModel",
+          "startLine": 344,
+          "endLine": 354,
+          "methods": [
+            "from_pretrained"
+          ],
+          "properties": [
+            "captured_kwargs",
+            "captured_hf_id"
+          ]
+        },
+        {
+          "name": "TestModelSpecAttnImplementation",
+          "startLine": 357,
+          "endLine": 373,
+          "methods": [
+            "test_defaults_to_none",
+            "test_is_settable",
+            "test_build_model_spec_propagates",
+            "test_build_model_spec_defaults_none"
+          ],
+          "properties": []
+        },
+        {
+          "name": "TestAttnImplementationLoading",
+          "startLine": 376,
+          "endLine": 411,
+          "methods": [
+            "_patch",
+            "test_injected_when_set",
+            "test_omitted_when_none"
+          ],
+          "properties": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "_FakeCuda",
+          "line": 15,
+          "isDefault": false
+        },
+        {
+          "name": "_FakeCudnn",
+          "line": 25,
+          "isDefault": false
+        },
+        {
+          "name": "_FakeBackends",
+          "line": 30,
+          "isDefault": false
+        },
+        {
+          "name": "_FakeTorch",
+          "line": 34,
+          "isDefault": false
+        },
+        {
+          "name": "fake_torch",
+          "line": 46,
+          "isDefault": false
+        },
+        {
+          "name": "TestModelSpec",
+          "line": 58,
+          "isDefault": false
+        },
+        {
+          "name": "TestBuildModelSpec",
+          "line": 79,
+          "isDefault": false
+        },
+        {
+          "name": "TestDecodingConfig",
+          "line": 116,
+          "isDefault": false
+        },
+        {
+          "name": "TestDeviceResolution",
+          "line": 139,
+          "isDefault": false
+        },
+        {
+          "name": "TestDtypeResolution",
+          "line": 157,
+          "isDefault": false
+        },
+        {
+          "name": "TestSetGlobalSeed",
+          "line": 186,
+          "isDefault": false
+        },
+        {
+          "name": "_FakeModel",
+          "line": 202,
+          "isDefault": false
+        },
+        {
+          "name": "_ThinkingAwareTokenizer",
+          "line": 206,
+          "isDefault": false
+        },
+        {
+          "name": "_LegacyTokenizer",
+          "line": 221,
+          "isDefault": false
+        },
+        {
+          "name": "TestPromptFormatting",
+          "line": 229,
+          "isDefault": false
+        },
+        {
+          "name": "_WrappingTokenizer",
+          "line": 257,
+          "isDefault": false
+        },
+        {
+          "name": "TestPromptProvenance",
+          "line": 265,
+          "isDefault": false
+        },
+        {
+          "name": "_FakeModel",
+          "line": 287,
+          "isDefault": false
+        },
+        {
+          "name": "TestQuantizationActive",
+          "line": 295,
+          "isDefault": false
+        },
+        {
+          "name": "_LoadedFakeModel",
+          "line": 323,
+          "isDefault": false
+        },
+        {
+          "name": "_FakeTokenizerInstance",
+          "line": 333,
+          "isDefault": false
+        },
+        {
+          "name": "_FakeAutoTokenizer",
+          "line": 338,
+          "isDefault": false
+        },
+        {
+          "name": "_CapturingAutoModel",
+          "line": 344,
+          "isDefault": false
+        },
+        {
+          "name": "TestModelSpecAttnImplementation",
+          "line": 357,
+          "isDefault": false
+        },
+        {
+          "name": "TestAttnImplementationLoading",
+          "line": 376,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "fake_torch",
+          "callee": "monkeypatch.setattr",
+          "lineNumber": 48
+        },
+        {
+          "caller": "fake_torch",
+          "callee": "monkeypatch.setattr",
+          "lineNumber": 49
+        },
+        {
+          "caller": "test_defaults",
+          "callee": "ModelSpec",
+          "lineNumber": 62
+        },
+        {
+          "caller": "test_immutability",
+          "callee": "ModelSpec",
+          "lineNumber": 69
+        },
+        {
+          "caller": "test_immutability",
+          "callee": "pytest.raises",
+          "lineNumber": 70
+        },
+        {
+          "caller": "test_valid_alias",
+          "callee": "build_model_spec",
+          "lineNumber": 90
+        },
+        {
+          "caller": "test_quantized_flag_is_propagated",
+          "callee": "build_model_spec",
+          "lineNumber": 103
+        },
+        {
+          "caller": "test_unknown_alias_raises",
+          "callee": "pytest.raises",
+          "lineNumber": 107
+        },
+        {
+          "caller": "test_unknown_alias_raises",
+          "callee": "build_model_spec",
+          "lineNumber": 108
+        },
+        {
+          "caller": "test_from_dict_defaults",
+          "callee": "DecodingConfig.from_dict",
+          "lineNumber": 120
+        },
+        {
+          "caller": "test_from_dict_custom_values",
+          "callee": "DecodingConfig.from_dict",
+          "lineNumber": 126
+        },
+        {
+          "caller": "test_cpu_forced",
+          "callee": "HFModelLoader",
+          "lineNumber": 143
+        },
+        {
+          "caller": "test_cpu_forced",
+          "callee": "loader._resolve_runtime_device",
+          "lineNumber": 144
+        },
+        {
+          "caller": "test_auto_resolves",
+          "callee": "HFModelLoader",
+          "lineNumber": 147
+        },
+        {
+          "caller": "test_auto_resolves",
+          "callee": "loader._resolve_runtime_device",
+          "lineNumber": 148
+        },
+        {
+          "caller": "test_auto_cpu",
+          "callee": "HFModelLoader._resolve_dtype",
+          "lineNumber": 161
+        },
+        {
+          "caller": "test_explicit_float16",
+          "callee": "HFModelLoader._resolve_dtype",
+          "lineNumber": 165
+        },
+        {
+          "caller": "test_alias_fp16",
+          "callee": "HFModelLoader._resolve_dtype",
+          "lineNumber": 169
+        },
+        {
+          "caller": "test_bfloat16",
+          "callee": "HFModelLoader._resolve_dtype",
+          "lineNumber": 173
+        },
+        {
+          "caller": "test_unsupported_raises",
+          "callee": "pytest.raises",
+          "lineNumber": 177
+        },
+        {
+          "caller": "test_unsupported_raises",
+          "callee": "HFModelLoader._resolve_dtype",
+          "lineNumber": 178
+        },
+        {
+          "caller": "test_does_not_raise",
+          "callee": "set_global_seed",
+          "lineNumber": 190
+        },
+        {
+          "caller": "test_determinism",
+          "callee": "set_global_seed",
+          "lineNumber": 195
+        },
+        {
+          "caller": "test_determinism",
+          "callee": "random.random",
+          "lineNumber": 196
+        },
+        {
+          "caller": "test_determinism",
+          "callee": "set_global_seed",
+          "lineNumber": 197
+        },
+        {
+          "caller": "test_determinism",
+          "callee": "random.random",
+          "lineNumber": 198
+        },
+        {
+          "caller": "apply_chat_template",
+          "callee": "TypeError",
+          "lineNumber": 224
+        },
+        {
+          "caller": "test_disables_thinking_when_template_supports_it",
+          "callee": "_ThinkingAwareTokenizer",
+          "lineNumber": 231
+        },
+        {
+          "caller": "test_disables_thinking_when_template_supports_it",
+          "callee": "TextGenerator",
+          "lineNumber": 232
+        },
+        {
+          "caller": "test_disables_thinking_when_template_supports_it",
+          "callee": "_FakeModel",
+          "lineNumber": 233
+        },
+        {
+          "caller": "test_disables_thinking_when_template_supports_it",
+          "callee": "DecodingConfig",
+          "lineNumber": 236
+        },
+        {
+          "caller": "test_disables_thinking_when_template_supports_it",
+          "callee": "generator._format_prompt",
+          "lineNumber": 239
+        },
+        {
+          "caller": "test_falls_back_for_legacy_chat_templates",
+          "callee": "_LegacyTokenizer",
+          "lineNumber": 244
+        },
+        {
+          "caller": "test_falls_back_for_legacy_chat_templates",
+          "callee": "TextGenerator",
+          "lineNumber": 245
+        },
+        {
+          "caller": "test_falls_back_for_legacy_chat_templates",
+          "callee": "_FakeModel",
+          "lineNumber": 246
+        },
+        {
+          "caller": "test_falls_back_for_legacy_chat_templates",
+          "callee": "DecodingConfig",
+          "lineNumber": 249
+        },
+        {
+          "caller": "test_falls_back_for_legacy_chat_templates",
+          "callee": "generator._format_prompt",
+          "lineNumber": 252
+        },
+        {
+          "caller": "test_flags_a_genuinely_templated_prompt",
+          "callee": "TextGenerator",
+          "lineNumber": 269
+        },
+        {
+          "caller": "test_flags_a_genuinely_templated_prompt",
+          "callee": "_FakeModel",
+          "lineNumber": 270
+        },
+        {
+          "caller": "test_flags_a_genuinely_templated_prompt",
+          "callee": "_WrappingTokenizer",
+          "lineNumber": 270
+        },
+        {
+          "caller": "test_flags_a_genuinely_templated_prompt",
+          "callee": "DecodingConfig",
+          "lineNumber": 270
+        },
+        {
+          "caller": "test_flags_a_genuinely_templated_prompt",
+          "callee": "generator.prompt_was_templated",
+          "lineNumber": 272
+        },
+        {
+          "caller": "test_not_flagged_when_templating_disabled",
+          "callee": "TextGenerator",
+          "lineNumber": 275
+        },
+        {
+          "caller": "test_not_flagged_when_templating_disabled",
+          "callee": "_FakeModel",
+          "lineNumber": 276
+        },
+        {
+          "caller": "test_not_flagged_when_templating_disabled",
+          "callee": "_WrappingTokenizer",
+          "lineNumber": 276
+        },
+        {
+          "caller": "test_not_flagged_when_templating_disabled",
+          "callee": "DecodingConfig",
+          "lineNumber": 277
+        },
+        {
+          "caller": "test_not_flagged_when_templating_disabled",
+          "callee": "generator.prompt_was_templated",
+          "lineNumber": 279
+        },
+        {
+          "caller": "__init__",
+          "callee": "attrs.items",
+          "lineNumber": 291
+        },
+        {
+          "caller": "__init__",
+          "callee": "setattr",
+          "lineNumber": 292
+        },
+        {
+          "caller": "test_is_loaded_in_4bit",
+          "callee": "loader_module._quantization_active",
+          "lineNumber": 299
+        },
+        {
+          "caller": "test_is_loaded_in_4bit",
+          "callee": "_FakeModel",
+          "lineNumber": 299
+        },
+        {
+          "caller": "test_is_quantized",
+          "callee": "loader_module._quantization_active",
+          "lineNumber": 302
+        },
+        {
+          "caller": "test_is_quantized",
+          "callee": "_FakeModel",
+          "lineNumber": 302
+        },
+        {
+          "caller": "test_hf_quantizer_present",
+          "callee": "loader_module._quantization_active",
+          "lineNumber": 305
+        },
+        {
+          "caller": "test_hf_quantizer_present",
+          "callee": "_FakeModel",
+          "lineNumber": 305
+        },
+        {
+          "caller": "test_hf_quantizer_present",
+          "callee": "object",
+          "lineNumber": 305
+        },
+        {
+          "caller": "test_no_signal_is_false",
+          "callee": "loader_module._quantization_active",
+          "lineNumber": 309
+        },
+        {
+          "caller": "test_no_signal_is_false",
+          "callee": "_FakeModel",
+          "lineNumber": 309
+        },
+        {
+          "caller": "test_no_signal_is_false",
+          "callee": "loader_module._quantization_active",
+          "lineNumber": 311
+        },
+        {
+          "caller": "test_no_signal_is_false",
+          "callee": "_FakeModel",
+          "lineNumber": 312
+        },
+        {
+          "caller": "from_pretrained",
+          "callee": "_FakeTokenizerInstance",
+          "lineNumber": 341
+        },
+        {
+          "caller": "from_pretrained",
+          "callee": "dict",
+          "lineNumber": 353
+        },
+        {
+          "caller": "from_pretrained",
+          "callee": "_LoadedFakeModel",
+          "lineNumber": 354
+        },
+        {
+          "caller": "test_defaults_to_none",
+          "callee": "ModelSpec",
+          "lineNumber": 361
+        },
+        {
+          "caller": "test_is_settable",
+          "callee": "ModelSpec",
+          "lineNumber": 365
+        },
+        {
+          "caller": "test_build_model_spec_propagates",
+          "callee": "build_model_spec",
+          "lineNumber": 370
+        },
+        {
+          "caller": "test_build_model_spec_defaults_none",
+          "callee": "build_model_spec",
+          "lineNumber": 373
+        },
+        {
+          "caller": "_patch",
+          "callee": "monkeypatch.setattr",
+          "lineNumber": 387
+        },
+        {
+          "caller": "test_injected_when_set",
+          "callee": "self._patch",
+          "lineNumber": 394
+        },
+        {
+          "caller": "test_injected_when_set",
+          "callee": "HFModelLoader",
+          "lineNumber": 395
+        },
+        {
+          "caller": "test_injected_when_set",
+          "callee": "ModelSpec",
+          "lineNumber": 396
+        },
+        {
+          "caller": "test_injected_when_set",
+          "callee": "loader.load",
+          "lineNumber": 401
+        },
+        {
+          "caller": "test_injected_when_set",
+          "callee": "_CapturingAutoModel.captured_kwargs.get",
+          "lineNumber": 402
+        },
+        {
+          "caller": "test_omitted_when_none",
+          "callee": "self._patch",
+          "lineNumber": 405
+        },
+        {
+          "caller": "test_omitted_when_none",
+          "callee": "HFModelLoader",
+          "lineNumber": 406
+        },
+        {
+          "caller": "test_omitted_when_none",
+          "callee": "ModelSpec",
+          "lineNumber": 407
+        },
+        {
+          "caller": "test_omitted_when_none",
+          "callee": "loader.load",
+          "lineNumber": 408
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 25,
+        "functionCount": 1,
+        "classCount": 24
+      }
+    },
+    {
+      "path": "tests/test_quant_int8.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 224,
+      "nonEmptyLines": 173,
+      "classes": [
+        {
+          "name": "TestQuantMethodSchema",
+          "startLine": 29,
+          "endLine": 48,
+          "methods": [
+            "_entry",
+            "test_accepts_int8_and_nf4_and_none",
+            "test_rejects_unknown_method",
+            "test_rejects_quant_method_on_baseline"
+          ],
+          "properties": []
+        },
+        {
+          "name": "TestModelSpecQuantMethod",
+          "startLine": 54,
+          "endLine": 67,
+          "methods": [
+            "test_defaults_to_none",
+            "test_is_settable",
+            "test_build_model_spec_propagates",
+            "test_build_model_spec_defaults_none"
+          ],
+          "properties": []
+        },
+        {
+          "name": "TestEightBitDetection",
+          "startLine": 73,
+          "endLine": 79,
+          "methods": [
+            "test_is_loaded_in_8bit_detected",
+            "test_plain_model_not_active"
+          ],
+          "properties": []
+        },
+        {
+          "name": "TestQuantizationGuard",
+          "startLine": 86,
+          "endLine": 106,
+          "methods": [
+            "_spec",
+            "test_raises_when_quantized_but_loaded_fp16",
+            "test_raise_message_names_the_method",
+            "test_no_raise_when_quantization_active",
+            "test_baseline_fp16_does_not_raise"
+          ],
+          "properties": []
+        },
+        {
+          "name": "_Cuda",
+          "startLine": 112,
+          "endLine": 119,
+          "methods": [
+            "is_available",
+            "manual_seed_all"
+          ],
+          "properties": []
+        },
+        {
+          "name": "_Torch",
+          "startLine": 122,
+          "endLine": 131,
+          "methods": [
+            "manual_seed"
+          ],
+          "properties": []
+        },
+        {
+          "name": "_Loaded",
+          "startLine": 134,
+          "endLine": 139,
+          "methods": [
+            "to",
+            "eval"
+          ],
+          "properties": []
+        },
+        {
+          "name": "_Tok",
+          "startLine": 142,
+          "endLine": 145,
+          "methods": [],
+          "properties": []
+        },
+        {
+          "name": "_FakeTokClass",
+          "startLine": 148,
+          "endLine": 151,
+          "methods": [
+            "from_pretrained"
+          ],
+          "properties": []
+        },
+        {
+          "name": "_CapturingModel",
+          "startLine": 154,
+          "endLine": 160,
+          "methods": [
+            "from_pretrained"
+          ],
+          "properties": [
+            "captured"
+          ]
+        },
+        {
+          "name": "TestLoaderQuantBranch",
+          "startLine": 163,
+          "endLine": 198,
+          "methods": [
+            "_patch",
+            "test_int8_selects_8bit_config",
+            "test_none_method_selects_nf4_config",
+            "test_explicit_nf4_selects_nf4_config",
+            "test_unquantized_has_no_quant_config"
+          ],
+          "properties": []
+        },
+        {
+          "name": "TestInt8Config",
+          "startLine": 204,
+          "endLine": 224,
+          "methods": [
+            "test_loads_five_pairs_with_int8_members",
+            "test_int8_members_have_method_and_baselines_do_not",
+            "test_phi_int8_keeps_eager"
+          ],
+          "properties": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "TestQuantMethodSchema",
+          "line": 29,
+          "isDefault": false
+        },
+        {
+          "name": "TestModelSpecQuantMethod",
+          "line": 54,
+          "isDefault": false
+        },
+        {
+          "name": "TestEightBitDetection",
+          "line": 73,
+          "isDefault": false
+        },
+        {
+          "name": "TestQuantizationGuard",
+          "line": 86,
+          "isDefault": false
+        },
+        {
+          "name": "_Cuda",
+          "line": 112,
+          "isDefault": false
+        },
+        {
+          "name": "_Torch",
+          "line": 122,
+          "isDefault": false
+        },
+        {
+          "name": "_Loaded",
+          "line": 134,
+          "isDefault": false
+        },
+        {
+          "name": "_Tok",
+          "line": 142,
+          "isDefault": false
+        },
+        {
+          "name": "_FakeTokClass",
+          "line": 148,
+          "isDefault": false
+        },
+        {
+          "name": "_CapturingModel",
+          "line": 154,
+          "isDefault": false
+        },
+        {
+          "name": "TestLoaderQuantBranch",
+          "line": 163,
+          "isDefault": false
+        },
+        {
+          "name": "TestInt8Config",
+          "line": 204,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "_entry",
+          "callee": "dict",
+          "lineNumber": 31
+        },
+        {
+          "caller": "_entry",
+          "callee": "base.update",
+          "lineNumber": 33
+        },
+        {
+          "caller": "test_accepts_int8_and_nf4_and_none",
+          "callee": "ModelEntry",
+          "lineNumber": 37
+        },
+        {
+          "caller": "test_accepts_int8_and_nf4_and_none",
+          "callee": "self._entry",
+          "lineNumber": 37
+        },
+        {
+          "caller": "test_accepts_int8_and_nf4_and_none",
+          "callee": "ModelEntry",
+          "lineNumber": 38
+        },
+        {
+          "caller": "test_accepts_int8_and_nf4_and_none",
+          "callee": "self._entry",
+          "lineNumber": 38
+        },
+        {
+          "caller": "test_accepts_int8_and_nf4_and_none",
+          "callee": "ModelEntry",
+          "lineNumber": 39
+        },
+        {
+          "caller": "test_accepts_int8_and_nf4_and_none",
+          "callee": "self._entry",
+          "lineNumber": 39
+        },
+        {
+          "caller": "test_rejects_unknown_method",
+          "callee": "pytest.raises",
+          "lineNumber": 42
+        },
+        {
+          "caller": "test_rejects_unknown_method",
+          "callee": "ModelEntry",
+          "lineNumber": 43
+        },
+        {
+          "caller": "test_rejects_unknown_method",
+          "callee": "self._entry",
+          "lineNumber": 43
+        },
+        {
+          "caller": "test_rejects_quant_method_on_baseline",
+          "callee": "pytest.raises",
+          "lineNumber": 47
+        },
+        {
+          "caller": "test_rejects_quant_method_on_baseline",
+          "callee": "ModelEntry",
+          "lineNumber": 48
+        },
+        {
+          "caller": "test_rejects_quant_method_on_baseline",
+          "callee": "self._entry",
+          "lineNumber": 48
+        },
+        {
+          "caller": "test_defaults_to_none",
+          "callee": "ModelSpec",
+          "lineNumber": 56
+        },
+        {
+          "caller": "test_is_settable",
+          "callee": "ModelSpec",
+          "lineNumber": 59
+        },
+        {
+          "caller": "test_build_model_spec_propagates",
+          "callee": "build_model_spec",
+          "lineNumber": 64
+        },
+        {
+          "caller": "test_build_model_spec_defaults_none",
+          "callee": "build_model_spec",
+          "lineNumber": 67
+        },
+        {
+          "caller": "test_is_loaded_in_8bit_detected",
+          "callee": "type",
+          "lineNumber": 75
+        },
+        {
+          "caller": "test_is_loaded_in_8bit_detected",
+          "callee": "loader_module._quantization_active",
+          "lineNumber": 76
+        },
+        {
+          "caller": "test_plain_model_not_active",
+          "callee": "loader_module._quantization_active",
+          "lineNumber": 79
+        },
+        {
+          "caller": "test_plain_model_not_active",
+          "callee": "type",
+          "lineNumber": 79
+        },
+        {
+          "caller": "_spec",
+          "callee": "type",
+          "lineNumber": 89
+        },
+        {
+          "caller": "test_raises_when_quantized_but_loaded_fp16",
+          "callee": "type",
+          "lineNumber": 92
+        },
+        {
+          "caller": "test_raises_when_quantized_but_loaded_fp16",
+          "callee": "pytest.raises",
+          "lineNumber": 93
+        },
+        {
+          "caller": "test_raises_when_quantized_but_loaded_fp16",
+          "callee": "loader_module._require_quantization_engaged",
+          "lineNumber": 94
+        },
+        {
+          "caller": "test_raises_when_quantized_but_loaded_fp16",
+          "callee": "self._spec",
+          "lineNumber": 94
+        },
+        {
+          "caller": "test_raise_message_names_the_method",
+          "callee": "pytest.raises",
+          "lineNumber": 97
+        },
+        {
+          "caller": "test_raise_message_names_the_method",
+          "callee": "loader_module._require_quantization_engaged",
+          "lineNumber": 98
+        },
+        {
+          "caller": "test_raise_message_names_the_method",
+          "callee": "self._spec",
+          "lineNumber": 98
+        },
+        {
+          "caller": "test_raise_message_names_the_method",
+          "callee": "type",
+          "lineNumber": 98
+        },
+        {
+          "caller": "test_no_raise_when_quantization_active",
+          "callee": "type",
+          "lineNumber": 101
+        },
+        {
+          "caller": "test_no_raise_when_quantization_active",
+          "callee": "loader_module._require_quantization_engaged",
+          "lineNumber": 102
+        },
+        {
+          "caller": "test_no_raise_when_quantization_active",
+          "callee": "self._spec",
+          "lineNumber": 102
+        },
+        {
+          "caller": "test_baseline_fp16_does_not_raise",
+          "callee": "loader_module._require_quantization_engaged",
+          "lineNumber": 106
+        },
+        {
+          "caller": "test_baseline_fp16_does_not_raise",
+          "callee": "self._spec",
+          "lineNumber": 106
+        },
+        {
+          "caller": "test_baseline_fp16_does_not_raise",
+          "callee": "type",
+          "lineNumber": 106
+        },
+        {
+          "caller": "from_pretrained",
+          "callee": "_Tok",
+          "lineNumber": 151
+        },
+        {
+          "caller": "from_pretrained",
+          "callee": "dict",
+          "lineNumber": 159
+        },
+        {
+          "caller": "from_pretrained",
+          "callee": "_Loaded",
+          "lineNumber": 160
+        },
+        {
+          "caller": "_patch",
+          "callee": "monkeypatch.setattr",
+          "lineNumber": 166
+        },
+        {
+          "caller": "_patch",
+          "callee": "monkeypatch.setattr",
+          "lineNumber": 167
+        },
+        {
+          "caller": "_patch",
+          "callee": "monkeypatch.setattr",
+          "lineNumber": 169
+        },
+        {
+          "caller": "_patch",
+          "callee": "monkeypatch.setattr",
+          "lineNumber": 170
+        },
+        {
+          "caller": "_patch",
+          "callee": "monkeypatch.setattr",
+          "lineNumber": 172
+        },
+        {
+          "caller": "test_int8_selects_8bit_config",
+          "callee": "self._patch",
+          "lineNumber": 175
+        },
+        {
+          "caller": "test_int8_selects_8bit_config",
+          "callee": "HFModelLoader",
+          "lineNumber": 176
+        },
+        {
+          "caller": "test_int8_selects_8bit_config",
+          "callee": "loader.load",
+          "lineNumber": 177
+        },
+        {
+          "caller": "test_int8_selects_8bit_config",
+          "callee": "ModelSpec",
+          "lineNumber": 177
+        },
+        {
+          "caller": "test_int8_selects_8bit_config",
+          "callee": "_CapturingModel.captured.get",
+          "lineNumber": 179
+        },
+        {
+          "caller": "test_none_method_selects_nf4_config",
+          "callee": "self._patch",
+          "lineNumber": 183
+        },
+        {
+          "caller": "test_none_method_selects_nf4_config",
+          "callee": "HFModelLoader",
+          "lineNumber": 184
+        },
+        {
+          "caller": "test_none_method_selects_nf4_config",
+          "callee": "loader.load",
+          "lineNumber": 185
+        },
+        {
+          "caller": "test_none_method_selects_nf4_config",
+          "callee": "ModelSpec",
+          "lineNumber": 185
+        },
+        {
+          "caller": "test_none_method_selects_nf4_config",
+          "callee": "_CapturingModel.captured.get",
+          "lineNumber": 186
+        },
+        {
+          "caller": "test_explicit_nf4_selects_nf4_config",
+          "callee": "self._patch",
+          "lineNumber": 189
+        },
+        {
+          "caller": "test_explicit_nf4_selects_nf4_config",
+          "callee": "HFModelLoader",
+          "lineNumber": 190
+        },
+        {
+          "caller": "test_explicit_nf4_selects_nf4_config",
+          "callee": "loader.load",
+          "lineNumber": 191
+        },
+        {
+          "caller": "test_explicit_nf4_selects_nf4_config",
+          "callee": "ModelSpec",
+          "lineNumber": 191
+        },
+        {
+          "caller": "test_explicit_nf4_selects_nf4_config",
+          "callee": "_CapturingModel.captured.get",
+          "lineNumber": 192
+        },
+        {
+          "caller": "test_unquantized_has_no_quant_config",
+          "callee": "self._patch",
+          "lineNumber": 195
+        },
+        {
+          "caller": "test_unquantized_has_no_quant_config",
+          "callee": "HFModelLoader",
+          "lineNumber": 196
+        },
+        {
+          "caller": "test_unquantized_has_no_quant_config",
+          "callee": "loader.load",
+          "lineNumber": 197
+        },
+        {
+          "caller": "test_unquantized_has_no_quant_config",
+          "callee": "ModelSpec",
+          "lineNumber": 197
+        },
+        {
+          "caller": "test_loads_five_pairs_with_int8_members",
+          "callee": "load_quant_config",
+          "lineNumber": 206
+        },
+        {
+          "caller": "test_loads_five_pairs_with_int8_members",
+          "callee": "str",
+          "lineNumber": 206
+        },
+        {
+          "caller": "test_loads_five_pairs_with_int8_members",
+          "callee": "len",
+          "lineNumber": 207
+        },
+        {
+          "caller": "test_loads_five_pairs_with_int8_members",
+          "callee": "cfg.models.values",
+          "lineNumber": 208
+        },
+        {
+          "caller": "test_int8_members_have_method_and_baselines_do_not",
+          "callee": "load_quant_config",
+          "lineNumber": 212
+        },
+        {
+          "caller": "test_int8_members_have_method_and_baselines_do_not",
+          "callee": "str",
+          "lineNumber": 212
+        },
+        {
+          "caller": "test_int8_members_have_method_and_baselines_do_not",
+          "callee": "cfg.models.items",
+          "lineNumber": 213
+        },
+        {
+          "caller": "test_int8_members_have_method_and_baselines_do_not",
+          "callee": "cfg.models.items",
+          "lineNumber": 214
+        },
+        {
+          "caller": "test_int8_members_have_method_and_baselines_do_not",
+          "callee": "len",
+          "lineNumber": 215
+        },
+        {
+          "caller": "test_int8_members_have_method_and_baselines_do_not",
+          "callee": "len",
+          "lineNumber": 215
+        },
+        {
+          "caller": "test_int8_members_have_method_and_baselines_do_not",
+          "callee": "a.endswith",
+          "lineNumber": 217
+        },
+        {
+          "caller": "test_phi_int8_keeps_eager",
+          "callee": "load_quant_config",
+          "lineNumber": 223
+        },
+        {
+          "caller": "test_phi_int8_keeps_eager",
+          "callee": "str",
+          "lineNumber": 223
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 12,
+        "functionCount": 0,
+        "classCount": 12
+      }
+    },
+    {
+      "path": "tests/test_refusal_margin.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 124,
+      "nonEmptyLines": 96,
+      "classes": [
+        {
+          "name": "TestMarginMath",
+          "startLine": 25,
+          "endLine": 62,
+          "methods": [
+            "test_refusal_margin_sign",
+            "test_refusal_margin_symmetric_is_zero",
+            "test_margin_invariant_to_logit_shift",
+            "test_log_prob_of_full_vocab_is_zero",
+            "test_log_prob_of_set_matches_softmax",
+            "test_out_of_range_ids_ignored",
+            "test_empty_set_is_nan_margin"
+          ],
+          "properties": []
+        },
+        {
+          "name": "TestConfidenceDiagnostics",
+          "startLine": 65,
+          "endLine": 78,
+          "methods": [
+            "test_entropy_uniform_is_log_vocab",
+            "test_entropy_peaked_is_near_zero",
+            "test_top1_top2_gap_uniform_is_zero",
+            "test_top1_top2_gap_peaked_near_one"
+          ],
+          "properties": []
+        },
+        {
+          "name": "_StubTokenizer",
+          "startLine": 81,
+          "endLine": 90,
+          "methods": [
+            "__init__",
+            "encode"
+          ],
+          "properties": []
+        },
+        {
+          "name": "TestTokenSets",
+          "startLine": 93,
+          "endLine": 124,
+          "methods": [
+            "test_leading_space_variant_collected",
+            "test_ambiguous_token_dropped_from_both",
+            "test_special_ids_skipped",
+            "test_outputs_are_plain_ints_no_text"
+          ],
+          "properties": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "TestMarginMath",
+          "line": 25,
+          "isDefault": false
+        },
+        {
+          "name": "TestConfidenceDiagnostics",
+          "line": 65,
+          "isDefault": false
+        },
+        {
+          "name": "_StubTokenizer",
+          "line": 81,
+          "isDefault": false
+        },
+        {
+          "name": "TestTokenSets",
+          "line": 93,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "test_refusal_margin_sign",
+          "callee": "np.array",
+          "lineNumber": 28
+        },
+        {
+          "caller": "test_refusal_margin_sign",
+          "callee": "refusal_margin",
+          "lineNumber": 29
+        },
+        {
+          "caller": "test_refusal_margin_sign",
+          "callee": "np.array",
+          "lineNumber": 31
+        },
+        {
+          "caller": "test_refusal_margin_sign",
+          "callee": "refusal_margin",
+          "lineNumber": 32
+        },
+        {
+          "caller": "test_refusal_margin_symmetric_is_zero",
+          "callee": "np.array",
+          "lineNumber": 35
+        },
+        {
+          "caller": "test_refusal_margin_symmetric_is_zero",
+          "callee": "refusal_margin",
+          "lineNumber": 36
+        },
+        {
+          "caller": "test_refusal_margin_symmetric_is_zero",
+          "callee": "pytest.approx",
+          "lineNumber": 36
+        },
+        {
+          "caller": "test_margin_invariant_to_logit_shift",
+          "callee": "np.array",
+          "lineNumber": 41
+        },
+        {
+          "caller": "test_margin_invariant_to_logit_shift",
+          "callee": "refusal_margin",
+          "lineNumber": 42
+        },
+        {
+          "caller": "test_margin_invariant_to_logit_shift",
+          "callee": "refusal_margin",
+          "lineNumber": 43
+        },
+        {
+          "caller": "test_margin_invariant_to_logit_shift",
+          "callee": "pytest.approx",
+          "lineNumber": 44
+        },
+        {
+          "caller": "test_log_prob_of_full_vocab_is_zero",
+          "callee": "np.array",
+          "lineNumber": 47
+        },
+        {
+          "caller": "test_log_prob_of_full_vocab_is_zero",
+          "callee": "log_prob_of_set",
+          "lineNumber": 48
+        },
+        {
+          "caller": "test_log_prob_of_full_vocab_is_zero",
+          "callee": "pytest.approx",
+          "lineNumber": 48
+        },
+        {
+          "caller": "test_log_prob_of_set_matches_softmax",
+          "callee": "np.array",
+          "lineNumber": 51
+        },
+        {
+          "caller": "test_log_prob_of_set_matches_softmax",
+          "callee": "np.exp",
+          "lineNumber": 52
+        },
+        {
+          "caller": "test_log_prob_of_set_matches_softmax",
+          "callee": "np.exp(z).sum",
+          "lineNumber": 52
+        },
+        {
+          "caller": "test_log_prob_of_set_matches_softmax",
+          "callee": "np.exp",
+          "lineNumber": 52
+        },
+        {
+          "caller": "test_log_prob_of_set_matches_softmax",
+          "callee": "log_prob_of_set",
+          "lineNumber": 53
+        },
+        {
+          "caller": "test_log_prob_of_set_matches_softmax",
+          "callee": "pytest.approx",
+          "lineNumber": 53
+        },
+        {
+          "caller": "test_log_prob_of_set_matches_softmax",
+          "callee": "math.log",
+          "lineNumber": 53
+        },
+        {
+          "caller": "test_out_of_range_ids_ignored",
+          "callee": "np.array",
+          "lineNumber": 56
+        },
+        {
+          "caller": "test_out_of_range_ids_ignored",
+          "callee": "log_prob_of_set",
+          "lineNumber": 58
+        },
+        {
+          "caller": "test_out_of_range_ids_ignored",
+          "callee": "pytest.approx",
+          "lineNumber": 58
+        },
+        {
+          "caller": "test_out_of_range_ids_ignored",
+          "callee": "log_prob_of_set",
+          "lineNumber": 58
+        },
+        {
+          "caller": "test_empty_set_is_nan_margin",
+          "callee": "np.array",
+          "lineNumber": 61
+        },
+        {
+          "caller": "test_empty_set_is_nan_margin",
+          "callee": "math.isnan",
+          "lineNumber": 62
+        },
+        {
+          "caller": "test_empty_set_is_nan_margin",
+          "callee": "refusal_margin",
+          "lineNumber": 62
+        },
+        {
+          "caller": "test_entropy_uniform_is_log_vocab",
+          "callee": "np.zeros",
+          "lineNumber": 67
+        },
+        {
+          "caller": "test_entropy_uniform_is_log_vocab",
+          "callee": "decision_entropy",
+          "lineNumber": 68
+        },
+        {
+          "caller": "test_entropy_uniform_is_log_vocab",
+          "callee": "pytest.approx",
+          "lineNumber": 68
+        },
+        {
+          "caller": "test_entropy_uniform_is_log_vocab",
+          "callee": "math.log",
+          "lineNumber": 68
+        },
+        {
+          "caller": "test_entropy_peaked_is_near_zero",
+          "callee": "np.array",
+          "lineNumber": 71
+        },
+        {
+          "caller": "test_entropy_peaked_is_near_zero",
+          "callee": "decision_entropy",
+          "lineNumber": 72
+        },
+        {
+          "caller": "test_entropy_peaked_is_near_zero",
+          "callee": "pytest.approx",
+          "lineNumber": 72
+        },
+        {
+          "caller": "test_top1_top2_gap_uniform_is_zero",
+          "callee": "top1_top2_gap",
+          "lineNumber": 75
+        },
+        {
+          "caller": "test_top1_top2_gap_uniform_is_zero",
+          "callee": "np.zeros",
+          "lineNumber": 75
+        },
+        {
+          "caller": "test_top1_top2_gap_uniform_is_zero",
+          "callee": "pytest.approx",
+          "lineNumber": 75
+        },
+        {
+          "caller": "test_top1_top2_gap_peaked_near_one",
+          "callee": "top1_top2_gap",
+          "lineNumber": 78
+        },
+        {
+          "caller": "test_top1_top2_gap_peaked_near_one",
+          "callee": "np.array",
+          "lineNumber": 78
+        },
+        {
+          "caller": "test_top1_top2_gap_peaked_near_one",
+          "callee": "pytest.approx",
+          "lineNumber": 78
+        },
+        {
+          "caller": "encode",
+          "callee": "self._mapping.get",
+          "lineNumber": 90
+        },
+        {
+          "caller": "test_leading_space_variant_collected",
+          "callee": "_StubTokenizer",
+          "lineNumber": 95
+        },
+        {
+          "caller": "test_leading_space_variant_collected",
+          "callee": "build_token_sets",
+          "lineNumber": 96
+        },
+        {
+          "caller": "test_ambiguous_token_dropped_from_both",
+          "callee": "_StubTokenizer",
+          "lineNumber": 102
+        },
+        {
+          "caller": "test_ambiguous_token_dropped_from_both",
+          "callee": "build_token_sets",
+          "lineNumber": 107
+        },
+        {
+          "caller": "test_special_ids_skipped",
+          "callee": "_StubTokenizer",
+          "lineNumber": 115
+        },
+        {
+          "caller": "test_special_ids_skipped",
+          "callee": "build_token_sets",
+          "lineNumber": 116
+        },
+        {
+          "caller": "test_outputs_are_plain_ints_no_text",
+          "callee": "_StubTokenizer",
+          "lineNumber": 121
+        },
+        {
+          "caller": "test_outputs_are_plain_ints_no_text",
+          "callee": "build_token_sets",
+          "lineNumber": 122
+        },
+        {
+          "caller": "test_outputs_are_plain_ints_no_text",
+          "callee": "all",
+          "lineNumber": 124
+        },
+        {
+          "caller": "test_outputs_are_plain_ints_no_text",
+          "callee": "isinstance",
+          "lineNumber": 124
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 4,
+        "functionCount": 0,
+        "classCount": 4
+      }
+    }
+  ]
+}

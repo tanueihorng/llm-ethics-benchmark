@@ -1,0 +1,60 @@
+{
+  "issues": [],
+  "warnings": [
+    "Node 'config:.hallmark/log.json' has no edges (orphan)",
+    "Node 'file:CITATION.bib' has no edges (orphan)",
+    "Node 'file:CITATION.cff' has no edges (orphan)",
+    "Node 'file:ethical_benchmark/analysis/__init__.py' has no edges (orphan)",
+    "Node 'file:ethical_benchmark/cluster/__init__.py' has no edges (orphan)",
+    "Node 'file:ethical_benchmark/constants.py' has no edges (orphan)",
+    "Node 'file:ethical_benchmark/evaluators/__init__.py' has no edges (orphan)",
+    "Node 'file:ethical_benchmark/models/__init__.py' has no edges (orphan)",
+    "Node 'file:scripts/build_agentic_report.js' has no edges (orphan)",
+    "Node 'file:scripts/build_fyp_report_v2.js' has no edges (orphan)",
+    "Node 'file:scripts/build_fyp_report_v3.js' has no edges (orphan)",
+    "Node 'file:scripts/build_fyp_report_v4.js' has no edges (orphan)",
+    "Node 'file:scripts/build_fyp_report.js' has no edges (orphan)",
+    "Node 'file:scripts/build_fyp_thesis_v2.js' has no edges (orphan)",
+    "Node 'file:scripts/build_fyp_thesis_v3.js' has no edges (orphan)",
+    "Node 'file:scripts/build_fyp_thesis.js' has no edges (orphan)",
+    "Node 'file:scripts/generate_agent_harness_architecture_diagram.py' has no edges (orphan)",
+    "Node 'file:scripts/generate_architecture_diagram.py' has no edges (orphan)",
+    "Node 'file:scripts/generate_integrated_architecture_diagram.py' has no edges (orphan)",
+    "Node 'file:scripts/generate_repo_hierarchy_diagram.py' has no edges (orphan)",
+    "Node 'file:scripts/harmbench_category_breakdown.py' has no edges (orphan)",
+    "Node 'file:scripts/make_figures.py' has no edges (orphan)",
+    "Node 'file:scripts/mmlu_subject_breakdown.py' has no edges (orphan)",
+    "Node 'file:scripts/number_bible_512.py' has no edges (orphan)",
+    "Node 'file:scripts/sensitivity_analysis.py' has no edges (orphan)",
+    "Node 'file:tests/__init__.py' has no edges (orphan)",
+    "Node 'file:tests/test_int8_scoping.py' has no edges (orphan)",
+    "Node 'file:tests/test_judge_agreement.py' has no edges (orphan)",
+    "Node 'file:tests/test_report_claims.py' has no edges (orphan)"
+  ],
+  "stats": {
+    "totalNodes": 429,
+    "totalEdges": 672,
+    "totalLayers": 14,
+    "tourSteps": 12,
+    "nodeTypes": {
+      "file": 121,
+      "class": 71,
+      "function": 219,
+      "document": 5,
+      "pipeline": 1,
+      "config": 12
+    },
+    "edgeTypes": {
+      "imports": 134,
+      "contains": 290,
+      "exports": 122,
+      "inherits": 4,
+      "calls": 73,
+      "tested_by": 22,
+      "configures": 14,
+      "documents": 4,
+      "related": 3,
+      "triggers": 6
+    }
+  }
+}

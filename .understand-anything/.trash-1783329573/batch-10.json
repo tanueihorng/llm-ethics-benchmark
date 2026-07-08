@@ -1,0 +1,299 @@
+{
+ "nodes": [
+  {
+   "id": "document:AGENTS.md",
+   "type": "document",
+   "name": "AGENTS.md",
+   "filePath": "AGENTS.md",
+   "summary": "Sister copy of CLAUDE.md for non-Claude coding agents (Codex, Cursor, Aider); must stay identical to CLAUDE.md below the header \u2014 enforced by the harness docs-sync check.",
+   "tags": [
+    "documentation",
+    "agent-instructions",
+    "governance"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "document:CLAUDE.md",
+   "type": "document",
+   "name": "CLAUDE.md",
+   "filePath": "CLAUDE.md",
+   "summary": "Primary agent instruction file: PROJECT_LOG.md single-source-of-truth rule, report regeneration duty, claim-surface sweep rule (D42), command reference, architecture map, model-pair table, and TC1 cluster policy.",
+   "tags": [
+    "documentation",
+    "agent-instructions",
+    "governance"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "pipeline:Makefile",
+   "type": "pipeline",
+   "name": "Makefile",
+   "filePath": "Makefile",
+   "summary": "Developer entry points: smoke/run/matrix/analyze local runs, report and thesis regeneration, dashboard launch, TC1 prefetch/cluster job generation, and the agent-harness gates (agent-check, harness-eval, agent-handoff).",
+   "tags": [
+    "build-system",
+    "automation",
+    "entry-point"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "document:README.md",
+   "type": "document",
+   "name": "README.md",
+   "filePath": "README.md",
+   "summary": "Project overview: research question (do 4-bit safety changes reflect alignment shifts or capability degradation), headline 512-token results, setup and usage, and links into the docs tree.",
+   "tags": [
+    "documentation",
+    "entry-point",
+    "overview"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "config:package.json",
+   "type": "config",
+   "name": "package.json",
+   "filePath": "package.json",
+   "summary": "Node manifest pinning docx-js for the report/thesis builder scripts under scripts/.",
+   "tags": [
+    "configuration",
+    "build-system",
+    "node"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:pyproject.toml",
+   "type": "config",
+   "name": "pyproject.toml",
+   "filePath": "pyproject.toml",
+   "summary": "Python project metadata and tooling configuration for the ethical_benchmark package.",
+   "tags": [
+    "configuration",
+    "build-system",
+    "python"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:requirements-dashboard.txt",
+   "type": "document",
+   "name": "requirements-dashboard.txt",
+   "filePath": "requirements-dashboard.txt",
+   "summary": "Extra Python dependencies for the Streamlit dashboard (streamlit, plotly).",
+   "tags": [
+    "configuration",
+    "dependencies",
+    "dashboard"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "document:requirements.txt",
+   "type": "document",
+   "name": "requirements.txt",
+   "filePath": "requirements.txt",
+   "summary": "Pinned Python dependencies: transformers/torch/bitsandbytes stack, judge tokenizer deps (sentencepiece/protobuf/tiktoken), optional OpenAI second-judge client, and pytest.",
+   "tags": [
+    "configuration",
+    "dependencies",
+    "python"
+   ],
+   "complexity": "simple"
+  }
+ ],
+ "edges": [
+  {
+   "source": "config:configs/default.yaml",
+   "target": "file:run_quant_benchmark.py",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "config:configs/default.yaml",
+   "target": "file:run_quant_matrix.py",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "config:configs/tc1.yaml",
+   "target": "file:run_quant_matrix.py",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "config:configs/tc1.yaml",
+   "target": "file:scripts/prefetch_tc1.py",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "config:configs/tc1_512.yaml",
+   "target": "file:run_quant_matrix.py",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "config:configs/tc1_int8.yaml",
+   "target": "file:run_quant_matrix.py",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "config:configs/tc1_int8_512.yaml",
+   "target": "file:run_quant_matrix.py",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "config:configs/tc1_sensitivity.yaml",
+   "target": "file:scripts/generate_sensitivity_jobs.py",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "config:configs/tc1_sensitivity_512.yaml",
+   "target": "file:scripts/generate_sensitivity_jobs.py",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "config:configs/artifact_policy.yaml",
+   "target": "file:ethical_benchmark/harness/agent.py",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "config:.streamlit/config.toml",
+   "target": "file:dashboard/app.py",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "config:package.json",
+   "target": "file:scripts/build_fyp_report_v5.js",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "config:package.json",
+   "target": "file:scripts/build_fyp_thesis_v4.js",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "config:pyproject.toml",
+   "target": "file:ethical_benchmark/__init__.py",
+   "type": "configures",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "document:README.md",
+   "target": "file:fyp_cli.py",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:README.md",
+   "target": "file:ethical_benchmark/__init__.py",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:CLAUDE.md",
+   "target": "pipeline:Makefile",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:CLAUDE.md",
+   "target": "file:ethical_benchmark/harness/agent.py",
+   "type": "documents",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:AGENTS.md",
+   "target": "document:CLAUDE.md",
+   "type": "related",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:requirements.txt",
+   "target": "file:ethical_benchmark/models/loader.py",
+   "type": "related",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "document:requirements-dashboard.txt",
+   "target": "file:dashboard/app.py",
+   "type": "related",
+   "direction": "forward",
+   "weight": 0.5
+  },
+  {
+   "source": "pipeline:Makefile",
+   "target": "file:fyp_cli.py",
+   "type": "triggers",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "pipeline:Makefile",
+   "target": "file:scripts/agent_check.py",
+   "type": "triggers",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "pipeline:Makefile",
+   "target": "file:scripts/build_fyp_report_v5.js",
+   "type": "triggers",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "pipeline:Makefile",
+   "target": "file:scripts/build_fyp_thesis_v4.js",
+   "type": "triggers",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "pipeline:Makefile",
+   "target": "file:scripts/harness_eval.py",
+   "type": "triggers",
+   "direction": "forward",
+   "weight": 0.6
+  },
+  {
+   "source": "pipeline:Makefile",
+   "target": "file:scripts/verify_report_claims.py",
+   "type": "triggers",
+   "direction": "forward",
+   "weight": 0.6
+  }
+ ]
+}

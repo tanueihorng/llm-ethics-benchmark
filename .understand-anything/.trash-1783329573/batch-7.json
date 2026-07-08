@@ -1,0 +1,523 @@
+{
+ "nodes": [
+  {
+   "id": "file:ethical_benchmark/harness/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "ethical_benchmark/harness/__init__.py",
+   "summary": "Package barrel re-exporting the agent-harness API: check runners, status/start-packet builders, and handoff/dashboard/checklist renderers.",
+   "tags": [
+    "entry-point",
+    "barrel",
+    "agent-harness"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:ethical_benchmark/harness/agent.py",
+   "type": "file",
+   "name": "agent.py",
+   "filePath": "ethical_benchmark/harness/agent.py",
+   "summary": "Core agent-harness engine: loads the machine-readable policy (configs/artifact_policy.yaml), verifies immutable TC1 artifacts via SHA-256 manifests, enforces CLAUDE.md/AGENTS.md sync and PROJECT_LOG.md discipline, runs stale-text/redaction scans and report-freshness checks, and renders agent status, start packets, HANDOFF.md, the agent dashboard, and the TC1 checklist.",
+   "tags": [
+    "agent-harness",
+    "validation",
+    "governance"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:ethical_benchmark/harness/agent.py:load_policy",
+   "type": "function",
+   "name": "load_policy",
+   "filePath": "ethical_benchmark/harness/agent.py",
+   "summary": "Parses configs/artifact_policy.yaml into the policy structure driving all checks.",
+   "tags": [
+    "agent-harness",
+    "validation",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    90,
+    106
+   ]
+  },
+  {
+   "id": "function:ethical_benchmark/harness/agent.py:write_immutable_manifest",
+   "type": "function",
+   "name": "write_immutable_manifest",
+   "filePath": "ethical_benchmark/harness/agent.py",
+   "summary": "Writes the SHA-256 manifest that pins immutable TC1-original artifacts.",
+   "tags": [
+    "agent-harness",
+    "validation",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    140,
+    149
+   ]
+  },
+  {
+   "id": "function:ethical_benchmark/harness/agent.py:check_agent_docs_sync",
+   "type": "function",
+   "name": "check_agent_docs_sync",
+   "filePath": "ethical_benchmark/harness/agent.py",
+   "summary": "Fails if CLAUDE.md and AGENTS.md diverge below the header.",
+   "tags": [
+    "agent-harness",
+    "validation",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    216,
+    228
+   ]
+  },
+  {
+   "id": "function:ethical_benchmark/harness/agent.py:check_project_log_updated",
+   "type": "function",
+   "name": "check_project_log_updated",
+   "filePath": "ethical_benchmark/harness/agent.py",
+   "summary": "Fails if repo changes lack a corresponding PROJECT_LOG.md changelog update.",
+   "tags": [
+    "agent-harness",
+    "validation",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    231,
+    242
+   ]
+  },
+  {
+   "id": "function:ethical_benchmark/harness/agent.py:check_immutable_artifacts",
+   "type": "function",
+   "name": "check_immutable_artifacts",
+   "filePath": "ethical_benchmark/harness/agent.py",
+   "summary": "Verifies committed raw/summary artifacts still match their manifest hashes (mutation/deletion detection).",
+   "tags": [
+    "agent-harness",
+    "validation",
+    "function"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    245,
+    306
+   ]
+  },
+  {
+   "id": "function:ethical_benchmark/harness/agent.py:check_report_freshness",
+   "type": "function",
+   "name": "check_report_freshness",
+   "filePath": "ethical_benchmark/harness/agent.py",
+   "summary": "Fails when report-worthy sources changed without regenerating the docx.",
+   "tags": [
+    "agent-harness",
+    "validation",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    322,
+    345
+   ]
+  },
+  {
+   "id": "function:ethical_benchmark/harness/agent.py:run_agent_checks",
+   "type": "function",
+   "name": "run_agent_checks",
+   "filePath": "ethical_benchmark/harness/agent.py",
+   "summary": "Runs the full ordered check suite and aggregates CheckResults (the make agent-check gate).",
+   "tags": [
+    "agent-harness",
+    "validation",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    364,
+    387
+   ]
+  },
+  {
+   "id": "function:ethical_benchmark/harness/agent.py:build_agent_start_packet",
+   "type": "function",
+   "name": "build_agent_start_packet",
+   "filePath": "ethical_benchmark/harness/agent.py",
+   "summary": "Builds a small task-specific startup packet (task, profile, next actions) for a fresh agent session.",
+   "tags": [
+    "agent-harness",
+    "validation",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    530,
+    553
+   ]
+  },
+  {
+   "id": "function:ethical_benchmark/harness/agent.py:format_agent_start_packet",
+   "type": "function",
+   "name": "format_agent_start_packet",
+   "filePath": "ethical_benchmark/harness/agent.py",
+   "summary": "Formats the start packet for terminal display.",
+   "tags": [
+    "agent-harness",
+    "validation",
+    "function"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    556,
+    623
+   ]
+  },
+  {
+   "id": "function:ethical_benchmark/harness/agent.py:build_agent_status",
+   "type": "function",
+   "name": "build_agent_status",
+   "filePath": "ethical_benchmark/harness/agent.py",
+   "summary": "Collects live repo status: git, PROJECT_LOG state, artifacts, analysis and judge sidecar presence.",
+   "tags": [
+    "agent-harness",
+    "validation",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    641,
+    667
+   ]
+  },
+  {
+   "id": "function:ethical_benchmark/harness/agent.py:format_agent_status",
+   "type": "function",
+   "name": "format_agent_status",
+   "filePath": "ethical_benchmark/harness/agent.py",
+   "summary": "Formats the live status block for agent-status CLI output.",
+   "tags": [
+    "agent-harness",
+    "validation",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    670,
+    694
+   ]
+  },
+  {
+   "id": "function:ethical_benchmark/harness/agent.py:render_handoff",
+   "type": "function",
+   "name": "render_handoff",
+   "filePath": "ethical_benchmark/harness/agent.py",
+   "summary": "Renders docs/HANDOFF.md from live state for next-session continuity.",
+   "tags": [
+    "agent-harness",
+    "validation",
+    "function"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    706,
+    776
+   ]
+  },
+  {
+   "id": "function:ethical_benchmark/harness/agent.py:render_agent_dashboard",
+   "type": "function",
+   "name": "render_agent_dashboard",
+   "filePath": "ethical_benchmark/harness/agent.py",
+   "summary": "Renders docs/AGENT_DASHBOARD.md summarizing harness state.",
+   "tags": [
+    "agent-harness",
+    "validation",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    779,
+    816
+   ]
+  },
+  {
+   "id": "function:ethical_benchmark/harness/agent.py:render_tc1_checklist",
+   "type": "function",
+   "name": "render_tc1_checklist",
+   "filePath": "ethical_benchmark/harness/agent.py",
+   "summary": "Renders docs/TC1_AGENT_CHECKLIST.md for cluster operations.",
+   "tags": [
+    "agent-harness",
+    "validation",
+    "function"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    819,
+    873
+   ]
+  },
+  {
+   "id": "class:ethical_benchmark/harness/agent.py:CheckResult",
+   "type": "class",
+   "name": "CheckResult",
+   "filePath": "ethical_benchmark/harness/agent.py",
+   "summary": "Named result of one harness check (name, ok, details).",
+   "tags": [
+    "agent-harness",
+    "validation",
+    "class"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    32,
+    42
+   ]
+  },
+  {
+   "id": "file:scripts/agent_check.py",
+   "type": "file",
+   "name": "agent_check.py",
+   "filePath": "scripts/agent_check.py",
+   "summary": "CLI entry for `make agent-check`: runs the full harness gate (docs sync, log discipline, artifacts, stale text, pytest) and prints pass/fail results.",
+   "tags": [
+    "cli",
+    "agent-harness",
+    "validation"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:scripts/agent_check.py:main",
+   "type": "function",
+   "name": "main",
+   "filePath": "scripts/agent_check.py",
+   "summary": "Parses args, runs run_agent_checks, prints results, exits non-zero on failure.",
+   "tags": [
+    "cli",
+    "agent-harness",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    29,
+    67
+   ]
+  },
+  {
+   "id": "file:scripts/generate_agent_dashboard.py",
+   "type": "file",
+   "name": "generate_agent_dashboard.py",
+   "filePath": "scripts/generate_agent_dashboard.py",
+   "summary": "Thin CLI wrapper regenerating docs/AGENT_DASHBOARD.md from harness state (make agent-dashboard).",
+   "tags": [
+    "cli",
+    "agent-harness",
+    "docs-generation"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:scripts/generate_handoff.py",
+   "type": "file",
+   "name": "generate_handoff.py",
+   "filePath": "scripts/generate_handoff.py",
+   "summary": "Thin CLI wrapper regenerating docs/HANDOFF.md from live repo state (make agent-handoff).",
+   "tags": [
+    "cli",
+    "agent-harness",
+    "docs-generation"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:scripts/generate_tc1_checklist.py",
+   "type": "file",
+   "name": "generate_tc1_checklist.py",
+   "filePath": "scripts/generate_tc1_checklist.py",
+   "summary": "Thin CLI wrapper regenerating docs/TC1_AGENT_CHECKLIST.md (make agent-tc1-checklist).",
+   "tags": [
+    "cli",
+    "agent-harness",
+    "docs-generation"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:tests/test_agent_harness.py",
+   "type": "file",
+   "name": "test_agent_harness.py",
+   "filePath": "tests/test_agent_harness.py",
+   "summary": "Harness self-evaluation suite: proves the gate catches doc drift, missing PROJECT_LOG updates, stale-text/kappa regressions, redaction leaks, immutable-artifact mutation, and report-freshness violations on fixture repos.",
+   "tags": [
+    "test",
+    "agent-harness",
+    "validation"
+   ],
+   "complexity": "complex"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:ethical_benchmark/harness/__init__.py",
+   "target": "file:ethical_benchmark/harness/agent.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:ethical_benchmark/harness/agent.py",
+   "target": "function:ethical_benchmark/harness/agent.py:load_policy",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:ethical_benchmark/harness/agent.py",
+   "target": "function:ethical_benchmark/harness/agent.py:write_immutable_manifest",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:ethical_benchmark/harness/agent.py",
+   "target": "function:ethical_benchmark/harness/agent.py:check_agent_docs_sync",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:ethical_benchmark/harness/agent.py",
+   "target": "function:ethical_benchmark/harness/agent.py:check_project_log_updated",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:ethical_benchmark/harness/agent.py",
+   "target": "function:ethical_benchmark/harness/agent.py:check_immutable_artifacts",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:ethical_benchmark/harness/agent.py",
+   "target": "function:ethical_benchmark/harness/agent.py:check_report_freshness",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:ethical_benchmark/harness/agent.py",
+   "target": "function:ethical_benchmark/harness/agent.py:run_agent_checks",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:ethical_benchmark/harness/agent.py",
+   "target": "function:ethical_benchmark/harness/agent.py:build_agent_start_packet",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:ethical_benchmark/harness/agent.py",
+   "target": "function:ethical_benchmark/harness/agent.py:format_agent_start_packet",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:ethical_benchmark/harness/agent.py",
+   "target": "function:ethical_benchmark/harness/agent.py:build_agent_status",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:ethical_benchmark/harness/agent.py",
+   "target": "function:ethical_benchmark/harness/agent.py:format_agent_status",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:ethical_benchmark/harness/agent.py",
+   "target": "function:ethical_benchmark/harness/agent.py:render_handoff",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:ethical_benchmark/harness/agent.py",
+   "target": "function:ethical_benchmark/harness/agent.py:render_agent_dashboard",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:ethical_benchmark/harness/agent.py",
+   "target": "function:ethical_benchmark/harness/agent.py:render_tc1_checklist",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:ethical_benchmark/harness/agent.py",
+   "target": "class:ethical_benchmark/harness/agent.py:CheckResult",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:scripts/agent_check.py",
+   "target": "function:scripts/agent_check.py:main",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:scripts/agent_check.py",
+   "target": "file:ethical_benchmark/harness/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:scripts/generate_agent_dashboard.py",
+   "target": "file:ethical_benchmark/harness/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:scripts/generate_handoff.py",
+   "target": "file:ethical_benchmark/harness/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:scripts/generate_tc1_checklist.py",
+   "target": "file:ethical_benchmark/harness/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:tests/test_agent_harness.py",
+   "target": "file:ethical_benchmark/harness/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  }
+ ]
+}

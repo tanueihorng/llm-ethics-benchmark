@@ -1,0 +1,491 @@
+{
+ "nodes": [
+  {
+   "id": "file:scripts/generate_repo_hierarchy_diagram.py",
+   "type": "file",
+   "name": "generate_repo_hierarchy_diagram.py",
+   "filePath": "scripts/generate_repo_hierarchy_diagram.py",
+   "summary": "Generates the repository hierarchy diagram (SVG + draw.io) used in report/docs.",
+   "tags": [
+    "docs-generation",
+    "diagram",
+    "repository"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:scripts/generate_sensitivity_jobs.py",
+   "type": "file",
+   "name": "generate_sensitivity_jobs.py",
+   "filePath": "scripts/generate_sensitivity_jobs.py",
+   "summary": "Generates decoding-sensitivity sbatch jobs (temperature/multi-seed sweep) plus the matching judge-scoring sbatch for TC1.",
+   "tags": [
+    "cluster",
+    "slurm",
+    "sensitivity"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:scripts/generate_sensitivity_jobs.py:main",
+   "type": "function",
+   "name": "main",
+   "filePath": "scripts/generate_sensitivity_jobs.py",
+   "summary": "Emits per-variant sbatch files honoring the TC1 bootstrap block and offline env.",
+   "tags": [
+    "cluster",
+    "slurm",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    112,
+    150
+   ]
+  },
+  {
+   "id": "file:scripts/genlen_512_analysis.py",
+   "type": "file",
+   "name": "genlen_512_analysis.py",
+   "filePath": "scripts/genlen_512_analysis.py",
+   "summary": "Generation-length study comparing the 128- vs 512-token budgets: per-pair kappa, McNemar, BH-FDR, and the prefix-truncation analysis that established the 128-era Qwen +0.055 ASR increase as a truncation artefact (report section 6.16).",
+   "tags": [
+    "analysis",
+    "statistics",
+    "generation-length"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:scripts/genlen_512_analysis.py:prefix_truncation_block",
+   "type": "function",
+   "name": "prefix_truncation_block",
+   "filePath": "scripts/genlen_512_analysis.py",
+   "summary": "Tests whether 128-token verdict flips are explained by judging truncated prefixes of the 512 outputs.",
+   "tags": [
+    "analysis",
+    "statistics",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    121,
+    149
+   ]
+  },
+  {
+   "id": "function:scripts/genlen_512_analysis.py:main",
+   "type": "function",
+   "name": "main",
+   "filePath": "scripts/genlen_512_analysis.py",
+   "summary": "Runs all comparison blocks (ASR, capability, length, kappa, truncation) and prints the study summary.",
+   "tags": [
+    "analysis",
+    "statistics",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    151,
+    177
+   ]
+  },
+  {
+   "id": "file:scripts/harmbench_category_breakdown.py",
+   "type": "file",
+   "name": "harmbench_category_breakdown.py",
+   "filePath": "scripts/harmbench_category_breakdown.py",
+   "summary": "Per-category HarmBench ASR breakdown (judge-scored) across pairs, showing which harm categories drive deltas.",
+   "tags": [
+    "analysis",
+    "harmbench",
+    "breakdown"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:scripts/harness_eval.py",
+   "type": "file",
+   "name": "harness_eval.py",
+   "filePath": "scripts/harness_eval.py",
+   "summary": "Named wrapper (make harness-eval) running the focused harness self-evaluation test suite.",
+   "tags": [
+    "cli",
+    "agent-harness",
+    "test-runner"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:scripts/human_label_audit.py",
+   "type": "file",
+   "name": "human_label_audit.py",
+   "filePath": "scripts/human_label_audit.py",
+   "summary": "Human annotation audit tooling (T30): draws a stratified candidate sample into a labeling sheet (CSV/HTML), then scores human labels against the judge and v2 regex with kappa and precision/recall/F1, and applies adjudicated labels.",
+   "tags": [
+    "annotation",
+    "validation",
+    "judge"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:scripts/human_label_audit.py:make_sheet",
+   "type": "function",
+   "name": "make_sheet",
+   "filePath": "scripts/human_label_audit.py",
+   "summary": "Builds the stratified human-labeling sheet from judge/regex disagreements and agreements.",
+   "tags": [
+    "annotation",
+    "validation",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    163,
+    196
+   ]
+  },
+  {
+   "id": "function:scripts/human_label_audit.py:score",
+   "type": "function",
+   "name": "score",
+   "filePath": "scripts/human_label_audit.py",
+   "summary": "Scores collected human labels against judge and regex outcomes (kappa, PRF).",
+   "tags": [
+    "annotation",
+    "validation",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    220,
+    245
+   ]
+  },
+  {
+   "id": "function:scripts/human_label_audit.py:apply_labels",
+   "type": "function",
+   "name": "apply_labels",
+   "filePath": "scripts/human_label_audit.py",
+   "summary": "Applies adjudicated human labels back into the audit artifacts.",
+   "tags": [
+    "annotation",
+    "validation",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    578,
+    605
+   ]
+  },
+  {
+   "id": "file:scripts/make_figures.py",
+   "type": "file",
+   "name": "make_figures.py",
+   "filePath": "scripts/make_figures.py",
+   "summary": "Matplotlib figure generation for the report: capability anchor, ASR forest plot, precision sweep, judge-vs-proxy comparison, category ASR, and multi-seed sensitivity figures.",
+   "tags": [
+    "visualization",
+    "figures",
+    "report"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:scripts/mmlu_subject_breakdown.py",
+   "type": "file",
+   "name": "mmlu_subject_breakdown.py",
+   "filePath": "scripts/mmlu_subject_breakdown.py",
+   "summary": "Per-subject MMLU accuracy breakdown across pairs to localize capability changes under quantization.",
+   "tags": [
+    "analysis",
+    "mmlu",
+    "breakdown"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:scripts/number_bible_512.py",
+   "type": "file",
+   "name": "number_bible_512.py",
+   "filePath": "scripts/number_bible_512.py",
+   "summary": "Prints the authoritative 'number bible' of 512-primary values from results_512/analysis so every number inserted into the report/thesis can be cross-checked against one source.",
+   "tags": [
+    "analysis",
+    "verification",
+    "report"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:scripts/prefetch_tc1.py",
+   "type": "file",
+   "name": "prefetch_tc1.py",
+   "filePath": "scripts/prefetch_tc1.py",
+   "summary": "Head-node pre-cache script: downloads datasets, model weights, and optionally the 13B judge into the HF cache so offline compute nodes (HF_HUB_OFFLINE=1) can run.",
+   "tags": [
+    "cluster",
+    "prefetch",
+    "offline"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:scripts/prefetch_tc1.py:_collect_dataset_targets",
+   "type": "function",
+   "name": "_collect_dataset_targets",
+   "filePath": "scripts/prefetch_tc1.py",
+   "summary": "Collects dataset repos/configs referenced by the config's benchmarks.",
+   "tags": [
+    "cluster",
+    "prefetch",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    62,
+    86
+   ]
+  },
+  {
+   "id": "function:scripts/prefetch_tc1.py:main",
+   "type": "function",
+   "name": "main",
+   "filePath": "scripts/prefetch_tc1.py",
+   "summary": "Prefetches datasets and models per config; --judge adds the HarmBench classifier.",
+   "tags": [
+    "cluster",
+    "prefetch",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    161,
+    190
+   ]
+  },
+  {
+   "id": "file:scripts/refusal_margin_analysis.py",
+   "type": "file",
+   "name": "refusal_margin_analysis.py",
+   "filePath": "scripts/refusal_margin_analysis.py",
+   "summary": "Analyzes captured refusal-margin sidecars: per-pair paired margin shifts, AUC of margin vs judge outcome, bootstrap CIs \u2014 the mechanistic complement to behavioural ASR deltas.",
+   "tags": [
+    "analysis",
+    "refusal",
+    "statistics"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:scripts/refusal_margin_analysis.py:analyse_pair",
+   "type": "function",
+   "name": "analyse_pair",
+   "filePath": "scripts/refusal_margin_analysis.py",
+   "summary": "Computes paired margin-shift statistics and AUC for one model pair.",
+   "tags": [
+    "analysis",
+    "refusal",
+    "function"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    102,
+    165
+   ]
+  },
+  {
+   "id": "file:scripts/sensitivity_analysis.py",
+   "type": "file",
+   "name": "sensitivity_analysis.py",
+   "filePath": "scripts/sensitivity_analysis.py",
+   "summary": "Decoding-sensitivity analysis: compares greedy vs sampled-decoding deltas (v2 and judge ASR) to check robustness of the headline conclusions.",
+   "tags": [
+    "analysis",
+    "sensitivity",
+    "statistics"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:scripts/verify_report_claims.py",
+   "type": "file",
+   "name": "verify_report_claims.py",
+   "filePath": "scripts/verify_report_claims.py",
+   "summary": "MACHINE CLAIM LOCK (make verify-claims): ~55 checks pinning report and thesis numbers plus IEEE citation consistency to the primary artifacts in results_512/analysis; rides pytest via tests/test_report_claims.py so stale claims fail CI.",
+   "tags": [
+    "verification",
+    "report",
+    "governance"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:scripts/verify_report_claims.py:run_checks",
+   "type": "function",
+   "name": "run_checks",
+   "filePath": "scripts/verify_report_claims.py",
+   "summary": "Runs every claim check (numbers, labels, citations) against live artifacts and reports mismatches.",
+   "tags": [
+    "verification",
+    "report",
+    "function"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    85,
+    691
+   ]
+  },
+  {
+   "id": "class:scripts/verify_report_claims.py:Checker",
+   "type": "class",
+   "name": "Checker",
+   "filePath": "scripts/verify_report_claims.py",
+   "summary": "Accumulates check results and renders the pass/fail report.",
+   "tags": [
+    "verification",
+    "report",
+    "class"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    48,
+    82
+   ]
+  },
+  {
+   "id": "file:tests/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "tests/__init__.py",
+   "summary": "Package marker for the test suite.",
+   "tags": [
+    "test",
+    "package",
+    "marker"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:tests/test_int8_scoping.py",
+   "type": "file",
+   "name": "test_int8_scoping.py",
+   "filePath": "tests/test_int8_scoping.py",
+   "summary": "Guards INT8 scoping: judge agreement, pairwise, and breakdown scripts must not reopen committed old-6 judge sidecars when scoring INT8 members (zero-drift rule).",
+   "tags": [
+    "test",
+    "quantization",
+    "scoping"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:tests/test_judge_agreement.py",
+   "type": "file",
+   "name": "test_judge_agreement.py",
+   "filePath": "tests/test_judge_agreement.py",
+   "summary": "Tests kappa computation in judge_agreement: known values, perfect agreement, total disagreement, degenerate and empty cases.",
+   "tags": [
+    "test",
+    "judge",
+    "statistics"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:tests/test_report_claims.py",
+   "type": "file",
+   "name": "test_report_claims.py",
+   "filePath": "tests/test_report_claims.py",
+   "summary": "Pytest bridge that runs the machine claim lock (verify_report_claims) so report/thesis number drift fails the test suite.",
+   "tags": [
+    "test",
+    "verification",
+    "report"
+   ],
+   "complexity": "simple"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:scripts/generate_sensitivity_jobs.py",
+   "target": "function:scripts/generate_sensitivity_jobs.py:main",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:scripts/genlen_512_analysis.py",
+   "target": "function:scripts/genlen_512_analysis.py:prefix_truncation_block",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:scripts/genlen_512_analysis.py",
+   "target": "function:scripts/genlen_512_analysis.py:main",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:scripts/human_label_audit.py",
+   "target": "function:scripts/human_label_audit.py:make_sheet",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:scripts/human_label_audit.py",
+   "target": "function:scripts/human_label_audit.py:score",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:scripts/human_label_audit.py",
+   "target": "function:scripts/human_label_audit.py:apply_labels",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:scripts/prefetch_tc1.py",
+   "target": "function:scripts/prefetch_tc1.py:_collect_dataset_targets",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:scripts/prefetch_tc1.py",
+   "target": "function:scripts/prefetch_tc1.py:main",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:scripts/refusal_margin_analysis.py",
+   "target": "function:scripts/refusal_margin_analysis.py:analyse_pair",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:scripts/verify_report_claims.py",
+   "target": "function:scripts/verify_report_claims.py:run_checks",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:scripts/verify_report_claims.py",
+   "target": "class:scripts/verify_report_claims.py:Checker",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  }
+ ]
+}

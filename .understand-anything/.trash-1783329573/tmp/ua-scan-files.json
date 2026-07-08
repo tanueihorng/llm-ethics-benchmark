@@ -1,0 +1,863 @@
+{
+  "scriptCompleted": true,
+  "files": [
+    {
+      "path": ".hallmark/log.json",
+      "language": "json",
+      "sizeLines": 4,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".streamlit/config.toml",
+      "language": "toml",
+      "sizeLines": 13,
+      "fileCategory": "config"
+    },
+    {
+      "path": "AGENTS.md",
+      "language": "markdown",
+      "sizeLines": 296,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "check_slurm_runs.py",
+      "language": "python",
+      "sizeLines": 7,
+      "fileCategory": "code"
+    },
+    {
+      "path": "CITATION.bib",
+      "language": "bib",
+      "sizeLines": 10,
+      "fileCategory": "code"
+    },
+    {
+      "path": "CITATION.cff",
+      "language": "cff",
+      "sizeLines": 30,
+      "fileCategory": "code"
+    },
+    {
+      "path": "CLAUDE.md",
+      "language": "markdown",
+      "sizeLines": 296,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "compare_quant_pairs.py",
+      "language": "python",
+      "sizeLines": 7,
+      "fileCategory": "code"
+    },
+    {
+      "path": "configs/artifact_policy.yaml",
+      "language": "yaml",
+      "sizeLines": 229,
+      "fileCategory": "config"
+    },
+    {
+      "path": "configs/default.yaml",
+      "language": "yaml",
+      "sizeLines": 168,
+      "fileCategory": "config"
+    },
+    {
+      "path": "configs/tc1_512.yaml",
+      "language": "yaml",
+      "sizeLines": 181,
+      "fileCategory": "config"
+    },
+    {
+      "path": "configs/tc1_int8_512.yaml",
+      "language": "yaml",
+      "sizeLines": 190,
+      "fileCategory": "config"
+    },
+    {
+      "path": "configs/tc1_int8.yaml",
+      "language": "yaml",
+      "sizeLines": 186,
+      "fileCategory": "config"
+    },
+    {
+      "path": "configs/tc1_sensitivity_512.yaml",
+      "language": "yaml",
+      "sizeLines": 122,
+      "fileCategory": "config"
+    },
+    {
+      "path": "configs/tc1_sensitivity.yaml",
+      "language": "yaml",
+      "sizeLines": 122,
+      "fileCategory": "config"
+    },
+    {
+      "path": "configs/tc1.yaml",
+      "language": "yaml",
+      "sizeLines": 178,
+      "fileCategory": "config"
+    },
+    {
+      "path": "dashboard/__init__.py",
+      "language": "python",
+      "sizeLines": 6,
+      "fileCategory": "code"
+    },
+    {
+      "path": "dashboard/app.py",
+      "language": "python",
+      "sizeLines": 549,
+      "fileCategory": "code"
+    },
+    {
+      "path": "dashboard/data.py",
+      "language": "python",
+      "sizeLines": 631,
+      "fileCategory": "code"
+    },
+    {
+      "path": "dashboard/theme.py",
+      "language": "python",
+      "sizeLines": 480,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ethical_benchmark/__init__.py",
+      "language": "python",
+      "sizeLines": 16,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ethical_benchmark/analysis/__init__.py",
+      "language": "python",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ethical_benchmark/analysis/compare_quant_pairs.py",
+      "language": "python",
+      "sizeLines": 926,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ethical_benchmark/analysis/refusal_margin.py",
+      "language": "python",
+      "sizeLines": 169,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ethical_benchmark/benchmarks/__init__.py",
+      "language": "python",
+      "sizeLines": 16,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ethical_benchmark/benchmarks/arc.py",
+      "language": "python",
+      "sizeLines": 242,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ethical_benchmark/benchmarks/base.py",
+      "language": "python",
+      "sizeLines": 91,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ethical_benchmark/benchmarks/harmbench.py",
+      "language": "python",
+      "sizeLines": 192,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ethical_benchmark/benchmarks/mmlu.py",
+      "language": "python",
+      "sizeLines": 242,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ethical_benchmark/benchmarks/registry.py",
+      "language": "python",
+      "sizeLines": 41,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ethical_benchmark/benchmarks/utils.py",
+      "language": "python",
+      "sizeLines": 274,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ethical_benchmark/benchmarks/xstest.py",
+      "language": "python",
+      "sizeLines": 362,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ethical_benchmark/cluster/__init__.py",
+      "language": "python",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ethical_benchmark/cluster/check_runs.py",
+      "language": "python",
+      "sizeLines": 194,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ethical_benchmark/cluster/generate_jobs.py",
+      "language": "python",
+      "sizeLines": 303,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ethical_benchmark/cluster/submit_jobs.py",
+      "language": "python",
+      "sizeLines": 142,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ethical_benchmark/config_schema.py",
+      "language": "python",
+      "sizeLines": 117,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ethical_benchmark/constants.py",
+      "language": "python",
+      "sizeLines": 38,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ethical_benchmark/datasets/__init__.py",
+      "language": "python",
+      "sizeLines": 14,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ethical_benchmark/datasets/bias.py",
+      "language": "python",
+      "sizeLines": 222,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ethical_benchmark/datasets/factuality.py",
+      "language": "python",
+      "sizeLines": 151,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ethical_benchmark/datasets/toxicity.py",
+      "language": "python",
+      "sizeLines": 118,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ethical_benchmark/evaluators/__init__.py",
+      "language": "python",
+      "sizeLines": 56,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ethical_benchmark/evaluators/bias_eval.py",
+      "language": "python",
+      "sizeLines": 233,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ethical_benchmark/evaluators/factuality_eval.py",
+      "language": "python",
+      "sizeLines": 211,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ethical_benchmark/evaluators/toxicity_eval.py",
+      "language": "python",
+      "sizeLines": 339,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ethical_benchmark/harness/__init__.py",
+      "language": "python",
+      "sizeLines": 31,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ethical_benchmark/harness/agent.py",
+      "language": "python",
+      "sizeLines": 877,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ethical_benchmark/judges/__init__.py",
+      "language": "python",
+      "sizeLines": 34,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ethical_benchmark/judges/validation.py",
+      "language": "python",
+      "sizeLines": 719,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ethical_benchmark/metrics/__init__.py",
+      "language": "python",
+      "sizeLines": 21,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ethical_benchmark/metrics/aggregate.py",
+      "language": "python",
+      "sizeLines": 223,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ethical_benchmark/models/__init__.py",
+      "language": "python",
+      "sizeLines": 42,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ethical_benchmark/models/generation.py",
+      "language": "python",
+      "sizeLines": 238,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ethical_benchmark/models/loader.py",
+      "language": "python",
+      "sizeLines": 337,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ethical_benchmark/pipeline/__init__.py",
+      "language": "python",
+      "sizeLines": 9,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ethical_benchmark/pipeline/run_benchmark.py",
+      "language": "python",
+      "sizeLines": 517,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ethical_benchmark/pipeline/run_quant_benchmark.py",
+      "language": "python",
+      "sizeLines": 559,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ethical_benchmark/pipeline/run_quant_matrix.py",
+      "language": "python",
+      "sizeLines": 331,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ethical_benchmark/quant/__init__.py",
+      "language": "python",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "ethical_benchmark/quant/config_schema.py",
+      "language": "python",
+      "sizeLines": 240,
+      "fileCategory": "code"
+    },
+    {
+      "path": "fyp_cli.py",
+      "language": "python",
+      "sizeLines": 337,
+      "fileCategory": "code"
+    },
+    {
+      "path": "generate_slurm_jobs.py",
+      "language": "python",
+      "sizeLines": 7,
+      "fileCategory": "code"
+    },
+    {
+      "path": "Makefile",
+      "language": "makefile",
+      "sizeLines": 125,
+      "fileCategory": "infra"
+    },
+    {
+      "path": "package.json",
+      "language": "json",
+      "sizeLines": 13,
+      "fileCategory": "config"
+    },
+    {
+      "path": "pyproject.toml",
+      "language": "toml",
+      "sizeLines": 39,
+      "fileCategory": "config"
+    },
+    {
+      "path": "README.md",
+      "language": "markdown",
+      "sizeLines": 374,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "requirements-dashboard.txt",
+      "language": "txt",
+      "sizeLines": 5,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "requirements.txt",
+      "language": "txt",
+      "sizeLines": 28,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "run_benchmark.py",
+      "language": "python",
+      "sizeLines": 10,
+      "fileCategory": "code"
+    },
+    {
+      "path": "run_quant_benchmark.py",
+      "language": "python",
+      "sizeLines": 7,
+      "fileCategory": "code"
+    },
+    {
+      "path": "run_quant_matrix.py",
+      "language": "python",
+      "sizeLines": 7,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/agent_check.py",
+      "language": "python",
+      "sizeLines": 71,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/build_agent_harness_architecture_doc.py",
+      "language": "python",
+      "sizeLines": 550,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/build_agentic_report.js",
+      "language": "javascript",
+      "sizeLines": 638,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/build_fyp_report_v2.js",
+      "language": "javascript",
+      "sizeLines": 1602,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/build_fyp_report_v3.js",
+      "language": "javascript",
+      "sizeLines": 1606,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/build_fyp_report_v4.js",
+      "language": "javascript",
+      "sizeLines": 1627,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/build_fyp_report_v5.js",
+      "language": "javascript",
+      "sizeLines": 1638,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/build_fyp_report.js",
+      "language": "javascript",
+      "sizeLines": 1546,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/build_fyp_thesis_v2.js",
+      "language": "javascript",
+      "sizeLines": 448,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/build_fyp_thesis_v3.js",
+      "language": "javascript",
+      "sizeLines": 448,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/build_fyp_thesis_v4.js",
+      "language": "javascript",
+      "sizeLines": 429,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/build_fyp_thesis.js",
+      "language": "javascript",
+      "sizeLines": 415,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/capture_refusal_margin.py",
+      "language": "python",
+      "sizeLines": 242,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/generate_agent_dashboard.py",
+      "language": "python",
+      "sizeLines": 37,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/generate_agent_harness_architecture_diagram.py",
+      "language": "python",
+      "sizeLines": 572,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/generate_architecture_diagram.py",
+      "language": "python",
+      "sizeLines": 592,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/generate_handoff.py",
+      "language": "python",
+      "sizeLines": 38,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/generate_integrated_architecture_diagram.py",
+      "language": "python",
+      "sizeLines": 879,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/generate_repo_hierarchy_diagram.py",
+      "language": "python",
+      "sizeLines": 406,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/generate_sensitivity_jobs.py",
+      "language": "python",
+      "sizeLines": 154,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/generate_tc1_checklist.py",
+      "language": "python",
+      "sizeLines": 31,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/genlen_512_analysis.py",
+      "language": "python",
+      "sizeLines": 180,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/harmbench_category_breakdown.py",
+      "language": "python",
+      "sizeLines": 228,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/harness_eval.py",
+      "language": "python",
+      "sizeLines": 24,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/human_label_audit.py",
+      "language": "python",
+      "sizeLines": 641,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/judge_agreement.py",
+      "language": "python",
+      "sizeLines": 363,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/judge_pairwise_agreement.py",
+      "language": "python",
+      "sizeLines": 285,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/make_figures.py",
+      "language": "python",
+      "sizeLines": 314,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/mmlu_subject_breakdown.py",
+      "language": "python",
+      "sizeLines": 181,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/multiple_comparisons.py",
+      "language": "python",
+      "sizeLines": 338,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/number_bible_512.py",
+      "language": "python",
+      "sizeLines": 76,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/precision_sweep_analysis.py",
+      "language": "python",
+      "sizeLines": 267,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/prefetch_tc1.py",
+      "language": "python",
+      "sizeLines": 194,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/refusal_margin_analysis.py",
+      "language": "python",
+      "sizeLines": 267,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/rescore_harmbench.py",
+      "language": "python",
+      "sizeLines": 487,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/run_judge_validation.py",
+      "language": "python",
+      "sizeLines": 158,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/sensitivity_analysis.py",
+      "language": "python",
+      "sizeLines": 217,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/verify_report_claims.py",
+      "language": "python",
+      "sizeLines": 700,
+      "fileCategory": "code"
+    },
+    {
+      "path": "submit_slurm_jobs.py",
+      "language": "python",
+      "sizeLines": 7,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/__init__.py",
+      "language": "python",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/conftest.py",
+      "language": "python",
+      "sizeLines": 196,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_agent_harness.py",
+      "language": "python",
+      "sizeLines": 338,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_arc.py",
+      "language": "python",
+      "sizeLines": 83,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_dashboard_data.py",
+      "language": "python",
+      "sizeLines": 247,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_dashboard_theme.py",
+      "language": "python",
+      "sizeLines": 81,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_datasets.py",
+      "language": "python",
+      "sizeLines": 193,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_evaluators.py",
+      "language": "python",
+      "sizeLines": 162,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_int8_scoping.py",
+      "language": "python",
+      "sizeLines": 183,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_judge_agreement.py",
+      "language": "python",
+      "sizeLines": 61,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_judge_pairwise.py",
+      "language": "python",
+      "sizeLines": 96,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_judge_validation.py",
+      "language": "python",
+      "sizeLines": 270,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_matrix_reuse.py",
+      "language": "python",
+      "sizeLines": 119,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_metrics_and_config.py",
+      "language": "python",
+      "sizeLines": 237,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_models.py",
+      "language": "python",
+      "sizeLines": 411,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_pipeline.py",
+      "language": "python",
+      "sizeLines": 111,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_precision_sweep.py",
+      "language": "python",
+      "sizeLines": 204,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_quant_analysis.py",
+      "language": "python",
+      "sizeLines": 505,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_quant_config_schema.py",
+      "language": "python",
+      "sizeLines": 106,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_quant_int8.py",
+      "language": "python",
+      "sizeLines": 224,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_quant_pipeline_utils.py",
+      "language": "python",
+      "sizeLines": 61,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_quant_smoke.py",
+      "language": "python",
+      "sizeLines": 224,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_refusal_margin.py",
+      "language": "python",
+      "sizeLines": 124,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_refusal_parser.py",
+      "language": "python",
+      "sizeLines": 184,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_report_claims.py",
+      "language": "python",
+      "sizeLines": 29,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_sensitivity.py",
+      "language": "python",
+      "sizeLines": 113,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_slurm_helpers.py",
+      "language": "python",
+      "sizeLines": 178,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tests/test_xstest_benign.py",
+      "language": "python",
+      "sizeLines": 39,
+      "fileCategory": "code"
+    }
+  ],
+  "totalFiles": 139,
+  "filteredByIgnore": 595,
+  "estimatedComplexity": "moderate",
+  "stats": {
+    "filesScanned": 139,
+    "byCategory": {
+      "config": 12,
+      "docs": 5,
+      "code": 121,
+      "infra": 1
+    },
+    "byLanguage": {
+      "json": 2,
+      "toml": 2,
+      "markdown": 3,
+      "python": 109,
+      "bib": 1,
+      "cff": 1,
+      "yaml": 8,
+      "makefile": 1,
+      "txt": 2,
+      "javascript": 10
+    }
+  }
+}

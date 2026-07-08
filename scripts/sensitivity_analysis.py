@@ -20,8 +20,13 @@ import csv
 import json
 import math
 import statistics
+import sys
 from pathlib import Path
 from typing import Any, Dict, List, Optional
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
+from ethical_benchmark.analysis.compare_quant_pairs import mcnemar_exact_test
 
 PAIRS = {
     "qwen_2b": ("qwen_2b_base", "qwen_2b_4bit"),
@@ -80,11 +85,12 @@ def _v2_asr(model_dir: Path) -> Optional[float]:
     return (data.get("metrics") or {}).get("attack_success_rate")
 
 
-def _judge_asr(model_dir: Path, judge_name: str) -> Optional[float]:
+def _judge_records(model_dir: Path, judge_name: str) -> Optional[Dict[str, bool]]:
+    """Per-prompt judge verdicts keyed by prompt_id (redacted sidecar only)."""
     path = model_dir / f"scores.judge.{judge_name}.jsonl"
     if not path.exists():
         return None
-    harmful = total = 0
+    out: Dict[str, bool] = {}
     with path.open("r", encoding="utf-8") as handle:
         for line in handle:
             line = line.strip()
@@ -92,10 +98,38 @@ def _judge_asr(model_dir: Path, judge_name: str) -> Optional[float]:
                 continue
             rec = json.loads(line)
             jh = rec.get("judge_harmful")
-            if isinstance(jh, bool):
-                total += 1
-                harmful += 1 if jh else 0
-    return harmful / total if total else None
+            pid = rec.get("prompt_id")
+            if isinstance(jh, bool) and pid is not None:
+                out[str(pid)] = jh
+    return out or None
+
+
+def _judge_asr(model_dir: Path, judge_name: str) -> Optional[float]:
+    recs = _judge_records(model_dir, judge_name)
+    if not recs:
+        return None
+    return sum(recs.values()) / len(recs)
+
+
+def per_seed_mcnemar(base: Dict[str, bool], quant: Dict[str, bool]) -> Dict[str, Any]:
+    """Exact paired McNemar for one seed's judge verdicts (matched prompt_ids).
+
+    b = baseline-harmful / 4-bit-safe, c = baseline-safe / 4-bit-harmful, so a
+    positive delta (c > b) is a harm increase. Reuses the canonical
+    ``mcnemar_exact_test`` so per-seed p-values are computed identically to the
+    primary contrasts in ``multiple_comparisons.json``.
+    """
+    ids = sorted(set(base) & set(quant))
+    b = sum(1 for i in ids if base[i] and not quant[i])
+    c = sum(1 for i in ids if quant[i] and not base[i])
+    mc = mcnemar_exact_test(b, c)
+    return {
+        "n_matched": len(ids),
+        "b": b,
+        "c": c,
+        "p_value": mc["p_value"],
+        "significant_p05": mc["p_value"] < 0.05,
+    }
 
 
 def _greedy_judge_deltas(analysis_dir: Path) -> Dict[str, float]:
@@ -132,6 +166,7 @@ def main() -> int:
     for pair_id, (base_alias, quant_alias) in PAIRS.items():
         v2_deltas: List[float] = []
         judge_deltas: List[float] = []
+        judge_per_seed: List[Dict[str, Any]] = []
         seeds_used: List[str] = []
         for seed_dir in seed_dirs:
             base_dir = seed_dir / base_alias / "harmbench"
@@ -140,12 +175,28 @@ def main() -> int:
             if b_v2 is not None and q_v2 is not None:
                 v2_deltas.append(q_v2 - b_v2)
                 seeds_used.append(seed_dir.name)
-            b_j, q_j = _judge_asr(base_dir, args.judge_name), _judge_asr(quant_dir, args.judge_name)
-            if b_j is not None and q_j is not None:
+            b_recs = _judge_records(base_dir, args.judge_name)
+            q_recs = _judge_records(quant_dir, args.judge_name)
+            if b_recs and q_recs:
+                b_j = sum(b_recs.values()) / len(b_recs)
+                q_j = sum(q_recs.values()) / len(q_recs)
                 judge_deltas.append(q_j - b_j)
+                # Per-seed exact McNemar so the report's per-seed delta list and
+                # "k/n seeds individually significant" claims are asserted
+                # against this committed artifact (audit 2026-07-08: these were
+                # previously stated in the report but persisted nowhere).
+                mc = per_seed_mcnemar(b_recs, q_recs)
+                mc["seed"] = seed_dir.name
+                mc["delta"] = q_j - b_j
+                judge_per_seed.append(mc)
 
         v2_summary = summarise_deltas(v2_deltas)
         judge_summary = summarise_deltas(judge_deltas)
+        if judge_per_seed:
+            judge_summary["per_seed"] = judge_per_seed
+            judge_summary["n_seeds_significant_p05"] = sum(
+                1 for s in judge_per_seed if s["significant_p05"]
+            )
         greedy_judge = greedy.get(pair_id)
         # Does the greedy headline sit inside the observed multi-seed range?
         # A small absolute tolerance guards against float artifacts: llama's

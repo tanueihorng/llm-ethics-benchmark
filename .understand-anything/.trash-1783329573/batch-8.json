@@ -1,0 +1,275 @@
+{
+ "nodes": [
+  {
+   "id": "file:dashboard/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "dashboard/__init__.py",
+   "summary": "Package marker for the Streamlit dashboard.",
+   "tags": [
+    "barrel",
+    "dashboard",
+    "package"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:dashboard/app.py",
+   "type": "file",
+   "name": "app.py",
+   "filePath": "dashboard/app.py",
+   "summary": "Streamlit GUI entry point with five pages: overview, results explorer (judge-primary ASR rebuilt from multiple_comparisons.json via classify_pair_change), schema-validated add-model form emitting runnable config+sbatch, run launcher with live logs, and raw-artifact browser. Read-only over the results trees; prefers results_512/analysis.",
+   "tags": [
+    "dashboard",
+    "streamlit",
+    "entry-point",
+    "visualization"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:dashboard/app.py:page_overview",
+   "type": "function",
+   "name": "page_overview",
+   "filePath": "dashboard/app.py",
+   "summary": "Overview page: headline verdict, pair cards, and study framing from the preferred results tree.",
+   "tags": [
+    "dashboard",
+    "streamlit",
+    "function"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    85,
+    178
+   ]
+  },
+  {
+   "id": "function:dashboard/app.py:page_results",
+   "type": "function",
+   "name": "page_results",
+   "filePath": "dashboard/app.py",
+   "summary": "Results explorer: pairwise deltas, precision sweep, judge agreement, and significance tables.",
+   "tags": [
+    "dashboard",
+    "streamlit",
+    "function"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    184,
+    328
+   ]
+  },
+  {
+   "id": "function:dashboard/app.py:page_add_model",
+   "type": "function",
+   "name": "page_add_model",
+   "filePath": "dashboard/app.py",
+   "summary": "Schema-validated form that emits a runnable pair config + sbatch under configs/generated/.",
+   "tags": [
+    "dashboard",
+    "streamlit",
+    "function"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    334,
+    425
+   ]
+  },
+  {
+   "id": "function:dashboard/app.py:page_run",
+   "type": "function",
+   "name": "page_run",
+   "filePath": "dashboard/app.py",
+   "summary": "Launches local runs with live log streaming; refuses protected results directories.",
+   "tags": [
+    "dashboard",
+    "streamlit",
+    "function"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    431,
+    511
+   ]
+  },
+  {
+   "id": "function:dashboard/app.py:page_raw",
+   "type": "function",
+   "name": "page_raw",
+   "filePath": "dashboard/app.py",
+   "summary": "Raw artifact browser over summaries and sidecars.",
+   "tags": [
+    "dashboard",
+    "streamlit",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    517,
+    536
+   ]
+  },
+  {
+   "id": "file:dashboard/theme.py",
+   "type": "file",
+   "name": "theme.py",
+   "filePath": "dashboard/theme.py",
+   "summary": "Editorial visual theme for the dashboard (light paper, indigo+gold, Newsreader/Spline Sans): CSS design tokens, hero/badge/stat-tile/pair-card HTML builders, and Plotly figure styling.",
+   "tags": [
+    "dashboard",
+    "theme",
+    "visualization"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:dashboard/theme.py:style_fig",
+   "type": "function",
+   "name": "style_fig",
+   "filePath": "dashboard/theme.py",
+   "summary": "Applies the editorial theme (fonts, colors, grid) to a Plotly figure.",
+   "tags": [
+    "dashboard",
+    "theme",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    323,
+    351
+   ]
+  },
+  {
+   "id": "function:dashboard/theme.py:pair_card_html",
+   "type": "function",
+   "name": "pair_card_html",
+   "filePath": "dashboard/theme.py",
+   "summary": "Renders one model pair's verdict card with deltas and judge-primary stat line.",
+   "tags": [
+    "dashboard",
+    "theme",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    441,
+    480
+   ]
+  },
+  {
+   "id": "file:tests/test_dashboard_data.py",
+   "type": "file",
+   "name": "test_dashboard_data.py",
+   "filePath": "tests/test_dashboard_data.py",
+   "summary": "Tests for the dashboard data layer: loader resilience, judge-primary interpretations matching committed headline artifacts, v2-proxy divergence, config-generation round-trips, and protected-results-dir guards.",
+   "tags": [
+    "test",
+    "dashboard",
+    "data-layer"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:tests/test_dashboard_theme.py",
+   "type": "file",
+   "name": "test_dashboard_theme.py",
+   "filePath": "tests/test_dashboard_theme.py",
+   "summary": "Tests for the dashboard theme: CSS token presence, hero/stat-tile/badge HTML structure, and judge-primary stat-line rendering in pair cards.",
+   "tags": [
+    "test",
+    "dashboard",
+    "theme"
+   ],
+   "complexity": "moderate"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:dashboard/app.py",
+   "target": "function:dashboard/app.py:page_overview",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:dashboard/app.py",
+   "target": "function:dashboard/app.py:page_results",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:dashboard/app.py",
+   "target": "function:dashboard/app.py:page_add_model",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:dashboard/app.py",
+   "target": "function:dashboard/app.py:page_run",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:dashboard/app.py",
+   "target": "function:dashboard/app.py:page_raw",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:dashboard/app.py",
+   "target": "file:dashboard/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:dashboard/theme.py",
+   "target": "function:dashboard/theme.py:style_fig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:dashboard/theme.py",
+   "target": "function:dashboard/theme.py:pair_card_html",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:dashboard/theme.py",
+   "target": "file:dashboard/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:tests/test_dashboard_data.py",
+   "target": "file:dashboard/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:tests/test_dashboard_data.py",
+   "target": "file:ethical_benchmark/quant/config_schema.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:tests/test_dashboard_theme.py",
+   "target": "file:dashboard/__init__.py",
+   "type": "imports",
+   "direction": "forward",
+   "weight": 0.7
+  }
+ ]
+}

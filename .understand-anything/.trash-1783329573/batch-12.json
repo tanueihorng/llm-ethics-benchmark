@@ -1,0 +1,595 @@
+{
+ "nodes": [
+  {
+   "id": "config:.hallmark/log.json",
+   "type": "config",
+   "name": "log.json",
+   "filePath": ".hallmark/log.json",
+   "summary": "Design-skill session log recording Hallmark redesign passes over project HTML artifacts and the dashboard theme.",
+   "tags": [
+    "configuration",
+    "design",
+    "log"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "config:.streamlit/config.toml",
+   "type": "config",
+   "name": "config.toml",
+   "filePath": ".streamlit/config.toml",
+   "summary": "Streamlit server/theme settings for the dashboard (fonts, colors matching the editorial theme).",
+   "tags": [
+    "configuration",
+    "dashboard",
+    "streamlit"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:CITATION.bib",
+   "type": "file",
+   "name": "CITATION.bib",
+   "filePath": "CITATION.bib",
+   "summary": "BibTeX citation entry for citing this benchmarking framework.",
+   "tags": [
+    "documentation",
+    "citation",
+    "metadata"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:CITATION.cff",
+   "type": "file",
+   "name": "CITATION.cff",
+   "filePath": "CITATION.cff",
+   "summary": "Citation File Format metadata (authors, title, version) for the repository.",
+   "tags": [
+    "documentation",
+    "citation",
+    "metadata"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:dashboard/data.py",
+   "type": "file",
+   "name": "data.py",
+   "filePath": "dashboard/data.py",
+   "summary": "Streamlit-free, unit-tested data layer for the dashboard: prefers results_512/analysis over results/analysis, rebuilds judge-primary interpretations from multiple_comparisons.json via classify_pair_change (not the v2-proxy pair_interpretations), guards protected results dirs, and generates schema-validated new-pair configs.",
+   "tags": [
+    "dashboard",
+    "data-layer",
+    "analysis"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:dashboard/data.py:analysis_dir",
+   "type": "function",
+   "name": "analysis_dir",
+   "filePath": "dashboard/data.py",
+   "summary": "Resolves the preferred analysis tree (results_512/analysis first, falling back to results/analysis).",
+   "tags": [
+    "dashboard",
+    "data-layer",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    92,
+    103
+   ]
+  },
+  {
+   "id": "function:dashboard/data.py:is_protected_results_dir",
+   "type": "function",
+   "name": "is_protected_results_dir",
+   "filePath": "dashboard/data.py",
+   "summary": "Refuses writes into protected results trees (immutable TC1 artifacts), case-insensitively.",
+   "tags": [
+    "dashboard",
+    "data-layer",
+    "function"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    117,
+    185
+   ]
+  },
+  {
+   "id": "function:dashboard/data.py:resolve_execution_dir",
+   "type": "function",
+   "name": "resolve_execution_dir",
+   "filePath": "dashboard/data.py",
+   "summary": "Resolves a safe output directory for dashboard-launched runs, blocking protected paths.",
+   "tags": [
+    "dashboard",
+    "data-layer",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    192,
+    209
+   ]
+  },
+  {
+   "id": "function:dashboard/data.py:safe_generated_config_name",
+   "type": "function",
+   "name": "safe_generated_config_name",
+   "filePath": "dashboard/data.py",
+   "summary": "Sanitizes generated config filenames against path escapes.",
+   "tags": [
+    "dashboard",
+    "data-layer",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    212,
+    224
+   ]
+  },
+  {
+   "id": "function:dashboard/data.py:precision_sweep_long",
+   "type": "function",
+   "name": "precision_sweep_long",
+   "filePath": "dashboard/data.py",
+   "summary": "Reshapes the precision-sweep JSON into a long dataframe for plotting.",
+   "tags": [
+    "dashboard",
+    "data-layer",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    289,
+    307
+   ]
+  },
+  {
+   "id": "function:dashboard/data.py:judge_agreement_df",
+   "type": "function",
+   "name": "judge_agreement_df",
+   "filePath": "dashboard/data.py",
+   "summary": "Loads judge-vs-regex agreement (kappa) tables into a dataframe.",
+   "tags": [
+    "dashboard",
+    "data-layer",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    317,
+    334
+   ]
+  },
+  {
+   "id": "function:dashboard/data.py:contrasts_index",
+   "type": "function",
+   "name": "contrasts_index",
+   "filePath": "dashboard/data.py",
+   "summary": "Indexes multiple_comparisons.json contrasts by pair and benchmark.",
+   "tags": [
+    "dashboard",
+    "data-layer",
+    "function"
+   ],
+   "complexity": "simple",
+   "lineRange": [
+    371,
+    382
+   ]
+  },
+  {
+   "id": "function:dashboard/data.py:judge_primary_interpretations",
+   "type": "function",
+   "name": "judge_primary_interpretations",
+   "filePath": "dashboard/data.py",
+   "summary": "Rebuilds pair interpretation labels judge-primary using classify_pair_change over the preferred tree's contrasts.",
+   "tags": [
+    "dashboard",
+    "data-layer",
+    "function"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    394,
+    475
+   ]
+  },
+  {
+   "id": "function:dashboard/data.py:build_new_pair_config",
+   "type": "function",
+   "name": "build_new_pair_config",
+   "filePath": "dashboard/data.py",
+   "summary": "Builds and validates a runnable YAML config (plus sbatch) for a user-added model pair.",
+   "tags": [
+    "dashboard",
+    "data-layer",
+    "function"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    532,
+    631
+   ]
+  },
+  {
+   "id": "class:dashboard/data.py:ProtectedResultsDirError",
+   "type": "class",
+   "name": "ProtectedResultsDirError",
+   "filePath": "dashboard/data.py",
+   "summary": "Raised when a write would target a protected results tree.",
+   "tags": [
+    "dashboard",
+    "data-layer",
+    "class"
+   ],
+   "complexity": "moderate",
+   "lineRange": [
+    188,
+    189
+   ]
+  },
+  {
+   "id": "file:ethical_benchmark/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "ethical_benchmark/__init__.py",
+   "summary": "Top-level package marker exposing the ethical_benchmark version and namespace.",
+   "tags": [
+    "barrel",
+    "package",
+    "entry-point"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:ethical_benchmark/analysis/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "ethical_benchmark/analysis/__init__.py",
+   "summary": "Package marker for the analysis subpackage.",
+   "tags": [
+    "barrel",
+    "package",
+    "analysis"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:ethical_benchmark/cluster/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "ethical_benchmark/cluster/__init__.py",
+   "summary": "Package marker for the SLURM cluster subpackage.",
+   "tags": [
+    "barrel",
+    "package",
+    "cluster"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:ethical_benchmark/constants.py",
+   "type": "file",
+   "name": "constants.py",
+   "filePath": "ethical_benchmark/constants.py",
+   "summary": "Shared constants: DEFAULT_SEED=42, generation defaults (max_new_tokens 128, temperature 0.0), and benchmark batch sizes.",
+   "tags": [
+    "configuration",
+    "constants",
+    "determinism"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:ethical_benchmark/evaluators/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "ethical_benchmark/evaluators/__init__.py",
+   "summary": "Lazy-import barrel for the legacy evaluators (toxicity/bias/factuality) so heavyweight ML deps load only when used; not part of the default quantization pipeline.",
+   "tags": [
+    "barrel",
+    "lazy-loading",
+    "legacy"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:ethical_benchmark/models/__init__.py",
+   "type": "file",
+   "name": "__init__.py",
+   "filePath": "ethical_benchmark/models/__init__.py",
+   "summary": "Lazy-import barrel exposing the model layer (HFModelLoader, TextGenerator, ModelSpec) without importing torch at package import time.",
+   "tags": [
+    "barrel",
+    "lazy-loading",
+    "model"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:scripts/build_agent_harness_architecture_doc.py",
+   "type": "file",
+   "name": "build_agent_harness_architecture_doc.py",
+   "filePath": "scripts/build_agent_harness_architecture_doc.py",
+   "summary": "python-docx builder for the agent-harness architecture Word document: styled tables, callouts, two-column cards, and scenario walkthroughs.",
+   "tags": [
+    "docs-generation",
+    "docx",
+    "agent-harness"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:scripts/build_agent_harness_architecture_doc.py:build_doc",
+   "type": "function",
+   "name": "build_doc",
+   "filePath": "scripts/build_agent_harness_architecture_doc.py",
+   "summary": "Assembles the full harness-architecture document section by section.",
+   "tags": [
+    "docs-generation",
+    "docx",
+    "function"
+   ],
+   "complexity": "complex",
+   "lineRange": [
+    258,
+    546
+   ]
+  },
+  {
+   "id": "file:scripts/build_agentic_report.js",
+   "type": "file",
+   "name": "build_agentic_report.js",
+   "filePath": "scripts/build_agentic_report.js",
+   "summary": "docx-js builder for the agentic-workflow meetup report, with inline SVG figures (ladder, loop, harness, memory, tests) rasterized to PNG.",
+   "tags": [
+    "docs-generation",
+    "docx",
+    "report-builder"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:scripts/build_fyp_report_v2.js",
+   "type": "file",
+   "name": "build_fyp_report_v2.js",
+   "filePath": "scripts/build_fyp_report_v2.js",
+   "summary": "Archived FYP report builder v2 (superseded by v5).",
+   "tags": [
+    "docs-generation",
+    "report-builder",
+    "archived"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:scripts/build_fyp_report_v3.js",
+   "type": "file",
+   "name": "build_fyp_report_v3.js",
+   "filePath": "scripts/build_fyp_report_v3.js",
+   "summary": "Archived FYP report builder v3 (superseded by v5).",
+   "tags": [
+    "docs-generation",
+    "report-builder",
+    "archived"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:scripts/build_fyp_report_v4.js",
+   "type": "file",
+   "name": "build_fyp_report_v4.js",
+   "filePath": "scripts/build_fyp_report_v4.js",
+   "summary": "Archived FYP report builder v4 (superseded by v5 in the D41 512-primary re-base).",
+   "tags": [
+    "docs-generation",
+    "report-builder",
+    "archived"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:scripts/build_fyp_report_v5.js",
+   "type": "file",
+   "name": "build_fyp_report_v5.js",
+   "filePath": "scripts/build_fyp_report_v5.js",
+   "summary": "CANONICAL FYP report builder (D41, 512-primary): docx-js source generating docs/FYP_Report_2026-07-01_v5.docx via `make report`. The script is the source of truth; the docx is the artifact and is never hand-edited.",
+   "tags": [
+    "docs-generation",
+    "report-builder",
+    "canonical"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:scripts/build_fyp_report.js",
+   "type": "file",
+   "name": "build_fyp_report.js",
+   "filePath": "scripts/build_fyp_report.js",
+   "summary": "Archived first-generation FYP report builder (superseded; kept for provenance \u2014 v5 is canonical).",
+   "tags": [
+    "docs-generation",
+    "report-builder",
+    "archived"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:scripts/build_fyp_thesis_v2.js",
+   "type": "file",
+   "name": "build_fyp_thesis_v2.js",
+   "filePath": "scripts/build_fyp_thesis_v2.js",
+   "summary": "Archived thesis builder v2 (superseded by v4).",
+   "tags": [
+    "docs-generation",
+    "thesis-builder",
+    "archived"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:scripts/build_fyp_thesis_v3.js",
+   "type": "file",
+   "name": "build_fyp_thesis_v3.js",
+   "filePath": "scripts/build_fyp_thesis_v3.js",
+   "summary": "Archived thesis builder v3 (superseded by v4).",
+   "tags": [
+    "docs-generation",
+    "thesis-builder",
+    "archived"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:scripts/build_fyp_thesis_v4.js",
+   "type": "file",
+   "name": "build_fyp_thesis_v4.js",
+   "filePath": "scripts/build_fyp_thesis_v4.js",
+   "summary": "CANONICAL thesis builder (D43 512 mirror): generates docs/FYP_Thesis_2026-07-02_v4.docx via `make thesis`, claim-locked and adversarially verified.",
+   "tags": [
+    "docs-generation",
+    "thesis-builder",
+    "canonical"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:scripts/build_fyp_thesis.js",
+   "type": "file",
+   "name": "build_fyp_thesis.js",
+   "filePath": "scripts/build_fyp_thesis.js",
+   "summary": "Archived first thesis builder (superseded by v4; archived docx carries a banner).",
+   "tags": [
+    "docs-generation",
+    "thesis-builder",
+    "archived"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:scripts/generate_agent_harness_architecture_diagram.py",
+   "type": "file",
+   "name": "generate_agent_harness_architecture_diagram.py",
+   "filePath": "scripts/generate_agent_harness_architecture_diagram.py",
+   "summary": "Generates the agent-harness architecture diagram as SVG and editable draw.io XML (cards, pills, edge routing).",
+   "tags": [
+    "docs-generation",
+    "diagram",
+    "agent-harness"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:scripts/generate_architecture_diagram.py",
+   "type": "file",
+   "name": "generate_architecture_diagram.py",
+   "filePath": "scripts/generate_architecture_diagram.py",
+   "summary": "Generates the system architecture diagram (pipeline, benchmarks, analysis layers) as SVG and draw.io XML for the report.",
+   "tags": [
+    "docs-generation",
+    "diagram",
+    "architecture"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:scripts/generate_integrated_architecture_diagram.py",
+   "type": "file",
+   "name": "generate_integrated_architecture_diagram.py",
+   "filePath": "scripts/generate_integrated_architecture_diagram.py",
+   "summary": "Generates the integrated architecture diagram combining the benchmark pipeline with the agent-harness contract band, folder tree, and skills, as SVG and draw.io XML.",
+   "tags": [
+    "docs-generation",
+    "diagram",
+    "architecture"
+   ],
+   "complexity": "complex"
+  }
+ ],
+ "edges": [
+  {
+   "source": "file:dashboard/data.py",
+   "target": "function:dashboard/data.py:analysis_dir",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:dashboard/data.py",
+   "target": "function:dashboard/data.py:is_protected_results_dir",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:dashboard/data.py",
+   "target": "function:dashboard/data.py:resolve_execution_dir",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:dashboard/data.py",
+   "target": "function:dashboard/data.py:safe_generated_config_name",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:dashboard/data.py",
+   "target": "function:dashboard/data.py:precision_sweep_long",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:dashboard/data.py",
+   "target": "function:dashboard/data.py:judge_agreement_df",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:dashboard/data.py",
+   "target": "function:dashboard/data.py:contrasts_index",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:dashboard/data.py",
+   "target": "function:dashboard/data.py:judge_primary_interpretations",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:dashboard/data.py",
+   "target": "function:dashboard/data.py:build_new_pair_config",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:dashboard/data.py",
+   "target": "class:dashboard/data.py:ProtectedResultsDirError",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  },
+  {
+   "source": "file:scripts/build_agent_harness_architecture_doc.py",
+   "target": "function:scripts/build_agent_harness_architecture_doc.py:build_doc",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1.0
+  }
+ ]
+}

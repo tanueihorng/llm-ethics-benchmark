@@ -1,0 +1,124 @@
+{
+ "projectRoot": "/Users/tanueihorng/fyp_quant",
+ "batchFiles": [
+  {
+   "path": "ethical_benchmark/metrics/__init__.py",
+   "language": "python",
+   "sizeLines": 21,
+   "fileCategory": "code"
+  },
+  {
+   "path": "ethical_benchmark/metrics/aggregate.py",
+   "language": "python",
+   "sizeLines": 223,
+   "fileCategory": "code"
+  },
+  {
+   "path": "ethical_benchmark/pipeline/__init__.py",
+   "language": "python",
+   "sizeLines": 9,
+   "fileCategory": "code"
+  },
+  {
+   "path": "ethical_benchmark/pipeline/run_quant_benchmark.py",
+   "language": "python",
+   "sizeLines": 559,
+   "fileCategory": "code"
+  },
+  {
+   "path": "ethical_benchmark/pipeline/run_quant_matrix.py",
+   "language": "python",
+   "sizeLines": 331,
+   "fileCategory": "code"
+  },
+  {
+   "path": "run_benchmark.py",
+   "language": "python",
+   "sizeLines": 10,
+   "fileCategory": "code"
+  },
+  {
+   "path": "run_quant_benchmark.py",
+   "language": "python",
+   "sizeLines": 7,
+   "fileCategory": "code"
+  },
+  {
+   "path": "run_quant_matrix.py",
+   "language": "python",
+   "sizeLines": 7,
+   "fileCategory": "code"
+  },
+  {
+   "path": "tests/test_matrix_reuse.py",
+   "language": "python",
+   "sizeLines": 119,
+   "fileCategory": "code"
+  },
+  {
+   "path": "tests/test_metrics_and_config.py",
+   "language": "python",
+   "sizeLines": 237,
+   "fileCategory": "code"
+  },
+  {
+   "path": "tests/test_quant_pipeline_utils.py",
+   "language": "python",
+   "sizeLines": 61,
+   "fileCategory": "code"
+  },
+  {
+   "path": "tests/test_quant_smoke.py",
+   "language": "python",
+   "sizeLines": 224,
+   "fileCategory": "code"
+  }
+ ],
+ "batchImportData": {
+  "ethical_benchmark/metrics/__init__.py": [
+   "ethical_benchmark/metrics/aggregate.py"
+  ],
+  "ethical_benchmark/metrics/aggregate.py": [],
+  "ethical_benchmark/pipeline/__init__.py": [
+   "ethical_benchmark/pipeline/run_quant_benchmark.py",
+   "ethical_benchmark/pipeline/run_quant_matrix.py"
+  ],
+  "ethical_benchmark/pipeline/run_quant_benchmark.py": [
+   "ethical_benchmark/benchmarks/base.py",
+   "ethical_benchmark/benchmarks/registry.py",
+   "ethical_benchmark/metrics/aggregate.py",
+   "ethical_benchmark/quant/config_schema.py"
+  ],
+  "ethical_benchmark/pipeline/run_quant_matrix.py": [
+   "ethical_benchmark/pipeline/run_quant_benchmark.py",
+   "ethical_benchmark/quant/config_schema.py"
+  ],
+  "run_benchmark.py": [
+   "ethical_benchmark/pipeline/run_quant_benchmark.py"
+  ],
+  "run_quant_benchmark.py": [
+   "ethical_benchmark/pipeline/run_quant_benchmark.py"
+  ],
+  "run_quant_matrix.py": [
+   "ethical_benchmark/pipeline/run_quant_matrix.py"
+  ],
+  "tests/test_matrix_reuse.py": [
+   "ethical_benchmark/pipeline/__init__.py",
+   "ethical_benchmark/quant/config_schema.py"
+  ],
+  "tests/test_metrics_and_config.py": [
+   "ethical_benchmark/metrics/aggregate.py"
+  ],
+  "tests/test_quant_pipeline_utils.py": [
+   "ethical_benchmark/benchmarks/base.py",
+   "ethical_benchmark/metrics/aggregate.py",
+   "ethical_benchmark/pipeline/run_quant_benchmark.py"
+  ],
+  "tests/test_quant_smoke.py": [
+   "ethical_benchmark/benchmarks/base.py",
+   "ethical_benchmark/metrics/aggregate.py",
+   "ethical_benchmark/pipeline/__init__.py",
+   "ethical_benchmark/quant/config_schema.py"
+  ]
+ }
+}

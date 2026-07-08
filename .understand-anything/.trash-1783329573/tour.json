@@ -1,0 +1,124 @@
+[
+ {
+  "order": 1,
+  "title": "What this project is",
+  "description": "Start with the README for the research question \u2014 do safety changes in 4-bit quantized models reflect true alignment shifts or capability degradation? \u2014 and CLAUDE.md for how the repo governs itself (PROJECT_LOG as source of truth, claim-lock discipline).",
+  "nodeIds": [
+   "document:README.md",
+   "document:CLAUDE.md"
+  ]
+ },
+ {
+  "order": 2,
+  "title": "The experiment, declared as config",
+  "description": "Every run starts from YAML validated by a Pydantic schema: five model pairs sharing a model_id (baseline vs 4-bit), three benchmarks, greedy decoding, seed 42. tc1_512.yaml is the PRIMARY study config (D41).",
+  "nodeIds": [
+   "config:configs/default.yaml",
+   "config:configs/tc1_512.yaml",
+   "file:ethical_benchmark/quant/config_schema.py"
+  ]
+ },
+ {
+  "order": 3,
+  "title": "Loading models \u2014 where quantization happens",
+  "description": "HFModelLoader resolves dtype/device and applies BitsAndBytes NF4 (or INT8) on the fly at load; a guard hard-fails if quantization silently didn't engage. TextGenerator then does deterministic chat-templated batch generation.",
+  "nodeIds": [
+   "file:ethical_benchmark/models/loader.py",
+   "file:ethical_benchmark/models/generation.py"
+  ]
+ },
+ {
+  "order": 4,
+  "title": "The three benchmark lenses",
+  "description": "All plugins implement one ABC: HarmBench measures harmful compliance (ASR), XSTest measures over-refusal on benign prompts, MMLU anchors capability. Each scores its own responses.",
+  "nodeIds": [
+   "file:ethical_benchmark/benchmarks/base.py",
+   "file:ethical_benchmark/benchmarks/harmbench.py",
+   "file:ethical_benchmark/benchmarks/xstest.py",
+   "file:ethical_benchmark/benchmarks/mmlu.py"
+  ]
+ },
+ {
+  "order": 5,
+  "title": "Running: single run to full matrix",
+  "description": "run_quant_benchmark orchestrates one model-benchmark run (seed, load, generate, score, write raw.jsonl + summary.json); run_quant_matrix loads each model once for all its benchmarks and releases GPU memory between models.",
+  "nodeIds": [
+   "file:ethical_benchmark/pipeline/run_quant_benchmark.py",
+   "file:ethical_benchmark/pipeline/run_quant_matrix.py",
+   "file:ethical_benchmark/metrics/aggregate.py"
+  ]
+ },
+ {
+  "order": 6,
+  "title": "Judge scoring \u2014 the primary ASR",
+  "description": "The official HarmBench 13B classifier is the primary HarmBench scorer (D16): it re-scores raw outputs into redacted judge sidecars (IDs + booleans only), never touching immutable raw artifacts. Agreement stats quantify how much the regex proxy over-counts.",
+  "nodeIds": [
+   "file:ethical_benchmark/judges/validation.py",
+   "file:scripts/run_judge_validation.py",
+   "file:scripts/judge_agreement.py"
+  ]
+ },
+ {
+  "order": 7,
+  "title": "From numbers to claims",
+  "description": "Pairwise deltas get interpretation labels (alignment_degradation vs capability_collapse_masquerading_as_safety, etc.); multiple_comparisons applies McNemar + BH-FDR across all contrasts; the genlen study showed the 128-token headline was a truncation artefact \u2014 at 512 no significant ASR increase survives anywhere.",
+  "nodeIds": [
+   "file:ethical_benchmark/analysis/compare_quant_pairs.py",
+   "file:scripts/multiple_comparisons.py",
+   "file:scripts/genlen_512_analysis.py",
+   "file:scripts/precision_sweep_analysis.py"
+  ]
+ },
+ {
+  "order": 8,
+  "title": "Running on the TC1 cluster",
+  "description": "Jobs are generated as per-model sbatch scripts (offline env, bootstrap block preserved), submitted under strict QoS limits; prefetch_tc1 caches models/datasets on the head node so compute nodes run fully offline.",
+  "nodeIds": [
+   "file:ethical_benchmark/cluster/generate_jobs.py",
+   "file:scripts/prefetch_tc1.py",
+   "file:ethical_benchmark/cluster/check_runs.py"
+  ]
+ },
+ {
+  "order": 9,
+  "title": "Exploring results \u2014 the dashboard",
+  "description": "The Streamlit app presents judge-primary results (rebuilt from multiple_comparisons.json, NOT the v2-proxy interpretations), lets you add a model pair via a validated form, and launches runs; data.py is the tested, Streamlit-free data layer.",
+  "nodeIds": [
+   "file:dashboard/app.py",
+   "file:dashboard/data.py",
+   "file:dashboard/theme.py"
+  ]
+ },
+ {
+  "order": 10,
+  "title": "The deliverables \u2014 report & thesis, claim-locked",
+  "description": "The docx report/thesis are generated from JS builders (never hand-edited); verify_report_claims machine-checks ~55 numbers and citations against primary artifacts on every pytest run, and number_bible_512 prints the single source for every headline value.",
+  "nodeIds": [
+   "file:scripts/build_fyp_report_v5.js",
+   "file:scripts/build_fyp_thesis_v4.js",
+   "file:scripts/verify_report_claims.py",
+   "file:scripts/number_bible_512.py"
+  ]
+ },
+ {
+  "order": 11,
+  "title": "The agent harness \u2014 the repo that maintains itself",
+  "description": "A policy file drives machine checks: immutable-artifact manifests, CLAUDE/AGENTS sync, PROJECT_LOG discipline, stale-claim and redaction scans, report freshness. agent_check is the gate; renderers produce handoff/dashboard/checklist docs.",
+  "nodeIds": [
+   "file:ethical_benchmark/harness/agent.py",
+   "config:configs/artifact_policy.yaml",
+   "file:scripts/agent_check.py"
+  ]
+ },
+ {
+  "order": 12,
+  "title": "How it's all verified",
+  "description": "The test suite proves each layer: end-to-end pipeline smoke, delta/interpretation math, judge redaction and idempotency, INT8 scoping guards, dashboard data invariants, and harness self-evaluation on fixture repos.",
+  "nodeIds": [
+   "file:tests/test_quant_smoke.py",
+   "file:tests/test_quant_analysis.py",
+   "file:tests/test_judge_validation.py",
+   "file:tests/test_agent_harness.py"
+  ]
+ }
+]

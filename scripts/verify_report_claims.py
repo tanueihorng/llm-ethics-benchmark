@@ -370,6 +370,94 @@ def run_checks(checker: Checker | None = None) -> Checker:
         ),
     )
 
+    def _per_seed_ok():
+        # 2026-07-08 audit: the §6.6.1 per-seed delta list and the
+        # "k of 5 seeds individually significant" counts were stated in the
+        # report but persisted nowhere; sensitivity_analysis.py now emits
+        # judge_delta.per_seed + n_seeds_significant_p05 and this check pins
+        # the report's claims to them.
+        q2 = smp["qwen_2b"]["judge_delta"]
+        q4 = smp["qwen_4b"]["judge_delta"]
+        ll = smp["llama_3_2_3b"]["judge_delta"]
+        q2_deltas = [round(s["delta"], 3) for s in q2["per_seed"]]
+        ll_sig = [s for s in ll["per_seed"] if s["significant_p05"]]
+        ok = (
+            q2_deltas == [0.0, 0.01, 0.02, 0.0, 0.035]
+            and q2["n_seeds_significant_p05"] == 0
+            and q4["n_seeds_significant_p05"] == 1
+            and ll["n_seeds_significant_p05"] == 2
+            and all(s["delta"] < 0 for s in ll_sig)
+        )
+        return ok, (
+            f"q2={q2_deltas} sig {q2['n_seeds_significant_p05']}/5; "
+            f"q4 sig {q4['n_seeds_significant_p05']}/5; "
+            f"llama sig {ll['n_seeds_significant_p05']}/5 (all decreases: "
+            f"{all(s['delta'] < 0 for s in ll_sig)})"
+        )
+
+    c.check(
+        "multiseed per-seed: delta list + 0/5, 1/5, 2/5 significance counts",
+        [
+            "0.000, +0.010, +0.020, 0.000, +0.035",
+            "no seed is individually significant (0/5)",
+            "1 of 5 seeds individually significant",
+            "2 of 5 seeds individually significant, both decreases",
+        ],
+        _per_seed_ok,
+    )
+
+    # ---------------- XSTest qwen_2b borderline (D44) ------------------------
+    def _borderline_ok():
+        pd_x = pdix[("qwen_2b", "xstest")]
+        mc_x = contrasts[("qwen_2b", "xstest_over_refusal")]
+        ok = (
+            pd_x["metric"] == "over_refusal_rate"
+            and bool(pd_x["delta_significant"])                # bootstrap CI excludes 0
+            and near(-0.028, pd_x["absolute_delta"])
+            and not mc_x["uncorrected_significant"]            # McNemar does not
+            and near(0.065, mc_x["p_value"])
+            and mc_x["b"] + mc_x["c"] == 11
+        )
+        return ok, (
+            f"bootstrap sig={pd_x['delta_significant']} delta={pd_x['absolute_delta']}; "
+            f"McNemar p={mc_x['p_value']:.4f} discordant={mc_x['b'] + mc_x['c']}"
+        )
+
+    c.check(
+        "xstest qwen_2b: borderline (bootstrap CI excludes 0, McNemar p=0.065)",
+        [
+            '"−0.028 [−0.052, −0.004]", "borderline"',
+            "McNemar p = 0.065",
+        ],
+        _borderline_ok,
+    )
+
+    # ---------------- Appendix A reproduces tc1_512.yaml ---------------------
+    def _appendix_a_ok():
+        m = re.search(r"const tc1Yaml = `([\s\S]*?)`;", c.text)
+        if not m:
+            return False, "tc1Yaml template literal not found"
+        appx = m.group(1)
+        real = (ROOT / "configs/tc1_512.yaml").read_text(encoding="utf-8")
+
+        def _kv(text, key):
+            mm = re.search(rf"^\s*{key}:\s*(\S+)", text, re.M)
+            return mm.group(1) if mm else None
+
+        keys = ["max_new_tokens", "log_dir", "temperature", "seed"]
+        diffs = [k for k in keys if _kv(appx, k) != _kv(real, k)]
+        return not diffs, (
+            "appendix matches tc1_512.yaml on " + ", ".join(keys)
+            if not diffs
+            else f"appendix/config mismatch on: {diffs}"
+        )
+
+    c.check(
+        "appendix A: reproduced config matches configs/tc1_512.yaml",
+        ["The full configs/tc1_512.yaml"],
+        _appendix_a_ok,
+    )
+
     # ---------------- INT8 precision point (6.15) ---------------------------
     def _mcn(ps, pair, judge):
         blk = ps[pair]["harmbench_asr_int8_mcnemar"][judge]

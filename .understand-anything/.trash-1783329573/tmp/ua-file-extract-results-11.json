@@ -1,0 +1,360 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 8,
+  "filesSkipped": [],
+  "results": [
+    {
+      "path": "configs/artifact_policy.yaml",
+      "language": "yaml",
+      "fileCategory": "config",
+      "totalLines": 229,
+      "nonEmptyLines": 221,
+      "sections": [
+        {
+          "heading": "version",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "description",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "immutable_manifest",
+          "level": 1,
+          "line": 7
+        },
+        {
+          "heading": "immutable_artifacts",
+          "level": 1,
+          "line": 9
+        },
+        {
+          "heading": "immutable_exclude",
+          "level": 1,
+          "line": 19
+        },
+        {
+          "heading": "allowed_derived_artifacts",
+          "level": 1,
+          "line": 25
+        },
+        {
+          "heading": "redaction",
+          "level": 1,
+          "line": 41
+        },
+        {
+          "heading": "stale_text",
+          "level": 1,
+          "line": 87
+        },
+        {
+          "heading": "report_worthy",
+          "level": 1,
+          "line": 197
+        },
+        {
+          "heading": "agent_status",
+          "level": 1,
+          "line": 223
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 10
+      }
+    },
+    {
+      "path": "configs/default.yaml",
+      "language": "yaml",
+      "fileCategory": "config",
+      "totalLines": 168,
+      "nonEmptyLines": 152,
+      "sections": [
+        {
+          "heading": "study_name",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "models",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "decoding",
+          "level": 1,
+          "line": 106
+        },
+        {
+          "heading": "benchmarks",
+          "level": 1,
+          "line": 114
+        },
+        {
+          "heading": "slurm",
+          "level": 1,
+          "line": 154
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 5
+      }
+    },
+    {
+      "path": "configs/tc1.yaml",
+      "language": "yaml",
+      "fileCategory": "config",
+      "totalLines": 178,
+      "nonEmptyLines": 162,
+      "sections": [
+        {
+          "heading": "study_name",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "models",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "decoding",
+          "level": 1,
+          "line": 106
+        },
+        {
+          "heading": "benchmarks",
+          "level": 1,
+          "line": 114
+        },
+        {
+          "heading": "slurm",
+          "level": 1,
+          "line": 158
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 5
+      }
+    },
+    {
+      "path": "configs/tc1_512.yaml",
+      "language": "yaml",
+      "fileCategory": "config",
+      "totalLines": 181,
+      "nonEmptyLines": 165,
+      "sections": [
+        {
+          "heading": "study_name",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "models",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "decoding",
+          "level": 1,
+          "line": 106
+        },
+        {
+          "heading": "benchmarks",
+          "level": 1,
+          "line": 117
+        },
+        {
+          "heading": "slurm",
+          "level": 1,
+          "line": 161
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 5
+      }
+    },
+    {
+      "path": "configs/tc1_int8.yaml",
+      "language": "yaml",
+      "fileCategory": "config",
+      "totalLines": 186,
+      "nonEmptyLines": 170,
+      "sections": [
+        {
+          "heading": "study_name",
+          "level": 1,
+          "line": 16
+        },
+        {
+          "heading": "models",
+          "level": 1,
+          "line": 18
+        },
+        {
+          "heading": "decoding",
+          "level": 1,
+          "line": 126
+        },
+        {
+          "heading": "benchmarks",
+          "level": 1,
+          "line": 134
+        },
+        {
+          "heading": "slurm",
+          "level": 1,
+          "line": 170
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 5
+      }
+    },
+    {
+      "path": "configs/tc1_int8_512.yaml",
+      "language": "yaml",
+      "fileCategory": "config",
+      "totalLines": 190,
+      "nonEmptyLines": 174,
+      "sections": [
+        {
+          "heading": "study_name",
+          "level": 1,
+          "line": 17
+        },
+        {
+          "heading": "models",
+          "level": 1,
+          "line": 19
+        },
+        {
+          "heading": "decoding",
+          "level": 1,
+          "line": 127
+        },
+        {
+          "heading": "benchmarks",
+          "level": 1,
+          "line": 138
+        },
+        {
+          "heading": "slurm",
+          "level": 1,
+          "line": 174
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 5
+      }
+    },
+    {
+      "path": "configs/tc1_sensitivity.yaml",
+      "language": "yaml",
+      "fileCategory": "config",
+      "totalLines": 122,
+      "nonEmptyLines": 112,
+      "sections": [
+        {
+          "heading": "study_name",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "models",
+          "level": 1,
+          "line": 25
+        },
+        {
+          "heading": "decoding",
+          "level": 1,
+          "line": 90
+        },
+        {
+          "heading": "benchmarks",
+          "level": 1,
+          "line": 98
+        },
+        {
+          "heading": "slurm",
+          "level": 1,
+          "line": 106
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 5
+      }
+    },
+    {
+      "path": "configs/tc1_sensitivity_512.yaml",
+      "language": "yaml",
+      "fileCategory": "config",
+      "totalLines": 122,
+      "nonEmptyLines": 112,
+      "sections": [
+        {
+          "heading": "study_name",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "models",
+          "level": 1,
+          "line": 25
+        },
+        {
+          "heading": "decoding",
+          "level": 1,
+          "line": 90
+        },
+        {
+          "heading": "benchmarks",
+          "level": 1,
+          "line": 98
+        },
+        {
+          "heading": "slurm",
+          "level": 1,
+          "line": 106
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 5
+      }
+    }
+  ]
+}

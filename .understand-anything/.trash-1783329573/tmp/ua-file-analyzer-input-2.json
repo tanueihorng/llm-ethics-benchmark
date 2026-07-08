@@ -1,0 +1,121 @@
+{
+ "projectRoot": "/Users/tanueihorng/fyp_quant",
+ "batchFiles": [
+  {
+   "path": "check_slurm_runs.py",
+   "language": "python",
+   "sizeLines": 7,
+   "fileCategory": "code"
+  },
+  {
+   "path": "ethical_benchmark/cluster/check_runs.py",
+   "language": "python",
+   "sizeLines": 194,
+   "fileCategory": "code"
+  },
+  {
+   "path": "ethical_benchmark/cluster/generate_jobs.py",
+   "language": "python",
+   "sizeLines": 303,
+   "fileCategory": "code"
+  },
+  {
+   "path": "ethical_benchmark/cluster/submit_jobs.py",
+   "language": "python",
+   "sizeLines": 142,
+   "fileCategory": "code"
+  },
+  {
+   "path": "ethical_benchmark/quant/__init__.py",
+   "language": "python",
+   "sizeLines": 5,
+   "fileCategory": "code"
+  },
+  {
+   "path": "ethical_benchmark/quant/config_schema.py",
+   "language": "python",
+   "sizeLines": 240,
+   "fileCategory": "code"
+  },
+  {
+   "path": "fyp_cli.py",
+   "language": "python",
+   "sizeLines": 337,
+   "fileCategory": "code"
+  },
+  {
+   "path": "generate_slurm_jobs.py",
+   "language": "python",
+   "sizeLines": 7,
+   "fileCategory": "code"
+  },
+  {
+   "path": "submit_slurm_jobs.py",
+   "language": "python",
+   "sizeLines": 7,
+   "fileCategory": "code"
+  },
+  {
+   "path": "tests/test_quant_config_schema.py",
+   "language": "python",
+   "sizeLines": 106,
+   "fileCategory": "code"
+  },
+  {
+   "path": "tests/test_sensitivity.py",
+   "language": "python",
+   "sizeLines": 113,
+   "fileCategory": "code"
+  },
+  {
+   "path": "tests/test_slurm_helpers.py",
+   "language": "python",
+   "sizeLines": 178,
+   "fileCategory": "code"
+  }
+ ],
+ "batchImportData": {
+  "check_slurm_runs.py": [
+   "ethical_benchmark/cluster/check_runs.py"
+  ],
+  "ethical_benchmark/cluster/check_runs.py": [
+   "ethical_benchmark/pipeline/run_quant_benchmark.py",
+   "ethical_benchmark/quant/config_schema.py"
+  ],
+  "ethical_benchmark/cluster/generate_jobs.py": [
+   "ethical_benchmark/quant/config_schema.py"
+  ],
+  "ethical_benchmark/cluster/submit_jobs.py": [],
+  "ethical_benchmark/quant/__init__.py": [
+   "ethical_benchmark/quant/config_schema.py"
+  ],
+  "ethical_benchmark/quant/config_schema.py": [],
+  "fyp_cli.py": [
+   "ethical_benchmark/analysis/compare_quant_pairs.py",
+   "ethical_benchmark/cluster/check_runs.py",
+   "ethical_benchmark/cluster/generate_jobs.py",
+   "ethical_benchmark/cluster/submit_jobs.py",
+   "ethical_benchmark/harness/__init__.py",
+   "ethical_benchmark/pipeline/run_quant_benchmark.py",
+   "ethical_benchmark/pipeline/run_quant_matrix.py",
+   "ethical_benchmark/quant/config_schema.py"
+  ],
+  "generate_slurm_jobs.py": [
+   "ethical_benchmark/cluster/generate_jobs.py"
+  ],
+  "submit_slurm_jobs.py": [
+   "ethical_benchmark/cluster/submit_jobs.py"
+  ],
+  "tests/test_quant_config_schema.py": [
+   "ethical_benchmark/quant/config_schema.py"
+  ],
+  "tests/test_sensitivity.py": [
+   "ethical_benchmark/quant/config_schema.py"
+  ],
+  "tests/test_slurm_helpers.py": [
+   "ethical_benchmark/cluster/generate_jobs.py",
+   "ethical_benchmark/cluster/submit_jobs.py",
+   "ethical_benchmark/quant/config_schema.py"
+  ]
+ }
+}
