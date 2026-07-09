@@ -98,6 +98,13 @@ verify-claims:
 thesis:
 	NODE_PATH=$$(npm root -g) node scripts/build_fyp_thesis_v4.js
 
+# Interim milestone report (~25-30 pp): a shorter, progress-framed derivative of
+# the thesis that REUSES the same 512-primary, claim-locked prose/numbers. The
+# full report (make report) stays as the final-thesis-grade master; this never
+# touches it. Output: docs/FYP_Interim_2026-07-10.docx.
+interim:
+	NODE_PATH=$$(npm root -g) node scripts/build_fyp_interim.js
+
 # Standalone agentic-AI workflow / methods report (how agentic AI tools were used to
 # accelerate the project — separate deliverable; touches neither report nor thesis).
 # Regenerates figures (local @resvg/resvg-js → run `npm install` once) + the docx.

@@ -803,6 +803,48 @@ def run_checks(checker: Checker | None = None) -> Checker:
         ),
     )
 
+    # ================= interim report mirror (same artifacts, same lock) ======
+    ii = (ROOT / "scripts/build_fyp_interim.js").read_text(encoding="utf-8")
+    hv = _load(A512 / "human_validation.json")
+
+    def icheck(name, snippets, fn=lambda: (True, "text pinned")):
+        missing = [s for s in snippets if s not in ii]
+        if missing:
+            c.results.append(("FAIL", name, f"interim text missing: {missing[0][:90]!r}"))
+            return
+        try:
+            ok, detail = fn()
+        except Exception as exc:  # noqa: BLE001
+            c.results.append(("FAIL", name, f"checker error: {exc!r}"))
+            return
+        c.results.append(("PASS" if ok else "FAIL", name, detail))
+
+    icheck(
+        "interim: headline ΔASR + capability + κ + counts + budget + INT8 == artifacts",
+        ['"−0.040 [−0.075, −0.010]"', '"−0.090*"', '"−0.032*"',
+         "classifier κ 0.59", "regex 0.11", "over-flagged 101 responses",
+         "60.3 percent", "classifier Δ+0.005", "339 automated tests"],
+        lambda: (
+            near(-0.040, hl512["llama_3_2_3b"]["delta"])
+            and near(-0.090, pdix[("qwen_2b", "mmlu")]["absolute_delta"])
+            and near(-0.032, pdix[("llama_3_2_3b", "arc")]["absolute_delta"])
+            and near(0.59, hv["classifier_vs_human"]["cohens_kappa"], 2)
+            and near(0.11, hv["regex_vs_human"]["cohens_kappa"], 2)
+            and hv["regex_vs_human"]["over_flag_vs_human"] == 101,
+            "interim headline/capability/κ/counts/budget/INT8 all match the committed artifacts",
+        ),
+    )
+    icheck(
+        "interim: labelled an Interim Report + no unscoped 128-era content",
+        ["Interim Report"],
+        lambda: (
+            all("128" in line for line in ii.split("\n")
+                if re.search(r"\+0\.055(?!\])", line) and ", +0.055" not in line)
+            and "329" not in ii and "339 automated tests" in ii,
+            "interim scoped correctly (Interim Report; no retired counts/128-era leakage)",
+        ),
+    )
+
     return c
 
 
