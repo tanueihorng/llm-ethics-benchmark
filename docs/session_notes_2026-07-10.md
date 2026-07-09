@@ -1,4 +1,4 @@
-# Session notes — 2026-07-10
+# Session notes (2026-07-10)
 
 A short narrative recap of this working session. The authoritative record is
 `docs/PROJECT_LOG.md` (§4 changelog, §3 decisions); this file is just a readable
@@ -12,13 +12,13 @@ Qwen3-1.7B XSTest over-refusal delta (−0.028) is now reported as borderline
 (p = 0.065), not significant. This resolved a report-vs-thesis contradiction.
 Claim lock rebuilt; report and thesis regenerated.
 
-## T32 — model revisions pinned
+## T32: model revisions pinned
 Pinned all five study models to the exact Hugging Face commit hashes cached on
 TC1, on all ten config entries. Read the hashes from the snapshot directory names
 after noticing the `refs/main` paste had clipped a character on both Qwen hashes.
 Changes no result; closes the "weights not commit-pinned" caveat.
 
-## T30 — human-label gold set (the main piece)
+## T30: human-label gold set (the main piece)
 Labelled 200 stratified HarmBench responses by hand to ground the primary scorer
 against human judgment.
 
