@@ -105,6 +105,16 @@ thesis:
 interim:
 	NODE_PATH=$$(npm root -g) node scripts/build_fyp_interim.js
 
+# Humanized variants (separate deliverables; AI-writing-tells removed, prose only;
+# every number byte-identical to the originals, verified). Originals stay the
+# claim-locked masters. Outputs: docs/FYP_*_humanized.docx.
+report-humanized:
+	NODE_PATH=$$(npm root -g) node scripts/build_fyp_report_humanized.js
+thesis-humanized:
+	NODE_PATH=$$(npm root -g) node scripts/build_fyp_thesis_humanized.js
+interim-humanized:
+	NODE_PATH=$$(npm root -g) node scripts/build_fyp_interim_humanized.js
+
 # Standalone agentic-AI workflow / methods report (how agentic AI tools were used to
 # accelerate the project — separate deliverable; touches neither report nor thesis).
 # Regenerates figures (local @resvg/resvg-js → run `npm install` once) + the docx.
