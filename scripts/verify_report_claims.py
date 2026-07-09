@@ -461,21 +461,27 @@ def run_checks(checker: Checker | None = None) -> Checker:
     # ---------------- human-label validation (§6.12 Result 5, T30) ----------
     def _human_val_ok():
         hv = _load(A512 / "human_validation.json")          # committed, redacted
-        clf = hv["classifier_vs_human"]["cohens_kappa"]
-        rgx = hv["regex_vs_human"]["cohens_kappa"]
+        clf = hv["classifier_vs_human"]; rgx = hv["regex_vs_human"]
         n = hv["n_labeled"]
         tt = (ROOT / "scripts/build_fyp_thesis_v4.js").read_text(encoding="utf-8")
         ok = (
-            near(0.59, clf, 2) and near(0.11, rgx, 2) and n == 200
-            and "Cohen's κ = 0.59" in c.text and "κ = 0.11" in c.text   # report Result 5
+            near(0.59, clf["cohens_kappa"], 2) and near(0.11, rgx["cohens_kappa"], 2) and n == 200
+            and "Cohen's κ = 0.59" in c.text and "κ = 0.11" in c.text   # report Result 5 κ
             and "κ 0.59 vs regex 0.11" in tt                            # thesis mirror
+            # confusion counts (report Result 5 "human 37 < clf 46 < regex 132; 18/9 vs 101/6")
+            and hv["human_harmful_count"] == 37
+            and clf["n_flagged_harmful"] == 46 and clf["over_flag_vs_human"] == 18 and clf["missed_vs_human"] == 9
+            and rgx["n_flagged_harmful"] == 132 and rgx["over_flag_vs_human"] == 101 and rgx["missed_vs_human"] == 6
         )
-        return ok, f"artifact clf κ={clf:.3f}, regex κ={rgx:.3f}, n={n}"
+        return ok, (f"clf κ={clf['cohens_kappa']:.3f} flags {clf['n_flagged_harmful']} (over {clf['over_flag_vs_human']}/miss {clf['missed_vs_human']}); "
+                    f"regex κ={rgx['cohens_kappa']:.3f} flags {rgx['n_flagged_harmful']} (over {rgx['over_flag_vs_human']}/miss {rgx['missed_vs_human']}); human {hv['human_harmful_count']}")
 
     c.check(
-        "human validation: classifier κ 0.59 vs regex κ 0.11 (n=200) == artifact",
+        "human validation: κ 0.59/0.11 + confusion counts (37/46/132; 18-9/101-6) == artifact",
         ["Cohen's κ = 0.59 (moderate agreement)", "κ = 0.11 (negligible)",
-         "200 saved HarmBench generations"],
+         "200 saved HarmBench generations",
+         "37 of 200, against the classifier's 46 and the regex's 132",
+         "101 over-flags against 6 misses"],
         _human_val_ok,
     )
 

@@ -214,7 +214,14 @@ def _prf(pred: List[int], truth: List[int]) -> Dict[str, float]:
     prec = tp / (tp + fp) if (tp + fp) else float("nan")
     rec = tp / (tp + fn) if (tp + fn) else float("nan")
     f1 = 2 * prec * rec / (prec + rec) if (prec and rec and prec + rec) else float("nan")
-    return {"precision": round(prec, 4), "recall": round(rec, 4), "f1": round(f1, 4)}
+    return {
+        "precision": round(prec, 4), "recall": round(rec, 4), "f1": round(f1, 4),
+        # Raw confusion cells vs the human, so the report can state the counts
+        # (e.g. "classifier over-flagged 18 vs human, missed 9") from the artifact.
+        "n_flagged_harmful": tp + fp,       # how many this scorer called harmful
+        "over_flag_vs_human": fp,           # scorer=harmful, human=benign (false alarms)
+        "missed_vs_human": fn,              # scorer=benign, human=harmful (misses)
+    }
 
 
 def score() -> None:
@@ -236,6 +243,7 @@ def score() -> None:
                         "Aggregates only; the annotation sheet (raw text) is local/gitignored."),
         "n_labeled": len(labeled),
         "human_harmful_rate": round(sum(hum) / len(hum), 4),
+        "human_harmful_count": sum(hum),   # the human is the strictest bar (fewest flagged)
         "classifier_vs_human": {"cohens_kappa": round(_kappa(clf, hum), 4), **_prf(clf, hum)},
         "regex_vs_human": {"cohens_kappa": round(_kappa(rgx, hum), 4), **_prf(rgx, hum)},
     }
