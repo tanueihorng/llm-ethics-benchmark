@@ -716,7 +716,7 @@ python scripts/prefetch_tc1.py       # or: make prefetch CONFIG=configs/tc1.yaml
   PJ("The first production matrix submission was made on 2026-05-27 with the Qwen 2B-class pair: job 60976 (qwen_2b_base__matrix) began running while job 60977 (qwen_2b_4bit__matrix) remained pending with reason QOSMaxGRESPerUser. This establishes the practical scheduling rule for the remainder of the study: submit only the current model pair and expect one job to run while the paired job waits; submit the next pair only after the current pair has cleared. Under this effective one-GPU concurrency, the six model jobs run serially or near-serially, still within the study plan because each job has an independent six-hour walltime allocation. Memory and CPU utilisation are recorded after each job using the seff and MyJobHistory commands to inform any subsequent right-sizing of the sbatch resource requests."),
 
   H2("5.7 Reproducibility Notes"),
-  PJ("All runs share the same global seed (42), deterministic dataset shuffling, and deterministic decoding. The exact commit hash of the framework at the time of the final result run will be recorded in the final report and will accompany the result tables. Per-prompt records are persisted to raw.jsonl with full metadata. Two reproducibility scopes are distinguished. The study can be re-executed from scratch from any repository checkout (configs, seeds, prompts, and pipeline are committed) — with one caveat: the configs do not pin a Hugging Face revision for the model weights, so a from-scratch re-execution fetches whatever revision is current at that date rather than the exact snapshots cached on TC1 at the recorded run dates (Chapter 8); and every reported number can be replayed from the committed analysis artifacts and redacted score sidecars. The raw per-prompt records themselves are local-only evidence — gitignored and hash-pinned in results/raw_artifact_manifest.sha256 — so recomputing the analysis directly from raw outputs requires the locally held evidence trees, not a fresh clone. One further provenance boundary: the run records carry the model alias, pair id, and quantized flag, but not the quantization method (NF4 versus INT8) or the resolved compute dtype as explicit fields; for the committed studies these are fixed by the study name and configuration, the loader guarantees the NF4 compute dtype equals the baseline's float16, and the pipeline persists both fields explicitly for future runs."),
+  PJ("All runs share the same global seed (42), deterministic dataset shuffling, and deterministic decoding. The exact commit hash of the framework at the time of the final result run will be recorded in the final report and will accompany the result tables. Per-prompt records are persisted to raw.jsonl with full metadata. Two reproducibility scopes are distinguished. The study can be re-executed from scratch from any repository checkout (configs, seeds, prompts, and pipeline are committed): the five model repositories are pinned by Hugging Face commit hash — the revision field on every model entry in configs/tc1.yaml and configs/tc1_512.yaml, set to the exact snapshots used on TC1 — so an online re-execution loads byte-identical weights rather than whatever revision happens to be current at fetch time; and every reported number can be replayed from the committed analysis artifacts and redacted score sidecars. The raw per-prompt records themselves are local-only evidence — gitignored and hash-pinned in results/raw_artifact_manifest.sha256 — so recomputing the analysis directly from raw outputs requires the locally held evidence trees, not a fresh clone. One further provenance boundary: the run records carry the model alias, pair id, and quantized flag, but not the quantization method (NF4 versus INT8) or the resolved compute dtype as explicit fields; for the committed studies these are fixed by the study name and configuration, the loader guarantees the NF4 compute dtype equals the baseline's float16, and the pipeline persists both fields explicitly for future runs."),
 ];
 
 // ------------------------------------------------------------
@@ -992,7 +992,7 @@ const ch8 = [
     "Greedy decoding only (stochastic-decoding arm now complete for three pairs). Temperature 0.0 is used throughout the primary study, eliminating within-condition stochastic variance from the main analysis. A multi-seed (T = 0.7, top-p 0.8, five seeds) sensitivity arm was run at the 512-token reference budget and scored by the official classifier (§6.6.1); it covers three of the five pairs (Qwen 1.7B, Qwen 4B, Llama), not the full matrix. At 512 it corroborates the null-safety result: for Qwen 1.7B the greedy ΔASR of 0.000 sits inside the per-seed range (mean +0.013, range [0.000, +0.035], 0 of 5 seeds significant), so there is no stochastic effect to attenuate, and no pair is seed-robust in the harmful direction. Extending the same symmetric arm to the two remaining pairs (Mistral, Phi) and raising the seed count would complete the within-condition variance estimate across the full matrix.",
     "Hardware and walltime constraints. Each TC1 job is allocated a single GPU, ten gigabytes of host memory, and six hours of walltime. Sample budgets and batch sizes are sized to fit comfortably within these constraints.",
     "Sample-size-driven confidence intervals. With 200 HarmBench prompts and 250 benign XSTest prompts, binomial-proportion confidence intervals are wider than large leaderboard settings; small deltas may not be statistically separable from zero.",
-    "Model weights not commit-pinned. The configuration schema exposes an optional revision field (a Hugging Face commit pin, Appendix C), but the study's configs load every model at the repository head current at fetch time. The weights actually used are those cached on TC1 at the recorded run dates; a from-scratch reproduction on a later date would re-fetch whatever revision is then current, which for a re-uploaded checkpoint need not be byte-identical. Within the study this does not affect any matched-pair delta (both members of every pair load the same cached snapshot), but exact external reproduction requires pinning the revisions of the five model repositories.",
+    "Model-weight provenance (pinned). Each of the five model repositories is pinned by Hugging Face commit hash — the optional revision field (Appendix C) set on every entry in configs/tc1.yaml and configs/tc1_512.yaml (Appendix A) — to the exact snapshot cached on TC1 at the recorded run dates, so an online from-scratch reproduction loads byte-identical weights rather than a possibly re-uploaded head. The residual reproducibility boundary is therefore not the weights but the raw per-prompt generations: those are retained locally (gitignored, hash-pinned in results/raw_artifact_manifest.sha256), so the analysis replays from the committed redacted sidecars but is not recomputable from raw generations on a fresh clone.",
     "Gated-access dependency. The Llama 3.2 3B pair and HarmBench dataset depend on accepted Hugging Face access conditions and a valid token available to the TC1 environment. This precondition has been satisfied for the current run, but future reproductions must repeat the access setup.",
   ]),
 ];
@@ -1075,6 +1075,7 @@ models:
     quantized: false
     pair_id: qwen_2b
     model_id: Qwen/Qwen3-1.7B
+    revision: 70d244cc86ccca08cf5af4e1e306ecf908b1ad5e  # T32: TC1-cached snapshot pinned 2026-07-08
     trust_remote_code: false
     dtype: auto
     benchmarks: [harmbench, xstest, mmlu, arc]
@@ -1085,6 +1086,7 @@ models:
     quantized: true
     pair_id: qwen_2b
     model_id: Qwen/Qwen3-1.7B
+    revision: 70d244cc86ccca08cf5af4e1e306ecf908b1ad5e  # T32: TC1-cached snapshot pinned 2026-07-08
     trust_remote_code: false
     dtype: auto
     benchmarks: [harmbench, xstest, mmlu, arc]
@@ -1095,6 +1097,7 @@ models:
     quantized: false
     pair_id: qwen_4b
     model_id: Qwen/Qwen3-4B
+    revision: 1cfa9a7208912126459214e8b04321603b3df60c  # T32: TC1-cached snapshot pinned 2026-07-08
     trust_remote_code: false
     dtype: auto
     benchmarks: [harmbench, xstest, mmlu, arc]
@@ -1105,6 +1108,7 @@ models:
     quantized: true
     pair_id: qwen_4b
     model_id: Qwen/Qwen3-4B
+    revision: 1cfa9a7208912126459214e8b04321603b3df60c  # T32: TC1-cached snapshot pinned 2026-07-08
     trust_remote_code: false
     dtype: auto
     benchmarks: [harmbench, xstest, mmlu, arc]
@@ -1115,6 +1119,7 @@ models:
     quantized: false
     pair_id: llama_3_2_3b
     model_id: meta-llama/Llama-3.2-3B-Instruct
+    revision: 0cb88a4f764b7a12671c53f0838cd831a0843b95  # T32: TC1-cached snapshot pinned 2026-07-08
     trust_remote_code: false
     dtype: auto
     benchmarks: [harmbench, xstest, mmlu, arc]
@@ -1125,6 +1130,7 @@ models:
     quantized: true
     pair_id: llama_3_2_3b
     model_id: meta-llama/Llama-3.2-3B-Instruct
+    revision: 0cb88a4f764b7a12671c53f0838cd831a0843b95  # T32: TC1-cached snapshot pinned 2026-07-08
     trust_remote_code: false
     dtype: auto
     benchmarks: [harmbench, xstest, mmlu, arc]
@@ -1138,6 +1144,7 @@ models:
     quantized: false
     pair_id: mistral_7b
     model_id: mistralai/Mistral-7B-Instruct-v0.3
+    revision: c170c708c41dac9275d15a8fff4eca08d52bab71  # T32: TC1-cached snapshot pinned 2026-07-08
     trust_remote_code: false
     dtype: auto
     benchmarks: [harmbench, xstest, mmlu, arc]
@@ -1148,6 +1155,7 @@ models:
     quantized: true
     pair_id: mistral_7b
     model_id: mistralai/Mistral-7B-Instruct-v0.3
+    revision: c170c708c41dac9275d15a8fff4eca08d52bab71  # T32: TC1-cached snapshot pinned 2026-07-08
     trust_remote_code: false
     dtype: auto
     benchmarks: [harmbench, xstest, mmlu, arc]
@@ -1158,6 +1166,7 @@ models:
     quantized: false
     pair_id: phi4_mini
     model_id: microsoft/Phi-4-mini-instruct
+    revision: cfbefacb99257ffa30c83adab238a50856ac3083  # T32: TC1-cached snapshot pinned 2026-07-08
     trust_remote_code: false
     attn_implementation: eager
     dtype: auto
@@ -1169,6 +1178,7 @@ models:
     quantized: true
     pair_id: phi4_mini
     model_id: microsoft/Phi-4-mini-instruct
+    revision: cfbefacb99257ffa30c83adab238a50856ac3083  # T32: TC1-cached snapshot pinned 2026-07-08
     trust_remote_code: false
     attn_implementation: eager
     dtype: auto

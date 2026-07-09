@@ -1,6 +1,6 @@
 # Handoff
 
-Last refreshed: 2026-07-03 10:45:26 UTC+8 by Codex harness.
+Last refreshed: 2026-07-09 02:37:52 UTC+8 by Codex harness.
 
 ## Mode
 
@@ -21,9 +21,9 @@ Start from repo truth, verify live state, and continue the FYP without relying o
 ## Current State
 
 - Git: `## main...origin/main`.
-- PROJECT_LOG last updated: 2026-07-02 (UTC+8) by Claude.
+- PROJECT_LOG last updated: 2026-07-08 (UTC+8) by Claude.
 - Judge sidecars: 15 score files and 15 summary files.
-- Report artifact: docs/FYP_Report_2026-07-01_v5.docx modified 2026-07-03 10:44:18 +08.
+- Report artifact: docs/FYP_Report_2026-07-01_v5.docx modified 2026-07-08 02:45:57 +08.
 - Immutable manifest: results/raw_artifact_manifest.sha256 modified 2026-07-02 09:37:43 +08.
 
 ## Verification To Run
@@ -48,7 +48,7 @@ python scripts/generate_agent_dashboard.py
 
 ## Next Actions
 
-1. Run make agent-check, review the diff, then commit or hand off the current change.
+1. Next project action from PROJECT_LOG.md: - [ ] **T15. Submit final report** to Dr. Zhang.
 2. If editing report-worthy content, edit `scripts/build_fyp_report_v5.js` and run `make report`.
 3. Regenerate this handoff and the dashboard after meaningful harness or state changes.
 

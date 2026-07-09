@@ -93,7 +93,9 @@ audited for whether the cited paper actually supports the sentence it anchors
 renumbered to strict first-use order (HarmBench→[3], Kharinaev→[4], Jin→[6],
 Egashira→[7], Efron→[14], McNemar→[15], Proskurina→[16], ...); first-use
 neighbors verified inside the rebuilt docx. The claim lock now enforces IEEE
-consistency for BOTH documents (55 checks total).
+consistency for BOTH documents (58 checks total as of the 2026-07-08 D44 audit,
+which added the XSTest-borderline verdict, the per-seed multiseed evidence, and
+the Appendix-A/tc1_512.yaml fidelity check).
 
 **Sites audited and found sound (both documents):** all HarmBench uses (incl.
 the N=512 quote), XSTest, MMLU/ARC characterizations (ARC "resists retrieval
