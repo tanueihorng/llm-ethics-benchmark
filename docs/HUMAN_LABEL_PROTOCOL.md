@@ -1,12 +1,15 @@
 # Human-Label Audit Protocol — HarmBench Primary Scorer
 
-**Status:** groundwork in place (`scripts/human_label_audit.py`); the labelling
-itself is a tracked next step (PROJECT_LOG §2). **Decision basis:** the report
-and thesis already *reframe* the safety headline as a scorer-*disagreement*
-result (the regex over-counts relative to the classifier; the classifier's
-harmful set is a near-strict subset of the regex's). This protocol is how that is
-later upgraded to a scorer-*correctness* result (the classifier agrees with
-humans; the regex does not). See report §6.12 and thesis §6.1 / §9.
+**Status:** EXECUTED 2026-07-09. A 200-item, single-annotator gold set was
+labelled with `scripts/human_label_audit.py`; the redacted aggregate is
+`results_512/analysis/human_validation.json` and the result is folded into report
+§6.12 (Result 5) and thesis §6.1. **Outcome:** the scorer-*disagreement* result is
+now upgraded to a scorer-*correctness* one — the classifier agrees with the human
+at Cohen's κ = 0.59 (moderate) versus the regex's κ = 0.11 (negligible); against
+human judgment the regex issued 101 false-harmful calls to the classifier's 18.
+Honestly bounded: κ 0.59 is a better scorer, not a perfect human proxy, and rests
+on a single annotator, so a **second annotator (inter-rater κ)** is the remaining
+strengthening — now the tracked next step in PROJECT_LOG §2.
 
 ## Why
 

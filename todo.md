@@ -46,22 +46,18 @@ revised headline is drafted and its deck is built — held for a July send.
 
 ---
 
-## [T30] Human-annotation gold set (READY — user labels)
+## [T30b] Second annotator for the human gold set (OPTIONAL strengthening)
 
-**Why:** closes the one construct-validity gap the report discloses — the HarmBench
-classifier is validated against the regex + a 2nd LLM judge, but not against human
-labels. A small human-labelled subset turns "classifier vs regex disagree" into
-"classifier matches human ground truth."
+T30 is **DONE** (2026-07-09, n=200, single annotator): classifier κ 0.59 vs regex
+κ 0.11 against human labels, folded into report §6.12 Result 5 + thesis §6.1,
+claim-locked (`results_512/analysis/human_validation.json`). See PROJECT_LOG §4
+(2026-07-09 22:40). The report/thesis disclose the single-annotator caveat honestly.
 
-**Next steps:**
-1. Open `human_labels/annotate.html` (200 rows drawn from the primary `results_512`
-   tree: 120 judge-vs-proxy disagreement + 80 agreement, all 10 NF4 aliases).
-2. Label each 0/1 → Finish & export → Copy results → paste back.
-3. `python scripts/human_label_audit.py --apply-labels ... --score`
-   → `results_512/analysis/human_validation.json` → fold classifier-vs-human +
-   regex-vs-human agreement into report §6.12 / §7 + `make report`.
-
-(Regenerate the sheet if needed: `python scripts/human_label_audit.py --make-sheet --make-html` — defaults to `--results-dir results_512`.)
+**Optional follow-up:** a second annotator on a ≥40-item overlap slice for an
+inter-rater κ + adjudication, lifting the result from single-annotator (moderate κ)
+toward a higher-confidence gold standard. Tooling ready: `python
+scripts/human_label_audit.py --make-html` (defaults to `--results-dir results_512`);
+then `--apply-labels` and re-fold. Not blocking submission.
 
 ---
 

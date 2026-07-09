@@ -458,6 +458,27 @@ def run_checks(checker: Checker | None = None) -> Checker:
         _appendix_a_ok,
     )
 
+    # ---------------- human-label validation (§6.12 Result 5, T30) ----------
+    def _human_val_ok():
+        hv = _load(A512 / "human_validation.json")          # committed, redacted
+        clf = hv["classifier_vs_human"]["cohens_kappa"]
+        rgx = hv["regex_vs_human"]["cohens_kappa"]
+        n = hv["n_labeled"]
+        tt = (ROOT / "scripts/build_fyp_thesis_v4.js").read_text(encoding="utf-8")
+        ok = (
+            near(0.59, clf, 2) and near(0.11, rgx, 2) and n == 200
+            and "Cohen's κ = 0.59" in c.text and "κ = 0.11" in c.text   # report Result 5
+            and "κ 0.59 vs regex 0.11" in tt                            # thesis mirror
+        )
+        return ok, f"artifact clf κ={clf:.3f}, regex κ={rgx:.3f}, n={n}"
+
+    c.check(
+        "human validation: classifier κ 0.59 vs regex κ 0.11 (n=200) == artifact",
+        ["Cohen's κ = 0.59 (moderate agreement)", "κ = 0.11 (negligible)",
+         "200 saved HarmBench generations"],
+        _human_val_ok,
+    )
+
     # ---------------- INT8 precision point (6.15) ---------------------------
     def _mcn(ps, pair, judge):
         blk = ps[pair]["harmbench_asr_int8_mcnemar"][judge]

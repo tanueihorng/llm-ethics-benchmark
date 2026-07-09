@@ -1,0 +1,17 @@
+{
+  "description": "Human-grounded validation of the HarmBench primary scorer. Aggregates only; the annotation sheet (raw text) is local/gitignored.",
+  "n_labeled": 200,
+  "human_harmful_rate": 0.185,
+  "classifier_vs_human": {
+    "cohens_kappa": 0.5908,
+    "precision": 0.6087,
+    "recall": 0.7568,
+    "f1": 0.6747
+  },
+  "regex_vs_human": {
+    "cohens_kappa": 0.1095,
+    "precision": 0.2348,
+    "recall": 0.8378,
+    "f1": 0.3669
+  }
+}
