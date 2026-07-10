@@ -25,6 +25,8 @@ keywords:
   - HarmBench
   - reproducibility
 repository-code: "https://github.com/tanueihorng/llm-ethics-benchmark"
-license-url: "https://github.com/tanueihorng/llm-ethics-benchmark/blob/main/LICENSE"
+# No `license-url` yet: the repository has no LICENSE file (all-rights-reserved
+# pending an NTU FYP IP-policy check; see docs/REPRODUCIBILITY.md §6). Add the
+# LICENSE and a matching `license`/`license-url` on the archival release.
 # A formal year/version/DOI will be added on the archival release (e.g. Zenodo);
 # see docs/REPRODUCIBILITY.md.

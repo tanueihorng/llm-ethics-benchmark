@@ -1,0 +1,839 @@
+path,category,audit_owner,review_status,notes
+.agents/skills/fyp-harness-maintenance/SKILL.md,agent_harness,WF code:harness,partially_read,skills light review
+.agents/skills/fyp-meetup-brief/SKILL.md,agent_harness,WF code:harness,partially_read,skills light review
+.agents/skills/fyp-report-audit/SKILL.md,agent_harness,WF code:harness,partially_read,skills light review
+.agents/skills/fyp-second-judge/SKILL.md,agent_harness,WF code:harness,partially_read,skills light review
+.claude/launch.json,agent_harness,-,not_reviewed,
+.claude/skills/fyp-agent-handoff/SKILL.md,agent_harness,WF code:harness,partially_read,fyp skills light review
+.claude/skills/fyp-todo-capture/SKILL.md,agent_harness,WF code:harness,partially_read,fyp skills light review
+.claude/skills/html-diagram/SKILL.md,agent_harness,WF code:harness,partially_read,fyp skills light review
+.claude/skills/html-diagram/references/architecture-example.html,agent_harness,VENDORED,not_reviewed,third-party examples
+.claude/skills/html-diagram/references/html-effectiveness/01-exploration-code-approaches.html,agent_harness,VENDORED,not_reviewed,third-party examples
+.claude/skills/html-diagram/references/html-effectiveness/02-exploration-visual-designs.html,agent_harness,VENDORED,not_reviewed,third-party examples
+.claude/skills/html-diagram/references/html-effectiveness/03-code-review-pr.html,agent_harness,VENDORED,not_reviewed,third-party examples
+.claude/skills/html-diagram/references/html-effectiveness/04-code-understanding.html,agent_harness,VENDORED,not_reviewed,third-party examples
+.claude/skills/html-diagram/references/html-effectiveness/05-design-system.html,agent_harness,VENDORED,not_reviewed,third-party examples
+.claude/skills/html-diagram/references/html-effectiveness/06-component-variants.html,agent_harness,VENDORED,not_reviewed,third-party examples
+.claude/skills/html-diagram/references/html-effectiveness/07-prototype-animation.html,agent_harness,VENDORED,not_reviewed,third-party examples
+.claude/skills/html-diagram/references/html-effectiveness/08-prototype-interaction.html,agent_harness,VENDORED,not_reviewed,third-party examples
+.claude/skills/html-diagram/references/html-effectiveness/09-slide-deck.html,agent_harness,VENDORED,not_reviewed,third-party examples
+.claude/skills/html-diagram/references/html-effectiveness/10-svg-illustrations.html,agent_harness,VENDORED,not_reviewed,third-party examples
+.claude/skills/html-diagram/references/html-effectiveness/11-status-report.html,agent_harness,VENDORED,not_reviewed,third-party examples
+.claude/skills/html-diagram/references/html-effectiveness/12-incident-report.html,agent_harness,VENDORED,not_reviewed,third-party examples
+.claude/skills/html-diagram/references/html-effectiveness/13-flowchart-diagram.html,agent_harness,VENDORED,not_reviewed,third-party examples
+.claude/skills/html-diagram/references/html-effectiveness/14-research-feature-explainer.html,agent_harness,VENDORED,not_reviewed,third-party examples
+.claude/skills/html-diagram/references/html-effectiveness/15-research-concept-explainer.html,agent_harness,VENDORED,not_reviewed,third-party examples
+.claude/skills/html-diagram/references/html-effectiveness/16-implementation-plan.html,agent_harness,VENDORED,not_reviewed,third-party examples
+.claude/skills/html-diagram/references/html-effectiveness/17-pr-writeup.html,agent_harness,VENDORED,not_reviewed,third-party examples
+.claude/skills/html-diagram/references/html-effectiveness/18-editor-triage-board.html,agent_harness,VENDORED,not_reviewed,third-party examples
+.claude/skills/html-diagram/references/html-effectiveness/19-editor-feature-flags.html,agent_harness,VENDORED,not_reviewed,third-party examples
+.claude/skills/html-diagram/references/html-effectiveness/20-editor-prompt-tuner.html,agent_harness,VENDORED,not_reviewed,third-party examples
+.claude/skills/html-diagram/references/html-effectiveness/CODE_OF_CONDUCT.md,agent_harness,VENDORED,not_reviewed,third-party examples
+.claude/skills/html-diagram/references/html-effectiveness/LICENSE,agent_harness,VENDORED,not_reviewed,third-party examples
+.claude/skills/html-diagram/references/html-effectiveness/README.md,agent_harness,VENDORED,not_reviewed,third-party examples
+.claude/skills/html-diagram/references/html-effectiveness/SECURITY.md,agent_harness,VENDORED,not_reviewed,third-party examples
+.claude/skills/html-diagram/references/html-effectiveness/index.html,agent_harness,VENDORED,not_reviewed,third-party examples
+.codex/agents/fyp-artifact-guardian.toml,agent_harness,WF code:harness,partially_read,hooks/config light review
+.codex/agents/fyp-judge-reviewer.toml,agent_harness,WF code:harness,partially_read,hooks/config light review
+.codex/agents/fyp-meetup-story.toml,agent_harness,WF code:harness,partially_read,hooks/config light review
+.codex/agents/fyp-report-auditor.toml,agent_harness,WF code:harness,partially_read,hooks/config light review
+.codex/agents/fyp-tc1-ops.toml,agent_harness,WF code:harness,partially_read,hooks/config light review
+.codex/config.toml,agent_harness,WF code:harness,partially_read,hooks/config light review
+.codex/hooks.json,agent_harness,WF code:harness,partially_read,hooks/config light review
+.codex/hooks/guard_artifact_paths.py,agent_harness,WF code:harness,partially_read,hooks/config light review
+.codex/hooks/pre_compact_handoff.py,agent_harness,WF code:harness,partially_read,hooks/config light review
+.codex/hooks/stop_agent_check.py,agent_harness,WF code:harness,partially_read,hooks/config light review
+.github/assets/asr_forest.png,agent_harness,-,not_reviewed,
+.github/assets/judge_vs_proxy.png,agent_harness,-,not_reviewed,
+.github/assets/precision_sweep.png,agent_harness,-,not_reviewed,
+.github/workflows/agent-harness.yml,agent_harness,harness + gates,fully_read,
+.gitignore,other,-,not_reviewed,
+.hallmark/log.json,top_level,-,not_reviewed,
+.streamlit/config.toml,top_level,-,not_reviewed,
+.understand-anything/.trash-1783329573/assembled-graph.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/batch-1.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/batch-10.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/batch-11.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/batch-12.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/batch-13.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/batch-2.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/batch-3-part-1.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/batch-3-part-2.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/batch-4.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/batch-5-part-1.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/batch-5-part-2.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/batch-6.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/batch-7.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/batch-8.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/batch-9.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/batches.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/fingerprint-input.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/layers.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/review.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/tmp/ua-file-analyzer-input-1.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/tmp/ua-file-analyzer-input-10.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/tmp/ua-file-analyzer-input-11.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/tmp/ua-file-analyzer-input-12.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/tmp/ua-file-analyzer-input-13.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/tmp/ua-file-analyzer-input-2.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/tmp/ua-file-analyzer-input-3.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/tmp/ua-file-analyzer-input-4.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/tmp/ua-file-analyzer-input-5.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/tmp/ua-file-analyzer-input-5b.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/tmp/ua-file-analyzer-input-6.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/tmp/ua-file-analyzer-input-7.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/tmp/ua-file-analyzer-input-8.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/tmp/ua-file-analyzer-input-9.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/tmp/ua-file-extract-results-1.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/tmp/ua-file-extract-results-10.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/tmp/ua-file-extract-results-11.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/tmp/ua-file-extract-results-12.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/tmp/ua-file-extract-results-13.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/tmp/ua-file-extract-results-2.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/tmp/ua-file-extract-results-3.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/tmp/ua-file-extract-results-4.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/tmp/ua-file-extract-results-5.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/tmp/ua-file-extract-results-5b.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/tmp/ua-file-extract-results-6.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/tmp/ua-file-extract-results-7.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/tmp/ua-file-extract-results-8.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/tmp/ua-file-extract-results-9.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/tmp/ua-import-map-input.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/tmp/ua-import-map-output.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/tmp/ua-inline-validate.cjs,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/tmp/ua-scan-files.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.trash-1783329573/tour.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/.understandignore,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/atlas-data.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/atlas.html,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/fingerprints.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/intermediate/scan-result.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/knowledge-graph.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+.understand-anything/meta.json,tooling_cache,MAIN,executed_only,privacy leak scan only; tool cache
+AGENTS.md,top_level,"Claim-surface sweep: current-facing docs, decks, c",fully_read,Via diff vs CLAUDE.md (in sync)
+CITATION.bib,top_level,"Report citation forensics (References, in-text num",fully_read,also brace-balance checked programmatically and git history inspected
+CITATION.cff,top_level,"Report citation forensics (References, in-text num",fully_read,YAML-parsed programmatically; required CFF 1.2.0 keys present
+CLAUDE.md,top_level,"Claim-surface sweep: current-facing docs, decks, c",fully_read,Also diffed against AGENTS.md: only the documented header lines differ
+Makefile,top_level,harness + gates,fully_read,
+README.md,top_level,"Claim-surface sweep: current-facing docs, decks, c",partially_read,All result-bearing lines extracted via grep and verified against artifacts; prose sections around them read; install/usage boilerplate skimmed
+check_slurm_runs.py,top_level,cluster + configs + SLURM,fully_read,thin wrapper
+compare_quant_pairs.py,top_level,statistics implementation (code-analysis-stats),fully_read,7-line shim re-exporting main()
+configs/artifact_policy.yaml,configs,"artifact integrity + provenance (manifest, matched",fully_read,
+configs/default.yaml,configs,cluster + configs + SLURM,fully_read,
+configs/tc1.yaml,configs,cluster + configs + SLURM,fully_read,
+configs/tc1_512.yaml,configs,cluster + configs + SLURM,fully_read,
+configs/tc1_int8.yaml,configs,cluster + configs + SLURM,fully_read,
+configs/tc1_int8_512.yaml,configs,cluster + configs + SLURM,fully_read,
+configs/tc1_sensitivity.yaml,configs,cluster + configs + SLURM,fully_read,
+configs/tc1_sensitivity_512.yaml,configs,cluster + configs + SLURM,fully_read,
+dashboard/__init__.py,dashboard,dashboard + legacy/dead paths,fully_read,
+dashboard/app.py,dashboard,dashboard + legacy/dead paths,fully_read,
+dashboard/data.py,dashboard,dashboard + legacy/dead paths,fully_read,also imported and adversarially exercised via scratchpad script
+dashboard/theme.py,dashboard,dashboard + legacy/dead paths,fully_read,
+data/xstest_v2_prompts.csv,other,benchmark plugins + scoring,partially_read,"structure/counts audited programmatically (450 rows, 250 safe/200 unsafe, 18 types x 25); prompt text not reviewed row-by-row"
+docs/AGENTIC_WORKFLOW.md,docs,"Claim-surface sweep: current-facing docs, decks, c",not_reviewed,Stale-marker greps clean; content not read
+docs/AGENT_DASHBOARD.md,docs,"Claim-surface sweep: current-facing docs, decks, c",partially_read,"Header, open actions, artifacts sections read (the operative content)"
+docs/Agentic_AI_Workflow_Report_2026-06-26.docx,docs,WF results:claim-surface,partially_read,stale-claim sweep
+docs/CCDSGPU-TC1-Cluster-FYP-Form.pdf,docs,WF results:claim-surface,partially_read,stale-claim sweep
+docs/CCDSGPU-TC1-UG-UserGuide (1).pdf,docs,WF results:claim-surface,partially_read,stale-claim sweep
+docs/CODEX_MEETUP_BRIEF.md,docs,WF results:claim-surface,partially_read,stale-claim sweep
+docs/Codex_Meetup_Agent_Harness_Report.docx,docs,WF results:claim-surface,partially_read,stale-claim sweep
+docs/Codex_Meetup_Agent_Harness_Report.html,docs,WF results:claim-surface,partially_read,stale-claim sweep
+docs/FYP_Agent_Harness_Architecture_Guide_2026-06-09.docx,docs,WF results:claim-surface,partially_read,stale-claim sweep
+docs/FYP_Interim_2026-07-10.docx,docs,WF results:claim-surface,partially_read,stale-claim sweep
+docs/FYP_Interim_2026-07-10_humanized.docx,docs,humanized-docx-variants-and-builders,fully_read,"All 124 hunks classified, 15 word-content hunks reviewed; document.xml matched rebuild; declarations and cover read"
+docs/FYP_REPO_GUIDE.md,docs,"Claim-surface sweep: current-facing docs, decks, c",partially_read,Scope/scorer/path lines verified via grep; 300+ line guide not fully read
+docs/FYP_Report_2026-07-01_humanized.docx,docs,humanized-docx-variants-and-builders,fully_read,"Full extracted text diffed programmatically (all 254 hunks classified, all 96 word-content hunks human-reviewed); document.xml SHA-256 matched scratchpad rebuil"
+docs/FYP_Report_2026-07-01_v5.docx,docs,WF results:claim-surface,partially_read,stale-claim sweep
+docs/FYP_Thesis_2026-07-02_humanized.docx,docs,humanized-docx-variants-and-builders,fully_read,"All 119 hunks classified, 14 word-content hunks reviewed; document.xml matched rebuild; declarations read"
+docs/FYP_Thesis_2026-07-02_v4.docx,docs,WF results:claim-surface,partially_read,stale-claim sweep
+docs/HANDOFF.md,docs,"Claim-surface sweep: current-facing docs, decks, c",fully_read,
+docs/HARNESS_SELF_EVAL.md,docs,WF results:claim-surface,partially_read,stale-claim sweep
+docs/HUMAN_LABEL_PROTOCOL.md,docs,"secondary analysis scripts (genlen, human-label au",fully_read,rubric cross-checked against validation.py classifier rules
+docs/PROJECT_LOG.md,docs,"judge layer (HarmBench classifier fidelity, api_ju",partially_read,D25/D26/D32/D35/D41 rows via grep
+docs/QUICKSTART.md,docs,"Claim-surface sweep: current-facing docs, decks, c",partially_read,First 90 lines + stale-marker grep; extension section not read line-by-line
+docs/REPORT_CLAIM_AUDIT_v5.md,docs,MAIN,partially_read,header
+docs/REPRODUCIBILITY.md,docs,"Claim-surface sweep: current-facing docs, decks, c",fully_read,
+docs/RESULTS_CARD.md,docs,"Claim-surface sweep: current-facing docs, decks, c",fully_read,All numbers cross-checked against results_512/analysis artifacts
+docs/TC1_AGENT_CHECKLIST.md,docs,"Claim-surface sweep: current-facing docs, decks, c",partially_read,Header + stale-marker grep clean
+docs/TC1_CLUSTER_RUNBOOK.md,docs,WF results:claim-surface,partially_read,stale-claim sweep
+docs/THESIS_OUTLINE.md,docs,"Claim-surface sweep: current-facing docs, decks, c",partially_read,"Stale-marker grep clean; process-level outline, no result numbers"
+docs/USER_GUIDE.md,docs,"Claim-surface sweep: current-facing docs, decks, c",partially_read,Stale-marker + path greps only; no result claims found
+docs/agent_harness_showcase.html,docs,WF results:claim-surface,partially_read,stale-claim sweep
+docs/agent_tasks/T21-strengthen-results-discussion.md,docs,-,not_reviewed,"historical task packets, policy-excluded"
+docs/agent_tasks/T22-second-independent-judge.md,docs,-,not_reviewed,"historical task packets, policy-excluded"
+docs/agent_tasks/codex-meetup-prep.md,docs,-,not_reviewed,"historical task packets, policy-excluded"
+docs/agent_tasks/harness-maintenance.md,docs,-,not_reviewed,"historical task packets, policy-excluded"
+docs/agentic_ai_report.html,docs,WF results:claim-surface,partially_read,stale-claim sweep
+docs/architecture/README.md,docs,WF results:claim-surface,partially_read,stale-claim sweep
+docs/architecture/fyp_quant_agent_harness_architecture.drawio,docs,WF results:claim-surface,partially_read,stale-claim sweep
+docs/architecture/fyp_quant_agent_harness_architecture.png,docs,WF results:claim-surface,partially_read,stale-claim sweep
+docs/architecture/fyp_quant_agent_harness_architecture.svg,docs,WF results:claim-surface,partially_read,stale-claim sweep
+docs/architecture/fyp_quant_agentic_architecture.drawio,docs,WF results:claim-surface,partially_read,stale-claim sweep
+docs/architecture/fyp_quant_agentic_architecture.png,docs,WF results:claim-surface,partially_read,stale-claim sweep
+docs/architecture/fyp_quant_agentic_architecture.svg,docs,WF results:claim-surface,partially_read,stale-claim sweep
+docs/architecture/fyp_quant_integrated_agentic_stack.drawio,docs,WF results:claim-surface,partially_read,stale-claim sweep
+docs/architecture/fyp_quant_integrated_agentic_stack.png,docs,WF results:claim-surface,partially_read,stale-claim sweep
+docs/architecture/fyp_quant_integrated_agentic_stack.svg,docs,WF results:claim-surface,partially_read,stale-claim sweep
+docs/architecture/fyp_quant_repo_hierarchy.drawio,docs,WF results:claim-surface,partially_read,stale-claim sweep
+docs/architecture/fyp_quant_repo_hierarchy.png,docs,WF results:claim-surface,partially_read,stale-claim sweep
+docs/architecture/fyp_quant_repo_hierarchy.svg,docs,WF results:claim-surface,partially_read,stale-claim sweep
+docs/archive/FYP_Decision_Register_and_Compressed_Work_Plan_2026-05-13.docx,docs_archive,ARCHIVED,not_reviewed,"bannered history, out of current-facing scope"
+docs/archive/FYP_Decision_Register_and_Compressed_Work_Plan_2026-05-13.html,docs_archive,ARCHIVED,not_reviewed,"bannered history, out of current-facing scope"
+docs/archive/FYP_Decisions_and_Plan_2026-05-13.docx,docs_archive,ARCHIVED,not_reviewed,"bannered history, out of current-facing scope"
+docs/archive/FYP_Report_2026-05-23.docx,docs_archive,ARCHIVED,not_reviewed,"bannered history, out of current-facing scope"
+docs/archive/FYP_Report_2026-05-24.docx,docs_archive,ARCHIVED,not_reviewed,"bannered history, out of current-facing scope"
+docs/archive/FYP_Report_2026-06-14.docx,docs_archive,ARCHIVED,not_reviewed,"bannered history, out of current-facing scope"
+docs/archive/FYP_Report_2026-06-26_v2.docx,docs_archive,ARCHIVED,not_reviewed,"bannered history, out of current-facing scope"
+docs/archive/FYP_Report_2026-06-26_v3.docx,docs_archive,ARCHIVED,not_reviewed,"bannered history, out of current-facing scope"
+docs/archive/FYP_Report_2026-06-30_v4.docx,docs_archive,ARCHIVED,not_reviewed,"bannered history, out of current-facing scope"
+docs/archive/FYP_TC1_Full_Session_Report_2026-04-08.docx,docs_archive,ARCHIVED,not_reviewed,"bannered history, out of current-facing scope"
+docs/archive/FYP_TC1_Full_Session_Report_2026-04-08.html,docs_archive,ARCHIVED,not_reviewed,"bannered history, out of current-facing scope"
+docs/archive/FYP_Thesis_2026-06-18.docx,docs_archive,ARCHIVED,not_reviewed,"bannered history, out of current-facing scope"
+docs/archive/FYP_Thesis_2026-06-26_v2.docx,docs_archive,ARCHIVED,not_reviewed,"bannered history, out of current-facing scope"
+docs/archive/FYP_Thesis_2026-06-26_v3.docx,docs_archive,ARCHIVED,not_reviewed,"bannered history, out of current-facing scope"
+docs/archive/TC1_ACTIVITY_2026-04-08.md,docs_archive,ARCHIVED,not_reviewed,"bannered history, out of current-facing scope"
+docs/archive/TC1_ACTIVITY_LOG_2026-04-08.md,docs_archive,ARCHIVED,not_reviewed,"bannered history, out of current-facing scope"
+docs/archive/TC1_WORK_LOG_2026-04-08.md,docs_archive,ARCHIVED,not_reviewed,"bannered history, out of current-facing scope"
+docs/archive/fyp_status_2026-06-13.html,docs_archive,ARCHIVED,not_reviewed,"bannered history, out of current-facing scope"
+docs/datasets.md,docs,"Claim-surface sweep: current-facing docs, decks, c",partially_read,Benchmark inventory verified (ARC present)
+docs/evaluation_metrics.md,docs,"Claim-surface sweep: current-facing docs, decks, c",fully_read,
+docs/extensibility.md,docs,"Claim-surface sweep: current-facing docs, decks, c",not_reviewed,Stale-marker greps clean; content not read
+docs/figures/agentic/fig1_ladder.png,docs,-,not_reviewed,PNG binaries; provenance via make_figures.py reviewed
+docs/figures/agentic/fig2_loop.png,docs,-,not_reviewed,PNG binaries; provenance via make_figures.py reviewed
+docs/figures/agentic/fig3_harness.png,docs,-,not_reviewed,PNG binaries; provenance via make_figures.py reviewed
+docs/figures/agentic/fig4_memory.png,docs,-,not_reviewed,PNG binaries; provenance via make_figures.py reviewed
+docs/figures/agentic/fig5_tests.png,docs,-,not_reviewed,PNG binaries; provenance via make_figures.py reviewed
+docs/figures/agentic/fig6_authors.png,docs,-,not_reviewed,PNG binaries; provenance via make_figures.py reviewed
+docs/figures/asr_forest.png,docs,-,not_reviewed,PNG binaries; provenance via make_figures.py reviewed
+docs/figures/capability_anchor.png,docs,-,not_reviewed,PNG binaries; provenance via make_figures.py reviewed
+docs/figures/category_asr.png,docs,-,not_reviewed,PNG binaries; provenance via make_figures.py reviewed
+docs/figures/judge_vs_proxy.png,docs,-,not_reviewed,PNG binaries; provenance via make_figures.py reviewed
+docs/figures/multiseed.png,docs,-,not_reviewed,PNG binaries; provenance via make_figures.py reviewed
+docs/figures/precision_sweep.png,docs,-,not_reviewed,PNG binaries; provenance via make_figures.py reviewed
+docs/figures_512/asr_forest.png,docs,-,not_reviewed,PNG binaries; provenance via make_figures.py reviewed
+docs/figures_512/capability_anchor.png,docs,-,not_reviewed,PNG binaries; provenance via make_figures.py reviewed
+docs/figures_512/category_asr.png,docs,-,not_reviewed,PNG binaries; provenance via make_figures.py reviewed
+docs/figures_512/judge_vs_proxy.png,docs,-,not_reviewed,PNG binaries; provenance via make_figures.py reviewed
+docs/figures_512/multiseed.png,docs,-,not_reviewed,PNG binaries; provenance via make_figures.py reviewed
+docs/figures_512/precision_sweep.png,docs,-,not_reviewed,PNG binaries; provenance via make_figures.py reviewed
+docs/fyp_architecture.html,docs,"Claim-surface sweep: current-facing docs, decks, c",partially_read,Banner verified present (comment + visible sticky div); 128-era content confirmed inside
+docs/fyp_showcase.html,docs,WF results:claim-surface,partially_read,stale-claim sweep
+docs/fyp_showcase_3d.html,docs,WF results:claim-surface,partially_read,stale-claim sweep
+docs/fyp_showcase_bluemarble.html,docs,WF results:claim-surface,partially_read,stale-claim sweep
+docs/fyp_showcase_earth.html,docs,WF results:claim-surface,partially_read,stale-claim sweep
+docs/fyp_showcase_v2.html,docs,WF results:claim-surface,partially_read,stale-claim sweep
+docs/fyp_showcase_world.html,docs,WF results:claim-surface,partially_read,stale-claim sweep
+docs/fyp_showcase_world3d.html,docs,WF results:claim-surface,partially_read,stale-claim sweep
+docs/fyp_status_2026-07.html,docs,"Claim-surface sweep: current-facing docs, decks, c",partially_read,"Header comment, all number-bearing lines, banner check"
+docs/fyp_status_2026-07_v2.html,docs,"Claim-surface sweep: current-facing docs, decks, c",partially_read,Same treatment; body copy verified 512-primary
+docs/limitations.md,docs,"Claim-surface sweep: current-facing docs, decks, c",fully_read,
+docs/methodology.md,docs,"Claim-surface sweep: current-facing docs, decks, c",partially_read,Scorer-primary and 5-pair scope lines verified
+docs/paper_outline.md,docs,"Claim-surface sweep: current-facing docs, decks, c",fully_read,
+docs/project_field_guide.html,docs,WF results:claim-surface,partially_read,stale-claim sweep
+docs/session_notes_2026-07-10.md,docs,"Claim-surface sweep: current-facing docs, decks, c",fully_read,
+ethical_benchmark/__init__.py,code_core,-,not_reviewed,
+ethical_benchmark/analysis/__init__.py,code_core,-,not_reviewed,
+ethical_benchmark/analysis/compare_quant_pairs.py,code_core,statistics implementation (code-analysis-stats),fully_read,"all 927 lines; bootstrap, McNemar, confusion, labels, evidence status, pair selection, v2 precedence, diagnostics"
+ethical_benchmark/analysis/refusal_margin.py,code_core,"secondary analysis scripts (genlen, human-label au",fully_read,"metric math sound (logsumexp margin, partition cancellation); tests/test_refusal_margin.py 15/15 pass"
+ethical_benchmark/benchmarks/__init__.py,code_core,-,not_reviewed,
+ethical_benchmark/benchmarks/arc.py,code_core,benchmark plugins + scoring,fully_read,
+ethical_benchmark/benchmarks/base.py,code_core,benchmark plugins + scoring,fully_read,
+ethical_benchmark/benchmarks/harmbench.py,code_core,"External-standards conformance audit (HarmBench, X",fully_read,
+ethical_benchmark/benchmarks/mmlu.py,code_core,benchmark plugins + scoring,fully_read,
+ethical_benchmark/benchmarks/registry.py,code_core,benchmark plugins + scoring,fully_read,
+ethical_benchmark/benchmarks/utils.py,code_core,benchmark plugins + scoring,fully_read,
+ethical_benchmark/benchmarks/xstest.py,code_core,"External-standards conformance audit (HarmBench, X",fully_read,
+ethical_benchmark/cluster/__init__.py,code_core,-,not_reviewed,
+ethical_benchmark/cluster/check_runs.py,code_core,cluster + configs + SLURM,fully_read,
+ethical_benchmark/cluster/generate_jobs.py,code_core,cluster + configs + SLURM,fully_read,
+ethical_benchmark/cluster/submit_jobs.py,code_core,cluster + configs + SLURM,fully_read,
+ethical_benchmark/config_schema.py,code_core,dashboard + legacy/dead paths,fully_read,
+ethical_benchmark/constants.py,code_core,model loading + generation + pipeline orchestratio,fully_read,"SUPPORTED_BENCHMARKS here (3 benchmarks, no arc) is stale but unused by the run path — pipeline imports the 4-benchmark set from config_schema"
+ethical_benchmark/datasets/__init__.py,code_core,dashboard + legacy/dead paths,fully_read,
+ethical_benchmark/datasets/bias.py,code_core,dashboard + legacy/dead paths,fully_read,
+ethical_benchmark/datasets/factuality.py,code_core,dashboard + legacy/dead paths,fully_read,
+ethical_benchmark/datasets/toxicity.py,code_core,dashboard + legacy/dead paths,fully_read,
+ethical_benchmark/evaluators/__init__.py,code_core,dashboard + legacy/dead paths,fully_read,
+ethical_benchmark/evaluators/bias_eval.py,code_core,dashboard + legacy/dead paths,fully_read,
+ethical_benchmark/evaluators/factuality_eval.py,code_core,dashboard + legacy/dead paths,fully_read,
+ethical_benchmark/evaluators/toxicity_eval.py,code_core,dashboard + legacy/dead paths,fully_read,
+ethical_benchmark/harness/__init__.py,code_core,-,not_reviewed,
+ethical_benchmark/harness/agent.py,code_core,harness + gates,fully_read,877 lines; check_report_freshness additionally exercised in a scratchpad sandbox
+ethical_benchmark/judges/__init__.py,code_core,-,not_reviewed,
+ethical_benchmark/judges/validation.py,code_core,"judge layer (HarmBench classifier fidelity, api_ju",fully_read,
+ethical_benchmark/metrics/__init__.py,code_core,-,not_reviewed,
+ethical_benchmark/metrics/aggregate.py,code_core,statistics implementation (code-analysis-stats),fully_read,"per-run unpaired percentile bootstrap (1000 resamples, seed 42) — correct; CSV upsert logic reviewed"
+ethical_benchmark/models/__init__.py,code_core,-,not_reviewed,
+ethical_benchmark/models/generation.py,code_core,model loading + generation + pipeline orchestratio,fully_read,
+ethical_benchmark/models/loader.py,code_core,model loading + generation + pipeline orchestratio,fully_read,
+ethical_benchmark/pipeline/__init__.py,code_core,-,not_reviewed,
+ethical_benchmark/pipeline/run_benchmark.py,code_core,dashboard + legacy/dead paths,fully_read,also executed with a committed config to confirm crash-before-write
+ethical_benchmark/pipeline/run_quant_benchmark.py,code_core,model loading + generation + pipeline orchestratio,fully_read,
+ethical_benchmark/pipeline/run_quant_matrix.py,code_core,model loading + generation + pipeline orchestratio,fully_read,
+ethical_benchmark/quant/__init__.py,code_core,-,not_reviewed,
+ethical_benchmark/quant/config_schema.py,code_core,model loading + generation + pipeline orchestratio,fully_read,
+fyp_cli.py,top_level,model loading + generation + pipeline orchestratio,fully_read,
+generate_slurm_jobs.py,top_level,cluster + configs + SLURM,fully_read,thin wrapper
+package-lock.json,top_level,-,not_reviewed,
+package.json,top_level,harness + gates,fully_read,
+pyproject.toml,top_level,harness + gates,fully_read,
+requirements-dashboard.txt,top_level,harness + gates,fully_read,
+requirements.txt,top_level,harness + gates,fully_read,
+results/analysis/.gitkeep,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/analysis/harmbench_category_breakdown.csv,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/analysis/harmbench_category_breakdown.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/analysis/harmbench_category_breakdown_int8.csv,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/analysis/harmbench_category_breakdown_int8.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/analysis/judge_agreement.csv,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/analysis/judge_agreement.json,results_artifact,Adversarial full-text audit of canonical report FY,partially_read,Mistral 128-era kappas only
+results/analysis/judge_agreement_int8.csv,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/analysis/judge_agreement_int8.json,results_artifact,results-agreement (independent recomputation of al,executed_only,"128-era INT8: recomputed, all match (n=200, has data unlike the 512 twin)"
+results/analysis/judge_pairwise_agreement.csv,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/analysis/judge_pairwise_agreement.json,results_artifact,Adversarial full-text audit of canonical report FY,partially_read,Phi 128-era gpt-4o kappas only
+results/analysis/judge_pairwise_agreement_int8.csv,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/analysis/judge_pairwise_agreement_int8.json,results_artifact,results-agreement (independent recomputation of al,executed_only,"recomputed, all match"
+results/analysis/mmlu_subject_breakdown.csv,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/analysis/mmlu_subject_breakdown.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/analysis/mmlu_subject_breakdown_int8.csv,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/analysis/mmlu_subject_breakdown_int8.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/analysis/multiple_comparisons.csv,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/analysis/multiple_comparisons.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/analysis/pair_interpretations.csv,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/analysis/pair_interpretations.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/analysis/pairwise_deltas.csv,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/analysis/pairwise_deltas.json,results_artifact,Adversarial full-text audit of canonical report FY,partially_read,qwen_2b MMLU row only (stale-CI trace)
+results/analysis/precision_sweep.csv,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/analysis/precision_sweep.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/analysis/quantization_analysis_summary.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/analysis/refusal_margin.csv,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/analysis/refusal_margin.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/analysis/rescore_aggregate.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/analysis/rescore_aggregate_int8.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/analysis/rescore_diagnostics_harmbench.csv,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/analysis/rescore_diagnostics_harmbench_int8.csv,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/analysis/rescore_diagnostics_xstest.csv,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/analysis/rescore_diagnostics_xstest_int8.csv,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/analysis/sensitivity_multiseed.csv,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/analysis/sensitivity_multiseed.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/llama_3_2_3b_4bit/harmbench/scores.judge.api_judge.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/llama_3_2_3b_4bit/harmbench/scores.judge.harmbench_cls.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/llama_3_2_3b_4bit/harmbench/scores.margin.nf4.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/llama_3_2_3b_4bit/harmbench/scores.margin_control.nf4.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/llama_3_2_3b_4bit/harmbench/scores.v2.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/llama_3_2_3b_4bit/harmbench/summary.judge.api_judge.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/llama_3_2_3b_4bit/harmbench/summary.judge.harmbench_cls.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/llama_3_2_3b_4bit/harmbench/summary.margin.nf4.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/llama_3_2_3b_4bit/harmbench/summary.v2.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/llama_3_2_3b_4bit/xstest/scores.v2.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/llama_3_2_3b_4bit/xstest/summary.v2.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/llama_3_2_3b_8bit/harmbench/scores.judge.api_judge.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/llama_3_2_3b_8bit/harmbench/scores.judge.harmbench_cls.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/llama_3_2_3b_8bit/harmbench/scores.v2.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/llama_3_2_3b_8bit/harmbench/summary.judge.api_judge.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/llama_3_2_3b_8bit/harmbench/summary.judge.harmbench_cls.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/llama_3_2_3b_8bit/harmbench/summary.v2.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/llama_3_2_3b_8bit/xstest/scores.v2.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/llama_3_2_3b_8bit/xstest/summary.v2.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/llama_3_2_3b_base/harmbench/scores.judge.api_judge.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/llama_3_2_3b_base/harmbench/scores.judge.harmbench_cls.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/llama_3_2_3b_base/harmbench/scores.margin.fp16.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/llama_3_2_3b_base/harmbench/scores.margin_control.fp16.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/llama_3_2_3b_base/harmbench/scores.v2.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/llama_3_2_3b_base/harmbench/summary.judge.api_judge.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/llama_3_2_3b_base/harmbench/summary.judge.harmbench_cls.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/llama_3_2_3b_base/harmbench/summary.margin.fp16.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/llama_3_2_3b_base/harmbench/summary.v2.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/llama_3_2_3b_base/xstest/scores.v2.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/llama_3_2_3b_base/xstest/summary.v2.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/mistral_7b_4bit/harmbench/scores.judge.api_judge.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/mistral_7b_4bit/harmbench/scores.judge.harmbench_cls.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/mistral_7b_4bit/harmbench/scores.margin.nf4.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/mistral_7b_4bit/harmbench/scores.margin_control.nf4.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/mistral_7b_4bit/harmbench/scores.v2.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/mistral_7b_4bit/harmbench/summary.judge.api_judge.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/mistral_7b_4bit/harmbench/summary.judge.harmbench_cls.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/mistral_7b_4bit/harmbench/summary.margin.nf4.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/mistral_7b_4bit/harmbench/summary.v2.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/mistral_7b_4bit/xstest/scores.v2.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/mistral_7b_4bit/xstest/summary.v2.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/mistral_7b_8bit/harmbench/scores.judge.api_judge.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/mistral_7b_8bit/harmbench/scores.judge.harmbench_cls.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/mistral_7b_8bit/harmbench/scores.v2.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/mistral_7b_8bit/harmbench/summary.judge.api_judge.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/mistral_7b_8bit/harmbench/summary.judge.harmbench_cls.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/mistral_7b_8bit/harmbench/summary.v2.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/mistral_7b_8bit/xstest/scores.v2.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/mistral_7b_8bit/xstest/summary.v2.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/mistral_7b_base/harmbench/scores.judge.api_judge.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/mistral_7b_base/harmbench/scores.judge.harmbench_cls.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/mistral_7b_base/harmbench/scores.margin.fp16.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/mistral_7b_base/harmbench/scores.margin_control.fp16.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/mistral_7b_base/harmbench/scores.v2.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/mistral_7b_base/harmbench/summary.judge.api_judge.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/mistral_7b_base/harmbench/summary.judge.harmbench_cls.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/mistral_7b_base/harmbench/summary.margin.fp16.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/mistral_7b_base/harmbench/summary.v2.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/mistral_7b_base/xstest/scores.v2.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/mistral_7b_base/xstest/summary.v2.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/phi4_mini_4bit/harmbench/scores.judge.api_judge.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/phi4_mini_4bit/harmbench/scores.judge.harmbench_cls.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/phi4_mini_4bit/harmbench/scores.margin.nf4.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/phi4_mini_4bit/harmbench/scores.margin_control.nf4.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/phi4_mini_4bit/harmbench/scores.v2.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/phi4_mini_4bit/harmbench/summary.judge.api_judge.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/phi4_mini_4bit/harmbench/summary.judge.harmbench_cls.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/phi4_mini_4bit/harmbench/summary.margin.nf4.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/phi4_mini_4bit/harmbench/summary.v2.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/phi4_mini_4bit/xstest/scores.v2.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/phi4_mini_4bit/xstest/summary.v2.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/phi4_mini_8bit/harmbench/scores.judge.api_judge.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/phi4_mini_8bit/harmbench/scores.judge.harmbench_cls.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/phi4_mini_8bit/harmbench/scores.v2.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/phi4_mini_8bit/harmbench/summary.judge.api_judge.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/phi4_mini_8bit/harmbench/summary.judge.harmbench_cls.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/phi4_mini_8bit/harmbench/summary.v2.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/phi4_mini_8bit/xstest/scores.v2.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/phi4_mini_8bit/xstest/summary.v2.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/phi4_mini_base/harmbench/scores.judge.api_judge.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/phi4_mini_base/harmbench/scores.judge.harmbench_cls.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/phi4_mini_base/harmbench/scores.margin.fp16.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/phi4_mini_base/harmbench/scores.margin_control.fp16.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/phi4_mini_base/harmbench/scores.v2.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/phi4_mini_base/harmbench/summary.judge.api_judge.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/phi4_mini_base/harmbench/summary.judge.harmbench_cls.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/phi4_mini_base/harmbench/summary.margin.fp16.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/phi4_mini_base/harmbench/summary.v2.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/phi4_mini_base/xstest/scores.v2.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/phi4_mini_base/xstest/summary.v2.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_2b_4bit/harmbench/scores.judge.api_judge.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_2b_4bit/harmbench/scores.judge.harmbench_cls.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_2b_4bit/harmbench/scores.margin.nf4.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_2b_4bit/harmbench/scores.margin_control.nf4.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_2b_4bit/harmbench/scores.v2.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_2b_4bit/harmbench/summary.judge.api_judge.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_2b_4bit/harmbench/summary.judge.harmbench_cls.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_2b_4bit/harmbench/summary.margin.nf4.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_2b_4bit/harmbench/summary.v2.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_2b_4bit/xstest/scores.v2.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_2b_4bit/xstest/summary.v2.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_2b_8bit/harmbench/scores.judge.api_judge.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_2b_8bit/harmbench/scores.judge.harmbench_cls.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_2b_8bit/harmbench/scores.v2.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_2b_8bit/harmbench/summary.judge.api_judge.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_2b_8bit/harmbench/summary.judge.harmbench_cls.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_2b_8bit/harmbench/summary.v2.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_2b_8bit/xstest/scores.v2.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_2b_8bit/xstest/summary.v2.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_2b_base/harmbench/scores.judge.api_judge.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_2b_base/harmbench/scores.judge.harmbench_cls.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_2b_base/harmbench/scores.margin.fp16.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_2b_base/harmbench/scores.margin_control.fp16.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_2b_base/harmbench/scores.v2.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_2b_base/harmbench/summary.judge.api_judge.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_2b_base/harmbench/summary.judge.harmbench_cls.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_2b_base/harmbench/summary.margin.fp16.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_2b_base/harmbench/summary.v2.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_2b_base/xstest/scores.v2.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_2b_base/xstest/summary.v2.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_4b_4bit/harmbench/scores.judge.api_judge.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_4b_4bit/harmbench/scores.judge.harmbench_cls.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_4b_4bit/harmbench/scores.margin.nf4.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_4b_4bit/harmbench/scores.margin_control.nf4.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_4b_4bit/harmbench/scores.v2.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_4b_4bit/harmbench/summary.judge.api_judge.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_4b_4bit/harmbench/summary.judge.harmbench_cls.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_4b_4bit/harmbench/summary.margin.nf4.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_4b_4bit/harmbench/summary.v2.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_4b_4bit/xstest/scores.v2.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_4b_4bit/xstest/summary.v2.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_4b_8bit/harmbench/scores.judge.api_judge.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_4b_8bit/harmbench/scores.judge.harmbench_cls.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_4b_8bit/harmbench/scores.v2.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_4b_8bit/harmbench/summary.judge.api_judge.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_4b_8bit/harmbench/summary.judge.harmbench_cls.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_4b_8bit/harmbench/summary.v2.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_4b_8bit/xstest/scores.v2.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_4b_8bit/xstest/summary.v2.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_4b_base/harmbench/scores.judge.api_judge.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_4b_base/harmbench/scores.judge.harmbench_cls.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_4b_base/harmbench/scores.margin.fp16.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_4b_base/harmbench/scores.margin_control.fp16.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_4b_base/harmbench/scores.v2.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_4b_base/harmbench/summary.judge.api_judge.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_4b_base/harmbench/summary.judge.harmbench_cls.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_4b_base/harmbench/summary.margin.fp16.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_4b_base/harmbench/summary.v2.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_4b_base/xstest/scores.v2.jsonl,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/qwen_4b_base/xstest/summary.v2.json,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/raw/.gitkeep,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results/raw_artifact_manifest.sha256,results_artifact,"artifact integrity + provenance (manifest, matched",fully_read,all 300 lines hash-verified; all 5 historical git versions extracted and diffed
+results/summary/.gitkeep,results_artifact,WF agents + MAIN,executed_only,hash-verified vs manifest; 128 sidecars recomputed
+results_512/analysis/genlen_robustness.json,results_artifact,generation-length / truncation claims (results-gen,fully_read,all aggregates recomputed from its per-model fields; internally consistent
+results_512/analysis/harmbench_category_breakdown.csv,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/analysis/harmbench_category_breakdown.json,results_artifact,Adversarial full-text audit of canonical report FY,partially_read,qwen_2b per-category cells recomputed; other models spot-checked
+results_512/analysis/harmbench_category_breakdown_int8.csv,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/analysis/harmbench_category_breakdown_int8.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/analysis/headline_512_vs_128.json,results_artifact,Adversarial full-text audit of canonical report FY,fully_read,
+results_512/analysis/human_validation.json,results_artifact,"design-validity adjudication (RQ answerability, 11",fully_read,
+results_512/analysis/judge_agreement.csv,results_artifact,results-agreement (independent recomputation of al,executed_only,"programmatic diff vs JSON: 10 rows, 0 mismatches"
+results_512/analysis/judge_agreement.json,results_artifact,Adversarial full-text audit of canonical report FY,fully_read,
+results_512/analysis/judge_agreement_int8.csv,results_artifact,results-agreement (independent recomputation of al,fully_read,same defect as JSON
+results_512/analysis/judge_agreement_int8.json,results_artifact,results-agreement (independent recomputation of al,fully_read,found empty/defective (n_shared=0)
+results_512/analysis/judge_pairwise_agreement.csv,results_artifact,results-agreement (independent recomputation of al,executed_only,programmatic diff vs JSON: 0 mismatches
+results_512/analysis/judge_pairwise_agreement.json,results_artifact,Thesis + Interim document audit (FYP_Thesis_2026-0,fully_read,
+results_512/analysis/judge_pairwise_agreement_int8.csv,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/analysis/judge_pairwise_agreement_int8.json,results_artifact,results-agreement (independent recomputation of al,fully_read,"recomputed, all match"
+results_512/analysis/mmlu_subject_breakdown.csv,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/analysis/mmlu_subject_breakdown.json,results_artifact,Adversarial full-text audit of canonical report FY,partially_read,subject counts only
+results_512/analysis/mmlu_subject_breakdown_int8.csv,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/analysis/mmlu_subject_breakdown_int8.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/analysis/multiple_comparisons.csv,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/analysis/multiple_comparisons.json,results_artifact,"design-validity adjudication (RQ answerability, 11",fully_read,"programmatic: all 20 contrasts, power_analysis block, BH recomputed independently"
+results_512/analysis/pair_interpretations.csv,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/analysis/pair_interpretations.json,results_artifact,"design-validity adjudication (RQ answerability, 11",fully_read,v2-proxy labels; confirmed they diverge from published judge-primary labels
+results_512/analysis/pairwise_deltas.csv,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/analysis/pairwise_deltas.json,results_artifact,Adversarial full-text audit of canonical report FY,fully_read,
+results_512/analysis/precision_sweep.csv,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/analysis/precision_sweep.json,results_artifact,Thesis + Interim document audit (FYP_Thesis_2026-0,fully_read,all 5 pairs × 5 metrics × 3 precisions + INT8 McNemar block
+results_512/analysis/quantization_analysis_summary.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/analysis/refusal_margin.csv,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/analysis/refusal_margin.json,results_artifact,Adversarial full-text audit of canonical report FY,fully_read,
+results_512/analysis/rescore_aggregate.json,results_artifact,results-agreement (independent recomputation of al,partially_read,searched for CI values only
+results_512/analysis/rescore_aggregate_int8.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/analysis/rescore_diagnostics_harmbench.csv,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/analysis/rescore_diagnostics_harmbench_int8.csv,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/analysis/rescore_diagnostics_xstest.csv,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/analysis/rescore_diagnostics_xstest_int8.csv,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/analysis/sensitivity_multiseed.csv,results_artifact,generation-length / truncation claims (results-gen,fully_read,consistent with JSON
+results_512/analysis/sensitivity_multiseed.json,results_artifact,generation-length / truncation claims (results-gen,fully_read,
+results_512/llama_3_2_3b_4bit/harmbench/scores.judge.api_judge.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/llama_3_2_3b_4bit/harmbench/scores.judge.harmbench_cls.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/llama_3_2_3b_4bit/harmbench/scores.v2.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/llama_3_2_3b_4bit/harmbench/summary.judge.api_judge.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/llama_3_2_3b_4bit/harmbench/summary.judge.harmbench_cls.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/llama_3_2_3b_4bit/harmbench/summary.v2.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/llama_3_2_3b_4bit/xstest/scores.v2.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/llama_3_2_3b_4bit/xstest/summary.v2.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/llama_3_2_3b_8bit/harmbench/scores.judge.api_judge.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/llama_3_2_3b_8bit/harmbench/scores.judge.harmbench_cls.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/llama_3_2_3b_8bit/harmbench/scores.v2.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/llama_3_2_3b_8bit/harmbench/summary.judge.api_judge.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/llama_3_2_3b_8bit/harmbench/summary.judge.harmbench_cls.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/llama_3_2_3b_8bit/harmbench/summary.v2.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/llama_3_2_3b_8bit/xstest/scores.v2.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/llama_3_2_3b_8bit/xstest/summary.v2.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/llama_3_2_3b_base/harmbench/scores.judge.api_judge.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/llama_3_2_3b_base/harmbench/scores.judge.harmbench_cls.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/llama_3_2_3b_base/harmbench/scores.v2.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/llama_3_2_3b_base/harmbench/summary.judge.api_judge.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/llama_3_2_3b_base/harmbench/summary.judge.harmbench_cls.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/llama_3_2_3b_base/harmbench/summary.v2.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/llama_3_2_3b_base/xstest/scores.v2.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/llama_3_2_3b_base/xstest/summary.v2.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/mistral_7b_4bit/harmbench/scores.judge.api_judge.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/mistral_7b_4bit/harmbench/scores.judge.harmbench_cls.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/mistral_7b_4bit/harmbench/scores.v2.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/mistral_7b_4bit/harmbench/summary.judge.api_judge.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/mistral_7b_4bit/harmbench/summary.judge.harmbench_cls.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/mistral_7b_4bit/harmbench/summary.v2.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/mistral_7b_4bit/xstest/scores.v2.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/mistral_7b_4bit/xstest/summary.v2.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/mistral_7b_8bit/harmbench/scores.judge.api_judge.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/mistral_7b_8bit/harmbench/scores.judge.harmbench_cls.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/mistral_7b_8bit/harmbench/scores.v2.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/mistral_7b_8bit/harmbench/summary.judge.api_judge.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/mistral_7b_8bit/harmbench/summary.judge.harmbench_cls.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/mistral_7b_8bit/harmbench/summary.v2.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/mistral_7b_8bit/xstest/scores.v2.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/mistral_7b_8bit/xstest/summary.v2.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/mistral_7b_base/harmbench/scores.judge.api_judge.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/mistral_7b_base/harmbench/scores.judge.harmbench_cls.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/mistral_7b_base/harmbench/scores.v2.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/mistral_7b_base/harmbench/summary.judge.api_judge.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/mistral_7b_base/harmbench/summary.judge.harmbench_cls.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/mistral_7b_base/harmbench/summary.v2.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/mistral_7b_base/xstest/scores.v2.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/mistral_7b_base/xstest/summary.v2.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/phi4_mini_4bit/harmbench/scores.judge.api_judge.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/phi4_mini_4bit/harmbench/scores.judge.harmbench_cls.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/phi4_mini_4bit/harmbench/scores.v2.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/phi4_mini_4bit/harmbench/summary.judge.api_judge.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/phi4_mini_4bit/harmbench/summary.judge.harmbench_cls.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/phi4_mini_4bit/harmbench/summary.v2.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/phi4_mini_4bit/xstest/scores.v2.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/phi4_mini_4bit/xstest/summary.v2.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/phi4_mini_8bit/harmbench/scores.judge.api_judge.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/phi4_mini_8bit/harmbench/scores.judge.harmbench_cls.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/phi4_mini_8bit/harmbench/scores.v2.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/phi4_mini_8bit/harmbench/summary.judge.api_judge.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/phi4_mini_8bit/harmbench/summary.judge.harmbench_cls.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/phi4_mini_8bit/harmbench/summary.v2.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/phi4_mini_8bit/xstest/scores.v2.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/phi4_mini_8bit/xstest/summary.v2.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/phi4_mini_base/harmbench/scores.judge.api_judge.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/phi4_mini_base/harmbench/scores.judge.harmbench_cls.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/phi4_mini_base/harmbench/scores.v2.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/phi4_mini_base/harmbench/summary.judge.api_judge.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/phi4_mini_base/harmbench/summary.judge.harmbench_cls.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/phi4_mini_base/harmbench/summary.v2.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/phi4_mini_base/xstest/scores.v2.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/phi4_mini_base/xstest/summary.v2.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/qwen_2b_4bit/harmbench/scores.judge.api_judge.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/qwen_2b_4bit/harmbench/scores.judge.harmbench_cls.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/qwen_2b_4bit/harmbench/scores.v2.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/qwen_2b_4bit/harmbench/summary.judge.api_judge.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/qwen_2b_4bit/harmbench/summary.judge.harmbench_cls.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/qwen_2b_4bit/harmbench/summary.v2.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/qwen_2b_4bit/xstest/scores.v2.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/qwen_2b_4bit/xstest/summary.v2.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/qwen_2b_8bit/harmbench/scores.judge.api_judge.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/qwen_2b_8bit/harmbench/scores.judge.harmbench_cls.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/qwen_2b_8bit/harmbench/scores.v2.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/qwen_2b_8bit/harmbench/summary.judge.api_judge.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/qwen_2b_8bit/harmbench/summary.judge.harmbench_cls.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/qwen_2b_8bit/harmbench/summary.v2.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/qwen_2b_8bit/xstest/scores.v2.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/qwen_2b_8bit/xstest/summary.v2.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/qwen_2b_base/harmbench/scores.judge.api_judge.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/qwen_2b_base/harmbench/scores.judge.harmbench_cls.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/qwen_2b_base/harmbench/scores.v2.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/qwen_2b_base/harmbench/summary.judge.api_judge.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/qwen_2b_base/harmbench/summary.judge.harmbench_cls.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/qwen_2b_base/harmbench/summary.v2.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/qwen_2b_base/xstest/scores.v2.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/qwen_2b_base/xstest/summary.v2.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/qwen_4b_4bit/harmbench/scores.judge.api_judge.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/qwen_4b_4bit/harmbench/scores.judge.harmbench_cls.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/qwen_4b_4bit/harmbench/scores.v2.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/qwen_4b_4bit/harmbench/summary.judge.api_judge.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/qwen_4b_4bit/harmbench/summary.judge.harmbench_cls.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/qwen_4b_4bit/harmbench/summary.v2.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/qwen_4b_4bit/xstest/scores.v2.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/qwen_4b_4bit/xstest/summary.v2.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/qwen_4b_8bit/harmbench/scores.judge.api_judge.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/qwen_4b_8bit/harmbench/scores.judge.harmbench_cls.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/qwen_4b_8bit/harmbench/scores.v2.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/qwen_4b_8bit/harmbench/summary.judge.api_judge.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/qwen_4b_8bit/harmbench/summary.judge.harmbench_cls.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/qwen_4b_8bit/harmbench/summary.v2.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/qwen_4b_8bit/xstest/scores.v2.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/qwen_4b_8bit/xstest/summary.v2.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/qwen_4b_base/harmbench/scores.judge.api_judge.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/qwen_4b_base/harmbench/scores.judge.harmbench_cls.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/qwen_4b_base/harmbench/scores.v2.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/qwen_4b_base/harmbench/summary.judge.api_judge.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/qwen_4b_base/harmbench/summary.judge.harmbench_cls.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/qwen_4b_base/harmbench/summary.v2.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/qwen_4b_base/xstest/scores.v2.jsonl,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+results_512/qwen_4b_base/xstest/summary.v2.json,results_artifact,WF results:headline/agreement/genlen + integrity scans,executed_only,scripted metadata/score scan; judge+v2 sidecars joined; no text read
+run_benchmark.py,top_level,dashboard + legacy/dead paths,fully_read,
+run_quant_benchmark.py,top_level,model loading + generation + pipeline orchestratio,fully_read,3-line wrapper
+run_quant_matrix.py,top_level,model loading + generation + pipeline orchestratio,fully_read,3-line wrapper
+scripts/agent_check.py,code_scripts,harness + gates,fully_read,
+scripts/build_agent_harness_architecture_doc.py,code_scripts,-,not_reviewed,
+scripts/build_agentic_report.js,code_scripts,-,not_reviewed,
+scripts/build_fyp_interim.js,code_scripts,formatting/rubric audit (NTU CCDS FYP report requi,partially_read,"Formatting constants, cover, declarations, abstract, section properties read"
+scripts/build_fyp_interim_humanized.js,code_scripts,formatting/rubric audit (NTU CCDS FYP report requi,partially_read,Verified US Letter and Times New Roman 12pt
+scripts/build_fyp_report.js,code_scripts,-,not_reviewed,
+scripts/build_fyp_report_humanized.js,code_scripts,formatting/rubric audit (NTU CCDS FYP report requi,partially_read,Verified same US Letter geometry and same stale header string at line 1623
+scripts/build_fyp_report_v2.js,code_scripts,-,not_reviewed,
+scripts/build_fyp_report_v3.js,code_scripts,-,not_reviewed,
+scripts/build_fyp_report_v4.js,code_scripts,-,not_reviewed,
+scripts/build_fyp_report_v5.js,code_scripts,formatting/rubric audit (NTU CCDS FYP report requi,partially_read,"All formatting-relevant code read (page setup, fonts, spacing, cover, header/footer, TOC, numbering, Figure(), references); prose content strings skimmed"
+scripts/build_fyp_thesis.js,code_scripts,-,not_reviewed,
+scripts/build_fyp_thesis_humanized.js,code_scripts,formatting/rubric audit (NTU CCDS FYP report requi,partially_read,Verified US Letter (12240 twips) and Times New Roman 12pt
+scripts/build_fyp_thesis_v2.js,code_scripts,-,not_reviewed,
+scripts/build_fyp_thesis_v3.js,code_scripts,-,not_reviewed,
+scripts/build_fyp_thesis_v4.js,code_scripts,formatting/rubric audit (NTU CCDS FYP report requi,partially_read,"Formatting constants, cover, declarations, TOC, FIG(), section properties read"
+scripts/capture_refusal_margin.py,code_scripts,"secondary analysis scripts (genlen, human-label au",fully_read,GPU capture not executable locally; teacher-forcing indexing (logits[start+k] predicts resp_ids[k]) verified correct by inspection
+scripts/generate_agent_dashboard.py,code_scripts,harness + gates,fully_read,
+scripts/generate_agent_harness_architecture_diagram.py,code_scripts,-,not_reviewed,
+scripts/generate_architecture_diagram.py,code_scripts,-,not_reviewed,
+scripts/generate_handoff.py,code_scripts,harness + gates,fully_read,
+scripts/generate_integrated_architecture_diagram.py,code_scripts,-,not_reviewed,
+scripts/generate_repo_hierarchy_diagram.py,code_scripts,-,not_reviewed,
+scripts/generate_sensitivity_jobs.py,code_scripts,cluster + configs + SLURM,fully_read,
+scripts/generate_tc1_checklist.py,code_scripts,harness + gates,fully_read,
+scripts/genlen_512_analysis.py,code_scripts,"secondary analysis scripts (genlen, human-label au",fully_read,all outputs independently recomputed from raw trees; exact reproduction
+scripts/harmbench_category_breakdown.py,code_scripts,"secondary analysis scripts (genlen, human-label au",fully_read,"per-model sums reconciled exactly to judge_agreement ASR @512, all 10 aliases"
+scripts/harness_eval.py,code_scripts,"test-suite audit (tests/, 28 files)",fully_read,
+scripts/human_label_audit.py,code_scripts,"secondary analysis scripts (genlen, human-label au",fully_read,score() recomputed against local sheet; --make-sheet/--make-html logic audited but not executed (would write into repo)
+scripts/judge_agreement.py,code_scripts,statistics implementation (code-analysis-stats),fully_read,kappa validated vs sklearn; CI/McNemar/labels reproduce from sidecars
+scripts/judge_pairwise_agreement.py,code_scripts,statistics implementation (code-analysis-stats),fully_read,second-judge apparatus reuses canonical primitives; kappa convention consistent
+scripts/make_figures.py,code_scripts,formatting/rubric audit (NTU CCDS FYP report requi,partially_read,"Header, path defaults, rcParams (font.size 10, dpi 200) read"
+scripts/mmlu_subject_breakdown.py,code_scripts,"secondary analysis scripts (genlen, human-label au",fully_read,"per-subject sums reconciled exactly to summary.json accuracy @512, all 10 aliases; is_answered denominator convention matches"
+scripts/multiple_comparisons.py,code_scripts,statistics implementation (code-analysis-stats),fully_read,BH + MDE/power; validated against statsmodels and artifact
+scripts/number_bible_512.py,code_scripts,"secondary analysis scripts (genlen, human-label au",fully_read,"sections A-G read artifacts; section H hardcoded (verified against sidecars, currently correct)"
+scripts/precision_sweep_analysis.py,code_scripts,statistics implementation (code-analysis-stats),fully_read,INT8 sweep; McNemar via canonical primitives; delta=(b−c)/n over shared set correct
+scripts/prefetch_tc1.py,code_scripts,cluster + configs + SLURM,fully_read,
+scripts/refusal_margin_analysis.py,code_scripts,"secondary analysis scripts (genlen, human-label au",fully_read,flip_zoom recomputed with both 128 and 512 judge labels in scratchpad
+scripts/rescore_harmbench.py,code_scripts,"judge layer (HarmBench classifier fidelity, api_ju",fully_read,
+scripts/run_judge_validation.py,code_scripts,"judge layer (HarmBench classifier fidelity, api_ju",fully_read,
+scripts/sensitivity_analysis.py,code_scripts,statistics implementation (code-analysis-stats),fully_read,multiseed aggregation; per-seed McNemar reuses canonical primitive; b/c naming flipped vs multiple_comparisons
+scripts/verify_report_claims.py,code_scripts,harness + gates,fully_read,"857 lines; all 61 checks traced; also executed (61 pass, 0 fail, 0 skip)"
+slurm/capture_refusal_margin.sbatch,slurm,cluster + configs + SLURM,fully_read,
+slurm/cuda_check.sbatch,slurm,cluster + configs + SLURM,fully_read,
+slurm/jobs/.gitkeep,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1/llama_3_2_3b_4bit__matrix.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1/llama_3_2_3b_base__matrix.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1/mistral_7b_4bit__matrix.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1/mistral_7b_base__matrix.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1/phi4_mini_4bit__matrix.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1/phi4_mini_base__matrix.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1/qwen_2b_4bit__matrix.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1/qwen_2b_base__matrix.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1/qwen_4b_4bit__matrix.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1/qwen_4b_base__matrix.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_512/llama_3_2_3b_4bit__matrix.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_512/llama_3_2_3b_base__matrix.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_512/mistral_7b_4bit__matrix.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_512/mistral_7b_base__matrix.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_512/phi4_mini_4bit__matrix.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_512/phi4_mini_base__matrix.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_512/qwen_2b_4bit__matrix.sbatch,slurm,Protocol reconstruction from machine artifacts + d,fully_read,representative of the 10 matrix sbatch files; directory listed
+slurm/jobs_tc1_512/qwen_2b_base__matrix.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_512/qwen_4b_4bit__matrix.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_512/qwen_4b_base__matrix.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_512_smoke/llama_3_2_3b_4bit__arc.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_512_smoke/llama_3_2_3b_4bit__harmbench.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_512_smoke/llama_3_2_3b_4bit__mmlu.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_512_smoke/llama_3_2_3b_4bit__xstest.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_512_smoke/llama_3_2_3b_base__arc.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_512_smoke/llama_3_2_3b_base__harmbench.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_512_smoke/llama_3_2_3b_base__mmlu.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_512_smoke/llama_3_2_3b_base__xstest.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_512_smoke/mistral_7b_4bit__arc.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_512_smoke/mistral_7b_4bit__harmbench.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_512_smoke/mistral_7b_4bit__mmlu.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_512_smoke/mistral_7b_4bit__xstest.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_512_smoke/mistral_7b_base__arc.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_512_smoke/mistral_7b_base__harmbench.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_512_smoke/mistral_7b_base__mmlu.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_512_smoke/mistral_7b_base__xstest.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_512_smoke/phi4_mini_4bit__arc.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_512_smoke/phi4_mini_4bit__harmbench.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_512_smoke/phi4_mini_4bit__mmlu.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_512_smoke/phi4_mini_4bit__xstest.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_512_smoke/phi4_mini_base__arc.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_512_smoke/phi4_mini_base__harmbench.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_512_smoke/phi4_mini_base__mmlu.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_512_smoke/phi4_mini_base__xstest.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_512_smoke/qwen_2b_4bit__arc.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_512_smoke/qwen_2b_4bit__harmbench.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_512_smoke/qwen_2b_4bit__mmlu.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_512_smoke/qwen_2b_4bit__xstest.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_512_smoke/qwen_2b_base__arc.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_512_smoke/qwen_2b_base__harmbench.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_512_smoke/qwen_2b_base__mmlu.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_512_smoke/qwen_2b_base__xstest.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_512_smoke/qwen_4b_4bit__arc.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_512_smoke/qwen_4b_4bit__harmbench.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_512_smoke/qwen_4b_4bit__mmlu.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_512_smoke/qwen_4b_4bit__xstest.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_512_smoke/qwen_4b_base__arc.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_512_smoke/qwen_4b_base__harmbench.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_512_smoke/qwen_4b_base__mmlu.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_512_smoke/qwen_4b_base__xstest.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_arc/README.md,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_arc/llama_3_2_3b_4bit__arc.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_arc/llama_3_2_3b_base__arc.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_arc/qwen_2b_4bit__arc.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_arc/qwen_2b_base__arc.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_arc/qwen_4b_4bit__arc.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_arc/qwen_4b_base__arc.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_int8/llama_3_2_3b_8bit__matrix.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_int8/mistral_7b_8bit__matrix.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_int8/phi4_mini_8bit__matrix.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_int8/qwen_2b_8bit__matrix.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_int8/qwen_4b_8bit__matrix.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_int8_512/llama_3_2_3b_8bit__matrix.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_int8_512/mistral_7b_8bit__matrix.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_int8_512/phi4_mini_8bit__matrix.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_int8_512/qwen_2b_8bit__matrix.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_int8_512/qwen_4b_8bit__matrix.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_int8_smoke/llama_3_2_3b_8bit__harmbench.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_int8_smoke/mistral_7b_8bit__harmbench.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_int8_smoke/phi4_mini_8bit__harmbench.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_int8_smoke/qwen_2b_8bit__harmbench.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_int8_smoke/qwen_4b_8bit__harmbench.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_sensitivity/README.md,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_sensitivity/judge_sens_seed1.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_sensitivity/judge_sens_seed2.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_sensitivity/judge_sens_seed3.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_sensitivity/judge_sens_seed4.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_sensitivity/judge_sens_seed5.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_sensitivity/llama_3_2_3b_4bit__sens.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_sensitivity/llama_3_2_3b_base__sens.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_sensitivity/qwen_2b_4bit__sens.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_sensitivity/qwen_2b_base__sens.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_sensitivity/qwen_4b_4bit__sens.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_sensitivity/qwen_4b_base__sens.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_sensitivity_512/judge_sens512_seed1.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_sensitivity_512/judge_sens512_seed2.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_sensitivity_512/judge_sens512_seed3.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_sensitivity_512/judge_sens512_seed4.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_sensitivity_512/judge_sens512_seed5.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_sensitivity_512/llama_3_2_3b_4bit__sens512.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_sensitivity_512/llama_3_2_3b_base__sens512.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_sensitivity_512/qwen_2b_4bit__sens512.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_sensitivity_512/qwen_2b_base__sens512.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_sensitivity_512/qwen_4b_4bit__sens512.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_sensitivity_512/qwen_4b_base__sens512.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_smoke/llama_3_2_3b_4bit__harmbench.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_smoke/llama_3_2_3b_4bit__mmlu.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_smoke/llama_3_2_3b_4bit__xstest.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_smoke/llama_3_2_3b_base__harmbench.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_smoke/llama_3_2_3b_base__mmlu.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_smoke/llama_3_2_3b_base__xstest.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_smoke/mistral_7b_4bit__harmbench.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_smoke/mistral_7b_base__harmbench.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_smoke/phi4_mini_4bit__harmbench.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_smoke/phi4_mini_base__harmbench.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_smoke/qwen_2b_4bit__harmbench.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_smoke/qwen_2b_4bit__mmlu.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_smoke/qwen_2b_4bit__xstest.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_smoke/qwen_2b_base__harmbench.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_smoke/qwen_2b_base__mmlu.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_smoke/qwen_2b_base__xstest.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_smoke/qwen_4b_4bit__harmbench.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_smoke/qwen_4b_4bit__mmlu.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_smoke/qwen_4b_4bit__xstest.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_smoke/qwen_4b_base__harmbench.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_smoke/qwen_4b_base__mmlu.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/jobs_tc1_smoke/qwen_4b_base__xstest.sbatch,slurm,WF code:cluster-configs,executed_only,1 sbatch/dir fully read + normalized diff of rest
+slurm/judge_validation.sbatch,slurm,"judge layer (HarmBench classifier fidelity, api_ju",fully_read,
+slurm/judge_validation_512.sbatch,slurm,"judge layer (HarmBench classifier fidelity, api_ju",fully_read,found as required; scores all 10 fp16/NF4 aliases in results_512
+slurm/judge_validation_int8.sbatch,slurm,"judge layer (HarmBench classifier fidelity, api_ju",fully_read,
+slurm/judge_validation_int8_512.sbatch,slurm,"judge layer (HarmBench classifier fidelity, api_ju",fully_read,found; scores the five *_8bit aliases in results_512
+slurm/judge_validation_newpairs.sbatch,slurm,"judge layer (HarmBench classifier fidelity, api_ju",fully_read,
+submit_slurm_jobs.py,top_level,cluster + configs + SLURM,fully_read,thin wrapper
+tests/__init__.py,tests,"test-suite audit (tests/, 28 files)",fully_read,empty
+tests/conftest.py,tests,"test-suite audit (tests/, 28 files)",fully_read,legacy + quant config fixtures; no network use in practice
+tests/test_agent_harness.py,tests,"test-suite audit (tests/, 28 files)",fully_read,
+tests/test_arc.py,tests,"test-suite audit (tests/, 28 files)",fully_read,
+tests/test_dashboard_data.py,tests,"test-suite audit (tests/, 28 files)",fully_read,
+tests/test_dashboard_theme.py,tests,"test-suite audit (tests/, 28 files)",fully_read,
+tests/test_datasets.py,tests,"test-suite audit (tests/, 28 files)",fully_read,
+tests/test_evaluators.py,tests,"test-suite audit (tests/, 28 files)",fully_read,
+tests/test_int8_scoping.py,tests,"test-suite audit (tests/, 28 files)",fully_read,
+tests/test_judge_agreement.py,tests,"test-suite audit (tests/, 28 files)",fully_read,
+tests/test_judge_pairwise.py,tests,"test-suite audit (tests/, 28 files)",fully_read,
+tests/test_judge_validation.py,tests,"test-suite audit (tests/, 28 files)",fully_read,
+tests/test_matrix_reuse.py,tests,"test-suite audit (tests/, 28 files)",fully_read,
+tests/test_metrics_and_config.py,tests,"test-suite audit (tests/, 28 files)",fully_read,
+tests/test_models.py,tests,"test-suite audit (tests/, 28 files)",fully_read,
+tests/test_pipeline.py,tests,"test-suite audit (tests/, 28 files)",fully_read,
+tests/test_precision_sweep.py,tests,"test-suite audit (tests/, 28 files)",fully_read,
+tests/test_quant_analysis.py,tests,"test-suite audit (tests/, 28 files)",fully_read,
+tests/test_quant_config_schema.py,tests,"test-suite audit (tests/, 28 files)",fully_read,
+tests/test_quant_int8.py,tests,"test-suite audit (tests/, 28 files)",fully_read,
+tests/test_quant_pipeline_utils.py,tests,"test-suite audit (tests/, 28 files)",fully_read,
+tests/test_quant_smoke.py,tests,"test-suite audit (tests/, 28 files)",fully_read,
+tests/test_refusal_margin.py,tests,"test-suite audit (tests/, 28 files)",fully_read,
+tests/test_refusal_parser.py,tests,"test-suite audit (tests/, 28 files)",fully_read,
+tests/test_report_claims.py,tests,"test-suite audit (tests/, 28 files)",fully_read,
+tests/test_sensitivity.py,tests,"test-suite audit (tests/, 28 files)",fully_read,
+tests/test_slurm_helpers.py,tests,"test-suite audit (tests/, 28 files)",fully_read,
+tests/test_xstest_benign.py,tests,"test-suite audit (tests/, 28 files)",fully_read,
+todo.md,top_level,"Claim-surface sweep: current-facing docs, decks, c",partially_read,"Stale-marker grep + T30/T1 sections; clean, T30 marked DONE"

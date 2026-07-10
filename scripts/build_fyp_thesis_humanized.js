@@ -1,4 +1,8 @@
 // ============================================================================
+// ⚠️ STALE (2026-07-11): this humanized variant lags the canonical master builder,
+// which received the post-audit P1 fixes (RQ3/§6.14/labels/declarations/A4/human-gold
+// disclosures). Only the dash-range corruption was patched here. Do NOT submit this
+// variant as-is; submit the fixed master, or regenerate this humanized layer from it.
 // FYP THESIS builder (v4 - 512-primary mirror; decisions D41/D43) - docx-js.
 // Separate from scripts/build_fyp_report_v5.js; `make report` never touches this.
 // Output: docs/FYP_Thesis_2026-07-02_humanized.docx   (build: make thesis)
@@ -274,10 +278,10 @@ const ch6 = [
   H2("6.1  Scoring validity: the regex over-counts"),
   PJ("The first result concerns the instrument. The refusal regex reports far higher Attack Success Rates than the HarmBench classifier, and the gap is uneven by family. Cohen's κ between the regex and the classifier at the 512-token reference budget is poor for the Qwen and Mistral models and good for Llama and Phi (Table 6.1), because models that produce a large volume of ambiguous, non-refusing-but-benign text are exactly those the regex mis-scores. In aggregate the classifier's harmful set is a near-strict subset of the regex's (29 judge-only labels against 325 regex-only across the ten models), so the disagreement is overwhelmingly one-directional over-counting. At the retired 128-token budget, adopting the classifier had moved the significant increases wholesale: the regex placed them on Qwen3-4B and Mistral, the classifier on Qwen3-1.7B alone. At the reference budget it removes every significant increase entirely (§6.2). A stratified human-label audit (200 items, single annotator) confirms the direction against truth rather than against another model: the classifier agrees with a human annotator at Cohen's κ 0.59 (moderate) while the regex agrees at only 0.11 (negligible), against the human's 200 labels the regex over-flagged 101 responses as harmful to the classifier's 18, and the human, flagging 37, applied the highest bar of the three, so refusal-counting over-states harmful compliance relative to human judgment, not merely relative to the classifier; the classifier is a better scorer, though at moderate agreement, not a perfect human proxy. In safety evaluation the choice of scorer is not a detail: it can change the conclusion."),
   tbl(["Family", "Cohen's κ (regex vs classifier)", "Reading"], [
-    ["Qwen", "0.36, 0.59", "poor to moderate; regex over-counts heavily (0.595 vs judge 0.255, 1.7B base)"],
-    ["Mistral", "0.25, 0.28", "worst; regex 0.890 vs judge 0.565 (4-bit)"],
-    ["Llama", "0.71, 0.84", "good; little ambiguous middle ground"],
-    ["Phi", "0.67, 0.77", "good; like Llama"],
+    ["Qwen", "0.36 to 0.59", "poor to moderate; regex over-counts heavily (0.595 vs judge 0.255, 1.7B base)"],
+    ["Mistral", "0.25 to 0.28", "worst; regex 0.890 vs judge 0.565 (4-bit)"],
+    ["Llama", "0.71 to 0.84", "good; little ambiguous middle ground"],
+    ["Phi", "0.67 to 0.77", "good; like Llama"],
   ], [1900, 3660, 3800]),
   CAP("Table 6.1  Judge-versus-regex agreement (Cohen's κ) by model family (fp16-vs-NF4 main study, 512-token reference budget)."),
   ...FIG("judge_vs_proxy.png", "Scorer validation. Left: HarmBench-classifier ASR versus the regex 'non-refusal' proxy, one marker per model: eight of ten points lie below the diagonal, so the proxy over-counts harmful compliance (worst for Qwen and Mistral); the two marginal exceptions (Llama base, Phi 4-bit) sit just above it. Right: judge-vs-proxy Cohen's κ per model, family-dependent. Source: results_512/analysis/judge_agreement.json."),

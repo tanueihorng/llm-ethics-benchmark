@@ -28,14 +28,14 @@ const CONTENT_W = 9360;    // US Letter, 1" margins
 let listN = 0;
 const T = (text, opts = {}) => new TextRun({ text, font: SERIF, size: BODY, ...opts });
 const P = (text, opts = {}) => new Paragraph({
-  children: [T(text)], spacing: { after: opts.after ?? 140, line: 276 },
+  children: [T(text)], spacing: { after: opts.after ?? 140, line: 360 },
   alignment: opts.center ? AlignmentType.CENTER : AlignmentType.LEFT, ...opts.p,
 });
 const PJ = (text) => new Paragraph({
-  children: [T(text)], alignment: AlignmentType.JUSTIFIED, spacing: { after: 160, line: 276 },
+  children: [T(text)], alignment: AlignmentType.JUSTIFIED, spacing: { after: 160, line: 360 },
 });
 const RUNS = (runs, opts = {}) => new Paragraph({
-  children: runs, alignment: AlignmentType.JUSTIFIED, spacing: { after: 160, line: 276 }, ...opts,
+  children: runs, alignment: AlignmentType.JUSTIFIED, spacing: { after: 160, line: 360 }, ...opts,
 });
 const H1 = (text) => new Paragraph({ heading: HeadingLevel.HEADING_1, pageBreakBefore: true,
   spacing: { after: 200 }, children: [new TextRun({ text, font: SERIF, size: 32, bold: true })] });
@@ -46,9 +46,9 @@ const H2 = (text) => new Paragraph({ heading: HeadingLevel.HEADING_2,
 const H3 = (text) => new Paragraph({ heading: HeadingLevel.HEADING_3,
   spacing: { before: 160, after: 120 }, children: [new TextRun({ text, font: SERIF, size: 24, bold: true })] });
 const BUL = (text) => { return new Paragraph({ numbering: { reference: "bullets", level: 0 },
-  spacing: { after: 80, line: 276 }, children: [T(text)] }); };
+  spacing: { after: 80, line: 360 }, children: [T(text)] }); };
 const NUM = (text, ref) => new Paragraph({ numbering: { reference: ref, level: 0 },
-  spacing: { after: 80, line: 276 }, children: [T(text)] });
+  spacing: { after: 80, line: 360 }, children: [T(text)] });
 // IEEE reference entry: "[n] ..." with a hanging indent so continuation lines align.
 const REF = (n, text) => new Paragraph({ spacing: { after: 90, line: 264 },
   indent: { left: 400, hanging: 400 },
@@ -116,7 +116,7 @@ const cover = [
 const declaration = [
   H1NB("Declaration of Originality"),
   PJ("I hereby declare that this Final Year Project interim report is my own work and, to the best of my knowledge and belief, it contains no material previously published or written by another person, nor material that has been accepted for the award of any other degree or diploma of a university or other institution of higher learning, except where due acknowledgement has been made in the text. The intellectual content of this interim report (its research design, experimental methodology, analysis, and interpretation) is the product of my own work, although I have received assistance on software implementation, language, and presentation as acknowledged herein."),
-  PJ("All experimental results reported in this interim report were produced by the open-source benchmarking framework described herein, executed on the NTU TC1 GPU cluster, and are reproducible from the committed configuration, source code, and redacted result artefacts. Every reported numerical result is computed by the committed code from the recorded experimental records; no result has been altered, fabricated, or selectively reported. Where the work of others has been used, it has been cited and referenced."),
+  PJ("All experimental results reported in this interim report were produced by the open-source benchmarking framework described herein, executed on the NTU TC1 GPU cluster. Every reported numerical result is computed by the committed code from the recorded experimental records; no result has been altered, fabricated, or selectively reported. The per-generation raw records are retained locally and pinned by cryptographic hash rather than committed to the public repository, so a third party reproduces the results either by re-running the pipeline from the committed configuration and source code, or by replaying the committed redacted score sidecars — not by recomputing from raw generations on a fresh clone. Where the work of others has been used, it has been cited and referenced."),
   new Paragraph({ spacing: { before: 700, after: 40 }, children: [T("_______________________________")] }),
   P("Tan Uei Horng  (UTAN001)", { after: 30 }),
   P("College of Computing and Data Science, Nanyang Technological University", { after: 30 }),
@@ -324,7 +324,7 @@ const ch7 = [
   H2("7.1  Internal validity"),
   PJ("Internal validity is the design’s strongest property: the matched-pair structure with on-the-fly quantization from identical weights, plus deterministic decoding and deterministic or judge-validated scoring, leaves quantization as the only plausible cause of a measured delta. The fail-loud loader guard rules out the subtle confound of a quantized run silently executing in full precision. The generation budget, which the 128-token run showed can manufacture an effect, is controlled by adopting the benchmark’s own standardized budget and retaining the truncated run as an explicit comparison rather than discarding it."),
   H2("7.2  Construct validity"),
-  PJ("The primary safety construct is scored by the benchmark’s own fine-tuned classifier rather than refusal matching, and the cross-judge agreement (Cohen’s κ 0.68–0.95 across all ten models at the reference budget) shows the finding is not an artefact of one classifier. A stratified human-label audit (200 items, single annotator, HarmBench rubric) now grounds this against truth: the classifier agrees with the human at Cohen's κ 0.59 versus the regex's 0.11, so the primary scorer is closer to human judgment than the demoted regex, not merely to another model. The residual is honestly bounded — κ 0.59 is moderate, not near-perfect, and rests on one annotator, so a second annotator with an inter-rater κ is the remaining strengthening. Over-refusal remains regex-scored, a known weaker construct. A second construct boundary is the threat model: the safety axis measures harmful compliance under direct requests only, with no attack augmentation, so the null does not speak to jailbreak robustness under optimised attacks, which is precisely where prior quantization-safety work reports effects [7], [5]."),
+  PJ("The primary safety construct is scored by the benchmark’s own fine-tuned classifier rather than refusal matching, and the cross-judge agreement (Cohen’s κ 0.68–0.95 across all ten models at the reference budget) shows the finding is not an artefact of one classifier. A stratified human-label audit (200 items, single annotator — the author — HarmBench rubric) now grounds this against truth: the classifier agrees with the human at Cohen's κ 0.59 versus the regex's 0.11, so the primary scorer is closer to human judgment than the demoted regex, not merely to another model. Two sampling caveats scope those figures symmetrically: the subset deliberately over-weights judge-vs-regex disagreement cases (roughly three times their population rate), so the κ values are a disagreement-enriched contrast rather than a population estimate (both scorers' population agreement would sit higher); and the annotation view was capped at the first 2,000 characters of each response while the scorers saw the full text, which can only inflate measured disagreement. The residual is honestly bounded — κ 0.59 is moderate, not near-perfect, and rests on one annotator, so a second annotator with an inter-rater κ is the remaining strengthening. Over-refusal remains regex-scored, a known weaker construct. A second construct boundary is the threat model: the safety axis measures harmful compliance under direct requests only, with no attack augmentation, so the null does not speak to jailbreak robustness under optimised attacks, which is precisely where prior quantization-safety work reports effects [7], [5]."),
   H2("7.3  External and statistical-conclusion validity"),
   PJ("External validity is bounded by five pairs, one decoding regime (greedy primary, with a three-pair multi-seed arm), two bitsandbytes methods, direct requests only, and English-only text; the cross-family, cross-precision, and cross-budget sweeps widen it but do not make it general. Statistical-conclusion validity is bounded by sample size and is addressed head-on: paired-bootstrap intervals, exact McNemar tests, an explicit BH-FDR correction over the primary family, a minimum-detectable-effect analysis (about 0.06), and a two-layer evidence status rather than bare significance."),
 ];
@@ -388,7 +388,7 @@ const refs = [
 
 const appendix = [
   H1("Appendix A  Reproducibility Statement"),
-  PJ("All code, configuration, and redacted result artefacts are in the project repository. The analysis reproduces byte-for-byte from the committed sidecars without a GPU; full experiments require the gated model weights and a CUDA GPU. The project maps to the ML Reproducibility Checklist [18]: models and algorithms are described (Chapters 3–4); datasets, splits, and sample counts are recorded in each run summary; code and pinned dependencies are released; hyper-parameters and decoding controls are recorded in every summary; the compute infrastructure is recorded; and significance procedures are specified, with multiple comparisons disclosed. The repository follows recognised research-software practice (scripts rather than manual steps, fixed seeds, explicit dependencies, and a documented project structure [19], [20]) and is packaged for reuse in line with open-source-software peer-review norms [21]. Raw generations are gitignored and hash-pinned; only redacted sidecars (identifiers, booleans, scalars) are released, so the study is reproducible without redistributing harmful text. The primary artefacts live under results_512/ (the 512-token study), with the 128-token run retained under results/ as the generation-length comparison; a checksum manifest pins 300 immutable raw files across both trees and the multi-seed arm."),
+  PJ("All code, configuration, and redacted result artefacts are in the project repository. The analysis reproduces byte-for-byte from the committed sidecars without a GPU; full experiments require the gated model weights and a CUDA GPU. The project maps to the ML Reproducibility Checklist [18]: models and algorithms are described (Chapters 3–4); datasets, splits, and sample counts are recorded in each run summary; code and declared dependencies are released; hyper-parameters and decoding controls are recorded in every summary; the compute infrastructure is recorded; and significance procedures are specified, with multiple comparisons disclosed. The dependency set is declared with minimum-version floors (a lockfile with exact pins is a future hardening step). The repository follows recognised research-software practice (scripts rather than manual steps, fixed seeds, explicit dependencies, and a documented project structure [19], [20]) and is packaged for reuse in line with open-source-software peer-review norms [21]. Raw generations are gitignored and hash-pinned; only redacted sidecars (identifiers, booleans, scalars) are released, so the study is reproducible without redistributing harmful text. The primary artefacts live under results_512/ (the 512-token study), with the 128-token run retained under results/ as the generation-length comparison; a checksum manifest pins 300 immutable raw files across both trees and the multi-seed arm."),
   H1("Appendix B  Artefacts and Test Suite"),
   PJ("The framework ships 339 automated tests across the schema, loaders (including the fail-loud quantization guard), scorers, analysis mathematics (delta computation, paired bootstrap, McNemar, Cohen’s κ), and the SLURM job generator; a machine claim lock (scripts/verify_report_claims.py, run inside the suite) additionally asserts every load-bearing number in the report and this interim report against the committed analysis artefacts under results_512/analysis/, so the documents cannot drift from the evidence without failing the build. Result artefacts comprise per-prompt redacted score sidecars, per-model judge summaries, and analysis files (pairwise deltas, judge agreement, the precision sweep). A checksum manifest pins the immutable raw artefacts."),
 ];
@@ -397,6 +397,7 @@ const appendix = [
 // ASSEMBLE
 // ===========================================================================
 const doc = new Document({
+  features: { updateFields: true },  // populate the TOC field on open
   styles: {
     default: { document: { run: { font: SERIF, size: BODY } } },
     paragraphStyles: [
@@ -414,8 +415,8 @@ const doc = new Document({
   ] },
   sections: [{
     properties: { page: {
-      size: { width: 12240, height: 15840 },
-      margin: { top: 1440, right: 1440, bottom: 1440, left: 1440 },
+      size: { width: 11906, height: 16838 },
+      margin: { top: 1273, right: 1273, bottom: 1273, left: 1273 },
     } },
     headers: { default: new Header({ children: [new Paragraph({ alignment: AlignmentType.RIGHT,
       border: { bottom: { style: BorderStyle.SINGLE, size: 4, color: "BBBBBB", space: 4 } },

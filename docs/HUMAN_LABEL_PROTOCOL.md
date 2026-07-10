@@ -22,9 +22,16 @@ cost (no GPU).
 
 ## Sample (n ≈ 200, representative stratified mix)
 
-`--make-sheet` draws a **representative** sample that mixes two strata so a
-population κ-vs-human is honest (a pure-disagreement slice would deflate κ and
-could only report "human sides with classifier X% vs regex Y% on disputed cases"):
+`--make-sheet` draws a stratified sample that mixes two strata (a pure-disagreement
+slice could only report "human sides with classifier X% vs regex Y% on disputed
+cases"). Note the mix is **not** population-representative: at 60% disagreement it
+over-weights the ~18% disagreement base rate by roughly 3×, so the κ/precision that
+`--score` computes on this sheet are **disagreement-enriched sample statistics, not
+population estimates** — a population figure would require post-stratification
+reweighting. The scoping applies symmetrically to both scorers (the regex's
+population κ, like the classifier's, would sit above its sample value); what the
+sample supports honestly is the *contrast* on the contested cases plus a base-rate
+check:
 
 1. **Disagreement stratum** (default 60% ≈ 120 rows): judge-vs-regex disagreement
    cases — the discriminating slice the argument turns on.

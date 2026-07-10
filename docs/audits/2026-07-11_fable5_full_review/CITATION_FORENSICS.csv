@@ -1,0 +1,27 @@
+document,ref,entry_as_printed,exists,metadata_status,source_checked
+thesis/interim,[1],"Dettmers et al., LLM.int8(), NeurIPS 2022, arXiv:2208.07339",yes,"OK — arXiv comment 'Published at NeurIPS 2022'; authors match (Dettmers, Lewis, Belkada, Zettlemoyer)",arXiv API
+thesis/interim,[2],"Dettmers et al., QLoRA, NeurIPS 2023, arXiv:2305.14314",yes,OK — NeurIPS 2023 oral confirmed (neurips.cc/virtual/2023/oral/73855),arXiv API + neurips.cc
+thesis/interim,[3],"Mazeika et al., HarmBench, ICML 2024, arXiv:2402.04249",yes,"OK — PMLR v235 pp.35181-35224, authors match",proceedings.mlr.press/v235/mazeika24a.html
+thesis/interim,[4],"Kharinaev et al., arXiv preprint 2502.15799, 2025",yes,"STALE — now IEEE Access (Crossref DOI 10.1109/access.2026.3703899, issued 2026); report cites 'IEEE Access, 2025' → cross-doc mismatch; also 6 authors, IEEE would list all",arXiv API + Crossref
+thesis/interim,[5],"Belkhiter et al., HarmLevelBench, arXiv preprint 2411.06835, 2024",yes,"STALE — arXiv comment: NeurIPS 2024 SafeGenAI workshop (report cites it); only 3 authors, should be listed in full",arXiv API
+thesis/interim,[6],"Jin et al., quantization strategies eval, ACL Findings 2024, arXiv:2402.16775",yes,OK — arXiv comment 'ACL 2024 Findings'; 7 authors so et al. valid,arXiv API
+thesis/interim,[7],"Egashira et al., Exploiting LLM Quantization, NeurIPS 2024, arXiv:2405.18137",yes,OK — NeurIPS 2024 confirmed (neurips.cc/virtual/2024/poster/95767); all 5 authors listed,arXiv API + neurips.cc
+thesis/interim,[8],"Röttger et al., XSTest, NAACL 2024, arXiv:2308.01263",yes,OK — 'Accepted at NAACL 2024 (Main Conference)'; all 6 authors listed and match,arXiv API
+thesis/interim,[9],"Liang et al., HELM, TMLR 2023, arXiv:2211.09110",yes,"OK — journal_ref 'Published in TMLR, 2023'; 50 authors, et al. valid. Thesis/interim-only (absent from report)",arXiv API
+thesis/interim,[10],"Gu et al., Survey on LLM-as-a-judge, arXiv preprint 2411.15594, 2024",yes,"OK — first author Jiawei Gu; no formal venue found (arXiv comment/Crossref), preprint citation correct",arXiv API + Crossref
+thesis/interim,[11],"Krumdick et al., No Free Labels, arXiv preprint 2503.05061, 2025",yes,"OK substantively — no formal venue found, preprint correct; 5 authors, IEEE would list all",arXiv API + Crossref
+thesis/interim,[12],"Hendrycks et al., MMLU, ICLR 2021, arXiv:2009.03300",yes,OK — arXiv comment 'ICLR 2021'; all 7 authors listed and match,arXiv API
+thesis/interim,[13],"Clark et al., ARC, arXiv preprint 1803.05457, 2018",yes,OK — never formally published; all 7 authors listed and match,arXiv API
+thesis/interim,[14],"Efron & Tibshirani, An Introduction to the Bootstrap, Chapman & Hall, 1993",yes,OK — canonical monograph (not re-fetched from publisher catalog),canonical/EXTERNAL
+thesis/interim,[15],"McNemar, Psychometrika 12(2):153-157, 1947",yes,OK — DOI 10.1007/BF02295996 title/journal match; vol/pages canonical. Humanized variants corrupt range to '153 to 157',doi.org
+thesis/interim,[16],"Proskurina et al., arXiv preprint 2405.00632, 2024",yes,"STALE — published Findings of NAACL 2024 (Crossref DOI 10.18653/v1/2024.findings-naacl.124; arXiv comment); report cites the venue, thesis/interim do not → cross-doc mismatch",arXiv API + Crossref
+thesis/interim,[17],"Inan et al., Llama Guard, Meta AI 2023, arXiv:2312.06674",yes,"OK — 11 authors, et al. valid",arXiv API
+thesis/interim,[18],"Pineau et al., JMLR vol 22, 2021, arXiv:2003.12206",yes,"OK — JMLR 22(164):1-20, 2021 confirmed; 8 authors, et al. valid. First-cited in Appendix A only",jmlr.org/papers/v22/20-303.html
+thesis/interim,[19],"Sandve et al., PLOS Comp Biol 9(10) e1003285, 2013",yes,OK — volume/issue/eid exact; all 4 authors match. First-cited in Appendix A only,doi.org/10.1371/journal.pcbi.1003285
+thesis/interim,[20],"Wilson et al., PLOS Comp Biol 13(6) e1005510, 2017",yes,OK — volume/issue/eid exact; 6 listed authors match. First-cited in Appendix A only,doi.org/10.1371/journal.pcbi.1005510
+thesis/interim,[21],"Smith et al., JOSS design and first-year review, arXiv preprint 1707.02264, 2017",yes,STALE — published PeerJ Computer Science 4:e147 (2018) per arXiv journal_ref; preprint citation is the 2017 version. First-cited in Appendix A only,arXiv API
+thesis/interim,,,,,
+report+thesis,SEMANTIC,"~14 load-bearing in-text citations deep-verified against fetched sources",yes,"CLEAN — none mischaracterizes its source (Egashira/Kharinaev/HarmLevelBench/Q-resafe/Proskurina/Dettmers all accurate); no citation laundering",25th verifier (semantic support)
+report+thesis,P3,"Benjamini–Hochberg used as headline method but uncited; Cohen's-κ interpretation labels use an uncited convention with one non-standard label",n/a,"add BH (1995) + Landis&Koch (1977) citations",25th verifier
+report,P3,"[21] cites Phi-4 (14B) TR arXiv:2412.08905 for Phi-4-MINI-instruct; correct = Phi-4-Mini TR arXiv:2503.01743",metadata_error,"swap reference",citation-forensics agent
+report,P2,"CITATION.bib = pre-pivot init metadata ([Your University] placeholder, wrong repo URL, toxicity/bias/factuality description)",metadata_error,"regenerate from CITATION.cff",citation-forensics agent

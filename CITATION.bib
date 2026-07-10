@@ -1,10 +1,15 @@
-@software{ethical_benchmark_2026,
+@software{fyp_quant_2026,
   author       = {Tan, Uei Horng},
-  title        = {Ethical Benchmarking Framework for Open-Source LLMs},
+  title        = {{fyp-quant: A matched-pair framework for
+                  safety--capability trade-offs in quantized small
+                  language models}},
   year         = {2026},
-  description  = {A research-oriented framework for evaluating the ethical
-                  performance of open-source language models under 10B parameters
-                  across toxicity, social bias, and factual correctness.},
-  url          = {https://github.com/tanueihorng/ethical-benchmark},
-  note         = {Final Year Project, University of [Your University]}
+  howpublished = {Final Year Project, College of Computing and Data
+                  Science, Nanyang Technological University},
+  note         = {Matched-pair (fp16 vs on-the-fly NF4/INT8) evaluation of
+                  harmful compliance (HarmBench), over-refusal (XSTest),
+                  and capability (MMLU, ARC-Challenge) across five model
+                  pairs / four families, scored by the official HarmBench
+                  classifier as the primary judge.},
+  url          = {https://github.com/tanueihorng/llm-ethics-benchmark}
 }

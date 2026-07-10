@@ -1,3 +1,7 @@
+// ⚠️ STALE (2026-07-11): this humanized variant lags the canonical master builder,
+// which received the post-audit P1 fixes (RQ3/§6.14/labels/declarations/A4/human-gold
+// disclosures). Only the dash-range corruption was patched here. Do NOT submit this
+// variant as-is; submit the fixed master, or regenerate this humanized layer from it.
 // FYP Report builder (v3 - publication-grade pass + humanizer prose edit) - docx-js
 // Output: /Users/tanueihorng/fyp_quant/docs/FYP_Report_2026-07-01_humanized.docx
 // v5 (T31/D41): 512-primary re-base. HarmBench ASR is now reported at HarmBench's

@@ -1,0 +1,11 @@
+claim,classification,source,artifact,evidence_status,audit_result
+No HarmBench ASR contrast survives BH-FDR at 512,READ,canonical documents,multiple_comparisons.json,61/61 claim lock plus artifact check,Supported not zero-effect
+Qwen-2B ASR 0.255 to 0.255 delta 0 p 1,READ,canonical documents,headline_512_vs_128.json,200 aligned judge IDs,Supported
+Llama ASR delta -0.040 p .021,READ,canonical documents,headline_512_vs_128.json,200 aligned judge IDs,Supported as uncorrected decrease
+Three BH survivors,READ,canonical documents,multiple_comparisons.json,q .008 .008 .0492,Supported
+512 is HarmBench reference budget,EXTERNAL,method text,tc1_512.yaml,HarmBench paper,Supported
+Exact model revisions used,INFERRED,report builder,tc1_512.yaml,Pins postdate run and raws omit revisions,Unsupported P1
+Byte-identical rerun,INFERRED,report builder,requirements/loaders/results,No full lock or manifest,Unsupported P1
+Generic pairwise ASR is judge-primary,READ,generic analysis,pairwise_deltas.json,Uses v2 proxy,Unsafe naming P2
+Generation uses inference_mode,READ,report builder,generation.py,Code uses no_grad,Incorrect P2
+General jailbreak robustness,INFERRED,scope prose,HarmBench DirectRequest config,No jailbreak tested,Unsupported if stated

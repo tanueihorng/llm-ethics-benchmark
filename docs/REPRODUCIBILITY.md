@@ -15,13 +15,13 @@
 |---|---|---|
 | Models & algorithms described | `docs/methodology.md`, report Ch3–4 | ✅ |
 | Datasets used (sources, splits, sample counts) | `docs/datasets.md`; per-run `summary.json` records dataset/split/`max_samples` | ✅ |
-| Code released with dependency specs | public repo; `requirements.txt` (pinned) + `pyproject.toml` | ✅ |
-| All reported results + full experimental setup | `results/analysis/*.json`, redacted judge sidecars, report Ch6 | ✅ |
-| Hyper-parameters / decoding controls | `generation_config` in every `summary.json` (greedy, `temperature=0.0`, seed 42, `max_new_tokens=128`) | ✅ |
+| Code released with dependency specs | public repo; `requirements.txt` (minimum-version floors) + `pyproject.toml` | ✅ |
+| All reported results + full experimental setup | `results_512/analysis/*.json` (the primary 512-token study), redacted judge sidecars, report Ch6; `results/analysis/*` retained as the 128-token generation-length comparison | ✅ |
+| Hyper-parameters / decoding controls | `generation_config` in every `summary.json` (greedy, `temperature=0.0`, seed 42, `max_new_tokens=512` primary — `128` in the retained comparison tree) | ✅ |
 | Evaluation-measure definitions | `docs/evaluation_metrics.md`; ASR / over-refusal / accuracy defined | ✅ |
 | Compute infrastructure | `summary.judge.*.json` records GPU + precision (Tesla V100-32GB); `docs/TC1_CLUSTER_RUNBOOK.md` | ✅ |
-| Number of runs / variance | greedy is deterministic; a multi-seed (T=0.7) sensitivity arm quantifies generation variance for the load-bearing pair | ✅ |
-| Statistical significance | paired bootstrap 95% CIs (2 000 resamples, seed 42) + McNemar exact test; *uncorrected* multiple comparisons disclosed (report §6.5) | ✅ (disclosed) |
+| Number of runs / variance | greedy is deterministic; a multi-seed (T=0.7) sensitivity arm at the 512-token budget quantifies generation variance for three of the five pairs | ✅ |
+| Statistical significance | paired bootstrap 95% CIs (2 000 resamples, seed 42) + McNemar exact test; Benjamini-Hochberg FDR correction over the 20-contrast NF4 family (report §6.5.1) | ✅ |
 | Central tendency + variation | deltas with CIs in `pairwise_deltas.json` / report Tables 6.1–6.2 | ✅ |
 
 ## 2. Determinism & provenance (Sandve "Ten Simple Rules")
@@ -34,7 +34,7 @@
   come from a complete record set with exactly the configured prompt count.
 - **Immutable raw artefacts** — `raw.jsonl` / `summary.json` are TC1-originals,
   never overwritten; all corrections/judging write *derived sidecars*. Integrity
-  is pinned in `results/raw_artifact_manifest.sha256` (120 files) and checked by
+  is pinned in `results/raw_artifact_manifest.sha256` (300 files across the 128, 512, and multi-seed-512 trees) and checked by
   `make agent-check`.
 - **Provenance in every record** — `raw.jsonl` carries `pair_id`, `quantized`,
   `quant_method`, `seed`, `generation_config`, `timestamp`.
@@ -44,7 +44,7 @@
 The repo follows the recommended `README / LICENSE / CITATION / data / doc /
 results / src` shape: `README.md`, `CITATION.cff`, `data/`, `docs/`, `results/`,
 and the `ethical_benchmark/` package as `src`. Dependencies are explicit
-(`requirements.txt`), code is decomposed into plugins/modules, and a 329-test
+(`requirements.txt`), code is decomposed into plugins/modules, and a 339-test
 suite guards behaviour.
 
 ## 4. One-command reproduction
@@ -60,7 +60,7 @@ make agent-check                            # docs/artifact/redaction gates + te
 
 # 3. Re-derive the committed analysis from the (redacted) sidecars (no GPU)
 python compare_quant_pairs.py --config configs/default.yaml \
-  --results_dir results --output_dir results/analysis
+  --results_dir results_512 --output_dir results_512/analysis
 python scripts/judge_agreement.py           # judge-vs-regex agreement (κ)
 python scripts/precision_sweep_analysis.py  # fp16 → INT8 → NF4 sweep
 
@@ -68,7 +68,7 @@ python scripts/precision_sweep_analysis.py  # fp16 → INT8 → NF4 sweep
 make matrix DEVICE=cuda
 ```
 
-Re-running step 3 reproduces `results/analysis/*` byte-for-byte from the committed
+Re-running step 3 reproduces `results_512/analysis/*` byte-for-byte from the committed
 sidecars (the audit, PROJECT_LOG D36, confirms this). Step 4 regenerates the raw
 generations and requires the gated model weights (HF licence + login).
 
