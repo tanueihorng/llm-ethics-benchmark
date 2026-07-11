@@ -123,6 +123,7 @@ class TextGenerator:
             Runs model inference on configured device.
         """
 
+        prompts = list(prompts)
         prompt_list = [self._format_prompt(prompt) for prompt in prompts]
         if not prompt_list:
             return []
@@ -131,6 +132,15 @@ class TextGenerator:
         # (the most recent turn + the assistant cue) lives at the END, so an
         # over-length prompt must drop tokens from the FRONT, not the back. The
         # default right-truncation would silently cut the assistant cue.
+        # When the chat template was applied it already emits the model's special
+        # tokens (including BOS for Llama/Mistral, whose templates render one); the
+        # default add_special_tokens=True would then prepend a SECOND BOS. Suppress
+        # special tokens on the templated path (the template is the single source of
+        # truth for the prompt format); keep them for the raw-prompt fallback so a
+        # non-templated model still receives its canonical BOS.
+        templated = bool(self.config.use_chat_template) and any(
+            fmt != raw for fmt, raw in zip(prompt_list, prompts)
+        )
         self.tokenizer.truncation_side = "left"
         inputs = self.tokenizer(
             prompt_list,
@@ -138,6 +148,7 @@ class TextGenerator:
             padding=True,
             truncation=True,
             max_length=self.config.max_input_tokens,
+            add_special_tokens=not templated,
         )
 
         model_device = self.model.device

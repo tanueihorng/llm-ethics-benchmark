@@ -56,8 +56,8 @@
         "benchmark": "harmbench",
         "n": 200,
         "old_asr": 0.825,
-        "new_asr": 0.825,
-        "asr_delta": 0.0
+        "new_asr": 0.83,
+        "asr_delta": 0.0050000000000000044
       },
       {
         "model_alias": "mistral_7b_4bit",
@@ -87,8 +87,8 @@
     "totals": {
       "total_records": 2000,
       "total_reclassified_to_refusal": 0,
-      "total_still_harmful": 746,
-      "total_still_refusal": 1254
+      "total_still_harmful": 747,
+      "total_still_refusal": 1253
     }
   },
   "xstest": {
@@ -98,8 +98,8 @@
         "benchmark": "xstest",
         "n": 250,
         "old_over_refusal": 0.056,
-        "new_over_refusal": 0.056,
-        "over_refusal_delta": 0.0
+        "new_over_refusal": 0.052,
+        "over_refusal_delta": -0.0040000000000000036
       },
       {
         "model_alias": "qwen_2b_4bit",
@@ -114,32 +114,32 @@
         "benchmark": "xstest",
         "n": 250,
         "old_over_refusal": 0.032,
-        "new_over_refusal": 0.032,
-        "over_refusal_delta": 0.0
+        "new_over_refusal": 0.028,
+        "over_refusal_delta": -0.004
       },
       {
         "model_alias": "qwen_4b_4bit",
         "benchmark": "xstest",
         "n": 250,
         "old_over_refusal": 0.032,
-        "new_over_refusal": 0.032,
-        "over_refusal_delta": 0.0
+        "new_over_refusal": 0.024,
+        "over_refusal_delta": -0.008
       },
       {
         "model_alias": "llama_3_2_3b_base",
         "benchmark": "xstest",
         "n": 250,
         "old_over_refusal": 0.036,
-        "new_over_refusal": 0.036,
-        "over_refusal_delta": 0.0
+        "new_over_refusal": 0.032,
+        "over_refusal_delta": -0.003999999999999997
       },
       {
         "model_alias": "llama_3_2_3b_4bit",
         "benchmark": "xstest",
         "n": 250,
         "old_over_refusal": 0.052,
-        "new_over_refusal": 0.052,
-        "over_refusal_delta": 0.0
+        "new_over_refusal": 0.048,
+        "over_refusal_delta": -0.003999999999999997
       },
       {
         "model_alias": "mistral_7b_base",
@@ -154,8 +154,8 @@
         "benchmark": "xstest",
         "n": 250,
         "old_over_refusal": 0.008,
-        "new_over_refusal": 0.008,
-        "over_refusal_delta": 0.0
+        "new_over_refusal": 0.004,
+        "over_refusal_delta": -0.004
       },
       {
         "model_alias": "phi4_mini_base",
@@ -170,14 +170,14 @@
         "benchmark": "xstest",
         "n": 250,
         "old_over_refusal": 0.084,
-        "new_over_refusal": 0.084,
-        "over_refusal_delta": 0.0
+        "new_over_refusal": 0.08,
+        "over_refusal_delta": -0.0040000000000000036
       }
     ],
     "totals": {
       "total_records": 2500,
       "total_newly_flagged_over_refusal": 0,
-      "total_over_refusal": 115
+      "total_over_refusal": 107
     }
   }
 }

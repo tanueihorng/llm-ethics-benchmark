@@ -118,24 +118,24 @@ def run_checks(checker: Checker | None = None) -> Checker:
     )
     c.check(
         "bh: survivor identities and deltas",
-        ["Qwen-1.7B MMLU −0.090, Llama ARC −0.032, Phi over-refusal −0.044"],
+        ["Qwen-1.7B MMLU −0.090, Llama ARC −0.032, Phi over-refusal −0.048"],
         lambda: (
             {(s["pair_id"], s["metric"]) for s in mc["bh_survivors"]}
             == {("qwen_2b", "mmlu_accuracy"), ("llama_3_2_3b", "arc_accuracy"),
                 ("phi4_mini", "xstest_over_refusal")}
             and near(-0.090, mc["bh_survivors"][0]["delta"])
             and near(-0.032, mc["bh_survivors"][1]["delta"])
-            and near(-0.044, mc["bh_survivors"][2]["delta"]),
+            and near(-0.048, mc["bh_survivors"][2]["delta"]),
             str([(s["pair_id"], s["delta"]) for s in mc["bh_survivors"]]),
         ),
     )
     c.check(
-        "bh: survivor q-values 0.008/0.008/0.049",
+        "bh: survivor q-values 0.008/0.008/0.012",
         [],
         lambda: (
             near(0.008, mc["bh_survivors"][0]["bh_q_value"])
             and near(0.008, mc["bh_survivors"][1]["bh_q_value"])
-            and near(0.049, mc["bh_survivors"][2]["bh_q_value"]),
+            and near(0.0122, mc["bh_survivors"][2]["bh_q_value"]),
             str([s["bh_q_value"] for s in mc["bh_survivors"]]),
         ),
     )
@@ -247,7 +247,7 @@ def run_checks(checker: Checker | None = None) -> Checker:
         "qwen_2b_base": 0.36, "qwen_2b_4bit": 0.41,
         "qwen_4b_base": 0.49, "qwen_4b_4bit": 0.59,
         "llama_3_2_3b_base": 0.71, "llama_3_2_3b_4bit": 0.84,
-        "mistral_7b_base": 0.28, "mistral_7b_4bit": 0.25,
+        "mistral_7b_base": 0.29, "mistral_7b_4bit": 0.25,
         "phi4_mini_base": 0.67, "phi4_mini_4bit": 0.77,
     }
     c.check(
@@ -259,11 +259,11 @@ def run_checks(checker: Checker | None = None) -> Checker:
         ),
     )
     c.check(
-        "mistral 512 kappa in prose: 0.28/0.25 (128-era 0.19/0.11 scoped)",
-        ["Cohen's κ = 0.28 at baseline, 0.25 under 4-bit",
+        "mistral 512 kappa in prose: 0.29/0.25 (128-era 0.19/0.11 scoped)",
+        ["Cohen's κ = 0.29 at baseline, 0.25 under 4-bit",
          "at the retired 128-token budget it had been lower still, 0.19/0.11"],
         lambda: (
-            near(0.28, ja["mistral_7b_base"]["cohens_kappa"], 2)
+            near(0.29, ja["mistral_7b_base"]["cohens_kappa"], 2)
             and near(0.25, ja["mistral_7b_4bit"]["cohens_kappa"], 2)
             and near(0.19, ja128["mistral_7b_base"]["cohens_kappa"], 2)
             and near(0.11, ja128["mistral_7b_4bit"]["cohens_kappa"], 2),
@@ -292,10 +292,10 @@ def run_checks(checker: Checker | None = None) -> Checker:
         ),
     )
     c.check(
-        "mistral v2 proxy 0.825 -> 0.890 (prose == table == artifact)",
-        ["non-refusal rate (0.825) rising to 0.890", '"0.825", "0.890"'],
+        "mistral v2 proxy 0.830 -> 0.890 (prose == table == artifact)",
+        ["non-refusal rate (0.830) rising to 0.890", '"0.830", "0.890"'],
         lambda: (
-            near(0.825, ja["mistral_7b_base"]["v2_asr"]) and near(0.890, ja["mistral_7b_4bit"]["v2_asr"]),
+            near(0.830, ja["mistral_7b_base"]["v2_asr"]) and near(0.890, ja["mistral_7b_4bit"]["v2_asr"]),
             f"{ja['mistral_7b_base']['v2_asr']}/{ja['mistral_7b_4bit']['v2_asr']}",
         ),
     )
@@ -418,17 +418,21 @@ def run_checks(checker: Checker | None = None) -> Checker:
         _per_seed_ok,
     )
 
-    # ---------------- XSTest qwen_2b borderline (D44) ------------------------
-    def _borderline_ok():
+    # ---- XSTest qwen_2b over-refusal now cleanly non-significant (line-38 fix) ----
+    # After removing the unanchored "unable to" refusal pattern (which over-counted
+    # third-person content), qwen_2b over-refusal drops from the earlier "borderline"
+    # state (bootstrap CI excluded 0 but McNemar n.s.) to non-significant on BOTH
+    # criteria: ΔOR −0.024, CI [−0.048, 0.000] (touches 0), McNemar p = 0.109.
+    def _qwen2b_or_ok():
         pd_x = pdix[("qwen_2b", "xstest")]
         mc_x = contrasts[("qwen_2b", "xstest_over_refusal")]
         ok = (
             pd_x["metric"] == "over_refusal_rate"
-            and bool(pd_x["delta_significant"])                # bootstrap CI excludes 0
-            and near(-0.028, pd_x["absolute_delta"])
-            and not mc_x["uncorrected_significant"]            # McNemar does not
-            and near(0.065, mc_x["p_value"])
-            and mc_x["b"] + mc_x["c"] == 11
+            and not bool(pd_x["delta_significant"])            # bootstrap CI now includes 0
+            and near(-0.024, pd_x["absolute_delta"])
+            and not mc_x["uncorrected_significant"]            # McNemar n.s.
+            and near(0.109, mc_x["p_value"])
+            and mc_x["b"] + mc_x["c"] == 10
         )
         return ok, (
             f"bootstrap sig={pd_x['delta_significant']} delta={pd_x['absolute_delta']}; "
@@ -436,12 +440,12 @@ def run_checks(checker: Checker | None = None) -> Checker:
         )
 
     c.check(
-        "xstest qwen_2b: borderline (bootstrap CI excludes 0, McNemar p=0.065)",
+        "xstest qwen_2b: over-refusal non-significant (CI includes 0, McNemar p=0.109)",
         [
-            '"−0.028 [−0.052, −0.004]", "borderline"',
-            "McNemar p = 0.065",
+            '"−0.024 [−0.048, 0.000]"',
+            "McNemar p = 0.109",
         ],
-        _borderline_ok,
+        _qwen2b_or_ok,
     )
 
     # ---------------- Appendix A reproduces tc1_512.yaml ---------------------
@@ -560,17 +564,17 @@ def run_checks(checker: Checker | None = None) -> Checker:
                      and pdelta("phi4_mini", "arc", delta=-0.015, sig=False)[0],
                      f"mmlu={pdix[('phi4_mini','mmlu')]['absolute_delta']:.4f} "
                      f"arc={pdix[('phi4_mini','arc')]['absolute_delta']:.4f}"))
-    c.check("phi over-refusal −0.044 [−0.072,−0.016] (sig, a decrease)",
-            ["ΔOR = −0.044 (CI [−0.072, −0.016]"],
+    c.check("phi over-refusal −0.048 [−0.076,−0.020] (sig, a decrease)",
+            ["ΔOR = −0.048 (CI [−0.076, −0.020]"],
             lambda: (
-                pdelta("phi4_mini", "xstest", delta=-0.044, sig=True)[0]
-                and near(-0.072, pdix[("phi4_mini", "xstest")]["delta_ci_lower"])
-                and near(-0.016, pdix[("phi4_mini", "xstest")]["delta_ci_upper"]),
+                pdelta("phi4_mini", "xstest", delta=-0.048, sig=True)[0]
+                and near(-0.076, pdix[("phi4_mini", "xstest")]["delta_ci_lower"])
+                and near(-0.020, pdix[("phi4_mini", "xstest")]["delta_ci_upper"]),
                 f"ci=[{pdix[('phi4_mini','xstest')]['delta_ci_lower']},"
                 f"{pdix[('phi4_mini','xstest')]['delta_ci_upper']}]"))
     c.check(
         "Table 6.1 v2-proxy CI cells (qwen_2b/qwen_4b/mistral)",
-        ['"−0.025 [−0.070, +0.020]"', '"+0.070 [+0.030, +0.115]"', '"+0.065 [+0.020, +0.110]"'],
+        ['"−0.025 [−0.070, +0.020]"', '"+0.070 [+0.030, +0.115]"', '"+0.060 [+0.015, +0.105]"'],
         lambda: (
             near(-0.025, pdix[("qwen_2b", "harmbench")]["absolute_delta"])
             and near(-0.070, pdix[("qwen_2b", "harmbench")]["delta_ci_lower"])
@@ -578,20 +582,20 @@ def run_checks(checker: Checker | None = None) -> Checker:
             and near(0.070, pdix[("qwen_4b", "harmbench")]["absolute_delta"])
             and near(0.030, pdix[("qwen_4b", "harmbench")]["delta_ci_lower"])
             and near(0.115, pdix[("qwen_4b", "harmbench")]["delta_ci_upper"])
-            and near(0.065, pdix[("mistral_7b", "harmbench")]["absolute_delta"])
-            and near(0.020, pdix[("mistral_7b", "harmbench")]["delta_ci_lower"])
-            and near(0.110, pdix[("mistral_7b", "harmbench")]["delta_ci_upper"]),
+            and near(0.060, pdix[("mistral_7b", "harmbench")]["absolute_delta"])
+            and near(0.015, pdix[("mistral_7b", "harmbench")]["delta_ci_lower"])
+            and near(0.105, pdix[("mistral_7b", "harmbench")]["delta_ci_upper"]),
             "v2 deltas + CIs match pairwise_deltas.json",
         ),
     )
-    c.check("qwen_4b ARC −1.6pp sig; OR flat 0.032->0.032",
-            ["−1.6 pp", "0.032 → 0.032"],
+    c.check("qwen_4b ARC −1.6pp sig; OR 0.028->0.024 (−0.004, n.s.)",
+            ["−1.6 pp", "0.028 → 0.024"],
             lambda: (pdelta("qwen_4b", "arc", delta=-0.016, sig=True)[0]
-                     and pdelta("qwen_4b", "xstest", 0.032, 0.032, 0.0)[0],
+                     and pdelta("qwen_4b", "xstest", 0.028, 0.024, -0.004)[0],
                      f"arc={pdix[('qwen_4b','arc')]['absolute_delta']:.4f}"))
-    c.check("llama OR 0.036->0.052 (+0.016, n.s.)",
-            ["0.036 to 0.052"],
-            lambda: pdelta("llama_3_2_3b", "xstest", 0.036, 0.052, 0.016, False))
+    c.check("llama OR 0.032->0.048 (+0.016, n.s.)",
+            ["0.032 to 0.048"],
+            lambda: pdelta("llama_3_2_3b", "xstest", 0.032, 0.048, 0.016, False))
     c.check("baseline MMLU anchors 0.643 / 0.747 / 0.610",
             ["0.643", "0.747", "0.610"],
             lambda: (near(0.643, pdix[("qwen_2b", "mmlu")]["baseline_value"])
@@ -708,12 +712,12 @@ def run_checks(checker: Checker | None = None) -> Checker:
     )
     tcheck(
         "thesis: kappa family table == judge_agreement",
-        ['"0.36 – 0.59"', '"0.25 – 0.28"', '"0.71 – 0.84"', '"0.67 – 0.77"'],
+        ['"0.36 – 0.59"', '"0.25 – 0.29"', '"0.71 – 0.84"', '"0.67 – 0.77"'],
         lambda: (
             near(0.36, min(ja[k]["cohens_kappa"] for k in KAPPA if "qwen" in k), 2)
             and near(0.59, max(ja[k]["cohens_kappa"] for k in KAPPA if "qwen" in k), 2)
             and near(0.25, min(ja[k]["cohens_kappa"] for k in KAPPA if "mistral" in k), 2)
-            and near(0.28, max(ja[k]["cohens_kappa"] for k in KAPPA if "mistral" in k), 2)
+            and near(0.29, max(ja[k]["cohens_kappa"] for k in KAPPA if "mistral" in k), 2)
             and near(0.71, min(ja[k]["cohens_kappa"] for k in KAPPA if "llama" in k), 2)
             and near(0.84, max(ja[k]["cohens_kappa"] for k in KAPPA if "llama" in k), 2)
             and near(0.67, min(ja[k]["cohens_kappa"] for k in KAPPA if "phi" in k), 2)
@@ -748,7 +752,7 @@ def run_checks(checker: Checker | None = None) -> Checker:
     )
     tcheck(
         "thesis: BH survivors + none-ASR",
-        ["q = 0.008", "q = 0.049", "Not one HarmBench ASR contrast survives"],
+        ["q = 0.008", "q = 0.012", "Not one HarmBench ASR contrast survives"],
         lambda: (
             mc["n_bh_significant_q05"] == 3
             and not any("asr" in s["metric"] for s in mc["bh_survivors"]),
@@ -767,12 +771,12 @@ def run_checks(checker: Checker | None = None) -> Checker:
     )
     tcheck(
         "thesis: multiseed + OR claims",
-        ["mean +0.013, range [0.000, +0.035]", "ΔOR = −0.044, CI [−0.072, −0.016]",
-         "−0.028, McNemar p = 0.065"],
+        ["mean +0.013, range [0.000, +0.035]", "ΔOR = −0.048, CI [−0.076, −0.020]",
+         "−0.024, McNemar p = 0.109"],
         lambda: (
             near(0.013, smp["qwen_2b"]["judge_delta"]["mean"])
-            and near(-0.044, pdix[("phi4_mini", "xstest")]["absolute_delta"])
-            and near(-0.028, pdix[("qwen_2b", "xstest")]["absolute_delta"]),
+            and near(-0.048, pdix[("phi4_mini", "xstest")]["absolute_delta"])
+            and near(-0.024, pdix[("qwen_2b", "xstest")]["absolute_delta"]),
             "multiseed + OR values match",
         ),
     )

@@ -1,6 +1,6 @@
 evidence_status,harmbench_asr_delta,harmbench_asr_delta_significant,interpretation_label,mmlu_accuracy_delta,mmlu_accuracy_delta_significant,pair_id,xstest_over_refusal_delta,xstest_over_refusal_delta_significant
-directional,-0.01999999999999999,False,broad_degradation,-0.036666666666666625,False,llama_3_2_3b,0.016,False
-confirmed,0.06500000000000006,True,alignment_degradation,-0.020000000000000018,False,mistral_7b,0.004,False
-null,0.0,False,robust_preservation,-0.026666666666666727,False,phi4_mini,-0.044,True
-confirmed,-0.025000000000000022,False,capability_collapse_masquerading_as_safety,-0.08999999999999997,True,qwen_2b,-0.028,True
-confirmed,0.07,True,alignment_degradation,-0.0033333333333334103,False,qwen_4b,0.0,False
+directional,-0.01999999999999999,False,capability_collapse_masquerading_as_safety,-0.036666666666666625,False,llama_3_2_3b,0.016,False
+confirmed,0.06000000000000005,True,alignment_degradation,-0.020000000000000018,False,mistral_7b,0.0,False
+null,0.0,False,robust_preservation,-0.026666666666666727,False,phi4_mini,-0.048,True
+confirmed,-0.025000000000000022,False,capability_collapse_masquerading_as_safety,-0.08999999999999997,True,qwen_2b,-0.023999999999999997,False
+confirmed,0.07,True,alignment_degradation,-0.0033333333333334103,False,qwen_4b,-0.004,False

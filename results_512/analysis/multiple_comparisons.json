@@ -23,9 +23,9 @@
     {
       "pair_id": "phi4_mini",
       "metric": "xstest_over_refusal",
-      "p_value": 0.0074,
-      "bh_q_value": 0.0492,
-      "delta": -0.044
+      "p_value": 0.0018,
+      "bh_q_value": 0.0122,
+      "delta": -0.048
     }
   ],
   "power_analysis": {
@@ -116,13 +116,13 @@
       "metric": "xstest_over_refusal",
       "n": 250,
       "b": 2,
-      "c": 9,
-      "n_discordant": 11,
-      "delta": -0.028,
-      "p_value": 0.0654296875,
+      "c": 8,
+      "n_discordant": 10,
+      "delta": -0.024,
+      "p_value": 0.109375,
       "uncorrected_significant": false,
       "direction": "down",
-      "bh_q_value": 0.2139,
+      "bh_q_value": 0.2431,
       "bh_significant_q05": false
     },
     {
@@ -136,7 +136,7 @@
       "p_value": 0.09625244140625,
       "uncorrected_significant": false,
       "direction": "harmful-ward",
-      "bh_q_value": 0.2139,
+      "bh_q_value": 0.2406,
       "bh_significant_q05": false
     },
     {
@@ -171,13 +171,13 @@
       "pair_id": "qwen_4b",
       "metric": "xstest_over_refusal",
       "n": 250,
-      "b": 2,
+      "b": 1,
       "c": 2,
-      "n_discordant": 4,
-      "delta": 0.0,
+      "n_discordant": 3,
+      "delta": -0.004,
       "p_value": 1.0,
       "uncorrected_significant": false,
-      "direction": "up",
+      "direction": "down",
       "bh_q_value": 1.0,
       "bh_significant_q05": false
     },
@@ -206,7 +206,7 @@
       "p_value": 0.08014331245794892,
       "uncorrected_significant": false,
       "direction": "down",
-      "bh_q_value": 0.2139,
+      "bh_q_value": 0.2406,
       "bh_significant_q05": false
     },
     {
@@ -227,14 +227,14 @@
       "pair_id": "llama_3_2_3b",
       "metric": "xstest_over_refusal",
       "n": 250,
-      "b": 7,
-      "c": 3,
-      "n_discordant": 10,
+      "b": 6,
+      "c": 2,
+      "n_discordant": 8,
       "delta": 0.016,
-      "p_value": 0.34375,
+      "p_value": 0.2890625,
       "uncorrected_significant": false,
       "direction": "up",
-      "bh_q_value": 0.5729,
+      "bh_q_value": 0.4818,
       "bh_significant_q05": false
     },
     {
@@ -276,17 +276,17 @@
       "p_value": 0.2836071084054854,
       "uncorrected_significant": false,
       "direction": "up",
-      "bh_q_value": 0.5156,
+      "bh_q_value": 0.4818,
       "bh_significant_q05": false
     },
     {
       "pair_id": "mistral_7b",
       "metric": "xstest_over_refusal",
       "n": 250,
-      "b": 2,
+      "b": 1,
       "c": 1,
-      "n_discordant": 3,
-      "delta": 0.004,
+      "n_discordant": 2,
+      "delta": 0.0,
       "p_value": 1.0,
       "uncorrected_significant": false,
       "direction": "up",
@@ -332,21 +332,21 @@
       "p_value": 0.09294694311794123,
       "uncorrected_significant": false,
       "direction": "down",
-      "bh_q_value": 0.2139,
+      "bh_q_value": 0.2406,
       "bh_significant_q05": false
     },
     {
       "pair_id": "phi4_mini",
       "metric": "xstest_over_refusal",
       "n": 250,
-      "b": 2,
+      "b": 1,
       "c": 13,
-      "n_discordant": 15,
-      "delta": -0.044,
-      "p_value": 0.00738525390625,
+      "n_discordant": 14,
+      "delta": -0.048,
+      "p_value": 0.0018310546875,
       "uncorrected_significant": true,
       "direction": "down",
-      "bh_q_value": 0.0492,
+      "bh_q_value": 0.0122,
       "bh_significant_q05": true
     }
   ]

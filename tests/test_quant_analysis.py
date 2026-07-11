@@ -155,6 +155,12 @@ def test_label_evidence_status_two_layer() -> None:
     assert label_evidence_status("broad_degradation", False, False, False) == "directional"
     assert label_evidence_status("broad_degradation", None, None, None) == "unknown"
 
+    # over_refusal_regression keys on the over-refusal axis (previously fell
+    # through to 'unknown' — audit fix). A significant ΔOR is 'confirmed'.
+    assert label_evidence_status("over_refusal_regression", None, None, True) == "confirmed"
+    assert label_evidence_status("over_refusal_regression", None, None, False) == "directional"
+    assert label_evidence_status("over_refusal_regression", None, None, None) == "unknown"
+
     # robust_preservation asserts nulls; bounded CIs cannot positively confirm it.
     assert label_evidence_status("robust_preservation", False, False, False) == "null"
     assert label_evidence_status("incomplete", None, None, None) == "unknown"

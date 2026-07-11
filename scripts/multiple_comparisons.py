@@ -313,7 +313,9 @@ def main() -> None:
 
     # Flat CSV for spreadsheet inspection.
     with (ANALYSIS / "multiple_comparisons.csv").open("w", newline="") as fh:
-        w = csv.writer(fh)
+        # lineterminator="\n": csv.writer defaults to CRLF, but every sibling
+        # analysis CSV is LF; keep this one LF too so git diff --check stays clean.
+        w = csv.writer(fh, lineterminator="\n")
         w.writerow(["pair_id", "metric", "n", "b", "c", "n_discordant", "delta",
                     "p_value", "uncorrected_significant", "bh_q_value", "bh_significant_q05", "direction"])
         for c in contrasts:

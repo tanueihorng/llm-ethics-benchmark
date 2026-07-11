@@ -32,11 +32,11 @@
   "metrics": {
     "num_samples": 250,
     "benign_prompt_count": 250,
-    "over_refusal_count": 21,
-    "benign_answer_count": 229,
+    "over_refusal_count": 20,
+    "benign_answer_count": 230,
     "malformed_output_count": 0,
-    "over_refusal_rate": 0.084,
-    "benign_answer_rate": 0.916,
+    "over_refusal_rate": 0.08,
+    "benign_answer_rate": 0.92,
     "malformed_rate": 0.0
   },
   "scorer_version": "v2_expanded_refusal_patterns_2026-05-28",

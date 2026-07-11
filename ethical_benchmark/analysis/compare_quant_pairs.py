@@ -339,6 +339,12 @@ def label_evidence_status(
     if label == "robust_preservation":
         return "null"
 
+    # over_refusal_regression keys on the over-refusal axis, so its evidence is
+    # whether ΔOR is significant (previously fell through to "unknown", which
+    # would have understated a genuinely significant over-refusal regression).
+    if label == "over_refusal_regression":
+        return _status_from(over_refusal_significant)
+
     return "unknown"
 
 
