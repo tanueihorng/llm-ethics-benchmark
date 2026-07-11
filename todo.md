@@ -25,8 +25,87 @@ Durable record: PROJECT_LOG §3 D44 + §4 (2026-07-08 row). Numbers source:
 
 The user pasted an OpenAI API key into chat (twice, earlier sessions). It is **not
 in the repo** (redaction scan clean; secret-pattern grep of the pushed tree clean),
-but a key exposed in a chat log should be rotated as hygiene. One-off user action:
-revoke + reissue at platform.openai.com, update `~/.zshrc` (`OPENAI_API_KEY`).
+but a key exposed in a chat log should be rotated as hygiene. **User decision
+2026-07-12: the existing key is used as-is for T35 (assessed not compromised;
+account holds only a few dollars, a natural spend cap) and will be DELETED
+entirely once T35 completes.** Remaining action: delete the key after T35.
+
+---
+
+## [2026-07-12] ACTIVE: T35 — XSTest independent API refusal judge (sensitivity layer)
+
+**Why:** the one BH-FDR-surviving over-refusal contrast (Phi-4-mini −0.048, q=0.0122)
+rests on the v2 refusal regex — the scorer class the study itself demoted for HarmBench.
+An independent judge either strengthens RQ2 or honestly exposes scorer-dependence.
+Planned by Fable 5; **execution assigned to Opus 4.8**. Durable record: PROJECT_LOG
+§3 **D45** + §2.1 **T35**.
+
+**Decided (don't re-litigate):**
+- **Sensitivity layer, NOT primary-scorer swap** (D45) — regex stays primary; the
+  BH-FDR 20-contrast family and `multiple_comparisons.json` are untouched. Blast
+  radius = one §6.12 result + one table.
+- **Pre-registration is LOCKED**: `docs/XSTEST_JUDGE_PREREG.md` — STRICT (full refusal
+  only; primary for the Phi replication verdict) + BROAD (partial+full; primary for
+  regex-agreement κ); binding outcome→reporting matrix A/B/C/D. No post-hoc framing;
+  only its Outcome section may be edited, append-only.
+- Judge = pinned **dated** gpt-4o snapshot (e.g. `gpt-4o-2024-08-06`), temperature 0,
+  max_tokens 10, 3-class XSTest taxonomy (Röttger et al. [5] used a GPT-4 judge with
+  this exact taxonomy — cite it in §6.12).
+- **Additive sibling code path**: new backend `xstest_api` subclassing
+  `OpenAICompatibleJudgeBackend` + new `scripts/run_xstest_judge.py` +
+  `scripts/xstest_judge_agreement.py`. Existing HarmBench runner byte-untouched.
+- New sidecars `results_512/*/xstest/{scores,summary}.judge.xstest_api.*` with own
+  version string `judge_xstest_refusal_api_v1_2026-07-12`.
+
+**Rejected (don't re-litigate):**
+- Reusing the HarmBench classifier for XSTest — it answers "is this harmful?", not
+  "did the model refuse a benign prompt?".
+- Modifying `run_judge_validation.py` — it hard-couples HarmBench field/metric names
+  (`judge_harmful`, `attack_success_rate`); sibling path is zero-regression.
+- Scoring the 128-token `results/` tree — historical comparison only.
+- Open-weight judge (LlamaGuard) — wrong construct for over-refusal; stays future work.
+
+**Verification already done (planning scouts, 2026-07-12):**
+- `configs/artifact_policy.yaml` judge globs are **harmbench-dir-anchored** → a new
+  xstest judge sidecar would silently escape BOTH `allowed_derived_artifacts` and
+  `redaction.scan_paths`. Globs + extended synthetic-leak self-test are Phase 1a,
+  before any sidecar exists.
+- `openai>=1.0.0` already pinned (requirements.txt:24); key via `OPENAI_API_KEY` env
+  only (SDK reads it; existing convention).
+- 15 aliases have `results_512/<alias>/xstest/raw.jsonl` (incl. `_8bit`), 250 records
+  each; refusal ground truth for κ = `score_fields.is_refusal` in `scores.v2.jsonl`.
+- Phi contrast verbatim from `multiple_comparisons.json`: n=250, b=1, c=13,
+  delta=−0.048, p=0.00183, q=0.0122, direction=down.
+- verify-claims `Checker.check(name, snippets, fn)` pattern confirmed for adding
+  Result-6 locks; next free IDs were D45/T35 (now taken).
+
+**Next steps (ordered — full detail in `docs/agent_tasks/T35-xstest-api-judge-sensitivity.md`):**
+1. Use the EXISTING key (user decision 2026-07-12; delete it after T35) →
+   `export OPENAI_API_KEY=...` (env only, never argv/source/logs).
+2. Phase 1: policy globs + self-test; backend + runner + `tests/test_xstest_judge.py`
+   (fake client, no network); `pytest tests/ -q` green BEFORE any API call.
+3. Phase 2 pilot: `python scripts/run_xstest_judge.py --results-dir results_512 --models phi4_mini_base phi4_mini_4bit --max-samples 20`
+   → manually inspect all 40 labels vs local raw text; 0 parse errors required.
+4. Phase 3 full run: `python scripts/run_xstest_judge.py --results-dir results_512`
+   (~3,750 calls, ~USD 10–20, 1–2 h, local Mac).
+5. Phase 4: `python scripts/xstest_judge_agreement.py --results-dir results_512` →
+   `results_512/analysis/xstest_judge_agreement.{json,csv}`; determine outcome letter;
+   append to prereg Outcome section.
+6. Phase 5 (outcome-scoped): §6.12 "Result 6" + table in all 6 builders + LaTeX
+   `mythesis.tex` (+ tectonic recompile + rebuild `final_thesis_overleaf.zip`, 24 files,
+   exclude pdf) + `docs/RESULTS_CARD.md` + CLAUDE.md/AGENTS.md scope sentence (in sync,
+   same commit) + ≥4 new verify-claims checks (self-test one fires) + Appendix D test
+   inventory + PROJECT_LOG (tick T35, D45 outcome, §1 sentence, changelog rows).
+
+**Watch items / guardrails:**
+- Immutable: `raw.jsonl`, `summary.json`, `scores.v2.*`, all `harmbench/` judge
+  sidecars, the 300-file manifest. Sidecars are additive; rollback = delete new files.
+- Every reporting sentence must be licensed by the pre-registered outcome letter.
+- Egress disclosure goes in the §6.12 setup discussion, NOT Limitations (2026-07-11
+  placement convention).
+- parse_error_rate > 2% or nonsense pilot ⇒ Outcome D: abort, commit only prereg +
+  PROJECT_LOG row.
+- No raw prompt/response text in any committed file or in this todo.
 
 ---
 
