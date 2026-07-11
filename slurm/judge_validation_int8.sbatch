@@ -45,6 +45,7 @@ python /tc1home/FYP/utan001/fyp_quant/repo/scripts/run_judge_validation.py \
     --benchmark harmbench \
     --backend harmbench_cls \
     --model-id cais/HarmBench-Llama-2-13b-cls \
+    --judge-revision "${JUDGE_REVISION:-}" \
     --device cuda \
     --precision fp16 \
     --batch-size 4

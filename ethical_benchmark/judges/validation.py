@@ -238,9 +238,16 @@ class HarmBenchJudgeBackend(JudgeBackend):
         load_in_4bit: Optional[bool] = None,
         batch_size: int = 8,
         max_generation_chars: int = 6000,
+        revision: Optional[str] = None,
     ) -> None:
         self.model_id = model_id
         self.device = device
+        # Judge checkpoint revision (audit P1-4): a HF commit SHA/tag pinning the
+        # classifier weights + tokenizer to an immutable snapshot. None means the
+        # mutable default branch was used (the pre-2026-07 committed judge sidecars
+        # predate this pin — see the report's reproducibility caveat). It is passed
+        # to BOTH from_pretrained calls and persisted in the judge summary.
+        self.revision = revision
         # Back-compat: an explicit load_in_4bit overrides precision.
         if load_in_4bit is True:
             precision = "4bit"
@@ -253,7 +260,7 @@ class HarmBenchJudgeBackend(JudgeBackend):
         self._tokenizer = None
         # Populated at load time so the run can record exactly which GPU and
         # precision produced the judge labels (reproducibility / auditability).
-        self.device_info: Dict[str, Any] = {"precision": self.precision}
+        self.device_info: Dict[str, Any] = {"precision": self.precision, "revision": revision}
 
     def _ensure_loaded(self) -> None:
         if self._model is not None:
@@ -263,7 +270,8 @@ class HarmBenchJudgeBackend(JudgeBackend):
         from transformers import AutoModelForCausalLM, AutoTokenizer
 
         tokenizer = AutoTokenizer.from_pretrained(
-            self.model_id, use_fast=False, truncation_side="left", padding_side="left"
+            self.model_id, revision=self.revision, use_fast=False,
+            truncation_side="left", padding_side="left"
         )
         if tokenizer.pad_token is None:
             tokenizer.pad_token = tokenizer.eos_token
@@ -298,13 +306,17 @@ class HarmBenchJudgeBackend(JudgeBackend):
             flush=True,
         )
 
-        model = AutoModelForCausalLM.from_pretrained(self.model_id, **model_kwargs)
+        model = AutoModelForCausalLM.from_pretrained(
+            self.model_id, revision=self.revision, **model_kwargs
+        )
         model.eval()
         self._model = model
         self._tokenizer = tokenizer
 
     def _capture_device_info(self, torch_mod: Any) -> Dict[str, Any]:
-        info: Dict[str, Any] = {"precision": self.precision}
+        # Include the pinned judge revision (audit P1-4) so it survives into the
+        # persisted judge_device_info even though this replaces the init-time dict.
+        info: Dict[str, Any] = {"precision": self.precision, "revision": self.revision}
         try:
             if torch_mod.cuda.is_available():
                 props = torch_mod.cuda.get_device_properties(0)
@@ -692,6 +704,7 @@ def run_judge_validation(
         "seed": seed,
         "judge_backend": name,
         "judge_model_id": getattr(backend, "model_id", None),
+        "judge_revision": getattr(backend, "revision", None),
         "judge_device_info": getattr(backend, "device_info", None),
         "scorer_version": SCORER_VERSION,
         "derived_from": "raw.jsonl",

@@ -1,0 +1,9 @@
+claim_location,claim,evidence_category,builder_or_source,analysis_or_sidecar,raw_or_protocol,status
+Report Chapter 6/Research synthesis,"zero HarmBench ASR contrasts survive BH-FDR",READ,scripts/build_fyp_report_v5.js,results_512/analysis/multiple_comparisons.json,configs/tc1_512.yaml,verified by claim lock
+Report Chapter 6/Research synthesis,"three BH survivors are MMLU Qwen-2B ARC Llama XSTest Phi",READ,scripts/build_fyp_report_v5.js,results_512/analysis/multiple_comparisons.json,paired result tree,verified by claim lock
+Report Chapter 6,"Llama ASR -0.040 uncorrected",READ,scripts/build_fyp_report_v5.js,results_512/analysis/multiple_comparisons.json,judge sidecars,verified by claim lock
+Report 512 budget narrative,"128 truncation 60.3 percent",READ,scripts/build_fyp_report_v5.js,results_512/analysis/genlen_robustness.json,128 and 512 artifacts,verified by claim lock
+Report scorer narrative,"judge proxy agreement ranges",READ,scripts/build_fyp_report_v5.js,results_512/analysis/judge_agreement.json,redacted judge/proxy sidecars,verified by claim lock
+Thesis Table 6.2,judge and capability deltas,READ,scripts/build_fyp_thesis_v4.js,headline_512_vs_128.json and pairwise_deltas.json,primary artifacts,verified by claim lock
+Interim headline,main safety/capability claims,READ,scripts/build_fyp_interim.js,multiple_comparisons.json and judge agreement,primary artifacts,verified by claim lock
+Any claim that results are exactly reproducible,INFERRED,all current documents,missing historical provenance fields,raw/summary metadata,UNVERIFIED/P1-2

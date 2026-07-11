@@ -5,6 +5,8 @@ from __future__ import annotations
 import random
 from pathlib import Path
 
+import pytest
+
 from ethical_benchmark.benchmarks.base import BenchmarkItem
 from ethical_benchmark.metrics.aggregate import read_jsonl
 from ethical_benchmark.pipeline import run_quant_benchmark as quant_runner
@@ -181,6 +183,31 @@ def test_smoke_each_benchmark(tmp_path: Path, quant_config_dict: dict, monkeypat
         # dtype and a null quant_method; quantized members record the method.
         assert summary["torch_dtype"] == "float32"  # dtype auto on cpu
         assert summary["quant_method"] is None
+
+    # Audit P2-1: a generator returning fewer responses than prompts must raise,
+    # never silently drop prompts by truncating through zip().
+    class _ShortGenerator(_DummyGenerator):
+        def generate_batch(self, prompts):
+            return [f"r::{i}" for i, _ in enumerate(prompts)][:-1]  # one short
+
+    def _short_stack():
+        dc, _gen, seed, loader, spec = _patched_model_stack()
+        return dc, _ShortGenerator, seed, loader, spec
+
+    monkeypatch.setattr(quant_runner, "_model_stack", _short_stack)
+    with pytest.raises(RuntimeError, match="responses for"):
+        quant_runner.execute_quant_benchmark(
+            config=config,
+            model_alias="qwen_small_base",
+            benchmark_name="harmbench",
+            output_dir=tmp_path,
+            seed=42,
+            device="cpu",
+            resume=False,
+            force_restart=True,
+            max_samples_override=3,
+            batch_size_override=2,
+        )
 
 
 def test_reproducible_order_same_seed(tmp_path: Path, quant_config_dict: dict, monkeypatch) -> None:

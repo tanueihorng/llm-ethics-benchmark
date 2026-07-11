@@ -22,6 +22,34 @@ from ethical_benchmark.quant.config_schema import (
 
 LOGGER = logging.getLogger(__name__)
 
+# Packages whose exact resolved versions determine reproducibility of a run.
+_PROVENANCE_PACKAGES = ("transformers", "torch", "bitsandbytes", "accelerate", "datasets")
+
+
+def _capture_env_provenance() -> Dict[str, Any]:
+    """Best-effort resolved-environment fingerprint for a summary (audit P1-2).
+
+    Records the exact installed versions of the load-bearing packages plus the
+    Python/platform string at run time, so summaries written from now on carry the
+    provenance the pre-2026-07 historical artifacts lack. Missing packages resolve
+    to ``None`` rather than raising, so this never blocks a run.
+    """
+    import platform
+    from importlib import metadata as _ilmd
+
+    versions: Dict[str, Any] = {}
+    for pkg in _PROVENANCE_PACKAGES:
+        try:
+            versions[pkg] = _ilmd.version(pkg)
+        except Exception:  # pragma: no cover - package simply absent
+            versions[pkg] = None
+    return {
+        "packages": versions,
+        "python": platform.python_version(),
+        "platform": platform.platform(),
+    }
+
+
 # Canonical, immutable evidence trees (see CLAUDE.md "Output Structure"). The
 # TC1-original raw.jsonl/summary.json under these must never be deleted by a
 # force_restart / --no-resume: doing so would destroy committed evidence. Matched
@@ -411,6 +439,17 @@ def execute_quant_benchmark_loaded(
         responses = generator.generate_batch(prompts)
         now = datetime.now(timezone.utc).isoformat()
 
+        # Run-integrity guard (audit P2-1): a generator that returns fewer (or
+        # more) responses than prompts would otherwise be silently truncated by
+        # zip() below, dropping prompts from the record set with no error. Fail
+        # loudly instead so a short/over-long batch can never corrupt a run.
+        if len(responses) != len(prompts):
+            raise RuntimeError(
+                f"{model_alias}:{benchmark} generation returned {len(responses)} "
+                f"responses for {len(prompts)} prompts; refusing to write a "
+                f"truncated batch (prompt_ids={[str(it.prompt_id) for it in batch]})."
+            )
+
         records: List[Dict[str, Any]] = []
         for item, prompt, response in zip(batch, prompts, responses):
             score_fields = plugin.score_response(item=item, response=response)
@@ -454,6 +493,11 @@ def execute_quant_benchmark_loaded(
             (model_entry.quant_method or "nf4") if model_entry.quantized else None
         ),
         "torch_dtype": _resolved_dtype_name(model_entry.dtype, runtime_device),
+        # Provenance (audit P1-2): the pinned checkpoint revision (None if the
+        # config left it unpinned) and the resolved run environment, so summaries
+        # written from now on are replayable without external reconstruction.
+        "model_revision": model_entry.revision,
+        "env_provenance": _capture_env_provenance(),
         "pair_id": model_entry.pair_id,
         "benchmark": benchmark,
         "runtime_device": runtime_device,

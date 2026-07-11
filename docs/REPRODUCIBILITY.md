@@ -57,6 +57,15 @@ re-solving the original environment bit-for-bit. An exact `pip freeze` lockfile 
 documented future-hardening step; it does not affect the committed results, which are
 derived from the saved generations, not re-generated.
 
+Going forward, the run pipeline now records the resolved package versions, the
+Python/platform string, and the pinned checkpoint revision into every new
+`summary.json` (an `env_provenance` field); the INT8 precision configs pin the same
+per-model revisions as the NF4 study (`configs/tc1_int8_512.yaml`,
+`configs/tc1_int8.yaml`); and the HarmBench judge exposes a `--judge-revision` pin
+that is persisted in its summary. New artifacts therefore carry the provenance the
+pre-2026-07 historical artifacts lack; the historical gap itself is unchanged, since
+those artifacts are immutable.
+
 ## 4. One-command reproduction
 
 ```bash

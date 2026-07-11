@@ -23,6 +23,7 @@ models:
     quantized: false
     pair_id: qwen_2b
     model_id: Qwen/Qwen3-1.7B
+    revision: 70d244cc86ccca08cf5af4e1e306ecf908b1ad5e  # T35: pinned to the same TC1-cached snapshot as configs/tc1_512.yaml (audit P1-3)
     trust_remote_code: false
     dtype: auto
     benchmarks: [harmbench, xstest, mmlu, arc]
@@ -34,6 +35,7 @@ models:
     quant_method: int8
     pair_id: qwen_2b
     model_id: Qwen/Qwen3-1.7B
+    revision: 70d244cc86ccca08cf5af4e1e306ecf908b1ad5e  # T35: pinned to the same TC1-cached snapshot as configs/tc1_512.yaml (audit P1-3)
     trust_remote_code: false
     dtype: auto
     benchmarks: [harmbench, xstest, mmlu, arc]
@@ -44,6 +46,7 @@ models:
     quantized: false
     pair_id: qwen_4b
     model_id: Qwen/Qwen3-4B
+    revision: 1cfa9a7208912126459214e8b04321603b3df60c  # T35: pinned to the same TC1-cached snapshot as configs/tc1_512.yaml (audit P1-3)
     trust_remote_code: false
     dtype: auto
     benchmarks: [harmbench, xstest, mmlu, arc]
@@ -55,6 +58,7 @@ models:
     quant_method: int8
     pair_id: qwen_4b
     model_id: Qwen/Qwen3-4B
+    revision: 1cfa9a7208912126459214e8b04321603b3df60c  # T35: pinned to the same TC1-cached snapshot as configs/tc1_512.yaml (audit P1-3)
     trust_remote_code: false
     dtype: auto
     benchmarks: [harmbench, xstest, mmlu, arc]
@@ -65,6 +69,7 @@ models:
     quantized: false
     pair_id: llama_3_2_3b
     model_id: meta-llama/Llama-3.2-3B-Instruct
+    revision: 0cb88a4f764b7a12671c53f0838cd831a0843b95  # T35: pinned to the same TC1-cached snapshot as configs/tc1_512.yaml (audit P1-3)
     trust_remote_code: false
     dtype: auto
     benchmarks: [harmbench, xstest, mmlu, arc]
@@ -76,6 +81,7 @@ models:
     quant_method: int8
     pair_id: llama_3_2_3b
     model_id: meta-llama/Llama-3.2-3B-Instruct
+    revision: 0cb88a4f764b7a12671c53f0838cd831a0843b95  # T35: pinned to the same TC1-cached snapshot as configs/tc1_512.yaml (audit P1-3)
     trust_remote_code: false
     dtype: auto
     benchmarks: [harmbench, xstest, mmlu, arc]
@@ -86,6 +92,7 @@ models:
     quantized: false
     pair_id: mistral_7b
     model_id: mistralai/Mistral-7B-Instruct-v0.3
+    revision: c170c708c41dac9275d15a8fff4eca08d52bab71  # T35: pinned to the same TC1-cached snapshot as configs/tc1_512.yaml (audit P1-3)
     trust_remote_code: false
     dtype: auto
     benchmarks: [harmbench, xstest, mmlu, arc]
@@ -97,6 +104,7 @@ models:
     quant_method: int8
     pair_id: mistral_7b
     model_id: mistralai/Mistral-7B-Instruct-v0.3
+    revision: c170c708c41dac9275d15a8fff4eca08d52bab71  # T35: pinned to the same TC1-cached snapshot as configs/tc1_512.yaml (audit P1-3)
     trust_remote_code: false
     dtype: auto
     benchmarks: [harmbench, xstest, mmlu, arc]
@@ -107,6 +115,7 @@ models:
     quantized: false
     pair_id: phi4_mini
     model_id: microsoft/Phi-4-mini-instruct
+    revision: cfbefacb99257ffa30c83adab238a50856ac3083  # T35: pinned to the same TC1-cached snapshot as configs/tc1_512.yaml (audit P1-3)
     trust_remote_code: false
     attn_implementation: eager
     dtype: auto
@@ -119,6 +128,7 @@ models:
     quant_method: int8
     pair_id: phi4_mini
     model_id: microsoft/Phi-4-mini-instruct
+    revision: cfbefacb99257ffa30c83adab238a50856ac3083  # T35: pinned to the same TC1-cached snapshot as configs/tc1_512.yaml (audit P1-3)
     trust_remote_code: false
     attn_implementation: eager
     dtype: auto

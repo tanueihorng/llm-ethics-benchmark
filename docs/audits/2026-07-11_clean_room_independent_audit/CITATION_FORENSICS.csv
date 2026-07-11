@@ -1,0 +1,5 @@
+report,ref_number,metadata_as_written,independently_verified_metadata,authoritative_source_checked,existence,formatting_status
+FYP_Report_v5,1-26,"IEEE bibliography in builder",UNVERIFIED,"citation ordering checked by verify_report_claims.py; no complete manual reference-by-reference forensic ledger completed",UNVERIFIED,"P2: full entry verification outstanding"
+FYP_Thesis_v4,1-22,"IEEE bibliography in builder",UNVERIFIED,"citation ordering checked by verify_report_claims.py; no complete manual reference-by-reference forensic ledger completed",UNVERIFIED,"P2: full entry verification outstanding"
+FYP_Interim,shared/reused references,UNVERIFIED,UNVERIFIED,"claim-lock tests selected citation ordering",UNVERIFIED,"P2: full forensic ledger outstanding"
+Humanized alternates,all,UNVERIFIED,UNVERIFIED,"not text-compared with claim-locked masters",UNVERIFIED,"P2: semantic/citation-equivalence audit outstanding"

@@ -1,0 +1,23 @@
+path,category,fully_read,execution_test_evidence,audit_owner,findings,not_reviewed_reason
+ethical_benchmark/models/loader.py,loader,yes,pytest tests/test_models.py,code_repro,"method-specific provenance not persisted",-
+ethical_benchmark/pipeline/run_quant_benchmark.py,pipeline,yes,pytest tests/test_pipeline.py,"resume fingerprint and response cardinality gaps",-
+ethical_benchmark/judges/validation.py,primary scorer,yes,pytest tests/test_judge_validation.py,"mutable judge revision; API egress",-
+ethical_benchmark/analysis/compare_quant_pairs.py,statistics,yes,pytest tests/test_quant_analysis.py,"paired tests/BH present",-
+ethical_benchmark/quant/config_schema.py,schema,yes,pytest tests/test_quant_config_schema.py,"pair invariants incomplete",-
+configs/tc1_512.yaml,main protocol,yes,config loaded,"artifact provenance remains incomplete",-
+configs/tc1_int8_512.yaml,INT8 protocol,yes,config loaded,"missing revisions",-
+configs/tc1_sensitivity_512.yaml,sensitivity protocol,yes,config loaded,"no Mistral/Phi seed arm",-
+slurm/judge_validation_512.sbatch,production scorer job,yes,static inspection,"mutable judge model",-
+scripts/build_fyp_report_v5.js,report builder,partly,claim lock + rendered output,"submission report contains internal handoff",full line-by-line source not independently reviewed
+scripts/build_fyp_thesis_v4.js,thesis builder,partly,rendered output + claim lock,"no P1 independently found",full line-by-line source not independently reviewed
+scripts/build_fyp_interim.js,interim builder,partly,rendered output + claim lock,"no P1 independently found",full line-by-line source not independently reviewed
+results_512/*/*/raw.jsonl,primary raw evidence,partly,duplicate-ID scan,"provenance fields absent in historical records",raw content not reproduced due harmful-text handling
+results_512/*/*/summary.json,primary summaries,partly,schema/count inspection,"missing resolved environment provenance",not every field independently recomputed
+results_512/analysis/*.json,analysis evidence,partly,claim lock + direct inspection,"power bounds",all ancillary analyses not recomputed
+docs/FYP_Report_2026-07-01_v5.docx,report,yes,108-page render + visual samples,"P1-1",all pages rendered; representative visual review
+docs/FYP_Thesis_2026-07-02_v4.docx,thesis,yes,33-page render + visual samples,"no P1 independently found",all pages rendered; representative visual review
+docs/FYP_Interim_2026-07-10.docx,interim,yes,34-page render + visual samples,"no P1 independently found",all pages rendered; representative visual review
+docs/FYP_*_humanized.docx,alternates,partly,all rendered,"alternate provenance/semantic equivalence unverified",not fully text-compared to masters
+tests/**,tests,partly,pytest -q 339 pass,"coverage is not method validation",individual test source not all read
+.github/workflows/**,CI,yes,static inspection,"does not run pytest",-
+remaining 537 primary files,other code/docs/artifacts,no,-,main,"unreviewed",bounded audit scope

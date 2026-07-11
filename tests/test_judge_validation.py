@@ -139,6 +139,14 @@ def test_run_judge_validation_writes_redacted_sidecars(tmp_path: Path) -> None:
     summary_path = tmp_path / "qwen_4b_base" / "harmbench" / "summary.judge.stub.json"
     assert scores_path.exists() and summary_path.exists()
 
+    # Audit P1-4: the judge revision is persisted in the summary (None here since
+    # the stub is unpinned; a pinned backend records its SHA verbatim).
+    assert "judge_revision" in summary and summary["judge_revision"] is None
+    backend.revision = "sha-777"
+    _write_raw(tmp_path, "qwen_4b_4bit", "harmbench", n=4)
+    summary_pinned = run_judge_validation(tmp_path, "qwen_4b_4bit", "harmbench", backend)
+    assert summary_pinned["judge_revision"] == "sha-777"
+
     # The backend must have transiently seen the text...
     assert backend.seen_text is True
     # ...but no text may appear anywhere in the sidecar.
@@ -259,6 +267,13 @@ def test_harmbench_backend_defaults_to_fp16() -> None:
     b = HarmBenchJudgeBackend()
     assert b.precision == "fp16"
     assert b.device_info["precision"] == "fp16"
+    # Audit P1-4: judge revision defaults to unpinned and is exposed for the
+    # summary writer; when pinned it is stored and mirrored into device_info.
+    assert b.revision is None
+    assert b.device_info["revision"] is None
+    pinned = HarmBenchJudgeBackend(revision="deadbeefcafe")
+    assert pinned.revision == "deadbeefcafe"
+    assert pinned.device_info["revision"] == "deadbeefcafe"
 
 
 def test_harmbench_backend_precision_and_compat() -> None:
@@ -268,3 +283,15 @@ def test_harmbench_backend_precision_and_compat() -> None:
     assert HarmBenchJudgeBackend(load_in_4bit=True).precision == "4bit"
     with pytest.raises(ValueError):
         HarmBenchJudgeBackend(precision="fp8")
+
+    # Audit P1-4: the pinned revision must reach BOTH from_pretrained calls
+    # (tokenizer and model), not just be stored on the object.
+    pytest.importorskip("transformers")
+    from unittest import mock
+
+    b = HarmBenchJudgeBackend(revision="rev123", device="cpu")
+    with mock.patch("transformers.AutoTokenizer.from_pretrained") as tok, \
+            mock.patch("transformers.AutoModelForCausalLM.from_pretrained") as mdl:
+        b._ensure_loaded()
+    assert tok.call_args.kwargs.get("revision") == "rev123"
+    assert mdl.call_args.kwargs.get("revision") == "rev123"

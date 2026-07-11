@@ -270,7 +270,7 @@ const ch5 = [
     ["Verification", "339 automated tests + machine claim lock"],
   ], [3600, 5760]),
   CAP("Table 5.1  Experimental configuration summary."),
-  PJ("The five NF4 pairs, the INT8 precision point, both judge validations, and the multi-seed sensitivity arm all ran at the 512-token reference budget (the primary study throughout, with zero classifier parse errors over 3,000 judged generations); the 128-token artefacts are retained unchanged for the generation-length comparison. The GPT-4o second judge runs locally against an API. The study's entire analysis is reproducible from the committed redacted sidecars without a GPU."),
+  PJ("The five NF4 pairs, the INT8 precision point, both judge validations, and the multi-seed sensitivity arm all ran at the 512-token reference budget (the primary study throughout, with zero classifier parse errors over 3,000 judged generations); the 128-token artefacts are retained unchanged for the generation-length comparison. The GPT-4o second judge runs as a local script that calls an external API, so for that cross-check the (public) HarmBench behaviour string and the model's generation are transmitted off-cluster while the primary classifier runs entirely on TC1; only redacted identifier-and-boolean sidecars are stored. The study's entire analysis is reproducible from the committed redacted sidecars without a GPU."),
 ];
 
 const ch6 = [

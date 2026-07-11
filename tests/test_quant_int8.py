@@ -208,6 +208,29 @@ class TestInt8Config:
         pairs = {e.pair_id for e in cfg.models.values()}
         assert pairs == {"qwen_2b", "qwen_4b", "llama_3_2_3b", "mistral_7b", "phi4_mini"}
 
+        # Audit P1-3: the INT8 precision comparison must be reproducibly tied to
+        # the same checkpoint snapshots as the NF4 study. Every INT8 config member
+        # pins a revision, both members of a pair share model_id + revision, and
+        # the 512 INT8 revisions equal the NF4 (tc1_512.yaml) revisions per model.
+        nf4_rev = {
+            e.model_id: e.revision
+            for e in load_quant_config(str(ROOT / "configs" / "tc1_512.yaml")).models.values()
+        }
+        for name in ("tc1_int8.yaml", "tc1_int8_512.yaml"):
+            icfg = load_quant_config(str(ROOT / "configs" / name))
+            by_pair: dict = {}
+            for entry in icfg.models.values():
+                assert entry.revision, f"{name}:{entry.model_id} has no pinned revision"
+                by_pair.setdefault(entry.pair_id, []).append((entry.model_id, entry.revision))
+            for pair_id, members in by_pair.items():
+                assert len({m[0] for m in members}) == 1, f"{name}:{pair_id} model_id mismatch"
+                assert len({m[1] for m in members}) == 1, f"{name}:{pair_id} revision mismatch"
+            if name == "tc1_int8_512.yaml":
+                for entry in icfg.models.values():
+                    assert entry.revision == nf4_rev[entry.model_id], (
+                        f"{name}:{entry.model_id} revision differs from the NF4 study"
+                    )
+
     def test_int8_members_have_method_and_baselines_do_not(self) -> None:
         cfg = load_quant_config(str(INT8_CONFIG))
         int8 = [a for a, e in cfg.models.items() if e.quantized]
