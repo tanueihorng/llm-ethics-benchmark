@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 from datetime import datetime, timezone
 import logging
+import os
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Sequence
 
@@ -20,6 +21,43 @@ from ethical_benchmark.quant.config_schema import (
 )
 
 LOGGER = logging.getLogger(__name__)
+
+# Canonical, immutable evidence trees (see CLAUDE.md "Output Structure"). The
+# TC1-original raw.jsonl/summary.json under these must never be deleted by a
+# force_restart / --no-resume: doing so would destroy committed evidence. Matched
+# case-insensitively because the macOS filesystem is case-insensitive, so RESULTS
+# and results are the same physical directory. results_dev/ and other scratch
+# trees are deliberately absent and remain freely restartable.
+_PROTECTED_RESULTS_NAMES = frozenset(
+    {"results", "results_512", "results_sensitivity", "results_sensitivity_512"}
+)
+
+
+def _under_protected_results_tree(path: Path) -> bool:
+    """True if ``path`` lives inside a canonical immutable evidence tree."""
+    for parent in path.resolve().parents:
+        if parent.name.lower() in _PROTECTED_RESULTS_NAMES:
+            return True
+    return False
+
+
+def _guard_protected_delete(raw_path: Path) -> None:
+    """Refuse to delete a raw artifact inside a protected results tree.
+
+    Set ``FYP_ALLOW_PROTECTED_RESTART=1`` to override deliberately (e.g. a genuine
+    from-scratch re-run of the committed study on TC1).
+    """
+    if (
+        _under_protected_results_tree(raw_path)
+        and os.environ.get("FYP_ALLOW_PROTECTED_RESTART") != "1"
+    ):
+        raise RuntimeError(
+            f"Refusing to delete raw evidence inside a protected results tree: {raw_path}. "
+            "results/, results_512/, and results_sensitivity* hold immutable TC1-original "
+            "artifacts. Re-run into a scratch tree instead (e.g. --results_dir results_dev), "
+            "or set FYP_ALLOW_PROTECTED_RESTART=1 to override deliberately."
+        )
+
 
 REQUIRED_RECORD_FIELDS = {
     "benchmark",
@@ -332,12 +370,14 @@ def execute_quant_benchmark_loaded(
     summary_csv_path = paths["summary_csv"]
 
     if force_restart and raw_path.exists():
+        _guard_protected_delete(raw_path)
         raw_path.unlink()
 
     # Without resume we must also clear any existing raw file; otherwise the
     # newly processed prompts get appended on top of stale rows and aggregate
     # double-counts. force_restart already handled above; this covers --no-resume.
     if not resume and raw_path.exists():
+        _guard_protected_delete(raw_path)
         raw_path.unlink()
 
     items = plugin.load_items(max_samples=max_samples, seed=seed)

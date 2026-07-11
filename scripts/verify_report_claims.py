@@ -661,7 +661,7 @@ def run_checks(checker: Checker | None = None) -> Checker:
     c.check(
         "IEEE citations: every ref cited, numbered strictly by first use",
         ["Kharinaev et al. [12]", "Egashira et al. [13]", "Proskurina et al. [11]",
-         "McNemar's exact test [19]", "Bootstrap 95% confidence intervals [18]",
+         "McNemar's exact test [20]", "Bootstrap 95% confidence intervals [19]",
          "R. Jin, J. Du, W. Huang"],
         ieee_citations,
     )

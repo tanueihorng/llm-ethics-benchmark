@@ -47,6 +47,16 @@ and the `ethical_benchmark/` package as `src`. Dependencies are explicit
 (`requirements.txt`), code is decomposed into plugins/modules, and a 339-test
 suite guards behaviour.
 
+**Environment caveat (retroactive pinning).** `requirements.txt` declares
+*minimum-version floors*, and those floors were recorded *after* the TC1 runs
+rather than solved into an exact lockfile at run time; the precise resolved package
+versions (`transformers`, `torch`, `bitsandbytes`) and the CUDA/driver build are not
+machine-recorded in the run artifacts. Reproduction therefore *replays* the committed
+analysis deterministically (seed 42) from the redacted sidecars, rather than
+re-solving the original environment bit-for-bit. An exact `pip freeze` lockfile is a
+documented future-hardening step; it does not affect the committed results, which are
+derived from the saved generations, not re-generated.
+
 ## 4. One-command reproduction
 
 ```bash

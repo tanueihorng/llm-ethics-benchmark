@@ -204,7 +204,10 @@ def _kappa(a: List[int], b: List[int]) -> float:
     pa1 = sum(a) / n
     pb1 = sum(b) / n
     pe = pa1 * pb1 + (1 - pa1) * (1 - pb1)
-    return (po - pe) / (1 - pe) if pe != 1 else 1.0
+    # When chance agreement is (near-)total both raters are effectively constant,
+    # so kappa is 0/0 — genuinely undefined. Return NaN rather than a spurious 1.0
+    # that would read as "perfect agreement" for a slice carrying no signal.
+    return (po - pe) / (1 - pe) if (1 - pe) > 1e-12 else float("nan")
 
 
 def _prf(pred: List[int], truth: List[int]) -> Dict[str, float]:

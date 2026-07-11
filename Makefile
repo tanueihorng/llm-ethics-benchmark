@@ -1,6 +1,10 @@
 PYTHON ?= python
 CONFIG ?= configs/default.yaml
 RESULTS_DIR ?= results
+# `make smoke` force-restarts (deletes prior raw). Default it to a scratch tree so a
+# sanity check can never delete committed evidence under results/ or results_512/
+# (the pipeline also refuses such deletes; see run_quant_benchmark._guard_protected_delete).
+SMOKE_RESULTS_DIR ?= results_smoke
 JOBS_DIR ?= slurm/jobs
 MODEL ?= qwen_2b_base
 BENCHMARK ?= harmbench
@@ -21,7 +25,7 @@ dashboard:
 	$(PYTHON) -m streamlit run dashboard/app.py
 
 smoke:
-	$(PYTHON) fyp_cli.py --config $(CONFIG) --results_dir $(RESULTS_DIR) smoke -m $(MODEL) -b $(BENCHMARK) -s $(SEED) -d $(DEVICE) $(if $(MAX_SAMPLES),-n $(MAX_SAMPLES),)
+	$(PYTHON) fyp_cli.py --config $(CONFIG) --results_dir $(SMOKE_RESULTS_DIR) smoke -m $(MODEL) -b $(BENCHMARK) -s $(SEED) -d $(DEVICE) $(if $(MAX_SAMPLES),-n $(MAX_SAMPLES),)
 
 run:
 	$(PYTHON) fyp_cli.py --config $(CONFIG) --results_dir $(RESULTS_DIR) run -m $(MODEL) -b $(BENCHMARK) -s $(SEED) -d $(DEVICE) $(if $(MAX_SAMPLES),-n $(MAX_SAMPLES),) $(if $(BATCH_SIZE),--batch_size $(BATCH_SIZE),)

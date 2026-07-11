@@ -138,7 +138,7 @@
       "pair_id": "qwen_4b",
       "v2_harm_delta": 0.065,
       "judge_harm_delta": 0.024999999999999994,
-      "judge_harm_delta_ci_lower": -0.00012499999999977975,
+      "judge_harm_delta_ci_lower": -0.005,
       "judge_harm_delta_ci_upper": 0.055,
       "judge_harm_delta_significant": false,
       "mcnemar_discordant": 9,

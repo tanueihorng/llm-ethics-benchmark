@@ -213,7 +213,7 @@ def test_safe_generated_config_name_blocks_path_escape() -> None:
     assert D.safe_generated_config_name("..") == "new_pair.yaml"
 
 
-def test_protected_results_dirs_are_refused() -> None:
+def test_protected_results_dirs_are_refused(monkeypatch) -> None:
     """Codex round-7 P1 regression: execution may never target the canonical
     evidence trees."""
     for bad in ("results", "results_512", "results/qwen_2b_base",
@@ -222,6 +222,23 @@ def test_protected_results_dirs_are_refused() -> None:
         assert D.is_protected_results_dir(REPO_ROOT / bad, REPO_ROOT), bad
     for ok in ("results_dev", "results_dev/qwen_2b_base", "scratch/results"):
         assert not D.is_protected_results_dir(REPO_ROOT / ok, REPO_ROOT), ok
+
+    # Audit P2: the run pipeline independently enforces the SAME protection
+    # (make smoke hardcodes force_restart=True), so a destructive delete can never
+    # target committed evidence even when the dashboard guard is not in the path.
+    from ethical_benchmark.pipeline.run_quant_benchmark import (
+        _guard_protected_delete, _under_protected_results_tree)
+    monkeypatch.delenv("FYP_ALLOW_PROTECTED_RESTART", raising=False)
+    for bad in ("results", "results_512", "RESULTS", "results_sensitivity_512"):
+        raw = REPO_ROOT / bad / "qwen_2b_base" / "harmbench" / "raw.jsonl"
+        assert _under_protected_results_tree(raw), bad
+        with pytest.raises(RuntimeError, match="protected results tree"):
+            _guard_protected_delete(raw)
+    # Scratch trees are freely restartable, and the explicit override is honoured.
+    assert not _under_protected_results_tree(
+        REPO_ROOT / "results_smoke" / "qwen_2b_base" / "harmbench" / "raw.jsonl")
+    monkeypatch.setenv("FYP_ALLOW_PROTECTED_RESTART", "1")
+    _guard_protected_delete(REPO_ROOT / "results_512" / "m" / "harmbench" / "raw.jsonl")
 
 
 def test_protected_results_dirs_refuse_case_variants() -> None:

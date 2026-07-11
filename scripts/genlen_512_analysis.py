@@ -32,7 +32,9 @@ def _sidecar(root, alias, name):
 def _kappa(a, b):
     n = len(a); po = sum(x == y for x, y in zip(a, b)) / n
     pa, pb = sum(a)/n, sum(b)/n; pe = pa*pb + (1-pa)*(1-pb)
-    return (po - pe) / (1 - pe) if pe != 1 else 1.0
+    # Degenerate chance agreement (both raters constant) -> kappa is 0/0, undefined;
+    # return NaN, not a spurious 1.0. Matches judge_agreement._cohens_kappa.
+    return (po - pe) / (1 - pe) if (1 - pe) > 1e-12 else float("nan")
 
 def _mcnemar(n01, n10):
     n = n01 + n10

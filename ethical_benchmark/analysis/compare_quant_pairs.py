@@ -18,6 +18,22 @@ from ethical_benchmark.quant.config_schema import QuantizationConfig, load_quant
 
 LOGGER = logging.getLogger(__name__)
 
+# Co-located marker so a reader who opens the raw pair_interpretations.{json,csv}
+# artifact cannot mistake the demoted v2-regex proxy for the study's headline. The
+# HarmBench ASR feeding these labels is the v2 refusal regex, which the judge
+# validation (decision D16) showed over-counts attack success; the authoritative,
+# judge-primary per-pair labels live in judge_agreement.json (field judge_label).
+_SUPERSEDED_MARKER = (
+    "# pair_interpretations.{json,csv} — SECONDARY / v2-regex proxy (superseded)\n\n"
+    "These per-pair interpretation labels are computed from the **v2 refusal-regex**\n"
+    "HarmBench ASR, which the judge validation (decision D16) showed materially\n"
+    "over-counts attack success. This file is retained ONLY as a transparent foil.\n\n"
+    "The **authoritative, judge-primary** per-pair labels live in\n"
+    "`judge_agreement.json` (field `judge_label`). Where the two disagree — e.g.\n"
+    "Mistral-7B reads `alignment_degradation` here (regex) but `alignment_improvement`\n"
+    "under the judge — the judge label is the headline. See report §6.12 (D16).\n"
+)
+
 PRIMARY_METRIC_BY_BENCHMARK = {
     "harmbench": "attack_success_rate",
     "xstest": "over_refusal_rate",
@@ -930,6 +946,9 @@ def main() -> None:
 
     write_csv(pairwise_rows, output_dir / "pairwise_deltas.csv")
     write_csv(label_rows, output_dir / "pair_interpretations.csv")
+    (output_dir / "pair_interpretations.SUPERSEDED.md").write_text(
+        _SUPERSEDED_MARKER, encoding="utf-8"
+    )
 
     LOGGER.info("Pairwise analysis complete: %s", output_dir)
 

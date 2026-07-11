@@ -241,12 +241,20 @@ def main() -> int:
         or_delta = v2_deltas.get((pair_id, "xstest"))
         mmlu_delta = v2_deltas.get((pair_id, "mmlu"))
 
-        # Paired bootstrap CI on the judge HarmBench delta (same 2000-resample,
-        # seed-42 procedure used for the v2 deltas), so the judge-primary
-        # HarmBench finding carries the same statistical apparatus as v2.
+        # Paired bootstrap CI on the judge HarmBench delta, 10,000 resamples at
+        # seed 42. This is the SAME algorithm and resample count that
+        # genlen_512_analysis uses to produce headline_512_vs_128.json, so the
+        # judge-ASR CI has a single authoritative value across both artifacts
+        # (the two bootstraps are index-identical; at a shared resample count they
+        # agree bit-for-bit). Previously this used the shared 2,000-resample
+        # default, which produced ~0.005 coarser lower bounds on two pairs
+        # (llama, mistral) and disagreed with the headline artifact. The general
+        # 2,000-resample capability/over-refusal CIs (compare_quant_pairs) are
+        # untouched; the higher judge-axis resolution is disclosed in the report
+        # and thesis methodology (§3.7 / §6). Significance is unchanged either way.
         base_outcomes = _load_judge_outcomes(results_dir / base_alias / args.benchmark, args.judge_name)
         quant_outcomes = _load_judge_outcomes(results_dir / quant_alias / args.benchmark, args.judge_name)
-        ci = compute_paired_bootstrap_ci(base_outcomes, quant_outcomes)
+        ci = compute_paired_bootstrap_ci(base_outcomes, quant_outcomes, num_resamples=10000)
         judge_ci_lo = ci["delta_ci_lower"] if ci else None
         judge_ci_hi = ci["delta_ci_upper"] if ci else None
         judge_sig = ci["delta_significant"] if ci else None

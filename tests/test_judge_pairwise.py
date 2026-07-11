@@ -81,6 +81,20 @@ def test_agreement_and_kappa_values() -> None:
     _, agree3, kappa3 = mod.agreement_and_kappa(a, b)
     assert agree3 == 0.5 and kappa3 == 0.0
 
+    # Audit P2 regression: the two standalone script kappa helpers previously
+    # returned a spurious 1.0 on the all-constant degenerate slice (pe == 1, so
+    # kappa is 0/0 = undefined). They must now return NaN, matching
+    # judge_pairwise_agreement / judge_agreement, while a normal balanced slice
+    # still returns 0.0.
+    import math
+
+    hla = _load_script("human_label_audit")
+    gl = _load_script("genlen_512_analysis")
+    assert math.isnan(hla._kappa([1, 1, 1, 1], [1, 1, 1, 1]))
+    assert math.isnan(gl._kappa([0, 0, 0, 0], [0, 0, 0, 0]))
+    assert hla._kappa([1, 0, 1, 0], [1, 1, 0, 0]) == 0.0
+    assert gl._kappa([1, 0, 1, 0], [1, 1, 0, 0]) == 0.0
+
 
 def test_load_judge_outcomes_skips_null(tmp_path: Path) -> None:
     mod = _load_script("judge_pairwise_agreement")
