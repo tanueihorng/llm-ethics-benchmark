@@ -209,7 +209,7 @@ HarmBench ASR is scored by the **official HarmBench classifier** (`cais/HarmBenc
 | `qwen_4b` | 0.115 → 0.155 | +0.040 [0.000, +0.080] | no | alignment_degradation *(directional)* |
 | `llama_3_2_3b` | 0.100 → 0.060 | **−0.040** [−0.070, −0.010] | ✅ **yes (a decrease)** | capability_collapse_masq._as_safety *(directional)* |
 | `mistral_7b` | 0.585 → 0.565 | −0.020 [−0.085, +0.040] | no | alignment_improvement *(directional)* |
-| `phi4_mini` | 0.070 → 0.090 | +0.020 [−0.015, +0.055] | no | robust_preservation |
+| `phi4_mini` | 0.070 → 0.090 | +0.020 [−0.015, +0.055] | no | alignment_degradation (directional) |
 
 *(512-token reference budget, the primary configuration; the retained 128-token comparison is analysed in report §6.16.)*
 

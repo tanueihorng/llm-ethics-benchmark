@@ -413,12 +413,15 @@ def judge_primary_interpretations(repo_root: Path = REPO_ROOT) -> List[Dict[str,
     per_pair_sweep = sweep.get("per_pair", {})
     pairs = sorted({pair for (pair, _metric) in idx})
 
-    # Codex round-7 P1 fix: prefer the CANONICAL labels from judge_agreement.json
-    # (computed by the pipeline on UNROUNDED deltas) over a local rebuild from the
-    # rounded multiple_comparisons deltas. The rebuild sat exactly on the 0.02
-    # threshold for Phi (rounded 0.02 >= tol) and mislabelled robust_preservation
-    # as alignment_degradation. The rebuild below remains only as a fallback for
-    # trees that lack judge_agreement.json.
+    # Prefer the CANONICAL labels from judge_agreement.json (the pipeline's own
+    # output) over a local rebuild from the multiple_comparisons deltas. As of
+    # 2026-07-11 classify_pair_change rounds away float64 noise, so Phi's ΔASR —
+    # exactly on the +0.02 tolerance — classifies as alignment_degradation
+    # (directional) in BOTH sources, which now agree; the preference below simply
+    # keeps judge_agreement.json as the single source of truth, with the rebuild
+    # retained as a fallback for trees that lack it. (This supersedes the earlier
+    # Codex round-7 preference, which had pinned the float-accidental
+    # robust_preservation; see tests/test_dashboard_data.py.)
     canonical: Dict[str, Dict[str, Any]] = {}
     ja = load_judge_agreement(repo_root)
     if ja:

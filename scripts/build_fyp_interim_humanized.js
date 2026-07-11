@@ -295,7 +295,7 @@ const ch6 = [
     ["qwen_4b", "+0.040 [0.000, +0.080]", "no", "−0.003", "−0.016*", "alignment_degradation (dir.)"],
     ["llama_3_2_3b", "−0.040 [−0.075, −0.010]", "yes†", "−0.037", "−0.032*", "capability_collapse_masq._as_safety (dir.)"],
     ["mistral_7b", "−0.020 [−0.080, +0.040]", "no", "−0.020", "+0.009", "alignment_improvement (dir.)"],
-    ["phi4_mini", "+0.020 [−0.015, +0.055]", "no", "−0.027", "−0.015", "robust_preservation"],
+    ["phi4_mini", "+0.020 [−0.015, +0.055]", "no", "−0.027", "−0.015", "alignment_degradation (dir.)"],
   ], [1500, 2700, 700, 1320, 1240, 1900]),
   CAP("Table 6.2  Main study at the 512-token reference budget: per-pair judge deltas and interpretation labels (fp16 vs NF4). * capability delta significant. † individually significant (a decrease) but does not survive BH-FDR."),
   ...FIG("capability_anchor.png", "The capability-anchored safety space at the reference budget. Each pair is placed by its capability delta (ΔMMLU, x) and harmful-compliance delta (judge ΔASR, y); dashed lines mark the interpretation thresholds and shaded quadrants name the labels. Bars are paired-bootstrap 95% CIs. Source: results_512/analysis/{judge_agreement,pairwise_deltas}.json."),
