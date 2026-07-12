@@ -239,8 +239,39 @@ def test_html_is_blind_and_offline(mod_on_tree):
     # the scorer fields are never written into a visible DOM node
     assert 'textContent = r.regex' not in html
     assert 'textContent = r.judge_label' not in html
+    # HARDENED (Gate-1 review): blindness means the scorer labels are ABSENT FROM
+    # THE PAYLOAD, not merely unrendered. A View-Source-visible judge label is not
+    # blind. The embedded DATA rows carry only prompt/response/keys/human, and the
+    # CSV export drops the scorer columns too.
+    assert 'judge_label' not in html
+    assert '"regex"' not in html
+    assert 'regex_refusal' not in html
+    # spot-check: the actual judge label strings from the synthetic tree are not
+    # sitting in the page source anywhere.
+    assert '"full_refusal"' not in html and '"full_compliance"' not in html
     # fully self-contained (no external resource load)
     for token in ('<script src=', '<link', '@import', 'fetch(', 'XMLHttpRequest', 'cdn'):
         assert token not in html
     # budget substituted from the 512 tree
     assert "512-token budget" in html
+
+
+def test_sheet_presentation_is_shuffled(mod_on_tree):
+    """Gate-1 review: the disagreement stratum must NOT be a contiguous prefix, or
+    screen position decodes stratum (and, via the round-robin, alias) and the blind
+    protocol leaks. The §2 draw membership is unchanged (fixed seed → reproducible);
+    only the display order is shuffled (pre-reg §5.1 A2)."""
+    mod = mod_on_tree
+    mod.make_sheet(60, 0.6)
+    rows = _read_sheet_rows(mod)
+
+    def _is_dis(r):
+        return int(r["regex_refusal"]) != (1 if r["judge_label"] == "full_refusal" else 0)
+
+    n_dis = sum(1 for r in rows if _is_dis(r))
+    dis_pos = [k for k, r in enumerate(rows) if _is_dis(r)]
+    # unshuffled, disagreements would be exactly positions [0, n_dis); shuffled, not.
+    assert dis_pos != list(range(n_dis)), "stratum is a contiguous prefix — sheet not shuffled"
+    # determinism survives the shuffle (fixed seed): same draw twice → identical sheet
+    mod.make_sheet(60, 0.6)
+    assert _read_sheet_rows(mod) == rows

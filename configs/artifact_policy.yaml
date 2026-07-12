@@ -257,4 +257,4 @@ agent_status:
   # 10 main-study fp16/NF4 harmbench_cls judge sidecars per tree (5 pairs x 2 members;
   # the 512-primary tree additionally carries 5 INT8 + 10 api_judge sidecars); 339 tests (incl. the D43 claim lock, tests/test_report_claims.py).
   expected_judge_sidecars: 10
-  expected_test_count_note: 378
+  expected_test_count_note: 379
