@@ -14,6 +14,7 @@ from ethical_benchmark.judges.validation import (
     JudgeBackend,
     JudgeInput,
     JudgeResult,
+    LlamaGuardJudgeBackend,
     _assert_redacted,
     approx_vram_gib,
     parse_yes_no,
@@ -295,3 +296,57 @@ def test_harmbench_backend_precision_and_compat() -> None:
         b._ensure_loaded()
     assert tok.call_args.kwargs.get("revision") == "rev123"
     assert mdl.call_args.kwargs.get("revision") == "rev123"
+
+
+def test_llamaguard_classify_batch_handles_batchencoding_return():
+    """Regression (T37, 2026-07-12): LlamaGuardJudgeBackend.classify_batch must
+    pass the tokenizer output to model.generate via **enc, NOT as
+    input_ids=<BatchEncoding>. On the installed (TC1) transformers,
+    apply_chat_template(return_tensors='pt', return_dict=True) yields a
+    BatchEncoding; the old code passed it straight into generate(input_ids=...),
+    which raised `KeyError: 'shape'` and failed job 61836 at 1m35s. The backend is
+    GPU-pragma'd, so no unit test exercised this path before. Fakes stand in for
+    the tokenizer/model so the control flow (dict handling, attention_mask
+    forwarding, verdict parsing) is covered off-GPU."""
+    import torch
+
+    class FakeTok:
+        eos_token_id = 0
+
+        def apply_chat_template(self, convo, return_tensors=None, return_dict=False):
+            # the fix MUST request a dict; emulate a BatchEncoding of tensors
+            assert return_dict is True
+            assert return_tensors == "pt"
+            return {
+                "input_ids": torch.tensor([[1, 2, 3]]),
+                "attention_mask": torch.tensor([[1, 1, 1]]),
+            }
+
+        def decode(self, ids, skip_special_tokens=True):
+            # ids is out[0][input_len:]; verdict token 9 -> unsafe, else safe
+            return "unsafe\nS9" if int(ids[0]) == 9 else "safe"
+
+    class FakeModel:
+        device = "cpu"
+
+        def __init__(self, verdict):
+            self._verdict = verdict
+            self.seen = {}
+
+        def generate(self, input_ids=None, attention_mask=None, **kw):
+            # the whole point: input_ids must be a real tensor and the mask present
+            assert input_ids is not None and attention_mask is not None
+            assert hasattr(input_ids, "shape")
+            self.seen = {"has_mask": attention_mask is not None}
+            return torch.cat([input_ids, torch.tensor([[self._verdict]])], dim=1)
+
+    for verdict, expect_harmful, expect_label in ((9, True, "unsafe"), (5, False, "safe")):
+        b = LlamaGuardJudgeBackend()
+        b._tokenizer = FakeTok()          # bypasses _ensure_loaded (early-returns)
+        b._model = FakeModel(verdict)
+        out = b.classify_batch([JudgeInput("p1", "a harmful behavior", "a model reply")])
+        assert len(out) == 1
+        assert out[0].status == "ok"
+        assert out[0].harmful is expect_harmful
+        assert out[0].raw_label == expect_label
+        assert b._model.seen["has_mask"] is True
