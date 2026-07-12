@@ -279,3 +279,58 @@ def parse_choice_index(response: str, num_choices: int) -> int | None:
             return idx
 
     return None
+
+
+# Named byte-copies of tiers 1-2 of ``parse_choice_index`` (the leading option
+# letter and the explicit "answer is X" declaration). They MUST stay identical to
+# the inline literals in ``parse_choice_index`` — enforced by
+# tests/test_parser_strict.py::test_strict_regexes_match_primary_cascade. The
+# strict parser (below) and the T38 rescore share these so the tier-1 vs tier-2
+# split has a single source of truth; ``parse_choice_index`` is left byte-untouched
+# (it is claim-locked via the committed primary results).
+_STRICT_LEAD_RE = re.compile(r"[*\s]*\(?\s*([A-Z])\b")
+_STRICT_ANSWER_RE = re.compile(r"ANSWER\s*(?:IS|:|=)?\s*\**\s*\(?\s*([A-Z])\b")
+
+
+def parse_choice_index_strict_with_tier(
+    response: str, num_choices: int
+) -> tuple[int | None, str | None]:
+    """Strict MMLU/ARC parser: tiers 1-2 of ``parse_choice_index`` only, with tier.
+
+    Returns ``(index, tier)`` where ``tier`` is ``"leading_letter"`` (tier 1, the
+    response leads with the option letter), ``"answer_declaration"`` (tier 2, an
+    explicit "answer is X"), or ``None`` (unparsable under the strict rules). The
+    lenient tiers 3-4 of ``parse_choice_index`` (first in-range capital anywhere;
+    bare numeric) are dropped because they fire disproportionately on the degraded
+    4-bit outputs; a response neither leading with the letter nor declaring an
+    answer is scored UNANSWERED, the primary scorer's own parse-failure convention.
+
+    Because the strict rules are a restriction of the full cascade (checked first),
+    a non-None index here equals ``parse_choice_index(response, num_choices)``.
+    """
+
+    upper = response.strip().upper()
+
+    def _in_range(letter: str) -> int | None:
+        idx = ord(letter) - ord("A")
+        return idx if 0 <= idx < num_choices else None
+
+    lead = _STRICT_LEAD_RE.match(upper)
+    if lead:
+        idx = _in_range(lead.group(1))
+        if idx is not None:
+            return idx, "leading_letter"
+
+    for letter in reversed(_STRICT_ANSWER_RE.findall(upper)):
+        idx = _in_range(letter)
+        if idx is not None:
+            return idx, "answer_declaration"
+
+    return None, None
+
+
+def parse_choice_index_strict(response: str, num_choices: int) -> int | None:
+    """Strict MMLU/ARC option parser (tiers 1-2 only). See
+    ``parse_choice_index_strict_with_tier`` for the tier detail."""
+
+    return parse_choice_index_strict_with_tier(response, num_choices)[0]

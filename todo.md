@@ -32,7 +32,36 @@ entirely once T35 completes.** Remaining action: delete the key after T35.
 
 ---
 
-## [2026-07-12] ACTIVE: T35 — XSTest independent API refusal judge (sensitivity layer)
+## [2026-07-12] NEXT: T36–T39 hardening batch (planned, ready for Opus 4.8)
+
+**Why:** user selected 4 of the 8 assessed weaknesses to close post-T35: the XSTest
+human gold set (T36 — "scorer-dependent, but who's right?"), LlamaGuard open-weight
+third judge (T37 — kills the versioned-API caveat), strict-parser capability
+sensitivity (T38 — bounds the MMLU parser inflation), multi-seed completion for
+Mistral/Phi (T39 — 5/5 pairs in §6.6.1). Durable record: PROJECT_LOG §3 **D46** +
+§2.1 **T36–T39**.
+
+**Everything an executor needs (do NOT re-research):**
+- Execution packet: `docs/agent_tasks/T36-T39-hardening-batch.md` — 4 workstreams,
+  Phase A (infra, local) → adversarial review → Phase B (user labels; TC1 jobs B
+  then D; T38 local) → Phase C (ONE combined fold-in, one D42 sweep, one commit set).
+- T36 pre-reg **LOCKED before any sampling/labeling**: `docs/XSTEST_GOLD_PREREG.md`
+  (blind 3-class labeling, ±0.15 κ margin, J/R/T/X matrix). Sheet tool = sibling of
+  `scripts/human_label_audit.py` (T30), reusing `xstest_judge_agreement.py` loaders.
+- Scout-verified traps (already encoded in the packet): T39 dual hardcoded pair
+  lists (`generate_sensitivity_jobs.py:33` + `sensitivity_analysis.py:31`, sync
+  test mandated; fix T24 in the same pass); T37 Llama-Guard-3-8B is HF-GATED
+  (license + head-node token BEFORE prefetch); T38 `parser_strict` sidecars are
+  NOT covered by existing policy globs (add 8 entries + self-test);
+  `tc1_sensitivity_512.yaml` predates T26 (verify/add mistral+phi entries).
+- First executor step: read the packet end-to-end, then Phase A WS-A.
+
+**Batch rule (D46):** single combined fold-in unless a workstream stalls >1 week.
+Current gates baseline: verify-claims 67, pytest 353, agent-check green.
+
+---
+
+## [2026-07-12] DONE: T35 — XSTest independent API refusal judge (sensitivity layer)
 
 **Why:** the one BH-FDR-surviving over-refusal contrast (Phi-4-mini −0.048, q=0.0122)
 rests on the v2 refusal regex — the scorer class the study itself demoted for HarmBench.

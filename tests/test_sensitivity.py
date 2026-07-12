@@ -69,24 +69,154 @@ def test_summarise_deltas_stability() -> None:
     assert empty["n_seeds"] == 0 and empty["mean"] is None
 
 
-def test_generator_emits_expected_files(tmp_path: Path) -> None:
+def test_generator_emits_expected_files() -> None:
     mod = _load_script("generate_sensitivity_jobs")
-    out_dir = tmp_path / "jobs"
+    all_models = [a for _, aliases in mod.MODELS_BY_PAIR for a in aliases]
+    # T39 (D46): the arm now covers five pairs (ten aliases).
+    assert len(all_models) == 10
 
-    written = []
-    for alias in mod.ALL_MODELS:
-        content = mod._gen_sbatch(alias, [1, 2, 3])
+    for alias in all_models:
+        content = mod._gen_sbatch(alias, [1, 2, 3], config="configs/tc1_sensitivity.yaml",
+                                  sens_root="results_sensitivity",
+                                  log_dir="results/slurm_logs_tc1", suffix="sens")
         assert "--config configs/tc1_sensitivity.yaml" in content
         assert "--benchmark harmbench" in content
         assert "for SEED in 1 2 3" in content
         assert "results_sensitivity/seed" in content
-        written.append(content)
-    assert len(written) == 6
 
-    judge = mod._judge_sbatch(1, mod.ALL_MODELS)
+    judge = mod._judge_sbatch(1, all_models, sens_root="results_sensitivity",
+                              log_dir="results/slurm_logs_tc1", suffix="sens")
     assert "run_judge_validation.py" in judge
     assert "--results-dir results_sensitivity/seed1" in judge
     assert "--precision fp16" in judge
+
+
+def test_pair_lists_in_sync() -> None:
+    """T39 trap-guard (D46): generate_sensitivity_jobs.MODELS_BY_PAIR and
+    sensitivity_analysis.PAIRS must list the SAME pairs. A pair present in only
+    one is silently dropped from the multi-seed arm (generated but not aggregated,
+    or vice versa)."""
+    gen = _load_script("generate_sensitivity_jobs")
+    ana = _load_script("sensitivity_analysis")
+    gen_pairs = {pid for pid, _ in gen.MODELS_BY_PAIR}
+    assert gen_pairs == set(ana.PAIRS)
+    # and the alias membership matches, too
+    for pid, aliases in gen.MODELS_BY_PAIR:
+        assert set(aliases) == set(ana.PAIRS[pid])
+
+
+def test_sensitivity_512_config_has_five_pairs() -> None:
+    """The 512 multi-seed config must validate and cover all five NF4 pairs (T39)."""
+    config = load_quant_config(str(ROOT / "configs" / "tc1_sensitivity_512.yaml"))
+    assert config.decoding.temperature > 0.0
+    assert config.decoding.max_new_tokens == 512
+    pair_ids = {m.pair_id for m in config.models.values()}
+    assert pair_ids == {"qwen_2b", "qwen_4b", "llama_3_2_3b", "mistral_7b", "phi4_mini"}
+    # Phi keeps eager attention on both members; Mistral pins its revision.
+    assert config.models["phi4_mini_base"].attn_implementation == "eager"
+    assert config.models["phi4_mini_4bit"].attn_implementation == "eager"
+    assert config.models["mistral_7b_base"].revision
+
+
+def test_generator_512_mode_covers_new_pairs(tmp_path: Path) -> None:
+    """The 512-mode invocation emits mistral/phi gen sbatch pointing at the 512
+    config + root, and a judge sbatch listing all ten aliases."""
+    mod = _load_script("generate_sensitivity_jobs")
+    content = mod._gen_sbatch("mistral_7b_base", [1, 2, 3, 4, 5],
+                              config="configs/tc1_sensitivity_512.yaml",
+                              sens_root="results_sensitivity_512",
+                              log_dir="results_512/slurm_logs_tc1", suffix="sens512")
+    assert "--config configs/tc1_sensitivity_512.yaml" in content
+    assert "results_sensitivity_512/seed" in content
+    assert "mistral_7b_base__sens512" in content
+    all_models = [a for _, aliases in mod.MODELS_BY_PAIR for a in aliases]
+    judge = mod._judge_sbatch(1, all_models, sens_root="results_sensitivity_512",
+                              log_dir="results_512/slurm_logs_tc1", suffix="sens512")
+    for alias in ("mistral_7b_4bit", "phi4_mini_base", "phi4_mini_4bit"):
+        assert alias in judge
+
+
+def test_512_readme_has_fully_formed_results_dir(tmp_path: Path) -> None:
+    """Review finding (WS-D): the emitted 512-arm README must render a COMPLETE
+    aggregation command with `--results-dir results_512`. A dangling flag would
+    let an operator drop it and silently write the 512 seed aggregate into the
+    128-era results/ tree against the wrong-budget greedy baseline."""
+    mod = _load_script("generate_sensitivity_jobs")
+    import sys
+    import contextlib
+    import io
+    out = tmp_path / "jobs512"
+    argv = sys.argv
+    sys.argv = ["generate_sensitivity_jobs.py", "--out-dir", str(out),
+                "--config", "configs/tc1_sensitivity_512.yaml",
+                "--sens-root", "results_sensitivity_512",
+                "--log-dir", "results_512/slurm_logs_tc1",
+                "--results-dir", "results_512", "--suffix", "sens512"]
+    try:
+        with contextlib.redirect_stdout(io.StringIO()):
+            mod.main()
+    finally:
+        sys.argv = argv
+    readme = (out / "README.md").read_text()
+    # the run command is fully formed with a concrete results-dir value
+    assert ("python scripts/sensitivity_analysis.py --sensitivity-root "
+            "results_sensitivity_512 --results-dir results_512") in readme
+    # and the old dangling form ("--results-dir" with no value, then end-of-command)
+    # is gone: every "--results-dir" in the command line is followed by a value
+    assert "--results-dir`.\n" not in readme
+    assert "--results-dir for" not in readme
+
+
+def test_seeds_used_counts_judge_only_seed(tmp_path: Path) -> None:
+    """T24 fix (D46): a seed with a judge sidecar but no summary.json must still
+    be counted in seeds_used. Previously seeds_used was appended only in the v2
+    branch, so a judge-only seed under-counted."""
+    import json
+    sa = _load_script("sensitivity_analysis")
+    root = tmp_path / "results_sensitivity_512"
+    for seed in ("seed1",):
+        for alias in ("qwen_2b_base", "qwen_2b_4bit"):
+            d = root / seed / alias / "harmbench"
+            d.mkdir(parents=True)
+            # judge sidecar present, but NO summary.json/summary.v2.json (v2 branch skipped)
+            recs = [{"prompt_id": str(i), "judge_harmful": (i % 3 == 0)} for i in range(9)]
+            with (d / "scores.judge.harmbench_cls.jsonl").open("w") as fh:
+                for r in recs:
+                    fh.write(json.dumps(r) + "\n")
+    analysis = tmp_path / "results_512" / "analysis"
+    analysis.mkdir(parents=True)
+    import sys
+    argv = sys.argv
+    sys.argv = ["sensitivity_analysis.py", "--sensitivity-root", str(root),
+                "--results-dir", str(tmp_path / "results_512")]
+    import contextlib
+    import io
+    try:
+        with contextlib.redirect_stdout(io.StringIO()):
+            sa.main()
+    finally:
+        sys.argv = argv
+    report = json.loads((analysis / "sensitivity_multiseed.json").read_text())
+    qwen = next(p for p in report["per_pair"] if p["pair_id"] == "qwen_2b")
+    # the judge-only seed is counted even though there is no v2 summary
+    assert "seed1" in qwen["seeds_used"]
+
+
+def test_llamaguard_sbatch_is_well_formed() -> None:
+    """WS-B (T37): the committed LlamaGuard third-judge sbatch must target the
+    512 tree, all fifteen aliases, the llamaguard backend, and preserve the
+    offline bootstrap."""
+    sbatch = (ROOT / "slurm" / "judge_validation_llamaguard_512.sbatch").read_text()
+    assert "--backend llamaguard" in sbatch
+    assert "--results-dir results_512" in sbatch
+    assert "--model-id" not in sbatch  # backend default (Llama-Guard-3-8B) applies
+    for env in ("HF_HUB_OFFLINE=1", "HF_DATASETS_OFFLINE=1", "TRANSFORMERS_OFFLINE=1"):
+        assert env in sbatch
+    for alias in ("qwen_2b_8bit", "mistral_7b_8bit", "phi4_mini_8bit",
+                  "qwen_2b_base", "llama_3_2_3b_4bit"):
+        assert alias in sbatch
+    # exactly fifteen aliases scored (5 pairs x {fp16, NF4, INT8})
+    assert sbatch.count("_base ") + sbatch.count("_base\n") >= 5
 
 
 def test_v2_asr_prefers_v2_summary(tmp_path) -> None:

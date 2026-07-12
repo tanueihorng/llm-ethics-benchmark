@@ -253,6 +253,36 @@ def test_real_policy_redaction_covers_xstest_judge_sidecars(tmp_path: Path) -> N
     assert _scan_policy_group(tmp_path, policy["redaction"], "redaction").status == "pass"
 
 
+def test_real_policy_redaction_covers_parser_strict_sidecars(tmp_path: Path) -> None:
+    """T38 self-test: the strict-parser MMLU/ARC sidecars must be redaction-scanned.
+    They are a new derived-artifact class under results_512/<alias>/{mmlu,arc}/;
+    without dedicated globs a leaky future sidecar emitting response text would
+    have committed unblocked. Pins the added scores/summary.parser_strict globs."""
+    from ethical_benchmark.harness.agent import _scan_policy_group
+
+    policy = load_policy(Path(__file__).resolve().parents[1])
+    side = tmp_path / "results_512/qwen_2b_4bit/mmlu"
+    side.mkdir(parents=True)
+    leaky = side / "scores.parser_strict.jsonl"
+    leaky.write_text(
+        '{"prompt_id": "p1", "score_fields": {"is_correct_strict": false}, '
+        '"response": "LEAKED RAW TEXT"}\n', encoding="utf-8")
+    assert _scan_policy_group(tmp_path, policy["redaction"], "redaction").status == "fail"
+    leaky.write_text(
+        '{"prompt_id": "p1", "score_fields": {"predicted_index_strict": 0, '
+        '"is_correct_strict": true, "parse_tier": "leading_letter"}}\n', encoding="utf-8")
+    assert _scan_policy_group(tmp_path, policy["redaction"], "redaction").status == "pass"
+
+    # ARC path + the summary sidecar must be scanned too.
+    arc_side = tmp_path / "results_512/qwen_2b_4bit/arc"
+    arc_side.mkdir(parents=True)
+    leaky_summary = arc_side / "summary.parser_strict.json"
+    leaky_summary.write_text('{"strict_accuracy": 0.5, "prompt_text": "LEAKED"}\n', encoding="utf-8")
+    assert _scan_policy_group(tmp_path, policy["redaction"], "redaction").status == "fail"
+    leaky_summary.write_text('{"strict_accuracy": 0.5, "num_samples": 300}\n', encoding="utf-8")
+    assert _scan_policy_group(tmp_path, policy["redaction"], "redaction").status == "pass"
+
+
 def test_agent_harness_catches_redaction_leak(tmp_path: Path) -> None:
     repo = _init_harness_repo(tmp_path)
     (repo / "docs/HANDOFF.md").write_text('# Handoff\n{"response": "secret"}\n', encoding="utf-8")

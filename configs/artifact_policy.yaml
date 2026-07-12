@@ -37,6 +37,12 @@ allowed_derived_artifacts:
   - results_512/*/harmbench/summary.judge.*.json
   - results_512/*/xstest/scores.judge.*.jsonl
   - results_512/*/xstest/summary.judge.*.json
+  # T38 (D46): strict-parser capability sensitivity sidecars (MMLU + ARC).
+  # Derived, redacted (IDs + parsed-index booleans + tier only, no text).
+  - results_512/*/mmlu/scores.parser_strict.jsonl
+  - results_512/*/mmlu/summary.parser_strict.json
+  - results_512/*/arc/scores.parser_strict.jsonl
+  - results_512/*/arc/summary.parser_strict.json
   - results_512/analysis/*.json
   - results_512/analysis/*.csv
   - results_sensitivity_512/*/*/harmbench/scores.judge.*.jsonl
@@ -78,6 +84,12 @@ redaction:
     - results_512/*/harmbench/summary.judge.*.json
     - results_512/*/xstest/scores.judge.*.jsonl
     - results_512/*/xstest/summary.judge.*.json
+    # T38 (D46): strict-parser sidecars must be redaction-scanned too (a future
+    # sidecar emitting a raw-text field would otherwise commit unblocked).
+    - results_512/*/mmlu/scores.parser_strict.jsonl
+    - results_512/*/mmlu/summary.parser_strict.json
+    - results_512/*/arc/scores.parser_strict.jsonl
+    - results_512/*/arc/summary.parser_strict.json
     - results_512/analysis/*.json
     - results_512/analysis/*.csv
     - results_sensitivity_512/*/*/harmbench/scores.judge.*.jsonl
@@ -245,4 +257,4 @@ agent_status:
   # 10 main-study fp16/NF4 harmbench_cls judge sidecars per tree (5 pairs x 2 members;
   # the 512-primary tree additionally carries 5 INT8 + 10 api_judge sidecars); 339 tests (incl. the D43 claim lock, tests/test_report_claims.py).
   expected_judge_sidecars: 10
-  expected_test_count_note: 353
+  expected_test_count_note: 375

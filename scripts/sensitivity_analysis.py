@@ -28,10 +28,17 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from ethical_benchmark.analysis.compare_quant_pairs import mcnemar_exact_test
 
+# NF4 main-study pairs covered by the multi-seed arm. T39 (D46) extends the arm
+# from the original three pairs to all five (adds mistral_7b + phi4_mini @512).
+# MUST stay in sync with generate_sensitivity_jobs.MODELS_BY_PAIR — asserted by
+# tests/test_sensitivity.py::test_pair_lists_in_sync (a pair missing from either
+# list is silently dropped from the arm).
 PAIRS = {
     "qwen_2b": ("qwen_2b_base", "qwen_2b_4bit"),
     "qwen_4b": ("qwen_4b_base", "qwen_4b_4bit"),
     "llama_3_2_3b": ("llama_3_2_3b_base", "llama_3_2_3b_4bit"),
+    "mistral_7b": ("mistral_7b_base", "mistral_7b_4bit"),
+    "phi4_mini": ("phi4_mini_base", "phi4_mini_4bit"),
 }
 
 
@@ -171,10 +178,11 @@ def main() -> int:
         for seed_dir in seed_dirs:
             base_dir = seed_dir / base_alias / "harmbench"
             quant_dir = seed_dir / quant_alias / "harmbench"
+            seed_used = False
             b_v2, q_v2 = _v2_asr(base_dir), _v2_asr(quant_dir)
             if b_v2 is not None and q_v2 is not None:
                 v2_deltas.append(q_v2 - b_v2)
-                seeds_used.append(seed_dir.name)
+                seed_used = True
             b_recs = _judge_records(base_dir, args.judge_name)
             q_recs = _judge_records(quant_dir, args.judge_name)
             if b_recs and q_recs:
@@ -189,6 +197,12 @@ def main() -> int:
                 mc["seed"] = seed_dir.name
                 mc["delta"] = q_j - b_j
                 judge_per_seed.append(mc)
+                seed_used = True
+            # T24 fix: a seed counts as used if EITHER scorer produced a delta.
+            # Previously seeds_used was appended only in the v2 branch, so a seed
+            # with a judge sidecar but no/partial summary.json under-counted.
+            if seed_used:
+                seeds_used.append(seed_dir.name)
 
         v2_summary = summarise_deltas(v2_deltas)
         judge_summary = summarise_deltas(judge_deltas)
@@ -248,11 +262,13 @@ def main() -> int:
     print(f"{'pair_id':<14} {'scorer':<7} {'seeds':>5} {'mean Δ':>9} {'sd':>7} "
           f"{'[min, max]':>18} {'sign?':>6} {'greedy':>8}")
     print("-" * 92)
+
+    def _f(x: Optional[float]) -> str:
+        return f"{x:+.3f}" if isinstance(x, (int, float)) else "  n/a"
+
     for p in per_pair:
         for scorer in ("v2_delta", "judge_delta"):
             s = p[scorer]
-            def _f(x: Optional[float]) -> str:
-                return f"{x:+.3f}" if isinstance(x, (int, float)) else "  n/a"
             rng = (f"[{s['min']:+.3f}, {s['max']:+.3f}]"
                    if s["n_seeds"] else "n/a")
             print(f"{p['pair_id']:<14} {scorer.replace('_delta',''):<7} {s['n_seeds']:>5} "

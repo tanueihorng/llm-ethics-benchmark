@@ -27,7 +27,7 @@ export TRANSFORMERS_OFFLINE=1
 # Edit --models below to match the models you actually generated for this seed.
 python /tc1home/FYP/utan001/fyp_quant/repo/scripts/run_judge_validation.py \
   --results-dir results_sensitivity_512/seed4 \
-  --models qwen_2b_base qwen_2b_4bit qwen_4b_base qwen_4b_4bit llama_3_2_3b_base llama_3_2_3b_4bit \
+  --models qwen_2b_base qwen_2b_4bit qwen_4b_base qwen_4b_4bit llama_3_2_3b_base llama_3_2_3b_4bit mistral_7b_base mistral_7b_4bit phi4_mini_base phi4_mini_4bit \
   --benchmark harmbench \
   --backend harmbench_cls \
   --precision fp16 \

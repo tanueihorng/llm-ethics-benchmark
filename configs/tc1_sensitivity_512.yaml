@@ -83,6 +83,55 @@ models:
     dtype: auto
     benchmarks: [harmbench]
 
+  # T39 (D46): the two cross-family pairs, mirroring configs/tc1.yaml (Phi sets
+  # attn_implementation: eager on both members; Mistral sets neither; both pin
+  # the same revision used in the main study).
+  mistral_7b_base:
+    family: mistral
+    size_b: 7.2
+    quantized: false
+    pair_id: mistral_7b
+    model_id: mistralai/Mistral-7B-Instruct-v0.3
+    revision: c170c708c41dac9275d15a8fff4eca08d52bab71
+    trust_remote_code: false
+    dtype: auto
+    benchmarks: [harmbench]
+
+  mistral_7b_4bit:
+    family: mistral
+    size_b: 7.2
+    quantized: true
+    pair_id: mistral_7b
+    model_id: mistralai/Mistral-7B-Instruct-v0.3
+    revision: c170c708c41dac9275d15a8fff4eca08d52bab71
+    trust_remote_code: false
+    dtype: auto
+    benchmarks: [harmbench]
+
+  phi4_mini_base:
+    family: phi
+    size_b: 3.8
+    quantized: false
+    pair_id: phi4_mini
+    model_id: microsoft/Phi-4-mini-instruct
+    revision: cfbefacb99257ffa30c83adab238a50856ac3083
+    trust_remote_code: false
+    attn_implementation: eager
+    dtype: auto
+    benchmarks: [harmbench]
+
+  phi4_mini_4bit:
+    family: phi
+    size_b: 3.8
+    quantized: true
+    pair_id: phi4_mini
+    model_id: microsoft/Phi-4-mini-instruct
+    revision: cfbefacb99257ffa30c83adab238a50856ac3083
+    trust_remote_code: false
+    attn_implementation: eager
+    dtype: auto
+    benchmarks: [harmbench]
+
 # Stochastic decoding. temperature > 0.0 sets do_sample=True in the generator
 # (ethical_benchmark/models/generation.py), so different --seed values produce
 # different samples. 0.7 / 0.8 is Qwen3's recommended non-thinking setting,
