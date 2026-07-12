@@ -53,23 +53,30 @@ def test_strict_tiers():
 
 def test_strict_regexes_match_primary_cascade():
     """Tripwire: the named strict regexes must be byte-identical to the tier-1/2
-    patterns actually inlined in parse_choice_index. The earlier version only
-    compared the strict copies against literals repeated in THIS test, so a change
-    to the primary parser could not trip it (latent guard defect). It now also reads
-    parse_choice_index's own source, so if its tier-1/2 patterns drift, the strict
-    byte-copies no longer appear in it and this fails — forcing them into lockstep."""
+    patterns actually inlined in parse_choice_index. Two prior weakenings, both
+    caught by mutation testing: (a) the first version compared the strict copies
+    against literals repeated in THIS test, so a primary edit could not trip it;
+    (b) the second version used a SUBSTRING check on the primary's source, so an
+    extension that keeps the old pattern as a substring — e.g. prefixing tier 2
+    with (?:FINAL\\s+)? — still passed while strict silently stopped being a
+    restriction of the primary. This version EXTRACTS the literal passed to the
+    primary's re.match (tier 1) and re.findall (tier 2) and asserts exact
+    equality, so any in-place edit, extension, or added second match/findall in
+    parse_choice_index fails here — forcing a deliberate re-sync."""
     import inspect
+    import re as _re
 
     # 1. the strict copies are still the claim-locked values (guards the copies) ...
     assert _STRICT_LEAD_RE.pattern == r"[*\s]*\(?\s*([A-Z])\b"
     assert _STRICT_ANSWER_RE.pattern == r"ANSWER\s*(?:IS|:|=)?\s*\**\s*\(?\s*([A-Z])\b"
-    # 2. ... AND those exact patterns are the ones inlined in the PRIMARY parser
-    #    (the half that was missing — actually inspect parse_choice_index).
+    # 2. ... AND they EQUAL the literals the PRIMARY parser actually uses.
     primary_src = inspect.getsource(parse_choice_index)
-    assert _STRICT_LEAD_RE.pattern in primary_src, \
-        "tier-1 pattern drifted from parse_choice_index; re-sync _STRICT_LEAD_RE"
-    assert _STRICT_ANSWER_RE.pattern in primary_src, \
-        "tier-2 pattern drifted from parse_choice_index; re-sync _STRICT_ANSWER_RE"
+    tier1_lits = _re.findall(r're\.match\(\s*r"([^"]*)"', primary_src)
+    tier2_lits = _re.findall(r're\.findall\(\s*r"([^"]*)"', primary_src)
+    assert tier1_lits == [_STRICT_LEAD_RE.pattern], \
+        f"tier-1 literal(s) in parse_choice_index drifted: {tier1_lits!r}; re-sync _STRICT_LEAD_RE"
+    assert tier2_lits == [_STRICT_ANSWER_RE.pattern], \
+        f"tier-2 literal(s) in parse_choice_index drifted: {tier2_lits!r}; re-sync _STRICT_ANSWER_RE"
 
 
 def test_strict_is_restriction_of_primary():
