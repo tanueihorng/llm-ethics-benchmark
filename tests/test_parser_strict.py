@@ -52,11 +52,24 @@ def test_strict_tiers():
 
 
 def test_strict_regexes_match_primary_cascade():
-    """Tripwire: the named strict regexes must equal the literals inlined as tiers
-    1-2 of parse_choice_index. If parse_choice_index's tier-1/2 patterns change,
-    this fails so the strict copies are updated in lockstep."""
+    """Tripwire: the named strict regexes must be byte-identical to the tier-1/2
+    patterns actually inlined in parse_choice_index. The earlier version only
+    compared the strict copies against literals repeated in THIS test, so a change
+    to the primary parser could not trip it (latent guard defect). It now also reads
+    parse_choice_index's own source, so if its tier-1/2 patterns drift, the strict
+    byte-copies no longer appear in it and this fails — forcing them into lockstep."""
+    import inspect
+
+    # 1. the strict copies are still the claim-locked values (guards the copies) ...
     assert _STRICT_LEAD_RE.pattern == r"[*\s]*\(?\s*([A-Z])\b"
     assert _STRICT_ANSWER_RE.pattern == r"ANSWER\s*(?:IS|:|=)?\s*\**\s*\(?\s*([A-Z])\b"
+    # 2. ... AND those exact patterns are the ones inlined in the PRIMARY parser
+    #    (the half that was missing — actually inspect parse_choice_index).
+    primary_src = inspect.getsource(parse_choice_index)
+    assert _STRICT_LEAD_RE.pattern in primary_src, \
+        "tier-1 pattern drifted from parse_choice_index; re-sync _STRICT_LEAD_RE"
+    assert _STRICT_ANSWER_RE.pattern in primary_src, \
+        "tier-2 pattern drifted from parse_choice_index; re-sync _STRICT_ANSWER_RE"
 
 
 def test_strict_is_restriction_of_primary():

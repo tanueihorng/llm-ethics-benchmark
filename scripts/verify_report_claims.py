@@ -682,7 +682,14 @@ def run_checks(checker: Checker | None = None) -> Checker:
         return True, "all five Table 6.4 rows (judge strict/broad + regex column) match artifacts"
 
     c.check("Result 6 / Table 6.4: five per-pair judge ΔORs + regex column == artifacts, none judge-sig",
+            # ALL FIVE printed rows are pinned to the report source (previously only
+            # qwen_2b + phi4_mini were, leaving 3 rows free to drift from the artifact
+            # without the lock firing — the table64_rows() predicate checks the
+            # artifact side for all five).
             ['["qwen_2b", "−0.024", "+0.040 [0.000, +0.080]; 0.087", "+0.040 [−0.004, +0.084]; 0.110"]',
+             '["qwen_4b", "−0.004", "−0.016 [−0.052, +0.024]; 0.541", "−0.020 [−0.060, +0.020]; 0.424"]',
+             '["llama_3_2_3b", "+0.016", "+0.004 [−0.028, +0.036]; 1.000", "0.000 [−0.032, +0.032]; 1.000"]',
+             '["mistral_7b", "0.000", "−0.004 [−0.036, +0.028]; 1.000", "−0.008 [−0.044, +0.024]; 0.815"]',
              '["phi4_mini", "−0.048 ★", "+0.016 [−0.028, +0.060]; 0.597", "−0.004 [−0.048, +0.036]; 1.000"]',
              "Qwen3-1.7B's +0.040 (strict; McNemar p = 0.087), is an apparent increase that does not reach significance"],
             table64_rows)
