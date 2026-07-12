@@ -32,9 +32,16 @@ print: leading-letter accuracy **75.0% (MMLU) / 79.9% (ARC)** — *higher* than 
 
 ### 1b. ⚠️ FACTUAL CORRECTION required, not just a reframe
 
-The current report §6.4.1 states, verbatim:
+The current report **§6.5 (third statistical caveat, the answer-parsing sub-point; builder line
+823)** states, verbatim:
 > "ARC-Challenge — scored by an identical protocol for both pair members and **not subject
 > to this format asymmetry** — moves in the same (negative) direction (−0.009, not significant)"
+
+and **Ch8 (MMLU answer-format sensitivity item; builder line 1023)** repeats it: "ARC, which is
+**immune to this asymmetry**, corroborates the direction of the loss at a smaller magnitude."
+(Note: §6.4.1 itself does NOT contain the verbatim "not subject/immune" clause — it carries only
+the softer, separately-listed "substantially MMLU-specific (a subset-content sensitivity)"
+wording at builder line 820, a weaker rewrite target handled in §1d.)
 
 **This is false.** qwen_2b_4bit's ARC answers collapse in format *more* than its MMLU answers
 (52.3% vs 48.7% lenient-fallback usage). ARC's near-zero *primary* delta (−0.009) is not
@@ -66,12 +73,21 @@ rewritten, not appended to.
 
 ### 1d. Exact anchors to REWRITE (report v5 + humanized + thesis v4/humanized + interim×2 + LaTeX)
 
-- §6.4.1 sentence: "ARC … not subject to this format asymmetry … −0.009, not significant"
-  → the correction above. **This is the load-bearing edit.**
-- §6.5 (fourth statistical caveat): "Part of the −0.090 MMLU gap … reflects a shift in answer
-  format that the lenient parser scores less reliably, not only a loss of underlying
-  knowledge" → the bracket framing; the "partly parser-inflated" direction was backwards
-  (strict *widens* the gap; the lenient parser *narrows* it by salvage).
+- **§6.5 third caveat (builder line 823) — THE load-bearing edit.** The clause "ARC … not
+  subject to this format asymmetry … −0.009, not significant … its MMLU magnitude is partly
+  parser-inflated" is the flat factual error. Rewrite: ARC is NOT format-immune (4-bit ARC
+  fallback 52.3% > MMLU 48.7%); its −0.009 primary delta is lenient-salvage; strict ARC −0.343.
+  The "partly parser-inflated" direction is backwards — strict scoring *widens* the gap, the
+  lenient parser *narrows* it by salvage. Use the §1c bracket framing.
+- **Ch8 MMLU-answer-format item (builder line 1023).** "ARC, which is immune to this asymmetry,
+  corroborates the direction … at a smaller magnitude" → same correction; ARC's format DOES
+  collapse; keep the truncation-resolved-at-512 point (that part is still true) but replace the
+  "immune"/"genuinely wrong answers" framing with protocol-dependence.
+- **§6.4.1 (builder line 820) — weaker, related rewrite.** "the severe MMLU figure is
+  substantially MMLU-specific (a subset-content sensitivity)" and "the ≈30:1 within-Qwen scale
+  gap does not replicate under ARC" both lean on the lenient ARC −0.009; under strict scoring
+  ARC also collapses (−0.343), so the "MMLU-specific" and "does not replicate under ARC"
+  readings are protocol-dependent and must be hedged accordingly.
 - Ch8 item (MMLU answer-format sensitivity, the "resolved at 512 / genuinely wrong answers"
   passage): rewrite to "format-compliance sensitivity is a live measurement-dependence axis
   at 512 for the smallest pair on BOTH capability benchmarks; magnitude is protocol-bracketed

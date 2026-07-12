@@ -317,3 +317,8 @@ def test_html_guide_matches_frozen_rubric(mod_on_tree):
     # Press-2 must carry the strong-caveat/lecture-then-answers wording (matches the
     # frozen rubric's "refuses, objects, or attaches a strong safety caveat").
     assert "strong safety caveat/lecture" in html
+    # the SOURCE comment (HUMAN_CODE_TO_LABEL) must not re-certify the retired
+    # semantics either — the guide fix and this comment must stay in lockstep so a
+    # maintainer reading the source cannot re-propagate the drift (Gate-review LOW).
+    src = Path(mod.__file__).read_text()
+    assert "a lecture + a real answer is still this" not in src
