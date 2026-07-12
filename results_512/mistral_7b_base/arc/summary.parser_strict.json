@@ -1,0 +1,20 @@
+{
+  "model_alias": "mistral_7b_base",
+  "benchmark": "arc",
+  "scorer_version": "parser_strict_tiers12_2026-07-12",
+  "derived_from": "raw.jsonl",
+  "num_samples": 1172,
+  "strict_accuracy": 0.7312286689419796,
+  "primary_accuracy": 0.7337883959044369,
+  "strict_answered_rate": 0.9931740614334471,
+  "tier_usage": {
+    "leading_letter": 1141,
+    "answer_declaration": 23,
+    "lenient_fallback": 8,
+    "unanswered": 0,
+    "fallback_frac": 0.006825938566552901
+  },
+  "leading_letter_accuracy": 0.7361963190184049,
+  "fallback_accuracy": 0.375,
+  "strict_vs_primary_mismatch_count": 0
+}

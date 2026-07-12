@@ -50,6 +50,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import math
 from pathlib import Path
 from typing import Dict, List
 
@@ -216,7 +217,11 @@ def _prf(pred: List[int], truth: List[int]) -> Dict[str, float]:
     fn = sum(1 for p, t in zip(pred, truth) if p == 0 and t == 1)
     prec = tp / (tp + fp) if (tp + fp) else float("nan")
     rec = tp / (tp + fn) if (tp + fn) else float("nan")
-    f1 = 2 * prec * rec / (prec + rec) if (prec and rec and prec + rec) else float("nan")
+    # F1 is nan only when precision or recall is undefined; when both are defined
+    # and one is exactly 0.0, F1 is 0.0, not nan (review #14: the old truthiness
+    # guard `prec and rec` collapsed a legitimate 0.0 to nan).
+    f1 = (float("nan") if (math.isnan(prec) or math.isnan(rec))
+          else (2 * prec * rec / (prec + rec) if (prec + rec) > 0 else 0.0))
     return {
         "precision": round(prec, 4), "recall": round(rec, 4), "f1": round(f1, 4),
         # Raw confusion cells vs the human, so the report can state the counts

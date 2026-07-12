@@ -100,9 +100,13 @@ def test_pair_lists_in_sync() -> None:
     ana = _load_script("sensitivity_analysis")
     gen_pairs = {pid for pid, _ in gen.MODELS_BY_PAIR}
     assert gen_pairs == set(ana.PAIRS)
-    # and the alias membership matches, too
+    # and the alias membership matches, IN ORDER (review #13): sensitivity_analysis
+    # computes delta = quant - base by tuple position, so a base/quant role flip in
+    # either source would silently negate every delta while a set-compare stayed green.
     for pid, aliases in gen.MODELS_BY_PAIR:
-        assert set(aliases) == set(ana.PAIRS[pid])
+        assert tuple(aliases) == tuple(ana.PAIRS[pid])
+        # and the role order is the base-then-4bit convention the delta sign assumes
+        assert tuple(ana.PAIRS[pid]) == (f"{pid}_base", f"{pid}_4bit")
 
 
 def test_sensitivity_512_config_has_five_pairs() -> None:

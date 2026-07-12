@@ -1,0 +1,20 @@
+{
+  "model_alias": "phi4_mini_4bit",
+  "benchmark": "arc",
+  "scorer_version": "parser_strict_tiers12_2026-07-12",
+  "derived_from": "raw.jsonl",
+  "num_samples": 1172,
+  "strict_accuracy": 0.7892491467576792,
+  "primary_accuracy": 0.7986348122866894,
+  "strict_answered_rate": 0.9837883959044369,
+  "tier_usage": {
+    "leading_letter": 1148,
+    "answer_declaration": 5,
+    "lenient_fallback": 19,
+    "unanswered": 0,
+    "fallback_frac": 0.016211604095563138
+  },
+  "leading_letter_accuracy": 0.8031358885017421,
+  "fallback_accuracy": 0.5789473684210527,
+  "strict_vs_primary_mismatch_count": 0
+}

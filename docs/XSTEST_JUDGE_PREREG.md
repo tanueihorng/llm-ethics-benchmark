@@ -141,3 +141,11 @@ no prompt or response text), enforced by `_assert_redacted` and the extended pol
   on benign over-refusal (κ ≤ 0.5). Committed reporting action = Outcome C (§5): regex stays the
   primary scorer of record and the BH-FDR family is unchanged; §6.5/§6.5.1 and the abstract's
   over-refusal-survivor mention gain a scorer-dependence caveat pointing to a new §6.12 Result 6.
+- **§5.1 amendment-2 disposition (recorded 2026-07-13).** Amendment 2 mandated §6.12 report "the
+  full per-alias table (all 15 aliases) AND all five NF4 per-pair judge ΔORs". Disposition: the
+  five per-pair judge ΔORs (strict + broad, CIs, McNemar) are carried **in-document** as Table 6.4
+  and machine-locked by `verify_report_claims.py` (all five rows, hardened 2026-07-12); the
+  15-alias per-alias κ/OR table is satisfied **by committed reference** to
+  `results_512/analysis/xstest_judge_agreement.csv` (redacted, per-alias) rather than an in-document
+  table, to avoid a 15-row table for an exploratory sensitivity layer. Both halves of the amendment
+  are thus met; the choice to reference (not inline) the per-alias table is the recorded disposition.

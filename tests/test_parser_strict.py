@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import sys
 from pathlib import Path
 from types import ModuleType
 
@@ -175,6 +176,28 @@ def test_rescore_immutability_and_sidecar(tmp_path: Path):
     assert res["summary"]["leading_letter_accuracy"] == pytest.approx(1.0)
     # fallback accuracy = primary-correct within fallback = p3 correct -> 1.0
     assert res["summary"]["fallback_accuracy"] == pytest.approx(1.0)
+
+
+def test_dry_run_writes_nothing(tmp_path: Path, monkeypatch):
+    """Review #12: --dry-run must create no files AND no directories. The main()
+    aggregate path previously ran analysis_dir.mkdir before the dry-run guard, so a
+    dry run against a fresh results root silently created <root>/analysis/."""
+    mod = _load_script("rescore_capability_strict")
+    root = tmp_path / "results_512"
+    _build_capability_tree(root, "qwen_2b_base", [("p1", "A. x", 0, 0, True)])
+    _build_capability_tree(root, "qwen_2b_4bit", [("p1", "A. x", 0, 0, True)])
+    before = sorted(p.relative_to(root).as_posix() for p in root.rglob("*"))
+
+    monkeypatch.setattr(sys, "argv", [
+        "rescore_capability_strict.py", "--dry-run",
+        "--results-dir", str(root), "--models", "qwen_2b_base", "qwen_2b_4bit",
+        "--benchmarks", "mmlu",
+    ])
+    assert mod.main() == 0
+
+    after = sorted(p.relative_to(root).as_posix() for p in root.rglob("*"))
+    assert after == before, "dry-run created files/dirs"
+    assert not (root / "analysis").exists(), "dry-run created the analysis/ directory"
 
 
 def test_rescore_pair_delta_plumbing(tmp_path: Path):

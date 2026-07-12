@@ -288,7 +288,8 @@ def main() -> int:
     models = args.models or MODEL_ALIASES
     results_root = Path(args.results_dir).resolve()
     analysis_dir = results_root / "analysis"
-    analysis_dir.mkdir(parents=True, exist_ok=True)
+    # A dry run must write nothing — including no directories (review finding #12);
+    # the mkdir is deferred to the write branch below.
 
     # benchmark -> alias -> {summary, strict_correct_by_id, primary_correct_by_id}
     per: Dict[str, Dict[str, Dict[str, Any]]] = {b: {} for b in args.benchmarks}
@@ -327,6 +328,7 @@ def main() -> int:
     agg_json = analysis_dir / f"parser_strict_sensitivity{args.out_suffix}.json"
     csv_path = analysis_dir / f"parser_strict_sensitivity{args.out_suffix}.csv"
     if not args.dry_run:
+        analysis_dir.mkdir(parents=True, exist_ok=True)
         agg_json.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
         with csv_path.open("w", encoding="utf-8", newline="") as fh:
             writer = csv.writer(fh, lineterminator="\n")

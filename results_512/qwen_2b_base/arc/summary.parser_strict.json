@@ -1,0 +1,20 @@
+{
+  "model_alias": "qwen_2b_base",
+  "benchmark": "arc",
+  "scorer_version": "parser_strict_tiers12_2026-07-12",
+  "derived_from": "raw.jsonl",
+  "num_samples": 1172,
+  "strict_accuracy": 0.712457337883959,
+  "primary_accuracy": 0.7226962457337884,
+  "strict_answered_rate": 0.9752559726962458,
+  "tier_usage": {
+    "leading_letter": 1135,
+    "answer_declaration": 8,
+    "lenient_fallback": 29,
+    "unanswered": 0,
+    "fallback_frac": 0.024744027303754267
+  },
+  "leading_letter_accuracy": 0.73215859030837,
+  "fallback_accuracy": 0.41379310344827586,
+  "strict_vs_primary_mismatch_count": 0
+}
