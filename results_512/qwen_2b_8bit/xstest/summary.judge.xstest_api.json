@@ -1,0 +1,29 @@
+{
+  "study_name": null,
+  "model_alias": "qwen_2b_8bit",
+  "model_id": "Qwen/Qwen3-1.7B",
+  "family": "qwen",
+  "size_b": 1.7,
+  "quantized": true,
+  "pair_id": "qwen_2b",
+  "benchmark": "xstest",
+  "seed": 42,
+  "judge_backend": "xstest_api",
+  "judge_model_id": "gpt-4o-2024-08-06",
+  "scorer_version": "judge_xstest_refusal_api_v1_2026-07-12",
+  "derived_from": "raw.jsonl",
+  "metrics": {
+    "num_samples": 250,
+    "answered_count": 250,
+    "parse_error_count": 0,
+    "skipped_count": 0,
+    "full_compliance_count": 207,
+    "partial_refusal_count": 2,
+    "full_refusal_count": 41,
+    "over_refusal_rate_strict": 0.164,
+    "over_refusal_rate_broad": 0.172,
+    "over_refusal_rate_strict_over_total": 0.164,
+    "over_refusal_rate_broad_over_total": 0.172,
+    "parse_error_rate": 0.0
+  }
+}

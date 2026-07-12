@@ -56,7 +56,7 @@ To answer it honestly the study compares each model against **itself** — a mat
   <img src=".github/assets/asr_forest.png" width="660" alt="Forest plot of the quantization effect on harmful compliance across five model pairs at the 512-token reference budget; only Llama-3.2-3B has a confidence interval excluding zero, and it is a decrease.">
 </p>
 
-Across five matched pairs at HarmBench's **512-token reference budget** (the primary configuration), **no pair shows a statistically significant increase in genuine harmful compliance** under 4-bit — the only ΔASR whose CI excludes zero is Llama-3.2-3B's **−0.040, a decrease**, and no HarmBench ASR contrast survives a BH-FDR correction. The multiplicity-robust effects are all **capability losses** (and one over-refusal *decrease*). An apparent +0.055 increase in the smallest model at a shorter 128-token budget turned out to be a **truncation artefact** (60% of 128-token responses were provably cut off mid-generation) and dissolves to 0.000 at the reference budget.
+Across five matched pairs at HarmBench's **512-token reference budget** (the primary configuration), **no pair shows a statistically significant increase in genuine harmful compliance** under 4-bit — the only ΔASR whose CI excludes zero is Llama-3.2-3B's **−0.040, a decrease**, and no HarmBench ASR contrast survives a BH-FDR correction. The multiplicity-robust effects are all **capability losses** (and one over-refusal *decrease* that is itself **scorer-dependent** — an independent 3-class refusal judge does not reproduce it; T35 / §6.12 Result 6). An apparent +0.055 increase in the smallest model at a shorter 128-token budget turned out to be a **truncation artefact** (60% of 128-token responses were provably cut off mid-generation) and dissolves to 0.000 at the reference budget.
 
 The headline isn't a single number — it's a **methodological** finding:
 
@@ -226,7 +226,7 @@ Adding INT8 shows the quantization effect is **not a smooth function of bit-widt
 - **Capability** is a clean **cliff at 4-bit** — no INT8 MMLU/ARC delta is significant for any pair; the real capability losses all appear at NF4.
 - **Safety** shows **no robust move at either precision** at the reference budget — every INT8 and NF4 ΔASR is non-significant under both judges. (At the shorter 128-token budget Llama‑3B showed a both-judge-significant +0.040 at INT8; like the Qwen‑1.7B NF4 signal, it vanishes at 512 — classifier +0.005, gpt‑4o +0.010, both p ≫ 0.05 — another casualty of the truncation artefact.)
 
-> Multiplicity is handled explicitly: under a Benjamini–Hochberg FDR correction over the 20 primary contrasts, **zero HarmBench ASR contrasts survive**; the three survivors are capability/over-refusal effects (see report §6.5.1). A full-repo scorer audit (PROJECT_LOG D36) confirmed every primary number is classifier-scored.
+> Multiplicity is handled explicitly: under a Benjamini–Hochberg FDR correction over the 20 primary contrasts, **zero HarmBench ASR contrasts survive**; the three survivors are capability/over-refusal effects (see report §6.5.1) — the two capability survivors are classifier/human-anchored, while the one over-refusal survivor is regex-scored and scorer-dependent (§6.12 Result 6). A full-repo scorer audit (PROJECT_LOG D36) confirmed every primary number is classifier-scored.
 
 ---
 

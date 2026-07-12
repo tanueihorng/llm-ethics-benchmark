@@ -219,6 +219,40 @@ def test_real_policy_redaction_covers_committed_sidecars(tmp_path: Path) -> None
     assert _scan_policy_group(tmp_path, policy["redaction"], "redaction").status == "pass"
 
 
+def test_real_policy_redaction_covers_xstest_judge_sidecars(tmp_path: Path) -> None:
+    """T35 self-test: the XSTest judge sidecar path must be redaction-scanned.
+    The judge-sidecar globs were harmbench-dir-anchored, so a new
+    results_512/<alias>/xstest/scores.judge.*.jsonl would have escaped both the
+    redaction scan and allowed_derived_artifacts. This pins the added
+    results_512/*/xstest/scores.judge.*.jsonl glob so a leaky future XSTest
+    judge sidecar fails the gate."""
+    from ethical_benchmark.harness.agent import _scan_policy_group
+
+    policy = load_policy(Path(__file__).resolve().parents[1])
+    side = tmp_path / "results_512/phi_test/xstest"
+    side.mkdir(parents=True)
+    leaky = side / "scores.judge.xstest_api.jsonl"
+    leaky.write_text(
+        '{"prompt_id": "p1", "judge_label": "full_refusal", "response": "LEAKED RAW TEXT"}\n',
+        encoding="utf-8",
+    )
+    assert _scan_policy_group(tmp_path, policy["redaction"], "redaction").status == "fail"
+
+    leaky.write_text(
+        '{"prompt_id": "p1", "judge_label": "full_refusal", '
+        '"judge_refusal_strict": true, "status": "ok"}\n',
+        encoding="utf-8",
+    )
+    assert _scan_policy_group(tmp_path, policy["redaction"], "redaction").status == "pass"
+
+    # The summary.judge glob must also be scanned (not just scores.judge).
+    leaky_summary = side / "summary.judge.xstest_api.json"
+    leaky_summary.write_text('{"metrics": {}, "prompt_text": "LEAKED"}\n', encoding="utf-8")
+    assert _scan_policy_group(tmp_path, policy["redaction"], "redaction").status == "fail"
+    leaky_summary.write_text('{"metrics": {"num_samples": 250}}\n', encoding="utf-8")
+    assert _scan_policy_group(tmp_path, policy["redaction"], "redaction").status == "pass"
+
+
 def test_agent_harness_catches_redaction_leak(tmp_path: Path) -> None:
     repo = _init_harness_repo(tmp_path)
     (repo / "docs/HANDOFF.md").write_text('# Handoff\n{"response": "secret"}\n', encoding="utf-8")

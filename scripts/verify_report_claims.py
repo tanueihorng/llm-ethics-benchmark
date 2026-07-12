@@ -603,6 +603,58 @@ def run_checks(checker: Checker | None = None) -> Checker:
                      and near(0.610, pdix[("llama_3_2_3b", "mmlu")]["baseline_value"]),
                      "qwen_2b/qwen_4b/llama baseline MMLU"))
 
+    # -------- XSTest refusal-judge sensitivity (§6.12 Result 6; T35/D45) -----
+    xja = _load(A512 / "xstest_judge_agreement.json")
+    xjp = {r["pair_id"]: r for r in xja["per_pair"]}
+    xjm = xja["per_model"]
+    phi_s = xjp["phi4_mini"]["judge_strict"]
+    phi_b = xjp["phi4_mini"]["judge_broad"]
+
+    c.check("Result 6: Phi judge ΔOR +0.016 strict (up) / −0.004 broad, both n.s. — regex −0.048 not reproduced",
+            ["+0.016 (strict; direction reversed, CI [−0.028, +0.060], McNemar p = 0.597)",
+             "−0.004 (broad; CI [−0.048, +0.036], McNemar p = 1.000)"],
+            lambda: (
+                near(0.016, phi_s["delta"]) and phi_s["direction"] == "up" and not phi_s["significant"]
+                and near(-0.028, phi_s["ci_lower"]) and near(0.060, phi_s["ci_upper"])
+                and near(0.597, phi_s["mcnemar_p_value"])
+                and near(-0.004, phi_b["delta"]) and not phi_b["significant"]
+                and near(-0.048, phi_b["ci_lower"]) and near(0.036, phi_b["ci_upper"])
+                and near(1.000, phi_b["mcnemar_p_value"]),
+                f"strict Δ={phi_s['delta']} p={phi_s['mcnemar_p_value']:.4f}; "
+                f"broad Δ={phi_b['delta']} p={phi_b['mcnemar_p_value']:.4f}"))
+
+    def xstest_kappa_and_levels():
+        nf4 = ["qwen_2b_base", "qwen_2b_4bit", "qwen_4b_base", "qwen_4b_4bit",
+               "llama_3_2_3b_base", "llama_3_2_3b_4bit", "mistral_7b_base", "mistral_7b_4bit",
+               "phi4_mini_base", "phi4_mini_4bit"]
+        ks = [xjm[a]["strict_vs_regex"]["cohens_kappa"] for a in nf4]
+        allm = list(xjm)
+        jor = sum(xjm[a]["strict_vs_regex"]["judge_or"] for a in allm) / len(allm)
+        ror = sum(xjm[a]["strict_vs_regex"]["regex_or"] for a in allm) / len(allm)
+        ok = (abs(min(ks) - (-0.008)) < 0.002 and abs(max(ks) - 0.501) < 0.01
+              and near(jor, 0.171, 3) and near(ror, 0.044, 3))
+        return ok, f"κ [{min(ks):.3f},{max(ks):.3f}], mean judge OR {jor:.3f} vs regex {ror:.3f}"
+
+    c.check("Result 6: κ −0.01..0.50 across 10 NF4 aliases; judge OR ~0.171 vs regex ~0.044",
+            ["Cohen κ from −0.01 to 0.50 across the ten NF4 aliases",
+             "mean over-refusal 0.171 strict versus 0.044"],
+            xstest_kappa_and_levels)
+
+    def xstest_judge_volume():
+        tot = pe = 0
+        files = sorted((ROOT / "results_512").glob("*/xstest/summary.judge.xstest_api.json"))
+        if not files:
+            raise FileNotFoundError("no xstest judge sidecars checked out")
+        for s in files:
+            m = _load(s)["metrics"]
+            tot += m["num_samples"]; pe += m["parse_error_count"]
+        return (tot == 3750 and pe == 0, f"{tot} scored, {pe} parse errors")
+
+    c.check("Result 6: 3,750 XSTest judge calls, zero parse failures",
+            ["3,750 saved benign XSTest responses (fifteen aliases × 250 prompts)",
+             "temperature 0, zero parse failures"],
+            xstest_judge_volume)
+
     # ---------------- local-only evidence (skip when absent) ----------------
     def sample_counts():
         counts = {}
@@ -778,6 +830,17 @@ def run_checks(checker: Checker | None = None) -> Checker:
             and near(-0.048, pdix[("phi4_mini", "xstest")]["absolute_delta"])
             and near(-0.024, pdix[("qwen_2b", "xstest")]["absolute_delta"]),
             "multiseed + OR values match",
+        ),
+    )
+    tcheck(
+        "thesis: Result 6 XSTest judge — Phi ΔOR +0.016/−0.004 n.s., scorer-dependent",
+        ["+0.016 (strict, direction reversed; McNemar p = 0.597) or −0.004 (broad; p = 1.000)",
+         "Cohen κ −0.01 to 0.50 across the ten NF4 aliases"],
+        lambda: (
+            near(0.016, phi_s["delta"]) and near(-0.004, phi_b["delta"])
+            and near(0.597, phi_s["mcnemar_p_value"]) and near(1.0, phi_b["mcnemar_p_value"])
+            and not phi_s["significant"] and not phi_b["significant"],
+            f"strict {phi_s['delta']} / broad {phi_b['delta']}",
         ),
     )
     tcheck(

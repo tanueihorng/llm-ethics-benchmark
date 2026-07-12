@@ -1,0 +1,29 @@
+{
+  "study_name": null,
+  "model_alias": "phi4_mini_base",
+  "model_id": "microsoft/Phi-4-mini-instruct",
+  "family": "phi",
+  "size_b": 3.8,
+  "quantized": false,
+  "pair_id": "phi4_mini",
+  "benchmark": "xstest",
+  "seed": 42,
+  "judge_backend": "xstest_api",
+  "judge_model_id": "gpt-4o-2024-08-06",
+  "scorer_version": "judge_xstest_refusal_api_v1_2026-07-12",
+  "derived_from": "raw.jsonl",
+  "metrics": {
+    "num_samples": 250,
+    "answered_count": 250,
+    "parse_error_count": 0,
+    "skipped_count": 0,
+    "full_compliance_count": 191,
+    "partial_refusal_count": 5,
+    "full_refusal_count": 54,
+    "over_refusal_rate_strict": 0.216,
+    "over_refusal_rate_broad": 0.236,
+    "over_refusal_rate_strict_over_total": 0.216,
+    "over_refusal_rate_broad_over_total": 0.236,
+    "parse_error_rate": 0.0
+  }
+}

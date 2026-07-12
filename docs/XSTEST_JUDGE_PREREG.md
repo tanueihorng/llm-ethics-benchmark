@@ -72,6 +72,31 @@ sensitivity check, exactly as gpt-4o is reported for HarmBench ASR in §6.12.
 Under every outcome A–C, all sidecars and the agreement analysis are committed (redacted), and
 the result is reported — a disagreement is not suppressible.
 
+### 5.1 Pre-unblinding amendments (2026-07-12, during the full run, before Phi pair results)
+
+Recorded while the full scoring run was in progress. Visible at amendment time: the two-round
+pilot (phi base+4bit, 20 items each, inspected) and completed point estimates for the four
+Qwen aliases (qwen_2b base/4bit/8bit, qwen_4b base). **Not** visible: any Phi full-run result,
+any paired CI/McNemar for any pair. The Phi verdict — the pre-registered question — was still
+blind.
+
+1. **Matrix exhaustiveness (gap fix).** The A–C definitions left one region unmapped: same
+   direction (decrease) AND McNemar p < 0.05 under STRICT, but Phi per-alias κ in [0.4, 0.6).
+   Rule: **B is the catch-all** — any decrease-direction result that fails at least one A
+   condition and triggers no C condition is outcome B. Rationale: mid-range κ means the two
+   scorers disagree substantially at item level, so a "replicates" claim would overreach even
+   with a significant paired delta; but a decrease under both scorers is not "does not
+   replicate" either.
+2. **Exploratory presentation rule (non-Phi pairs).** §6.12 reports the full per-alias table
+   (all 15 aliases: judge OR strict/broad vs regex OR, κ) and all five NF4 per-pair judge ΔORs
+   with CIs — regardless of direction — labelled *exploratory sensitivity results*. No new
+   significance claims enter the pre-registered BH-FDR family; the multiplicity family is
+   unchanged. INT8 aliases are reported descriptively (no paired tests). This rule is
+   direction-neutral and maximally disclosing, adopted after the qwen_2b point estimates were
+   visible (judge-strict 0.184 base vs 0.224 4bit — an apparent increase); committing to
+   publish the full table regardless of what the remaining pairs show is the anti-cherry-pick
+   guarantee.
+
 ## 6. Egress and privacy
 
 Each API call sends one benign XSTest prompt + one saved model response to OpenAI. Both are
@@ -82,7 +107,37 @@ no prompt or response text), enforced by `_assert_redacted` and the extended pol
 
 ## 7. Outcome (append-only; fill in after analysis)
 
-- Judge model id used: _pending_
-- Pilot verdict: _pending_
-- Outcome letter: _pending_
-- One-line result: _pending_
+- Judge model id used: `gpt-4o-2024-08-06` (pinned dated snapshot; temperature 0, max_tokens 10).
+- **Pilot v1 (2026-07-12, 40 calls, phi4_mini base+4bit, 20 items each):** 0 parse errors,
+  labels sane on inspection; the judge correctly caught a v2-regex false-positive (a full
+  "What constitutes rape?" definition the regex flagged as a refusal). A 4-agent adversarial
+  code review run in parallel surfaced two pre-run fixes, both applied before any full run:
+  (1) HIGH — the label parser could silently misparse a stray-digit/multi-label completion to
+  the wrong class; hardened to "single unambiguous label or parse_error" (no silent wrong
+  class). (2) MEDIUM — the draft rubric put alternative-only responses under partial_refusal,
+  deviating from Röttger et al. and deflating the STRICT primary metric; rubric corrected to
+  the version in §2 above / the packet and RE-PILOTED. Both changes are rubric/parser-level,
+  so per this pre-registration the pilot was re-run from scratch and the rubric is now frozen
+  (byte-pinned).
+- Pilot verdict (post-fix re-pilot): **PASS** — re-pilot (40 calls) 0 parse errors; rubric fix
+  improved consistency; rubric then frozen/byte-pinned.
+- **Full run (2026-07-12): 15 aliases × 250 = 3,750 calls, 0 parse errors (0.000%, well under
+  the 2% Outcome-D threshold). Valid.**
+- **Outcome letter: C — does not replicate / scorer-dependent.** Determined mechanically from
+  `results_512/analysis/xstest_judge_agreement.json`:
+  - Regex Phi ΔOR = −0.048 (decrease, the FDR survivor). Judge Phi ΔOR **STRICT = +0.016**
+    (direction *flips* to an increase; CI [−0.028, +0.060]; McNemar p = 0.597; n.s.),
+    **BROAD = −0.004** (CI [−0.048, +0.036]; McNemar p = 1.000; n.s.). Phi κ (strict vs regex)
+    = 0.50/0.45 (base/4bit). The "direction flips under STRICT" C-condition is triggered; the
+    judge reproduces no meaningful decrease under either mapping. Not A (strict not down, not
+    significant, κ<0.6); not B (a C-condition fires).
+  - Scorer disagreement is substantial and study-wide: mean judge over-refusal (strict) 0.171
+    vs regex 0.044 (~4×); per-alias κ across the 10 NF4 aliases −0.008 to 0.50. No pair's judge
+    ΔOR is significant (all CIs include 0), consistent with the regex-under-FDR null, but the
+    direction/magnitude/level differ — most sharply for the Phi survivor.
+- **One-line result:** The one FDR-surviving over-refusal contrast (Phi-4-mini −0.048, regex) is
+  **scorer-dependent** — an independent 3-class refusal judge does not reproduce it (judge
+  ΔOR +0.016 strict / −0.004 broad, both n.s.), and the two scorers agree only poorly-to-moderately
+  on benign over-refusal (κ ≤ 0.5). Committed reporting action = Outcome C (§5): regex stays the
+  primary scorer of record and the BH-FDR family is unchanged; §6.5/§6.5.1 and the abstract's
+  over-refusal-survivor mention gain a scorer-dependence caveat pointing to a new §6.12 Result 6.

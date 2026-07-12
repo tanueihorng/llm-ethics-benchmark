@@ -23,7 +23,10 @@
 increase**; the only significant ΔASR is Llama-3B's *decrease*. Under BH-FDR over
 the 20 primary contrasts, **zero ASR contrasts survive** — the three survivors are
 qwen_2b MMLU (−0.090, q=0.008), llama ARC (−0.032, q=0.008), and phi over-refusal
-(−0.044, q=0.049, a *decrease*).
+(−0.048, q=0.012, a *decrease*). The two capability survivors are classifier/human-anchored;
+the phi over-refusal survivor is regex-scored and **scorer-dependent** — an independent
+3-class refusal judge does not reproduce it (judge ΔOR +0.016 strict / −0.004 broad,
+both n.s.; T35 / report §6.12 Result 6).
 
 ## Generation budget matters (why 512 is primary)
 
@@ -62,6 +65,14 @@ Mistral ≈ 0.25–0.28 (worst), Qwen ≈ 0.36–0.59, Phi ≈ 0.67–0.77, Llam
 scorer changes both which model looks least safe and whether any model looks
 significantly less safe at all; the over-counting pattern replicates at INT8 and
 across all 4 families.
+
+The **over-refusal axis is scorer-sensitive too** (T35, report §6.12 Result 6): an
+independent gpt-4o 3-class refusal judge (XSTest taxonomy, 3,750 responses, 0 parse
+errors) counts ~4× more benign refusals than the regex (mean 0.171 strict vs 0.044;
+κ −0.01 to 0.50) and does **not** reproduce the one FDR-surviving over-refusal
+decrease — Phi judge ΔOR +0.016 strict / −0.004 broad (both n.s.) vs the regex's
+−0.048 — so that survivor is scorer-dependent. Regex stays the primary over-refusal
+scorer of record; the BH-FDR family is unchanged.
 
 ## Read this before quoting a number
 
