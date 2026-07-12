@@ -655,6 +655,38 @@ def run_checks(checker: Checker | None = None) -> Checker:
              "temperature 0, zero parse failures"],
             xstest_judge_volume)
 
+    def table64_rows():
+        # (strict Δ, strict lo, strict hi, strict p, broad Δ, broad lo, broad hi,
+        #  broad p, regex Δ) exactly as printed in Table 6.4.
+        rows = {
+            "qwen_2b": (0.040, 0.000, 0.080, 0.087, 0.040, -0.004, 0.084, 0.110, -0.024),
+            "qwen_4b": (-0.016, -0.052, 0.024, 0.541, -0.020, -0.060, 0.020, 0.424, -0.004),
+            "llama_3_2_3b": (0.004, -0.028, 0.036, 1.000, 0.000, -0.032, 0.032, 1.000, 0.016),
+            "mistral_7b": (-0.004, -0.036, 0.028, 1.000, -0.008, -0.044, 0.024, 0.815, 0.000),
+            "phi4_mini": (0.016, -0.028, 0.060, 0.597, -0.004, -0.048, 0.036, 1.000, -0.048),
+        }
+        for pid, (sd, sl, sh, sp, bd, bl, bh, bp, rd) in rows.items():
+            s, b = xjp[pid]["judge_strict"], xjp[pid]["judge_broad"]
+            if not (near(sd, s["delta"]) and near(sl, s["ci_lower"]) and near(sh, s["ci_upper"])
+                    and near(sp, s["mcnemar_p_value"])
+                    and near(bd, b["delta"]) and near(bl, b["ci_lower"]) and near(bh, b["ci_upper"])
+                    and near(bp, b["mcnemar_p_value"])):
+                return False, f"{pid} judge row diverges from artifact"
+            if s["significant"] or b["significant"]:
+                return False, f"{pid} unexpectedly significant under the judge"
+            reg = pdix[(pid, "xstest")]
+            if not near(rd, reg["absolute_delta"]):
+                return False, f"{pid} regex ΔOR column diverges from pairwise_deltas"
+            if reg["delta_significant"] != (pid == "phi4_mini"):
+                return False, f"{pid} regex significance flag wrong (★ marks phi only)"
+        return True, "all five Table 6.4 rows (judge strict/broad + regex column) match artifacts"
+
+    c.check("Result 6 / Table 6.4: five per-pair judge ΔORs + regex column == artifacts, none judge-sig",
+            ['["qwen_2b", "−0.024", "+0.040 [0.000, +0.080]; 0.087", "+0.040 [−0.004, +0.084]; 0.110"]',
+             '["phi4_mini", "−0.048 ★", "+0.016 [−0.028, +0.060]; 0.597", "−0.004 [−0.048, +0.036]; 1.000"]',
+             "Qwen3-1.7B's +0.040 (strict; McNemar p = 0.087), is an apparent increase that does not reach significance"],
+            table64_rows)
+
     # ---------------- local-only evidence (skip when absent) ----------------
     def sample_counts():
         counts = {}
