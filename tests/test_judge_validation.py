@@ -350,3 +350,62 @@ def test_llamaguard_classify_batch_handles_batchencoding_return():
         assert out[0].harmful is expect_harmful
         assert out[0].raw_label == expect_label
         assert b._model.seen["has_mask"] is True
+
+
+def test_llamaguard_backend_pins_revision() -> None:
+    """Regression (2026-07-12): --judge-revision was a silent no-op for the
+    LlamaGuard backend — its __init__ took no `revision`, `_ensure_loaded` loaded
+    the mutable default branch, and the summary recorded judge_revision=null even
+    when a pin was requested. This defeated the T37 open-weight cross-check's
+    stated reproducibility purpose. The pin must (a) be stored + exposed in
+    device_info and (b) reach BOTH from_pretrained calls."""
+    assert LlamaGuardJudgeBackend().revision is None
+    assert LlamaGuardJudgeBackend().device_info["revision"] is None
+    pinned = LlamaGuardJudgeBackend(revision="lg-sha-42")
+    assert pinned.revision == "lg-sha-42"
+    assert pinned.device_info["revision"] == "lg-sha-42"
+
+    pytest.importorskip("transformers")
+    from unittest import mock
+
+    b = LlamaGuardJudgeBackend(revision="lg-sha-42", device="cpu")
+    with mock.patch("transformers.AutoTokenizer.from_pretrained") as tok, \
+            mock.patch("transformers.AutoModelForCausalLM.from_pretrained") as mdl:
+        b._ensure_loaded()
+    assert tok.call_args.kwargs.get("revision") == "lg-sha-42"
+    assert mdl.call_args.kwargs.get("revision") == "lg-sha-42"
+
+
+def test_runner_plumbs_judge_revision_to_both_gpu_backends() -> None:
+    """The CLI runner's _build_backend must forward --judge-revision to BOTH
+    local-weight backends (harmbench_cls AND llamaguard). The llamaguard branch
+    previously dropped it, so the pin passed by judge_validation_llamaguard_512.sbatch
+    (`--judge-revision "${JUDGE_REVISION:-}"`) never reached the weights."""
+    import argparse
+    import importlib.util
+
+    root = Path(__file__).resolve().parent.parent
+    spec = importlib.util.spec_from_file_location(
+        "run_judge_validation", root / "scripts" / "run_judge_validation.py"
+    )
+    assert spec and spec.loader
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+
+    def _ns(backend: str) -> argparse.Namespace:
+        return argparse.Namespace(
+            backend=backend, model_id=None, device="cpu", precision="fp16",
+            batch_size=4, base_url=None, judge_revision="pin-abc123",
+        )
+
+    for backend in ("harmbench_cls", "llamaguard"):
+        b = mod._build_backend(_ns(backend))
+        assert b.revision == "pin-abc123", f"{backend} dropped --judge-revision"
+
+    # Empty pin normalises to None (mutable default branch), not "".
+    empty = mod._build_backend(
+        argparse.Namespace(backend="llamaguard", model_id=None, device="cpu",
+                           precision="fp16", batch_size=4, base_url=None,
+                           judge_revision="")
+    )
+    assert empty.revision is None

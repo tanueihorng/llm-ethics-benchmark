@@ -77,6 +77,7 @@ def _build_backend(args: argparse.Namespace):
             device=args.device,
             precision=args.precision,
             batch_size=args.batch_size,
+            revision=getattr(args, "judge_revision", None) or None,
         )
     if args.backend == "api_judge":
         # API judge (T22): runs locally, no GPU. The OpenAI SDK reads the key
@@ -111,10 +112,11 @@ def main() -> int:
                              "(e.g. a non-OpenAI endpoint). Defaults to the OpenAI API. "
                              "The API key is read from OPENAI_API_KEY, never from argv.")
     parser.add_argument("--judge-revision", default=None,
-                        help="HF commit SHA/tag pinning the harmbench_cls judge weights + "
-                             "tokenizer to an immutable snapshot (audit P1-4). Passed to both "
-                             "from_pretrained calls and persisted as judge_revision in the "
-                             "summary. Omit to use the mutable default branch.")
+                        help="HF commit SHA/tag pinning the local judge weights + tokenizer "
+                             "(harmbench_cls or llamaguard) to an immutable snapshot (audit "
+                             "P1-4). Passed to both from_pretrained calls and persisted as "
+                             "judge_revision in the summary. Ignored by the api_judge backend "
+                             "(no local weights). Omit to use the mutable default branch.")
     parser.add_argument("--device", default="cuda")
     parser.add_argument("--precision", default="fp16", choices=["fp16", "8bit", "4bit"],
                         help="Judge precision. Default fp16 (full precision — the judge's "

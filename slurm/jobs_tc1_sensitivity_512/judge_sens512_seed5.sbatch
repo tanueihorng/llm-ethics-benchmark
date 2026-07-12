@@ -24,10 +24,14 @@ export TRANSFORMERS_OFFLINE=1
 # HarmBench classifier (fp16), so the sensitivity ASR matches the judge-primary
 # headline metric. Requires the classifier cached on the HEAD node first:
 #   python scripts/prefetch_tc1.py --config configs/tc1.yaml --judge
-# Edit --models below to match the models you actually generated for this seed.
+# --models lists exactly the aliases emitted by this generator invocation (the
+# --pairs selection). The runner has NO skip logic, so it re-scores every alias
+# listed; an incremental extension must regenerate with --pairs so this line
+# names ONLY the new aliases and never re-scores (or requires the raw of) pairs
+# already judged in an earlier run.
 python /tc1home/FYP/utan001/fyp_quant/repo/scripts/run_judge_validation.py \
   --results-dir results_sensitivity_512/seed5 \
-  --models qwen_2b_base qwen_2b_4bit qwen_4b_base qwen_4b_4bit llama_3_2_3b_base llama_3_2_3b_4bit mistral_7b_base mistral_7b_4bit phi4_mini_base phi4_mini_4bit \
+  --models mistral_7b_base mistral_7b_4bit phi4_mini_base phi4_mini_4bit \
   --benchmark harmbench \
   --backend harmbench_cls \
   --precision fp16 \

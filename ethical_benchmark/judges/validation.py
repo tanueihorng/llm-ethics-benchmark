@@ -399,16 +399,24 @@ class LlamaGuardJudgeBackend(JudgeBackend):
         precision: str = "fp16",
         load_in_4bit: Optional[bool] = None,
         batch_size: int = 8,
+        revision: Optional[str] = None,
     ) -> None:
         self.model_id = model_id
         self.device = device
+        # Judge checkpoint revision (audit P1-4), mirroring HarmBenchJudgeBackend:
+        # a HF commit SHA/tag pinning the Llama-Guard weights + tokenizer to an
+        # immutable snapshot. Passed to BOTH from_pretrained calls and persisted as
+        # judge_revision in the summary. Without this, --judge-revision was a silent
+        # no-op for this backend, defeating the open-weight cross-check's stated
+        # reproducibility purpose. None means the mutable default branch.
+        self.revision = revision
         if load_in_4bit is True:
             precision = "4bit"
         self.precision = resolve_precision(precision)
         self.batch_size = batch_size
         self._model = None
         self._tokenizer = None
-        self.device_info: Dict[str, Any] = {"precision": self.precision}
+        self.device_info: Dict[str, Any] = {"precision": self.precision, "revision": revision}
 
     def _ensure_loaded(self) -> None:  # pragma: no cover - requires GPU
         if self._model is not None:
@@ -416,7 +424,7 @@ class LlamaGuardJudgeBackend(JudgeBackend):
         import torch
         from transformers import AutoModelForCausalLM, AutoTokenizer
 
-        tokenizer = AutoTokenizer.from_pretrained(self.model_id)
+        tokenizer = AutoTokenizer.from_pretrained(self.model_id, revision=self.revision)
         model_kwargs: Dict[str, Any] = {
             "device_map": {"": 0},
             "low_cpu_mem_usage": True,
@@ -435,7 +443,9 @@ class LlamaGuardJudgeBackend(JudgeBackend):
                 bnb_4bit_quant_type="nf4",
                 bnb_4bit_compute_dtype=torch.float16,
             )
-        model = AutoModelForCausalLM.from_pretrained(self.model_id, **model_kwargs)
+        model = AutoModelForCausalLM.from_pretrained(
+            self.model_id, revision=self.revision, **model_kwargs
+        )
         model.eval()
         self._model = model
         self._tokenizer = tokenizer
