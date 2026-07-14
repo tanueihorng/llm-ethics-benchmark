@@ -32,11 +32,11 @@
           "shape": "cliff_at_int8"
         },
         "xstest_over_refusal": {
-          "fp16": 0.056,
+          "fp16": 0.052,
           "int8": 0.044,
           "nf4": 0.028,
-          "delta_int8_vs_fp16": -0.012,
-          "delta_nf4_vs_fp16": -0.028,
+          "delta_int8_vs_fp16": -0.008,
+          "delta_nf4_vs_fp16": -0.024,
           "delta_nf4_vs_int8": -0.016,
           "shape": "graded"
         },
@@ -109,13 +109,13 @@
           "shape": "cliff_at_nf4"
         },
         "xstest_over_refusal": {
-          "fp16": 0.032,
+          "fp16": 0.028,
           "int8": 0.032,
-          "nf4": 0.032,
-          "delta_int8_vs_fp16": 0.0,
-          "delta_nf4_vs_fp16": 0.0,
-          "delta_nf4_vs_int8": 0.0,
-          "shape": "flat"
+          "nf4": 0.024,
+          "delta_int8_vs_fp16": 0.004,
+          "delta_nf4_vs_fp16": -0.004,
+          "delta_nf4_vs_int8": -0.008,
+          "shape": "non_monotonic"
         },
         "mmlu_accuracy": {
           "fp16": 0.7466666666666667,
@@ -186,13 +186,13 @@
           "shape": "non_monotonic"
         },
         "xstest_over_refusal": {
-          "fp16": 0.036,
+          "fp16": 0.032,
           "int8": 0.036,
-          "nf4": 0.052,
-          "delta_int8_vs_fp16": 0.0,
+          "nf4": 0.048,
+          "delta_int8_vs_fp16": 0.004,
           "delta_nf4_vs_fp16": 0.016,
-          "delta_nf4_vs_int8": 0.016,
-          "shape": "cliff_at_nf4"
+          "delta_nf4_vs_int8": 0.012,
+          "shape": "graded"
         },
         "mmlu_accuracy": {
           "fp16": 0.61,
@@ -254,21 +254,21 @@
           "shape": "cliff_at_int8"
         },
         "harmbench_asr_v2": {
-          "fp16": 0.825,
+          "fp16": 0.83,
           "int8": 0.87,
           "nf4": 0.89,
-          "delta_int8_vs_fp16": 0.045,
-          "delta_nf4_vs_fp16": 0.065,
+          "delta_int8_vs_fp16": 0.04,
+          "delta_nf4_vs_fp16": 0.06,
           "delta_nf4_vs_int8": 0.02,
           "shape": "graded"
         },
         "xstest_over_refusal": {
           "fp16": 0.004,
           "int8": 0.0,
-          "nf4": 0.008,
+          "nf4": 0.004,
           "delta_int8_vs_fp16": -0.004,
-          "delta_nf4_vs_fp16": 0.004,
-          "delta_nf4_vs_int8": 0.008,
+          "delta_nf4_vs_fp16": 0.0,
+          "delta_nf4_vs_int8": 0.004,
           "shape": "non_monotonic"
         },
         "mmlu_accuracy": {
@@ -342,10 +342,10 @@
         "xstest_over_refusal": {
           "fp16": 0.128,
           "int8": 0.12,
-          "nf4": 0.084,
+          "nf4": 0.08,
           "delta_int8_vs_fp16": -0.008,
-          "delta_nf4_vs_fp16": -0.044,
-          "delta_nf4_vs_int8": -0.036,
+          "delta_nf4_vs_fp16": -0.048,
+          "delta_nf4_vs_int8": -0.04,
           "shape": "cliff_at_nf4"
         },
         "mmlu_accuracy": {

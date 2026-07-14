@@ -582,6 +582,37 @@ def run_checks(checker: Checker | None = None) -> Checker:
         ),
     )
 
+    # Artifact-consistency guard for the precision-sweep XSTest over-refusal
+    # column. Unlike the ASR-judge column (tracked judge sidecars, recomputable
+    # in CI and pinned by the thesis Table 6.3 check below), this column reads the
+    # gitignored summary.v2.json inputs, so it cannot be recomputed on a fresh
+    # clone — and it drifted silently once the sweep script was switched to prefer
+    # v2 while the committed column stayed v1 (2026-07-14; the follow-up T40/D47
+    # deferred). It is not rendered in the report or thesis, so there is no prose
+    # to pin; instead assert it against the authoritative v2 deltas in
+    # pairwise_deltas.json (the source the §6.3 pair prose DOES cite, e.g.
+    # "0.052 -> 0.028, deltaOR = -0.024"). This is the machine check the drift
+    # lacked (D42); it would have fired on the stale column (e.g. Phi nf4 0.084 vs
+    # the pairwise-implied 0.080). fp16/nf4 only — INT8 has no base-vs-4bit
+    # pairwise counterpart.
+    def _sweep_xstest_matches_pairwise():
+        bad = []
+        for pair in ("qwen_2b", "qwen_4b", "llama_3_2_3b", "mistral_7b", "phi4_mini"):
+            s = ps512[pair]["metrics"]["xstest_over_refusal"]
+            r = pdix[(pair, "xstest")]
+            if not (near(s["fp16"], r["baseline_value"])
+                    and near(s["nf4"], r["quantized_value"])
+                    and near(s["delta_nf4_vs_fp16"], r["absolute_delta"])):
+                bad.append(f"{pair}(fp16 {s['fp16']}/{r['baseline_value']}, "
+                           f"nf4 {s['nf4']}/{r['quantized_value']})")
+        return (not bad, "all 5 pairs agree" if not bad else "MISMATCH: " + "; ".join(bad))
+
+    c.check(
+        "sweep: XSTest over-refusal column == pairwise_deltas (v2, no drift)",
+        [],  # artifact-vs-artifact invariant; the column is not rendered in prose
+        _sweep_xstest_matches_pairwise,
+    )
+
     # ---------------- capability / over-refusal (pairwise_deltas) -----------
     def pdelta(pair, bench, base=None, quant=None, delta=None, sig=None, places=3):
         r = pdix[(pair, bench)]
