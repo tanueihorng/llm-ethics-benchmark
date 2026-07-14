@@ -151,6 +151,11 @@ stale_text:
     # Task packets are point-in-time records of completed tasks (like archive); they
     # legitimately cite the then-current report/builder, so they are not stale-scanned.
     - docs/agent_tasks/*
+    # The claim CHECKER necessarily quotes the retired phrases it guards against
+    # (e.g. `"immune to this asymmetry" not in c.text`) and the numbers it binds to
+    # artifacts; it is verification tooling, not a deliverable, and its descriptions
+    # are already artifact-bound, so it is not itself stale-text-scanned (T40/D47).
+    - scripts/verify_report_claims.py
     # Retired report builders (v1–v4) and the 128-era thesis builders are
     # historical sources for archived/banner-marked docx — not scanned. Only
     # the CANONICAL builder (added to scan_paths above) is stale-scanned; when
@@ -224,6 +229,16 @@ stale_text:
     - 'two significant over-refusal deltas'
     - '−0\.028 \[−0\.052, −0\.004\]", "yes"'
     - '^(?!.*(?:[Bb]orderline|not significant|128))(?=.*(?:over-refus|ΔOR|XSTest)).*−0\.028.{0,100}?(?<!in)significant'
+    # P1 audit (2026-07-14, T40): ARC-Challenge is NOT immune to the 4-bit answer-
+    # format asymmetry — its 4-bit lenient-fallback share (52.3%) exceeds MMLU's
+    # (48.7%), the near-zero primary ARC delta is lenient-parser salvage, and under
+    # a strict parser ARC falls −0.343 (§6.5, results_512/analysis/parser_strict_
+    # sensitivity.json). The retired "immune / not subject to this format asymmetry"
+    # framing is always wrong now and must not reappear in any scanned builder/doc.
+    # The negative-lookbehind keeps the CORRECT negated form ("ARC is not immune to
+    # this asymmetry") legal. Self-tested to fire (and exempt) in test_agent_harness.
+    - '(?<!not )immune to this asymmetry'
+    - 'not subject to this format asymmetry'
 
 report_worthy:
   changed_file_patterns:

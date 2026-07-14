@@ -46,10 +46,14 @@ or:
 make cluster-generate DEVICE=cuda
 ```
 
-Submit:
+Submit (local/dev clusters only):
 ```bash
 python fyp_cli.py cluster-submit --jobs_dir slurm/jobs
 ```
+> **Not for NTU TC1.** `cluster-submit` runs Python on the head node and reads a
+> gitignored `manifest.json`, both of which TC1 policy forbids. On TC1, submit each
+> generated sbatch directly with `sbatch slurm/jobs_tc1/<model>__matrix.sbatch`
+> (see `docs/TC1_CLUSTER_RUNBOOK.md` and the README TC1 section).
 
 Check status:
 ```bash

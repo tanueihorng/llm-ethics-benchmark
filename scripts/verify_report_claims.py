@@ -444,8 +444,61 @@ def run_checks(checker: Checker | None = None) -> Checker:
         [
             '"−0.024 [−0.048, 0.000]"',
             "McNemar p = 0.109",
+            "10 discordant prompts",   # artifact b+c=10; prose had drifted to 11 (P1 audit fix)
         ],
         _qwen2b_or_ok,
+    )
+
+    # ---- Strict-parser capability bracket (T38 / P1 audit fix). The report had
+    # called ARC "immune to / not subject to" the 4-bit answer-format asymmetry
+    # and used it to characterise the capability loss as MMLU-specific. The
+    # committed strict-parser sensitivity refutes that: the smallest pair's 4-bit
+    # ARC answers fall to the lenient fallback even more than its MMLU, so ARC's
+    # near-zero primary delta is salvage, not immunity, and under a strict parser
+    # ARC and MMLU fall comparably. Lock the bracket numbers to the artifact and
+    # assert the retired "immune" phrasing is gone. -------------------------------
+    pss = _load(A512 / "parser_strict_sensitivity.json")
+    pss_pair = {(r["pair_id"], r["benchmark"]): r for r in pss["per_pair"]}
+    pss_alias = {(r["model_alias"], r["benchmark"]): r for r in pss["per_alias"]}
+
+    def _strict_bracket_ok():
+        arc = pss_pair[("qwen_2b", "arc")]["strict_delta"]
+        mmlu = pss_pair[("qwen_2b", "mmlu")]["strict_delta"]
+        arc_fb = pss_alias[("qwen_2b_4bit", "arc")]["tier_usage"]["fallback_frac"]
+        mmlu_fb = pss_alias[("qwen_2b_4bit", "mmlu")]["tier_usage"]["fallback_frac"]
+        arc_base_fb = pss_alias[("qwen_2b_base", "arc")]["tier_usage"]["fallback_frac"]
+        ok = (
+            near(-0.343, arc["delta"], 3) and near(-0.375, arc["ci_lower"], 3)
+            and near(-0.311, arc["ci_upper"], 3) and bool(arc["significant"])
+            and near(-0.293, mmlu["delta"], 3) and near(-0.350, mmlu["ci_lower"], 3)
+            and near(-0.237, mmlu["ci_upper"], 3)
+            and near(0.523, arc_fb, 3) and near(0.487, mmlu_fb, 3)
+            and near(0.025, arc_base_fb, 3)
+            and "immune to this asymmetry" not in c.text
+            and "not subject to this format asymmetry" not in c.text
+        )
+        return ok, (
+            f"ARC strict {arc['delta']:.3f} [{arc['ci_lower']:.3f},{arc['ci_upper']:.3f}]; "
+            f"MMLU strict {mmlu['delta']:.3f}; ARC 4bit fallback {arc_fb:.3f} vs base {arc_base_fb:.3f}; "
+            "retired 'immune' phrasing absent"
+        )
+
+    c.check(
+        "strict-parser bracket: ARC −0.343 / MMLU −0.293, ARC 52.3% fallback, not 'immune'",
+        ["ARC falls −0.343", "MMLU falls −0.293", "52.3%"],
+        _strict_bracket_ok,
+    )
+
+    def _llama_base_or_ok():
+        v2 = _load(A512.parent / "llama_3_2_3b_base/xstest/summary.v2.json")
+        return near(0.032, v2["metrics"]["over_refusal_rate"], 3), (
+            f"llama base xstest v2 OR={v2['metrics']['over_refusal_rate']}"
+        )
+
+    c.check(
+        "llama baseline XSTest over-refusal 0.032 (v2 scorer of record, not retired 0.036)",
+        ["XSTest over-refusal is 0.032, low."],
+        _llama_base_or_ok,
     )
 
     # ---------------- Appendix A reproduces tc1_512.yaml ---------------------
@@ -916,8 +969,20 @@ def run_checks(checker: Checker | None = None) -> Checker:
         lambda: (
             all("128" in line for line in tt.split("\n") if re.search(r"\+0\.055(?!\])", line) and ", +0.055" not in line)
             and "0.19 " not in tt and "two-peaked" not in tt
-            and "329" not in tt and "339 automated tests" in tt,
-            "every +0.055 line 128-scoped; no retired kappa/counts",
+            and "329" not in tt and "339 automated tests" not in tt and "382 automated tests" in tt
+            and "immune to this asymmetry" not in tt,
+            "every +0.055 line 128-scoped; no retired kappa/counts/immune-ARC",
+        ),
+    )
+
+    tcheck(
+        "thesis: strict-parser bracket ARC −0.343 / MMLU −0.293 (not 'immune')",
+        ["ARC falls −0.343 and MMLU −0.293"],
+        lambda: (
+            near(-0.343, pss_pair[("qwen_2b", "arc")]["strict_delta"]["delta"], 3)
+            and near(-0.293, pss_pair[("qwen_2b", "mmlu")]["strict_delta"]["delta"], 3)
+            and "immune to this asymmetry" not in tt,
+            "thesis ARC/MMLU strict bracket bound to parser_strict_sensitivity.json",
         ),
     )
 
@@ -941,7 +1006,7 @@ def run_checks(checker: Checker | None = None) -> Checker:
         "interim: headline ΔASR + capability + κ + counts + budget + INT8 == artifacts",
         ['"−0.040 [−0.075, −0.010]"', '"−0.090*"', '"−0.032*"',
          "classifier κ 0.59", "regex 0.11", "over-flagged 101 responses",
-         "60.3 percent", "classifier Δ+0.005", "339 automated tests"],
+         "60.3 percent", "classifier Δ+0.005", "382 automated tests"],
         lambda: (
             near(-0.040, hl512["llama_3_2_3b"]["delta"])
             and near(-0.090, pdix[("qwen_2b", "mmlu")]["absolute_delta"])
@@ -958,7 +1023,7 @@ def run_checks(checker: Checker | None = None) -> Checker:
         lambda: (
             all("128" in line for line in ii.split("\n")
                 if re.search(r"\+0\.055(?!\])", line) and ", +0.055" not in line)
-            and "329" not in ii and "339 automated tests" in ii,
+            and "329" not in ii and "339 automated tests" not in ii and "382 automated tests" in ii,
             "interim scoped correctly (Interim Report; no retired counts/128-era leakage)",
         ),
     )

@@ -37,14 +37,16 @@
   is pinned in `results/raw_artifact_manifest.sha256` (300 files across the 128, 512, and multi-seed-512 trees) and checked by
   `make agent-check`.
 - **Provenance in every record** — `raw.jsonl` carries `pair_id`, `quantized`,
-  `quant_method`, `seed`, `generation_config`, `timestamp`.
+  `model_id`, `model_alias`, `seed`, `generation_config`, and `timestamp` (the
+  quantization *method* is fixed per alias in the config and recorded in each
+  run's `summary.json`, not repeated on every raw row).
 
 ## 3. Project structure (Wilson "Good Enough Practices")
 
 The repo follows the recommended `README / LICENSE / CITATION / data / doc /
 results / src` shape: `README.md`, `CITATION.cff`, `data/`, `docs/`, `results/`,
 and the `ethical_benchmark/` package as `src`. Dependencies are explicit
-(`requirements.txt`), code is decomposed into plugins/modules, and a 339-test
+(`requirements.txt`), code is decomposed into plugins/modules, and a 382-test
 suite guards behaviour.
 
 **Environment caveat (retroactive pinning).** `requirements.txt` declares
@@ -77,19 +79,27 @@ pip install -r requirements.txt && pip install -e .
 pytest -q                                   # expect all green
 make agent-check                            # docs/artifact/redaction gates + tests
 
-# 3. Re-derive the committed analysis from the (redacted) sidecars (no GPU)
+# 3. Re-derive the committed analysis from the (redacted) sidecars (no GPU).
+# NOTE: judge_agreement.py and precision_sweep_analysis.py default to the 128-token
+# tree (results/); pass --results-dir results_512 so they read the primary tree.
 python compare_quant_pairs.py --config configs/default.yaml \
   --results_dir results_512 --output_dir results_512/analysis
-python scripts/judge_agreement.py           # judge-vs-regex agreement (κ)
-python scripts/precision_sweep_analysis.py  # fp16 → INT8 → NF4 sweep
+python scripts/judge_agreement.py --results-dir results_512           # judge-vs-regex agreement (κ)
+python scripts/precision_sweep_analysis.py --results-dir results_512  # fp16 → INT8 → NF4 sweep
 
 # 4. Re-run experiments from scratch (GPU; see docs/TC1_CLUSTER_RUNBOOK.md)
 make matrix DEVICE=cuda
 ```
 
-Re-running step 3 reproduces `results_512/analysis/*` byte-for-byte from the committed
-sidecars (the audit, PROJECT_LOG D36, confirms this). Step 4 regenerates the raw
-generations and requires the gated model weights (HF licence + login).
+Re-running step 3 reproduces the pairwise deltas and the judge-agreement analysis
+(`pairwise_deltas.*`, `judge_agreement.*`) byte-for-byte from the committed sidecars,
+and the ASR and capability columns of the precision sweep — the cells that carry the
+reported claims. One known exception: the committed `precision_sweep.json` predates the
+analyzer's switch to preferring the `summary.v2.json` refusal sidecars, so re-running
+`precision_sweep_analysis.py` updates only its (uncited, unlocked) regex-derived
+over-refusal column to the current v2 values; regenerating that artifact cleanly is
+tracked as a separate follow-up. Step 4 regenerates the raw generations and requires the
+gated model weights (HF licence + login).
 
 ## 5. Privacy / data-release note
 

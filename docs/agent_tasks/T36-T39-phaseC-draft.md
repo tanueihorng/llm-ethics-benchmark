@@ -1,9 +1,20 @@
 # Phase C fold-in DRAFT — T36–T39 (staging only; NO builder edits here)
 
-**Status:** DRAFT prepared by Opus 4.8, 2026-07-13 (WS-3 of packet 5fea5d2). This is a
-staging document. The single combined Phase-C fold-in happens ONCE, after T36 labels +
+> **⚠️ SUPERSEDED IN PART BY T40/D47 (2026-07-14).** §1 below (the T38 capability-parser
+> passage, including the ARC "format-immune" **factual correction**) has ALREADY BEEN
+> APPLIED to the report and thesis by the P1 submission-safety patch (T40, decision D47;
+> `docs/agent_tasks/P1-submission-safety-patch.md`). The report §6.2/§6.4.1/§6.5/Ch8 and
+> thesis now carry the lenient/strict bracket framing, ARC strict −0.343 / MMLU −0.293 are
+> claim-locked to `parser_strict_sensitivity.json`, and a stale-text guard forbids the
+> retired "immune" phrasing. **Phase C must NOT re-apply §1** — it is done. Phase C now
+> only needs the T36 (gold-set outcome J/R/T/X), T37 (LlamaGuard third judge), and T39
+> (5-pair multiseed) EVIDENCE fold-ins (§2–§4 below), each with its own claim-lock. Keep §1
+> here only as the record of what was corrected.
+
+**Status:** DRAFT prepared by Opus 4.8, 2026-07-13 (WS-3 of packet 5fea5d2); §1 executed
+2026-07-14 via T40. The remaining combined Phase-C fold-in happens ONCE, after T36 labels +
 T37 LlamaGuard + T39 multiseed TC1 results are all in (D46 batch rule). Until then,
-**do not touch** `build_fyp_*.js`, `mythesis.tex`, or `verify_report_claims.py`.
+**do not touch** `build_fyp_*.js`, `mythesis.tex`, or `verify_report_claims.py` for §2–§4.
 
 Numbers below are the committed artifacts as of `4e73380`:
 - T38: `results_512/analysis/parser_strict_sensitivity.{json,csv}` (LIVE — committed).

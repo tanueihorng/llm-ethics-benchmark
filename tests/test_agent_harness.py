@@ -184,12 +184,18 @@ def test_real_policy_stale_kappa_guards_fire_and_exempt(tmp_path: Path) -> None:
         "Mistral judge-vs-proxy agreement: Cohen's κ = 0.19 at baseline, 0.11 under 4-bit.",
         "the second judge agrees with the classifier at κ 0.60–0.63.",
         "a sign-flipped over-count, judge-vs-proxy κ as low as 0.11.",
+        # P1 audit (2026-07-14, T40): retired ARC "format-immune" framing.
+        "ARC, which is immune to this asymmetry, corroborates the direction.",
+        "ARC-Challenge, not subject to this format asymmetry, moves the same way.",
     ):
         assert scan(bad) == "fail", bad
     for ok in (
         "at the retired 128-token budget it had been lower still, 0.19/0.11.",
         "gpt-4o concurring at κ 0.60–0.63 (128-token era; superseded).",
         "judge-vs-proxy κ as low as 0.25 at the reference budget.",
+        # Corrected bracket framing + the negated "not immune" form stay legal.
+        "ARC is subject to the same asymmetry even more strongly for this pair.",
+        "ARC is not immune to this asymmetry; under a strict parser it falls to −0.343.",
     ):
         assert scan(ok) == "pass", ok
 

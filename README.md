@@ -7,7 +7,7 @@
 <br/>
 
 ![Study](https://img.shields.io/badge/study-complete-0ea5e9?style=flat-square)
-![Tests](https://img.shields.io/badge/tests-339_passing-2ea44f?style=flat-square)
+![Tests](https://img.shields.io/badge/tests-382_passing-2ea44f?style=flat-square)
 ![agent--check](https://img.shields.io/badge/agent--check-8%2F8-2ea44f?style=flat-square)
 ![Models](https://img.shields.io/badge/models-10_·_5_pairs-4f46e5?style=flat-square)
 ![Families](https://img.shields.io/badge/families-4-4f46e5?style=flat-square)
@@ -286,7 +286,7 @@ docs/                # PROJECT_LOG.md (source of truth) · report/thesis · arch
 results/             # raw.jsonl + summaries + redacted judge sidecars + analysis
 scripts/             # prefetch · judge validation · figures · report/thesis builders
 slurm/               # per-model sbatch (NF4 + INT8 + smoke + judge)
-tests/               # 339 tests (26 files)
+tests/               # 382 tests (29 files)
 ```
 
 <details>
