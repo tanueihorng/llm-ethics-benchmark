@@ -540,7 +540,7 @@ push(plain("A good research process is defined by how it behaves when the conven
 // ---- 10. Payoff ----
 push(H1("10.  The Payoff, Measured Honestly"));
 push(PJ("The acceleration did not show up as “the AI wrote the project.” It showed up as depth that could be afforded: a study that grew from a basic three-pair experiment into a five-family, three-precision investigation with two independent judges, two capability benchmarks, a mechanism probe, and two full audits — each guarded by tests (Figure 5)."));
-push(Figure("fig5_tests.png", "The test suite grew alongside the scope — from 186 to 306 tests. Each rise is a robustness layer that the harness made safe to add without breaking what already worked.", 560));
+push(Figure("fig5_tests.png", "The test suite grew alongside the scope. Each rise is a robustness layer that the harness made safe to add without breaking what already worked.", 560));
 push(Figure("fig6_authors.png", "Logged changes by agent — execution volume, not scientific credit. Every entry was a human-directed change.", 480));
 push(PJ("The point is not “more is better.” It is that each robustness layer in Section 9 — the second judge, the multi-seed run, the second benchmark, the audits — is exactly the kind of careful, repetitive work that usually gets skipped under time pressure. The tooling made that work cheap enough to actually do, and the harness made it safe to do without destabilising the result. The acceleration was spent on rigor, not on cutting corners."));
 

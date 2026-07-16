@@ -10,6 +10,7 @@
 // ============================================================================
 const fs = require("fs");
 const path = require("path");
+const { loadClaimRegistry } = require("./lib/claim_registry");
 const {
   Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell,
   Header, Footer, AlignmentType, LevelFormat, TableOfContents, HeadingLevel,
@@ -17,6 +18,7 @@ const {
 } = require("docx");
 
 const FIGDIR = path.join(__dirname, "..", "docs", "figures");
+const CLAIMS = loadClaimRegistry();
 
 const SERIF = "Times New Roman";
 const MONO = "Consolas";
@@ -107,7 +109,7 @@ const cover = [
   CTR("Email:  UTAN001@e.ntu.edu.sg", { size: 22, after: 120 }),
   CTR("Supervisor:  Dr. Zhang Jiehuang  (jiehuang.zhang@ntu.edu.sg)", { size: 22, after: 560 }),
   CTR("2 July 2026", { size: 26, bold: true, after: 80 }),
-  CTR("Five matched pairs / ten models / four families · three precisions · four benchmarks · HarmBench 512-token reference budget · 382 automated tests", { size: 18, italics: true, color: "555555" }),
+  CTR("Five matched pairs / ten models / four families · three precisions · four benchmarks · HarmBench 512-token reference budget · artifact-derived claim registry", { size: 18, italics: true, color: "555555" }),
   new Paragraph({ children: [new PageBreak()] }),
 ];
 
@@ -245,7 +247,7 @@ const ch4 = [
   H2("4.2  Extensibility and the plugin contract"),
   PJ("Adding a model requires only a configuration entry; adding a benchmark requires implementing four methods (load, build prompt, score, aggregate) and registering one line; adding a quantization method extends the loader’s method branch. This keeps the framework reusable beyond the present study, a design property documented in the project’s quickstart and verified by the test suite."),
   H2("4.3  Reliability safeguards"),
-  PJ("Several safeguards protect result integrity. The loader fails loud if quantization is requested but does not actually engage, refusing to emit full-precision results mislabelled as quantized. Raw generations and their summaries are treated as immutable artefacts: all post-hoc scoring, including judge validation, writes derived sidecars only, and integrity is pinned by a checksum manifest. Resume logic keys on prompt identity so an interrupted run continues without double-counting. A suite of 382 automated tests covers the schema, loaders, scorers, analysis mathematics, and the cluster job generator; a machine claim lock, run inside the suite, additionally asserts every load-bearing number in the report and thesis builders against the committed analysis artefacts, so a prose claim cannot silently drift from its evidence."),
+  PJ(`Several safeguards protect result integrity. The loader fails loud if quantization is requested but does not actually engage, refusing to emit full-precision results mislabelled as quantized. Raw generations and their summaries are treated as immutable artefacts: all post-hoc scoring, including judge validation, writes derived sidecars only, and integrity is pinned by a checksum manifest. Resume logic keys on prompt identity so an interrupted run continues without double-counting. ${CLAIMS.render.verification_phrase} cover the schema, loaders, scorers, analysis mathematics, cluster job generator, and every registered document surface.`),
   H2("4.4  Privacy discipline"),
   PJ("Because the study handles harmful prompts and responses, committed artefacts are redacted: prompt identifiers, boolean labels, scalar scores, and run metadata only, never prompt or response text. This makes the study reproducible from the committed sidecars without redistributing harmful content."),
 ];
@@ -263,7 +265,7 @@ const ch5 = [
     ["Second judge", "GPT-4o (architecturally independent)"],
     ["Statistics", "paired bootstrap 95% CI (2000 resamples) + McNemar exact + BH-FDR"],
     ["Hardware", "NVIDIA Tesla V100-32GB (TC1)"],
-    ["Verification", "382 automated tests + machine claim lock"],
+    ["Verification", "automated test suite + artifact-derived claim registry"],
   ], [3600, 5760]),
   CAP("Table 5.1  Experimental configuration summary."),
   PJ("The five NF4 pairs, the INT8 precision point, both judge validations, and the multi-seed sensitivity arm all ran at the 512-token reference budget (the primary study throughout, with zero classifier parse errors over 3,000 judged generations); the 128-token artefacts are retained unchanged for the generation-length comparison. The GPT-4o second judge runs as a local script that calls an external API, so for that cross-check the (public) HarmBench behaviour string and the model’s generation are transmitted off-cluster while the primary classifier runs entirely on TC1; only redacted identifier-and-boolean sidecars are stored. The study’s entire analysis is reproducible from the committed redacted sidecars without a GPU."),
@@ -283,14 +285,10 @@ const ch6 = [
   ...FIG("judge_vs_proxy.png", "Scorer validation. Left: HarmBench-classifier ASR versus the regex 'non-refusal' proxy, one marker per model: eight of ten points lie below the diagonal, so the proxy over-counts harmful compliance (worst for Qwen and Mistral); the two marginal exceptions (Llama base, Phi 4-bit) sit just above it. Right: judge-vs-proxy Cohen’s κ per model, family-dependent. Source: results_512/analysis/judge_agreement.json."),
   H2("6.2  Main study (fp16 vs NF4) at the reference budget"),
   PJ("Under the primary classifier at the 512-token reference budget, no pair shows a significant increase in harmful compliance under NF4 quantization. The only ΔASR whose confidence interval excludes zero is Llama-3.2-3B’s, and it is a decrease (−0.040, CI [−0.075, −0.010]; McNemar p = 0.021); it does not survive the multiplicity correction (§6.7). Table 6.2 reports the per-pair deltas and labels."),
-  tbl(["Pair", "ΔASR (95% CI)", "Sig?", "ΔMMLU", "ΔARC", "Label"], [
-    ["qwen_2b", "0.000 [−0.055, +0.055]", "no", "−0.090*", "−0.009", "broad_degradation (capability-driven)"],
-    ["qwen_4b", "+0.040 [0.000, +0.080]", "no", "−0.003", "−0.016*", "alignment_degradation (dir.)"],
-    ["llama_3_2_3b", "−0.040 [−0.075, −0.010]", "yes†", "−0.037", "−0.032*", "capability_collapse_masq._as_safety (dir.)"],
-    ["mistral_7b", "−0.020 [−0.080, +0.040]", "no", "−0.020", "+0.009", "alignment_improvement (dir.)"],
-    ["phi4_mini", "+0.020 [−0.015, +0.055]", "no", "−0.027", "−0.015", "alignment_degradation (dir.)"],
-  ], [1500, 2700, 700, 1320, 1240, 1900]),
+  tbl(["Pair", "ΔASR (95% CI)", "Sig?", "ΔMMLU", "ΔARC", "Label"],
+    CLAIMS.render.thesis_table_6_2, [1500, 2700, 700, 1320, 1240, 1900]),
   CAP("Table 6.2  Main study at the 512-token reference budget: per-pair judge deltas and interpretation labels (fp16 vs NF4). * capability delta significant. † individually significant (a decrease) but does not survive BH-FDR."),
+  PJ(CLAIMS.render.bh_survivor_sentence),
   ...FIG("capability_anchor.png", "The capability-anchored safety space at the reference budget. Each pair is placed by its capability delta (ΔMMLU, x) and harmful-compliance delta (judge ΔASR, y); dashed lines mark the interpretation thresholds and shaded quadrants name the labels. Bars are paired-bootstrap 95% CIs. Source: results_512/analysis/{judge_agreement,pairwise_deltas}.json."),
   PJ("Over-refusal moves in the benign direction where it moves at all: the only over-refusal delta significant under the exact paired test is Phi-4-mini’s decrease (ΔOR = −0.048, CI [−0.076, −0.020], under the primary regex scorer; an independent refusal judge does not reproduce it, so it is scorer-dependent — §7.2), while Qwen3-1.7B’s smaller decrease is not significant on either criterion (−0.024, McNemar p = 0.109; its CI [−0.048, 0.000] touches zero). No pair becomes significantly more prone to over-refusal on benign prompts (RQ2)."),
   PJ("The Qwen3-1.7B pair, whose +0.055 increase was the study’s original headline at the 128-token budget, is exactly zero at the reference budget: its thirty-two discordant prompts split sixteen against sixteen, the signature of symmetric boundary churn rather than a directional alignment shift (§6.5)."),
@@ -385,7 +383,7 @@ const appendix = [
   H1("Appendix A  Reproducibility Statement"),
   PJ("All code, configuration, and redacted result artefacts are in the project repository. The analysis reproduces byte-for-byte from the committed sidecars without a GPU; full experiments require the gated model weights and a CUDA GPU. The project maps to the ML Reproducibility Checklist [19]: models and algorithms are described (Chapters 3–4); datasets, splits, and sample counts are recorded in each run summary; code and declared dependencies are released; hyper-parameters and decoding controls are recorded in every summary; the compute infrastructure is recorded; and significance procedures are specified, with multiple comparisons disclosed. The dependency set is declared with minimum-version floors (a lockfile with exact pins is a future hardening step). The repository follows recognised research-software practice (scripts rather than manual steps, fixed seeds, explicit dependencies, and a documented project structure [20], [21]) and is packaged for reuse in line with open-source-software peer-review norms [22]. Raw generations are gitignored and hash-pinned; only redacted sidecars (identifiers, booleans, scalars) are released, so the study is reproducible without redistributing harmful text. The primary artefacts live under results_512/ (the 512-token study), with the 128-token run retained under results/ as the generation-length comparison; a checksum manifest pins 300 immutable raw files across both trees and the multi-seed arm."),
   H1("Appendix B  Artefacts and Test Suite"),
-  PJ("The framework ships 382 automated tests across the schema, loaders (including the fail-loud quantization guard), scorers, analysis mathematics (delta computation, paired bootstrap, McNemar, Cohen’s κ), and the SLURM job generator; a machine claim lock (scripts/verify_report_claims.py, run inside the suite) additionally asserts every load-bearing number in the report and this thesis against the committed analysis artefacts under results_512/analysis/, so the documents cannot drift from the evidence without failing the build. Result artefacts comprise per-prompt redacted score sidecars, per-model judge summaries, and analysis files (pairwise deltas, judge agreement, the precision sweep). A checksum manifest pins the immutable raw artefacts."),
+  PJ("The framework ships an automated verification suite across the schema, loaders (including the fail-loud quantization guard), scorers, analysis mathematics, the SLURM generator, and the registered document surfaces. The artifact-derived claim registry and claim checker bind load-bearing tables, captions, deck data, and recurring prose to results_512/analysis/, while a checksum manifest pins immutable raw artefacts. The live test inventory is obtained from pytest rather than copied into the thesis."),
 ];
 
 // ===========================================================================

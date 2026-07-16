@@ -373,9 +373,9 @@ html.reveal-now .anim{opacity:1 !important;transform:none !important;transition:
       </div>
 
       <div class="grid g4 anim">
-        <div class="stat"><div class="num" data-count="306">0</div><div class="lab">automated tests guarding the framework (all passing)</div></div>
+        <div class="stat"><div class="num">Live</div><div class="lab">automated verification guarding the framework</div></div>
         <div class="stat"><div class="num" data-count="120">0</div><div class="lab">raw evidence files locked by cryptographic hash — never edited</div></div>
-        <div class="stat"><div class="num" data-count="8">0</div><div class="lab">checks in the one command that must pass before any change is "done"</div></div>
+        <div class="stat"><div class="num">Live</div><div class="lab">release gates in the one command that must pass before any change is "done"</div></div>
         <div class="stat"><div class="num" data-count="37">0</div><div class="lab">dated decisions logged with rationale, append-only and tamper-evident</div></div>
       </div>
       <p class="src anim">Every figure in this report is sourced from the repository's committed evidence: <span class="kbd">docs/PROJECT_LOG.md</span> (the project's single source of truth), <span class="kbd">configs/artifact_policy.yaml</span>, the harness code, and the test suite. Where a number could drift, the live value is one command away (§12).</p>
@@ -800,7 +800,7 @@ html.reveal-now .anim{opacity:1 !important;transform:none !important;transition:
       <h2 class="anim d1">The payoff, measured <span class="accent">honestly</span></h2>
       <p class="lead anim d2">The acceleration did not show up as "the AI wrote my project." It showed up as <em>depth I could afford</em>: a study that grew from a basic 3-pair experiment into a 5-family, 3-precision investigation with two independent judges, two capability benchmarks, a mechanism probe, and two full audits — each guarded by tests.</p>
 
-      <figure class="fig anim d3" aria-label="A line chart of the automated test suite growing from 186 to 306 tests across project milestones.">
+      <figure class="fig anim d3" aria-label="A line chart showing the automated test suite growing across project milestones.">
         <div class="legend"><span><i style="background:var(--signal)"></i>automated tests (all passing)</span></div>
         <div class="chartwrap"><div id="testChart"></div></div>
         <figcaption><b>Figure 5.</b> The test suite grew alongside the scope — from <b>186</b> to <b>306</b> tests. Each rise is a robustness layer that the harness let me add <em>without</em> fear of breaking what already worked.</figcaption>

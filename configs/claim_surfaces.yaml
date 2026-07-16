@@ -1,0 +1,137 @@
+version: 1
+registry: generated/claim_registry.json
+description: >
+  Explicit inventory of current, generated, snapshot, and machine-local FYP
+  claim surfaces. Discovery patterns are a completeness gate: a newly added
+  deliverable matching them must be classified here before verification passes.
+
+discovery:
+  - AGENTS.md
+  - CLAUDE.md
+  - README.md
+  - docs/PROJECT_LOG.md
+  - docs/RESULTS_CARD.md
+  - docs/*.md
+  - docs/*.docx
+  - docs/*.html
+  - scripts/build_fyp_report_v5.js
+  - scripts/build_fyp_report_humanized.js
+  - scripts/build_fyp_thesis_v4.js
+  - scripts/build_fyp_thesis_humanized.js
+  - scripts/build_fyp_interim.js
+  - scripts/build_fyp_interim_humanized.js
+  - docs/FYP_Report_2026-07-01_v5.docx
+  - docs/FYP_Report_2026-07-01_humanized.docx
+  - docs/FYP_Thesis_2026-07-02_v4.docx
+  - docs/FYP_Thesis_2026-07-02_humanized.docx
+  - docs/FYP_Interim_2026-07-10.docx
+  - docs/FYP_Interim_2026-07-10_humanized.docx
+  - fyp_submission/FYP_*_LaTeX.pdf
+  - fyp_submission/decks/*.html
+  - fyp_submission/emails/*.md
+  - fyp_submission/report_latex/final_thesis/mythesis.tex
+  - fyp_submission/report_latex/final_thesis/mythesis.pdf
+  - fyp_submission/report_latex/final_thesis_overleaf.zip
+  - fyp_submission/report_latex/interim_report/mythesis.tex
+  - fyp_submission/report_latex/interim_report/mythesis.pdf
+  - fyp_submission/report_latex/interim_report_overleaf.zip
+
+surfaces:
+  - {id: agents, path: AGENTS.md, lifecycle: current, profiles: [volatile_free]}
+  - {id: claude, path: CLAUDE.md, lifecycle: current, profiles: [volatile_free]}
+  - {id: readme, path: README.md, lifecycle: current, profiles: [markdown_primary, volatile_free]}
+  - {id: project_log, path: docs/PROJECT_LOG.md, lifecycle: current-plus-history, profiles: [project_log_current]}
+  - {id: results_card, path: docs/RESULTS_CARD.md, lifecycle: current, profiles: [markdown_primary, volatile_free]}
+  - {id: agentic_workflow, path: docs/AGENTIC_WORKFLOW.md, lifecycle: current-reference, profiles: []}
+  - {id: agent_dashboard, path: docs/AGENT_DASHBOARD.md, lifecycle: generated-live, profiles: []}
+  - {id: codex_meetup_brief, path: docs/CODEX_MEETUP_BRIEF.md, lifecycle: current-reference, profiles: []}
+  - {id: fyp_repo_guide, path: docs/FYP_REPO_GUIDE.md, lifecycle: current-reference, profiles: []}
+  - {id: handoff, path: docs/HANDOFF.md, lifecycle: generated-live, profiles: []}
+  - {id: harness_self_eval, path: docs/HARNESS_SELF_EVAL.md, lifecycle: current-reference, profiles: []}
+  - {id: human_label_protocol, path: docs/HUMAN_LABEL_PROTOCOL.md, lifecycle: current-reference, profiles: []}
+  - {id: quickstart, path: docs/QUICKSTART.md, lifecycle: current-reference, profiles: []}
+  - {id: report_claim_audit, path: docs/REPORT_CLAIM_AUDIT_v5.md, lifecycle: audit-snapshot, profiles: []}
+  - {id: reproducibility, path: docs/REPRODUCIBILITY.md, lifecycle: current-reference, profiles: [volatile_free]}
+  - {id: tc1_agent_checklist, path: docs/TC1_AGENT_CHECKLIST.md, lifecycle: generated-live, profiles: []}
+  - {id: tc1_cluster_runbook, path: docs/TC1_CLUSTER_RUNBOOK.md, lifecycle: current-reference, profiles: []}
+  - {id: thesis_outline, path: docs/THESIS_OUTLINE.md, lifecycle: current-reference, profiles: [volatile_free]}
+  - {id: user_guide, path: docs/USER_GUIDE.md, lifecycle: current-reference, profiles: []}
+  - {id: xstest_gold_prereg, path: docs/XSTEST_GOLD_PREREG.md, lifecycle: preregistration, profiles: []}
+  - {id: xstest_judge_prereg, path: docs/XSTEST_JUDGE_PREREG.md, lifecycle: preregistration, profiles: []}
+  - {id: datasets_doc, path: docs/datasets.md, lifecycle: current-reference, profiles: []}
+  - {id: june_email_early, path: docs/email_drZhang_2026-06-09.md, lifecycle: snapshot, profiles: []}
+  - {id: july_email, path: docs/email_drZhang_july.md, lifecycle: current, profiles: [volatile_free]}
+  - {id: june_email, path: docs/email_drZhang_june.md, lifecycle: snapshot, profiles: []}
+  - {id: evaluation_metrics_doc, path: docs/evaluation_metrics.md, lifecycle: current-reference, profiles: []}
+  - {id: extensibility_doc, path: docs/extensibility.md, lifecycle: current-reference, profiles: []}
+  - {id: limitations_doc, path: docs/limitations.md, lifecycle: current-reference, profiles: []}
+  - {id: methodology_doc, path: docs/methodology.md, lifecycle: current-reference, profiles: []}
+  - {id: paper_outline, path: docs/paper_outline.md, lifecycle: current-reference, profiles: []}
+  - {id: session_notes, path: docs/session_notes_2026-07-10.md, lifecycle: snapshot, profiles: []}
+
+  - {id: report_builder, path: scripts/build_fyp_report_v5.js, lifecycle: current, profiles: [registry_consumer, volatile_free]}
+  - {id: report_humanized_builder, path: scripts/build_fyp_report_humanized.js, lifecycle: current, profiles: [registry_consumer, volatile_free]}
+  - {id: thesis_builder, path: scripts/build_fyp_thesis_v4.js, lifecycle: current, profiles: [registry_consumer, volatile_free]}
+  - {id: thesis_humanized_builder, path: scripts/build_fyp_thesis_humanized.js, lifecycle: current, profiles: [registry_consumer, volatile_free]}
+  - {id: interim_builder, path: scripts/build_fyp_interim.js, lifecycle: current, profiles: [registry_consumer, volatile_free]}
+  - {id: interim_humanized_builder, path: scripts/build_fyp_interim_humanized.js, lifecycle: current, profiles: [registry_consumer, volatile_free]}
+
+  - {id: report_docx, path: docs/FYP_Report_2026-07-01_v5.docx, lifecycle: generated, source: scripts/build_fyp_report_v5.js, profiles: [docx_primary, volatile_free, fresh_from_source]}
+  - {id: report_humanized_docx, path: docs/FYP_Report_2026-07-01_humanized.docx, lifecycle: generated, source: scripts/build_fyp_report_humanized.js, profiles: [docx_primary, volatile_free, fresh_from_source]}
+  - {id: thesis_docx, path: docs/FYP_Thesis_2026-07-02_v4.docx, lifecycle: generated, source: scripts/build_fyp_thesis_v4.js, profiles: [docx_primary, volatile_free, fresh_from_source]}
+  - {id: thesis_humanized_docx, path: docs/FYP_Thesis_2026-07-02_humanized.docx, lifecycle: generated, source: scripts/build_fyp_thesis_humanized.js, profiles: [docx_primary, volatile_free, fresh_from_source]}
+  - {id: interim_docx, path: docs/FYP_Interim_2026-07-10.docx, lifecycle: generated, source: scripts/build_fyp_interim.js, profiles: [docx_primary, volatile_free, fresh_from_source]}
+  - {id: interim_humanized_docx, path: docs/FYP_Interim_2026-07-10_humanized.docx, lifecycle: generated, source: scripts/build_fyp_interim_humanized.js, profiles: [docx_primary, volatile_free, fresh_from_source]}
+  - {id: agentic_workflow_docx, path: docs/Agentic_AI_Workflow_Report_2026-06-26.docx, lifecycle: snapshot, profiles: []}
+  - {id: meetup_report_docx, path: docs/Codex_Meetup_Agent_Harness_Report.docx, lifecycle: snapshot, profiles: []}
+  - {id: architecture_guide_docx, path: docs/FYP_Agent_Harness_Architecture_Guide_2026-06-09.docx, lifecycle: snapshot, profiles: []}
+
+  - {id: defense_deck, path: docs/fyp-report-defense-deck-2026-07.html, lifecycle: generated, profiles: [generated_defense_asr, volatile_free]}
+  - {id: showcase, path: docs/fyp_showcase.html, lifecycle: generated, profiles: [generated_deck_pairs, volatile_free]}
+  - {id: showcase_3d, path: docs/fyp_showcase_3d.html, lifecycle: generated, profiles: [generated_deck_pairs, volatile_free]}
+  - {id: showcase_earth, path: docs/fyp_showcase_earth.html, lifecycle: generated, profiles: [generated_deck_pairs, volatile_free]}
+  - {id: showcase_bluemarble, path: docs/fyp_showcase_bluemarble.html, lifecycle: generated, profiles: [generated_deck_pairs, volatile_free]}
+  - {id: showcase_world, path: docs/fyp_showcase_world.html, lifecycle: generated, profiles: [generated_deck_pairs, volatile_free]}
+  - {id: showcase_world3d, path: docs/fyp_showcase_world3d.html, lifecycle: generated, profiles: [generated_deck_pairs, volatile_free]}
+  - {id: july_status, path: docs/fyp_status_2026-07.html, lifecycle: current, profiles: [volatile_free]}
+  - {id: july_status_v2, path: docs/fyp_status_2026-07_v2.html, lifecycle: current, profiles: [volatile_free]}
+  - {id: field_guide, path: docs/project_field_guide.html, lifecycle: current, profiles: [volatile_free]}
+  - {id: agentic_ai_report_html, path: docs/agentic_ai_report.html, lifecycle: current-reference, profiles: [volatile_free]}
+
+  - {id: old_showcase_v2, path: docs/fyp_showcase_v2.html, lifecycle: snapshot, profiles: [snapshot_banner]}
+  - {id: architecture_snapshot, path: docs/fyp_architecture.html, lifecycle: snapshot, profiles: [snapshot_banner]}
+  - {id: agent_harness_snapshot, path: docs/agent_harness_showcase.html, lifecycle: snapshot, profiles: [snapshot_banner]}
+  - {id: meetup_snapshot, path: docs/Codex_Meetup_Agent_Harness_Report.html, lifecycle: snapshot, profiles: [snapshot_banner]}
+
+  - id: local_final_tex
+    path: fyp_submission/report_latex/final_thesis/mythesis.tex
+    lifecycle: local-generated
+    availability: local_optional
+    profiles: [latex_primary, volatile_free]
+  - id: local_interim_tex
+    path: fyp_submission/report_latex/interim_report/mythesis.tex
+    lifecycle: local-generated
+    availability: local_optional
+    profiles: [latex_primary, volatile_free]
+  - {id: local_final_pdf, path: fyp_submission/report_latex/final_thesis/mythesis.pdf, lifecycle: local-generated, availability: local_optional, source: fyp_submission/report_latex/final_thesis/mythesis.tex, profiles: [pdf, fresh_from_source]}
+  - {id: local_interim_pdf, path: fyp_submission/report_latex/interim_report/mythesis.pdf, lifecycle: local-generated, availability: local_optional, source: fyp_submission/report_latex/interim_report/mythesis.tex, profiles: [pdf, fresh_from_source]}
+  - {id: local_final_pdf_copy, path: fyp_submission/FYP_Thesis_LaTeX.pdf, lifecycle: local-generated, availability: local_optional, source: fyp_submission/report_latex/final_thesis/mythesis.pdf, profiles: [pdf, byte_matches_source]}
+  - {id: local_interim_pdf_copy, path: fyp_submission/FYP_Interim_Report_LaTeX.pdf, lifecycle: local-generated, availability: local_optional, source: fyp_submission/report_latex/interim_report/mythesis.pdf, profiles: [pdf, byte_matches_source]}
+  - id: local_final_zip
+    path: fyp_submission/report_latex/final_thesis_overleaf.zip
+    lifecycle: local-generated
+    availability: local_optional
+    profiles: [zip_matches_tex]
+    source: fyp_submission/report_latex/final_thesis/mythesis.tex
+    zip_member: final_thesis/mythesis.tex
+  - id: local_interim_zip
+    path: fyp_submission/report_latex/interim_report_overleaf.zip
+    lifecycle: local-generated
+    availability: local_optional
+    profiles: [zip_matches_tex]
+    source: fyp_submission/report_latex/interim_report/mythesis.tex
+    zip_member: interim_report/mythesis.tex
+  - {id: local_july_email, path: fyp_submission/emails/email_drZhang_july.md, lifecycle: local-current, availability: local_optional, profiles: [volatile_free]}
+  - {id: local_june_email, path: fyp_submission/emails/email_drZhang_june.md, lifecycle: snapshot, availability: local_optional, profiles: []}
+  - {id: local_july_deck, path: fyp_submission/decks/fyp_status_2026-07.html, lifecycle: local-current, availability: local_optional, profiles: [volatile_free]}
+  - {id: local_june_deck, path: fyp_submission/decks/fyp_status_2026-06-13.html, lifecycle: snapshot, availability: local_optional, profiles: []}

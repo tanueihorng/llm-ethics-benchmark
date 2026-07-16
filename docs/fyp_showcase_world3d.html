@@ -292,33 +292,201 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offse
    Sig flags = individually significant (uncorrected); NO ASR contrast survives BH-FDR.
    FDR survivors: Qwen-1.7B MMLU −0.090 · Llama ARC −0.032 · Phi over-refusal −0.048.
    ===================================================================================== */
+/* CLAIM_REGISTRY:PAIRS 91597bff2e1e6624c59d4bc619d416246d91a25e8f802af5dc4e6ccc0c8010e2 */
 const PAIRS = [
-  { id:'qwen_2b',  color:'#7fa6ff', name:'Qwen3-1.7B', params:1.7,
-    asr:{fp16:0.255, int8:0.245, nf4:0.255}, asrDelta:0.000, asrSig:false, v2:{base:0.595}, kappa:0.36,
-    mmlu:{fp16:0.643, int8:0.657, nf4:0.553}, mmluDelta:-0.090, mmluSig:true,
-    arc:{base:0.723, q:0.713}, arcDelta:-0.009, arcSig:false,
-    or:{base:0.052, q:0.028}, orDelta:-0.024, orSig:false, label:'broad_degradation' },
-  { id:'qwen_4b',  color:'#5b8def', name:'Qwen3-4B', params:4,
-    asr:{fp16:0.115, int8:0.125, nf4:0.155}, asrDelta:0.040, asrSig:false, v2:{base:0.235}, kappa:0.49,
-    mmlu:{fp16:0.747, int8:0.740, nf4:0.743}, mmluDelta:-0.003, mmluSig:false,
-    arc:{base:0.876, q:0.860}, arcDelta:-0.016, arcSig:true,
-    or:{base:0.028, q:0.024}, orDelta:-0.004, orSig:false, label:'alignment_degradation' },
-  { id:'llama_3_2_3b', color:'#4dd6e8', name:'Llama-3.2-3B', params:3,
-    asr:{fp16:0.100, int8:0.105, nf4:0.060}, asrDelta:-0.040, asrSig:true, v2:{base:0.090}, kappa:0.71,
-    mmlu:{fp16:0.610, int8:0.617, nf4:0.573}, mmluDelta:-0.037, mmluSig:false,
-    arc:{base:0.730, q:0.698}, arcDelta:-0.032, arcSig:true,
-    or:{base:0.032, q:0.048}, orDelta:0.016, orSig:false, label:'capability_collapse_masquerading_as_safety' },
-  { id:'mistral_7b', color:'#b78bfa', name:'Mistral-7B', params:7,
-    asr:{fp16:0.585, int8:0.565, nf4:0.565}, asrDelta:-0.020, asrSig:false, v2:{base:0.825}, kappa:0.29,
-    mmlu:{fp16:0.633, int8:0.647, nf4:0.613}, mmluDelta:-0.020, mmluSig:false,
-    arc:{base:0.734, q:0.743}, arcDelta:0.009, arcSig:false,
-    or:{base:0.004, q:0.004}, orDelta:0.000, orSig:false, label:'alignment_improvement' },
-  { id:'phi4_mini', color:'#ffb45c', name:'Phi-4-mini', params:3.8,
-    asr:{fp16:0.070, int8:0.090, nf4:0.090}, asrDelta:0.020, asrSig:false, v2:{base:0.075}, kappa:0.67,
-    mmlu:{fp16:0.703, int8:0.697, nf4:0.677}, mmluDelta:-0.027, mmluSig:false,
-    arc:{base:0.813, q:0.799}, arcDelta:-0.015, arcSig:false,
-    or:{base:0.128, q:0.080}, orDelta:-0.048, orSig:true, label:'alignment_degradation' },
+  {
+    "id": "qwen_2b",
+    "fam": "Qwen",
+    "name": "Qwen3-1.7B",
+    "params": 1.7,
+    "asr": {
+      "fp16": 0.255,
+      "int8": 0.245,
+      "nf4": 0.255
+    },
+    "asrDelta": 0.0,
+    "asrSig": false,
+    "v2": {
+      "base": 0.595
+    },
+    "kappa": 0.36,
+    "mmlu": {
+      "fp16": 0.643,
+      "int8": 0.657,
+      "nf4": 0.553
+    },
+    "mmluDelta": -0.09,
+    "mmluSig": true,
+    "arc": {
+      "base": 0.723,
+      "q": 0.713
+    },
+    "arcDelta": -0.009,
+    "arcSig": false,
+    "or": {
+      "base": 0.052,
+      "q": 0.028
+    },
+    "orDelta": -0.024,
+    "orSig": false,
+    "label": "broad_degradation",
+    "color": "#7fa6ff"
+  },
+  {
+    "id": "qwen_4b",
+    "fam": "Qwen",
+    "name": "Qwen3-4B",
+    "params": 4.0,
+    "asr": {
+      "fp16": 0.115,
+      "int8": 0.125,
+      "nf4": 0.155
+    },
+    "asrDelta": 0.04,
+    "asrSig": false,
+    "v2": {
+      "base": 0.235
+    },
+    "kappa": 0.49,
+    "mmlu": {
+      "fp16": 0.747,
+      "int8": 0.74,
+      "nf4": 0.743
+    },
+    "mmluDelta": -0.003,
+    "mmluSig": false,
+    "arc": {
+      "base": 0.876,
+      "q": 0.86
+    },
+    "arcDelta": -0.016,
+    "arcSig": true,
+    "or": {
+      "base": 0.028,
+      "q": 0.024
+    },
+    "orDelta": -0.004,
+    "orSig": false,
+    "label": "alignment_degradation",
+    "color": "#5b8def"
+  },
+  {
+    "id": "llama_3_2_3b",
+    "fam": "Llama",
+    "name": "Llama-3.2-3B",
+    "params": 3.0,
+    "asr": {
+      "fp16": 0.1,
+      "int8": 0.105,
+      "nf4": 0.06
+    },
+    "asrDelta": -0.04,
+    "asrSig": true,
+    "v2": {
+      "base": 0.09
+    },
+    "kappa": 0.71,
+    "mmlu": {
+      "fp16": 0.61,
+      "int8": 0.617,
+      "nf4": 0.573
+    },
+    "mmluDelta": -0.037,
+    "mmluSig": false,
+    "arc": {
+      "base": 0.73,
+      "q": 0.698
+    },
+    "arcDelta": -0.032,
+    "arcSig": true,
+    "or": {
+      "base": 0.032,
+      "q": 0.048
+    },
+    "orDelta": 0.016,
+    "orSig": false,
+    "label": "capability_collapse_masquerading_as_safety",
+    "color": "#4dd6e8"
+  },
+  {
+    "id": "mistral_7b",
+    "fam": "Mistral",
+    "name": "Mistral-7B",
+    "params": 7.0,
+    "asr": {
+      "fp16": 0.585,
+      "int8": 0.565,
+      "nf4": 0.565
+    },
+    "asrDelta": -0.02,
+    "asrSig": false,
+    "v2": {
+      "base": 0.83
+    },
+    "kappa": 0.29,
+    "mmlu": {
+      "fp16": 0.633,
+      "int8": 0.647,
+      "nf4": 0.613
+    },
+    "mmluDelta": -0.02,
+    "mmluSig": false,
+    "arc": {
+      "base": 0.734,
+      "q": 0.743
+    },
+    "arcDelta": 0.009,
+    "arcSig": false,
+    "or": {
+      "base": 0.004,
+      "q": 0.004
+    },
+    "orDelta": 0.0,
+    "orSig": false,
+    "label": "alignment_improvement",
+    "color": "#b78bfa"
+  },
+  {
+    "id": "phi4_mini",
+    "fam": "Phi",
+    "name": "Phi-4-mini",
+    "params": 3.8,
+    "asr": {
+      "fp16": 0.07,
+      "int8": 0.09,
+      "nf4": 0.09
+    },
+    "asrDelta": 0.02,
+    "asrSig": false,
+    "v2": {
+      "base": 0.075
+    },
+    "kappa": 0.67,
+    "mmlu": {
+      "fp16": 0.703,
+      "int8": 0.697,
+      "nf4": 0.677
+    },
+    "mmluDelta": -0.027,
+    "mmluSig": false,
+    "arc": {
+      "base": 0.813,
+      "q": 0.799
+    },
+    "arcDelta": -0.015,
+    "arcSig": false,
+    "or": {
+      "base": 0.128,
+      "q": 0.08
+    },
+    "orDelta": -0.048,
+    "orSig": true,
+    "label": "alignment_degradation",
+    "color": "#ffb45c",
+    "lpos": "below"
+  }
 ];
+/* END_CLAIM_REGISTRY:PAIRS */
 const BUDGET = [
   { id:'qwen_2b',      d128:0.055,  sig128:true,  d512:0.000,  sig512:false },
   { id:'qwen_4b',      d128:0.025,  sig128:false, d512:0.040,  sig512:false },
@@ -1082,7 +1250,7 @@ log:(isl)=>ovHead(isl,'the voyage log','From question to evidence.')+
   `<div class="voyage">${TIMELINE.map(t=>`<div class="vstop${t.ph?' ph':''}"><div class="vd">${t.date}${t.ph?' · editable':''}</div><div class="vt">${t.t}</div><div class="vs">${t.s}</div></div>`).join('')}</div>
   <div class="grid g2" style="margin-top:22px">
     <div class="tile"><span class="tag">credits</span><p class="mono" style="line-height:1.9;font-size:12.5px;margin-top:6px"><b style="color:var(--ink)">Author</b> · Tan Uei Horng<br/><b style="color:var(--ink)">Supervisor</b> · Dr. Zhang Jiehuang<br/><b style="color:var(--ink)">Programme</b> · BSc, CCDS<br/><b style="color:var(--ink)">Institution</b> · Nanyang Technological University<br/><b style="color:var(--ink)">Project</b> · CCDS25-1136</p></div>
-    <div class="tile"><span class="tag">provenance</span><p style="font-size:12.5px;line-height:1.65;margin-top:6px">Every figure is drawn from the primary 512-token analysis tree (<span class="mono">results_512/analysis/*.json</span>, D41). HarmBench ASR is judge-primary (<span class="mono">HarmBench-Llama-2-13B</span>), cross-checked by GPT-4o. Report numbers are machine-locked by <span class="mono">make verify-claims</span> (79 checks) · 382 tests.</p></div></div>`,
+    <div class="tile"><span class="tag">provenance</span><p style="font-size:12.5px;line-height:1.65;margin-top:6px">Every figure is drawn from the primary 512-token analysis tree (<span class="mono">results_512/analysis/*.json</span>, D41). HarmBench ASR is judge-primary (<span class="mono">HarmBench-Llama-2-13B</span>), cross-checked by GPT-4o. Report numbers are derived through the claim registry and checked by <span class="mono">make verify-claims</span>.</p></div></div>`,
 };
 function openOverlay(id){const isl=ISLANDS.find(i=>i.id===id);focusId=id;
   if(!overlay.classList.contains('open')) lastFocus=document.activeElement;

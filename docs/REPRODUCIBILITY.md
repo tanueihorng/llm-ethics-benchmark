@@ -46,8 +46,9 @@
 The repo follows the recommended `README / LICENSE / CITATION / data / doc /
 results / src` shape: `README.md`, `CITATION.cff`, `data/`, `docs/`, `results/`,
 and the `ethical_benchmark/` package as `src`. Dependencies are explicit
-(`requirements.txt`), code is decomposed into plugins/modules, and a 382-test
-suite guards behaviour.
+(`requirements.txt`), code is decomposed into plugins/modules, and the automated
+suite guards behaviour plus artifact-derived document claims. Run
+`pytest --collect-only` for the live inventory.
 
 **Environment caveat (retroactive pinning).** `requirements.txt` declares
 *minimum-version floors*, and those floors were recorded *after* the TC1 runs

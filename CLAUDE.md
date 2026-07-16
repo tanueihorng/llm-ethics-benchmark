@@ -162,7 +162,7 @@ Judge outputs are redacted sidecars (IDs + booleans only); raw outputs and v2 si
 
 ### Tests
 ```bash
-pytest tests/                                    # All tests (382)
+pytest tests/                                    # Full live test suite
 pytest tests/test_judge_validation.py            # Judge layer (stub backend, redaction)
 pytest tests/test_quant_smoke.py                 # Smoke: end-to-end pipeline
 pytest tests/test_quant_analysis.py              # Pairwise delta computation

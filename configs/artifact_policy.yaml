@@ -61,6 +61,7 @@ redaction:
     - docs/architecture/*.drawio
     - docs/architecture/*.png
     - docs/agent_tasks/*.md
+    - generated/claim_registry.json
     - .agents/skills/**/*.md
     - .claude/skills/**/*.md
     - .codex/agents/*.toml
@@ -280,9 +281,9 @@ stale_text:
     # different builders. Self-tested: fires on all five wordings, silent on the
     # canonical "the direction ... is not identified" / "plausibly inflates" form.
     - 'conservative floor|conservative lower bound|lower bound on[^\n]{0,25}agreement|would sit higher|can only inflate'
-    # Retired current-state counts: the suite is 382 tests across 29 files and the
-    # claim lock is 79 checks. Anchored on the retired NUMBER in a count context
-    # rather than on one phrasing — the first cut pinned "339 tests" and so missed
+    # Retired hard-coded counts. Current-facing prose must name the live command,
+    # not copy its present output. Anchored on the retired NUMBER in a count context
+    # rather than on one phrasing — an earlier cut pinned "339 tests" and so missed
     # "All tests (339)", "339-test suite", and a `data-count="339"` counter. Lines
     # carrying a date are exempt so dated audit timelines keep their own era's
     # numbers; STARS excludes a deck's star-coordinate array that contains 339/329
@@ -323,6 +324,17 @@ report_worthy:
     - ethical_benchmark/pipeline/run_quant_benchmark.py
     - ethical_benchmark/pipeline/run_quant_matrix.py
     - scripts/build_fyp_report_v5.js
+    - scripts/build_fyp_report_humanized.js
+    - scripts/build_fyp_thesis_v4.js
+    - scripts/build_fyp_thesis_humanized.js
+    - scripts/build_fyp_interim.js
+    - scripts/build_fyp_interim_humanized.js
+    - scripts/claim_registry.py
+    - scripts/sync_claim_surfaces.py
+    - scripts/verify_claim_surfaces.py
+    - scripts/lib/claim_registry.js
+    - configs/claim_surfaces.yaml
+    - generated/claim_registry.json
     - scripts/judge_agreement.py
     - scripts/run_judge_validation.py
     - scripts/rescore_harmbench.py

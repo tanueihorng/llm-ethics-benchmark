@@ -190,7 +190,7 @@ dd b,dd strong{color:var(--color-ink)}
   <div class="issue-row"><span>CCDS25-1136 · NTU CCDS</span><span>Final Year Project</span><span>2 July 2026</span></div>
   <h1>The fyp_quant Field Guide</h1>
   <p class="dek">Every folder, decision, date, number, and mechanism in this project — written for its author, so the report and thesis can be vetted from <strong>first-hand understanding</strong>, not trust.</p>
-  <div class="badges"><span>5 pairs · 4 families</span><span>fp16 → INT8 → NF4</span><span>4 benchmarks</span><span>2 judges</span><span>512-token primary</span><span>382 tests</span><span>79-check claim lock</span></div>
+  <div class="badges"><span>5 pairs · 4 families</span><span>fp16 → INT8 → NF4</span><span>4 benchmarks</span><span>2 judges</span><span>512-token primary</span><span>artifact-derived claims</span><span>automated verification</span></div>
   <div class="double-rule"></div>
 </header>
 
@@ -290,7 +290,7 @@ dd b,dd strong{color:var(--color-ink)}
     <dt><code>data/</code></dt><dd>Bundled datasets: <code>xstest_v2_prompts.csv</code> (450 rows = 250 benign + 200 contrast) from the official XSTest release.</dd>
     <dt><code>docs/</code></dt><dd>All deliverables and documentation: the report/thesis docx, PROJECT_LOG.md, RESULTS_CARD.md, REPORT_CLAIM_AUDIT_v5.md (the citation-and-claim ledger), HANDOFF.md, figures/, the HTML decks, this guide, and <code>archive/</code> for superseded artifacts.</dd>
     <dt><code>dashboard/</code></dt><dd>Streamlit GUI — <code>app.py</code> (pages), <code>data.py</code> (pure, unit-tested data layer + the evidence-protection guard), <code>theme.py</code> (editorial design system).</dd>
-    <dt><code>tests/</code></dt><dd>382 automated tests across 29 files (inventory in report Appendix D), including the claim-lock wrapper.</dd>
+    <dt><code>tests/</code></dt><dd>The live automated suite, including the claim-registry and surface-verification wrappers. Use <code>pytest --collect-only</code> for its current inventory.</dd>
     <dt><code>human_labels/</code></dt><dd>Gitignored: the T30 annotation sheet + in-browser annotator — 200 rows from the 512 tree, awaiting your labels.</dd>
     <dt><code>fyp_cli.py</code></dt><dd>The CLI front door: <code>run</code>, <code>smoke</code>, <code>matrix</code>, <code>analyze</code>, <code>agent-status</code>, <code>agent-start</code>.</dd>
     <dt><code>run_quant_benchmark.py</code> · <code>run_quant_matrix.py</code></dt><dd>Thin root-level entrypoints into the pipeline package (single run / full matrix).</dd>
@@ -345,7 +345,7 @@ dd b,dd strong{color:var(--color-ink)}
     <tr><td>Documents</td><td>Node 24 + <code>docx</code> 9.6.1 (pinned)</td><td>Report and thesis are <em>generated</em>; the .js builders are the editable sources.</td></tr>
     <tr><td>Figures</td><td>matplotlib</td><td>Deterministic regeneration from analysis JSON.</td></tr>
     <tr><td>Dashboard</td><td>Streamlit + Plotly</td><td>Read-only over the evidence trees; judge-primary numbers; editorial theme.</td></tr>
-    <tr><td>Testing &amp; CI discipline</td><td>pytest (382 tests) + the harness gates</td><td><code>make agent-check</code> = doc-sync · log discipline · immutable artifacts · redaction · stale-text · report freshness · pytest.</td></tr>
+    <tr><td>Testing &amp; CI discipline</td><td>pytest + the harness gates</td><td><code>make agent-check</code> = doc-sync · log discipline · immutable artifacts · redaction · stale-text · report freshness · pytest.</td></tr>
     <tr><td>Repository</td><td>Public GitHub</td><td>Which is why the redaction discipline exists: raw harmful text is never committed.</td></tr>
   </table></div>
 </section>
@@ -506,7 +506,7 @@ dd b,dd strong{color:var(--color-ink)}
   <p>This project is co-built with AI agents on a public repository, which creates two risks the harness exists to kill: <em>stale claims</em> (a number changes but old prose survives somewhere) and <em>evidence damage or leaks</em>. The harness is machine-checked, not prose-promised.</p>
   <div class="note">
     <span class="tag">The lock ("agent lock") · scripts/verify_report_claims.py · 79 checks</span>
-    <p>Every load-bearing number in the report <em>and</em> thesis builders is asserted in <strong>two directions</strong>: (a) the document text still contains the claim string, which catches silent rewording; and (b) the value recomputed live from the committed analysis artifacts equals the claim, which catches drift from evidence. Plus IEEE citation-consistency checks for both documents: every reference cited, no citation beyond the list, numbering strictly by first use. It runs via <code>make verify-claims</code> and inside pytest — a drifted claim turns the whole 382-test suite red.</p>
+    <p>Load-bearing values, labels, configurations, and status are derived into one claim registry from the committed artifacts. Each current-facing file is then checked independently for the semantic properties it promises. IEEE citation-consistency checks still cover both documents: every reference cited, no citation beyond the list, numbering strictly by first use. It runs via <code>make verify-claims</code> and inside pytest, so drift turns the verification suite red.</p>
     <p><strong>Why it exists:</strong> on its first run it immediately caught six errors that <em>seven external review rounds and a five-agent adversarial audit had all missed</em> — including a prose/table mismatch masked by an identical delta, a stale 128-era κ pair, and three drifted CI endpoints. Prose is not self-verifying. Never hand-verify a report number; run the lock.</p>
   </div>
   <h4>The gates — <code>make agent-check</code></h4>
@@ -518,7 +518,7 @@ dd b,dd strong{color:var(--color-ink)}
     <tr><td>redaction</td><td>Raw-text field names (<code>"response":</code> and friends) anywhere in committed docs, sidecars, and analysis outputs — 493 files scanned.</td><td>Leaks phrased outside the pattern list.</td></tr>
     <tr><td>stale-text</td><td>Retired claims cited as current: superseded docx names, un-scoped 128-era numbers (the +0.055 and retired-κ guards demand "128" on the same line), retired headline phrasings. Scans instruction files, docs, code, decks, <em>and the canonical report/thesis builder sources</em>.</td><td>Stale numbers that match no written pattern — which is why the claim lock exists as the complementary positive check.</td></tr>
     <tr><td>report-freshness</td><td>A report-worthy source change without a regenerated docx (the builder is a trigger, never a satisfier).</td><td>Report-worthiness of changes outside the pattern list.</td></tr>
-    <tr><td>pytest</td><td>All 382 tests: the claim lock, guard regressions (e.g. the case-variant evidence-dir bypass), redaction self-tests, and the schema/pipeline/stats layers.</td><td>Anything without a test.</td></tr>
+    <tr><td>pytest</td><td>The live suite: claim-registry checks, guard regressions (e.g. the case-variant evidence-dir bypass), redaction self-tests, and the schema/pipeline/stats layers.</td><td>Anything without a test.</td></tr>
   </table></div>
   <h4>The conventions — the "D" decisions that govern behaviour</h4>
   <ul>
@@ -587,7 +587,7 @@ dd b,dd strong{color:var(--color-ink)}
     <tr><td>Ch2 related work</td><td>Each citation's characterization matches the paper (all sites audited — ledger §2c/§4); you can summarize each cited paper in one sentence yourself.</td><td><code>docs/REPORT_CLAIM_AUDIT_v5.md</code></td></tr>
     <tr><td>Ch3 methodology</td><td>Threat-model paragraph present; the N=512 justification quotes the HarmBench paper; the decoding-controls table matches <code>configs/tc1_512.yaml</code>.</td><td>Diff the table against the YAML.</td></tr>
     <tr><td>Ch4/Ch5 system &amp; setup</td><td>Architecture matches the repository map (<a href="#repo">§3</a>); TC1 numbers match <code>configs/tc1*.yaml</code> and the sbatch files.</td><td>Spot-check Appendix A/B against the real files.</td></tr>
-    <tr><td>Ch6 results</td><td>Tables 6.1–6.4 against the artifacts; labels + evidence status; every "significant" carries its test + correction status.</td><td><code>python scripts/number_bible_512.py</code> · <code>make verify-claims</code> (55/55)</td></tr>
+    <tr><td>Ch6 results</td><td>Tables 6.1–6.4 against the artifacts; labels + evidence status; every "significant" carries its test + correction status.</td><td><code>python scripts/number_bible_512.py</code> · <code>make verify-claims</code></td></tr>
     <tr><td>§6.12/§6.13 judge sections</td><td>κ values — the historically riskiest spot (three separate stale-κ incidents were fixed here); 128-era values only ever appear with explicit 128 scoping.</td><td>The lock enforces it; grep the docx for "128" near any κ that surprises you.</td></tr>
     <tr><td>§6.16 genlen</td><td>The 60.3 / 30.5 / 9.2 breakdown, the family heterogeneity, and the mismatch-class disclosure are all present.</td><td><code>results_512/analysis/genlen_robustness.json</code></td></tr>
     <tr><td>Ch7–Ch10</td><td>No sentence implies a safety-<em>degradation</em> finding at 512; deployment advice hedged to bitsandbytes + direct requests.</td><td>Read with <a href="#human">§14</a>'s eyes.</td></tr>
@@ -619,8 +619,8 @@ dd b,dd strong{color:var(--color-ink)}
   <span class="sec-no">Section 17</span>
   <h3 class="sec">Command crib sheet</h3>
 <pre class="wide"><code># --- verify everything (your pre-submission ritual) ---
-make verify-claims        # 79-check claim lock: numbers + citations vs artifacts
-pytest tests/ -q          # 382 tests (the lock rides inside)
+make verify-claims        # registry + per-file semantics + citations vs artifacts
+pytest tests/ -q          # full live suite (the claim checks ride inside)
 make agent-check          # all harness gates
 python scripts/number_bible_512.py   # print every headline number from the artifacts
 
@@ -651,7 +651,7 @@ docs/PROJECT_LOG.md                                # the complete history (decis
   <div class="inner">
     <div><span class="wordmark">fyp_quant</span> · The Complete Project Field Guide</div>
     <div>Generated 2 July 2026 for the project author.<br>Descriptive documentation; the sources of truth remain <code>docs/PROJECT_LOG.md</code>, the artifacts under <code>results_512/analysis/</code>, and the claim ledger. If this guide ever disagrees with those, they win — and please fix this file.</div>
-    <div>Set in Fraunces &amp; Source Serif 4.<br>Verified: claim lock 79/79 · pytest 382/382 · stale-text + redaction scans pass.</div>
+    <div>Set in Fraunces &amp; Source Serif 4.<br>Verified live through the claim registry, pytest, stale-text scan, and redaction scan.</div>
   </div>
 </footer>
 

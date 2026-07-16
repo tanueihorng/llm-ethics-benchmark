@@ -30,10 +30,30 @@ import re
 import sys
 from pathlib import Path
 
+from claim_registry import build_registry
+
 ROOT = Path(__file__).resolve().parents[1]
 BUILDER = ROOT / "scripts/build_fyp_report_v5.js"
 A512 = ROOT / "results_512/analysis"
 A128 = ROOT / "results/analysis"
+
+
+def _registry_search_text() -> str:
+    """Expose generated fragments to legacy snippet locks during migration.
+
+    The values no longer live as duplicated literals in each builder. Keeping
+    the existing evidence recomputations while searching the deterministic
+    registry output preserves those guards without reintroducing copies.
+    """
+    render = build_registry(ROOT)["render"]
+    chunks: list[str] = []
+    for key in ("report_table_6_1", "report_table_6_2", "thesis_table_6_2"):
+        chunks.extend(json.dumps(row, ensure_ascii=False) for row in render[key])
+    chunks.extend(
+        value for value in render.values()
+        if isinstance(value, str)
+    )
+    return "\n".join(chunks)
 
 
 def _load(path: Path):
@@ -47,7 +67,7 @@ def near(claimed: float, actual: float, places: int = 3) -> bool:
 
 class Checker:
     def __init__(self) -> None:
-        self.text = BUILDER.read_text(encoding="utf-8")
+        self.text = BUILDER.read_text(encoding="utf-8") + "\n" + _registry_search_text()
         self.results: list[tuple[str, str, str]] = []
 
     def check(self, name: str, snippets: list[str], fn) -> None:
@@ -970,7 +990,8 @@ def run_checks(checker: Checker | None = None) -> Checker:
     )
 
     # ================= thesis v4 mirror (same artifacts, same lock) ==========
-    tt = (ROOT / "scripts/build_fyp_thesis_v4.js").read_text(encoding="utf-8")
+    tt = ((ROOT / "scripts/build_fyp_thesis_v4.js").read_text(encoding="utf-8")
+          + "\n" + _registry_search_text())
 
     def tcheck(name, snippets, fn=lambda: (True, "text pinned")):
         missing = [s for s in snippets if s not in tt]
@@ -1133,7 +1154,8 @@ def run_checks(checker: Checker | None = None) -> Checker:
         lambda: (
             all("128" in line for line in tt.split("\n") if re.search(r"\+0\.055(?!\])", line) and ", +0.055" not in line)
             and "0.19 " not in tt and "two-peaked" not in tt
-            and "329" not in tt and "339 automated tests" not in tt and "382 automated tests" in tt
+            and "329" not in tt and "339 automated tests" not in tt and "382 automated tests" not in tt
+            and "artifact-derived claim registry" in tt
             and "immune to this asymmetry" not in tt,
             "every +0.055 line 128-scoped; no retired kappa/counts/immune-ARC",
         ),
@@ -1151,7 +1173,8 @@ def run_checks(checker: Checker | None = None) -> Checker:
     )
 
     # ================= interim report mirror (same artifacts, same lock) ======
-    ii = (ROOT / "scripts/build_fyp_interim.js").read_text(encoding="utf-8")
+    ii = ((ROOT / "scripts/build_fyp_interim.js").read_text(encoding="utf-8")
+          + "\n" + _registry_search_text())
     hv = _load(A512 / "human_validation.json")
 
     def icheck(name, snippets, fn=lambda: (True, "text pinned")):
@@ -1170,7 +1193,7 @@ def run_checks(checker: Checker | None = None) -> Checker:
         "interim: headline ΔASR + capability + κ + counts + budget + INT8 == artifacts",
         ['"−0.040 [−0.075, −0.010]"', '"−0.090*"', '"−0.032*"',
          "classifier κ 0.59", "regex 0.11", "over-flagged 101 responses",
-         "60.3 percent", "classifier Δ+0.005", "382 automated tests"],
+         "60.3 percent", "classifier Δ+0.005", "artifact-derived claim registry"],
         lambda: (
             near(-0.040, hl512["llama_3_2_3b"]["delta"])
             and near(-0.090, pdix[("qwen_2b", "mmlu")]["absolute_delta"])
@@ -1197,7 +1220,8 @@ def run_checks(checker: Checker | None = None) -> Checker:
         lambda: (
             all("128" in line for line in ii.split("\n")
                 if re.search(r"\+0\.055(?!\])", line) and ", +0.055" not in line)
-            and "329" not in ii and "339 automated tests" not in ii and "382 automated tests" in ii,
+            and "329" not in ii and "339 automated tests" not in ii and "382 automated tests" not in ii
+            and "artifact-derived claim registry" in ii,
             "interim scoped correctly (Interim Report; no retired counts/128-era leakage)",
         ),
     )

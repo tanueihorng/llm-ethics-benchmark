@@ -627,7 +627,7 @@ p{color:var(--soft);line-height:1.62}
         <span class="chip"><span class="dot" style="background:var(--safe)"></span>5 pairs · 4 families</span>
         <span class="chip"><span class="dot" style="background:var(--signal)"></span>fp16 · INT8 · NF4</span>
         <span class="chip"><span class="dot" style="background:var(--harm)"></span>2 judges · κ 0.68–0.95</span>
-        <span class="chip"><span class="dot" style="background:var(--cap)"></span>382 tests · machine claim-lock</span>
+        <span class="chip"><span class="dot" style="background:var(--cap)"></span>Automated suite · machine claim registry</span>
       </div>
       <div class="grid g2 anim d3">
         <div class="card">
@@ -660,38 +660,201 @@ p{color:var(--soft);line-height:1.62}
    contrast survives BH-FDR — the three FDR survivors are Qwen-1.7B MMLU,
    Llama ARC and Phi over-refusal. kappa = judge-vs-proxy κ on the fp16 member @512.
    ===================================================================================== */
+/* CLAIM_REGISTRY:PAIRS 91597bff2e1e6624c59d4bc619d416246d91a25e8f802af5dc4e6ccc0c8010e2 */
 const PAIRS = [
-  { id:'qwen_2b',  fam:'Qwen',   color:'#5b8def', name:'Qwen3-1.7B', params:1.7,
-    asr:{fp16:0.255, int8:0.245, nf4:0.255}, asrDelta:0.000, asrSig:false,
-    v2:{base:0.595}, kappa:0.36,
-    mmlu:{fp16:0.643, int8:0.657, nf4:0.553}, mmluDelta:-0.090, mmluSig:true,
-    arc:{base:0.723, q:0.713}, arcDelta:-0.009, arcSig:false,
-    or:{base:0.052, q:0.028}, orDelta:-0.024, orSig:false, label:'broad_degradation' },
-  { id:'qwen_4b',  fam:'Qwen',   color:'#3f6fd8', name:'Qwen3-4B', params:4,
-    asr:{fp16:0.115, int8:0.125, nf4:0.155}, asrDelta:0.040, asrSig:false,
-    v2:{base:0.235}, kappa:0.49,
-    mmlu:{fp16:0.747, int8:0.740, nf4:0.743}, mmluDelta:-0.003, mmluSig:false,
-    arc:{base:0.876, q:0.860}, arcDelta:-0.016, arcSig:true,
-    or:{base:0.028, q:0.024}, orDelta:-0.004, orSig:false, label:'alignment_degradation' },
-  { id:'llama_3_2_3b', fam:'Llama', color:'#37d5e8', name:'Llama-3.2-3B', params:3,
-    asr:{fp16:0.100, int8:0.105, nf4:0.060}, asrDelta:-0.040, asrSig:true,
-    v2:{base:0.090}, kappa:0.71,
-    mmlu:{fp16:0.610, int8:0.617, nf4:0.573}, mmluDelta:-0.037, mmluSig:false,
-    arc:{base:0.730, q:0.698}, arcDelta:-0.032, arcSig:true,
-    or:{base:0.032, q:0.048}, orDelta:0.016, orSig:false, label:'capability_collapse_masquerading_as_safety' },
-  { id:'mistral_7b', fam:'Mistral', color:'#a78bfa', name:'Mistral-7B', params:7,
-    asr:{fp16:0.585, int8:0.565, nf4:0.565}, asrDelta:-0.020, asrSig:false,
-    v2:{base:0.825}, kappa:0.29,
-    mmlu:{fp16:0.633, int8:0.647, nf4:0.613}, mmluDelta:-0.020, mmluSig:false,
-    arc:{base:0.734, q:0.743}, arcDelta:0.009, arcSig:false,
-    or:{base:0.004, q:0.004}, orDelta:0.000, orSig:false, label:'alignment_improvement' },
-  { id:'phi4_mini', fam:'Phi', color:'#f0a13e', name:'Phi-4-mini', params:3.8,
-    asr:{fp16:0.070, int8:0.090, nf4:0.090}, asrDelta:0.020, asrSig:false,
-    v2:{base:0.075}, kappa:0.67,
-    mmlu:{fp16:0.703, int8:0.697, nf4:0.677}, mmluDelta:-0.027, mmluSig:false,
-    arc:{base:0.813, q:0.799}, arcDelta:-0.015, arcSig:false,
-    or:{base:0.128, q:0.080}, orDelta:-0.048, orSig:true, label:'alignment_degradation' },
+  {
+    "id": "qwen_2b",
+    "fam": "Qwen",
+    "name": "Qwen3-1.7B",
+    "params": 1.7,
+    "asr": {
+      "fp16": 0.255,
+      "int8": 0.245,
+      "nf4": 0.255
+    },
+    "asrDelta": 0.0,
+    "asrSig": false,
+    "v2": {
+      "base": 0.595
+    },
+    "kappa": 0.36,
+    "mmlu": {
+      "fp16": 0.643,
+      "int8": 0.657,
+      "nf4": 0.553
+    },
+    "mmluDelta": -0.09,
+    "mmluSig": true,
+    "arc": {
+      "base": 0.723,
+      "q": 0.713
+    },
+    "arcDelta": -0.009,
+    "arcSig": false,
+    "or": {
+      "base": 0.052,
+      "q": 0.028
+    },
+    "orDelta": -0.024,
+    "orSig": false,
+    "label": "broad_degradation",
+    "color": "#5b8def"
+  },
+  {
+    "id": "qwen_4b",
+    "fam": "Qwen",
+    "name": "Qwen3-4B",
+    "params": 4.0,
+    "asr": {
+      "fp16": 0.115,
+      "int8": 0.125,
+      "nf4": 0.155
+    },
+    "asrDelta": 0.04,
+    "asrSig": false,
+    "v2": {
+      "base": 0.235
+    },
+    "kappa": 0.49,
+    "mmlu": {
+      "fp16": 0.747,
+      "int8": 0.74,
+      "nf4": 0.743
+    },
+    "mmluDelta": -0.003,
+    "mmluSig": false,
+    "arc": {
+      "base": 0.876,
+      "q": 0.86
+    },
+    "arcDelta": -0.016,
+    "arcSig": true,
+    "or": {
+      "base": 0.028,
+      "q": 0.024
+    },
+    "orDelta": -0.004,
+    "orSig": false,
+    "label": "alignment_degradation",
+    "color": "#3f6fd8"
+  },
+  {
+    "id": "llama_3_2_3b",
+    "fam": "Llama",
+    "name": "Llama-3.2-3B",
+    "params": 3.0,
+    "asr": {
+      "fp16": 0.1,
+      "int8": 0.105,
+      "nf4": 0.06
+    },
+    "asrDelta": -0.04,
+    "asrSig": true,
+    "v2": {
+      "base": 0.09
+    },
+    "kappa": 0.71,
+    "mmlu": {
+      "fp16": 0.61,
+      "int8": 0.617,
+      "nf4": 0.573
+    },
+    "mmluDelta": -0.037,
+    "mmluSig": false,
+    "arc": {
+      "base": 0.73,
+      "q": 0.698
+    },
+    "arcDelta": -0.032,
+    "arcSig": true,
+    "or": {
+      "base": 0.032,
+      "q": 0.048
+    },
+    "orDelta": 0.016,
+    "orSig": false,
+    "label": "capability_collapse_masquerading_as_safety",
+    "color": "#37d5e8"
+  },
+  {
+    "id": "mistral_7b",
+    "fam": "Mistral",
+    "name": "Mistral-7B",
+    "params": 7.0,
+    "asr": {
+      "fp16": 0.585,
+      "int8": 0.565,
+      "nf4": 0.565
+    },
+    "asrDelta": -0.02,
+    "asrSig": false,
+    "v2": {
+      "base": 0.83
+    },
+    "kappa": 0.29,
+    "mmlu": {
+      "fp16": 0.633,
+      "int8": 0.647,
+      "nf4": 0.613
+    },
+    "mmluDelta": -0.02,
+    "mmluSig": false,
+    "arc": {
+      "base": 0.734,
+      "q": 0.743
+    },
+    "arcDelta": 0.009,
+    "arcSig": false,
+    "or": {
+      "base": 0.004,
+      "q": 0.004
+    },
+    "orDelta": 0.0,
+    "orSig": false,
+    "label": "alignment_improvement",
+    "color": "#a78bfa"
+  },
+  {
+    "id": "phi4_mini",
+    "fam": "Phi",
+    "name": "Phi-4-mini",
+    "params": 3.8,
+    "asr": {
+      "fp16": 0.07,
+      "int8": 0.09,
+      "nf4": 0.09
+    },
+    "asrDelta": 0.02,
+    "asrSig": false,
+    "v2": {
+      "base": 0.075
+    },
+    "kappa": 0.67,
+    "mmlu": {
+      "fp16": 0.703,
+      "int8": 0.697,
+      "nf4": 0.677
+    },
+    "mmluDelta": -0.027,
+    "mmluSig": false,
+    "arc": {
+      "base": 0.813,
+      "q": 0.799
+    },
+    "arcDelta": -0.015,
+    "arcSig": false,
+    "or": {
+      "base": 0.128,
+      "q": 0.08
+    },
+    "orDelta": -0.048,
+    "orSig": true,
+    "label": "alignment_degradation",
+    "color": "#f0a13e",
+    "lpos": "below"
+  }
 ];
+/* END_CLAIM_REGISTRY:PAIRS */
 
 /* ΔASR at both budgets (genlen_robustness.json §6.16): the 128 cap truncated ~60%
    of responses; the apparent +0.055 at 128 for Qwen-1.7B is 0.000 at 512. */

@@ -19,7 +19,7 @@ PYTEST_ARGS ?= -q
 TASK ?=
 AGENT ?=
 
-.PHONY: smoke run matrix analyze prefetch report architecture-diagram cluster-generate cluster-submit cluster-dry cluster-check cluster-all cluster-smoke agent-start agent-status agent-check agent-manifest agent-handoff agent-dashboard agent-tc1-checklist harness-eval dashboard
+.PHONY: smoke run matrix analyze prefetch report thesis interim report-humanized thesis-humanized interim-humanized claim-registry claim-surfaces verify-claims verify-claim-surfaces architecture-diagram cluster-generate cluster-submit cluster-dry cluster-check cluster-all cluster-smoke agent-start agent-status agent-check agent-manifest agent-handoff agent-dashboard agent-tc1-checklist harness-eval dashboard
 
 dashboard:
 	$(PYTHON) -m streamlit run dashboard/app.py
@@ -87,36 +87,47 @@ prefetch:
 # docx is pinned in package.json — `npm install` once on a fresh clone.
 # (NODE_PATH is kept as a fallback for machines with only a global install;
 # local node_modules wins when present.)
-report:
+claim-registry:
+	$(PYTHON) scripts/claim_registry.py --write
+
+claim-surfaces: claim-registry
+	$(PYTHON) scripts/sync_claim_surfaces.py --write
+
+report: claim-surfaces
 	NODE_PATH=$$(npm root -g) node scripts/build_fyp_report_v5.js
 
 # Deterministic claim lock (D43): every load-bearing number in the canonical
 # report builder is asserted against the committed analysis artifacts. Also
 # runs inside pytest via tests/test_report_claims.py.
 verify-claims:
+	$(PYTHON) scripts/claim_registry.py --check
 	$(PYTHON) scripts/verify_report_claims.py
+	$(PYTHON) scripts/verify_claim_surfaces.py
+
+verify-claim-surfaces:
+	$(PYTHON) scripts/verify_claim_surfaces.py
 
 # Standalone full thesis (separate from the interim report; not overwritten by
 # `make report`). v4 = the 512-primary mirror (D41/D43); v1-v3 builders are
 # retained as 128-era history and their banner-marked docx live in docs/archive/.
-thesis:
+thesis: claim-surfaces
 	NODE_PATH=$$(npm root -g) node scripts/build_fyp_thesis_v4.js
 
 # Interim milestone report (~25-30 pp): a shorter, progress-framed derivative of
 # the thesis that REUSES the same 512-primary, claim-locked prose/numbers. The
 # full report (make report) stays as the final-thesis-grade master; this never
 # touches it. Output: docs/FYP_Interim_2026-07-10.docx.
-interim:
+interim: claim-surfaces
 	NODE_PATH=$$(npm root -g) node scripts/build_fyp_interim.js
 
 # Humanized variants (separate deliverables; AI-writing-tells removed, prose only;
 # every number byte-identical to the originals, verified). Originals stay the
 # claim-locked masters. Outputs: docs/FYP_*_humanized.docx.
-report-humanized:
+report-humanized: claim-surfaces
 	NODE_PATH=$$(npm root -g) node scripts/build_fyp_report_humanized.js
-thesis-humanized:
+thesis-humanized: claim-surfaces
 	NODE_PATH=$$(npm root -g) node scripts/build_fyp_thesis_humanized.js
-interim-humanized:
+interim-humanized: claim-surfaces
 	NODE_PATH=$$(npm root -g) node scripts/build_fyp_interim_humanized.js
 
 # Standalone agentic-AI workflow / methods report (how agentic AI tools were used to

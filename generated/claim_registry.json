@@ -1,0 +1,1391 @@
+{
+  "claims": {
+    "multiplicity": {
+      "asr_survivor_count": 0,
+      "family_size": 20,
+      "survivor_count": 3,
+      "survivors": [
+        {
+          "bh_q_value": 0.008,
+          "delta": -0.09,
+          "display_name": "Qwen3-1.7B",
+          "metric": "mmlu_accuracy",
+          "metric_label": "MMLU",
+          "p_value": 0.0006,
+          "pair_id": "qwen_2b"
+        },
+        {
+          "bh_q_value": 0.008,
+          "delta": -0.0316,
+          "display_name": "Llama-3.2-3B",
+          "metric": "arc_accuracy",
+          "metric_label": "ARC",
+          "p_value": 0.0008,
+          "pair_id": "llama_3_2_3b"
+        },
+        {
+          "bh_q_value": 0.0122,
+          "delta": -0.048,
+          "display_name": "Phi-4-mini",
+          "metric": "xstest_over_refusal",
+          "metric_label": "over-refusal",
+          "p_value": 0.0018,
+          "pair_id": "phi4_mini"
+        }
+      ]
+    },
+    "pairs": {
+      "llama_3_2_3b": {
+        "aliases": {
+          "fp16": "llama_3_2_3b_base",
+          "nf4": "llama_3_2_3b_4bit"
+        },
+        "arc": {
+          "baseline": 0.7295221843003413,
+          "bh_q_value": 0.008,
+          "bh_significant": true,
+          "ci": [
+            -0.04863481228668942,
+            -0.012798634812286689
+          ],
+          "delta": -0.03156996587030725,
+          "nf4": 0.6979522184300341,
+          "p_value": 0.0007995844433963207,
+          "significant": true
+        },
+        "asr": {
+          "base_to_harmful": 1,
+          "baseline": 0.1,
+          "bh_q_value": 0.1074,
+          "bh_significant": false,
+          "ci": [
+            -0.075,
+            -0.01
+          ],
+          "delta": -0.04,
+          "discordant": 10,
+          "harmful_to_safe": 9,
+          "nf4": 0.06,
+          "p_value": 0.021484375,
+          "significant": true
+        },
+        "asr_v2_proxy": {
+          "baseline": 0.09,
+          "ci": [
+            -0.05,
+            0.01
+          ],
+          "delta": -0.01999999999999999,
+          "nf4": 0.07,
+          "significant": false
+        },
+        "baseline_regex_classifier_kappa": 0.7093023255813949,
+        "cross_judge": {
+          "api_judge_delta": -0.034999999999999996,
+          "api_judge_mcnemar_p": 0.015625,
+          "api_judge_significant": true,
+          "harmbench_cls_delta": -0.04000000000000001,
+          "harmbench_cls_mcnemar_p": 0.021484375,
+          "harmbench_cls_significant": true,
+          "pair_id": "llama_3_2_3b",
+          "sign_agree": true,
+          "significance_agree": true
+        },
+        "evidence_status": "directional",
+        "family": "Llama",
+        "label": "capability_collapse_masquerading_as_safety",
+        "mmlu": {
+          "baseline": 0.61,
+          "bh_q_value": 0.2406,
+          "bh_significant": false,
+          "ci": [
+            -0.07333333333333333,
+            0.0
+          ],
+          "delta": -0.036666666666666625,
+          "nf4": 0.5733333333333334,
+          "p_value": 0.08014331245794892,
+          "significant": false
+        },
+        "model_id": "meta-llama/Llama-3.2-3B-Instruct",
+        "name": "Llama-3.2-3B",
+        "params_b": 3.0,
+        "precision": {
+          "arc_accuracy": {
+            "delta_int8_vs_fp16": -0.0068,
+            "delta_nf4_vs_fp16": -0.0316,
+            "delta_nf4_vs_int8": -0.0247,
+            "fp16": 0.7295221843003413,
+            "int8": 0.7226962457337884,
+            "nf4": 0.6979522184300341,
+            "shape": "graded"
+          },
+          "harmbench_asr_judge": {
+            "delta_int8_vs_fp16": 0.005,
+            "delta_nf4_vs_fp16": -0.04,
+            "delta_nf4_vs_int8": -0.045,
+            "fp16": 0.1,
+            "int8": 0.105,
+            "nf4": 0.06,
+            "shape": "non_monotonic"
+          },
+          "harmbench_asr_v2": {
+            "delta_int8_vs_fp16": 0.025,
+            "delta_nf4_vs_fp16": -0.02,
+            "delta_nf4_vs_int8": -0.045,
+            "fp16": 0.09,
+            "int8": 0.115,
+            "nf4": 0.07,
+            "shape": "non_monotonic"
+          },
+          "mmlu_accuracy": {
+            "delta_int8_vs_fp16": 0.0067,
+            "delta_nf4_vs_fp16": -0.0367,
+            "delta_nf4_vs_int8": -0.0433,
+            "fp16": 0.61,
+            "int8": 0.6166666666666667,
+            "nf4": 0.5733333333333334,
+            "shape": "non_monotonic"
+          },
+          "xstest_over_refusal": {
+            "delta_int8_vs_fp16": 0.004,
+            "delta_nf4_vs_fp16": 0.016,
+            "delta_nf4_vs_int8": 0.012,
+            "fp16": 0.032,
+            "int8": 0.036,
+            "nf4": 0.048,
+            "shape": "graded"
+          }
+        },
+        "revision": "0cb88a4f764b7a12671c53f0838cd831a0843b95",
+        "xstest": {
+          "baseline": 0.032,
+          "bh_q_value": 0.4818,
+          "bh_significant": false,
+          "ci": [
+            -0.004,
+            0.04
+          ],
+          "delta": 0.016,
+          "nf4": 0.048,
+          "p_value": 0.2890625,
+          "significant": false
+        },
+        "xstest_judge": {
+          "judge_broad": {
+            "ci_lower": -0.032,
+            "ci_upper": 0.032,
+            "delta": 0.0,
+            "direction": "flat",
+            "mcnemar_b_to_refusal": 8,
+            "mcnemar_c_to_compliance": 8,
+            "mcnemar_discordant": 16,
+            "mcnemar_p_value": 1.0,
+            "significant": false
+          },
+          "judge_strict": {
+            "ci_lower": -0.028,
+            "ci_upper": 0.036,
+            "delta": 0.004,
+            "direction": "up",
+            "mcnemar_b_to_refusal": 9,
+            "mcnemar_c_to_compliance": 8,
+            "mcnemar_discordant": 17,
+            "mcnemar_p_value": 1.0,
+            "significant": false
+          },
+          "pair_id": "llama_3_2_3b"
+        }
+      },
+      "mistral_7b": {
+        "aliases": {
+          "fp16": "mistral_7b_base",
+          "nf4": "mistral_7b_4bit"
+        },
+        "arc": {
+          "baseline": 0.7337883959044369,
+          "bh_q_value": 0.4818,
+          "bh_significant": false,
+          "ci": [
+            -0.005119453924914676,
+            0.024744027303754267
+          ],
+          "delta": 0.009385665529010212,
+          "nf4": 0.7431740614334471,
+          "p_value": 0.2836071084054854,
+          "significant": false
+        },
+        "asr": {
+          "base_to_harmful": 17,
+          "baseline": 0.585,
+          "bh_q_value": 0.7839,
+          "bh_significant": false,
+          "ci": [
+            -0.08,
+            0.04
+          ],
+          "delta": -0.02,
+          "discordant": 38,
+          "harmful_to_safe": 21,
+          "nf4": 0.565,
+          "p_value": 0.6271025701571489,
+          "significant": false
+        },
+        "asr_v2_proxy": {
+          "baseline": 0.83,
+          "ci": [
+            0.015,
+            0.105
+          ],
+          "delta": 0.06000000000000005,
+          "nf4": 0.89,
+          "significant": true
+        },
+        "baseline_regex_classifier_kappa": 0.29038071637756274,
+        "cross_judge": {
+          "api_judge_delta": -0.0050000000000000044,
+          "api_judge_mcnemar_p": 1.0,
+          "api_judge_significant": false,
+          "harmbench_cls_delta": -0.020000000000000018,
+          "harmbench_cls_mcnemar_p": 0.6271025701571489,
+          "harmbench_cls_significant": false,
+          "pair_id": "mistral_7b",
+          "sign_agree": true,
+          "significance_agree": true
+        },
+        "evidence_status": "directional",
+        "family": "Mistral",
+        "label": "alignment_improvement",
+        "mmlu": {
+          "baseline": 0.6333333333333333,
+          "bh_q_value": 0.6024,
+          "bh_significant": false,
+          "ci": [
+            -0.05674999999999985,
+            0.016666666666666666
+          ],
+          "delta": -0.020000000000000018,
+          "nf4": 0.6133333333333333,
+          "p_value": 0.39152830513194203,
+          "significant": false
+        },
+        "model_id": "mistralai/Mistral-7B-Instruct-v0.3",
+        "name": "Mistral-7B",
+        "params_b": 7.0,
+        "precision": {
+          "arc_accuracy": {
+            "delta_int8_vs_fp16": 0.0009,
+            "delta_nf4_vs_fp16": 0.0094,
+            "delta_nf4_vs_int8": 0.0085,
+            "fp16": 0.7337883959044369,
+            "int8": 0.734641638225256,
+            "nf4": 0.7431740614334471,
+            "shape": "cliff_at_nf4"
+          },
+          "harmbench_asr_judge": {
+            "delta_int8_vs_fp16": -0.02,
+            "delta_nf4_vs_fp16": -0.02,
+            "delta_nf4_vs_int8": 0.0,
+            "fp16": 0.585,
+            "int8": 0.565,
+            "nf4": 0.565,
+            "shape": "cliff_at_int8"
+          },
+          "harmbench_asr_v2": {
+            "delta_int8_vs_fp16": 0.04,
+            "delta_nf4_vs_fp16": 0.06,
+            "delta_nf4_vs_int8": 0.02,
+            "fp16": 0.83,
+            "int8": 0.87,
+            "nf4": 0.89,
+            "shape": "graded"
+          },
+          "mmlu_accuracy": {
+            "delta_int8_vs_fp16": 0.0133,
+            "delta_nf4_vs_fp16": -0.02,
+            "delta_nf4_vs_int8": -0.0333,
+            "fp16": 0.6333333333333333,
+            "int8": 0.6466666666666666,
+            "nf4": 0.6133333333333333,
+            "shape": "non_monotonic"
+          },
+          "xstest_over_refusal": {
+            "delta_int8_vs_fp16": -0.004,
+            "delta_nf4_vs_fp16": 0.0,
+            "delta_nf4_vs_int8": 0.004,
+            "fp16": 0.004,
+            "int8": 0.0,
+            "nf4": 0.004,
+            "shape": "non_monotonic"
+          }
+        },
+        "revision": "c170c708c41dac9275d15a8fff4eca08d52bab71",
+        "xstest": {
+          "baseline": 0.004,
+          "bh_q_value": 1.0,
+          "bh_significant": false,
+          "ci": [
+            -0.012,
+            0.012
+          ],
+          "delta": 0.0,
+          "nf4": 0.004,
+          "p_value": 1.0,
+          "significant": false
+        },
+        "xstest_judge": {
+          "judge_broad": {
+            "ci_lower": -0.044,
+            "ci_upper": 0.024,
+            "delta": -0.008,
+            "direction": "down",
+            "mcnemar_b_to_refusal": 8,
+            "mcnemar_c_to_compliance": 10,
+            "mcnemar_discordant": 18,
+            "mcnemar_p_value": 0.8145294189453125,
+            "significant": false
+          },
+          "judge_strict": {
+            "ci_lower": -0.036,
+            "ci_upper": 0.028,
+            "delta": -0.004,
+            "direction": "down",
+            "mcnemar_b_to_refusal": 8,
+            "mcnemar_c_to_compliance": 9,
+            "mcnemar_discordant": 17,
+            "mcnemar_p_value": 1.0,
+            "significant": false
+          },
+          "pair_id": "mistral_7b"
+        }
+      },
+      "phi4_mini": {
+        "aliases": {
+          "fp16": "phi4_mini_base",
+          "nf4": "phi4_mini_4bit"
+        },
+        "arc": {
+          "baseline": 0.8131399317406144,
+          "bh_q_value": 0.2406,
+          "bh_significant": false,
+          "ci": [
+            -0.031569965870307165,
+            0.0008532423208191126
+          ],
+          "delta": -0.014505119453924964,
+          "nf4": 0.7986348122866894,
+          "p_value": 0.09294694311794123,
+          "significant": false
+        },
+        "asr": {
+          "base_to_harmful": 9,
+          "baseline": 0.07,
+          "bh_q_value": 0.6056,
+          "bh_significant": false,
+          "ci": [
+            -0.015,
+            0.055
+          ],
+          "delta": 0.02,
+          "discordant": 14,
+          "harmful_to_safe": 5,
+          "nf4": 0.09,
+          "p_value": 0.4239501953125,
+          "significant": false
+        },
+        "asr_v2_proxy": {
+          "baseline": 0.075,
+          "ci": [
+            -0.025,
+            0.025
+          ],
+          "delta": 0.0,
+          "nf4": 0.075,
+          "significant": false
+        },
+        "baseline_regex_classifier_kappa": 0.6654275092936801,
+        "cross_judge": {
+          "api_judge_delta": 0.020000000000000004,
+          "api_judge_mcnemar_p": 0.3876953125,
+          "api_judge_significant": false,
+          "harmbench_cls_delta": 0.01999999999999999,
+          "harmbench_cls_mcnemar_p": 0.4239501953125,
+          "harmbench_cls_significant": false,
+          "pair_id": "phi4_mini",
+          "sign_agree": true,
+          "significance_agree": true
+        },
+        "evidence_status": "directional",
+        "family": "Phi",
+        "label": "alignment_degradation",
+        "mmlu": {
+          "baseline": 0.7033333333333334,
+          "bh_q_value": 0.4307,
+          "bh_significant": false,
+          "ci": [
+            -0.06333333333333334,
+            0.01
+          ],
+          "delta": -0.026666666666666727,
+          "nf4": 0.6766666666666666,
+          "p_value": 0.21532714972272515,
+          "significant": false
+        },
+        "model_id": "microsoft/Phi-4-mini-instruct",
+        "name": "Phi-4-mini",
+        "params_b": 3.8,
+        "precision": {
+          "arc_accuracy": {
+            "delta_int8_vs_fp16": 0.0009,
+            "delta_nf4_vs_fp16": -0.0145,
+            "delta_nf4_vs_int8": -0.0154,
+            "fp16": 0.8131399317406144,
+            "int8": 0.8139931740614335,
+            "nf4": 0.7986348122866894,
+            "shape": "non_monotonic"
+          },
+          "harmbench_asr_judge": {
+            "delta_int8_vs_fp16": 0.02,
+            "delta_nf4_vs_fp16": 0.02,
+            "delta_nf4_vs_int8": 0.0,
+            "fp16": 0.07,
+            "int8": 0.09,
+            "nf4": 0.09,
+            "shape": "cliff_at_int8"
+          },
+          "harmbench_asr_v2": {
+            "delta_int8_vs_fp16": 0.01,
+            "delta_nf4_vs_fp16": 0.0,
+            "delta_nf4_vs_int8": -0.01,
+            "fp16": 0.075,
+            "int8": 0.085,
+            "nf4": 0.075,
+            "shape": "non_monotonic"
+          },
+          "mmlu_accuracy": {
+            "delta_int8_vs_fp16": -0.0067,
+            "delta_nf4_vs_fp16": -0.0267,
+            "delta_nf4_vs_int8": -0.02,
+            "fp16": 0.7033333333333334,
+            "int8": 0.6966666666666667,
+            "nf4": 0.6766666666666666,
+            "shape": "graded"
+          },
+          "xstest_over_refusal": {
+            "delta_int8_vs_fp16": -0.008,
+            "delta_nf4_vs_fp16": -0.048,
+            "delta_nf4_vs_int8": -0.04,
+            "fp16": 0.128,
+            "int8": 0.12,
+            "nf4": 0.08,
+            "shape": "cliff_at_nf4"
+          }
+        },
+        "revision": "cfbefacb99257ffa30c83adab238a50856ac3083",
+        "xstest": {
+          "baseline": 0.128,
+          "bh_q_value": 0.0122,
+          "bh_significant": true,
+          "ci": [
+            -0.076,
+            -0.02
+          ],
+          "delta": -0.048,
+          "nf4": 0.08,
+          "p_value": 0.0018310546875,
+          "significant": true
+        },
+        "xstest_judge": {
+          "judge_broad": {
+            "ci_lower": -0.048,
+            "ci_upper": 0.036,
+            "delta": -0.004,
+            "direction": "down",
+            "mcnemar_b_to_refusal": 14,
+            "mcnemar_c_to_compliance": 15,
+            "mcnemar_discordant": 29,
+            "mcnemar_p_value": 1.0,
+            "significant": false
+          },
+          "judge_strict": {
+            "ci_lower": -0.028,
+            "ci_upper": 0.06,
+            "delta": 0.016,
+            "direction": "up",
+            "mcnemar_b_to_refusal": 18,
+            "mcnemar_c_to_compliance": 14,
+            "mcnemar_discordant": 32,
+            "mcnemar_p_value": 0.5966148958541453,
+            "significant": false
+          },
+          "pair_id": "phi4_mini"
+        }
+      },
+      "qwen_2b": {
+        "aliases": {
+          "fp16": "qwen_2b_base",
+          "nf4": "qwen_2b_4bit"
+        },
+        "arc": {
+          "baseline": 0.7226962457337884,
+          "bh_q_value": 0.6164,
+          "bh_significant": false,
+          "ci": [
+            -0.032423208191126277,
+            0.013651877133105802
+          ],
+          "delta": -0.009385665529010323,
+          "nf4": 0.7133105802047781,
+          "p_value": 0.4623030339182505,
+          "significant": false
+        },
+        "asr": {
+          "base_to_harmful": 16,
+          "baseline": 0.255,
+          "bh_q_value": 1.0,
+          "bh_significant": false,
+          "ci": [
+            -0.055,
+            0.055
+          ],
+          "delta": 0.0,
+          "discordant": 32,
+          "harmful_to_safe": 16,
+          "nf4": 0.255,
+          "p_value": 1.0,
+          "significant": false
+        },
+        "asr_v2_proxy": {
+          "baseline": 0.595,
+          "ci": [
+            -0.07,
+            0.02
+          ],
+          "delta": -0.025000000000000022,
+          "nf4": 0.57,
+          "significant": false
+        },
+        "baseline_regex_classifier_kappa": 0.359619430976123,
+        "cross_judge": {
+          "api_judge_delta": 0.0050000000000000044,
+          "api_judge_mcnemar_p": 1.0,
+          "api_judge_significant": false,
+          "harmbench_cls_delta": 0.0,
+          "harmbench_cls_mcnemar_p": 1.0,
+          "harmbench_cls_significant": false,
+          "pair_id": "qwen_2b",
+          "sign_agree": false,
+          "significance_agree": true
+        },
+        "evidence_status": "confirmed",
+        "family": "Qwen",
+        "label": "broad_degradation",
+        "mmlu": {
+          "baseline": 0.6433333333333333,
+          "bh_q_value": 0.008,
+          "bh_significant": true,
+          "ci": [
+            -0.14,
+            -0.043333333333333335
+          ],
+          "delta": -0.08999999999999997,
+          "nf4": 0.5533333333333333,
+          "p_value": 0.0005843646280443461,
+          "significant": true
+        },
+        "model_id": "Qwen/Qwen3-1.7B",
+        "name": "Qwen3-1.7B",
+        "params_b": 1.7,
+        "precision": {
+          "arc_accuracy": {
+            "delta_int8_vs_fp16": 0.0128,
+            "delta_nf4_vs_fp16": -0.0094,
+            "delta_nf4_vs_int8": -0.0222,
+            "fp16": 0.7226962457337884,
+            "int8": 0.735494880546075,
+            "nf4": 0.7133105802047781,
+            "shape": "non_monotonic"
+          },
+          "harmbench_asr_judge": {
+            "delta_int8_vs_fp16": -0.01,
+            "delta_nf4_vs_fp16": 0.0,
+            "delta_nf4_vs_int8": 0.01,
+            "fp16": 0.255,
+            "int8": 0.245,
+            "nf4": 0.255,
+            "shape": "non_monotonic"
+          },
+          "harmbench_asr_v2": {
+            "delta_int8_vs_fp16": -0.02,
+            "delta_nf4_vs_fp16": -0.025,
+            "delta_nf4_vs_int8": -0.005,
+            "fp16": 0.595,
+            "int8": 0.575,
+            "nf4": 0.57,
+            "shape": "cliff_at_int8"
+          },
+          "mmlu_accuracy": {
+            "delta_int8_vs_fp16": 0.0133,
+            "delta_nf4_vs_fp16": -0.09,
+            "delta_nf4_vs_int8": -0.1033,
+            "fp16": 0.6433333333333333,
+            "int8": 0.6566666666666666,
+            "nf4": 0.5533333333333333,
+            "shape": "non_monotonic"
+          },
+          "xstest_over_refusal": {
+            "delta_int8_vs_fp16": -0.008,
+            "delta_nf4_vs_fp16": -0.024,
+            "delta_nf4_vs_int8": -0.016,
+            "fp16": 0.052,
+            "int8": 0.044,
+            "nf4": 0.028,
+            "shape": "graded"
+          }
+        },
+        "revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+        "xstest": {
+          "baseline": 0.052,
+          "bh_q_value": 0.2431,
+          "bh_significant": false,
+          "ci": [
+            -0.048,
+            0.0
+          ],
+          "delta": -0.023999999999999997,
+          "nf4": 0.028,
+          "p_value": 0.109375,
+          "significant": false
+        },
+        "xstest_judge": {
+          "judge_broad": {
+            "ci_lower": -0.004,
+            "ci_upper": 0.084,
+            "delta": 0.04,
+            "direction": "up",
+            "mcnemar_b_to_refusal": 21,
+            "mcnemar_c_to_compliance": 11,
+            "mcnemar_discordant": 32,
+            "mcnemar_p_value": 0.11018416518345475,
+            "significant": false
+          },
+          "judge_strict": {
+            "ci_lower": 0.0,
+            "ci_upper": 0.08,
+            "delta": 0.04,
+            "direction": "up",
+            "mcnemar_b_to_refusal": 19,
+            "mcnemar_c_to_compliance": 9,
+            "mcnemar_discordant": 28,
+            "mcnemar_p_value": 0.08715855330228806,
+            "significant": false
+          },
+          "pair_id": "qwen_2b"
+        }
+      },
+      "qwen_4b": {
+        "aliases": {
+          "fp16": "qwen_4b_base",
+          "nf4": "qwen_4b_4bit"
+        },
+        "arc": {
+          "baseline": 0.8762798634812287,
+          "bh_q_value": 0.1687,
+          "bh_significant": false,
+          "ci": [
+            -0.031569965870307165,
+            -0.0017064846416382253
+          ],
+          "delta": -0.016211604095563104,
+          "nf4": 0.8600682593856656,
+          "p_value": 0.042165443994951105,
+          "significant": true
+        },
+        "asr": {
+          "base_to_harmful": 13,
+          "baseline": 0.115,
+          "bh_q_value": 0.2406,
+          "bh_significant": false,
+          "ci": [
+            0.0,
+            0.08
+          ],
+          "delta": 0.04,
+          "discordant": 18,
+          "harmful_to_safe": 5,
+          "nf4": 0.155,
+          "p_value": 0.09625244140625,
+          "significant": false
+        },
+        "asr_v2_proxy": {
+          "baseline": 0.235,
+          "ci": [
+            0.03,
+            0.115
+          ],
+          "delta": 0.07,
+          "nf4": 0.305,
+          "significant": true
+        },
+        "baseline_regex_classifier_kappa": 0.49315762797769896,
+        "cross_judge": {
+          "api_judge_delta": 0.04000000000000001,
+          "api_judge_mcnemar_p": 0.11531829833984375,
+          "api_judge_significant": false,
+          "harmbench_cls_delta": 0.039999999999999994,
+          "harmbench_cls_mcnemar_p": 0.09625244140625,
+          "harmbench_cls_significant": false,
+          "pair_id": "qwen_4b",
+          "sign_agree": true,
+          "significance_agree": true
+        },
+        "evidence_status": "directional",
+        "family": "Qwen",
+        "label": "alignment_degradation",
+        "mmlu": {
+          "baseline": 0.7466666666666667,
+          "bh_q_value": 1.0,
+          "bh_significant": false,
+          "ci": [
+            -0.04,
+            0.03333333333333333
+          ],
+          "delta": -0.0033333333333334103,
+          "nf4": 0.7433333333333333,
+          "p_value": 1.0,
+          "significant": false
+        },
+        "model_id": "Qwen/Qwen3-4B",
+        "name": "Qwen3-4B",
+        "params_b": 4.0,
+        "precision": {
+          "arc_accuracy": {
+            "delta_int8_vs_fp16": -0.0026,
+            "delta_nf4_vs_fp16": -0.0162,
+            "delta_nf4_vs_int8": -0.0137,
+            "fp16": 0.8762798634812287,
+            "int8": 0.8737201365187713,
+            "nf4": 0.8600682593856656,
+            "shape": "cliff_at_nf4"
+          },
+          "harmbench_asr_judge": {
+            "delta_int8_vs_fp16": 0.01,
+            "delta_nf4_vs_fp16": 0.04,
+            "delta_nf4_vs_int8": 0.03,
+            "fp16": 0.115,
+            "int8": 0.125,
+            "nf4": 0.155,
+            "shape": "graded"
+          },
+          "harmbench_asr_v2": {
+            "delta_int8_vs_fp16": 0.005,
+            "delta_nf4_vs_fp16": 0.07,
+            "delta_nf4_vs_int8": 0.065,
+            "fp16": 0.235,
+            "int8": 0.24,
+            "nf4": 0.305,
+            "shape": "cliff_at_nf4"
+          },
+          "mmlu_accuracy": {
+            "delta_int8_vs_fp16": -0.0067,
+            "delta_nf4_vs_fp16": -0.0033,
+            "delta_nf4_vs_int8": 0.0033,
+            "fp16": 0.7466666666666667,
+            "int8": 0.74,
+            "nf4": 0.7433333333333333,
+            "shape": "non_monotonic"
+          },
+          "xstest_over_refusal": {
+            "delta_int8_vs_fp16": 0.004,
+            "delta_nf4_vs_fp16": -0.004,
+            "delta_nf4_vs_int8": -0.008,
+            "fp16": 0.028,
+            "int8": 0.032,
+            "nf4": 0.024,
+            "shape": "non_monotonic"
+          }
+        },
+        "revision": "1cfa9a7208912126459214e8b04321603b3df60c",
+        "xstest": {
+          "baseline": 0.028,
+          "bh_q_value": 1.0,
+          "bh_significant": false,
+          "ci": [
+            -0.02,
+            0.008
+          ],
+          "delta": -0.004,
+          "nf4": 0.024,
+          "p_value": 1.0,
+          "significant": false
+        },
+        "xstest_judge": {
+          "judge_broad": {
+            "ci_lower": -0.06,
+            "ci_upper": 0.02,
+            "delta": -0.02,
+            "direction": "down",
+            "mcnemar_b_to_refusal": 10,
+            "mcnemar_c_to_compliance": 15,
+            "mcnemar_discordant": 25,
+            "mcnemar_p_value": 0.42435622215270996,
+            "significant": false
+          },
+          "judge_strict": {
+            "ci_lower": -0.052,
+            "ci_upper": 0.024,
+            "delta": -0.016,
+            "direction": "down",
+            "mcnemar_b_to_refusal": 10,
+            "mcnemar_c_to_compliance": 14,
+            "mcnemar_discordant": 24,
+            "mcnemar_p_value": 0.5412561893463135,
+            "significant": false
+          },
+          "pair_id": "qwen_4b"
+        }
+      }
+    },
+    "study": {
+      "alias_count": 10,
+      "benchmarks": [
+        "harmbench",
+        "xstest",
+        "mmlu",
+        "arc"
+      ],
+      "generation_budget": 512,
+      "pair_count": 5,
+      "pair_order": [
+        "qwen_2b",
+        "qwen_4b",
+        "llama_3_2_3b",
+        "mistral_7b",
+        "phi4_mini"
+      ],
+      "primary_config": "configs/tc1_512.yaml",
+      "status": {
+        "harmbench_human_validation_complete": true,
+        "phase_c_blocked_by": [
+          "xstest_human_gold"
+        ],
+        "primary_results_complete": true,
+        "xstest_human_gold_complete": false
+      }
+    },
+    "validation": {
+      "classifier_human_kappa": 0.5908,
+      "classifier_over_flags": 18,
+      "human_n": 200,
+      "judge_only": 28,
+      "regex_human_kappa": 0.1095,
+      "regex_only": 325,
+      "regex_over_flags": 101
+    }
+  },
+  "registry_fingerprint": "91597bff2e1e6624c59d4bc619d416246d91a25e8f802af5dc4e6ccc0c8010e2",
+  "render": {
+    "asr_forest_caption": "Quantization effect on harmful compliance at the 512-token reference budget: per-pair judge ΔASR (4-bit − fp16) with paired-bootstrap 95% confidence intervals. Filled markers denote intervals that exclude zero; only Llama-3.2-3B reaches significance, and it is a decrease (safety-improving) — no pair shows a significant increase. Source: results_512/analysis/judge_agreement.json.",
+    "bh_survivor_sentence": "Exactly 3 primary contrasts survive BH-FDR: Qwen3-1.7B MMLU (−0.090, q = 0.008), Llama-3.2-3B ARC (−0.032, q = 0.008), Phi-4-mini over-refusal (−0.048, q = 0.012). No HarmBench ASR contrast survives.",
+    "deck_pairs": [
+      {
+        "arc": {
+          "base": 0.723,
+          "q": 0.713
+        },
+        "arcDelta": -0.009,
+        "arcSig": false,
+        "asr": {
+          "fp16": 0.255,
+          "int8": 0.245,
+          "nf4": 0.255
+        },
+        "asrDelta": 0.0,
+        "asrSig": false,
+        "fam": "Qwen",
+        "id": "qwen_2b",
+        "kappa": 0.36,
+        "label": "broad_degradation",
+        "mmlu": {
+          "fp16": 0.643,
+          "int8": 0.657,
+          "nf4": 0.553
+        },
+        "mmluDelta": -0.09,
+        "mmluSig": true,
+        "name": "Qwen3-1.7B",
+        "or": {
+          "base": 0.052,
+          "q": 0.028
+        },
+        "orDelta": -0.024,
+        "orSig": false,
+        "params": 1.7,
+        "v2": {
+          "base": 0.595
+        }
+      },
+      {
+        "arc": {
+          "base": 0.876,
+          "q": 0.86
+        },
+        "arcDelta": -0.016,
+        "arcSig": true,
+        "asr": {
+          "fp16": 0.115,
+          "int8": 0.125,
+          "nf4": 0.155
+        },
+        "asrDelta": 0.04,
+        "asrSig": false,
+        "fam": "Qwen",
+        "id": "qwen_4b",
+        "kappa": 0.49,
+        "label": "alignment_degradation",
+        "mmlu": {
+          "fp16": 0.747,
+          "int8": 0.74,
+          "nf4": 0.743
+        },
+        "mmluDelta": -0.003,
+        "mmluSig": false,
+        "name": "Qwen3-4B",
+        "or": {
+          "base": 0.028,
+          "q": 0.024
+        },
+        "orDelta": -0.004,
+        "orSig": false,
+        "params": 4.0,
+        "v2": {
+          "base": 0.235
+        }
+      },
+      {
+        "arc": {
+          "base": 0.73,
+          "q": 0.698
+        },
+        "arcDelta": -0.032,
+        "arcSig": true,
+        "asr": {
+          "fp16": 0.1,
+          "int8": 0.105,
+          "nf4": 0.06
+        },
+        "asrDelta": -0.04,
+        "asrSig": true,
+        "fam": "Llama",
+        "id": "llama_3_2_3b",
+        "kappa": 0.71,
+        "label": "capability_collapse_masquerading_as_safety",
+        "mmlu": {
+          "fp16": 0.61,
+          "int8": 0.617,
+          "nf4": 0.573
+        },
+        "mmluDelta": -0.037,
+        "mmluSig": false,
+        "name": "Llama-3.2-3B",
+        "or": {
+          "base": 0.032,
+          "q": 0.048
+        },
+        "orDelta": 0.016,
+        "orSig": false,
+        "params": 3.0,
+        "v2": {
+          "base": 0.09
+        }
+      },
+      {
+        "arc": {
+          "base": 0.734,
+          "q": 0.743
+        },
+        "arcDelta": 0.009,
+        "arcSig": false,
+        "asr": {
+          "fp16": 0.585,
+          "int8": 0.565,
+          "nf4": 0.565
+        },
+        "asrDelta": -0.02,
+        "asrSig": false,
+        "fam": "Mistral",
+        "id": "mistral_7b",
+        "kappa": 0.29,
+        "label": "alignment_improvement",
+        "mmlu": {
+          "fp16": 0.633,
+          "int8": 0.647,
+          "nf4": 0.613
+        },
+        "mmluDelta": -0.02,
+        "mmluSig": false,
+        "name": "Mistral-7B",
+        "or": {
+          "base": 0.004,
+          "q": 0.004
+        },
+        "orDelta": 0.0,
+        "orSig": false,
+        "params": 7.0,
+        "v2": {
+          "base": 0.83
+        }
+      },
+      {
+        "arc": {
+          "base": 0.813,
+          "q": 0.799
+        },
+        "arcDelta": -0.015,
+        "arcSig": false,
+        "asr": {
+          "fp16": 0.07,
+          "int8": 0.09,
+          "nf4": 0.09
+        },
+        "asrDelta": 0.02,
+        "asrSig": false,
+        "fam": "Phi",
+        "id": "phi4_mini",
+        "kappa": 0.67,
+        "label": "alignment_degradation",
+        "mmlu": {
+          "fp16": 0.703,
+          "int8": 0.697,
+          "nf4": 0.677
+        },
+        "mmluDelta": -0.027,
+        "mmluSig": false,
+        "name": "Phi-4-mini",
+        "or": {
+          "base": 0.128,
+          "q": 0.08
+        },
+        "orDelta": -0.048,
+        "orSig": true,
+        "params": 3.8,
+        "v2": {
+          "base": 0.075
+        }
+      }
+    ],
+    "defense_asr_rows": [
+      {
+        "bh_q_value": 1.0,
+        "delta_pp": 0.0,
+        "display_name": "Qwen3-1.7B",
+        "p_value": 1.0,
+        "pair_id": "qwen_2b"
+      },
+      {
+        "bh_q_value": 0.2406,
+        "delta_pp": 4.0,
+        "display_name": "Qwen3-4B",
+        "p_value": 0.09625244140625,
+        "pair_id": "qwen_4b"
+      },
+      {
+        "bh_q_value": 0.1074,
+        "delta_pp": -4.0,
+        "display_name": "Llama-3.2-3B",
+        "p_value": 0.021484375,
+        "pair_id": "llama_3_2_3b"
+      },
+      {
+        "bh_q_value": 0.7839,
+        "delta_pp": -2.0,
+        "display_name": "Mistral-7B",
+        "p_value": 0.6271025701571489,
+        "pair_id": "mistral_7b"
+      },
+      {
+        "bh_q_value": 0.6056,
+        "delta_pp": 2.0,
+        "display_name": "Phi-4-mini",
+        "p_value": 0.4239501953125,
+        "pair_id": "phi4_mini"
+      }
+    ],
+    "report_table_6_1": [
+      [
+        "qwen_2b",
+        "HarmBench ASR (judge)",
+        "0.255",
+        "0.255",
+        "0.000 [−0.055, +0.055]",
+        "no"
+      ],
+      [
+        "qwen_2b",
+        "  HarmBench non-refusal (v2 proxy)",
+        "0.595",
+        "0.570",
+        "−0.025 [−0.070, +0.020]",
+        "no"
+      ],
+      [
+        "qwen_2b",
+        "XSTest over-refusal",
+        "0.052",
+        "0.028",
+        "−0.024 [−0.048, 0.000]",
+        "no"
+      ],
+      [
+        "qwen_2b",
+        "MMLU accuracy",
+        "0.643",
+        "0.553",
+        "−0.090 [−0.140, −0.043]",
+        "yes"
+      ],
+      [
+        "qwen_4b",
+        "HarmBench ASR (judge)",
+        "0.115",
+        "0.155",
+        "+0.040 [0.000, +0.080]",
+        "no"
+      ],
+      [
+        "qwen_4b",
+        "  HarmBench non-refusal (v2 proxy)",
+        "0.235",
+        "0.305",
+        "+0.070 [+0.030, +0.115]",
+        "(proxy)"
+      ],
+      [
+        "qwen_4b",
+        "XSTest over-refusal",
+        "0.028",
+        "0.024",
+        "−0.004 [−0.020, +0.008]",
+        "no"
+      ],
+      [
+        "qwen_4b",
+        "MMLU accuracy",
+        "0.747",
+        "0.743",
+        "−0.003 [−0.040, +0.033]",
+        "no"
+      ],
+      [
+        "llama_3_2_3b",
+        "HarmBench ASR (judge)",
+        "0.100",
+        "0.060",
+        "−0.040 [−0.075, −0.010]",
+        "yes"
+      ],
+      [
+        "llama_3_2_3b",
+        "  HarmBench non-refusal (v2 proxy)",
+        "0.090",
+        "0.070",
+        "−0.020 [−0.050, +0.010]",
+        "no"
+      ],
+      [
+        "llama_3_2_3b",
+        "XSTest over-refusal",
+        "0.032",
+        "0.048",
+        "+0.016 [−0.004, +0.040]",
+        "no"
+      ],
+      [
+        "llama_3_2_3b",
+        "MMLU accuracy",
+        "0.610",
+        "0.573",
+        "−0.037 [−0.073, 0.000]",
+        "no"
+      ],
+      [
+        "mistral_7b",
+        "HarmBench ASR (judge)",
+        "0.585",
+        "0.565",
+        "−0.020 [−0.080, +0.040]",
+        "no"
+      ],
+      [
+        "mistral_7b",
+        "  HarmBench non-refusal (v2 proxy)",
+        "0.830",
+        "0.890",
+        "+0.060 [+0.015, +0.105]",
+        "(proxy)"
+      ],
+      [
+        "mistral_7b",
+        "XSTest over-refusal",
+        "0.004",
+        "0.004",
+        "0.000 [−0.012, +0.012]",
+        "no"
+      ],
+      [
+        "mistral_7b",
+        "MMLU accuracy",
+        "0.633",
+        "0.613",
+        "−0.020 [−0.057, +0.017]",
+        "no"
+      ],
+      [
+        "phi4_mini",
+        "HarmBench ASR (judge)",
+        "0.070",
+        "0.090",
+        "+0.020 [−0.015, +0.055]",
+        "no"
+      ],
+      [
+        "phi4_mini",
+        "  HarmBench non-refusal (v2 proxy)",
+        "0.075",
+        "0.075",
+        "0.000 [−0.025, +0.025]",
+        "no"
+      ],
+      [
+        "phi4_mini",
+        "XSTest over-refusal",
+        "0.128",
+        "0.080",
+        "−0.048 [−0.076, −0.020]",
+        "yes"
+      ],
+      [
+        "phi4_mini",
+        "MMLU accuracy",
+        "0.703",
+        "0.677",
+        "−0.027 [−0.063, +0.010]",
+        "no"
+      ]
+    ],
+    "report_table_6_2": [
+      [
+        "HarmBench ΔASR (judge)",
+        "0.000",
+        "+0.040",
+        "−0.040  ★",
+        "−0.020",
+        "+0.020"
+      ],
+      [
+        "  HarmBench ΔASR (v2 proxy)",
+        "−0.025",
+        "+0.070",
+        "−0.020",
+        "+0.060",
+        "0.000"
+      ],
+      [
+        "  HarmBench McNemar exact p",
+        "1.000",
+        "0.096",
+        "0.021",
+        "0.627",
+        "0.424"
+      ],
+      [
+        "XSTest Δover-refusal",
+        "−0.024",
+        "−0.004",
+        "+0.016",
+        "0.000",
+        "−0.048  ★"
+      ],
+      [
+        "MMLU Δaccuracy",
+        "−0.090  ★",
+        "−0.003",
+        "−0.037",
+        "−0.020",
+        "−0.027"
+      ],
+      [
+        "Interpretation label (judge-primary)",
+        "broad_degradation",
+        "alignment_degradation",
+        "capability_collapse_masquerading_as_safety",
+        "alignment_improvement",
+        "alignment_degradation"
+      ],
+      [
+        "Evidence status (two-layer)",
+        "confirmed",
+        "directional",
+        "directional",
+        "directional",
+        "directional"
+      ]
+    ],
+    "thesis_table_6_2": [
+      [
+        "qwen_2b",
+        "0.000 [−0.055, +0.055]",
+        "no",
+        "−0.090*",
+        "−0.009",
+        "broad_degradation (capability-driven)"
+      ],
+      [
+        "qwen_4b",
+        "+0.040 [0.000, +0.080]",
+        "no",
+        "−0.003",
+        "−0.016*",
+        "alignment_degradation (dir.)"
+      ],
+      [
+        "llama_3_2_3b",
+        "−0.040 [−0.075, −0.010]",
+        "yes†",
+        "−0.037",
+        "−0.032*",
+        "capability_collapse_masq._as_safety (dir.)"
+      ],
+      [
+        "mistral_7b",
+        "−0.020 [−0.080, +0.040]",
+        "no",
+        "−0.020",
+        "+0.009",
+        "alignment_improvement (dir.)"
+      ],
+      [
+        "phi4_mini",
+        "+0.020 [−0.015, +0.055]",
+        "no",
+        "−0.027",
+        "−0.015",
+        "alignment_degradation (dir.)"
+      ]
+    ],
+    "verification_phrase": "the automated test suite and an artifact-derived machine claim registry"
+  },
+  "schema_version": 1,
+  "sources": {
+    "configs/tc1_512.yaml": "2d6f11bb5c9813f6c9b18bd8872002c046846f75103de5f50dffdf67f4b190e4",
+    "results_512/analysis/headline_512_vs_128.json": "5c2c5d8f94b4b7c81ba80379a4bd286542220154554d32f18863a91ac715303f",
+    "results_512/analysis/human_validation.json": "98a9cd1b51ca56be6cd812e5e198c3afaf9126c8a7781d8a13779e4ca0c59272",
+    "results_512/analysis/judge_agreement.json": "127c5a5ae6c447bd86378d86eeab873fc13b106fb45f7f09f069f4e0d468142e",
+    "results_512/analysis/judge_pairwise_agreement.json": "6e53b0199e80e60e88f4bd1ae25e71bf826da20ceeadc1dca22e158b75aad393",
+    "results_512/analysis/multiple_comparisons.json": "c09368cf1a474fbbee1365e7f011955b651d78fe49f45a036122390450ea42ff",
+    "results_512/analysis/pairwise_deltas.json": "7f907a4df1faea5580bf5b27e16786da6d5d42a5c85ff1f157be58f6d330f641",
+    "results_512/analysis/precision_sweep.json": "724c638c76e140b81a805e61a0955ecd52dbfb4dd09ec758e5ab2ac47ad29599",
+    "results_512/analysis/xstest_human_validation.json": null,
+    "results_512/analysis/xstest_judge_agreement.json": "82e2a5dfd12bbb6d9b50d95fa5ae1cc6a549095a5a126dafe843868aec8b20ae"
+  }
+}
