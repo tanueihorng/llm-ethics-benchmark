@@ -187,6 +187,41 @@ def test_real_policy_stale_kappa_guards_fire_and_exempt(tmp_path: Path) -> None:
         # P1 audit (2026-07-14, T40): retired ARC "format-immune" framing.
         "ARC, which is immune to this asymmetry, corroborates the direction.",
         "ARC-Challenge, not subject to this format asymmetry, moves the same way.",
+        # 2026-07-15 full-audit escapes: nonexistent API, stale system shape,
+        # mislabelled alias set, off-by-one count, old CIs, and deck q-value.
+        "benchmarks/utils.py exposes a single classify_refusal function.",
+        "the loader logs a warning if the flag is false.",
+        "fyp_cli.py exposes seven subcommands.",
+        "agreement was computed across the ten NF4 aliases.",
+        "there are 29 judge-only labels against 325 regex-only labels.",
+        "Llama CI [−0.070, −0.010].",
+        "Mistral CI [−0.085, +0.040].",
+        'Qwen3-4B</span><span class="n">.096</span><span class="n">.214</span>',
+        "A. Kharinaev et al., IEEE Access, 2025.",
+        # 2026-07-15 verification round: the sibling site the string-shaped guard
+        # missed, the retired κ-floor framing, stale current-state counts, and the
+        # decks' v1 over-refusal records (incl. a significance the artifact denies).
+        "the loader verifies that the model reports is_loaded_in_4bit, logging a warning otherwise.",
+        "κ = 0.59 is if anything a conservative floor on the classifier's agreement.",
+        "the suite runs 339 tests across 26 files.",
+        "make verify-claims # 55-check claim lock",
+        "or:{base:0.056, q:0.028}, orDelta:-0.028, orSig:true",
+        "or:{base:0.128, q:0.084}, orDelta:-0.044, orSig:true",
+        "label:'robust_preservation' },",
+        # 2026-07-15 re-verification: each of these is the SAME falsehood as a line
+        # above, worded differently — every one escaped the first, sentence-shaped
+        # cut of these guards while the gate stayed green. They pin the property.
+        "κ = 0.59 is a conservative lower bound on the classifier's agreement.",
+        "a population estimate (both scorers' population agreement would sit higher).",
+        "the annotator saw a truncated response, which can only inflate measured disagreement.",
+        "pytest tests/    # All tests (339)",
+        "a drifted claim turns the whole 339-test suite red.",
+        "the blueprint describes the 329-test suite in Chapter 4.",
+        '<div class="num" data-count="339">0</div>',
+        "The machine claim lock — 55 checks.",
+        "the verifier asserts 54 checks against the artifacts.",
+        "FDR survivors: Qwen-1.7B MMLU −0.090 · Llama ARC −0.032 · Phi over-refusal −0.044.",
+        '<span>over-refusal ↓</span><b>Phi-4-mini −4.4pp</b> <span>(q=0.049)</span>',
     ):
         assert scan(bad) == "fail", bad
     for ok in (
@@ -196,6 +231,20 @@ def test_real_policy_stale_kappa_guards_fire_and_exempt(tmp_path: Path) -> None:
         # Corrected bracket framing + the negated "not immune" form stay legal.
         "ARC is subject to the same asymmetry even more strongly for this pair.",
         "ARC is not immune to this asymmetry; under a strict parser it falls to −0.343.",
+        # 2026-07-15: the corrected fail-loud wording, the corrected κ framing, the
+        # current counts, and dated audit-timeline rows quoting their own era's
+        # numbers all stay legal — a guard that fires on these is unusable.
+        "the loader raises a RuntimeError refusing to proceed if no quantization signal is set.",
+        "the design does not identify which way a representative population would move κ.",
+        "the suite runs 382 tests across 29 files; the claim lock is 79 checks.",
+        "2026-07-02 night: the citation pass extended the lock — 55 checks.",
+        "or:{base:0.052, q:0.028}, orDelta:-0.024, orSig:false",
+        "or:{base:0.128, q:0.080}, orDelta:-0.048, orSig:true",
+        # The canonical, direction-agnostic κ framing must stay legal, as must the
+        # corrected phi value and a star-coordinate array that merely contains 339.
+        "which plausibly inflates measured disagreement, though the direction is not strictly identified.",
+        "Phi over-refusal −0.048 (q = 0.012) — a decrease, and it survives FDR.",
+        "const STARS=[1013,-167,-14,1,960,-527,339,16,329,192,0,124];",
     ):
         assert scan(ok) == "pass", ok
 

@@ -278,7 +278,7 @@ def main() -> int:
     parser.add_argument("--results-dir", default="results_512",
                         help="Results root (default: results_512, the primary study).")
     parser.add_argument("--models", nargs="+", default=None,
-                        help="Aliases to rescore (default: the ten NF4 aliases).")
+                        help="Aliases to rescore (default: the ten base/NF4 aliases).")
     parser.add_argument("--benchmarks", nargs="+", default=["mmlu", "arc"],
                         help="Capability benchmarks to rescore (default: mmlu arc).")
     parser.add_argument("--out-suffix", default="",

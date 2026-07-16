@@ -336,27 +336,27 @@ const PAIRS = [
     asr:{fp16:0.255, int8:0.245, nf4:0.255}, asrDelta:0.000, asrSig:false, v2:{base:0.595}, kappa:0.36,
     mmlu:{fp16:0.643, int8:0.657, nf4:0.553}, mmluDelta:-0.090, mmluSig:true,
     arc:{base:0.723, q:0.713}, arcDelta:-0.009, arcSig:false,
-    or:{base:0.056, q:0.028}, orDelta:-0.028, orSig:true, label:'broad_degradation' },
+    or:{base:0.052, q:0.028}, orDelta:-0.024, orSig:false, label:'broad_degradation' },
   { id:'qwen_4b',  color:'#5b8def', name:'Qwen3-4B', params:4,
     asr:{fp16:0.115, int8:0.125, nf4:0.155}, asrDelta:0.040, asrSig:false, v2:{base:0.235}, kappa:0.49,
     mmlu:{fp16:0.747, int8:0.740, nf4:0.743}, mmluDelta:-0.003, mmluSig:false,
     arc:{base:0.876, q:0.860}, arcDelta:-0.016, arcSig:true,
-    or:{base:0.032, q:0.032}, orDelta:0.000, orSig:false, label:'alignment_degradation' },
+    or:{base:0.028, q:0.024}, orDelta:-0.004, orSig:false, label:'alignment_degradation' },
   { id:'llama_3_2_3b', color:'#4dd6e8', name:'Llama-3.2-3B', params:3,
     asr:{fp16:0.100, int8:0.105, nf4:0.060}, asrDelta:-0.040, asrSig:true, v2:{base:0.090}, kappa:0.71,
     mmlu:{fp16:0.610, int8:0.617, nf4:0.573}, mmluDelta:-0.037, mmluSig:false,
     arc:{base:0.730, q:0.698}, arcDelta:-0.032, arcSig:true,
-    or:{base:0.036, q:0.052}, orDelta:0.016, orSig:false, label:'capability_collapse_masquerading_as_safety' },
+    or:{base:0.032, q:0.048}, orDelta:0.016, orSig:false, label:'capability_collapse_masquerading_as_safety' },
   { id:'mistral_7b', color:'#b78bfa', name:'Mistral-7B', params:7,
     asr:{fp16:0.585, int8:0.565, nf4:0.565}, asrDelta:-0.020, asrSig:false, v2:{base:0.825}, kappa:0.28,
     mmlu:{fp16:0.633, int8:0.647, nf4:0.613}, mmluDelta:-0.020, mmluSig:false,
     arc:{base:0.734, q:0.743}, arcDelta:0.009, arcSig:false,
-    or:{base:0.004, q:0.008}, orDelta:0.004, orSig:false, label:'alignment_improvement' },
+    or:{base:0.004, q:0.004}, orDelta:0.000, orSig:false, label:'alignment_improvement' },
   { id:'phi4_mini', color:'#ffb45c', name:'Phi-4-mini', params:3.8,
     asr:{fp16:0.070, int8:0.090, nf4:0.090}, asrDelta:0.020, asrSig:false, v2:{base:0.075}, kappa:0.67,
     mmlu:{fp16:0.703, int8:0.697, nf4:0.677}, mmluDelta:-0.027, mmluSig:false,
     arc:{base:0.813, q:0.799}, arcDelta:-0.015, arcSig:false,
-    or:{base:0.128, q:0.084}, orDelta:-0.044, orSig:true, label:'robust_preservation' },
+    or:{base:0.128, q:0.080}, orDelta:-0.048, orSig:true, label:'alignment_degradation' },
 ];
 const BUDGET = [
   { id:'qwen_2b', d128:0.055, sig128:true, d512:0.000, sig512:false },
@@ -1479,14 +1479,14 @@ lighthouse:(isl)=>ovHead(isl,'the answer','')+
   <div class="fdr-list">
     <div class="f"><span class="pill" style="background:rgba(255,180,92,.18);color:var(--cap)">capability</span><b>Qwen3-1.7B MMLU −9.0pp</b> <span>(q=0.008) — harm axis flat (ΔASR 0.000)</span></div>
     <div class="f"><span class="pill" style="background:rgba(255,180,92,.18);color:var(--cap)">capability</span><b>Llama-3.2-3B ARC −3.2pp</b> <span>(q=0.008) — the pair whose ASR "improved" (−4.0pp): collapse masquerading as safety</span></div>
-    <div class="f"><span class="pill" style="background:rgba(61,219,164,.16);color:var(--safe)">over-refusal ↓</span><b>Phi-4-mini −4.4pp</b> <span>(q=0.049) — it refuses <i>less</i>, not more</span></div></div>
+    <div class="f"><span class="pill" style="background:rgba(61,219,164,.16);color:var(--safe)">over-refusal ↓</span><b>Phi-4-mini −4.8pp</b> <span>(q=0.012) — it refuses <i>less</i>, not more</span></div></div>
   <div class="takeaway">When a quantized model looks safer, it usually just got worse. Effects below the ~6pp power floor can't be ruled out — that boundary is disclosed, not hidden.</div>`,
 log:(isl)=>ovHead(isl,'the voyage log','From question to evidence.')+
   nibbleSay("The arc includes both humbling turns — the fired scorer and the budget re-base — because <b>that's where the rigor lives</b>.")+
   `<div class="voyage">${TIMELINE.map(t=>`<div class="vstop${t.ph?' ph':''}"><div class="vd">${t.date}${t.ph?' · editable':''}</div><div class="vt">${t.t}</div><div class="vs">${t.s}</div></div>`).join('')}</div>
   <div class="grid g2" style="margin-top:22px">
     <div class="tile"><span class="tag">credits</span><p class="mono" style="line-height:1.9;font-size:12.5px;margin-top:6px"><b style="color:var(--ink)">Author</b> · Tan Uei Horng<br/><b style="color:var(--ink)">Supervisor</b> · Dr. Zhang Jiehuang<br/><b style="color:var(--ink)">Programme</b> · BSc, CCDS<br/><b style="color:var(--ink)">Institution</b> · Nanyang Technological University<br/><b style="color:var(--ink)">Project</b> · CCDS25-1136</p></div>
-    <div class="tile"><span class="tag">provenance</span><p style="font-size:12.5px;line-height:1.65;margin-top:6px">Every figure is drawn from the primary 512-token analysis tree (<span class="mono">results_512/analysis/*.json</span>, D41). HarmBench ASR is judge-primary (<span class="mono">HarmBench-Llama-2-13B</span>), cross-checked by GPT-4o. Report numbers are machine-locked by <span class="mono">make verify-claims</span> (55 checks) · 339 tests.</p></div></div>`,
+    <div class="tile"><span class="tag">provenance</span><p style="font-size:12.5px;line-height:1.65;margin-top:6px">Every figure is drawn from the primary 512-token analysis tree (<span class="mono">results_512/analysis/*.json</span>, D41). HarmBench ASR is judge-primary (<span class="mono">HarmBench-Llama-2-13B</span>), cross-checked by GPT-4o. Report numbers are machine-locked by <span class="mono">make verify-claims</span> (79 checks) · 382 tests.</p></div></div>`,
 };
 function openOverlay(id){const isl=ISLANDS.find(i=>i.id===id);focusId=id;
   if(!overlay.classList.contains('open')) lastFocus=document.activeElement;
@@ -1563,7 +1563,7 @@ const deltaMeta={
   asr:{key:'asrDelta',sig:'asrSig',color:p=>p.asrDelta>0?'#ff6b7a':'#3ddba4',cap:'The only individually significant ΔASR is Llama-3B (−4.0pp) — a decrease — and even it fails FDR. No increase is significant anywhere; effects below the ~6pp power floor can’t be ruled out.'},
   mmlu:{key:'mmluDelta',sig:'mmluSig',color:()=>'#ffb45c',cap:'Capability anchor: Qwen-1.7B (−9.0pp) drops significantly and survives FDR. The other four hold.'},
   arc:{key:'arcDelta',sig:'arcSig',color:()=>'#ffb45c',cap:'Second anchor: Qwen-4B (−1.6pp) and Llama-3B (−3.2pp) drop significantly; Llama’s survives FDR — the pair whose ASR “improved”.'},
-  or:{key:'orDelta',sig:'orSig',color:p=>p.orDelta>0?'#ff6b7a':'#3ddba4',cap:'Benign-prompt refusals: Qwen-1.7B and Phi-4-mini move significantly — both refuse less, not more (Phi survives FDR).'},
+  or:{key:'orDelta',sig:'orSig',color:p=>p.orDelta>0?'#ff6b7a':'#3ddba4',cap:'Benign-prompt refusals: only Phi-4-mini moves significantly — it refuses less, not more, and it survives FDR.'},
 };
 function drawDelta(metric){const host=document.getElementById('deltaChart');if(!host)return;host.innerHTML='';const meta=deltaMeta[metric];
   const Wd=880,rowH=46,padL=140,padR=96,padT=12,Hh=padT+PAIRS.length*rowH+26;const svg=svgBase(Wd,Hh,meta.cap);host.appendChild(svg);

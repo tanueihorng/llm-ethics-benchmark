@@ -139,6 +139,16 @@ stale_text:
     # below as historical sources.
     - scripts/build_fyp_report_v5.js
     - scripts/build_fyp_thesis_v4.js
+    # 2026-07-15 verification round: the CURRENT submission alternates and the
+    # interim builder are deliverables too, but were scanned by nothing — a retired
+    # κ claim ("conservative floor") survived in build_fyp_report_humanized.js
+    # through a 77/77 green gate because only one verify-claims snippet check
+    # covered them. Same rule as the canonical builders: current source is scanned,
+    # retired source is excluded below.
+    - scripts/build_fyp_report_humanized.js
+    - scripts/build_fyp_thesis_humanized.js
+    - scripts/build_fyp_interim.js
+    - scripts/build_fyp_interim_humanized.js
   exclude:
     - docs/archive/*
     # fyp_showcase.html was refreshed to the 512-primary results on 2026-07-03
@@ -239,6 +249,56 @@ stale_text:
     # this asymmetry") legal. Self-tested to fire (and exempt) in test_agent_harness.
     - '(?<!not )immune to this asymmetry'
     - 'not subject to this format asymmetry'
+    # 2026-07-15 full-audit sweep: prevent the exact documentation/claim drifts
+    # that escaped the prior report-only locks. Retired builders and historical
+    # audit ledgers remain excluded above; current-facing surfaces must use the
+    # real APIs, current alias composition, and artifact-derived values.
+    - 'classify_refusal'
+    - 'exposes seven subcommands'
+    - 'ten NF4 aliases'
+    - '29 judge-only'
+    - '\[−0\.070, −0\.010\]'
+    - '\[−0\.085, \+0\.040\]'
+    - 'Qwen3-4B.*<span class="n">\.214</span>'
+    - 'IEEE Access, 2025'
+    # 2026-07-15 verification round: the patterns above were fitted to the exact
+    # SENTENCE each fix rewrote, so an identically-wrong sibling site phrased
+    # differently sailed through a green gate ('logs a warning if the flag is
+    # false' was guarded; §3.3's 'logging a warning otherwise' was not). Guard the
+    # PROPERTY — any prose pairing the quantization-engaged check with a warning
+    # rather than the loader's actual fail-loud raise. loader.py contains no
+    # LOGGER.warning call at all, so "the loader ... logs a warning" is never a true
+    # description of it. Self-tested to fire on all three known wordings and to stay
+    # silent on the corrected text.
+    - '(?:is_loaded_in_4bit|the loader)[^\n]{0,80}?(?:logs|logging) a warning'
+    # The κ human-validation sample deliberately over-weights disagreements, so the
+    # design does NOT identify which way a representative population would move κ
+    # (report §6.12). Any framing that asserts a DIRECTION for that unmeasured
+    # quantity is the retired claim, whatever words it uses — "conservative floor",
+    # "lower bound", "would sit higher", and the truncation caveat's "can only
+    # inflate" are all the same over-claim and all survived a green gate in
+    # different builders. Self-tested: fires on all five wordings, silent on the
+    # canonical "the direction ... is not identified" / "plausibly inflates" form.
+    - 'conservative floor|conservative lower bound|lower bound on[^\n]{0,25}agreement|would sit higher|can only inflate'
+    # Retired current-state counts: the suite is 382 tests across 29 files and the
+    # claim lock is 79 checks. Anchored on the retired NUMBER in a count context
+    # rather than on one phrasing — the first cut pinned "339 tests" and so missed
+    # "All tests (339)", "339-test suite", and a `data-count="339"` counter. Lines
+    # carrying a date are exempt so dated audit timelines keep their own era's
+    # numbers; STARS excludes a deck's star-coordinate array that contains 339/329
+    # as raw coordinates.
+    - '^(?!.*20[0-9]{2}-[0-9]{2})(?=.*(?:test|suite|pytest|data-count))(?!.*STARS).*\b(?:339|329)\b'
+    - '^(?!.*20[0-9]{2}-[0-9]{2})(?=.*(?:check|lock|verify-claims)).*\b(?:55|54)[- ]check'
+    # Retired v1 over-refusal values. The showcase decks' ASR/MMLU/ARC/κ fields were
+    # re-based to 512 while the over-refusal block kept v1 — including orSig:true for
+    # qwen_2b, a significance the artifact denies (Δ−0.024, CI [−0.048, 0.000],
+    # p=0.109). Phi's true FDR-surviving value is −0.048 (q=0.012), not −0.044
+    # (q=0.049). Value-anchored, not syntax-anchored: the first cut guarded only the
+    # JS literal `orDelta:-0.044` and so could not see the same false number in prose
+    # one screen away. No pair carries robust_preservation at 512.
+    - 'or:\{base:0\.056'
+    - '^(?!.*20[0-9]{2}-[0-9]{2})(?=.*(?:over-refus|ΔOR|orDelta|refusal|FDR|Phi)).*(?:[-−]0\.044|[-−]4\.4\s?pp)'
+    - "label:'robust_preservation'"
 
 report_worthy:
   changed_file_patterns:
@@ -270,6 +330,6 @@ agent_status:
   # Informational only — no check consumes these (they document expected counts for
   # a human reading the policy). Kept current with the post-audit 2026-07-02 state:
   # 10 main-study fp16/NF4 harmbench_cls judge sidecars per tree (5 pairs x 2 members;
-  # the 512-primary tree additionally carries 5 INT8 + 10 api_judge sidecars); 339 tests (incl. the D43 claim lock, tests/test_report_claims.py).
+  # the 512-primary tree additionally carries 5 INT8 + 10 api_judge sidecars); 382 tests (incl. the D43 claim lock, tests/test_report_claims.py).
   expected_judge_sidecars: 10
   expected_test_count_note: 382

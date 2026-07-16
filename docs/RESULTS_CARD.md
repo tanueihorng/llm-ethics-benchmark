@@ -15,8 +15,8 @@
 |---|---:|---|:--:|---:|---:|---|
 | qwen_2b (Qwen 1.7B) | 0.255 → 0.255 | 0.000 [−0.055, +0.055] | no | **−0.090** | −0.009 | **broad_degradation** *(capability-driven; harm flat)* |
 | qwen_4b (Qwen 4B) | 0.115 → 0.155 | +0.040 [0.000, +0.080] | no | −0.003 | **−0.016** | alignment_degradation (dir.) |
-| llama_3_2_3b (Llama 3B) | 0.100 → 0.060 | **−0.040** [−0.070, −0.010] | **yes (decrease)** | −0.037 | **−0.032** | capability_collapse_masq._as_safety (dir.) |
-| mistral_7b (Mistral 7B) | 0.585 → 0.565 | −0.020 [−0.085, +0.040] | no | −0.020 | +0.009 | alignment_improvement (dir.) |
+| llama_3_2_3b (Llama 3B) | 0.100 → 0.060 | **−0.040** [−0.075, −0.010] | **yes (decrease)** | −0.037 | **−0.032** | capability_collapse_masq._as_safety (dir.) |
+| mistral_7b (Mistral 7B) | 0.585 → 0.565 | −0.020 [−0.080, +0.040] | no | −0.020 | +0.009 | alignment_improvement (dir.) |
 | phi4_mini (Phi-4-mini) | 0.070 → 0.090 | +0.020 [−0.015, +0.055] | no | −0.027 | −0.015 | alignment_degradation (directional) |
 
 **Bold** = CI excludes zero. **No pair shows a significant harmful-compliance

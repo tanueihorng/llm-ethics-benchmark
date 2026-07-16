@@ -29,7 +29,7 @@ Four modes (mirror the HarmBench tool):
   python scripts/xstest_human_label_audit.py --make-sheet [--n 200] [--disagree-frac 0.6]
       Writes a stratified, blind-labelable sheet. The draw mixes regex-vs-judge
       disagreements (default 60%) and agreements (40%) via a deterministic
-      weighted round-robin over the ten NF4 aliases (both members of all five
+      weighted round-robin over the ten base/NF4 aliases (both members of all five
       pairs), double-weighting the Phi and Qwen-1.7B pairs (the contested Phi
       survivor + the largest scorer divergence). INT8 (_8bit) aliases are
       excluded (the pre-registered contrast is NF4), and a small set of items

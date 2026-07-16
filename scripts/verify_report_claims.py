@@ -106,6 +106,19 @@ def run_checks(checker: Checker | None = None) -> Checker:
     pdix = {(r["pair_id"], r["benchmark"]): r for r in pdl}
     contrasts = {(r["pair_id"], r["metric"]): r for r in mc["contrasts"]}
 
+    def surface_check(name: str, text: str, snippets: list[str], fn) -> None:
+        """Apply the same text-plus-artifact contract to non-report surfaces."""
+        missing = [s for s in snippets if s not in text]
+        if missing:
+            c.results.append(("FAIL", name, f"surface text missing: {missing[0][:90]!r}"))
+            return
+        try:
+            ok, detail = fn()
+        except Exception as exc:  # noqa: BLE001 - a broken lookup is a failure
+            c.results.append(("FAIL", name, f"checker error: {exc!r}"))
+            return
+        c.results.append(("PASS" if ok else "FAIL", name, detail))
+
     # ---------------- BH-FDR family / headline -----------------------------
     c.check(
         "bh: exactly 3 survivors, none ASR",
@@ -190,6 +203,49 @@ def run_checks(checker: Checker | None = None) -> Checker:
             ['"0.115", "0.155", "+0.040 [0.000, +0.080]"'],
             lambda: pair512("qwen_4b", 0.115, 0.155, 0.040, 0.000, 0.080,
                             hl512["qwen_4b"]["mcnemar_p"]))
+    c.check(
+        "qwen baseline scaling: XSTest 0.052->0.028; MMLU 0.643->0.747",
+        ["MMLU accuracy simultaneously rises from 0.643 to 0.747",
+         "XSTest over-refusal falls from 0.052 to 0.028"],
+        lambda: (
+            near(0.052, pdix[("qwen_2b", "xstest")]["baseline_value"])
+            and near(0.028, pdix[("qwen_4b", "xstest")]["baseline_value"])
+            and near(0.643, pdix[("qwen_2b", "mmlu")]["baseline_value"])
+            and near(0.747, pdix[("qwen_4b", "mmlu")]["baseline_value"]),
+            "baseline levels match pairwise_deltas.json",
+        ),
+    )
+
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    results_card = (ROOT / "docs/RESULTS_CARD.md").read_text(encoding="utf-8")
+    surface_check(
+        "outer surfaces: Llama/Mistral headline CIs match artifact",
+        readme + "\n" + results_card,
+        ["[−0.075, −0.010]", "[−0.080, +0.040]"],
+        lambda: (
+            readme.count("[−0.075, −0.010]") >= 1
+            and results_card.count("[−0.075, −0.010]") >= 1
+            and readme.count("[−0.080, +0.040]") >= 1
+            and results_card.count("[−0.080, +0.040]") >= 1
+            and "[−0.070, −0.010]" not in readme + results_card
+            and "[−0.085, +0.040]" not in readme + results_card
+            and near(-0.075, hl512["llama_3_2_3b"]["ci"][0])
+            and near(-0.080, hl512["mistral_7b"]["ci"][0]),
+            "README and RESULTS_CARD carry the current artifact CIs",
+        ),
+    )
+
+    defense_deck = (ROOT / "docs/fyp-report-defense-deck-2026-07.html").read_text(encoding="utf-8")
+    surface_check(
+        "defense deck: qwen_4b BH q = .241",
+        defense_deck,
+        ["Qwen3-4B", '<span class="n">.241</span>'],
+        lambda: (
+            near(0.2406, contrasts[("qwen_4b", "harmbench_asr_judge")]["bh_q_value"], 4)
+            and ".214</span>" not in defense_deck,
+            "artifact q=" + str(contrasts[("qwen_4b", "harmbench_asr_judge")]["bh_q_value"]),
+        ),
+    )
     c.check(
         "128-era qwen_2b: +0.055, McNemar p=0.027, sig",
         ["+0.055 at 128 tokens"],
@@ -720,7 +776,7 @@ def run_checks(checker: Checker | None = None) -> Checker:
         return ok, f"κ [{min(ks):.3f},{max(ks):.3f}], mean judge OR {jor:.3f} vs regex {ror:.3f}"
 
     c.check("Result 6: κ −0.01..0.50 across 10 NF4 aliases; judge OR ~0.171 vs regex ~0.044",
-            ["Cohen κ from −0.01 to 0.50 across the ten NF4 aliases",
+            ["Cohen κ from −0.01 to 0.50 across the ten base/NF4 aliases of the primary study",
              "mean over-refusal 0.171 strict versus 0.044"],
             xstest_kappa_and_levels)
 
@@ -841,7 +897,7 @@ def run_checks(checker: Checker | None = None) -> Checker:
         "IEEE citations: every ref cited, numbered strictly by first use",
         ["Kharinaev et al. [12]", "Egashira et al. [13]", "Proskurina et al. [11]",
          "McNemar's exact test [20]", "Bootstrap 95% confidence intervals [19]",
-         "R. Jin, J. Du, W. Huang"],
+         "R. Jin, J. Du, W. Huang", "doi: 10.1109/ACCESS.2026.3703899"],
         ieee_citations,
     )
 
@@ -898,6 +954,15 @@ def run_checks(checker: Checker | None = None) -> Checker:
             and near(0.67, min(ja[k]["cohens_kappa"] for k in KAPPA if "phi" in k), 2)
             and near(0.77, max(ja[k]["cohens_kappa"] for k in KAPPA if "phi" in k), 2),
             "family ranges match",
+        ),
+    )
+    tcheck(
+        "thesis: judge-only/regex-only counts == judge_agreement",
+        ["28 judge-only labels against 325 regex-only"],
+        lambda: (
+            sum(r["judge_harmful_v2_not"] for r in ja.values()) == 28
+            and sum(r["v2_harmful_judge_not"] for r in ja.values()) == 325,
+            "28 judge-only / 325 regex-only",
         ),
     )
     tcheck(
@@ -958,7 +1023,7 @@ def run_checks(checker: Checker | None = None) -> Checker:
     tcheck(
         "thesis: Result 6 XSTest judge — Phi ΔOR +0.016/−0.004 n.s., scorer-dependent",
         ["+0.016 (strict, direction reversed; McNemar p = 0.597) or −0.004 (broad; p = 1.000)",
-         "Cohen κ −0.01 to 0.50 across the ten NF4 aliases"],
+         "Cohen κ −0.01 to 0.50 across the ten base/NF4 aliases of the primary study"],
         lambda: (
             near(0.016, phi_s["delta"]) and near(-0.004, phi_b["delta"])
             and near(0.597, phi_s["mcnemar_p_value"]) and near(1.0, phi_b["mcnemar_p_value"])
@@ -992,7 +1057,7 @@ def run_checks(checker: Checker | None = None) -> Checker:
                     if ok else f"uncited={uncited}, seq starts {seq[:8]}")
 
     tcheck("thesis: IEEE citations — every ref cited, strict first-use order",
-           [], thesis_ieee)
+           ["IEEE Access, vol. 14, 2026, doi: 10.1109/ACCESS.2026.3703899"], thesis_ieee)
 
     tcheck(
         "thesis: no unscoped 128-era content",
@@ -1049,6 +1114,16 @@ def run_checks(checker: Checker | None = None) -> Checker:
         ),
     )
     icheck(
+        "interim: judge-only/regex-only counts == judge_agreement",
+        ["28 judge-only labels against 325 regex-only",
+         "IEEE Access, vol. 14, 2026, doi: 10.1109/ACCESS.2026.3703899"],
+        lambda: (
+            sum(r["judge_harmful_v2_not"] for r in ja.values()) == 28
+            and sum(r["v2_harmful_judge_not"] for r in ja.values()) == 325,
+            "28 judge-only / 325 regex-only; final publication metadata present",
+        ),
+    )
+    icheck(
         "interim: labelled an Interim Report + no unscoped 128-era content",
         ["Interim Report"],
         lambda: (
@@ -1058,6 +1133,41 @@ def run_checks(checker: Checker | None = None) -> Checker:
             "interim scoped correctly (Interim Report; no retired counts/128-era leakage)",
         ),
     )
+
+    # Each alternate is checked on its OWN text. Joining the three into one blob
+    # (the 2026-07-15 first cut) let a snippet present in a single file satisfy the
+    # check for all three, so an alternate could silently lose its claim: no mirror
+    # carries every snippet (only the thesis alternate quotes the judge-only counts
+    # AND the alias composition). Expectations are per-file for that reason.
+    KHARINAEV_512 = "IEEE Access, vol. 14, 2026, doi: 10.1109/ACCESS.2026.3703899"
+    mirror_expectations = [
+        ("report", ROOT / "scripts/build_fyp_report_humanized.js",
+         ["ten base/NF4 aliases of the primary study", KHARINAEV_512]),
+        ("thesis", ROOT / "scripts/build_fyp_thesis_humanized.js",
+         ["28 judge-only labels against 325 regex-only",
+          "ten base/NF4 aliases of the primary study", KHARINAEV_512]),
+        ("interim", ROOT / "scripts/build_fyp_interim_humanized.js",
+         ["28 judge-only labels against 325 regex-only", KHARINAEV_512]),
+    ]
+    retired_mirror_text = [
+        "29 judge-only",
+        "ten NF4 aliases",
+        "IEEE Access, 2025",
+        "arXiv preprint arXiv:2502.15799, 2025",
+        "conservative floor",
+        "logging a warning otherwise",
+    ]
+    for label, path, snippets in mirror_expectations:
+        text = path.read_text(encoding="utf-8")
+        surface_check(
+            f"current alternate ({label}): corrected aliases, counts, and Kharinaev metadata",
+            text,
+            snippets,
+            lambda text=text, label=label: (
+                not any(r in text for r in retired_mirror_text),
+                f"{label} alternate carries the corrected wording and no retired claim",
+            ),
+        )
 
     return c
 
