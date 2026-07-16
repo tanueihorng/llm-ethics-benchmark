@@ -84,3 +84,6 @@ fyp_submission/
 configs/generated/
 slurm/jobs_generated/
 results_dev/
+
+# pytest-cov by-product
+.coverage
