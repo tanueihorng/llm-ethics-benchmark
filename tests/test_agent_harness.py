@@ -222,6 +222,12 @@ def test_real_policy_stale_kappa_guards_fire_and_exempt(tmp_path: Path) -> None:
         "the verifier asserts 54 checks against the artifacts.",
         "FDR survivors: Qwen-1.7B MMLU −0.090 · Llama ARC −0.032 · Phi over-refusal −0.044.",
         '<span>over-refusal ↓</span><b>Phi-4-mini −4.4pp</b> <span>(q=0.049)</span>',
+        # 2026-07-15 V7-V9 re-verification: the retired judge-vs-proxy range for the
+        # hardest families, in the spelling that survived D43's en-dash-only ban, and
+        # the decks' per-model κ record (base κ; mistral is 0.2904 -> 0.29).
+        "it agrees at a Cohen's κ of 0.68 to 0.95 (against 0.25 to 0.41 for the old regex).",
+        "judge-vs-proxy κ ≈ 0.25–0.41 for Qwen/Mistral.",
+        "v2:{base:0.825}, kappa:0.28,",
     ):
         assert scan(bad) == "fail", bad
     for ok in (
@@ -245,6 +251,11 @@ def test_real_policy_stale_kappa_guards_fire_and_exempt(tmp_path: Path) -> None:
         "which plausibly inflates measured disagreement, though the direction is not strictly identified.",
         "Phi over-refusal −0.048 (q = 0.012) — a decrease, and it survives FDR.",
         "const STARS=[1013,-167,-14,1,960,-527,339,16,329,192,0,124];",
+        # The corrected κ range and the corrected deck record stay legal, as does a
+        # dated row quoting the retired range as that era's finding.
+        "against 0.25 to 0.59 for the old regex on the hardest families",
+        "v2:{base:0.825}, kappa:0.29,",
+        "2026-07-02: the κ-range lines 0.25–0.41 → 0.25–0.59 were corrected.",
     ):
         assert scan(ok) == "pass", ok
 

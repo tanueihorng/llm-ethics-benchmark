@@ -235,7 +235,70 @@ def run_checks(checker: Checker | None = None) -> Checker:
         ),
     )
 
+    # V8 (2026-07-15 re-verification): RESULTS_CARD and the field guide carried the
+    # Mistral judge-vs-proxy κ upper bound as 0.28 while the artifact says 0.2904 —
+    # the family ranges were quoted on outer surfaces but bound to nothing. Derive
+    # each family's range from judge_agreement.json and assert the printed string,
+    # so a future κ shift fails here instead of drifting silently.
+    field_guide = (ROOT / "docs/project_field_guide.html").read_text(encoding="utf-8")
+    # "Qwen" spans BOTH Qwen pairs (1.7B and 4B), so its family range is over four
+    # aliases, not two — the printed 0.36–0.59 is min/max across all of them.
+    kappa_families = {"Mistral": "mistral_7b", "Qwen": "qwen", "Phi": "phi4_mini", "Llama": "llama_3_2_3b"}
+
+    def kappa_range(prefix: str) -> tuple[float, float]:
+        ks = [v["cohens_kappa"] for k, v in ja.items() if k.startswith(prefix)]
+        return (min(ks), max(ks))
+
+    def kappa_family_ok() -> tuple[bool, str]:
+        """Both outer surfaces, anchored.
+
+        Two self-inflicted bugs the 2026-07-15 re-verification caught in the first
+        cut of this check, kept fixed here: (a) `field_guide` was read and never
+        used, so a check named "outer surfaces" (plural) guarded exactly one; and
+        (b) `printed not in text` is a SUBSTRING test, so a fabricated extra digit
+        ("0.36–0.594") satisfied "0.36–0.59" and passed. Parse the printed pair and
+        compare the captured numbers instead.
+        """
+        parts = []
+        for label, prefix in kappa_families.items():
+            lo, hi = kappa_range(prefix)
+            # The two surfaces legitimately print different forms: RESULTS_CARD
+            # "Mistral ≈ 0.25–0.29", the field guide "Mistral 0.25–0.29". Accept
+            # either spelling; pin the numbers.
+            for surface_name, text in (("RESULTS_CARD", results_card), ("field_guide", field_guide)):
+                m = re.search(rf"{re.escape(label)} ≈? ?(\d+\.\d+)–(\d+\.\d+)", text)
+                if not m:
+                    return False, f"{surface_name} has no parsable '{label} ≈ lo–hi' range"
+                if (m.group(1), m.group(2)) != (f"{lo:.2f}", f"{hi:.2f}"):
+                    return False, (f"{surface_name} prints {label} ≈ {m.group(1)}–{m.group(2)}, "
+                                   f"artifact says {lo:.2f}–{hi:.2f}")
+            parts.append(f"{label} ≈ {lo:.2f}–{hi:.2f}")
+        # The per-model rendering is a differently-worded sibling of the same claim
+        # (it survived the first fix 66 lines below the range it corrected).
+        mistral_base = f"{ja['mistral_7b_base']['cohens_kappa']:.2f}"
+        mistral_nf4 = f"{ja['mistral_7b_4bit']['cohens_kappa']:.2f}"
+        if f"mistral {mistral_base}/{mistral_nf4}" not in field_guide:
+            return False, f"field_guide per-model list is not 'mistral {mistral_base}/{mistral_nf4}'"
+        return True, "; ".join(parts) + f" (both surfaces; per-model mistral {mistral_base}/{mistral_nf4})"
+
+    surface_check(
+        "outer surfaces: judge-vs-proxy κ family ranges == judge_agreement",
+        results_card + "\n" + field_guide,
+        ["Mistral ≈ 0.25–0.29 (worst)"],
+        kappa_family_ok,
+    )
+
     defense_deck = (ROOT / "docs/fyp-report-defense-deck-2026-07.html").read_text(encoding="utf-8")
+    surface_check(
+        "defense deck: cross-judge κ range scoped to its ten aliases",
+        defense_deck,
+        ["over the ten base/NF4 aliases the two judges agree at κ .68–.95"],
+        lambda: (
+            len(jp["per_model"]) == 10
+            and "cross-checked all 15 aliases at 512 tokens; the Qwen 1.7B" not in defense_deck,
+            f"judge_pairwise_agreement covers {len(jp['per_model'])} aliases; deck scopes the range to them",
+        ),
+    )
     surface_check(
         "defense deck: qwen_4b BH q = .241",
         defense_deck,
@@ -897,7 +960,12 @@ def run_checks(checker: Checker | None = None) -> Checker:
         "IEEE citations: every ref cited, numbered strictly by first use",
         ["Kharinaev et al. [12]", "Egashira et al. [13]", "Proskurina et al. [11]",
          "McNemar's exact test [20]", "Bootstrap 95% confidence intervals [19]",
-         "R. Jin, J. Du, W. Huang", "doi: 10.1109/ACCESS.2026.3703899"],
+         "R. Jin, J. Du, W. Huang",
+         # V7: pin the FULL Kharinaev entry, not just the DOI. Pinning the DOI alone
+         # left the report's volume/pages/year silently droppable while the thesis,
+         # interim and mirror locks pinned the complete string — self-tested: the
+         # report-side revert was the one case that did not fire.
+         "IEEE Access, vol. 14, pp. 96771–96793, 2026, doi: 10.1109/ACCESS.2026.3703899"],
         ieee_citations,
     )
 
@@ -1057,7 +1125,7 @@ def run_checks(checker: Checker | None = None) -> Checker:
                     if ok else f"uncited={uncited}, seq starts {seq[:8]}")
 
     tcheck("thesis: IEEE citations — every ref cited, strict first-use order",
-           ["IEEE Access, vol. 14, 2026, doi: 10.1109/ACCESS.2026.3703899"], thesis_ieee)
+           ["IEEE Access, vol. 14, pp. 96771–96793, 2026, doi: 10.1109/ACCESS.2026.3703899"], thesis_ieee)
 
     tcheck(
         "thesis: no unscoped 128-era content",
@@ -1116,7 +1184,7 @@ def run_checks(checker: Checker | None = None) -> Checker:
     icheck(
         "interim: judge-only/regex-only counts == judge_agreement",
         ["28 judge-only labels against 325 regex-only",
-         "IEEE Access, vol. 14, 2026, doi: 10.1109/ACCESS.2026.3703899"],
+         "IEEE Access, vol. 14, pp. 96771–96793, 2026, doi: 10.1109/ACCESS.2026.3703899"],
         lambda: (
             sum(r["judge_harmful_v2_not"] for r in ja.values()) == 28
             and sum(r["v2_harmful_judge_not"] for r in ja.values()) == 325,
@@ -1139,7 +1207,11 @@ def run_checks(checker: Checker | None = None) -> Checker:
     # check for all three, so an alternate could silently lose its claim: no mirror
     # carries every snippet (only the thesis alternate quotes the judge-only counts
     # AND the alias composition). Expectations are per-file for that reason.
-    KHARINAEV_512 = "IEEE Access, vol. 14, 2026, doi: 10.1109/ACCESS.2026.3703899"
+    # The humanized alternates are a deliberately dash-free register (their sibling
+    # McNemar entry prints "pp. 153 to 157"), so they spell the page range out. The
+    # V7 fix first pushed the canonical en-dash form into them, leaving exactly one
+    # en-dash in each document — the typographic tell those builds exist to remove.
+    KHARINAEV_512 = "IEEE Access, vol. 14, pp. 96771 to 96793, 2026, doi: 10.1109/ACCESS.2026.3703899"
     mirror_expectations = [
         ("report", ROOT / "scripts/build_fyp_report_humanized.js",
          ["ten base/NF4 aliases of the primary study", KHARINAEV_512]),

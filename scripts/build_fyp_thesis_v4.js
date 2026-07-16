@@ -360,7 +360,7 @@ const refs = [
   REF(1, "T. Dettmers, M. Lewis, Y. Belkada, and L. Zettlemoyer, “LLM.int8(): 8-bit matrix multiplication for transformers at scale,” in Proc. Advances in Neural Information Processing Systems (NeurIPS), 2022. arXiv:2208.07339."),
   REF(2, "T. Dettmers, A. Pagnoni, A. Holtzman, and L. Zettlemoyer, “QLoRA: Efficient finetuning of quantized LLMs,” in Proc. NeurIPS, 2023. arXiv:2305.14314."),
   REF(3, "M. Mazeika et al., “HarmBench: A standardized evaluation framework for automated red teaming and robust refusal,” in Proc. International Conference on Machine Learning (ICML), 2024. arXiv:2402.04249."),
-  REF(4, "A. Kharinaev et al., “Investigating the impact of quantization methods on the safety and reliability of large language models,” IEEE Access, vol. 14, 2026, doi: 10.1109/ACCESS.2026.3703899. arXiv:2502.15799."),
+  REF(4, "A. Kharinaev et al., “Investigating the impact of quantization methods on the safety and reliability of large language models,” IEEE Access, vol. 14, pp. 96771–96793, 2026, doi: 10.1109/ACCESS.2026.3703899. arXiv:2502.15799."),
   REF(5, "Y. Belkhiter et al., “HarmLevelBench: Evaluating harm-level compliance and the impact of quantization on model alignment,” arXiv preprint arXiv:2411.06835, 2024."),
   REF(6, "R. Jin et al., “A comprehensive evaluation of quantization strategies for large language models,” in Findings of the Association for Computational Linguistics (ACL Findings), 2024. arXiv:2402.16775."),
   REF(7, "K. Egashira, M. Vero, R. Staab, J. He, and M. Vechev, “Exploiting LLM quantization,” in Proc. Advances in Neural Information Processing Systems (NeurIPS), 2024. arXiv:2405.18137."),

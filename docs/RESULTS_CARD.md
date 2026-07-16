@@ -60,7 +60,7 @@ Capability deltas are budget-robust (Qwen-1.7B MMLU −0.087 → −0.090).
 ## Scoring validity (the methodological headline)
 
 The v2 regex over-counts ASR; agreement with the classifier at 512 (Cohen κ):
-Mistral ≈ 0.25–0.28 (worst), Qwen ≈ 0.36–0.59, Phi ≈ 0.67–0.77, Llama ≈ 0.71–0.84
+Mistral ≈ 0.25–0.29 (worst), Qwen ≈ 0.36–0.59, Phi ≈ 0.67–0.77, Llama ≈ 0.71–0.84
 (best). The classifier is cross-checked by gpt-4o at κ 0.68–0.95. The choice of
 scorer changes both which model looks least safe and whether any model looks
 significantly less safe at all; the over-counting pattern replicates at INT8 and

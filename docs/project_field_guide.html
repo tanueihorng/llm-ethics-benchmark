@@ -409,7 +409,7 @@ dd b,dd strong{color:var(--color-ink)}
   <ol>
     <li><strong>v1 regex (retired).</strong> A small refusal-pattern list. It missed modern refusal templates ("I can't fulfill this request…"), misclassifying clear refusals as harmful compliance. Fixed as T13.</li>
     <li><strong>v2 regex (demoted to proxy).</strong> Forty-plus patterns, apostrophe-normalised, regression-tested. Deterministic and reproducible — but it measures <em>non-refusal</em>, not harm: vague deflections, safety lectures, and benign on-topic answers all count as "attack success". Retained in Tables 6.1/6.2 as a transparent proxy so readers can see exactly where refusal-counting diverges.</li>
-    <li><strong>The official HarmBench classifier (primary — D16).</strong> The benchmark's own fine-tuned 13B judge, run at full precision so the instrument is not itself confounded by quantization. Validation showed the regex <em>over-counts</em>, one-directionally (aggregate: 325 regex-only harmful labels vs 28 judge-only across ten models) and unevenly by family — judge-vs-regex κ at 512: Qwen 0.36–0.59, Mistral 0.25–0.28 (worst), Llama 0.71–0.84, Phi 0.67–0.77.</li>
+    <li><strong>The official HarmBench classifier (primary — D16).</strong> The benchmark's own fine-tuned 13B judge, run at full precision so the instrument is not itself confounded by quantization. Validation showed the regex <em>over-counts</em>, one-directionally (aggregate: 325 regex-only harmful labels vs 28 judge-only across ten models) and unevenly by family — judge-vs-regex κ at 512: Qwen 0.36–0.59, Mistral 0.25–0.29 (worst), Llama 0.71–0.84, Phi 0.67–0.77.</li>
     <li><strong>GPT-4o second judge (D25).</strong> Architecturally independent, same rubric, re-scores the same saved generations. Cross-judge κ 0.68–0.95 at 512 across all ten models — the finding does not depend on one classifier.</li>
   </ol>
   <p><strong>The honest residual:</strong> both judges are LLMs; no human gold set exists yet. That is exactly what T30 closes — your 200-row annotation upgrades "two judges agree" to human-grounded validation.</p>
@@ -475,7 +475,7 @@ dd b,dd strong{color:var(--color-ink)}
   <p class="smallprint">★ = CI excludes zero. BH-FDR survivors (q &lt; 0.05): qwen_2b MMLU (q = 0.008), llama ARC (q = 0.008), phi over-refusal (q = 0.012). Zero ASR contrasts survive. Phi's is the only over-refusal delta significant under the exact test (qwen_2b's −0.024 is not significant, p = 0.109) — and it is a <em>decrease</em>.</p>
   <h4>Judge agreement at 512</h4>
   <ul>
-    <li><strong>Judge vs regex proxy (Cohen's κ):</strong> qwen_2b 0.36/0.41 · qwen_4b 0.49/0.59 · llama 0.71/0.84 · mistral 0.28/0.25 · phi 0.67/0.77 (base/4bit). The over-count in one example: Qwen3-1.7B base regex 0.595 vs judge 0.255; Mistral 4-bit regex 0.890 vs judge 0.565.</li>
+    <li><strong>Judge vs regex proxy (Cohen's κ):</strong> qwen_2b 0.36/0.41 · qwen_4b 0.49/0.59 · llama 0.71/0.84 · mistral 0.29/0.25 · phi 0.67/0.77 (base/4bit). The over-count in one example: Qwen3-1.7B base regex 0.595 vs judge 0.255; Mistral 4-bit regex 0.890 vs judge 0.565.</li>
     <li><strong>Judge vs GPT-4o (cross-judge κ):</strong> 0.68–0.95 across all ten models (floor = phi base 0.68; peak = llama 4bit 0.95). Per-pair deltas agree in direction; GPT-4o gives qwen_2b +0.005 and llama −0.035.</li>
   </ul>
   <h4>Precision sweep — judge ASR at fp16 / INT8 / NF4</h4>
