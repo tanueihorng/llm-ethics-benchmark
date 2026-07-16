@@ -113,6 +113,12 @@ surfaces:
     lifecycle: local-generated
     availability: local_optional
     profiles: [latex_primary, volatile_free]
+    waived_claims:
+      human-validation-kappa: >-
+        The interim LaTeX is scoped to interim-stage content and never makes
+        the human-grounding claim (it says "a planned independent second
+        judge"); the interim DOCX carries the kappa pair. Waived, not absent
+        by drift.
   - {id: local_final_pdf, path: fyp_submission/report_latex/final_thesis/mythesis.pdf, lifecycle: local-generated, availability: local_optional, source: fyp_submission/report_latex/final_thesis/mythesis.tex, profiles: [pdf, fresh_from_source]}
   - {id: local_interim_pdf, path: fyp_submission/report_latex/interim_report/mythesis.pdf, lifecycle: local-generated, availability: local_optional, source: fyp_submission/report_latex/interim_report/mythesis.tex, profiles: [pdf, fresh_from_source]}
   - {id: local_final_pdf_copy, path: fyp_submission/FYP_Thesis_LaTeX.pdf, lifecycle: local-generated, availability: local_optional, source: fyp_submission/report_latex/final_thesis/mythesis.pdf, profiles: [pdf, byte_matches_source]}
