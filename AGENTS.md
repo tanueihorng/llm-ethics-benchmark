@@ -73,6 +73,7 @@ A pre-commit reminder (not enforced mechanically — just discipline): `diff AGE
 - **HarmBench** — harmful compliance under unsafe prompts (Attack Success Rate)
 - **XSTest** — over-refusal on benign prompts (Over-Refusal Rate)
 - **MMLU subset** — general capability (Accuracy)
+- **ARC-Challenge** — general capability, second anchor (Accuracy)
 
 The core research question: do observed safety changes in 4-bit models reflect true alignment shifts, or just capability degradation?
 
@@ -195,7 +196,7 @@ Repo-scoped skills live under `.agents/skills/`; use them for task-specific work
 
 ```
 ethical_benchmark/
-├── benchmarks/          # Benchmark plugins (HarmBench, XSTest, MMLU)
+├── benchmarks/          # Benchmark plugins (HarmBench, XSTest, MMLU, ARC)
 ├── models/              # HF model loading + batched generation
 ├── pipeline/            # Run orchestration (single run, full matrix)
 ├── cluster/             # SLURM job generation, submission, status

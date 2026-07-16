@@ -347,6 +347,7 @@ const lof = [
   P("Table 6.4  Exploratory per-pair XSTest over-refusal deltas under the independent three-class refusal judge.", { after: 60 }),
   P("Table 6.5  HarmBench ΔASR across the 128- and 512-token generation budgets.", { after: 60 }),
   P("Table D.1  Distribution of automated tests across modules.", { after: 60 }),
+  P("Table G.1  Revision history of this FYP report.", { after: 60 }),
 ];
 
 // ------------------------------------------------------------
@@ -1436,6 +1437,8 @@ const appendixE = [
 │   ├── analysis/compare_quant_pairs.py
 │   ├── cluster/{generate_jobs.py, submit_jobs.py, check_runs.py}
 │   └── metrics/
+├── scripts/                  (analysis + build: precision_sweep_analysis.py, judge_agreement.py,
+│                              make_figures.py, prefetch_tc1.py, verify_report_claims.py, ...)
 ├── tests/                    (382 tests across 29 files)
 ├── slurm/jobs_tc1/           (generated sbatch files)
 ├── results_512/              (primary 512-token results and analysis)
