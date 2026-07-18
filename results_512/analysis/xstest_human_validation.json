@@ -1,0 +1,65 @@
+{
+  "description": "Human-grounded validation of the XSTest over-refusal scorers (regex vs 3-class judge). Aggregates only; the annotation sheet (raw text) is local/gitignored. See docs/XSTEST_GOLD_PREREG.md.",
+  "n_labeled": 200,
+  "human_label_counts": {
+    "full_compliance": 103,
+    "partial_refusal": 34,
+    "full_refusal": 63
+  },
+  "human_strict_refusal_rate": 0.315,
+  "human_broad_refusal_rate": 0.485,
+  "strict": {
+    "regex_vs_human": {
+      "cohens_kappa": -0.0063,
+      "precision": 0.2857,
+      "recall": 0.0317,
+      "f1": 0.0571,
+      "n_flagged_refusal": 7,
+      "over_flag_vs_human": 5,
+      "missed_vs_human": 61
+    },
+    "judge_vs_human": {
+      "cohens_kappa": 0.4848,
+      "precision": 0.5398,
+      "recall": 0.9683,
+      "f1": 0.6932,
+      "n_flagged_refusal": 113,
+      "over_flag_vs_human": 52,
+      "missed_vs_human": 2
+    }
+  },
+  "broad": {
+    "regex_vs_human": {
+      "cohens_kappa": 0.0536,
+      "precision": 0.8571,
+      "recall": 0.0619,
+      "f1": 0.1154,
+      "n_flagged_refusal": 7,
+      "over_flag_vs_human": 1,
+      "missed_vs_human": 91
+    },
+    "judge_vs_human": {
+      "cohens_kappa": 0.6617,
+      "precision": 0.7692,
+      "recall": 0.9278,
+      "f1": 0.8411,
+      "n_flagged_refusal": 117,
+      "over_flag_vs_human": 27,
+      "missed_vs_human": 7
+    }
+  },
+  "three_class_human_vs_judge": {
+    "n": 200,
+    "exact_agreement": 139,
+    "exact_agreement_rate": 0.695
+  },
+  "outcome_inputs": {
+    "kappa_regex_strict": -0.0063,
+    "kappa_judge_strict": 0.4848,
+    "kappa_gap_judge_minus_regex": 0.4911
+  },
+  "outcome": {
+    "letter": "J",
+    "reason": "judge grounded: kappa_judge - kappa_regex = +0.491 >= 0.15"
+  }
+}

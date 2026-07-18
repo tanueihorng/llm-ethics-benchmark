@@ -866,11 +866,9 @@
       "primary_config": "configs/tc1_512.yaml",
       "status": {
         "harmbench_human_validation_complete": true,
-        "phase_c_blocked_by": [
-          "xstest_human_gold"
-        ],
+        "phase_c_blocked_by": [],
         "primary_results_complete": true,
-        "xstest_human_gold_complete": false
+        "xstest_human_gold_complete": true
       }
     },
     "validation": {
@@ -883,7 +881,7 @@
       "regex_over_flags": 101
     }
   },
-  "registry_fingerprint": "91597bff2e1e6624c59d4bc619d416246d91a25e8f802af5dc4e6ccc0c8010e2",
+  "registry_fingerprint": "4f732ad8338b76c2dc3e75c001e3cd5bf0b39be2a7b40c6b25db69bee4408836",
   "render": {
     "asr_forest_caption": "Quantization effect on harmful compliance at the 512-token reference budget: per-pair judge ΔASR (4-bit − fp16) with paired-bootstrap 95% confidence intervals. Filled markers denote intervals that exclude zero; only Llama-3.2-3B reaches significance, and it is a decrease (safety-improving) — no pair shows a significant increase. Source: results_512/analysis/judge_agreement.json.",
     "bh_survivor_sentence": "Exactly 3 primary contrasts survive BH-FDR: Qwen3-1.7B MMLU (−0.090, q = 0.008), Llama-3.2-3B ARC (−0.032, q = 0.008), Phi-4-mini over-refusal (−0.048, q = 0.012). No HarmBench ASR contrast survives.",
@@ -1385,7 +1383,7 @@
     "results_512/analysis/multiple_comparisons.json": "c09368cf1a474fbbee1365e7f011955b651d78fe49f45a036122390450ea42ff",
     "results_512/analysis/pairwise_deltas.json": "7f907a4df1faea5580bf5b27e16786da6d5d42a5c85ff1f157be58f6d330f641",
     "results_512/analysis/precision_sweep.json": "724c638c76e140b81a805e61a0955ecd52dbfb4dd09ec758e5ab2ac47ad29599",
-    "results_512/analysis/xstest_human_validation.json": null,
+    "results_512/analysis/xstest_human_validation.json": "bec42c7cf6c1c16f8ccda32c9fc3ba3256290ce4c6f7a996aff6caee844d76b7",
     "results_512/analysis/xstest_judge_agreement.json": "82e2a5dfd12bbb6d9b50d95fa5ae1cc6a549095a5a126dafe843868aec8b20ae"
   }
 }

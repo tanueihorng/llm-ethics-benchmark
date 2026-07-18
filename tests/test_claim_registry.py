@@ -28,7 +28,11 @@ def test_committed_registry_is_fresh() -> None:
 
 def test_registry_derives_load_bearing_survivors() -> None:
     registry = build_registry(ROOT)
-    assert registry["sources"]["results_512/analysis/xstest_human_validation.json"] is None
+    # T36 executed 2026-07-18 (Outcome J): the human-validation artifact now
+    # exists and is hashed into the registry sources, unblocking Phase C.
+    assert registry["sources"]["results_512/analysis/xstest_human_validation.json"] is not None
+    assert registry["claims"]["study"]["status"]["xstest_human_gold_complete"] is True
+    assert registry["claims"]["study"]["status"]["phase_c_blocked_by"] == []
     multiplicity = registry["claims"]["multiplicity"]
     assert multiplicity["asr_survivor_count"] == 0
     assert multiplicity["survivor_count"] == 3

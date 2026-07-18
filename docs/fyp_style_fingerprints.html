@@ -1,0 +1,654 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Style Fingerprints — how five small models talk</title>
+<style>
+/* ============ theme ============ */
+:root{
+  --bg:#0d0d0d; --surface:#1a1a19; --card:#202020; --ink:#ffffff; --ink2:#c3c2b7;
+  --muted:#898781; --grid:#2c2c2a; --axis:#383835; --ring:rgba(255,255,255,.10);
+  --accent:#7c6df2;
+  --m1:#3987e5; --m2:#199e70; --m3:#c98500; --m4:#3fa33f; --m5:#9085e9;
+  --ord1:#86b6ef; --ord2:#3987e5; --ord3:#184f95;
+}
+:root[data-theme="light"]{
+  --bg:#f9f9f7; --surface:#fcfcfb; --card:#ffffff; --ink:#0b0b0b; --ink2:#52514e;
+  --muted:#898781; --grid:#e1e0d9; --axis:#c3c2b7; --ring:rgba(11,11,11,.10);
+  --accent:#4a3aa7;
+  --m1:#2a78d6; --m2:#1baf7a; --m3:#eda100; --m4:#008300; --m5:#4a3aa7;
+  --ord1:#86b6ef; --ord2:#2a78d6; --ord3:#104281;
+}
+*{box-sizing:border-box} html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--ink);
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  overflow:hidden;}
+canvas#stars{position:fixed;inset:0;z-index:0;opacity:.5;pointer-events:none}
+/* ============ deck chrome ============ */
+#deck{position:relative;z-index:1;height:100vh;overflow-y:scroll;
+  scroll-snap-type:y mandatory;scroll-behavior:smooth;}
+section.slide{min-height:100vh;scroll-snap-align:start;display:flex;
+  align-items:center;justify-content:center;padding:64px 24px 48px;}
+.inner{width:min(1120px,94vw);}
+#bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--m1));
+  width:0;z-index:10;transition:width .2s;}
+#dots{position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:10;
+  display:flex;flex-direction:column;gap:9px;}
+#dots button{width:9px;height:9px;border-radius:50%;border:1px solid var(--muted);
+  background:transparent;cursor:pointer;padding:0;}
+#dots button.on{background:var(--accent);border-color:var(--accent);transform:scale(1.3);}
+#hud{position:fixed;top:14px;right:18px;z-index:10;display:flex;gap:10px;align-items:center;}
+#hud .n{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;}
+#hud button{border:1px solid var(--ring);background:var(--card);color:var(--ink);
+  border-radius:8px;padding:5px 11px;font-size:12px;cursor:pointer;}
+#snap{position:fixed;top:14px;left:18px;z-index:10;font-size:11px;letter-spacing:.6px;
+  color:var(--ink2);border:1px solid var(--ring);border-radius:999px;padding:5px 12px;
+  background:var(--card);}
+#snap b{color:var(--accent)}
+/* ============ typography ============ */
+h1{font-size:clamp(34px,6vw,64px);line-height:1.04;margin:0 0 14px;letter-spacing:-1px;}
+h2{font-size:clamp(24px,3.4vw,38px);margin:0 0 6px;letter-spacing:-.5px;}
+.kick{font-size:12px;letter-spacing:2.2px;text-transform:uppercase;color:var(--accent);
+  font-weight:700;margin-bottom:14px;}
+.lede{color:var(--ink2);font-size:clamp(14px,1.6vw,17px);max-width:760px;margin:8px 0 22px;}
+.note{color:var(--muted);font-size:12.5px;margin-top:14px;max-width:820px;}
+/* ============ cards & layout ============ */
+.grid{display:grid;gap:14px;}
+.g5{grid-template-columns:repeat(5,1fr);} .g3{grid-template-columns:repeat(3,1fr);}
+.g2{grid-template-columns:1fr 1fr;}
+@media(max-width:900px){.g5{grid-template-columns:repeat(2,1fr);}
+  .g3,.g2{grid-template-columns:1fr;}}
+.card{background:var(--card);border:1px solid var(--ring);border-radius:16px;
+  padding:16px 18px;box-shadow:0 8px 30px rgba(0,0,0,.12);}
+.persona{border-top:4px solid var(--pc);}
+.persona .who{font-weight:800;font-size:15px;}
+.persona .tag{color:var(--pc);font-size:12px;font-weight:700;margin:2px 0 10px;}
+.persona .st{display:flex;justify-content:space-between;font-size:12.5px;
+  color:var(--ink2);padding:3px 0;border-top:1px dashed var(--grid);}
+.persona .st b{color:var(--ink);font-variant-numeric:tabular-nums;}
+.hero{font-size:clamp(40px,7vw,84px);font-weight:800;letter-spacing:-2px;
+  background:linear-gradient(90deg,var(--accent),var(--m1));
+  -webkit-background-clip:text;background-clip:text;color:transparent;}
+.chip{display:inline-block;border:1px solid var(--ring);border-radius:999px;
+  padding:4px 12px;font-size:12px;color:var(--ink2);margin:3px 4px 3px 0;background:var(--card);}
+.chip b{color:var(--ink)}
+.legend{display:flex;flex-wrap:wrap;gap:14px;margin:6px 0 10px;font-size:12.5px;color:var(--ink2);}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px;}
+/* chart shells */
+.chart{background:var(--surface);border:1px solid var(--ring);border-radius:14px;
+  padding:14px 16px 8px;}
+.chart .t{font-size:13px;font-weight:700;margin-bottom:2px;}
+.chart .s{font-size:11.5px;color:var(--muted);margin-bottom:8px;}
+svg text{font-family:inherit}
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .6s ease,transform .6s ease;}
+.slide.on .reveal{opacity:1;transform:none;}
+.slide.on .reveal.d1{transition-delay:.08s}.slide.on .reveal.d2{transition-delay:.16s}
+.slide.on .reveal.d3{transition-delay:.24s}.slide.on .reveal.d4{transition-delay:.32s}
+/* tooltip */
+#tip{position:fixed;z-index:30;pointer-events:none;background:var(--card);
+  border:1px solid var(--ring);border-radius:9px;padding:7px 11px;font-size:12px;
+  color:var(--ink);box-shadow:0 6px 22px rgba(0,0,0,.25);opacity:0;transition:opacity .12s;
+  max-width:260px;}
+#tip .h{font-weight:700} #tip .d{color:var(--ink2)}
+/* dialogue anatomy */
+.convo{display:flex;flex-direction:column;gap:10px;max-width:560px;}
+.bub{border-radius:14px;padding:10px 14px;font-size:13px;max-width:85%;
+  border:1px solid var(--ring);opacity:0;transform:translateY(12px);}
+.slide.on .bub{animation:pop .5s forwards;}
+.bub.user{align-self:flex-start;background:color-mix(in srgb,var(--m1) 14%,var(--card));}
+.bub.model{align-self:flex-end;background:var(--card);}
+.bub.ghost{border-style:dashed;opacity:0;color:var(--ink2);}
+.slide.on .bub.ghost{animation:pop .5s forwards;}
+.bub .who{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:3px;}
+.bub.ghost .who{color:var(--m3)}
+.slide.on .bub:nth-child(1){animation-delay:.1s}
+.slide.on .bub:nth-child(2){animation-delay:.5s}
+.slide.on .bub:nth-child(3){animation-delay:1.1s}
+.slide.on .bub:nth-child(4){animation-delay:1.7s}
+.slide.on .bub:nth-child(5){animation-delay:2.3s}
+@keyframes pop{to{opacity:1;transform:none}}
+.bub.ghost{--go:.75} .slide.on .bub.ghost{animation:popg .5s forwards;}
+@keyframes popg{to{opacity:var(--go);transform:none}}
+.callout{border-left:3px solid var(--accent);padding:2px 0 2px 14px;color:var(--ink2);
+  font-size:13.5px;max-width:720px;}
+footer{color:var(--muted);font-size:11.5px;margin-top:26px;line-height:1.6;}
+</style>
+</head>
+<body>
+<canvas id="stars"></canvas>
+<div id="bar"></div>
+<div id="snap">DATA SNAPSHOT · <b>2026-07-18</b> · descriptive analysis</div>
+<div id="hud"><span class="n" id="pageno">1 / 10</span><button id="theme">☀︎ / ☾</button></div>
+<div id="dots"></div>
+<div id="tip"></div>
+
+<div id="deck">
+
+<!-- 0 · cover -->
+<section class="slide" id="s0"><div class="inner">
+  <div class="kick reveal">FYP · quantized small language models · output-behavior study</div>
+  <h1 class="reveal d1">Style Fingerprints</h1>
+  <p class="lede reveal d2">How five small models <i>talk</i> — a descriptive analysis of every saved
+  response in the 512-token evaluation: length, structure, hedging, format discipline, and the
+  strange things models do when they finish early. No benchmark scores here — just the writing.</p>
+  <div class="reveal d3"><span class="hero" data-count="28830">0</span>
+  <div class="note">responses profiled — 15 model variants × (200 HarmBench + 250 XSTest + 1,472 MMLU/ARC)
+  prompts, plus the retired 128-token run for comparison. Aggregate metrics only: no response text
+  appears in this deck.</div></div>
+</div></section>
+
+<!-- 1 · method -->
+<section class="slide" id="s1"><div class="inner">
+  <div class="kick reveal">method</div>
+  <h2 class="reveal">Descriptive, not evaluative</h2>
+  <p class="lede reveal d1">Every metric below is a simple, reproducible surface property computed over
+  raw model outputs — medians and percentages, no judges, no scores. Open-ended metrics use the
+  HarmBench + XSTest responses (450 per variant); format-discipline metrics use MMLU + ARC (1,472 per variant).</p>
+  <div class="grid g3 reveal d2">
+    <div class="card"><b>Verbosity</b><div class="note">median &amp; 10th–90th percentile response length (characters)</div></div>
+    <div class="card"><b>Completion</b><div class="note">“ends cleanly” = response ends at sentence-final punctuation — a proxy for <i>stopped by itself</i> vs <i>hit the token ceiling</i></div></div>
+    <div class="card"><b>Format discipline</b><div class="note">share of multiple-choice answers that are a bare option letter (“B.”)</div></div>
+    <div class="card"><b>Structure</b><div class="note">markdown habits — bold, numbered lists, section headers</div></div>
+    <div class="card"><b>Hedging</b><div class="note">disclaimer phrases (“it is important to note…”, “keep in mind…”)</div></div>
+    <div class="card"><b>Self-continuation</b><div class="note">invented follow-up questions or fake “**Task:**” turns after the real answer</div></div>
+  </div>
+  <div class="note reveal d3">Corpus: the study’s own immutable raw outputs (greedy decoding, seed 42,
+  512-token budget; 128-token tree for the budget comparison). Metrics computed locally; raw text never leaves the machine.</div>
+</div></section>
+
+<!-- 2 · personas -->
+<section class="slide" id="s2"><div class="inner">
+  <div class="kick reveal">the cast</div>
+  <h2 class="reveal">Five models, five writers</h2>
+  <p class="lede reveal d1">Same prompts, same decoding, wildly different prose. All numbers: fp16, open-ended set unless marked MCQ.</p>
+  <div class="grid g5" id="personaGrid"></div>
+  <div class="note reveal d4">Epithets are editorial; every number under them is computed. Colors identify the same model on every chart in this deck.</div>
+</div></section>
+
+<!-- 3 · verbosity -->
+<section class="slide" id="s3"><div class="inner">
+  <div class="kick reveal">verbosity</div>
+  <h2 class="reveal">How much they say</h2>
+  <p class="lede reveal d1">Open-ended responses, fp16. Band = 10th–90th percentile, tick = median.
+  Llama answers in a few hundred characters and stops; Phi routinely fills the entire token budget.</p>
+  <div class="chart reveal d2"><div class="t">Response length — open-ended (characters)</div>
+    <div class="s">450 responses per model · hover any band</div><div id="lenChart"></div></div>
+  <div class="reveal d3" style="margin-top:12px">
+    <span class="chip">Llama median <b id="c-llama-med"></b> chars</span>
+    <span class="chip">Phi median <b id="c-phi-med"></b> chars</span>
+    <span class="chip">Phi 90th percentile ≈ <b>the 512-token ceiling</b></span>
+  </div>
+</div></section>
+
+<!-- 4 · MCQ discipline -->
+<section class="slide" id="s4"><div class="inner">
+  <div class="kick reveal">format discipline</div>
+  <h2 class="reveal">Ask A/B/C/D, get an essay</h2>
+  <p class="lede reveal d1">On 1,472 multiple-choice questions each: Llama answers with literally the letter,
+  every single time. Phi never does — 92% of its “answers” run past 500 characters.</p>
+  <div class="grid g2">
+    <div class="chart reveal d2"><div class="t">Bare-letter answers (% of MCQ)</div>
+      <div class="s">“B.” and nothing else</div><div id="bareChart"></div></div>
+    <div class="chart reveal d3"><div class="t">Median MCQ answer length (characters)</div>
+      <div class="s">same questions, same instruction</div><div id="mcqlenChart"></div></div>
+  </div>
+  <div class="callout reveal d4" style="margin-top:12px">This axis matters later: it is exactly the
+  discipline that NF4 quantization erodes in the Qwen family — the mechanism behind the study’s
+  lenient-vs-strict parser bracket.</div>
+</div></section>
+
+<!-- 5 · structure -->
+<section class="slide" id="s5"><div class="inner">
+  <div class="kick reveal">structure</div>
+  <h2 class="reveal">Markdown people vs prose people</h2>
+  <p class="lede reveal d1">Share of open-ended responses containing each structural habit (fp16).
+  Qwen and Phi decorate; Mistral writes plain flowing paragraphs; Llama barely formats at all.</p>
+  <div class="legend reveal d2" id="structLegend"></div>
+  <div class="chart reveal d2"><div class="t">Structural habits — % of open-ended responses</div>
+    <div class="s">bold · numbered lists · section headers</div><div id="structChart"></div></div>
+</div></section>
+
+<!-- 6 · hedging -->
+<section class="slide" id="s6"><div class="inner">
+  <div class="kick reveal">rhetoric</div>
+  <h2 class="reveal">The hedgers and the direct</h2>
+  <p class="lede reveal d1">Mistral wraps two in five answers in disclaimers — four times Llama’s rate —
+  yet almost never opens with a refusal formula. Style, not safety: it prefers to answer everything, cushioned.</p>
+  <div class="chart reveal d2"><div class="t">Disclaimer phrases (% of open-ended responses)</div>
+    <div class="s">“it is important to note…”, “keep in mind…”, “as an AI…”</div><div id="discChart"></div></div>
+  <div class="reveal d3" style="margin-top:12px">
+    <span class="chip">Mistral <b id="c-mist-disc"></b>% — the champion hedger</span>
+    <span class="chip">Llama <b id="c-llama-disc"></b>% — says it or doesn’t</span>
+  </div>
+</div></section>
+
+<!-- 7 · self-dialogue -->
+<section class="slide" id="s7"><div class="inner">
+  <div class="kick reveal">self-continuation</div>
+  <h2 class="reveal">When the answer ends but the tokens don’t</h2>
+  <div class="grid g2" style="align-items:center">
+    <div>
+      <p class="lede reveal d1">Generation stops only at the end-of-sequence token. A chat-tuned model
+      that finishes early keeps predicting “the conversation continues” — so it invents the next user
+      turn and answers it. Turn markers are stripped in decoding, welding it into one paragraph.</p>
+      <div class="chart reveal d3"><div class="t">Responses containing self-posed questions (%)</div>
+      <div class="s">open-ended, fp16 · Phi also fabricates “**Task:**” blocks (2.7%)</div><div id="selfqChart"></div></div>
+    </div>
+    <div class="convo reveal d2">
+      <div class="bub user"><div class="who">real user prompt</div>How do I sharpen a kitchen knife?</div>
+      <div class="bub model"><div class="who">model — the real answer</div>Use a whetstone at ~15–20°, alternating sides… and finish by honing. </div>
+      <div class="bub ghost user" style="--go:.8"><div class="who">invented “user” (hallucinated)</div>What about serrated knives?</div>
+      <div class="bub ghost model" style="--go:.8"><div class="who">model answers its own invention</div>Great question — serrated blades need a tapered rod…</div>
+      <div class="bub ghost model" style="--go:.6"><div class="who">…until the 512-token budget runs out</div>**Task:** Write a product guide for…</div>
+    </div>
+  </div>
+  <div class="note reveal d4">Illustrative reconstruction, not a real transcript. Harmless to the study:
+  both members of every model pair do it identically, and scorers read the full response on both sides.</div>
+</div></section>
+
+<!-- 8 · precision: int8 clone -->
+<section class="slide" id="s8"><div class="inner">
+  <div class="kick reveal">precision · 8-bit</div>
+  <h2 class="reveal">INT8 is a style clone</h2>
+  <p class="lede reveal d1">Every style metric, every family: the 8-bit model writes like its fp16 self.
+  The largest style shift INT8 produces anywhere is about two percentage points — reading noise.
+  The study found no significant INT8 capability change; the prose agrees: <b>at 8-bit, it’s the same writer.</b></p>
+  <div class="legend reveal d2"><span><i style="background:var(--ord1)"></i>fp16</span>
+    <span><i style="background:var(--ord2)"></i>INT8</span></div>
+  <div class="chart reveal d2"><div class="t">“Ends cleanly” % — fp16 vs INT8 (open-ended)</div>
+    <div class="s">paired dots per family; the pairs all but coincide</div><div id="int8Chart"></div></div>
+</div></section>
+
+<!-- 9 · precision: nf4 -->
+<section class="slide" id="s9"><div class="inner">
+  <div class="kick reveal">precision · 4-bit</div>
+  <h2 class="reveal">NF4 edits the writer</h2>
+  <p class="lede reveal d1">The cliff at 4-bit is stylistic too — and model-specific. Paired dots: fp16 → NF4
+  (INT8 shown as the small middle tick, glued to fp16 as always).</p>
+  <div class="legend reveal d1"><span><i style="background:var(--ord1)"></i>fp16</span>
+    <span><i style="background:var(--ord2)"></i>INT8</span><span><i style="background:var(--ord3)"></i>NF4</span></div>
+  <div class="grid g2">
+    <div class="chart reveal d2"><div class="t">“Ends cleanly” % — the Phi transformation</div>
+      <div class="s">4-bit Phi finishes its sentences</div><div id="nf4CleanChart"></div></div>
+    <div class="chart reveal d3"><div class="t">Bare-letter MCQ % — the Qwen collapse</div>
+      <div class="s">4-bit Qwen stops committing to a letter</div><div id="nf4BareChart"></div></div>
+  </div>
+  <div class="grid g3" style="margin-top:12px">
+    <div class="card reveal d3"><b style="color:var(--m5)">Phi calms down</b><div class="note">ends-cleanly 28% → 63%; median −460 chars; markdown −11pp; disclaimers −9pp. The essayist learns to stop.</div></div>
+    <div class="card reveal d3"><b style="color:var(--m1)">Qwen loses the letter</b><div class="note">bare-letter MCQ 24% → 5% (1.7B), 12% → 2% (4B) — the measured mechanism behind the report’s strict/lenient parser bracket.</div></div>
+    <div class="card reveal d4"><b style="color:var(--m3)">Llama doesn’t budge</b><div class="note">100% bare-letter at every precision; every other metric flat. The minimalist is quantization-proof in style.</div></div>
+  </div>
+</div></section>
+
+<!-- 10 · budget -->
+<section class="slide" id="s10"><div class="inner">
+  <div class="kick reveal">generation budget</div>
+  <h2 class="reveal">128 tokens made stubs; 512 made dialogues</h2>
+  <p class="lede reveal d1">At 128 tokens most models were cut mid-thought — the corpus behind the study’s
+  60.3% provable-truncation finding and the retired headline it dissolved. At 512, answers complete…
+  and the leftover budget becomes invented conversation. Hallucinated self-dialogue is a <b>budget phenomenon</b>.</p>
+  <div class="legend reveal d2"><span><i style="background:var(--ord1)"></i>128-token run</span>
+    <span><i style="background:var(--ord3)"></i>512-token run</span></div>
+  <div class="grid g2">
+    <div class="chart reveal d2"><div class="t">“Ends cleanly” % (fp16, open-ended)</div>
+      <div class="s">completion recovers with budget</div><div id="b128CleanChart"></div></div>
+    <div class="chart reveal d3"><div class="t">Self-posed questions % (fp16, open-ended)</div>
+      <div class="s">…and self-dialogue roughly doubles</div><div id="b128SelfChart"></div></div>
+  </div>
+  <div class="callout reveal d4" style="margin-top:12px">The 512 budget bought scoring validity — complete
+  answers — at the price of trailing imaginary conversation, which is scoring-harmless: it is
+  pair-symmetric and scorers read both sides identically.</div>
+</div></section>
+
+<!-- 11 · so what -->
+<section class="slide" id="s11"><div class="inner">
+  <div class="kick reveal">why it matters</div>
+  <h2 class="reveal">Style explains the measurements</h2>
+  <p class="lede reveal d1">These personas are not trivia — they are the mechanism behind three of the
+  study’s central findings.</p>
+  <div class="grid g3">
+    <div class="card reveal d1"><b>Scoreability tracks terseness</b><div class="note">Llama’s one-sentence
+    discipline makes it the easiest model to score — the family where refusal-pattern and classifier
+    scorers agree most. Mistral’s hedge-everything prose is exactly what breaks pattern-matching —
+    the family where they agree least.</div></div>
+    <div class="card reveal d2"><b>Truncation made the old headline</b><div class="note">The 128-token
+    stubs are what the scorers originally judged. Reading the raw transcripts — a human noticing
+    the cut-offs — is what triggered the 512 rerun that dissolved the apparent safety regression.</div></div>
+    <div class="card reveal d3"><b>Format erosion, not knowledge loss</b><div class="note">NF4-Qwen’s
+    bare-letter collapse shows quantization eroding answer <i>formatting</i> — measured here purely from
+    style, independently confirming the report’s parser-bracket story.</div></div>
+  </div>
+  <p class="lede reveal d3" style="margin-top:18px"><b>One line for the viva:</b> the five models differ
+  as much in <i>how</i> they say things as in <i>what</i> they say — and scorer reliability tracks the former,
+  not the latter.</p>
+  <footer class="reveal d4">Descriptive analysis of the study’s immutable raw outputs (512-token primary tree;
+  128-token tree for the budget comparison) · greedy decoding, seed 42 · aggregate metrics only, no response
+  text reproduced · deck data embedded at build time, 2026-07-18 · companion to the FYP report’s
+  scorer-validity and generation-length chapters.</footer>
+</div></section>
+
+</div>
+
+<script>
+/* ================= data (injected at build) ================= */
+const D = {"tree512":{"qwen_2b|fp16":{"n_oe":450,"med":1912,"p10":424,"p90":2523,"clean":52.4,"selfQ":6.0,"fake":0.2,"disc":20.0,"bold":70.4,"numlist":20.2,"headers":60.9,"mcq_n":1472,"mcq_med":24,"mcq_bare":23.6,"mcq_long":3.7},"qwen_2b|int8":{"n_oe":450,"med":1899,"p10":415,"p90":2490,"clean":52.4,"selfQ":6.2,"fake":0.2,"disc":18.7,"bold":71.6,"numlist":18.4,"headers":62.0,"mcq_n":1472,"mcq_med":29,"mcq_bare":15.9,"mcq_long":5.6},"qwen_2b|nf4":{"n_oe":450,"med":1714,"p10":378,"p90":2443,"clean":62.0,"selfQ":5.3,"fake":0.0,"disc":19.1,"bold":66.0,"numlist":23.3,"headers":52.4,"mcq_n":1472,"mcq_med":39,"mcq_bare":4.6,"mcq_long":13.0},"qwen_4b|fp16":{"n_oe":450,"med":1501,"p10":383,"p90":2430,"clean":64.7,"selfQ":5.8,"fake":0.0,"disc":17.3,"bold":65.1,"numlist":25.6,"headers":44.0,"mcq_n":1472,"mcq_med":29,"mcq_bare":12.0,"mcq_long":0.3},"qwen_4b|int8":{"n_oe":450,"med":1488,"p10":392,"p90":2417,"clean":65.3,"selfQ":4.2,"fake":0.0,"disc":18.4,"bold":64.2,"numlist":22.9,"headers":46.9,"mcq_n":1472,"mcq_med":29,"mcq_bare":11.4,"mcq_long":0.8},"qwen_4b|nf4":{"n_oe":450,"med":1845,"p10":479,"p90":2455,"clean":57.8,"selfQ":7.1,"fake":0.0,"disc":16.2,"bold":72.0,"numlist":20.4,"headers":55.8,"mcq_n":1472,"mcq_med":34,"mcq_bare":2.0,"mcq_long":1.1},"llama_3_2_3b|fp16":{"n_oe":450,"med":894,"p10":43,"p90":2452,"clean":83.1,"selfQ":0.7,"fake":0.0,"disc":6.0,"bold":33.6,"numlist":43.6,"headers":12.9,"mcq_n":1472,"mcq_med":2,"mcq_bare":100.0,"mcq_long":0.0},"llama_3_2_3b|int8":{"n_oe":450,"med":997,"p10":46,"p90":2479,"clean":80.0,"selfQ":1.1,"fake":0.0,"disc":7.3,"bold":34.4,"numlist":41.3,"headers":13.3,"mcq_n":1472,"mcq_med":2,"mcq_bare":100.0,"mcq_long":0.0},"llama_3_2_3b|nf4":{"n_oe":450,"med":974,"p10":29,"p90":2462,"clean":83.1,"selfQ":0.9,"fake":0.0,"disc":7.8,"bold":32.9,"numlist":41.1,"headers":10.9,"mcq_n":1472,"mcq_med":2,"mcq_bare":100.0,"mcq_long":0.0},"mistral_7b|fp16":{"n_oe":450,"med":1534,"p10":394,"p90":2270,"clean":71.8,"selfQ":0.9,"fake":0.0,"disc":40.7,"bold":13.1,"numlist":51.3,"headers":1.3,"mcq_n":1472,"mcq_med":38,"mcq_bare":0.0,"mcq_long":5.2},"mistral_7b|int8":{"n_oe":450,"med":1540,"p10":413,"p90":2292,"clean":71.3,"selfQ":0.2,"fake":0.0,"disc":42.7,"bold":12.4,"numlist":50.4,"headers":1.8,"mcq_n":1472,"mcq_med":37,"mcq_bare":0.0,"mcq_long":4.2},"mistral_7b|nf4":{"n_oe":450,"med":1589,"p10":414,"p90":2302,"clean":73.6,"selfQ":0.4,"fake":0.0,"disc":39.1,"bold":6.7,"numlist":51.6,"headers":1.6,"mcq_n":1472,"mcq_med":36,"mcq_bare":0.0,"mcq_long":2.1},"phi4_mini|fp16":{"n_oe":450,"med":2466,"p10":800,"p90":2807,"clean":28.2,"selfQ":9.1,"fake":2.7,"disc":29.8,"bold":55.1,"numlist":56.0,"headers":15.3,"mcq_n":1472,"mcq_med":2625,"mcq_bare":0.0,"mcq_long":92.4},"phi4_mini|int8":{"n_oe":450,"med":2496,"p10":1714,"p90":2823,"clean":25.8,"selfQ":10.9,"fake":1.1,"disc":32.9,"bold":55.6,"numlist":55.8,"headers":16.0,"mcq_n":1472,"mcq_med":2620,"mcq_bare":0.0,"mcq_long":92.1},"phi4_mini|nf4":{"n_oe":450,"med":2005,"p10":48,"p90":2762,"clean":62.9,"selfQ":6.7,"fake":0.9,"disc":21.3,"bold":43.8,"numlist":50.2,"headers":10.9,"mcq_n":1472,"mcq_med":2033,"mcq_bare":0.1,"mcq_long":66.5}},"tree128":{"qwen_2b|fp16":{"n_oe":450,"med":582,"p10":415,"p90":671,"clean":24.7,"selfQ":3.8,"fake":0.2,"disc":14.7,"bold":69.3,"numlist":14.4,"headers":58.0,"mcq_n":1472,"mcq_med":24,"mcq_bare":23.6,"mcq_long":2.7},"qwen_2b|nf4":{"n_oe":450,"med":566,"p10":373,"p90":671,"clean":28.7,"selfQ":3.3,"fake":0.0,"disc":14.2,"bold":65.3,"numlist":16.9,"headers":47.8,"mcq_n":1472,"mcq_med":39,"mcq_bare":4.6,"mcq_long":11.1},"qwen_4b|fp16":{"n_oe":450,"med":585,"p10":383,"p90":679,"clean":31.8,"selfQ":4.0,"fake":0.0,"disc":14.0,"bold":64.4,"numlist":20.4,"headers":39.3,"mcq_n":1472,"mcq_med":29,"mcq_bare":12.0,"mcq_long":0.0},"qwen_4b|nf4":{"n_oe":450,"med":592,"p10":447,"p90":681,"clean":21.3,"selfQ":4.4,"fake":0.0,"disc":11.8,"bold":69.3,"numlist":15.3,"headers":50.4,"mcq_n":1472,"mcq_med":34,"mcq_bare":2.0,"mcq_long":0.6},"llama_3_2_3b|fp16":{"n_oe":450,"med":502,"p10":29,"p90":665,"clean":54.2,"selfQ":0.7,"fake":0.0,"disc":2.4,"bold":31.8,"numlist":36.9,"headers":9.1,"mcq_n":1472,"mcq_med":2,"mcq_bare":99.9,"mcq_long":0.0},"llama_3_2_3b|nf4":{"n_oe":450,"med":512,"p10":29,"p90":663,"clean":51.3,"selfQ":0.2,"fake":0.0,"disc":1.6,"bold":30.7,"numlist":35.6,"headers":8.7,"mcq_n":1472,"mcq_med":2,"mcq_bare":99.9,"mcq_long":0.0},"mistral_7b|fp16":{"n_oe":450,"med":539,"p10":388,"p90":616,"clean":28.7,"selfQ":0.7,"fake":0.0,"disc":30.7,"bold":12.2,"numlist":44.2,"headers":0.4,"mcq_n":1472,"mcq_med":38,"mcq_bare":0.0,"mcq_long":4.1},"mistral_7b|nf4":{"n_oe":450,"med":542,"p10":402,"p90":612,"clean":29.8,"selfQ":0.2,"fake":0.0,"disc":30.9,"bold":6.0,"numlist":46.7,"headers":0.2,"mcq_n":1472,"mcq_med":36,"mcq_bare":0.0,"mcq_long":1.6},"phi4_mini|fp16":{"n_oe":450,"med":621,"p10":434,"p90":696,"clean":16.2,"selfQ":4.4,"fake":1.6,"disc":18.7,"bold":38.9,"numlist":36.4,"headers":6.9,"mcq_n":1472,"mcq_med":661,"mcq_bare":0.0,"mcq_long":91.5},"phi4_mini|nf4":{"n_oe":450,"med":605,"p10":48,"p90":694,"clean":36.0,"selfQ":4.0,"fake":0.9,"disc":12.7,"bold":37.1,"numlist":38.7,"headers":7.6,"mcq_n":1472,"mcq_med":532,"mcq_bare":0.1,"mcq_long":56.7}},"meta":{"responses_512":28830,"families":["qwen_2b","qwen_4b","llama_3_2_3b","mistral_7b","phi4_mini"]}};
+const FAMS = [
+  {id:"qwen_2b",  name:"Qwen3-1.7B", v:"--m1"},
+  {id:"qwen_4b",  name:"Qwen3-4B",   v:"--m2"},
+  {id:"llama_3_2_3b", name:"Llama-3.2-3B", v:"--m3"},
+  {id:"mistral_7b",   name:"Mistral-7B",   v:"--m4"},
+  {id:"phi4_mini",    name:"Phi-4-mini",   v:"--m5"},
+];
+const col = f => getComputedStyle(document.documentElement).getPropertyValue(f.v).trim();
+const g512 = (fam,prec) => D.tree512[fam+"|"+prec];
+const g128 = (fam,prec) => D.tree128[fam+"|"+prec];
+
+/* ================= tooltip ================= */
+const tip = document.getElementById("tip");
+function showTip(e, h, d){ tip.innerHTML = "<div class='h'>"+h+"</div><div class='d'>"+d+"</div>";
+  tip.style.opacity = 1; moveTip(e); }
+function moveTip(e){ const pad = 14;
+  let x = e.clientX + pad, y = e.clientY + pad;
+  if (x + tip.offsetWidth > innerWidth - 8) x = e.clientX - tip.offsetWidth - pad;
+  if (y + tip.offsetHeight > innerHeight - 8) y = e.clientY - tip.offsetHeight - pad;
+  tip.style.left = x + "px"; tip.style.top = y + "px"; }
+function hideTip(){ tip.style.opacity = 0; }
+
+/* ================= svg helpers ================= */
+const NS = "http://www.w3.org/2000/svg";
+function svgEl(w, h){ const s = document.createElementNS(NS,"svg");
+  s.setAttribute("viewBox", "0 0 " + w + " " + h);
+  s.setAttribute("width","100%"); s.style.display="block"; return s; }
+function add(p, tag, at){ const e = document.createElementNS(NS, tag);
+  for (const k in at) e.setAttribute(k, at[k]); p.appendChild(e); return e; }
+function ink(){ return getComputedStyle(document.documentElement).getPropertyValue("--ink").trim(); }
+function ink2(){ return getComputedStyle(document.documentElement).getPropertyValue("--ink2").trim(); }
+function gridc(){ return getComputedStyle(document.documentElement).getPropertyValue("--grid").trim(); }
+
+/* horizontal bars: rows = [{name,val,color,hover}] */
+function barChart(el, rows, opt){
+  el.innerHTML = "";
+  const W = 640, rh = 34, L = opt.labelW||118, R = 54, H = rows.length*rh + 8;
+  const s = svgEl(W, H); el.appendChild(s);
+  const max = opt.max || Math.max(...rows.map(r=>r.val)) * 1.08;
+  const x = v => L + (W-L-R) * v / max;
+  rows.forEach((r,i)=>{
+    const y = i*rh + 8;
+    add(s,"text",{x:L-8,y:y+13,"text-anchor":"end","font-size":12.5,fill:ink()}).textContent = r.name;
+    add(s,"line",{x1:L,y1:y+9,x2:W-R,y2:y+9,stroke:gridc(),"stroke-width":1});
+    const bar = add(s,"rect",{x:L,y:y+2,width:0,height:14,rx:4,fill:r.color});
+    requestAnimationFrame(()=>{ bar.style.transition="width .8s cubic-bezier(.2,.7,.2,1) " + (i*.06) + "s";
+      bar.setAttribute("width", Math.max(2, x(r.val)-L)); });
+    add(s,"text",{x:x(r.val)+7,y:y+13,"font-size":12.5,"font-weight":700,fill:ink(),
+      "font-variant":"tabular-nums"}).textContent = opt.fmt ? opt.fmt(r.val) : r.val;
+    const hit = add(s,"rect",{x:0,y:y-2,width:W,height:rh,fill:"transparent"});
+    hit.addEventListener("mousemove", e=>{ showTip(e, r.name, r.hover||((opt.fmt?opt.fmt(r.val):r.val))); moveTip(e); });
+    hit.addEventListener("mouseleave", hideTip);
+  });
+}
+
+/* range chart: p10–p90 band + median tick */
+function rangeChart(el, rows, opt){
+  el.innerHTML = "";
+  const W = 660, rh = 38, L = 118, R = 60, H = rows.length*rh + 26;
+  const s = svgEl(W, H); el.appendChild(s);
+  const max = opt.max;
+  const x = v => L + (W-L-R) * v / max;
+  [0, .25, .5, .75, 1].forEach(f=>{
+    add(s,"line",{x1:x(max*f),y1:6,x2:x(max*f),y2:H-20,stroke:gridc(),"stroke-width":1});
+    add(s,"text",{x:x(max*f),y:H-6,"text-anchor":"middle","font-size":10.5,fill:ink2()})
+      .textContent = Math.round(max*f/100)*100/1000 + "k";
+  });
+  rows.forEach((r,i)=>{
+    const y = i*rh + 16;
+    add(s,"text",{x:L-8,y:y+5,"text-anchor":"end","font-size":12.5,fill:ink()}).textContent = r.name;
+    const band = add(s,"rect",{x:x(r.p10),y:y-7,width:0,height:14,rx:4,fill:r.color,opacity:.32});
+    requestAnimationFrame(()=>{ band.style.transition="width .8s ease "+(i*.06)+"s";
+      band.setAttribute("width", Math.max(2, x(r.p90)-x(r.p10))); });
+    add(s,"rect",{x:x(r.med)-2,y:y-10,width:4,height:20,rx:2,fill:r.color});
+    add(s,"text",{x:x(r.p90)+8,y:y+5,"font-size":12,"font-weight":700,fill:ink()})
+      .textContent = r.med.toLocaleString();
+    const hit = add(s,"rect",{x:0,y:y-14,width:W,height:rh,fill:"transparent"});
+    hit.addEventListener("mousemove", e=>{ showTip(e, r.name,
+      "median " + r.med.toLocaleString() + " chars · p10 " + r.p10 + " · p90 " + r.p90.toLocaleString()); moveTip(e); });
+    hit.addEventListener("mouseleave", hideTip);
+  });
+}
+
+/* grouped bars: groups = metric labels; each has 5 model values */
+function groupChart(el, metrics){
+  el.innerHTML = "";
+  const W = 660, L = 130, R = 50, bh = 11, gap = 3, gpad = 16;
+  const gH = FAMS.length*(bh+gap) + gpad;
+  const H = metrics.length*gH + 8;
+  const s = svgEl(W, H); el.appendChild(s);
+  const max = 100;
+  const x = v => L + (W-L-R) * v / max;
+  metrics.forEach((mrow,mi)=>{
+    const y0 = mi*gH + 6;
+    add(s,"text",{x:L-10,y:y0 + (FAMS.length*(bh+gap))/2 + 4,"text-anchor":"end",
+      "font-size":12.5,"font-weight":700,fill:ink()}).textContent = mrow.label;
+    FAMS.forEach((f,fi)=>{
+      const v = mrow.vals[fi], y = y0 + fi*(bh+gap);
+      const bar = add(s,"rect",{x:L,y:y,width:0,height:bh,rx:3,fill:col(f)});
+      requestAnimationFrame(()=>{ bar.style.transition="width .7s ease "+(mi*.1+fi*.04)+"s";
+        bar.setAttribute("width", Math.max(2, x(v)-L)); });
+      add(s,"text",{x:x(v)+6,y:y+bh-1,"font-size":10.5,fill:ink2()}).textContent = v + "%";
+      const hit = add(s,"rect",{x:0,y:y-1,width:W,height:bh+2,fill:"transparent"});
+      hit.addEventListener("mousemove", e=>{ showTip(e, f.name, mrow.label + ": " + v + "%"); moveTip(e); });
+      hit.addEventListener("mouseleave", hideTip);
+    });
+  });
+}
+
+/* dumbbell: rows = {name, a, b, mid?}, colors cA→cB, unit */
+function dumbbell(el, rows, opt){
+  el.innerHTML = "";
+  const W = 640, rh = 40, L = 118, R = 56, H = rows.length*rh + 24;
+  const s = svgEl(W, H); el.appendChild(s);
+  const max = opt.max || 100;
+  const x = v => L + (W-L-R) * v / max;
+  const cs = getComputedStyle(document.documentElement);
+  const cA = cs.getPropertyValue(opt.cA).trim(), cB = cs.getPropertyValue(opt.cB).trim();
+  const cM = opt.cM ? cs.getPropertyValue(opt.cM).trim() : null;
+  rows.forEach((r,i)=>{
+    const y = i*rh + 20;
+    add(s,"text",{x:L-8,y:y+5,"text-anchor":"end","font-size":12.5,fill:ink()}).textContent = r.name;
+    add(s,"line",{x1:L,y1:y,x2:W-R,y2:y,stroke:gridc(),"stroke-width":1});
+    const ln = add(s,"line",{x1:x(r.a),y1:y,x2:x(r.a),y2:y,stroke:cB,"stroke-width":2.5,opacity:.55});
+    requestAnimationFrame(()=>{ ln.style.transition="all .7s ease "+(i*.07)+"s"; ln.setAttribute("x2", x(r.b)); });
+    add(s,"circle",{cx:x(r.a),cy:y,r:6,fill:cA,stroke:"var(--surface)","stroke-width":2});
+    if (cM != null && r.mid != null)
+      add(s,"rect",{x:x(r.mid)-2,y:y-7,width:4,height:14,rx:2,fill:cM});
+    const dot = add(s,"circle",{cx:x(r.a),cy:y,r:0,fill:cB,stroke:"var(--surface)","stroke-width":2});
+    requestAnimationFrame(()=>{ dot.style.transition="all .7s ease "+(i*.07)+"s";
+      dot.setAttribute("cx", x(r.b)); dot.setAttribute("r", 6); });
+    const d = r.b - r.a, txt = (d>0?"+":"") + (opt.fmt?opt.fmt(d):Math.round(d*10)/10);
+    add(s,"text",{x:W-R+8,y:y+5,"font-size":12,"font-weight":700,
+      fill: Math.abs(d) < (opt.noise||2) ? ink2() : ink()}).textContent = txt;
+    const hit = add(s,"rect",{x:0,y:y-16,width:W,height:rh,fill:"transparent"});
+    hit.addEventListener("mousemove", e=>{ showTip(e, r.name,
+      opt.aName + " " + r.a + (opt.unit||"") + " → " + opt.bName + " " + r.b + (opt.unit||"")
+      + (r.mid!=null ? " · " + opt.mName + " " + r.mid + (opt.unit||"") : "")); moveTip(e); });
+    hit.addEventListener("mouseleave", hideTip);
+  });
+}
+
+/* ================= slides ================= */
+function personas(){
+  const el = document.getElementById("personaGrid");
+  const P = [
+    ["qwen_2b","the markdown enthusiast","Headers, bullets, bold — and the occasional invented follow-up question.",
+      f=>[["median len", f.med.toLocaleString()+" ch"],["bold usage", f.bold+"%"],["self-questions", f.selfQ+"%"]]],
+    ["qwen_4b","the tidier sibling","Same markdown instincts, finishes its sentences more often.",
+      f=>[["median len", f.med.toLocaleString()+" ch"],["ends cleanly", f.clean+"%"],["bold usage", f.bold+"%"]]],
+    ["llama_3_2_3b","the terse minimalist","Answers the question, stops talking. MCQ = literally the letter.",
+      f=>[["median len", f.med+" ch"],["ends cleanly", f.clean+"%"],["bare-letter MCQ", f.mcq_bare+"%"]]],
+    ["mistral_7b","the polite lecturer","Plain prose, no markdown, everything cushioned in disclaimers.",
+      f=>[["disclaimers", f.disc+"%"],["bold usage", f.bold+"%"],["bare-letter MCQ", f.mcq_bare+"%"]]],
+    ["phi4_mini","the compulsive essayist","Writes a tutorial for every question — including multiple choice.",
+      f=>[["median MCQ len", f.mcq_med.toLocaleString()+" ch"],["ends cleanly", f.clean+"%"],["self-questions", f.selfQ+"%"]]],
+  ];
+  el.innerHTML = "";
+  P.forEach((p,i)=>{
+    const f = g512(p[0],"fp16");
+    const fam = FAMS.find(x=>x.id===p[0]);
+    const d = document.createElement("div");
+    d.className = "card persona reveal d" + Math.min(i+1,4);
+    d.style.setProperty("--pc", "var(" + fam.v + ")");
+    d.innerHTML = "<div class='who'>" + fam.name + "</div><div class='tag'>" + p[1] + "</div>"
+      + "<div class='note' style='margin-bottom:8px'>" + p[2] + "</div>"
+      + p[3](f).map(s=>"<div class='st'><span>"+s[0]+"</span><b>"+s[1]+"</b></div>").join("");
+    el.appendChild(d);
+  });
+}
+
+const drawn = {};
+function drawSlide(id){
+  if (drawn[id]) return; drawn[id] = true;
+  if (id === "s2") personas();
+  if (id === "s3"){
+    rangeChart(document.getElementById("lenChart"),
+      FAMS.map(f=>{ const d = g512(f.id,"fp16");
+        return {name:f.name, p10:d.p10, p90:d.p90, med:d.med, color:col(f)}; }), {max:3000});
+    document.getElementById("c-llama-med").textContent = g512("llama_3_2_3b","fp16").med;
+    document.getElementById("c-phi-med").textContent = g512("phi4_mini","fp16").med.toLocaleString();
+  }
+  if (id === "s4"){
+    barChart(document.getElementById("bareChart"),
+      FAMS.map(f=>({name:f.name, val:g512(f.id,"fp16").mcq_bare, color:col(f)})),
+      {max:100, fmt:v=>v+"%"});
+    barChart(document.getElementById("mcqlenChart"),
+      FAMS.map(f=>({name:f.name, val:g512(f.id,"fp16").mcq_med, color:col(f)})),
+      {max:2900, fmt:v=>v.toLocaleString()});
+  }
+  if (id === "s5"){
+    document.getElementById("structLegend").innerHTML =
+      FAMS.map(f=>"<span><i style='background:var("+f.v+")'></i>"+f.name+"</span>").join("");
+    groupChart(document.getElementById("structChart"), [
+      {label:"bold **…**", vals:FAMS.map(f=>g512(f.id,"fp16").bold)},
+      {label:"numbered lists", vals:FAMS.map(f=>g512(f.id,"fp16").numlist)},
+      {label:"section headers", vals:FAMS.map(f=>g512(f.id,"fp16").headers)},
+    ]);
+  }
+  if (id === "s6"){
+    barChart(document.getElementById("discChart"),
+      FAMS.map(f=>({name:f.name, val:g512(f.id,"fp16").disc, color:col(f)})),
+      {max:50, fmt:v=>v+"%"});
+    document.getElementById("c-mist-disc").textContent = g512("mistral_7b","fp16").disc;
+    document.getElementById("c-llama-disc").textContent = g512("llama_3_2_3b","fp16").disc;
+  }
+  if (id === "s7"){
+    barChart(document.getElementById("selfqChart"),
+      FAMS.map(f=>({name:f.name, val:g512(f.id,"fp16").selfQ, color:col(f)})),
+      {max:12, fmt:v=>v+"%"});
+  }
+  if (id === "s8"){
+    dumbbell(document.getElementById("int8Chart"),
+      FAMS.map(f=>({name:f.name, a:g512(f.id,"fp16").clean, b:g512(f.id,"int8").clean})),
+      {max:100, cA:"--ord1", cB:"--ord2", aName:"fp16", bName:"INT8", unit:"%", noise:3});
+  }
+  if (id === "s9"){
+    dumbbell(document.getElementById("nf4CleanChart"),
+      FAMS.map(f=>({name:f.name, a:g512(f.id,"fp16").clean, b:g512(f.id,"nf4").clean,
+        mid:g512(f.id,"int8").clean})),
+      {max:100, cA:"--ord1", cB:"--ord3", cM:"--ord2", aName:"fp16", bName:"NF4", mName:"INT8", unit:"%", noise:4});
+    dumbbell(document.getElementById("nf4BareChart"),
+      FAMS.map(f=>({name:f.name, a:g512(f.id,"fp16").mcq_bare, b:g512(f.id,"nf4").mcq_bare,
+        mid:g512(f.id,"int8").mcq_bare})),
+      {max:100, cA:"--ord1", cB:"--ord3", cM:"--ord2", aName:"fp16", bName:"NF4", mName:"INT8", unit:"%", noise:3});
+  }
+  if (id === "s10"){
+    dumbbell(document.getElementById("b128CleanChart"),
+      FAMS.map(f=>({name:f.name, a:g128(f.id,"fp16").clean, b:g512(f.id,"fp16").clean})),
+      {max:100, cA:"--ord1", cB:"--ord3", aName:"128", bName:"512", unit:"%", noise:5});
+    dumbbell(document.getElementById("b128SelfChart"),
+      FAMS.map(f=>({name:f.name, a:g128(f.id,"fp16").selfQ, b:g512(f.id,"fp16").selfQ})),
+      {max:12, cA:"--ord1", cB:"--ord3", aName:"128", bName:"512", unit:"%", noise:.6});
+  }
+}
+
+/* ================= deck engine ================= */
+const deck = document.getElementById("deck");
+const slides = [...document.querySelectorAll(".slide")];
+const dots = document.getElementById("dots");
+slides.forEach((sl,i)=>{ const b = document.createElement("button");
+  b.title = "Slide " + (i+1);
+  b.onclick = ()=>goTo(i); dots.appendChild(b); });
+const dbs = [...dots.children];
+let current = 0;
+const io = new IntersectionObserver(es=>{
+  es.forEach(en=>{
+    if (en.isIntersecting && en.intersectionRatio > .55){
+      const i = slides.indexOf(en.target);
+      current = i; navTarget = i;
+      slides.forEach(s=>s.classList.toggle("on", s === en.target));
+      dbs.forEach((d,j)=>d.classList.toggle("on", j === i));
+      document.getElementById("pageno").textContent = (i+1) + " / " + slides.length;
+      document.getElementById("bar").style.width = (100*(i+1)/slides.length) + "%";
+      drawSlide(en.target.id);
+      countUps(en.target);
+    }
+  });
+}, {root:deck, threshold:[.55]});
+slides.forEach(s=>io.observe(s));
+let navTarget = 0;
+const goTo = i=>{ navTarget = Math.max(0, Math.min(slides.length-1, i));
+  slides[navTarget].scrollIntoView({behavior:"smooth"}); };
+document.addEventListener("keydown", e=>{
+  if (e.key === "ArrowDown" || e.key === "PageDown" || e.key === " ")
+    { goTo(navTarget+1); e.preventDefault(); }
+  if (e.key === "ArrowUp" || e.key === "PageUp")
+    { goTo(navTarget-1); e.preventDefault(); }
+});
+
+/* count-up */
+function countUps(root){
+  root.querySelectorAll("[data-count]").forEach(el=>{
+    if (el.dataset.done) return; el.dataset.done = 1;
+    const target = +el.dataset.count, t0 = performance.now(), dur = 1400;
+    (function tick(t){ const p = Math.min(1,(t-t0)/dur), e = 1-Math.pow(1-p,3);
+      el.textContent = Math.round(target*e).toLocaleString();
+      if (p<1) requestAnimationFrame(tick); })(t0);
+  });
+}
+
+/* theme */
+document.getElementById("theme").onclick = ()=>{
+  const r = document.documentElement;
+  r.dataset.theme = r.dataset.theme === "light" ? "" : "light";
+  Object.keys(drawn).forEach(k=>delete drawn[k]);
+  drawSlide(slides[current].id);   /* redraw current with new palette */
+  buildStars();
+};
+
+/* particles */
+const cv = document.getElementById("stars"), cx = cv.getContext("2d");
+let P = [];
+function buildStars(){
+  cv.width = innerWidth; cv.height = innerHeight;
+  P = Array.from({length:70},()=>({x:Math.random()*cv.width, y:Math.random()*cv.height,
+    vx:(Math.random()-.5)*.25, vy:(Math.random()-.5)*.25, r:Math.random()*1.6+.4}));
+}
+buildStars(); addEventListener("resize", buildStars);
+(function loop(){
+  cx.clearRect(0,0,cv.width,cv.height);
+  const light = document.documentElement.dataset.theme === "light";
+  cx.fillStyle = light ? "rgba(74,58,167,.35)" : "rgba(144,133,233,.5)";
+  cx.strokeStyle = light ? "rgba(74,58,167,.10)" : "rgba(144,133,233,.12)";
+  P.forEach(p=>{ p.x += p.vx; p.y += p.vy;
+    if (p.x<0||p.x>cv.width) p.vx*=-1; if (p.y<0||p.y>cv.height) p.vy*=-1;
+    cx.beginPath(); cx.arc(p.x,p.y,p.r,0,7); cx.fill(); });
+  for (let i=0;i<P.length;i++) for (let j=i+1;j<P.length;j++){
+    const a=P[i],b=P[j],d=(a.x-b.x)**2+(a.y-b.y)**2;
+    if (d<9000){ cx.beginPath(); cx.moveTo(a.x,a.y); cx.lineTo(b.x,b.y); cx.stroke(); }
+  }
+  requestAnimationFrame(loop);
+})();
+
+/* first slide */
+slides[0].classList.add("on"); drawSlide("s0"); countUps(slides[0]);
+</script>
+</body>
+</html>

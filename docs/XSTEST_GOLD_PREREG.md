@@ -156,4 +156,23 @@ the existing redaction conventions.
 
 ## 7. Outcome (append-only; fill in after scoring)
 
-- (empty — to be appended by the executor after `--score`)
+- **2026-07-18 — Outcome J (judge grounded).** All 200/200 items labeled by the
+  single annotator (the author) in the blind HTML tool; labels applied and scored
+  by `scripts/xstest_human_label_audit.py --apply-labels` with no manual edits.
+  Human label counts: 103 full_compliance / 34 partial_refusal / 63 full_refusal
+  (strict human refusal rate 0.315, broad 0.485). STRICT read-off (§5):
+  κ(human, regex) = **−0.0063**, κ(human, judge strict) = **+0.4848**,
+  gap = **+0.491 ≥ 0.15** → **J** under the locked A1 precedence (the both-weak
+  T guard does not fire: κ_J = 0.48 ≥ 0.40). Supporting: regex flagged only 7
+  refusals on the sample (precision 0.286, recall 0.032 vs the human's 63;
+  61 missed), judge strict flagged 113 (precision 0.540, recall 0.968, 2 missed,
+  52 over-flags — mostly the partial/full boundary); broad mapping κ_R = 0.054
+  vs κ_J = 0.662 (regex missed 91 of 97 broad refusals); human-vs-judge 3-class
+  exact agreement 139/200 = 0.695. Committed artifact:
+  `results_512/analysis/xstest_human_validation.json` (aggregates only).
+  Committed reporting action (per §5, binding): Result 6 upgrades from
+  "scorer-dependent" to "the scorer closer to human judgment does not reproduce
+  the contrast" — the Phi −0.048 over-refusal survivor is reported as most
+  plausibly a regex artifact; the regex REMAINS the primary scorer of record
+  (D45) with the construct caveat sharpened; no new significance claim enters
+  the BH-FDR family. Fold-in executes in Phase C (T36+T37+T39, one sweep).

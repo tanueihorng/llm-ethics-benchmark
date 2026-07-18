@@ -87,6 +87,10 @@ surfaces:
   - {id: architecture_guide_docx, path: docs/FYP_Agent_Harness_Architecture_Guide_2026-06-09.docx, lifecycle: snapshot, profiles: []}
 
   - {id: defense_deck, path: docs/fyp-report-defense-deck-2026-07.html, lifecycle: generated, profiles: [generated_defense_asr, volatile_free]}
+  # Descriptive style-analysis deck: computed from local gitignored raw outputs
+  # (no registry claims, no benchmark scores, no response text), so it is a
+  # dated snapshot, not a registry consumer.
+  - {id: style_fingerprints_deck, path: docs/fyp_style_fingerprints.html, lifecycle: snapshot, profiles: [snapshot_banner, volatile_free]}
   - {id: showcase, path: docs/fyp_showcase.html, lifecycle: generated, profiles: [generated_deck_pairs, volatile_free]}
   - {id: showcase_3d, path: docs/fyp_showcase_3d.html, lifecycle: generated, profiles: [generated_deck_pairs, volatile_free]}
   - {id: showcase_earth, path: docs/fyp_showcase_earth.html, lifecycle: generated, profiles: [generated_deck_pairs, volatile_free]}
