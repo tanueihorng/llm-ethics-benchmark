@@ -1,4 +1,26 @@
 // ============================================================================
+// SUPERSEDED - DO NOT BUILD (D53, 2026-07-19).
+// This retired 128-era builder is kept ONLY as the historical source for its
+// archived docx snapshot in docs/archive/. Running it would resurrect stale
+// 128-era numbers/claims into docs/ (the exact resurrection risk D42 guards
+// against). The canonical deliverables are built by `make report` /
+// `make thesis` / `make interim` (+ the three *-humanized targets), i.e.
+// build_fyp_report_v5.js, build_fyp_thesis_v4.js, build_fyp_interim*.js,
+// build_fyp_report_humanized.js, build_fyp_thesis_humanized.js.
+// To intentionally rebuild the archived snapshot (rare; e.g. re-archiving):
+//   FYP_BUILD_SUPERSEDED=1 node scripts/build_fyp_thesis_v2.js
+// ============================================================================
+if (!process.env.FYP_BUILD_SUPERSEDED) {
+  console.error(
+    "SUPERSEDED builder (scripts/build_fyp_thesis_v2.js): refusing to build - its output is a " +
+      "retired 128-era snapshot (now in docs/archive/). Use `make report` " +
+      "(build_fyp_report_v5.js) or the sibling canonical targets instead. " +
+      "Set FYP_BUILD_SUPERSEDED=1 only to rebuild the archived snapshot."
+  );
+  process.exit(2);
+}
+
+// ============================================================================
 // FYP THESIS builder (v2 — publication-grade pass) — standalone thesis (docx-js).
 // Separate from scripts/build_fyp_report.js; `make report` never touches this.
 // Output: docs/FYP_Thesis_2026-06-26_v2.docx

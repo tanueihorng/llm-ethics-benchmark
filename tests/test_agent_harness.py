@@ -480,3 +480,53 @@ def test_real_policy_report_source_is_not_a_freshness_satisfier() -> None:
     assert "scripts/build_fyp_report_v5.js" in report_worthy["changed_file_patterns"]
     assert "scripts/build_fyp_report_v5.js" not in report_worthy["required_changed_patterns"]
     assert any("FYP_Report" in pat for pat in report_worthy["required_changed_patterns"])
+
+
+RETIRED_BUILDERS = (
+    "scripts/build_fyp_report.js",
+    "scripts/build_fyp_report_v2.js",
+    "scripts/build_fyp_report_v3.js",
+    "scripts/build_fyp_report_v4.js",
+    "scripts/build_fyp_thesis.js",
+    "scripts/build_fyp_thesis_v2.js",
+    "scripts/build_fyp_thesis_v3.js",
+)
+
+CANONICAL_BUILDERS = (
+    "scripts/build_fyp_report_v5.js",
+    "scripts/build_fyp_thesis_v4.js",
+    "scripts/build_fyp_interim.js",
+    "scripts/build_fyp_report_humanized.js",
+    "scripts/build_fyp_thesis_humanized.js",
+    "scripts/build_fyp_interim_humanized.js",
+)
+
+
+def test_retired_builders_carry_superseded_execution_guard() -> None:
+    """Every retired 128-era builder must refuse to run without
+    FYP_BUILD_SUPERSEDED=1 (D53). The retired scripts are stale-scan-exempt
+    (they are historical sources for docs/archive/ docx), so nothing else
+    stops a future session from regenerating a stale 128-era docx into
+    docs/ — the guard must sit BEFORE the first require() so it fires before
+    any build work, and must never leak into a canonical builder (where it
+    would break `make report`)."""
+    repo = Path(__file__).resolve().parents[1]
+
+    policy = load_policy(repo)
+    excluded = set(policy["stale_text"].get("exclude", []))
+    for rel in RETIRED_BUILDERS:
+        assert rel in excluded, f"{rel} should stay stale-scan-excluded as archive source"
+        text = (repo / rel).read_text(encoding="utf-8")
+        guard_pos = text.find("FYP_BUILD_SUPERSEDED")
+        assert guard_pos != -1, f"{rel} is missing the SUPERSEDED execution guard"
+        require_pos = text.find("require(")
+        assert require_pos != -1 and guard_pos < require_pos, (
+            f"{rel}: guard must precede the first require()"
+        )
+        assert "process.exit(2)" in text, f"{rel}: guard must hard-exit"
+
+    for rel in CANONICAL_BUILDERS:
+        text = (repo / rel).read_text(encoding="utf-8")
+        assert "FYP_BUILD_SUPERSEDED" not in text, (
+            f"{rel} is canonical and must not carry the superseded guard"
+        )

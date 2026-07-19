@@ -28,6 +28,18 @@ Landed in two commits (part A: T36 + D51 validation-informed family, PROJECT_LOG
 Durable outcomes, decisions (D51), and gate states are recorded in PROJECT_LOG §1–§4;
 T36/T37/T39 are ticked in §2. Remaining related backlog: T30b second annotator only.
 
+## [2026-07-19] T42: external venue (workshop paper / arXiv preprint) — scoped, waiting on T15
+
+Everything is in `docs/agent_tasks/T42-external-venue-plan.md` (venue table with
+verified deadlines, related-work positioning, required-work order, recommended path).
+Key dates: **NeurIPS 2026 workshop list lands ~Aug 2026** (paper deadlines usually
+late Aug–early Sep) and **SaTML 2027 deadline Sep 29, 2026**. Key finding: closest
+related work arXiv:2606.29581 already publishes the "quantization is usually
+safety-neutral" null — position on measurement validity + the 128-token truncation
+artifact, not the bare null. First step (user, not agent): raise co-authorship/venue
+with Dr. Zhang (can ride the T1 July email). Then: condense the LaTeX mirrors,
+arXiv preprint, workshop submission. T30b before the SaTML tier.
+
 ## ⚠️ [security] ROTATE the OpenAI key
 
 The user pasted an OpenAI API key into chat (twice, earlier sessions). It is **not
