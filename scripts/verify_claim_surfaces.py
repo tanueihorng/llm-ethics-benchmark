@@ -237,6 +237,12 @@ _METRIC_MARKERS = {
 # For survival statements, "HarmBench contrast" is an ASR contrast even when
 # the token "ASR" is absent ("no HarmBench contrast survives …").
 _ASR_SURVIVAL_MARKERS = _METRIC_MARKERS["harmbench_asr_judge"] + ("harmbench",)
+# Enumerated scope markers for the validation-informed parallel family (D51):
+# a survivor-count differing from the registered family's is legitimate only
+# clause-scoped by one of these.
+_VI_SCOPE = ("validation-informed", "validation informed", "judge-strict",
+             "judge strict", "parallel analysis", "parallel famil",
+             "parallel bh", "semantic analysis")
 _NEGATIONS = ("no ", "none", "not ", "nor ", "never", "neither", "zero ", "n.s.", "does not", "doesn't", "non-significant")
 
 # Splits after ./!/? followed by a plausible sentence opener; decimals like
@@ -419,9 +425,28 @@ def _validate_primary_claims(
                 and _has_any(s, ("BH", "Benjamini", "FDR", "false-discovery", "false discovery", "multiplicity"))), None)
     results.append(("survivor-count", hit is not None,
                     "exact survivor count asserted with BH-FDR context" if hit else "no exact BH-FDR survivor-count statement"))
+    # The validation-informed PARALLEL family (post-hoc, added after T36
+    # Outcome J): its survivor count is a DIFFERENT number, legitimate ONLY
+    # in sentences that scope themselves to that family via an enumerated
+    # marker. Positive half: the scoped count must be asserted somewhere.
+    vi = claims.get("multiplicity_validation_informed")
+    if vi:
+        vi_word = number_words[vi["survivor_count"]]
+        vi_re = re.compile(
+            rf"\b(exactly )?({vi['survivor_count']}|{vi_word})( [a-z-]+)? (contrasts? )?surviv",
+            re.IGNORECASE,
+        )
+        hit = next((s for s in sentences if _has_any(s, _VI_SCOPE) and vi_re.search(s)), None)
+        results.append(("vi-survivor-count", hit is not None,
+                        f"validation-informed count ({vi_word}) asserted in scope" if hit
+                        else f"no scoped validation-informed survivor-count ({vi_word}) statement"))
+
     # Contradiction: hedged counts, or any OTHER count — spelled (zero
     # through the hyphenated tens; longest-first so "seventeen" wins over
     # "seven") or a digit run — presented as the surviving-contrasts count.
+    # Sentences scoped to the validation-informed family may carry THAT
+    # family's true count; any other number fails in any scope, and hedges
+    # ("at least N") fail in every scope.
     number_alt = (
         r"(?:twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety)(?:-\w+)?"
         r"|nineteen|eighteen|seventeen|sixteen|fifteen|fourteen|thirteen|twelve|eleven"
@@ -432,12 +457,30 @@ def _validate_primary_claims(
     # survivor-count statement.
     hedge_re = re.compile(
         rf"\b(at least|more than|at minimum|upwards of) ({number_alt})( [a-z-]+)? contrasts?\b[^.;]*?surviv"
-        rf"|\b(at least|more than|at minimum|upwards of) ({number_alt}) (contrasts? )?surviv"
-        rf"|\b(exactly|only) (?!(?:{count}|{word})\b)({number_alt})( [a-z-]+)? contrasts?\b[^.;]*?surviv"
+        rf"|\b(at least|more than|at minimum|upwards of) ({number_alt}) (contrasts? )?surviv",
+        re.IGNORECASE,
+    )
+    wrong_re = re.compile(
+        rf"\b(exactly|only) (?!(?:{count}|{word})\b)({number_alt})( [a-z-]+)? contrasts?\b[^.;]*?surviv"
         rf"|\b(exactly|only) (?!(?:{count}|{word})\b)({number_alt}) (contrasts? )?surviv",
         re.IGNORECASE,
     )
-    offender = next((s for s in sentences if hedge_re.search(s)), None)
+
+    def _count_offender(s: str) -> bool:
+        if hedge_re.search(s):
+            return True
+        m = wrong_re.search(s)
+        if not m:
+            return False
+        if vi and _has_any(s, _VI_SCOPE):
+            licensed = re.compile(
+                rf"\b({vi['survivor_count']}|{number_words[vi['survivor_count']]})\b",
+                re.IGNORECASE,
+            )
+            return not licensed.search(m.group(0))
+        return True
+
+    offender = next((s for s in sentences if _count_offender(s)), None)
     results.append(("contradiction:survivor-count", offender is None,
                     "no hedged/wrong survivor count" if offender is None
                     else f"hedged or wrong survivor count: {offender[:120]}"))
@@ -632,9 +675,13 @@ def _validate_primary_claims(
 # human-validation waiver). Claims without a signature rely on their
 # unwaivable contradiction half instead.
 _CLAIM_FAMILY_SIGNATURES = {
+    # The waived claim is the HARMBENCH classifier-vs-regex human grounding
+    # (κ 0.59/0.11). Requiring the "classifier" owner keeps the signature from
+    # false-firing on the XSTest T36 audit prose (judge/regex/annotator κs),
+    # which is a different claim with its own checks.
     "human-validation-kappa": lambda u: (
         _has_any(u, ("κ", "kappa")) and _has_any(u, ("human",))
-        and _has_any(u, ("regex", "classifier", "judge"))
+        and _has_any(u, ("classifier",))
         and re.search(r"0\.\d", u) is not None
     ),
 }

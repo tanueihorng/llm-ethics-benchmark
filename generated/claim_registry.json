@@ -34,6 +34,32 @@
         }
       ]
     },
+    "multiplicity_validation_informed": {
+      "asr_survivor_count": 0,
+      "family_size": 20,
+      "or_survivor_count": 0,
+      "survivor_count": 2,
+      "survivors": [
+        {
+          "bh_q_value": 0.008,
+          "delta": -0.09,
+          "display_name": "Qwen3-1.7B",
+          "metric": "mmlu_accuracy",
+          "metric_label": "MMLU",
+          "p_value": 0.0005843646280443461,
+          "pair_id": "qwen_2b"
+        },
+        {
+          "bh_q_value": 0.008,
+          "delta": -0.0316,
+          "display_name": "Llama-3.2-3B",
+          "metric": "arc_accuracy",
+          "metric_label": "ARC",
+          "p_value": 0.0007995844433963207,
+          "pair_id": "llama_3_2_3b"
+        }
+      ]
+    },
     "pairs": {
       "llama_3_2_3b": {
         "aliases": {
@@ -867,7 +893,7 @@
       "status": {
         "harmbench_human_validation_complete": true,
         "phase_c_blocked_by": [],
-        "primary_results_complete": true,
+        "primary_results_complete": false,
         "xstest_human_gold_complete": true
       }
     },
@@ -879,9 +905,22 @@
       "regex_human_kappa": 0.1095,
       "regex_only": 325,
       "regex_over_flags": 101
+    },
+    "validation_xstest": {
+      "human_full_refusals": 63,
+      "human_n": 200,
+      "judge_recall_strict": 0.9683,
+      "kappa_judge_broad": 0.6617,
+      "kappa_judge_strict": 0.4848,
+      "kappa_regex_broad": 0.0536,
+      "kappa_regex_strict": -0.0063,
+      "outcome_letter": "J",
+      "regex_missed_strict": 61,
+      "regex_recall_strict": 0.0317,
+      "three_class_agreement": 0.695
     }
   },
-  "registry_fingerprint": "4f732ad8338b76c2dc3e75c001e3cd5bf0b39be2a7b40c6b25db69bee4408836",
+  "registry_fingerprint": "3806df19508bfbcc06c4fc635a2f7fb2bad4f2f55a6702f34b83f5d863b53dc8",
   "render": {
     "asr_forest_caption": "Quantization effect on harmful compliance at the 512-token reference budget: per-pair judge ΔASR (4-bit − fp16) with paired-bootstrap 95% confidence intervals. Filled markers denote intervals that exclude zero; only Llama-3.2-3B reaches significance, and it is a decrease (safety-improving) — no pair shows a significant increase. Source: results_512/analysis/judge_agreement.json.",
     "bh_survivor_sentence": "Exactly 3 primary contrasts survive BH-FDR: Qwen3-1.7B MMLU (−0.090, q = 0.008), Llama-3.2-3B ARC (−0.032, q = 0.008), Phi-4-mini over-refusal (−0.048, q = 0.012). No HarmBench ASR contrast survives.",
@@ -1109,6 +1148,7 @@
         "pair_id": "phi4_mini"
       }
     ],
+    "dual_family_sentence": "Under the original registered analysis, exactly three contrasts survive BH-FDR (Qwen3-1.7B MMLU (−0.090, q = 0.008), Llama-3.2-3B ARC (−0.032, q = 0.008), Phi-4-mini over-refusal (−0.048, q = 0.012)); under the validation-informed parallel analysis — identical except that over-refusal is scored by the independent judge under the strict mapping — two survive: Qwen3-1.7B MMLU (q = 0.008), Llama-3.2-3B ARC (q = 0.008), both capability effects. The third registered survivor (Phi-4-mini over-refusal, regex-scored) is retained only as the original scorer-of-record finding and is most plausibly a measurement artifact of that scorer.",
     "report_table_6_1": [
       [
         "qwen_2b",
@@ -1381,6 +1421,7 @@
     "results_512/analysis/judge_agreement.json": "127c5a5ae6c447bd86378d86eeab873fc13b106fb45f7f09f069f4e0d468142e",
     "results_512/analysis/judge_pairwise_agreement.json": "6e53b0199e80e60e88f4bd1ae25e71bf826da20ceeadc1dca22e158b75aad393",
     "results_512/analysis/multiple_comparisons.json": "c09368cf1a474fbbee1365e7f011955b651d78fe49f45a036122390450ea42ff",
+    "results_512/analysis/multiple_comparisons_judge_strict.json": "c9dee8ab8c526f9fbdb1b42b49cf1b16d636342fc612ead97168254d72d4ee31",
     "results_512/analysis/pairwise_deltas.json": "7f907a4df1faea5580bf5b27e16786da6d5d42a5c85ff1f157be58f6d330f641",
     "results_512/analysis/precision_sweep.json": "724c638c76e140b81a805e61a0955ecd52dbfb4dd09ec758e5ab2ac47ad29599",
     "results_512/analysis/xstest_human_validation.json": "bec42c7cf6c1c16f8ccda32c9fc3ba3256290ce4c6f7a996aff6caee844d76b7",

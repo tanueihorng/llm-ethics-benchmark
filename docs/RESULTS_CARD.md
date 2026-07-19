@@ -23,10 +23,14 @@
 increase**; the only significant ΔASR is Llama-3B's *decrease*. Under BH-FDR over
 the 20 primary contrasts, **zero ASR contrasts survive** — the three survivors are
 qwen_2b MMLU (−0.090, q=0.008), llama ARC (−0.032, q=0.008), and phi over-refusal
-(−0.048, q=0.012, a *decrease*). The two capability survivors are classifier/human-anchored;
-the phi over-refusal survivor is regex-scored and **scorer-dependent** — an independent
+(−0.048, q=0.012, a *decrease*). The two capability survivors rest on exact-match
+scoring; the phi over-refusal survivor is regex-scored and, per the pre-registered
+T36 human audit, **most plausibly a regex measurement artifact** — an independent
 3-class refusal judge does not reproduce it (judge ΔOR +0.016 strict / −0.004 broad,
-both n.s.; T35 / report §6.12 Result 6).
+both n.s.; T35 / report §6.12 Result 6), and that judge aligns far better with a
+blinded human annotator than the regex (strict κ 0.485 vs −0.006). Under the
+**validation-informed parallel BH-FDR family** (over-refusal scored judge-strict,
+D51) exactly two contrasts survive, both capability.
 
 ## Generation budget matters (why 512 is primary)
 
@@ -71,8 +75,15 @@ independent gpt-4o 3-class refusal judge (XSTest taxonomy, 3,750 responses, 0 pa
 errors) counts ~4× more benign refusals than the regex (mean 0.171 strict vs 0.044;
 κ −0.01 to 0.50) and does **not** reproduce the one FDR-surviving over-refusal
 decrease — Phi judge ΔOR +0.016 strict / −0.004 broad (both n.s.) vs the regex's
-−0.048 — so that survivor is scorer-dependent. Regex stays the primary over-refusal
-scorer of record; the BH-FDR family is unchanged.
+−0.048 — so that survivor is scorer-dependent. The **T36 human gold set** (200 items,
+blinded single annotator, disagreement-enriched draw — a reference set, not population
+ground truth; pre-registered Outcome J) grounds the comparison: the judge aligns with
+the annotator at strict κ 0.485 / broad 0.662 versus the regex's −0.006 / 0.054 (regex
+recall: 2 of 63 full refusals), so the Phi contrast is carried as most plausibly a
+regex measurement artifact. The regex stays the original pre-specified scorer-of-record;
+the registered BH-FDR family is unchanged, and the composition-locked validation-informed
+parallel family (`multiple_comparisons_judge_strict.json`) yields 2 survivors, both
+capability. **No scorer finds a statistically significant over-refusal increase.**
 
 ## Read this before quoting a number
 

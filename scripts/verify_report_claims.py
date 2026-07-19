@@ -917,6 +917,69 @@ def run_checks(checker: Checker | None = None) -> Checker:
              "Qwen3-1.7B's +0.040 (strict; McNemar p = 0.087), is an apparent increase that does not reach significance"],
             table64_rows)
 
+    # -------- T36 human refusal gold set (§6.12 Result 6 extension) ----------
+    xhv = _load(A512 / "xstest_human_validation.json")
+
+    def t36_outcome():
+        s, b = xhv["strict"], xhv["broad"]
+        kr = s["regex_vs_human"]["cohens_kappa"]
+        kj = s["judge_vs_human"]["cohens_kappa"]
+        # Recompute the prereg §5/A1 precedence (X → T-both-weak → J → R → T)
+        # rather than trusting the stored letter.
+        if xhv["n_labeled"] < 190:
+            expect = "X"
+        elif kr < 0.40 and kj < 0.40:
+            expect = "T"
+        elif kj - kr >= 0.15:
+            expect = "J"
+        elif kr - kj >= 0.15:
+            expect = "R"
+        else:
+            expect = "T"
+        ok = (xhv["n_labeled"] == 200 and expect == "J"
+              and xhv["outcome"]["letter"] == "J"
+              and near(kr, -0.0063) and near(kj, 0.4848)
+              and near(b["regex_vs_human"]["cohens_kappa"], 0.0536)
+              and near(b["judge_vs_human"]["cohens_kappa"], 0.6617)
+              and s["regex_vs_human"]["missed_vs_human"] == 61
+              and s["judge_vs_human"]["missed_vs_human"] == 2
+              and xhv["human_label_counts"]["full_refusal"] == 63
+              and near(xhv["three_class_human_vs_judge"]["exact_agreement_rate"], 0.695))
+        return ok, f"recomputed outcome {expect}; strict κ judge {kj:.4f} vs regex {kr:.4f}"
+
+    c.check("T36: Outcome J recomputed via prereg precedence; strict κ 0.485/−0.006, broad 0.662/0.054; recall 2/63",
+            ["strict-mapping Cohen's κ 0.485 versus −0.006, broad-mapping 0.662 versus 0.054",
+             "The regex detected 2 of the annotator's 63 full refusals",
+             "most plausibly a measurement artifact"],
+            t36_outcome)
+
+    # -------- D51 validation-informed parallel BH-FDR family -----------------
+    vi = _load(A512 / "multiple_comparisons_judge_strict.json")
+
+    def d51_family():
+        if vi["n_bh_significant_q05"] != 2:
+            return False, f"{vi['n_bh_significant_q05']} survivors, expected 2"
+        got = {(s["pair_id"], s["metric"]) for s in vi["bh_survivors"]}
+        if got != {("qwen_2b", "mmlu_accuracy"), ("llama_3_2_3b", "arc_accuracy")}:
+            return False, f"unexpected survivors: {sorted(got)}"
+        registered = {(x["pair_id"], x["metric"]): x["p_value"]
+                      for x in _load(A512 / "multiple_comparisons.json")["contrasts"]}
+        for x in vi["contrasts"]:
+            if x["metric"] == "xstest_over_refusal_judge_strict":
+                if not near(x["p_value"], xjp[x["pair_id"]]["judge_strict"]["mcnemar_p_value"]):
+                    return False, f"{x['pair_id']} judge-strict p diverges from the T35 artifact"
+            elif not near(x["p_value"], registered[(x["pair_id"], x["metric"])]):
+                return False, f"{x['pair_id']}/{x['metric']} shared p diverges from the registered family"
+        return True, "2 survivors (both capability); 15 shared + 5 judge-strict p-values verified"
+
+    c.check("D51: validation-informed parallel family — 2 survivors (both capability), composition verified",
+            ["validation-informed parallel",
+             "purely deflationary",
+             "no scorer finds a statistically significant over-refusal increase",
+             "multiple_comparisons_judge_strict.json",
+             "original pre-specified scorer-of-record"],
+            d51_family)
+
     # ---------------- local-only evidence (skip when absent) ----------------
     def sample_counts():
         counts = {}

@@ -28,13 +28,13 @@ SOURCE_PATHS = (
     "results_512/analysis/judge_agreement.json",
     "results_512/analysis/judge_pairwise_agreement.json",
     "results_512/analysis/multiple_comparisons.json",
+    "results_512/analysis/multiple_comparisons_judge_strict.json",
     "results_512/analysis/pairwise_deltas.json",
     "results_512/analysis/precision_sweep.json",
+    "results_512/analysis/xstest_human_validation.json",
     "results_512/analysis/xstest_judge_agreement.json",
 )
-OPTIONAL_SOURCE_PATHS = (
-    "results_512/analysis/xstest_human_validation.json",
-)
+OPTIONAL_SOURCE_PATHS = ()
 
 DISPLAY = {
     "qwen_2b": {"name": "Qwen3-1.7B", "family": "Qwen", "params_b": 1.7},
@@ -47,6 +47,7 @@ DISPLAY = {
 METRIC_LABELS = {
     "harmbench_asr_judge": "HarmBench ASR",
     "xstest_over_refusal": "over-refusal",
+    "xstest_over_refusal_judge_strict": "over-refusal (judge-strict)",
     "mmlu_accuracy": "MMLU",
     "arc_accuracy": "ARC",
 }
@@ -113,9 +114,11 @@ def build_registry(root: Path = ROOT) -> dict[str, Any]:
     agreement = _load_json(root, "results_512/analysis/judge_agreement.json")
     cross_judge = _load_json(root, "results_512/analysis/judge_pairwise_agreement.json")
     comparisons = _load_json(root, "results_512/analysis/multiple_comparisons.json")
+    vi_family = _load_json(root, "results_512/analysis/multiple_comparisons_judge_strict.json")
     deltas = _load_json(root, "results_512/analysis/pairwise_deltas.json")
     precision = _load_json(root, "results_512/analysis/precision_sweep.json")
     xstest_judge = _load_json(root, "results_512/analysis/xstest_judge_agreement.json")
+    xstest_human = _load_json(root, "results_512/analysis/xstest_human_validation.json")
 
     pair_order: list[str] = []
     aliases_by_pair: dict[str, dict[str, str]] = {}
@@ -199,6 +202,14 @@ def build_registry(root: Path = ROOT) -> dict[str, Any]:
             "metric_label": METRIC_LABELS[row["metric"]],
         }
         for row in comparisons["bh_survivors"]
+    ]
+    vi_survivors = [
+        {
+            **row,
+            "display_name": DISPLAY[row["pair_id"]]["name"],
+            "metric_label": METRIC_LABELS[row["metric"]],
+        }
+        for row in vi_family["bh_survivors"]
     ]
     disagreement = {
         "judge_only": sum(
@@ -372,6 +383,22 @@ def build_registry(root: Path = ROOT) -> dict[str, Any]:
             f"Exactly {len(survivors)} primary contrasts survive BH-FDR: "
             f"{survivor_text}. No HarmBench ASR contrast survives."
         ),
+        "dual_family_sentence": (
+            f"Under the original registered analysis, exactly "
+            f"{('two', 'three', 'four')[len(survivors) - 2]} contrasts survive "
+            f"BH-FDR ({survivor_text}); under the validation-informed parallel "
+            f"analysis — identical except that over-refusal is scored by the "
+            f"independent judge under the strict mapping — "
+            f"{('two', 'three', 'four')[len(vi_survivors) - 2]} survive: "
+            + ", ".join(
+                f"{s['display_name']} {s['metric_label']} "
+                f"(q = {_fmt(s['bh_q_value'])})" for s in vi_survivors
+            )
+            + ", both capability effects. The third registered survivor "
+            f"(Phi-4-mini over-refusal, regex-scored) is retained only as the "
+            f"original scorer-of-record finding and is most plausibly a "
+            f"measurement artifact of that scorer."
+        ),
         "asr_forest_caption": (
             "Quantization effect on harmful compliance at the 512-token reference "
             "budget: per-pair judge ΔASR (4-bit − fp16) with paired-bootstrap 95% "
@@ -414,6 +441,22 @@ def build_registry(root: Path = ROOT) -> dict[str, Any]:
                 ),
                 "survivors": survivors,
             },
+            # Post-hoc parallel family added after T36 Outcome J: identical 20
+            # contrasts with over-refusal scored judge-STRICT (T35 replication
+            # definition). The registered family above stays the family of
+            # record; composition lock: docs/VALIDATION_INFORMED_FAMILY_NOTE.md.
+            "multiplicity_validation_informed": {
+                "family_size": vi_family["family_size"],
+                "survivor_count": vi_family["n_bh_significant_q05"],
+                "asr_survivor_count": sum(
+                    s["metric"] == "harmbench_asr_judge" for s in vi_survivors
+                ),
+                "or_survivor_count": sum(
+                    s["metric"] == "xstest_over_refusal_judge_strict"
+                    for s in vi_survivors
+                ),
+                "survivors": vi_survivors,
+            },
             "validation": {
                 "human_n": human["n_labeled"],
                 "classifier_human_kappa": human["classifier_vs_human"]["cohens_kappa"],
@@ -421,6 +464,22 @@ def build_registry(root: Path = ROOT) -> dict[str, Any]:
                 "regex_over_flags": human["regex_vs_human"]["over_flag_vs_human"],
                 "classifier_over_flags": human["classifier_vs_human"]["over_flag_vs_human"],
                 **disagreement,
+            },
+            # T36 XSTest human audit (Outcome J): blinded single-annotator
+            # reference set, disagreement-enriched draw — validation evidence,
+            # not population ground truth (docs/XSTEST_GOLD_PREREG.md §7).
+            "validation_xstest": {
+                "human_n": xstest_human["n_labeled"],
+                "outcome_letter": xstest_human["outcome"]["letter"],
+                "kappa_regex_strict": xstest_human["strict"]["regex_vs_human"]["cohens_kappa"],
+                "kappa_judge_strict": xstest_human["strict"]["judge_vs_human"]["cohens_kappa"],
+                "kappa_regex_broad": xstest_human["broad"]["regex_vs_human"]["cohens_kappa"],
+                "kappa_judge_broad": xstest_human["broad"]["judge_vs_human"]["cohens_kappa"],
+                "regex_recall_strict": xstest_human["strict"]["regex_vs_human"]["recall"],
+                "judge_recall_strict": xstest_human["strict"]["judge_vs_human"]["recall"],
+                "regex_missed_strict": xstest_human["strict"]["regex_vs_human"]["missed_vs_human"],
+                "human_full_refusals": xstest_human["human_label_counts"]["full_refusal"],
+                "three_class_agreement": xstest_human["three_class_human_vs_judge"]["exact_agreement_rate"],
             },
         },
         "render": render,

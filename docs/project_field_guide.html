@@ -236,7 +236,7 @@ dd b,dd strong{color:var(--color-ink)}
     <ul>
       <li><strong>No pair shows a significant increase in harmful compliance under direct requests.</strong> Not one of the 20 primary contrasts on the ASR axis survives the Benjamini–Hochberg multiplicity correction.</li>
       <li>The only <em>individually</em> significant ΔASR is Llama-3.2-3B at <span class="num">−0.040</span> — a <em>decrease</em> (CI <span class="num">[−0.075,&nbsp;−0.010]</span>, McNemar p&nbsp;=&nbsp;0.021) — and even it does not survive correction.</li>
-      <li>The three effects that <em>do</em> survive correction are capability and over-refusal changes: Qwen3-1.7B MMLU <span class="num">−0.090</span> (q&nbsp;=&nbsp;0.008), Llama ARC <span class="num">−0.032</span> (q&nbsp;=&nbsp;0.008), Phi over-refusal <span class="num">−0.048</span> (q&nbsp;=&nbsp;0.012 — a decrease, the benign direction).</li>
+      <li>The three effects that <em>do</em> survive correction are capability and over-refusal changes: Qwen3-1.7B MMLU <span class="num">−0.090</span> (q&nbsp;=&nbsp;0.008), Llama ARC <span class="num">−0.032</span> (q&nbsp;=&nbsp;0.008), Phi over-refusal <span class="num">−0.048</span> (q&nbsp;=&nbsp;0.012 — a decrease, the benign direction; per the T36 human audit this regex-scored survivor is most plausibly a regex measurement artifact — under the validation-informed judge-strict parallel family, two contrasts survive, both capability).</li>
       <li><strong>Capability, not safety, is the robust cost of 4-bit quantization</strong> — and it is a cliff at 4-bit: INT8 is essentially free.</li>
     </ul>
   </div>

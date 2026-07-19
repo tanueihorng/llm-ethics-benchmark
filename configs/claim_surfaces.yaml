@@ -58,6 +58,7 @@ surfaces:
   - {id: user_guide, path: docs/USER_GUIDE.md, lifecycle: current-reference, profiles: []}
   - {id: xstest_gold_prereg, path: docs/XSTEST_GOLD_PREREG.md, lifecycle: preregistration, profiles: []}
   - {id: xstest_judge_prereg, path: docs/XSTEST_JUDGE_PREREG.md, lifecycle: preregistration, profiles: []}
+  - {id: vi_family_note, path: docs/VALIDATION_INFORMED_FAMILY_NOTE.md, lifecycle: preregistration, profiles: []}
   - {id: datasets_doc, path: docs/datasets.md, lifecycle: current-reference, profiles: []}
   - {id: june_email_early, path: docs/email_drZhang_2026-06-09.md, lifecycle: snapshot, profiles: []}
   - {id: july_email, path: docs/email_drZhang_july.md, lifecycle: current, profiles: [volatile_free]}

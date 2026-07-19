@@ -548,7 +548,7 @@ body.on-dark #dots button.active{background:#8fb0ff}
       <div class="eyebrow anim">10 — What the numbers say</div>
       <div class="chead">
         <div><h2 class="anim d1" style="margin-bottom:2px">No rise in harm survives scrutiny.</h2>
-        <p class="anim d2" style="font-size:clamp(.86rem,1.2vw,1rem)">Absolute change, baseline → 4-bit, at 512 tokens. ✦ = individually significant (CI excludes zero); no ASR contrast survives BH-FDR.</p></div>
+        <p class="anim d2" style="font-size:clamp(.86rem,1.2vw,1rem)">Absolute change, baseline → 4-bit, at 512 tokens. ✦ = individually significant (CI excludes zero); no ASR contrast survives BH-FDR; the one over-refusal survivor is most plausibly a regex measurement artifact (T36) — under the validation-informed judge-strict parallel family, two survive, both capability.</p></div>
         <div class="toggle anim d2" id="barToggle" role="group" aria-label="Choose metric">
           <button data-metric="asr" class="on">Harm ↑</button><button data-metric="mmlu">MMLU</button>
           <button data-metric="arc">ARC</button><button data-metric="or">Over-refusal</button>
@@ -643,10 +643,10 @@ body.on-dark #dots button.active{background:#8fb0ff}
    DATA — PRIMARY 512-token study (D41), sourced from results_512/analysis/*.json
    (multiple_comparisons, precision_sweep, judge_agreement, pairwise_deltas).
    asrSig/mmluSig/arcSig/orSig = individually significant (uncorrected); no ASR
-   contrast survives BH-FDR — the three FDR survivors are Qwen-1.7B MMLU,
+   contrast survives BH-FDR (T36 human audit: the over-refusal survivor is most plausibly a regex measurement artifact; validation-informed judge-strict parallel family: 2 survivors, both capability) — the three registered-family FDR survivors are Qwen-1.7B MMLU,
    Llama ARC and Phi over-refusal. kappa = judge-vs-proxy κ on the fp16 member @512.
    ===================================================================================== */
-/* CLAIM_REGISTRY:PAIRS 4f732ad8338b76c2dc3e75c001e3cd5bf0b39be2a7b40c6b25db69bee4408836 */
+/* CLAIM_REGISTRY:PAIRS 3806df19508bfbcc06c4fc635a2f7fb2bad4f2f55a6702f34b83f5d863b53dc8 */
 const PAIRS = [
   {
     "id": "qwen_2b",

@@ -36,6 +36,16 @@ def test_registry_derives_load_bearing_survivors() -> None:
     multiplicity = registry["claims"]["multiplicity"]
     assert multiplicity["asr_survivor_count"] == 0
     assert multiplicity["survivor_count"] == 3
+    # The validation-informed parallel family (post-hoc, composition-locked):
+    # purely deflationary — 2 survivors, both capability, no OR/ASR survivor.
+    vi = registry["claims"]["multiplicity_validation_informed"]
+    assert vi["survivor_count"] == 2
+    assert vi["asr_survivor_count"] == 0
+    assert vi["or_survivor_count"] == 0
+    assert {s["metric"] for s in vi["survivors"]} == {"mmlu_accuracy", "arc_accuracy"}
+    xv = registry["claims"]["validation_xstest"]
+    assert xv["outcome_letter"] == "J"
+    assert xv["kappa_judge_strict"] > xv["kappa_regex_strict"] + 0.15
     assert registry["render"]["report_table_6_1"][0] == [
         "qwen_2b",
         "HarmBench ASR (judge)",
@@ -102,6 +112,8 @@ GOOD_UNITS = [
     "Exactly 3 primary contrasts survive BH-FDR: Qwen3-1.7B MMLU (-0.090, "
     "q = 0.008), Llama-3.2-3B ARC (-0.032, q = 0.008), Phi-4-mini "
     "over-refusal (-0.048, q = 0.012). No HarmBench ASR contrast survives.",
+    "Under the validation-informed parallel analysis, two contrasts survive "
+    "BH-FDR, both capability effects.",
     "The only individually-significant ΔASR is Llama-3.2-3B's -0.040, a decrease.",
     "The Phi-4-mini over-refusal survivor (-0.048) does not replicate under an independent judge.",
     "Human grounding: classifier κ 0.59 vs regex κ 0.11 against human labels.",
@@ -133,7 +145,8 @@ def test_correct_value_on_wrong_model_fails() -> None:
 
 def test_correct_delta_with_wrong_direction_fails() -> None:
     units = list(GOOD_UNITS)
-    units[2] = "The only individually-significant ΔASR is Llama-3.2-3B's -0.040, a significant regression."
+    units = [("The only individually-significant ΔASR is Llama-3.2-3B's -0.040, a significant regression."
+              if "-0.040" in u else u) for u in units]
     status = _claim_status(units)
     assert not status["asr-direction:llama_3_2_3b"]
 
@@ -146,7 +159,8 @@ def test_survivor_without_scorer_dependence_caveat_fails() -> None:
 
 def test_retired_128_value_without_scoping_fails() -> None:
     units = list(GOOD_UNITS)
-    units[5] = "Qwen3-1.7B shows a ΔASR of +0.055, a significant safety regression."
+    units = [("Qwen3-1.7B shows a ΔASR of +0.055, a significant safety regression."
+              if "+0.055" in u else u) for u in units]
     status = _claim_status(units)
     assert not status["retired-scope:+0.055"]
 
@@ -397,6 +411,30 @@ def test_waiver_family_catches_single_digit_and_split_sentences(tmp_path: Path) 
         tmp_path, base + ["The classifier kappa was 0.5 and the regex kappa 0.2. These agreements are against human labels."],
         waived=waived)
     assert failures == ["docx_primary.human-validation-kappa"]
+
+
+# --- Two-family (D51) survivor-count scoping --------------------------------
+
+
+def test_vi_survivor_count_positive_and_scoping() -> None:
+    status = _claim_status(GOOD_UNITS)
+    assert status["vi-survivor-count"]
+    # Missing the scoped VI sentence fails the positive.
+    without = [u for u in GOOD_UNITS if "validation-informed" not in u]
+    assert not _claim_status(without)["vi-survivor-count"]
+    # Wrong count inside VI scope fails.
+    wrong = [u.replace("two contrasts survive", "four contrasts survive")
+             if "validation-informed" in u else u for u in GOOD_UNITS]
+    assert not _claim_status(wrong)["vi-survivor-count"]
+
+
+def test_unscoped_two_still_fails_and_hedge_fails_in_scope() -> None:
+    status = _claim_status(GOOD_UNITS + ["Exactly two contrasts survive the BH-FDR correction."])
+    assert not status["contradiction:survivor-count"]
+    status = _claim_status(GOOD_UNITS + [
+        "Under the validation-informed parallel analysis, at least two contrasts survive BH-FDR."
+    ])
+    assert not status["contradiction:survivor-count"]
 
 
 # --- Integration fixtures: real DOCX / LaTeX through validate_surface ------
