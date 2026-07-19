@@ -108,6 +108,48 @@ samples"), judge-literature uses, Llama Guard, Arditi, McNemar/Efron, HELM
 multi-metric framing, model TRs, and the reproducibility-practice refs
 (Pineau/Sandve/Wilson/JOSS).
 
+## 2d. Full citation-fitness re-audit (2026-07-19; Fable 5 orchestrating, 6 Opus verifiers)
+
+Scope: **all 31 unique papers and all 83 in-text citation sites** across the
+canonical report (26 refs) and thesis (22 refs), re-verified from scratch
+against the actual papers (arXiv abstract + full text where needed; DBLP /
+proceedings / canonical records for venues and the non-arXiv classics). Every
+verifier verdict on a load-bearing claim was independently cross-checked by
+the orchestrator before being acted on (standing rule).
+
+**Result: zero hallucinated citations.** All 31 bibliographic entries correct,
+including the two post-ledger changes: the **Hong et al. "Decoding Compressed
+Trust" insertion at report [16]** (ICML 2024, PMLR 235 — shifts every
+subsequent number by one vs the §4 table below: Llama Guard is now [25],
+Arditi [26]) and the **Phi-4-mini TR swap at report [22]** (A. Abouelenin,
+arXiv:2503.01743 — implements this ledger's own [21]-row improvement note;
+first author verified). Load-bearing verbatim quotes re-confirmed in the
+HarmBench paper §3.2 ("we standardize this parameter to N=512", "can change
+ASR by up to 30%"); XSTest's GPT-4 three-class taxonomy confirmed (§4.2/4.5);
+Kharinaev's benchmark set re-confirmed disjoint from HarmBench/XSTest/MMLU
+(gap framing safe); Arditi NeurIPS 2024 re-confirmed via DBLP + proceedings.
+
+**Three thesis-lineage sentences carried the authors' own synthesis on cited
+papers that do not make those claims (fixed 2026-07-19; footprint per fix:
+#1 all six surfaces — four thesis/interim builders + both LaTeX mirrors;
+#2 thesis_v4 builder only — the humanized register and final-thesis LaTeX
+already attached the citation to the validation clause, and the sentence is
+absent from the interim lineage; #3 the four builders + final-thesis LaTeX —
+the sentence does not exist in the interim LaTeX):**
+
+| # | Old claim | Problem | Fix |
+|---|---|---|---|
+| 1 | "inter-judge agreement is often left unreported [11], [12]" | Neither the Gu survey (full text checked: urges reliability *evaluation*, never claims under-reporting) nor Krumdick asserts this bibliometric fact | "the judge literature cautions that their reliability must itself be evaluated rather than assumed [11], [12]" |
+| 2 | condensed-rubric sentence ending "...full enumerated template [11], [12]" | Citation placement attributed the rubric design to the judge literature | cites moved to the robustness-check clause ("independent validation of judge scores is exactly what the LLM-as-judge literature urges [11], [12]") |
+| 3 | "jailbreak robustness under optimised attacks ... reports effects [7], [5]" | Egashira [7] is a quantization-targeted poisoning construction, not an optimised jailbreak (that descriptor fits only Belkhiter [5]) | split attribution: "optimised jailbreak attacks [5] or quantization-targeted poisoning that surfaces only after quantization [7]" |
+
+Benign notes (no change): Llama-Guard-3-8B cited to the family paper (Inan
+2023) — standard canonical family cite, construct disclosed in-text; Llama 3.2
+3B cited to the Llama-3 herd TR and Mistral-v0.3 to the Mistral-7B (v0.1)
+paper — canonical model-family cites, no post-dated property attributed; the
+report's own "optimised attacks" sentences carry no bracketed citations and
+are accurate as written.
+
 ## 3. The load-bearing external fact: 512 is HarmBench's own budget
 
 Claim (D41's foundation): *"HarmBench's 512-token reference budget."*
