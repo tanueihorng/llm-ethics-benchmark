@@ -1,15 +1,15 @@
 # Agent Dashboard
 
-Generated: 2026-07-16 14:06:29 UTC+8
+Generated: 2026-07-19 13:02:33 UTC+8
 
 ## Live State
 
 - Git: `## main...origin/main`
-- Changed files: 42
-- PROJECT_LOG: 2026-07-16 (UTC+8) by Codex
-- Report: 2026-07-16 13:28:30 +08 (696682 bytes)
-- Handoff: 2026-07-16 14:05:26 +08
-- Immutable manifest: 2026-07-02 09:37:43 +08
+- Changed files: 66
+- PROJECT_LOG: 2026-07-19 (UTC+8) by Claude
+- Report: 2026-07-19 12:50:46 +08 (703036 bytes)
+- Handoff: 2026-07-19 13:02:33 +08
+- Immutable manifest: 2026-07-19 11:46:32 +08
 - Judge sidecars: 15 score files
 
 ## Suggested Next Action
@@ -18,10 +18,6 @@ Run make agent-check, review the diff, then commit or hand off the current chang
 
 ## Open Actions
 
-- [ ] **T36. XSTest human-labelled refusal gold set** (hardening batch WS-A, D46). Pre-reg LOCKED at `docs/XSTEST_GOLD_PREREG.md` (200 items, blind 3-class labeling, J/R/T/X outcome matrix); execution packet `docs/agent_tasks/T36-T39-hardening-batch.md` §WS-A. Build sibling `scripts/xstest_human_label_audit.py` (mirror T30's tool), user labels blind (~3-5 h), score -> `results_512/analysis/xstest_human_validation.json`. Resolves "scorer-dependent but which scorer is right" - the strongest remaining defense upgrade. No compute.
-- [ ] **T37. LlamaGuard open-weight third judge, HarmBench @512** (WS-B, D46). **COMPUTE IS DONE - do NOT submit a TC1 job.** Job `61854` (pinned rerun, superseding the unpinned `61844`) COMPLETED: Llama-Guard-3-8B over all 15 aliases, 0 parse errors; the two `judge_pairwise_agreement.py` runs (`_llamaguard`, `_api_vs_llamaguard`) are done and kappa is computed. Sidecars are **deliberately not committed** (scored with `--out-suffix _llamaguard` so they can never overwrite the committed api_judge file); they live on TC1 (`results_512/*/harmbench/*.judge.llamaguard.*` + `~/t37_t39_sidecars.tgz`) with the re-SCP command in the §4 changelog. **Remaining: the Phase-C fold-in only**, deliberately held until T36 labels land so the D42 claim-surface sweep is paid once (todo.md 2026-07-13; plan `docs/agent_tasks/T36-T39-phaseC-draft.md`). Resolves the versioned-API-judge reproducibility caveat.
-- [ ] **T38. Strict-parser capability sensitivity (MMLU+ARC)** (WS-C, D46). New `scripts/rescore_capability_strict.py` (mirror rescore_harmbench.py; tiers 1-2 only, unparsed->incorrect, rule pre-locked in the packet); sidecars `scores/summary.parser_strict.*` (policy globs REQUIRED - not covered) + `results_512/analysis/parser_strict_sensitivity.json`; first committed artifact behind the 48.7%/3.3% tier-usage claim. Local only.
-- [ ] **T39. Multi-seed completion: mistral_7b + phi4_mini @512, seeds 1-5** (WS-D, D46). **COMPUTE IS DONE - do NOT submit TC1 jobs.** All 5 sensitivity seed jobs COMPLETED (40 sidecars; each of seeds 1-5 now carries 10/10 aliases), SCP'd to the Mac, and the 5-pair aggregate is computed. The committed `results_512/analysis/sensitivity_multiseed.{json,csv}` was **deliberately restored (git checkout) to the 3-pair version** so verify-claims stays consistent with the current 3-pair §6.6.1 during the T36 wait - the artifact and the report must move together, in Phase C. **Remaining: regenerate the 5-pair artifact alongside the §6.6.1 edit in the Phase-C fold-in** (held for T36; plan `docs/agent_tasks/T36-T39-phaseC-draft.md`), keeping existing pairs byte-identical. ⚠️ Still to do in that pass: TWO hardcoded lists must change in sync (`generate_sensitivity_jobs.py MODELS_BY_PAIR` + `sensitivity_analysis.py PAIRS` - add a sync test); fix T24 while in the file; verify/add the two pairs to `configs/tc1_sensitivity_512.yaml` (predates T26). Extends §6.6.1 to 5/5 pairs.
 - [ ] **T1. Send the staged July follow-up to Dr. Zhang.** The 2026-05-23 re-engagement email **was sent**, and the **June progress update was SENT 2026-06-13** (user's own edited wording; as-sent record at `docs/email_drZhang_june.md`) - completed 3-pair judge-primary headline (Qwen 1.7B dual degradation; Llama capability-only; Qwen 4B intact) + regex->13B-classifier self-correction, with the 5-pair/INT8/2nd-judge/ARC work framed as *upcoming*, and the 6-13 status deck attached. **Open item:** the staged FOLLOW-UP, `docs/email_drZhang_july.md` (drafted in the June email's format/voice), which reports those extensions as *completed*; hold for a July send (deliberate pacing). **READY (2026-07-02):** the email body is re-based to 512-primary in the user's framing (spotted the 128 truncation issue -> reran everything at 512 -> 512 is HarmBench's official budget) and BOTH July status decks (`docs/fyp_status_2026-07{,_v2}.html`) are refreshed to 512 (banners removed; they pass the stale scan). User: review wording, pick a deck design, send in July. (Earlier drafts `email_drZhang_2026-06-09/13.md` + `..._2026-06-26.md` superseded/renamed.)
 - [ ] **T3. Run `MyTCinfo` on TC1.** Confirm actual storage quota (assumed ~300 GB in the report; verify and update Table 5.1 if different). Effectively confirmed by the successful 25.5 GB prefetch but should still run `MyTCinfo` to record the exact number.
 - [ ] **T15. Submit final report** to Dr. Zhang.

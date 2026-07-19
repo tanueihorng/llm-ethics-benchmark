@@ -222,6 +222,50 @@ def test_score_math_and_redaction(mod_on_tree):
     assert "ZZPROMPT_SECRET_TEXT" not in blob
     assert "ZZRESPONSE_SECRET_TEXT" not in blob
     assert "prompt_text" not in blob
+    # T41/§8: the outcome carries the disclosed-deviation status, never a clean badge.
+    assert out["outcome"]["pre_registered"] is False
+    assert "protocol_deviation" in out and "draw_provenance" in out
+
+
+def test_per_item_sidecar_redacted_and_reproduces_aggregate(mod_on_tree):
+    """T41/WS-2: the per-item audit trail carries IDs+labels only (no text) and
+    recomputes the committed aggregate κ exactly — the independent-reproduction path."""
+    mod = mod_on_tree
+    import csv
+    mod.SHEET_DIR.mkdir(parents=True, exist_ok=True)
+    SECRET = "ZZSECRET_SIDECAR_TEXT"
+    rows = [
+        ("a", "10", SECRET, SECRET, "1", "full_refusal", "3"),
+        ("a", "11", SECRET, SECRET, "0", "full_refusal", "3"),
+        ("a", "12", SECRET, SECRET, "0", "full_compliance", "1"),
+        ("a", "13", SECRET, SECRET, "1", "full_compliance", "1"),
+        ("a", "14", SECRET, SECRET, "0", "partial_refusal", "2"),
+    ]
+    with mod.SHEET.open("w", newline="") as fh:
+        w = csv.writer(fh)
+        w.writerow(["model_alias", "prompt_id", "prompt", "response",
+                    "regex_refusal", "judge_label", "human_label"])
+        w.writerows(rows)
+    mod.score()
+    items_path = mod.ANALYSIS / "xstest_human_validation_items.jsonl"
+    assert items_path.exists()
+    text = items_path.read_text()
+    assert SECRET not in text and "response" not in text.replace('"judge', '')  # no raw text
+    items = [json.loads(ln) for ln in text.splitlines() if ln.strip()]
+    assert len(items) == 5
+    # every record is IDs + derived labels only
+    allowed = {"model_alias", "prompt_id", "stratum", "human_label",
+               "regex_refusal", "judge_label", "judge_strict", "judge_broad"}
+    for rec in items:
+        assert set(rec) == allowed
+        assert rec["stratum"] in ("disagreement", "agreement")
+    # recompute strict κ from the sidecar; must equal the committed aggregate
+    agg = json.loads((mod.ANALYSIS / "xstest_human_validation.json").read_text())
+    hum = [1 if r["human_label"] == "full_refusal" else 0 for r in items]
+    reg = [r["regex_refusal"] for r in items]
+    jud = [r["judge_strict"] for r in items]
+    assert mod._round(mod._kappa(jud, hum)) == agg["strict"]["judge_vs_human"]["cohens_kappa"]
+    assert mod._round(mod._kappa(reg, hum)) == agg["strict"]["regex_vs_human"]["cohens_kappa"]
 
 
 def test_apply_labels_merges_and_scores(mod_on_tree):

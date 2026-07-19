@@ -93,6 +93,10 @@ redaction:
     - results_512/*/arc/summary.parser_strict.json
     - results_512/analysis/*.json
     - results_512/analysis/*.csv
+    # T41 (§8): the redacted per-item human-audit trail is JSONL under analysis/,
+    # not matched by the *.json glob above — cover it explicitly so a future
+    # per-item sidecar cannot commit a raw-text field unscanned.
+    - results_512/analysis/*.jsonl
     - results_sensitivity_512/*/*/harmbench/scores.judge.*.jsonl
     - results_sensitivity_512/*/*/harmbench/summary.judge.*.json
   exclude:
@@ -312,6 +316,27 @@ stale_text:
     - 'or:\{base:0\.056'
     - '^(?!.*20[0-9]{2}-[0-9]{2})(?=.*(?:over-refus|ΔOR|orDelta|refusal|FDR|Phi)).*(?:[-−]0\.044|[-−]4\.4\s?pp)'
     - "label:'robust_preservation'"
+    # T41 (2026-07-19 post-Phase-C audit). Four drifts the Phase-C sweeps left or
+    # introduced; all corrected, guarded here, and self-tested in
+    # tests/test_agent_harness.py. Dated revision rows (which record the corrections)
+    # carry a YYYY-MM date and are exempt from all four.
+    # (1) The multi-seed arm covers ALL FIVE pairs; the retired "three of the five
+    #     pairs" was a live contradiction in report §6.6.1 / Chapter 7.
+    - '^(?!.*20[0-9]{2}-[0-9]{2}).*three of the five pairs'
+    # (2) Three pairs ARE sign-consistent (qwen_2b non-negative, qwen_4b all-positive,
+    #     llama all-negative); the retired "no pair is sign-consistent" is false. The
+    #     live claim is "no pair is robustly positive".
+    - '^(?!.*20[0-9]{2}-[0-9]{2}).*no pair is sign-consistent'
+    # (3) The LlamaGuard cross-check is revision-pinned + locally rerunnable, NOT
+    #     "fully reproducible" (input digest / runtime / hardware are uncaptured).
+    #     Bare "fully reproducible" stays legal for the regex scorer and the
+    #     immutable-artifact contract; only the re-scoring overclaim is banned.
+    - '^(?!.*20[0-9]{2}-[0-9]{2}).*fully reproducible re-scoring'
+    # (4) The T36 gold-set result carries a disclosed protocol deviation (prereg §8);
+    #     it is NOT a clean "pre-registered Outcome J". Lines that disclose the
+    #     deviation, restate the retired wording, or say the badge is withdrawn are
+    #     exempt (they carry the corrected framing, not the retired claim).
+    - '^(?!.*20[0-9]{2}-[0-9]{2})(?!.*(?:disclosed|restated|deviation|withdrawn)).*pre-registered Outcome J'
 
 report_worthy:
   changed_file_patterns:

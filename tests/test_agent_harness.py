@@ -228,6 +228,11 @@ def test_real_policy_stale_kappa_guards_fire_and_exempt(tmp_path: Path) -> None:
         "it agrees at a Cohen's κ of 0.68 to 0.95 (against 0.25 to 0.41 for the old regex).",
         "judge-vs-proxy κ ≈ 0.25–0.41 for Qwen/Mistral.",
         "v2:{base:0.825}, kappa:0.28,",
+        # T41 (2026-07-19): the four post-Phase-C drifts, each worded as a live claim.
+        "The multi-seed check at 512 (covering three of the five pairs) corroborates this.",
+        "every per-pair seed-mean |ΔASR| ≤ 0.029, no pair is sign-consistent, and the only",
+        "a revision-pinned Llama-Guard-3-8B, whose fully reproducible re-scoring agrees at κ 0.36–0.92.",
+        "the human gold set (200 items, blinded single annotator, pre-registered Outcome J) grounds it.",
     ):
         assert scan(bad) == "fail", bad
     for ok in (
@@ -256,6 +261,15 @@ def test_real_policy_stale_kappa_guards_fire_and_exempt(tmp_path: Path) -> None:
         "against 0.25 to 0.59 for the old regex on the hardest families",
         "v2:{base:0.825}, kappa:0.29,",
         "2026-07-02: the κ-range lines 0.25–0.41 → 0.25–0.59 were corrected.",
+        # T41 (2026-07-19): the corrected wordings and dated correction rows stay legal.
+        "The multi-seed check at 512 (covering all five pairs) corroborates this.",
+        "no pair is robustly positive (three pairs are sign-consistent), and the 4 significant seeds split 1 vs 3.",
+        "a revision-pinned Llama-Guard-3-8B, whose revision-pinned, locally rerunnable re-scoring agrees at κ 0.36–0.92.",
+        "a deterministic regex-based parser provides fully reproducible, zero-variance scoring.",
+        "a mechanical Outcome J carried with one disclosed protocol deviation (prereg §8).",
+        'the clean confirmatory "pre-registered Outcome J" badge is withdrawn; reported as a disclosed-deviation validation.',
+        "2026-07-19: the residual 'three of the five pairs' phrasing was removed.",
+        '2026-07-19: restated from a clean "pre-registered Outcome J" to a disclosed-deviation validation.',
     ):
         assert scan(ok) == "pass", ok
 

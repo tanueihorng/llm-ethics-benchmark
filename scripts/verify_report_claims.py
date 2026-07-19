@@ -953,6 +953,52 @@ def run_checks(checker: Checker | None = None) -> Checker:
              "most plausibly a measurement artifact"],
             t36_outcome)
 
+    # -------- T41 T36 protocol-deviation disclosure + per-item audit trail ----
+    def t41_deviation():
+        dev = xhv.get("protocol_deviation") or {}
+        # (a) the artifact records the disclosed deviation with a bounded footprint
+        if not (dev.get("displaced_at_most") == 14
+                and dev.get("counterfactual_overlap") == 186
+                and dev.get("labeled_items") == 200
+                and dev.get("intersection_kappa_gap") is not None
+                and near(dev["intersection_kappa_gap"], 0.5106, 0.02)):
+            return False, (f"deviation footprint changed: overlap "
+                           f"{dev.get('counterfactual_overlap')}/200, gap {dev.get('intersection_kappa_gap')}")
+        if xhv["outcome"].get("pre_registered") is not False:
+            return False, "outcome no longer flags the disclosed deviation (pre_registered != False)"
+        # (b) the per-item audit trail exists, is redaction-clean, and independently
+        #     recomputes the committed aggregate κ — the reviewer-reproduction path.
+        items_path = A512 / "xstest_human_validation_items.jsonl"
+        if not items_path.exists():
+            return False, "per-item audit trail xstest_human_validation_items.jsonl missing"
+        items = [json.loads(ln) for ln in items_path.read_text().splitlines() if ln.strip()]
+        allowed = {"model_alias", "prompt_id", "stratum", "human_label",
+                   "regex_refusal", "judge_label", "judge_strict", "judge_broad"}
+        if len(items) != 200 or any(set(r) != allowed for r in items):
+            return False, f"{len(items)} per-item rows or unexpected fields (redaction/shape)"
+
+        def _k(a, bb):
+            n = len(a)
+            po = sum(x == y for x, y in zip(a, bb)) / n
+            pa, pb = sum(a) / n, sum(bb) / n
+            pe = pa * pb + (1 - pa) * (1 - pb)
+            return (po - pe) / (1 - pe) if (1 - pe) > 1e-12 else None
+
+        hum = [1 if r["human_label"] == "full_refusal" else 0 for r in items]
+        kr_s = round(_k([r["regex_refusal"] for r in items], hum), 4)
+        kj_s = round(_k([r["judge_strict"] for r in items], hum), 4)
+        if not (kr_s == xhv["strict"]["regex_vs_human"]["cohens_kappa"]
+                and kj_s == xhv["strict"]["judge_vs_human"]["cohens_kappa"]):
+            return False, f"per-item recompute {kr_s}/{kj_s} != committed aggregate"
+        return True, (f"deviation displaced ≤{dev['displaced_at_most']}/200, intersection gap "
+                      f"{dev['intersection_kappa_gap']:+.3f}; per-item sidecar recomputes κ {kr_s}/{kj_s}")
+
+    c.check("T41: T36 deviation disclosed + bounded (≤14/200, gap +0.51); per-item sidecar recomputes aggregate",
+            ["one disclosed protocol deviation",
+             "at most 14 of 200 items",
+             "does not depend on the deviation-specific items"],
+            t41_deviation)
+
     # -------- D51 validation-informed parallel BH-FDR family -----------------
     vi = _load(A512 / "multiple_comparisons_judge_strict.json")
 

@@ -1,6 +1,6 @@
 # Handoff
 
-Last refreshed: 2026-07-16 14:06:29 UTC+8 by Codex harness.
+Last refreshed: 2026-07-19 13:02:32 UTC+8 by Codex harness.
 
 ## Mode
 
@@ -21,10 +21,10 @@ Start from repo truth, verify live state, and continue the FYP without relying o
 ## Current State
 
 - Git: `## main...origin/main`.
-- PROJECT_LOG last updated: 2026-07-16 (UTC+8) by Codex.
+- PROJECT_LOG last updated: 2026-07-19 (UTC+8) by Claude.
 - Judge sidecars: 15 score files and 15 summary files.
-- Report artifact: docs/FYP_Report_2026-07-01_v5.docx modified 2026-07-16 13:28:30 +08.
-- Immutable manifest: results/raw_artifact_manifest.sha256 modified 2026-07-02 09:37:43 +08.
+- Report artifact: docs/FYP_Report_2026-07-01_v5.docx modified 2026-07-19 12:50:46 +08.
+- Immutable manifest: results/raw_artifact_manifest.sha256 modified 2026-07-19 11:46:32 +08.
 
 ## Verification To Run
 

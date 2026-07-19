@@ -1,5 +1,6 @@
 {
-  "description": "Human-grounded validation of the XSTest over-refusal scorers (regex vs 3-class judge). Aggregates only; the annotation sheet (raw text) is local/gitignored. See docs/XSTEST_GOLD_PREREG.md.",
+  "description": "Human-grounded validation of the XSTest over-refusal scorers (regex vs 3-class judge). Aggregates only; the annotation sheet (raw text) is local/gitignored. Per-item labels (IDs only, no text) are in xstest_human_validation_items.jsonl. See docs/XSTEST_GOLD_PREREG.md.",
+  "prereg_version": "docs/XSTEST_GOLD_PREREG.md (locked 2026-07-12; \u00a78 deviation record 2026-07-19)",
   "n_labeled": 200,
   "human_label_counts": {
     "full_compliance": 103,
@@ -53,6 +54,62 @@
     "exact_agreement": 139,
     "exact_agreement_rate": 0.695
   },
+  "draw_provenance": {
+    "priority_aliases": [
+      "phi4_mini_base",
+      "phi4_mini_4bit",
+      "qwen_2b_base",
+      "qwen_2b_4bit"
+    ],
+    "other_aliases": [
+      "qwen_4b_base",
+      "qwen_4b_4bit",
+      "llama_3_2_3b_base",
+      "llama_3_2_3b_4bit",
+      "mistral_7b_base",
+      "mistral_7b_4bit"
+    ],
+    "excluded_prompt_ids": [
+      "1",
+      "102",
+      "165",
+      "206",
+      "293"
+    ],
+    "disagree_frac_target": 0.6,
+    "labeled_stratum_counts": {
+      "disagreement": 120,
+      "agreement": 80
+    },
+    "labeled_per_alias_counts": {
+      "llama_3_2_3b_base": 13,
+      "llama_3_2_3b_4bit": 13,
+      "phi4_mini_4bit": 30,
+      "mistral_7b_4bit": 13,
+      "phi4_mini_base": 30,
+      "qwen_4b_base": 14,
+      "qwen_2b_4bit": 30,
+      "qwen_2b_base": 30,
+      "mistral_7b_base": 13,
+      "qwen_4b_4bit": 14
+    },
+    "sheet_sha256": "6343f357cca046333de76c9d2172c610cd5f00ded07cf49d8f0539457853e18a"
+  },
+  "protocol_deviation": {
+    "rule_specified": "prereg \u00a72: exclude the specific quoted (alias, prompt) items (\u226410 pairs)",
+    "rule_applied": "5 prompt_ids {1,102,165,206,293} removed from all 10 aliases (prompt-wide, \u224850 candidate items)",
+    "fixed_in_code": "before the draw and before any labeling (committed)",
+    "direction": "blindness-conservative (removes more potential priming, never less)",
+    "prereg_letter_status": "Outcome X under \u00a75 (a \u00a72 draw deviation); the clean confirmatory pre-registration badge is withdrawn and the result is reported as a disclosed-deviation validation consistent with the mechanical outcome",
+    "counterfactual_basis": "no-exclusion draw (maximal-inclusion upper bound on the footprint)",
+    "labeled_items": 200,
+    "counterfactual_overlap": 186,
+    "displaced_at_most": 14,
+    "intersection_n": 186,
+    "intersection_kappa_regex_strict": -0.0072,
+    "intersection_kappa_judge_strict": 0.5034,
+    "intersection_kappa_gap": 0.5106
+  },
   "outcome_inputs": {
     "kappa_regex_strict": -0.0063,
     "kappa_judge_strict": 0.4848,
@@ -60,6 +117,9 @@
   },
   "outcome": {
     "letter": "J",
-    "reason": "judge grounded: kappa_judge - kappa_regex = +0.491 >= 0.15"
+    "reason": "judge grounded: kappa_judge - kappa_regex = +0.491 >= 0.15",
+    "mechanical_letter": "J",
+    "pre_registered": false,
+    "pre_registered_status": "disclosed protocol deviation (prereg \u00a78): the blindness exclusion was applied prompt-wide rather than to the \u226410 pre-specified (alias, prompt) items, so under \u00a75's letter this is Outcome X; reported as a disclosed-deviation validation consistent with the mechanical Outcome J, whose footprint is bounded in protocol_deviation"
   }
 }

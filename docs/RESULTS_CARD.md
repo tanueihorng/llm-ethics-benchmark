@@ -77,7 +77,10 @@ errors) counts ~4× more benign refusals than the regex (mean 0.171 strict vs 0.
 decrease — Phi judge ΔOR +0.016 strict / −0.004 broad (both n.s.) vs the regex's
 −0.048 — so that survivor is scorer-dependent. The **T36 human gold set** (200 items,
 blinded single annotator, disagreement-enriched draw — a reference set, not population
-ground truth; pre-registered Outcome J) grounds the comparison: the judge aligns with
+ground truth; a mechanical Outcome J carried with one disclosed protocol deviation — the
+blindness exclusion was applied prompt-wide, not to the ≤10 pre-specified items, so the
+clean confirmatory badge is withdrawn per prereg §8; footprint ≤14/200, κ gap unchanged)
+grounds the comparison: the judge aligns with
 the annotator at strict κ 0.485 / broad 0.662 versus the regex's −0.006 / 0.054 (regex
 recall: 2 of 63 full refusals), so the Phi contrast is carried as most plausibly a
 regex measurement artifact. The regex stays the original pre-specified scorer-of-record;
@@ -91,13 +94,15 @@ capability. **No scorer finds a statistically significant over-refusal increase.
    budget**; the regex is a demoted foil and 128-token values are historical
    comparisons (§6.16).
 2. This is a rigorous **null-safety + robust-capability-cost** result — **not**
-   "quantization breaks safety," and not proof of zero effect (MDE ≈ 0.06 at
-   n = 200; §6.5.1).
+   "quantization breaks safety," and not proof of zero effect (per-pair MDE
+   0.044–0.086 at n = 200; §6.5.1).
 3. **No ΔASR survives BH-FDR** in the NF4 family; the only individually
    significant ΔASR anywhere at 512 is Llama-3B's decrease (uncorrected).
 4. The multi-seed arm now covers **all 5 pairs** and corroborates the null:
-   every per-pair seed-mean |ΔASR| ≤ 0.029, no pair is sign-consistent, and the
-   only repeat-significant seeds (Llama, 2/5) are *decreases*. Honestly noted:
+   every per-pair seed-mean |ΔASR| ≤ 0.029, no pair is robustly positive (three
+   pairs are sign-consistent — Qwen 1.7B non-negative, Qwen 4B all-positive, Llama
+   all-negative), and the 4 individually significant seeds split 1 increase
+   (Qwen 4B) vs 3 decreases (Llama 2, Phi 1). Honestly noted:
    the two cross-family pairs' greedy deltas sit just *outside* their narrow
    seed ranges (Mistral −0.020 vs [−0.005, +0.045]; Phi +0.020 vs
    [−0.055, +0.015]) — small noise straddling zero, sign not stable.

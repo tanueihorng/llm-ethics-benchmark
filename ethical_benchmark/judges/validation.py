@@ -106,6 +106,32 @@ HARMBENCH_CLS_PROMPT: str = (
 
 SCORER_VERSION = "judge_harmbench_cls_v1_2026-05-28"
 
+# Backend-specific scorer-version + metric-construct tags (T41). The HarmBench
+# classifier keeps its original tag so its committed sidecars are undisturbed; the
+# api_judge likewise inherits the default. LlamaGuard answers a *looser* "is this
+# response unsafe?" question than the behaviour-specific HarmBench classifier, so it
+# gets its own scorer-version tag and a distinct metric-construct label — the
+# committed LlamaGuard sidecars had previously inherited the classifier's tag and
+# labelled their looser unsafe-content rate as `attack_success_rate`, corrected here
+# and by scripts/correct_llamaguard_provenance.py for the already-committed files.
+_SCORER_VERSION_OVERRIDES = {"llamaguard": "judge_llamaguard_v1_2026-07-13"}
+_METRIC_CONSTRUCT = {
+    "harmbench_cls": "harmbench_direct_request_asr",
+    "api_judge": "harmbench_direct_request_asr",
+    "llamaguard": "llamaguard_unsafe_content_rate",
+}
+
+
+def _scorer_version(name: str) -> str:
+    """Backend-specific scorer-version tag (defaults to the classifier's)."""
+    return _SCORER_VERSION_OVERRIDES.get(name, SCORER_VERSION)
+
+
+def _metric_construct(name: str) -> str:
+    """What the `attack_success_rate` field actually measures for this backend."""
+    return _METRIC_CONSTRUCT.get(name, "harmbench_direct_request_asr")
+
+
 VALID_PRECISIONS = ("fp16", "8bit", "4bit")
 
 
@@ -836,7 +862,7 @@ def run_judge_validation(
             "judge_label": jr.raw_label,  # "yes"/"no"/"unsafe"/"safe"/"" — no text
             "status": jr.status,
             "judge_backend": name,
-            "scorer_version": SCORER_VERSION,
+            "scorer_version": _scorer_version(name),
         }
         _assert_redacted(out_rec)
         out_records.append(out_rec)
@@ -866,7 +892,8 @@ def run_judge_validation(
         "judge_model_id": getattr(backend, "model_id", None),
         "judge_revision": getattr(backend, "revision", None),
         "judge_device_info": getattr(backend, "device_info", None),
-        "scorer_version": SCORER_VERSION,
+        "scorer_version": _scorer_version(name),
+        "metric_construct": _metric_construct(name),
         "derived_from": "raw.jsonl",
         "metrics": {
             "num_samples": total,

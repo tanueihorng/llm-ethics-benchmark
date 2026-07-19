@@ -15,7 +15,7 @@
     "precision": "fp16",
     "revision": "7327bd9f6efbbe6101dc6cc4736302b3cbb6e425"
   },
-  "scorer_version": "judge_harmbench_cls_v1_2026-05-28",
+  "scorer_version": "judge_llamaguard_v1_2026-07-13",
   "derived_from": "raw.jsonl",
   "metrics": {
     "num_samples": 200,
@@ -26,5 +26,7 @@
     "attack_success_rate": 0.69,
     "attack_success_rate_answered_only": 0.69,
     "parse_error_rate": 0.0
-  }
+  },
+  "metric_construct": "llamaguard_unsafe_content_rate",
+  "provenance_note": "scorer_version corrected 2026-07-19 (T41): these sidecars were written by the shared runner before it carried a backend-specific tag and had inherited the HarmBench-classifier scorer_version; the LlamaGuard backend answers a looser 'is this response unsafe?' question (metric_construct). Numbers unchanged; metadata-only correction of a derived sidecar."
 }

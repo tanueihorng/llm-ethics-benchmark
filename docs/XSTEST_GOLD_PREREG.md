@@ -176,3 +176,52 @@ the existing redaction conventions.
   plausibly a regex artifact; the regex REMAINS the primary scorer of record
   (D45) with the construct caveat sharpened; no new significance claim enters
   the BH-FDR family. Fold-in executes in Phase C (T36+T37+T39, one sweep).
+
+## 8. Protocol deviation record (append-only; added 2026-07-19, T41 audit)
+
+A post–Phase-C audit (T41) found that the blindness-exclusion **draw deviated from
+§2**. This section records the deviation, its cause, its direction, and its
+quantified footprint. It does not edit §2 or §5 (both remain as locked); it is the
+honest disclosure §5's Outcome-X clause is designed to force.
+
+**What §2 specified.** Exclude *the specific (alias, prompt) items* whose scorer
+labels were quoted in analysis chats — i.e. at most ~10 individual (alias, prompt)
+pairs (the five prompts × the pair members they were discussed for).
+
+**What the code did.** `scripts/xstest_human_label_audit.py` filters the candidate
+pool on `prompt_id` alone (`EXCLUDE_PROMPT_IDS`), so each of the five prompt_ids
+`{1, 102, 165, 206, 293}` was removed from **all ten aliases** — a *prompt-wide*
+exclusion of up to 5×10 ≈ 50 candidate items rather than the ≤10 (alias, prompt)
+items §2 sanctioned.
+
+**Cause and timing.** The widening was an implementation choice baked into
+committed code **before the draw and before any item was labeled** (the annotator
+never saw a differently-drawn sheet). It is **blindness-conservative**: it removes
+*more* potentially-priming items, never fewer, so it cannot have leaked a quoted
+label into the annotator's view.
+
+**Pre-registration status.** Under §5's letter, *any* deviation of the draw from §2
+is **Outcome X** (the confirmatory pre-registration is void). We therefore **withdraw
+the clean "pre-registered Outcome J" badge** and report the result as a
+**disclosed-deviation validation consistent with the mechanical Outcome J** — the
+κ arithmetic (§7) is unchanged and correct; only its confirmatory pre-registration
+status changes.
+
+**Footprint (counterfactual sensitivity, computed by `--score`).** A counterfactual
+draw that applies **no** blindness exclusion (the maximal-inclusion bound — it even
+re-includes the items a correct ≤10-item draw would still have dropped) overlaps the
+labeled 200 on **186 items**, so the deviation **displaced at most 14 of 200 items
+(7%)**. On the 186 items common to both draws, the STRICT κ is κ(human, regex)
+= −0.007 and κ(human, judge) = +0.503 (**gap +0.511**) — as large as, or larger
+than, the full-sample gap (+0.491). The judge-grounded conclusion therefore does
+**not** depend on the deviation-specific items. These numbers are recomputed
+deterministically on every `--score` run and stored in the committed artifact's
+`protocol_deviation` block; the per-item labels (IDs only, no text) are in
+`results_512/analysis/xstest_human_validation_items.jsonl` for independent
+reproduction.
+
+**Reporting action.** Every surface that described a "pre-registered Outcome J" is
+changed to "Outcome J–consistent, with one disclosed protocol deviation (§8)". The
+substantive conclusion (the judge tracks human refusal judgment far better than the
+regex; the Phi −0.048 survivor is most plausibly a regex measurement artifact) and
+the scorer-of-record (regex, D45) are unchanged.
