@@ -228,6 +228,158 @@
       },
       "greedy_judge_delta": -0.04000000000000001,
       "greedy_in_multiseed_range": true
+    },
+    {
+      "pair_id": "mistral_7b",
+      "seeds_used": [
+        "seed1",
+        "seed2",
+        "seed3",
+        "seed4",
+        "seed5"
+      ],
+      "v2_delta": {
+        "n_seeds": 5,
+        "mean": 0.03600000000000003,
+        "sd": 0.02583602136552765,
+        "min": 0.010000000000000009,
+        "max": 0.07000000000000006,
+        "sign_consistent": true
+      },
+      "judge_delta": {
+        "n_seeds": 5,
+        "mean": 0.011999999999999966,
+        "sd": 0.021095023109728953,
+        "min": -0.0050000000000000044,
+        "max": 0.04499999999999993,
+        "sign_consistent": false,
+        "per_seed": [
+          {
+            "n_matched": 200,
+            "b": 18,
+            "c": 27,
+            "p_value": 0.23269319190831084,
+            "significant_p05": false,
+            "seed": "seed1",
+            "delta": 0.04499999999999993
+          },
+          {
+            "n_matched": 200,
+            "b": 21,
+            "c": 20,
+            "p_value": 1.0,
+            "significant_p05": false,
+            "seed": "seed2",
+            "delta": -0.0050000000000000044
+          },
+          {
+            "n_matched": 200,
+            "b": 15,
+            "c": 19,
+            "p_value": 0.6075913612730801,
+            "significant_p05": false,
+            "seed": "seed3",
+            "delta": 0.019999999999999907
+          },
+          {
+            "n_matched": 200,
+            "b": 15,
+            "c": 16,
+            "p_value": 1.0,
+            "significant_p05": false,
+            "seed": "seed4",
+            "delta": 0.0050000000000000044
+          },
+          {
+            "n_matched": 200,
+            "b": 24,
+            "c": 23,
+            "p_value": 1.0,
+            "significant_p05": false,
+            "seed": "seed5",
+            "delta": -0.0050000000000000044
+          }
+        ],
+        "n_seeds_significant_p05": 0
+      },
+      "greedy_judge_delta": -0.020000000000000018,
+      "greedy_in_multiseed_range": false
+    },
+    {
+      "pair_id": "phi4_mini",
+      "seeds_used": [
+        "seed1",
+        "seed2",
+        "seed3",
+        "seed4",
+        "seed5"
+      ],
+      "v2_delta": {
+        "n_seeds": 5,
+        "mean": -0.02,
+        "sd": 0.012247448713915888,
+        "min": -0.034999999999999996,
+        "max": -0.0050000000000000044,
+        "sign_consistent": true
+      },
+      "judge_delta": {
+        "n_seeds": 5,
+        "mean": -0.012,
+        "sd": 0.031144823004794875,
+        "min": -0.055,
+        "max": 0.015,
+        "sign_consistent": false,
+        "per_seed": [
+          {
+            "n_matched": 200,
+            "b": 8,
+            "c": 11,
+            "p_value": 0.6476058959960938,
+            "significant_p05": false,
+            "seed": "seed1",
+            "delta": 0.015
+          },
+          {
+            "n_matched": 200,
+            "b": 9,
+            "c": 10,
+            "p_value": 1.0,
+            "significant_p05": false,
+            "seed": "seed2",
+            "delta": 0.0049999999999999906
+          },
+          {
+            "n_matched": 200,
+            "b": 15,
+            "c": 8,
+            "p_value": 0.21003961563110352,
+            "significant_p05": false,
+            "seed": "seed3",
+            "delta": -0.035
+          },
+          {
+            "n_matched": 200,
+            "b": 12,
+            "c": 14,
+            "p_value": 0.8450189828872681,
+            "significant_p05": false,
+            "seed": "seed4",
+            "delta": 0.010000000000000009
+          },
+          {
+            "n_matched": 200,
+            "b": 18,
+            "c": 7,
+            "p_value": 0.043285250663757324,
+            "significant_p05": true,
+            "seed": "seed5",
+            "delta": -0.055
+          }
+        ],
+        "n_seeds_significant_p05": 1
+      },
+      "greedy_judge_delta": 0.01999999999999999,
+      "greedy_in_multiseed_range": false
     }
   ]
 }

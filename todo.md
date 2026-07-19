@@ -21,89 +21,12 @@ Durable record: PROJECT_LOG §3 D44 + §4 (2026-07-08 row). Numbers source:
 
 ---
 
-## [2026-07-13] ACTIVE: Phase-C fold-in of T36 + T37 + T39 (one combined D42 sweep)
+## [2026-07-19] DONE + pruned: Phase-C fold-in of T36 + T37 + T39
 
-**Why:** T37 (LlamaGuard third judge) and T39 (5-pair multi-seed) are COMPUTED and
-verified but deliberately NOT committed; T38 (strict ΔMMLU) is computed. The single
-remaining blocker is T36 human labels. Fold all four into every surface in ONE sweep
-so the D42 claim-surface pass is paid once. Source of truth: `docs/PROJECT_LOG.md`.
-
-**AUTHORITATIVE PHASE-C PLAN already exists:** `docs/agent_tasks/T36-T39-phaseC-draft.md`
-(Codex, commits `b61dc24`/`7faeafd`) — outcome-conditional prose for T36 J/R/T/X, T37
-LlamaGuard + construct-mismatch caveat, T38 parser reframe, T39 multiseed, claim-lock
-stubs. **This entry supplies the actual computed T37/T39 NUMBERS to feed that draft; do
-not duplicate the draft — extend it.** Codex also surfaced a TRUTH-CHANGING report error
-there: §6.4.1's "ARC … not subject to this format asymmetry" is WRONG (ARC lenient-
-fallback usage 52.3% under NF4 > MMLU's 48.7%; strict ARC ΔMMLU −0.343 sig) — the
-"MMLU-specific loss" argument in §6.2/§6.4.1/RQ4 must be rewritten in Phase C too.
-
-**Decided (don't re-litigate):**
-- Hold the whole Phase-C fold-in until T36 labels land — one sweep, not two.
-- Restored `results_512/analysis/sensitivity_multiseed.{json,csv}` to the committed
-  3-pair version (git checkout) so verify-claims stays consistent with the current
-  3-pair report during the multi-day T36 wait. Regenerate 5-pair IN Phase C, together
-  with the §6.6.1 report edit, so artifact and report move together.
-- T37 scored with `--out-suffix _llamaguard` so it never overwrites the committed
-  api_judge pairwise file.
-
-**Verification already done (don't repeat):**
-- All GPU jobs COMPLETED: LlamaGuard `61854` (pinned rerun, revision
-  `7327bd9f6efbbe6101dc6cc4736302b3cbb6e425` in BOTH summary fields, ASR byte-identical
-  to the unpinned `61844`, parse_err 0, 15 aliases); 5 sensitivity seed jobs (40 sidecars).
-- Sidecars SCP'd + extracted to Mac; 5 seeds now 10/10 aliases each; tree clean after
-  restoring sensitivity_multiseed; `verify_report_claims.py` → 67/67; pytest **382**
-  (tree at HEAD 7faeafd incl. Codex Phase-B/WS-3 commits); agent-check 8/8.
-- T37 κ + T39 aggregate computed (results below).
-
-**EVIDENCE — pulled OUT of the working tree** (loose evidence broke immutable-artifacts
-[unmanifested mistral/phi raw] + report-freshness [llamaguard analysis]; accounting for
-both IS the Phase-C work, so it's deferred). Two durable copies:
-- **Mac tarball (130 entries):** `<scratchpad>/t37_t39_sidecars.tgz` — the session scratchpad
-  `/private/tmp/claude-501/-Users-tanueihorng-fyp-quant/af6bf29d-3f43-4faf-86d4-605cb9c723c8/scratchpad/`
-  (may be cleaned across sessions — TC1 is the real backstop).
-- **TC1 (durable):** `~/t37_t39_sidecars.tgz` on the head node, and the live trees
-  `results_512/*/harmbench/*.judge.llamaguard.*` + `results_sensitivity_512/seed*/{mistral_7b,phi4_mini}_*`.
-  Re-SCP with the exact command in the PROJECT_LOG (tar contents: 15 llamaguard sidecars +
-  20 mistral/phi sensitivity harmbench dirs). LlamaGuard pin: `7327bd9f…e425`.
-
-**Phase-C step 0 — re-place the evidence FIRST** (from the Mac tarball; or re-SCP from TC1):
-- `tar xzf "<scratchpad>/t37_t39_sidecars.tgz" -C /Users/tanueihorng/fyp_quant/`
-
-**Regen commands (deterministic; run AFTER step 0):**
-- T37 κ: `python scripts/judge_pairwise_agreement.py --results-dir results_512 --judge-a harmbench_cls --judge-b llamaguard --out-suffix _llamaguard`
-- T39: `python scripts/sensitivity_analysis.py --sensitivity-root results_sensitivity_512 --results-dir results_512`
-
-**Computed results to fold in:**
-- **T37:** per-model κ(classifier, LlamaGuard) 0.36–0.92 (Llama ~0.90; Phi low outlier
-  ~0.37 = instrument-family gap, LlamaGuard flags Phi 0.21 vs classifier 0.07). Every
-  per-pair LlamaGuard ΔASR n.s.; direction agrees 4/5 (qwen_2b classifier exactly 0.000
-  → sign undefined); only classifier-sig delta Llama −0.040 is a decrease. RQ1 null holds
-  under an open-weight third judge.
-- **T39 (judge, 5 seeds):** qwen_2b +0.013 [+0.000,+0.035] greedy +0.000 in-range;
-  qwen_4b +0.029 [+0.010,+0.050] greedy +0.040 in-range; llama −0.024 [−0.040,−0.010]
-  greedy −0.040 in-range; **mistral +0.012 [−0.005,+0.045] greedy −0.020 JUST BELOW,
-  sign flips**; **phi −0.012 [−0.055,+0.015] greedy +0.020 JUST ABOVE, sign flips**. All
-  |Δ|≤0.055, all n.s. → null holds across 5 pairs. **§6.6.1 must drop the clean "greedy
-  always in-range" phrasing**: the two cross-family pairs' greedy sits just outside their
-  narrow seed range (small noise around zero) — report the honestly-caveated 5-pair version.
-
-**Next steps (ordered; do once T36 labels are pasted back):**
-1. `python scripts/xstest_human_label_audit.py --apply-labels` then `--score` → J/R/T/X outcome.
-2. Re-run the two regen commands above (T37 κ, T39 aggregate).
-3. Fold T36+T37+T39 into `scripts/build_fyp_report_v5.js` + `scripts/build_fyp_thesis_v4.js`
-   (§6.6.1 5-pair caveated; §6.12 add LlamaGuard third-judge κ + result; add T36 gold-set
-   result), plus `README.md`, `docs/RESULTS_CARD.md`, dashboard.
-4. T38: reframe §6.5 / Ch8 for strict ΔMMLU = −0.293 (vs primary −0.090).
-5. Add llamaguard sidecars to the immutable manifest + `configs/artifact_policy.yaml`
-   allowed patterns; add `verify_report_claims.py` pins for the new T37/T39/T36 numbers.
-6. `make report && make thesis && make verify-claims && make agent-check`; PROJECT_LOG
-   §4 rows + a §3 decision for the Phase-C landing.
-
-**Watch items / guardrails:**
-- `raw.jsonl` / `summary.json` immutable; llamaguard sidecars are redacted (IDs+booleans) — keep so.
-- Report §6.6.1 honesty: do NOT claim greedy-in-range for mistral/phi.
-- The 5-pair `sensitivity_multiseed` overwrite and the report §6.6.1 edit must land in the
-  SAME commit (else verify-claims flags artifact↔report mismatch).
+Landed in two commits (part A: T36 + D51 validation-informed family, PROJECT_LOG
+2026-07-19 11:17; part B: T37 LlamaGuard + T39 5-pair multiseed, 2026-07-19 11:50).
+Durable outcomes, decisions (D51), and gate states are recorded in PROJECT_LOG §1–§4;
+T36/T37/T39 are ticked in §2. Remaining related backlog: T30b second annotator only.
 
 ## ⚠️ [security] ROTATE the OpenAI key
 

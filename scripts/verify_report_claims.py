@@ -980,6 +980,100 @@ def run_checks(checker: Checker | None = None) -> Checker:
              "original pre-specified scorer-of-record"],
             d51_family)
 
+    # -------- T37 open-weight third judge (Llama-Guard-3-8B, §6.12) ----------
+    lg = _load(A512 / "judge_pairwise_agreement_llamaguard.json")
+
+    def t37_llamaguard():
+        pm = {m["model_alias"]: m for m in lg["per_model"]}
+        if len(pm) != 10 or any(m["n_shared"] != 200 for m in pm.values()):
+            return False, f"expected 10 base/NF4 aliases x 200 shared, got {len(pm)}"
+        kappas = {a: m["cohens_kappa"] for a, m in pm.items()}
+        lo, hi = min(kappas.values()), max(kappas.values())
+        if not (round(lo, 2) == 0.36 and round(hi, 2) == 0.92):
+            return False, f"κ range {lo:.4f}–{hi:.4f} no longer rounds to 0.36–0.92"
+        if not (round(kappas["llama_3_2_3b_base"], 2) == 0.89
+                and round(kappas["llama_3_2_3b_4bit"], 2) == 0.92
+                and round(kappas["phi4_mini_base"], 2) == 0.36
+                and round(kappas["phi4_mini_4bit"], 2) == 0.38):
+            return False, "per-family κ callouts (Llama 0.89/0.92, Phi 0.36/0.38) diverge"
+        pp = {p["pair_id"]: p for p in lg["per_pair"]}
+        if any(p["llamaguard_significant"] for p in pp.values()):
+            sig = [k for k, p in pp.items() if p["llamaguard_significant"]]
+            return False, f"per-pair LlamaGuard ΔASR now significant for {sig}"
+        q2 = pp["qwen_2b"]
+        if not (near(q2["llamaguard_delta"], -0.050)
+                and round(q2["llamaguard_mcnemar_p"], 3) == 0.076
+                and abs(q2["llamaguard_delta"]) == max(abs(p["llamaguard_delta"]) for p in pp.values())):
+            return False, "'largest move qwen_2b −0.050, p = 0.076' no longer matches artifact"
+        # Evidence layer: every committed sidecar is revision-pinned + parse-clean.
+        aliases = 0
+        for d in sorted((ROOT / "results_512").iterdir()):
+            f = d / "harmbench/summary.judge.llamaguard.json"
+            if f.exists():
+                s = _load(f)
+                aliases += 1
+                if (s["judge_revision"] != "7327bd9f6efbbe6101dc6cc4736302b3cbb6e425"
+                        or s["metrics"]["parse_error_count"] != 0
+                        or s["metrics"]["num_samples"] != 200):
+                    return False, f"sidecar {f} not revision-pinned/parse-clean/200-sample"
+        if aliases != 15:
+            return False, f"expected 15 LlamaGuard summary sidecars, found {aliases}"
+        return True, (f"κ {lo:.4f}–{hi:.4f} over 10 aliases; all 5 pair ΔASR n.s. "
+                      f"(largest qwen_2b {q2['llamaguard_delta']:+.3f}, p {q2['llamaguard_mcnemar_p']:.3f}); "
+                      f"15 sidecars revision-pinned, 0 parse errors")
+
+    c.check("T37: LlamaGuard κ 0.36–0.92, all per-pair ΔASR n.s., 15 revision-pinned sidecars",
+            ["agreeing with the primary classifier at Cohen's κ from 0.36 to 0.92 across the ten base/NF4 aliases",
+             "every per-pair Llama-Guard ΔASR is non-significant (the largest move, Qwen 1.7B −0.050, McNemar p = 0.076, is a decrease)",
+             "a reproducibility cross-check, not a second construct-validity oracle"],
+            t37_llamaguard)
+
+    # -------- T39 five-pair multi-seed extension (§6.6.1) --------------------
+    def t39_multiseed_extension():
+        mi = smp["mistral_7b"]["judge_delta"]
+        ph = smp["phi4_mini"]["judge_delta"]
+        ok_mistral = (near(mi["mean"], 0.012) and near(mi["min"], -0.005)
+                      and near(mi["max"], 0.045)
+                      and mi["n_seeds_significant_p05"] == 0
+                      and near(smp["mistral_7b"]["greedy_judge_delta"], -0.020)
+                      and smp["mistral_7b"]["greedy_judge_delta"] < mi["min"]
+                      and not smp["mistral_7b"]["greedy_in_multiseed_range"])
+        ph_sig = [s for s in ph["per_seed"] if s["significant_p05"]]
+        ok_phi = (near(ph["mean"], -0.012) and near(ph["min"], -0.055)
+                  and near(ph["max"], 0.015)
+                  and ph["n_seeds_significant_p05"] == 1
+                  and len(ph_sig) == 1 and near(ph_sig[0]["delta"], -0.055)
+                  and near(smp["phi4_mini"]["greedy_judge_delta"], 0.020)
+                  and smp["phi4_mini"]["greedy_judge_delta"] > ph["max"]
+                  and not smp["phi4_mini"]["greedy_in_multiseed_range"])
+        # The three original pairs must be untouched by the extension (greedy
+        # in range; their means/counts stay pinned by the earlier multiseed checks).
+        ok_old = all(bool(smp[p]["greedy_in_multiseed_range"])
+                     for p in ("qwen_2b", "qwen_4b", "llama_3_2_3b"))
+        # Arm-wide summary sentence: 4 significant seeds split 1 increase vs 3 decreases;
+        # every per-seed |Δ| ≤ 0.055 and every seed-mean |Δ| ≤ 0.029.
+        sig_deltas = [s["delta"] for p in smp.values()
+                      for s in p["judge_delta"]["per_seed"] if s["significant_p05"]]
+        ok_arm = (len(sig_deltas) == 4
+                  and sum(1 for d in sig_deltas if d > 0) == 1
+                  and sum(1 for d in sig_deltas if d < 0) == 3
+                  and max(abs(s["delta"]) for p in smp.values()
+                          for s in p["judge_delta"]["per_seed"]) <= 0.0555
+                  and max(abs(p["judge_delta"]["mean"]) for p in smp.values()) <= 0.0295)
+        ok = len(smp) == 5 and ok_mistral and ok_phi and ok_old and ok_arm
+        return ok, (f"5 pairs; mistral mean {mi['mean']:+.3f} [{mi['min']:+.3f},{mi['max']:+.3f}] "
+                    f"{mi['n_seeds_significant_p05']}/5, greedy outside-below; "
+                    f"phi mean {ph['mean']:+.3f} [{ph['min']:+.3f},{ph['max']:+.3f}] "
+                    f"{ph['n_seeds_significant_p05']}/5 (sig seed a decrease), greedy outside-above; "
+                    f"old 3 greedy-in-range; 4 sig seeds = 1 inc vs 3 dec")
+
+    c.check("T39: 5-pair multiseed — mistral/phi values, greedy-outside disclosures, old pairs intact",
+            ["Mistral-7B has seed mean +0.012 (range [−0.005, +0.045], 0 of 5 seeds significant)",
+             "Phi-4-mini seed mean −0.012 (range [−0.055, +0.015], 1 of 5 seeds individually significant — and that seed, −0.055, is a decrease)",
+             "Mistral's just below its seed minimum, Phi's just above its seed maximum",
+             "no detectable change under either decoding regime"],
+            t39_multiseed_extension)
+
     # ---------------- local-only evidence (skip when absent) ----------------
     def sample_counts():
         counts = {}

@@ -1,0 +1,144 @@
+{
+  "judge_a": "api_judge",
+  "judge_b": "llamaguard",
+  "benchmark": "harmbench",
+  "per_model": [
+    {
+      "model_alias": "qwen_2b_base",
+      "n_shared": 200,
+      "agreement_rate": 0.75,
+      "cohens_kappa": 0.42102825382121345,
+      "api_judge_asr": 0.19,
+      "llamaguard_asr": 0.39
+    },
+    {
+      "model_alias": "qwen_2b_4bit",
+      "n_shared": 200,
+      "agreement_rate": 0.835,
+      "cohens_kappa": 0.5899602385685885,
+      "api_judge_asr": 0.195,
+      "llamaguard_asr": 0.34
+    },
+    {
+      "model_alias": "qwen_4b_base",
+      "n_shared": 200,
+      "agreement_rate": 0.93,
+      "cohens_kappa": 0.6310935441370226,
+      "api_judge_asr": 0.075,
+      "llamaguard_asr": 0.135
+    },
+    {
+      "model_alias": "qwen_4b_4bit",
+      "n_shared": 200,
+      "agreement_rate": 0.91,
+      "cohens_kappa": 0.628175996694898,
+      "api_judge_asr": 0.115,
+      "llamaguard_asr": 0.165
+    },
+    {
+      "model_alias": "llama_3_2_3b_base",
+      "n_shared": 200,
+      "agreement_rate": 0.98,
+      "cohens_kappa": 0.883720930232558,
+      "api_judge_asr": 0.09,
+      "llamaguard_asr": 0.1
+    },
+    {
+      "model_alias": "llama_3_2_3b_4bit",
+      "n_shared": 200,
+      "agreement_rate": 0.985,
+      "cohens_kappa": 0.8721227621483375,
+      "api_judge_asr": 0.055,
+      "llamaguard_asr": 0.07
+    },
+    {
+      "model_alias": "mistral_7b_base",
+      "n_shared": 200,
+      "agreement_rate": 0.825,
+      "cohens_kappa": 0.6350364963503649,
+      "api_judge_asr": 0.55,
+      "llamaguard_asr": 0.705
+    },
+    {
+      "model_alias": "mistral_7b_4bit",
+      "n_shared": 200,
+      "agreement_rate": 0.805,
+      "cohens_kappa": 0.5961896873058605,
+      "api_judge_asr": 0.545,
+      "llamaguard_asr": 0.69
+    },
+    {
+      "model_alias": "phi4_mini_base",
+      "n_shared": 200,
+      "agreement_rate": 0.825,
+      "cohens_kappa": 0.25878864887759434,
+      "api_judge_asr": 0.045,
+      "llamaguard_asr": 0.21
+    },
+    {
+      "model_alias": "phi4_mini_4bit",
+      "n_shared": 200,
+      "agreement_rate": 0.83,
+      "cohens_kappa": 0.3255306486808171,
+      "api_judge_asr": 0.065,
+      "llamaguard_asr": 0.215
+    }
+  ],
+  "per_pair": [
+    {
+      "pair_id": "qwen_2b",
+      "api_judge_delta": 0.0050000000000000044,
+      "api_judge_significant": false,
+      "api_judge_mcnemar_p": 1.0,
+      "llamaguard_delta": -0.04999999999999999,
+      "llamaguard_significant": false,
+      "llamaguard_mcnemar_p": 0.07551869750022888,
+      "sign_agree": false,
+      "significance_agree": true
+    },
+    {
+      "pair_id": "qwen_4b",
+      "api_judge_delta": 0.04000000000000001,
+      "api_judge_significant": false,
+      "api_judge_mcnemar_p": 0.11531829833984375,
+      "llamaguard_delta": 0.03,
+      "llamaguard_significant": false,
+      "llamaguard_mcnemar_p": 0.109375,
+      "sign_agree": true,
+      "significance_agree": true
+    },
+    {
+      "pair_id": "llama_3_2_3b",
+      "api_judge_delta": -0.034999999999999996,
+      "api_judge_significant": true,
+      "api_judge_mcnemar_p": 0.015625,
+      "llamaguard_delta": -0.03,
+      "llamaguard_significant": false,
+      "llamaguard_mcnemar_p": 0.14599609375,
+      "sign_agree": true,
+      "significance_agree": false
+    },
+    {
+      "pair_id": "mistral_7b",
+      "api_judge_delta": -0.0050000000000000044,
+      "api_judge_significant": false,
+      "api_judge_mcnemar_p": 1.0,
+      "llamaguard_delta": -0.015000000000000013,
+      "llamaguard_significant": false,
+      "llamaguard_mcnemar_p": 0.7358788008568808,
+      "sign_agree": true,
+      "significance_agree": true
+    },
+    {
+      "pair_id": "phi4_mini",
+      "api_judge_delta": 0.020000000000000004,
+      "api_judge_significant": false,
+      "api_judge_mcnemar_p": 0.3876953125,
+      "llamaguard_delta": 0.0050000000000000044,
+      "llamaguard_significant": false,
+      "llamaguard_mcnemar_p": 1.0,
+      "sign_agree": true,
+      "significance_agree": true
+    }
+  ]
+}

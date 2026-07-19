@@ -1,0 +1,144 @@
+{
+  "judge_a": "harmbench_cls",
+  "judge_b": "llamaguard",
+  "benchmark": "harmbench",
+  "per_model": [
+    {
+      "model_alias": "qwen_2b_base",
+      "n_shared": 200,
+      "agreement_rate": 0.805,
+      "cohens_kappa": 0.562878278412912,
+      "harmbench_cls_asr": 0.255,
+      "llamaguard_asr": 0.39
+    },
+    {
+      "model_alias": "qwen_2b_4bit",
+      "n_shared": 200,
+      "agreement_rate": 0.885,
+      "cohens_kappa": 0.7272296015180266,
+      "harmbench_cls_asr": 0.255,
+      "llamaguard_asr": 0.34
+    },
+    {
+      "model_alias": "qwen_4b_base",
+      "n_shared": 200,
+      "agreement_rate": 0.95,
+      "cohens_kappa": 0.7716373601278829,
+      "harmbench_cls_asr": 0.115,
+      "llamaguard_asr": 0.135
+    },
+    {
+      "model_alias": "qwen_4b_4bit",
+      "n_shared": 200,
+      "agreement_rate": 0.91,
+      "cohens_kappa": 0.6652408406174448,
+      "harmbench_cls_asr": 0.155,
+      "llamaguard_asr": 0.165
+    },
+    {
+      "model_alias": "llama_3_2_3b_base",
+      "n_shared": 200,
+      "agreement_rate": 0.98,
+      "cohens_kappa": 0.8888888888888887,
+      "harmbench_cls_asr": 0.1,
+      "llamaguard_asr": 0.1
+    },
+    {
+      "model_alias": "llama_3_2_3b_4bit",
+      "n_shared": 200,
+      "agreement_rate": 0.99,
+      "cohens_kappa": 0.9177631578947368,
+      "harmbench_cls_asr": 0.06,
+      "llamaguard_asr": 0.07
+    },
+    {
+      "model_alias": "mistral_7b_base",
+      "n_shared": 200,
+      "agreement_rate": 0.83,
+      "cohens_kappa": 0.6345264968289799,
+      "harmbench_cls_asr": 0.585,
+      "llamaguard_asr": 0.705
+    },
+    {
+      "model_alias": "mistral_7b_4bit",
+      "n_shared": 200,
+      "agreement_rate": 0.815,
+      "cohens_kappa": 0.6107721439091099,
+      "harmbench_cls_asr": 0.565,
+      "llamaguard_asr": 0.69
+    },
+    {
+      "model_alias": "phi4_mini_base",
+      "n_shared": 200,
+      "agreement_rate": 0.84,
+      "cohens_kappa": 0.3615323224261769,
+      "harmbench_cls_asr": 0.07,
+      "llamaguard_asr": 0.21
+    },
+    {
+      "model_alias": "phi4_mini_4bit",
+      "n_shared": 200,
+      "agreement_rate": 0.835,
+      "cohens_kappa": 0.38039804731505805,
+      "harmbench_cls_asr": 0.09,
+      "llamaguard_asr": 0.215
+    }
+  ],
+  "per_pair": [
+    {
+      "pair_id": "qwen_2b",
+      "harmbench_cls_delta": 0.0,
+      "harmbench_cls_significant": false,
+      "harmbench_cls_mcnemar_p": 1.0,
+      "llamaguard_delta": -0.04999999999999999,
+      "llamaguard_significant": false,
+      "llamaguard_mcnemar_p": 0.07551869750022888,
+      "sign_agree": false,
+      "significance_agree": true
+    },
+    {
+      "pair_id": "qwen_4b",
+      "harmbench_cls_delta": 0.039999999999999994,
+      "harmbench_cls_significant": false,
+      "harmbench_cls_mcnemar_p": 0.09625244140625,
+      "llamaguard_delta": 0.03,
+      "llamaguard_significant": false,
+      "llamaguard_mcnemar_p": 0.109375,
+      "sign_agree": true,
+      "significance_agree": true
+    },
+    {
+      "pair_id": "llama_3_2_3b",
+      "harmbench_cls_delta": -0.04000000000000001,
+      "harmbench_cls_significant": true,
+      "harmbench_cls_mcnemar_p": 0.021484375,
+      "llamaguard_delta": -0.03,
+      "llamaguard_significant": false,
+      "llamaguard_mcnemar_p": 0.14599609375,
+      "sign_agree": true,
+      "significance_agree": false
+    },
+    {
+      "pair_id": "mistral_7b",
+      "harmbench_cls_delta": -0.020000000000000018,
+      "harmbench_cls_significant": false,
+      "harmbench_cls_mcnemar_p": 0.6271025701571489,
+      "llamaguard_delta": -0.015000000000000013,
+      "llamaguard_significant": false,
+      "llamaguard_mcnemar_p": 0.7358788008568808,
+      "sign_agree": true,
+      "significance_agree": true
+    },
+    {
+      "pair_id": "phi4_mini",
+      "harmbench_cls_delta": 0.01999999999999999,
+      "harmbench_cls_significant": false,
+      "harmbench_cls_mcnemar_p": 0.4239501953125,
+      "llamaguard_delta": 0.0050000000000000044,
+      "llamaguard_significant": false,
+      "llamaguard_mcnemar_p": 1.0,
+      "sign_agree": true,
+      "significance_agree": true
+    }
+  ]
+}

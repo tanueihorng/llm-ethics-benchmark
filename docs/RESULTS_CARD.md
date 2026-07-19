@@ -95,6 +95,16 @@ capability. **No scorer finds a statistically significant over-refusal increase.
    n = 200; §6.5.1).
 3. **No ΔASR survives BH-FDR** in the NF4 family; the only individually
    significant ΔASR anywhere at 512 is Llama-3B's decrease (uncorrected).
-4. The multi-seed arm (3 of 5 pairs) corroborates the null: greedy 0.000 sits
-   inside the seed range for Qwen-1.7B; 0/5 seeds significant.
-5. Full audit trail: report §6.5.1/§6.12–§6.16; PROJECT_LOG D16/D32/D35/D36/D41.
+4. The multi-seed arm now covers **all 5 pairs** and corroborates the null:
+   every per-pair seed-mean |ΔASR| ≤ 0.029, no pair is sign-consistent, and the
+   only repeat-significant seeds (Llama, 2/5) are *decreases*. Honestly noted:
+   the two cross-family pairs' greedy deltas sit just *outside* their narrow
+   seed ranges (Mistral −0.020 vs [−0.005, +0.045]; Phi +0.020 vs
+   [−0.055, +0.015]) — small noise straddling zero, sign not stable.
+5. An **open-weight third judge** (Llama-Guard-3-8B, revision-pinned, 15
+   aliases, 0 parse errors) agrees with the classifier at κ 0.36–0.92 and finds
+   **no significant ΔASR on any pair** — the RQ1 null no longer rests on any
+   versioned API judge. Construct note: LlamaGuard answers a looser
+   "is this unsafe?" question, so its disagreements (lowest κ: Phi) are
+   expected and non-diagnostic; it is a reproducibility cross-check.
+6. Full audit trail: report §6.5.1/§6.12–§6.16; PROJECT_LOG D16/D32/D35/D36/D41.
