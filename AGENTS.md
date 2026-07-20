@@ -58,6 +58,10 @@ Editing the report is not enough when a change alters **what is true** (a headli
 
 This rule generalises D40 ("sweep the instruction layer"): sweep every layer that *references* the changed thing — instructions, results claims, visualisations, and generated docs. Rationale: during the D41 512-primary re-base, three successive external audits kept finding stale 128-era claims that diff-scoped verification had missed (PROJECT_LOG 2026-07-02 rows).
 
+## Citations: usage→presence discipline (D54)
+
+Any NAMED procedure (statistical test, correction, agreement coefficient, effect size) introduced into a document builder must land with its bibliography entry **in the same edit** — `tests/test_citation_completeness.py` enforces this (lexicon × all six builders + both LaTeX mirrors) and its lexicon should grow with any new named method. The `ieee_citations` lock checks the opposite direction only (every listed ref is bracket-cited in first-use order); it cannot see a method named with no bracket at all. Corollary for audits (D54): every presence-audit (verify what exists) must either pair with an absence-direction pass (what *should* exist and doesn't) or explicitly record that omissions are out of scope — the uncited-BH defect survived six audits because all of them enumerated from the reference list outward, and the one verifier that ran the reverse direction (2026-07-11 "25th verifier") was cut with its P3 finding left untracked.
+
 ## Keeping AGENTS.md and CLAUDE.md in sync
 
 `AGENTS.md` and `CLAUDE.md` are intentional duplicates because different coding agents read different files. If you edit one, edit the other in the same commit. The content below the "Project Overview" header is identical between the two; only the opening pointer differs.
