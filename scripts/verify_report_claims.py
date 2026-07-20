@@ -686,7 +686,7 @@ def run_checks(checker: Checker | None = None) -> Checker:
 
     c.check(
         "human validation: κ 0.59/0.11 + confusion counts (37/46/132; 18-9/101-6) == artifact",
-        ["Cohen's κ = 0.59 (moderate agreement)", "κ = 0.11 (negligible)",
+        ["Cohen's κ = 0.59 (moderate agreement)", "κ = 0.11 (slight)",
          "200 saved HarmBench generations",
          "37 of 200, against the classifier's 46 and the regex's 132",
          "101 over-flags against 6 misses"],
