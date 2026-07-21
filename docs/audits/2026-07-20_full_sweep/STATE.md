@@ -19,7 +19,7 @@
 | 0 Freeze & baseline | **done** | S1 | BASELINE.md; committed 680e7bc |
 | 1 Gate self-audit | **done** | S1 | 1a: 12 families fired, 0 fail-to-fire (phase1_must_fire.md). 1b: coverage map done (phase1_coverage_map.md + phase1_coverage_data.json); 18 high / ~103 medium / ~87 low unlocked claims; findings FS-1..FS-6 (FS-1 = verified content defect 300-vs-340). Workflow wf_15d80ba0-845: 10/11 agents (diff:thesis died on USER SESSION LIMIT, resets 02:40; completed INLINE by Fable orchestrator — model-policy deviation recorded) |
 | 2A Recompute (scripted) | **done** | S2 | phase2a_recompute.py + phase2a_results.md: **84/85 pass**. §6.14 verified (27 checks) except FS-7 (dz +1.8 should be +1.75/+1.7, mis-rounding). INT8 capability verdict VERIFIED by first-ever direct test (10 McNemar contrasts from 14,720 paired items, none sig, max 1.33pp). Table 6.5 all cells match. Independent re-derivations: own BH reproduces all 20 q-values; own exact McNemar all 20 p-values; own κ over raw sidecars reproduces all 30 published κs to 1e-6; human-val κs 0.59/0.11 from confusion cells; XSTest gold κs (−0.006/0.485/0.054/0.662), 2-of-63, 61-of-63, 0.695 all reproduce from the 200-item trail; MDE formula reproduces all per-pair MDEs |
-| 2B Stats appropriateness | pending | — | needs 1b's unlocked-claims map |
+| 2B Stats appropriateness | **done** | S3 | Workflow wf_0cdecbd1-16c: 6 Opus-xhigh seats + 2× adversarial refutation (38 agents, 0 errors). All six seats: `appropriate_with_caveats` — method choices sound. 15 findings → 14 unanimously refuted → 1 survivor = **FS-8** (P3: INT8 "capability-lossless" cites a "(paired bootstrap)" test that was never run; no capability-axis MDE; thesis borrows ASR MDE as "detection floor"; verdict true per Phase 2A, basis misattributed). phase2b_results.md has seat verdicts, kill list, + 4-item optional polish list for Phase 9 |
 | 3 Citations (4 axes) | pending | — | |
 | 4 Cross-document consistency | pending | — | |
 | 5 Omission audit | pending | — | |
@@ -45,12 +45,13 @@ mid-sweep, FS-1 is fixed first.
 
 ## NEXT-ACTION
 
-**S2 COMPLETE (Phase 2A). Next: S3 = Phase 2B (stats appropriateness, heavy — needs full window)
-or Phase 7 (audit-of-audits, medium — fits a partial window). Both have their inputs ready:**
-2B plan: Opus-xhigh panel judging METHOD CHOICE (not execution): McNemar-exact vs alternatives for
-paired binaries; BH family composition vs its preregistration; one- vs two-sided consistency;
-CI-vs-test disagreement handling; dz appropriateness; MDE formula assumptions. Inputs:
-phase1_coverage_data.json + phase2a_results.md.
-7 plan: iterate every ledger under docs/audits/* + audit-shaped PROJECT_LOG rows; verdict per finding
-(remediated-link / tracked-open / waived / LOST); any LOST finding = new P1 process finding.
-FS-1 + FS-7 await Phase 9 R1 (content); FS-2..FS-6 lock gaps await Phase 9 R2.
+**S3 COMPLETE (Phase 2B). Next: S4 — pick by window:**
+- **Phase 3 (citations, 4 axes — heavy):** 3a fitness (presence→fitness re-verify, 07-19 method),
+  3b completeness (methods used-but-never-named; lexicon-blind), 3c/3d light (gate cross-checks).
+- **Phase 4 (cross-document consistency — heavy):** report vs thesis vs interim vs README vs
+  RESULTS_CARD vs decks — same numbers, same verdicts, era-scoping.
+- **Phase 7 (audit-of-audits — medium, fits a partial window):** iterate every ledger under
+  docs/audits/* + audit-shaped PROJECT_LOG rows; verdict per finding (remediated-link /
+  tracked-open / waived / LOST); any LOST finding = new P1 process finding.
+FS-1 + FS-7 + FS-8 await Phase 9 R1 (content); FS-2..FS-6 lock gaps await Phase 9 R2;
+phase2b_results.md carries a 4-item optional polish list for Phase 9's discretion.
