@@ -17,3 +17,8 @@ FS-4 | phase1b | P2 | open | scripts/build_fyp_interim.js (9 sites: 133,283-286,
 FS-5 | phase1b | P3 | open | scripts/build_fyp_thesis_v4.js:278,321,325,326 | Thesis verdict-bearing blocks unpinned on this surface (scorer-relocation §6.1, RQ block ch7, LlamaGuard §7.2, XSTest-gold κs §7.2) — values locked on the report builder only. | candidate: thesis-side gates
 
 FS-6 | phase1b | P3 | open | scripts/verify_report_claims.py (gate design) | Duplicate-instance blindness: presence gates are whole-file string searches, so a drifted duplicate instance (abstract/summary restatements) passes while any one pinned instance survives. ~85 medium unlocked claims are largely this class. | candidate: instance-counting gates for headline numbers (e.g. assert N occurrences)
+
+FS-7 | phase2a | P3 | **verified** (recompute 2026-07-21) | scripts/build_fyp_report_v5.js:936 (§6.14) + report_humanized mirror | CONTENT DEFECT (mis-rounding): "effect sizes spanning Cohen dz ≈ −0.74 to +1.8" — artifact max m1 dz = +1.7498 (qwen_4b), which rounds to +1.7 at the sentence's own precision; "+1.8" is a double-rounding (1.7498→1.75→1.8). Min −0.74 (llama −0.7402) is exact. Thesis/interim do not carry dz. | remediation → Phase 9 R1 (change "+1.8" → "+1.75" or "+1.7")
+
+> STATUS NOTE (2026-07-21, post-2A) on FS-2: §6.14 VALUES now verified correct against refusal_margin.json (27 checks; sole exception = FS-7 rounding). The LOCK GAP remains open → Phase 9 R2.
+> STATUS NOTE (2026-07-21, post-2A) on FS-3: INT8 capability verdict now VERIFIED by direct recompute — 10 McNemar contrasts (5 pairs × MMLU/ARC) from 14,720 paired per-item records: no p < 0.05, max |Δ| = 1.33pp; Table 6.5 cells all match artifacts. The LOCK GAP remains open → Phase 9 R2.

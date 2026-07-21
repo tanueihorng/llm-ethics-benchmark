@@ -18,7 +18,7 @@
 |---|---|---|---|
 | 0 Freeze & baseline | **done** | S1 | BASELINE.md; committed 680e7bc |
 | 1 Gate self-audit | **done** | S1 | 1a: 12 families fired, 0 fail-to-fire (phase1_must_fire.md). 1b: coverage map done (phase1_coverage_map.md + phase1_coverage_data.json); 18 high / ~103 medium / ~87 low unlocked claims; findings FS-1..FS-6 (FS-1 = verified content defect 300-vs-340). Workflow wf_15d80ba0-845: 10/11 agents (diff:thesis died on USER SESSION LIMIT, resets 02:40; completed INLINE by Fable orchestrator — model-policy deviation recorded) |
-| 2A Recompute (scripted) | pending | S2 | targets now include FS-2 (§6.14 numbers) + FS-3 (INT8 capability verdicts, Table 6.5 cells) |
+| 2A Recompute (scripted) | **done** | S2 | phase2a_recompute.py + phase2a_results.md: **84/85 pass**. §6.14 verified (27 checks) except FS-7 (dz +1.8 should be +1.75/+1.7, mis-rounding). INT8 capability verdict VERIFIED by first-ever direct test (10 McNemar contrasts from 14,720 paired items, none sig, max 1.33pp). Table 6.5 all cells match. Independent re-derivations: own BH reproduces all 20 q-values; own exact McNemar all 20 p-values; own κ over raw sidecars reproduces all 30 published κs to 1e-6; human-val κs 0.59/0.11 from confusion cells; XSTest gold κs (−0.006/0.485/0.054/0.662), 2-of-63, 61-of-63, 0.695 all reproduce from the 200-item trail; MDE formula reproduces all per-pair MDEs |
 | 2B Stats appropriateness | pending | — | needs 1b's unlocked-claims map |
 | 3 Citations (4 axes) | pending | — | |
 | 4 Cross-document consistency | pending | — | |
@@ -45,12 +45,12 @@ mid-sweep, FS-1 is fixed first.
 
 ## NEXT-ACTION
 
-**S1 COMPLETE (Phase 0 + Phase 1). Next: S2 = Phase 2A (scripted recompute — cheap session).**
-S2 plan: write deterministic recompute scripts against results_512 sidecars/artifacts for
-(a) every FS-2 §6.14 number (refusal_margin.json + per-item margins), (b) FS-3 INT8 MMLU/ARC
-significance (precision_sweep + per-item summaries; McNemar on paired records), (c) Table 6.5
-cells vs headline_512_vs_128.json + genlen_robustness.json, then extend to the full locked set
-(re-derive the 86 locks' values independently). Findings → FINDINGS.md at discovery. Inputs:
-phase1_coverage_data.json (unlocked map), BASELINE.md. FS-1 (300-vs-340) awaits remediation —
-either a quick fix session (builders + regen + log) or Phase 9; if fixed mid-sweep, add a
-drift-log entry here.
+**S2 COMPLETE (Phase 2A). Next: S3 = Phase 2B (stats appropriateness, heavy — needs full window)
+or Phase 7 (audit-of-audits, medium — fits a partial window). Both have their inputs ready:**
+2B plan: Opus-xhigh panel judging METHOD CHOICE (not execution): McNemar-exact vs alternatives for
+paired binaries; BH family composition vs its preregistration; one- vs two-sided consistency;
+CI-vs-test disagreement handling; dz appropriateness; MDE formula assumptions. Inputs:
+phase1_coverage_data.json + phase2a_results.md.
+7 plan: iterate every ledger under docs/audits/* + audit-shaped PROJECT_LOG rows; verdict per finding
+(remediated-link / tracked-open / waived / LOST); any LOST finding = new P1 process finding.
+FS-1 + FS-7 await Phase 9 R1 (content); FS-2..FS-6 lock gaps await Phase 9 R2.
