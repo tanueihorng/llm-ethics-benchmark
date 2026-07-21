@@ -87,3 +87,4 @@ results_dev/
 
 # pytest-cov by-product
 .coverage
+.local_build_state

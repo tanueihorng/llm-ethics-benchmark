@@ -95,6 +95,7 @@ claim-surfaces: claim-registry
 
 report: claim-surfaces
 	NODE_PATH=$$(npm root -g) node scripts/build_fyp_report_v5.js
+	@touch .local_build_state
 
 # Deterministic claim lock (D43): every load-bearing number in the canonical
 # report builder is asserted against the committed analysis artifacts. Also
@@ -112,6 +113,7 @@ verify-claim-surfaces:
 # retained as 128-era history and their banner-marked docx live in docs/archive/.
 thesis: claim-surfaces
 	NODE_PATH=$$(npm root -g) node scripts/build_fyp_thesis_v4.js
+	@touch .local_build_state
 
 # Interim milestone report (~25-30 pp): a shorter, progress-framed derivative of
 # the thesis that REUSES the same 512-primary, claim-locked prose/numbers. The
@@ -119,16 +121,20 @@ thesis: claim-surfaces
 # touches it. Output: docs/FYP_Interim_2026-07-10.docx.
 interim: claim-surfaces
 	NODE_PATH=$$(npm root -g) node scripts/build_fyp_interim.js
+	@touch .local_build_state
 
 # Humanized variants (separate deliverables; AI-writing-tells removed, prose only;
 # every number byte-identical to the originals, verified). Originals stay the
 # claim-locked masters. Outputs: docs/FYP_*_humanized.docx.
 report-humanized: claim-surfaces
 	NODE_PATH=$$(npm root -g) node scripts/build_fyp_report_humanized.js
+	@touch .local_build_state
 thesis-humanized: claim-surfaces
 	NODE_PATH=$$(npm root -g) node scripts/build_fyp_thesis_humanized.js
+	@touch .local_build_state
 interim-humanized: claim-surfaces
 	NODE_PATH=$$(npm root -g) node scripts/build_fyp_interim_humanized.js
+	@touch .local_build_state
 
 # Standalone agentic-AI workflow / methods report (how agentic AI tools were used to
 # accelerate the project — separate deliverable; touches neither report nor thesis).

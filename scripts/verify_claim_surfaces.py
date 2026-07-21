@@ -726,6 +726,10 @@ def validate_surface(
     if not path.exists():
         if local_root_absent:
             return [("availability", True, "local submission tree absent; optional on clone")]
+        if surface.get("availability") == "gitignored_optional":
+            # Gitignored drafts (e.g. supervisor emails) are absent on a fresh
+            # clone by design; when present they are checked normally (T44 FS-18).
+            return [("availability", True, "gitignored draft absent; optional on clone")]
         return [("availability", False, "required surface is missing")]
 
     text: str | None = None
@@ -744,6 +748,13 @@ def validate_surface(
             results.append((profile, ok, "byte-matches generated source" if ok else f"differs from {surface['source']}"))
             continue
         if profile == "fresh_from_source":
+            if not (root / ".local_build_state").exists():
+                # mtimes are meaningless after `git checkout` (a fresh clone
+                # stamps every file with checkout time); the gitignored marker
+                # is touched by the Makefile build targets, so its absence
+                # means no local build has happened yet (T44 FS-18).
+                results.append((profile, True, "no local build state (fresh clone); freshness not assessable"))
+                continue
             source = root / surface["source"]
             ok = path.stat().st_mtime_ns >= source.stat().st_mtime_ns
             results.append((profile, ok, "not older than source" if ok else f"older than {surface['source']}"))

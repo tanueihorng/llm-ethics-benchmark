@@ -1620,7 +1620,7 @@ const doc = new Document({
   }],
 });
 
-const OUTPUT = "/Users/tanueihorng/fyp_quant/docs/FYP_Report_2026-06-26_v3.docx";
+const OUTPUT = path.join(__dirname, "..", "docs", "FYP_Report_2026-06-26_v3.docx");
 Packer.toBuffer(doc).then(buf => {
   fs.writeFileSync(OUTPUT, buf);
   console.log("WROTE: " + OUTPUT);

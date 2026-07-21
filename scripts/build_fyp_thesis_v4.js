@@ -433,5 +433,5 @@ const doc = new Document({
   }],
 });
 
-const out = "/Users/tanueihorng/fyp_quant/docs/FYP_Thesis_2026-07-02_v4.docx";
+const out = path.join(__dirname, "..", "docs", "FYP_Thesis_2026-07-02_v4.docx");
 Packer.toBuffer(doc).then(buf => { fs.writeFileSync(out, buf); console.log("WROTE:", out, "(" + buf.length + " bytes)"); });

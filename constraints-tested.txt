@@ -1,0 +1,17 @@
+# Known-good version set: the interpreter that runs the local test suite and analysis
+# (pip install -r requirements.txt -c constraints-tested.txt). requirements.txt pins are
+# lower-bound-only, so a fresh unconstrained install resolves to untested major versions
+# (transformers 5.x etc.); this file records the tested set (T44 FS-19). TC1 GPU-side
+# versions are recorded per-run in the results env fingerprints (audit P1-2).
+torch==2.6.0
+transformers==4.32.1
+datasets==2.12.0
+pydantic==2.10.5
+numpy==1.26.4
+pandas==2.0.3
+pytest==7.4.0
+huggingface_hub==0.15.1
+protobuf==5.29.3
+tiktoken==0.8.0
+pyyaml==6.0
+scipy==1.11.1

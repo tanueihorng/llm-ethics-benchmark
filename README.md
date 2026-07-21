@@ -331,6 +331,12 @@ python scripts/verify_report_claims.py                                # re-check
 # note: --results-dir defaults to results/ (the retired 128-token secondary tree); the primary study lives in results_512/
 ```
 
+For a faithful environment, install against the tested version set (loose lower bounds otherwise resolve to untested majors):
+
+```bash
+pip install -r requirements.txt -c constraints-tested.txt
+```
+
 ---
 
 ## Documentation

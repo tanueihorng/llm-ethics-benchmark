@@ -26,6 +26,7 @@ if (!process.env.FYP_BUILD_SUPERSEDED) {
 // Output: docs/FYP_Thesis_2026-06-18.docx   (build: node scripts/build_fyp_thesis.js)
 // ============================================================================
 const fs = require("fs");
+const path = require("path");
 const {
   Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell,
   Header, Footer, AlignmentType, LevelFormat, TableOfContents, HeadingLevel,
@@ -433,5 +434,5 @@ const doc = new Document({
   }],
 });
 
-const out = "/Users/tanueihorng/fyp_quant/docs/FYP_Thesis_2026-06-18.docx";
+const out = path.join(__dirname, "..", "docs", "FYP_Thesis_2026-06-18.docx");
 Packer.toBuffer(doc).then(buf => { fs.writeFileSync(out, buf); console.log("WROTE:", out, "(" + buf.length + " bytes)"); });

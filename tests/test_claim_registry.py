@@ -194,10 +194,35 @@ def test_docx_older_than_builder_fails(tmp_path: Path) -> None:
     builder.write_text("fresh", encoding="utf-8")
     os.utime(docx, ns=(1_000, 1_000))
     os.utime(builder, ns=(2_000, 2_000))
+    # A built workspace carries the gitignored marker (T44 FS-18); without it
+    # the freshness check is not assessable (post-checkout mtimes are noise).
+    (tmp_path / ".local_build_state").touch()
     surface = {"path": "docs/report.docx", "source": "builder.js", "profiles": ["fresh_from_source"]}
     registry = build_registry(ROOT)
     results = validate_surface(surface, registry, tmp_path)
     assert results == [("fresh_from_source", False, "older than builder.js")]
+
+
+def test_docx_freshness_not_assessable_on_fresh_clone(tmp_path: Path) -> None:
+    # T44 FS-18 must-fire counterpart: with NO local build state (fresh clone),
+    # the mtime comparison is skipped as satisfied rather than failing red.
+    (tmp_path / "docs").mkdir()
+    (tmp_path / "docs/report.docx").write_bytes(b"stale")
+    (tmp_path / "builder.js").write_text("fresh", encoding="utf-8")
+    surface = {"path": "docs/report.docx", "source": "builder.js", "profiles": ["fresh_from_source"]}
+    results = validate_surface(surface, build_registry(ROOT), tmp_path)
+    assert results == [("fresh_from_source", True, "no local build state (fresh clone); freshness not assessable")]
+
+
+def test_gitignored_optional_surface_skips_when_absent(tmp_path: Path) -> None:
+    # T44 FS-18: gitignored drafts (emails) are optional on a clone...
+    surface = {"id": "e", "path": "docs/email_x.md", "availability": "gitignored_optional", "profiles": []}
+    results = validate_surface(surface, build_registry(ROOT), tmp_path)
+    assert results == [("availability", True, "gitignored draft absent; optional on clone")]
+    # ...but a plain required surface still fails red when missing (must-fire).
+    required = {"id": "r", "path": "docs/email_x.md", "profiles": []}
+    results = validate_surface(required, build_registry(ROOT), tmp_path)
+    assert results == [("availability", False, "required surface is missing")]
 
 
 def test_history_appendix_is_exempt_from_retired_scoping() -> None:

@@ -41,6 +41,10 @@ LEXICON = {
     r"Fisher[’']?s? exact": "Fisher",
     r"Krippendorff": "Krippendorff",
     r"Landis\s*(?:and|&)\s*Koch": "Landis",
+    # T44 FS-11: the MDE/power method must carry its source (Connor 1987). Keyed
+    # on the procedure names, not "Cohen's d" (the blind spot that let the
+    # thesis quote MDE values with no power reference in its bibliography).
+    r"power analysis|minimum[- ]detectable": "Connor",
 }
 
 BUILDERS = [

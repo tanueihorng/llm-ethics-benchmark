@@ -26,7 +26,7 @@
 | 6 Fresh-clone reproducibility | **done** | S6 | Cold-clone agent (scratchpad/phase6_clone): **research numbers reproduce 85/86 with zero failures from the clone** — scientific core portable. But tooling fails cold: **FS-17** (P2: 13/14 builders hardcode absolute output paths — clone build LIVE-dirtied the parent docx, restored+verified), **FS-18** (P2: gates red on untouched checkout — 3 gitignored email surfaces required + mtime freshness), **FS-19** (P2: npm install undocumented, .venv doc stale, no lockfile). docx content-deterministic/not byte-reproducible (note). Tex mirrors not in clone (per FS-16 theme). TC1/GPU out of scope. phase6_results.md |
 | 7 Audit-of-audits | **done** | S7 | 2 workflow rounds (wf_3a3ac433 + rerun wf_60ac08f2; QC incident: 2 placeholder outputs + 1 retry-cap at Opus-low, caught by count reconciliation, re-run at medium). ~282 items traced across 7 sources; 92 defects dispositioned. 25th-verifier item = LOST→recovered(D54/T43)✓. **3 NEW recovered losses, all pre-07-15: FS-21 (inference_mode≠no_grad), FS-22 (classifier template fork undisclosed), FS-23 (6-item framing-cluster residual)** → **FS-24 (P1 process): no-loss guarantee failed pre-ledger-discipline; 0 losses after 07-15**. phase7_results.md |
 | 8 Examiner panel (4 lenses) | **done** | S8 | wf_9be3417f + domain re-run wf_eb7ab800 (31 agents; QC incident #3: degenerate at_risk/zero-findings seat discarded + re-run). **All four lenses: pass_with_minor_corrections.** 13 findings → 12 killed (documents defended themselves: causal disclaimer present, parser bracket disclosed 3×, D51 answers scorer epistemics) → **FS-25** (P3: §6.4.1 "parser-dependent" vs RQ4 "MMLU-specific" internal contradiction). Deliverables: ~19-question viva-prep sheet (5 GAPs) + 4-item polish list (thinking-mode 6th bound, abstract "independently supports", multiseed paragraph, regeneration how-to). phase8_results.md |
-| 9 Synthesis & closure | pending | — | last |
+| 9 Synthesis & closure | **done** | S9 | phase9_synthesis.md committed (b72f06d); user approved full scope (R1+R2+polish); **R1 content batch executed** (16 FS + 7 polish across all 8 surfaces; 2 dispositions corrected at remediation time: FS-23b refuted by timestamp evidence, FS-23d already-remediated; commit 262f977); **R2 lock/tooling batch executed** (7 new claim locks → verify-claims 93; tex↔JS sync gate; 13 builders relocatable; clone-aware gates; lexicon + constraints file; all must-fire-proven). FS-24 → D55 standing rule. **Ledger closed: 23 remediated / 1 waived / 1 refuted.** Final gates: pytest 464, verify-claims 93/93, surfaces 264/264 |
 
 ## Remediation policy (user decision 2026-07-21)
 
@@ -45,12 +45,13 @@ mid-sweep, FS-1 is fixed first.
 
 ## NEXT-ACTION
 
-**S9 PART 1 DONE (synthesis committed, b72f06d). PAUSED FOR USER REVIEW (2026-07-22 01:40):**
-user is reading phase9_synthesis.md + FINDINGS.md before approving remediation scope.
-**User decisions so far: pacing = SPLIT (R1 content batch first, R2 lock batch in a later
-session). Scope = pending review.** On the user's go ("continue T44" + scope): execute R1 per
-the synthesis plan (with any user adjustments), re-verify loop, commit; R2 next session; then
-close-out (FS-24 D-row, ledger statuses, baseline reconcile, tick T44).
+**SWEEP CLOSED 2026-07-22.** All phases 0–9 done; user approved full scope; R1 + R2 executed
+in S9 (user superseded the earlier split decision with "let's do R1 and R2 since they are
+cheap"). Ledger: 25 findings → 23 remediated / 1 waived (FS-23e) / 1 refuted (FS-23b).
+Baseline reconcile: content baseline `64e4f4f` was audit-frozen through S1–S8 (drift log
+empty); all post-baseline commits are sweep ledger entries + the approved remediation
+batches. T44 ticked in §2; standing rule = D55. Viva-prep sheet: phase8_results.md.
+Nothing further scheduled for this ledger; any reopening starts a NEW audit dir per D55.
 Original Phase 9 charter for reference:
 1. Synthesis: full-sweep report (scope-limits statement included), final findings census.
 2. Present the remediation plan to the user for approval, THEN execute in two themed batches:

@@ -1468,6 +1468,98 @@ def run_checks(checker: Checker | None = None) -> Checker:
             ),
         )
 
+    # ---- T44 R2 lock extensions (FS-2..FS-6; sweep docs/audits/2026-07-20_full_sweep) ----
+    rm = _load(A512 / "refusal_margin.json")
+    rmp, rmpool = rm["per_pair"], rm["pooled"]
+
+    c.check(
+        "§6.14 margin shifts + dz range match refusal_margin.json (FS-2)",
+        ["Δm = +1.2 for 1.7B, +4.0 for 4B", "≈ −0.74 to +1.7", "p < 0.001, n = 200"],
+        lambda: (
+            all(rmp[p]["margin_shift"]["m1"]["wilcoxon_p"] < 1e-3
+                for p in ("qwen_2b", "qwen_4b", "llama_3_2_3b", "phi4_mini"))
+            and round(rmp["qwen_2b"]["margin_shift"]["m1"]["mean_delta"], 1) == 1.2
+            and round(rmp["qwen_4b"]["margin_shift"]["m1"]["mean_delta"], 1) == 4.0
+            and round(rmp["llama_3_2_3b"]["margin_shift"]["m1"]["mean_delta"], 1) == -1.1
+            and round(rmp["phi4_mini"]["margin_shift"]["m1"]["mean_delta"], 1) == -0.3
+            and round(min(rmp[p]["margin_shift"]["m1"]["cohen_dz"]
+                          for p in ("qwen_2b", "qwen_4b", "llama_3_2_3b", "phi4_mini")), 2) == -0.74
+            and round(max(rmp[p]["margin_shift"]["m1"]["cohen_dz"]
+                          for p in ("qwen_2b", "qwen_4b", "llama_3_2_3b", "phi4_mini")), 1) == 1.7,
+            "Wilcoxon p<0.001 ×4, means +1.2/+4.0/−1.1/−0.3, dz range −0.74..+1.7",
+        ),
+    )
+    c.check(
+        "§6.14 pooled flips + AUCs match refusal_margin.json (FS-2)",
+        ["92 flip", "flips, 50 are harmful-ward (refuse→comply) and 42"],
+        lambda: (
+            rmpool["n_flips"] == 92 and rmpool["n_harmful_ward"] == 50
+            and rmpool["n_safe_ward"] == 42
+            and round(rmpool["auc_thin_margin_predicts_flip"], 2) == 0.76
+            and round(rmpool["within_pair_auc_by_pair"]["qwen_2b"], 2) == 0.61
+            and round(rmpool["within_pair_auc_by_pair"]["mistral_7b"], 2) == 0.54,
+            "92 = 50 + 42; pooled AUC 0.76; within-pair 0.61/0.54",
+        ),
+    )
+    c.check(
+        "§6.15 INT8 capability verdict bounded by artifact deltas (FS-3/FS-8)",
+        ["largest |Δ| 1.3 pp", "capability-lossless"],
+        lambda: (
+            0.013 <= max(abs(ps512[p]["metrics"][m]["delta_int8_vs_fp16"])
+                         for p in ps512 for m in ("mmlu_accuracy", "arc_accuracy")) <= 0.0135,
+            "max |INT8 capability delta| rounds to 1.3 pp across all five pairs",
+        ),
+    )
+    c.check(
+        "§6.15 Llama INT8 512 non-replication cells match precision_sweep.json (FS-3)",
+        ["Δ+0.005, McNemar p = 1.000", "gpt-4o Δ+0.010, p = 0.688"],
+        lambda: (
+            ps512["llama_3_2_3b"]["harmbench_asr_int8_mcnemar"]["harmbench_cls"]["delta"] == 0.005
+            and ps512["llama_3_2_3b"]["harmbench_asr_int8_mcnemar"]["harmbench_cls"]["p_value"] == 1.0
+            and ps512["llama_3_2_3b"]["harmbench_asr_int8_mcnemar"]["api_judge"]["delta"] == 0.01
+            and round(ps512["llama_3_2_3b"]["harmbench_asr_int8_mcnemar"]["api_judge"]["p_value"], 3) == 0.688,
+            "llama INT8 deltas/p-values match artifact",
+        ),
+    )
+
+    interim_text = (ROOT / "scripts/build_fyp_interim.js").read_text(encoding="utf-8")
+    thesis_text = (ROOT / "scripts/build_fyp_thesis_v4.js").read_text(encoding="utf-8")
+    _bh_set = {(r["pair_id"], r["metric"]) for r in mc["contrasts"] if r.get("bh_significant_q05")}
+    surface_check(
+        "interim surface: BH survivor set + RQ1 null match multiple_comparisons.json (FS-4)",
+        interim_text,
+        ["−0.090", "−0.032", "−0.048", "no pair shows a significant increase in harmful compliance"],
+        lambda: (
+            _bh_set == {("qwen_2b", "mmlu_accuracy"), ("llama_3_2_3b", "arc_accuracy"),
+                        ("phi4_mini", "xstest_over_refusal")}
+            and not any(m == "harmbench_asr_judge" for _, m in _bh_set),
+            "3 BH survivors, none on the safety axis",
+        ),
+    )
+    lgk = [r["cohens_kappa"] for r in _load(A512 / "judge_pairwise_agreement_llamaguard.json")["per_model"]]
+    xhv = _load(A512 / "xstest_human_validation.json")
+    surface_check(
+        "thesis surface: LlamaGuard κ range + XSTest gold κs match artifacts (FS-5)",
+        thesis_text,
+        ["0.36–0.92", "0.485", "0.662", "0.054"],
+        lambda: (
+            round(min(lgk), 2) == 0.36 and round(max(lgk), 2) == 0.92
+            and round(xhv["strict"]["judge_vs_human"]["cohens_kappa"], 3) == 0.485
+            and round(xhv["strict"]["regex_vs_human"]["cohens_kappa"], 3) == -0.006
+            and round(xhv["broad"]["judge_vs_human"]["cohens_kappa"], 3) == 0.662
+            and round(xhv["broad"]["regex_vs_human"]["cohens_kappa"], 3) == 0.054,
+            "LlamaGuard κ 0.36–0.92; gold κ 0.485/−0.006 strict, 0.662/0.054 broad",
+        ),
+    )
+    c.check(
+        "headline-number instance counts stable on report surface (FS-6 canary)",
+        [],
+        lambda: (
+            c.text.count("−0.090") == 26 and c.text.count("−0.048") == 40,
+            "−0.090 ×26, −0.048 ×40 incl. registry (update counts deliberately on any real edit)",
+        ),
+    )
+
     return c
 
 
