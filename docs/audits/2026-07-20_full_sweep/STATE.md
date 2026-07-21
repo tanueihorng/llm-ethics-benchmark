@@ -28,6 +28,17 @@
 | 8 Examiner panel (4 lenses) | pending | — | after 1–7 |
 | 9 Synthesis & closure | pending | — | last |
 
+## Remediation policy (user decision 2026-07-21)
+
+**Batch-at-Phase-9 (default):** findings accumulate in FINDINGS.md and are remediated once, at
+Phase 9, grouped by THEME (content fixes vs lock/gate extensions), with one re-verify loop.
+Rationale: keeps the frozen baseline audit-stable, lets fix clusters complete before design
+(FS-2..FS-6 are one lock-extension change), and avoids N fix-verify-drift cycles.
+**Hotfix exception (only):** a P1 content defect on a deliverable that will leave the repo
+before the sweep ends → fix immediately + drift-log entry + targeted re-check of done phases.
+FS-1 does NOT qualify while nothing is being sent; if the user decides to send thesis/report
+mid-sweep, FS-1 is fixed first.
+
 ## Drift log
 
 (none — content work frozen during the sweep; T1 send, if it happens, gets an entry here)
