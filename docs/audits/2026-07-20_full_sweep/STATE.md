@@ -21,7 +21,7 @@
 | 2A Recompute (scripted) | **done** | S2 | phase2a_recompute.py + phase2a_results.md: **84/85 pass**. §6.14 verified (27 checks) except FS-7 (dz +1.8 should be +1.75/+1.7, mis-rounding). INT8 capability verdict VERIFIED by first-ever direct test (10 McNemar contrasts from 14,720 paired items, none sig, max 1.33pp). Table 6.5 all cells match. Independent re-derivations: own BH reproduces all 20 q-values; own exact McNemar all 20 p-values; own κ over raw sidecars reproduces all 30 published κs to 1e-6; human-val κs 0.59/0.11 from confusion cells; XSTest gold κs (−0.006/0.485/0.054/0.662), 2-of-63, 61-of-63, 0.695 all reproduce from the 200-item trail; MDE formula reproduces all per-pair MDEs |
 | 2B Stats appropriateness | **done** | S3 | Workflow wf_0cdecbd1-16c: 6 Opus-xhigh seats + 2× adversarial refutation (38 agents, 0 errors). All six seats: `appropriate_with_caveats` — method choices sound. 15 findings → 14 unanimously refuted → 1 survivor = **FS-8** (P3: INT8 "capability-lossless" cites a "(paired bootstrap)" test that was never run; no capability-axis MDE; thesis borrows ASR MDE as "detection floor"; verdict true per Phase 2A, basis misattributed). phase2b_results.md has seat verdicts, kill list, + 4-item optional polish list for Phase 9 |
 | 3 Citations (4 axes) | **done** | S4 | Deterministic: D54 gate 12/12; numbering integrity clean on all 8 surfaces (2 orchestrator false alarms self-caught pre-filing). Workflow wf_8cb7af9e-b96 (47 agents, 0 errors): 31 fitness + 2×3b + 3c + 3d seats; **30/35 clean, zero hallucinated citations** (2nd consecutive clean fitness audit; 5 new stats refs + renumber cascades all correct). 6 findings → 2 killed → **FS-9** (tex-only Jin misattribution), **FS-10** (Proskurina venue inconsistency ×6 surfaces), **FS-11** (MDE/Connor-Lachin formula uncited; thesis has NO power ref; lexicon blind — D54-class catch by the absence-direction pass). All P3. phase3_results.md |
-| 4 Cross-document consistency | pending | — | |
+| 4 Cross-document consistency | **done** | S5 | Workflow wf_eb1681e8-cc2 (34 agents, 0 errors): 12 surface seats, both directions. **Thesis builder + 5 other surfaces fully consistent (0 findings); README/hum-thesis findings killed as legitimate compression.** 11 findings → 7 survived → **FS-12** (tex κ-tables stale pre-T43, P2), **FS-13** (tex-interim front matter lists done work as planned, P2), **FS-14** (interim 10-July date over 18/19-July content), **FS-15** (humanized abstract pre-hedge overstatements), **FS-16** (root cause, P2 lock gap: zero tex↔JS sync coverage), FS-10 note (Egashira venue). Theme: all real drift lives in the hand-maintained tex mirrors. phase4_results.md |
 | 5 Omission audit | pending | — | |
 | 6 Fresh-clone reproducibility | pending | — | |
 | 7 Audit-of-audits | pending | — | |
@@ -45,15 +45,16 @@ mid-sweep, FS-1 is fixed first.
 
 ## NEXT-ACTION
 
-**S4 COMPLETE (Phase 3). Next: S5 — pick by window:**
-- **Phase 4 (cross-document consistency — heavy):** diff the load-bearing story across ALL
-  surfaces (report v5, thesis v4, interim, 3 humanized, 2 tex mirrors, decks, README,
-  RESULTS_CARD, dashboard data layer, CLAUDE/AGENTS, PROJECT_LOG §1); both directions —
-  same claim stated differently, and claim absent where a reader needs it. Point-in-time
-  decks exempt but must carry their snapshot notice.
-- **Phase 5 (omission audit — heavy):** what SHOULD the documents say that they don't.
-- **Phase 6 (fresh-clone reproducibility — cheap-medium)** and **Phase 7 (audit-of-audits —
-  medium)** both fit partial windows.
-Content findings awaiting Phase 9 R1: FS-1, FS-7, FS-8, FS-9, FS-10, FS-11.
-Lock/gate gaps awaiting Phase 9 R2: FS-2..FS-6 + FS-11's lexicon extension.
-Optional polish: 4-item list in phase2b_results.md.
+**S5 COMPLETE (Phase 4). Next: S6 — pick by window:**
+- **Phase 5 (omission audit — heavy):** what SHOULD the documents say that they don't —
+  absence-direction over the whole claim surface (D54 corollary applied globally): missing
+  limitations, missing robustness checks a reviewer would expect, missing disclosures.
+- **Phase 6 (fresh-clone reproducibility — cheap-medium):** clone to a temp dir, follow the
+  README/CLAUDE instructions cold, run gates + report build, record every friction point.
+- **Phase 7 (audit-of-audits — medium, partial-window):** iterate every ledger under
+  docs/audits/* + audit-shaped PROJECT_LOG rows; verdict per finding (remediated-link /
+  tracked-open / waived / LOST); any LOST finding = new P1 process finding.
+Then Phase 8 (examiner panel, after 1–7) → Phase 9 (synthesis + R1 content / R2 locks).
+Content findings awaiting Phase 9 R1: FS-1, FS-7, FS-8, FS-9, FS-10(+note), FS-11, FS-12,
+FS-13, FS-14, FS-15. Lock/gate gaps awaiting R2: FS-2..FS-6, FS-11-lexicon, FS-16 (tex↔JS
+sync — root cause of the tex cluster). Optional polish: 4-item list in phase2b_results.md.
