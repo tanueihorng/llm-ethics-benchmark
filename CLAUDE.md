@@ -31,6 +31,7 @@ The current FYP report (`docs/FYP_Report_2026-07-01_v5.docx`, the 512-token-prim
 ```bash
 make report
 ```
+(first run on a machine requires the Node dependencies: `npm install` in the repo root — the docx builders need the `docx` package; a missing install fails with "Cannot find module 'docx'". The Python side runs on the interpreter `make` resolves via `PYTHON` — historically conda base on the author's Mac, not a repo-local `.venv`)
 
 A change is **report-worthy** if it affects any of:
 - **Methodology** (Chapter 3): scope, model pairs, benchmarks, quantization approach, scoring rules, decoding controls, interpretation framework.

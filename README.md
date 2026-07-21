@@ -321,6 +321,16 @@ Raw generations are written once and never overwritten. Post-hoc re-scoring and 
 - **Uncertainty quantified** — paired-bootstrap 95% CIs and McNemar exact tests on every delta, with an honest family-wise-correction caveat.
 - **Machine-checkable rails** — `make agent-check` (8/8) guards docs, artifacts, redaction, and report freshness on every change.
 
+**Regenerating the headline numbers from committed artifacts** (no GPU needed — all inputs are committed under `results_512/`):
+
+```bash
+python scripts/multiple_comparisons.py --results-dir results_512      # BH-FDR table + MDEs → results_512/analysis/multiple_comparisons.{json,csv}
+python scripts/judge_agreement.py --results-dir results_512           # judge-vs-regex κ table → judge_agreement.{json,csv}
+python scripts/precision_sweep_analysis.py --results-dir results_512  # INT8/NF4 precision table → precision_sweep.{json,csv}
+python scripts/verify_report_claims.py                                # re-checks every locked report number against the artifacts
+# note: --results-dir defaults to results/ (the retired 128-token secondary tree); the primary study lives in results_512/
+```
+
 ---
 
 ## Documentation
