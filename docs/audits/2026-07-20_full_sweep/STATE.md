@@ -45,8 +45,13 @@ mid-sweep, FS-1 is fixed first.
 
 ## NEXT-ACTION
 
-**S8 COMPLETE (Phase 8) — ALL AUDIT PHASES DONE (0–8). Next: S9 = Phase 9 (synthesis +
-remediation, user approves scope before edits):**
+**S9 PART 1 DONE (synthesis committed, b72f06d). PAUSED FOR USER REVIEW (2026-07-22 01:40):**
+user is reading phase9_synthesis.md + FINDINGS.md before approving remediation scope.
+**User decisions so far: pacing = SPLIT (R1 content batch first, R2 lock batch in a later
+session). Scope = pending review.** On the user's go ("continue T44" + scope): execute R1 per
+the synthesis plan (with any user adjustments), re-verify loop, commit; R2 next session; then
+close-out (FS-24 D-row, ledger statuses, baseline reconcile, tick T44).
+Original Phase 9 charter for reference:
 1. Synthesis: full-sweep report (scope-limits statement included), final findings census.
 2. Present the remediation plan to the user for approval, THEN execute in two themed batches:
    **R1 content batch** (all six builders + tex mirrors + regenerate docx/PDF/zips + one
