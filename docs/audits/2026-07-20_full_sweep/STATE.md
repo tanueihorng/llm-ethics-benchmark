@@ -25,7 +25,7 @@
 | 5 Omission audit | **done** | S6 | Workflow wf_94d4c07f-ae6 (17 agents, 0 errors): 5 xhigh absence-direction seats. **artifact-limitations + prereg-outcomes: zero findings** (all 8 candidate limitation classes disclosed; every prereg clause resolved). 6 findings → 5 killed → **FS-20** (P3, split adjudicated: HarmBench gpt-4o judge is a floating alias, XSTest judge dated — pinning asymmetry, not load-bearing). Verdict: no material omissions. phase5_results.md |
 | 6 Fresh-clone reproducibility | **done** | S6 | Cold-clone agent (scratchpad/phase6_clone): **research numbers reproduce 85/86 with zero failures from the clone** — scientific core portable. But tooling fails cold: **FS-17** (P2: 13/14 builders hardcode absolute output paths — clone build LIVE-dirtied the parent docx, restored+verified), **FS-18** (P2: gates red on untouched checkout — 3 gitignored email surfaces required + mtime freshness), **FS-19** (P2: npm install undocumented, .venv doc stale, no lockfile). docx content-deterministic/not byte-reproducible (note). Tex mirrors not in clone (per FS-16 theme). TC1/GPU out of scope. phase6_results.md |
 | 7 Audit-of-audits | **done** | S7 | 2 workflow rounds (wf_3a3ac433 + rerun wf_60ac08f2; QC incident: 2 placeholder outputs + 1 retry-cap at Opus-low, caught by count reconciliation, re-run at medium). ~282 items traced across 7 sources; 92 defects dispositioned. 25th-verifier item = LOST→recovered(D54/T43)✓. **3 NEW recovered losses, all pre-07-15: FS-21 (inference_mode≠no_grad), FS-22 (classifier template fork undisclosed), FS-23 (6-item framing-cluster residual)** → **FS-24 (P1 process): no-loss guarantee failed pre-ledger-discipline; 0 losses after 07-15**. phase7_results.md |
-| 8 Examiner panel (4 lenses) | pending | — | after 1–7 |
+| 8 Examiner panel (4 lenses) | **done** | S8 | wf_9be3417f + domain re-run wf_eb7ab800 (31 agents; QC incident #3: degenerate at_risk/zero-findings seat discarded + re-run). **All four lenses: pass_with_minor_corrections.** 13 findings → 12 killed (documents defended themselves: causal disclaimer present, parser bracket disclosed 3×, D51 answers scorer epistemics) → **FS-25** (P3: §6.4.1 "parser-dependent" vs RQ4 "MMLU-specific" internal contradiction). Deliverables: ~19-question viva-prep sheet (5 GAPs) + 4-item polish list (thinking-mode 6th bound, abstract "independently supports", multiseed paragraph, regeneration how-to). phase8_results.md |
 | 9 Synthesis & closure | pending | — | last |
 
 ## Remediation policy (user decision 2026-07-21)
@@ -45,14 +45,17 @@ mid-sweep, FS-1 is fixed first.
 
 ## NEXT-ACTION
 
-**S7 COMPLETE (Phase 7). Next: S8 = Phase 8 (adversarial examiner panel — heavy, LAST before
-synthesis):** 4 hostile lenses, each trying to REFUTE rather than verify, run on the
-post-1..7 state with NO enumeration basis by design: (1) stats examiner, (2) safety-ML domain
-examiner, (3) hostile FYP examiner (would I pass this?), (4) reproducibility examiner. They
-hunt what the structured phases missed; findings verified by refuters as usual.
-Then S9/S10 = Phase 9 (synthesis; R1 content batch / R2 lock batch; user approves scope).
-Content findings awaiting Phase 9 R1: FS-1, FS-7, FS-8, FS-9, FS-10(+note), FS-11, FS-12,
-FS-13, FS-14, FS-15, FS-19(doc half), FS-20, FS-21, FS-22, FS-23 (fix-or-waive per item).
-Lock/tooling gaps awaiting R2: FS-2..FS-6, FS-11-lexicon, FS-16, FS-17, FS-18, FS-19(lockfile).
-Process: FS-24 (P1) → Phase 9 adopts the audit-close no-loss standing rule (§3 D-row).
-Optional polish: 4-item list in phase2b_results.md.
+**S8 COMPLETE (Phase 8) — ALL AUDIT PHASES DONE (0–8). Next: S9 = Phase 9 (synthesis +
+remediation, user approves scope before edits):**
+1. Synthesis: full-sweep report (scope-limits statement included), final findings census.
+2. Present the remediation plan to the user for approval, THEN execute in two themed batches:
+   **R1 content batch** (all six builders + tex mirrors + regenerate docx/PDF/zips + one
+   re-verify loop): FS-1, FS-7, FS-8, FS-9, FS-10(+Egashira note), FS-11 (needs Connor 1987
+   bibliographic web-verify first), FS-12, FS-13, FS-14, FS-15, FS-19(doc half), FS-20, FS-21,
+   FS-22, FS-23 (fix-or-waive per item), FS-25; optional polish lists (phase2b ×4 + phase8 ×4).
+   **R2 lock/tooling batch**: FS-2..FS-6 (lock extensions), FS-11-lexicon, FS-16 (tex↔JS sync
+   gate), FS-17 (builder __dirname paths), FS-18 (clone-aware gates), FS-19(lockfile);
+   must-fire self-test for every new gate per D42.
+3. FS-24 closure: adopt the audit-close no-loss standing rule as a §3 D-row.
+4. Reconcile final state vs baseline 64e4f4f; tick T44 in §2; final commit.
+Viva-prep sheet lives in phase8_results.md — surface it to the user at close.
