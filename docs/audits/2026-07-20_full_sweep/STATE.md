@@ -16,9 +16,9 @@
 
 | Phase | Status | Session(s) | Notes |
 |---|---|---|---|
-| 0 Freeze & baseline | in-progress | S1 | this session |
-| 1 Gate self-audit | pending | S1 | 1a must-fire + 1b coverage map |
-| 2A Recompute (scripted) | pending | — | |
+| 0 Freeze & baseline | **done** | S1 | BASELINE.md; committed 680e7bc |
+| 1 Gate self-audit | **done** | S1 | 1a: 12 families fired, 0 fail-to-fire (phase1_must_fire.md). 1b: coverage map done (phase1_coverage_map.md + phase1_coverage_data.json); 18 high / ~103 medium / ~87 low unlocked claims; findings FS-1..FS-6 (FS-1 = verified content defect 300-vs-340). Workflow wf_15d80ba0-845: 10/11 agents (diff:thesis died on USER SESSION LIMIT, resets 02:40; completed INLINE by Fable orchestrator — model-policy deviation recorded) |
+| 2A Recompute (scripted) | pending | S2 | targets now include FS-2 (§6.14 numbers) + FS-3 (INT8 capability verdicts, Table 6.5 cells) |
 | 2B Stats appropriateness | pending | — | needs 1b's unlocked-claims map |
 | 3 Citations (4 axes) | pending | — | |
 | 4 Cross-document consistency | pending | — | |
@@ -34,7 +34,12 @@
 
 ## NEXT-ACTION
 
-S1 in progress: Phase 0 baseline capture → Phase 1a perturbation sweep → Phase 1b coverage-map
-workflow → end-of-session protocol. If S1 dies mid-run: re-read BASELINE.md (if present, Phase 0
-is done); check FINDINGS.md for recorded 1a results; re-run any 1a perturbation not yet recorded;
-1b workflow results land in `phase1_coverage_map.md` (absent = re-run 1b).
+**S1 COMPLETE (Phase 0 + Phase 1). Next: S2 = Phase 2A (scripted recompute — cheap session).**
+S2 plan: write deterministic recompute scripts against results_512 sidecars/artifacts for
+(a) every FS-2 §6.14 number (refusal_margin.json + per-item margins), (b) FS-3 INT8 MMLU/ARC
+significance (precision_sweep + per-item summaries; McNemar on paired records), (c) Table 6.5
+cells vs headline_512_vs_128.json + genlen_robustness.json, then extend to the full locked set
+(re-derive the 86 locks' values independently). Findings → FINDINGS.md at discovery. Inputs:
+phase1_coverage_data.json (unlocked map), BASELINE.md. FS-1 (300-vs-340) awaits remediation —
+either a quick fix session (builders + regen + log) or Phase 9; if fixed mid-sweep, add a
+drift-log entry here.

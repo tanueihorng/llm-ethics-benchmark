@@ -1,0 +1,1246 @@
+{
+ "baseline": "64e4f4f",
+ "locks": 86,
+ "claims_counts": {
+  "report-ch1-5": 45,
+  "report-ch6": 79,
+  "report-ch7-app": 52,
+  "thesis": 79,
+  "interim": 73
+ },
+ "unlocked": [
+  {
+   "location": "build_fyp_report_v5.js:330 (Abstract)",
+   "claim": "Refusal regex's harmful set very nearly contains the classifier's \u2014 disagreement is one-directional over-counting.",
+   "severity": "medium",
+   "why": "The 28-vs-325 one-directional numeric basis is locked only on the thesis/interim surfaces (build_fyp_thesis_v4.js / build_fyp_interim.js), not on build_fyp_report_v5.js where this abstract prose lives.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:331 (Abstract)",
+   "claim": "Power analysis bounds minimum detectable \u0394ASR \u2248 0.04\u20130.09 per pair at n=200.",
+   "severity": "medium",
+   "why": "The power_analysis lock computes representative_mde 0.0594 with explicit 'no text gate', so the printed range endpoints 0.04\u20130.09 are not verified against this surface.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:331 (Abstract)",
+   "claim": "Five pairs across four families (Qwen, Llama, Mistral, Phi; 1.7\u20137.2 B) at three precisions (fp16, INT8, NF4).",
+   "severity": "medium",
+   "why": "Locks gate 5-pair result values but no lock gates the scope framing text \u2014 family enumeration, the 1.7\u20137.2B parameter range, or the three-precision list.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:402 (Ch1 Scope)",
+   "claim": "Study spans ~1.7 to 7.2 billion parameters; cross-family extension reaches 7.2B (Mistral-7B).",
+   "severity": "low",
+   "why": "No lock gates the parameter-range string; it is a config framing statement not tied to any computed check.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:404 (Ch1 Scope)",
+   "claim": "All inference uses deterministic greedy decoding with temperature 0.0 and top-p 1.0.",
+   "severity": "medium",
+   "why": "The tc1Yaml lock verifies only max_new_tokens/log_dir/temperature/seed in the appendix YAML literal; this prose (esp. top-p 1.0) on the Ch1 surface is not gated.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:515-521 (Table 3.3)",
+   "claim": "Decoding controls: temp 0.0, top_p 1.0, max_new_tokens 512, repetition_penalty 1.0, max_input_tokens 1024, use_chat_template true, enable_thinking false.",
+   "severity": "medium",
+   "why": "The tc1Yaml lock checks only 4 keys against the config file and targets the appendix literal, not the Table 3.3 prose; top_p, repetition_penalty, max_input_tokens, use_chat_template, enable_thinking are ungated config values.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:544-549 (Table 3.4)",
+   "claim": "Interpretation-label thresholds (alignment_degradation \u0394ASR\u2265+0.02 & \u0394MMLU>\u22120.03; alignment_improvement; capability_collapse; over_refusal_regression; robust_preservation; broad_degradation).",
+   "severity": "medium",
+   "why": "No lock gates the threshold constants (\u00b10.02, \u22120.03) that define every diagnostic label; a misstated cutoff would pass unchecked.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:503 (Ch3.4)",
+   "claim": "MMLU six subjects (business_ethics, clinical_knowledge, college_biology, high_school_world_history, high_school_macroeconomics, human_aging); per-subject counts range 25 to 94.",
+   "severity": "medium",
+   "why": "The summary.json lock gates only the 300 total; the six subject identities and the 25\u201394 per-subject range are ungated config composition.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:506 (Ch3.5)",
+   "claim": "Primary HarmBench ASR scorer is the official classifier cais/HarmBench-Llama-2-13b-cls, full precision, greedy (D16); regex retained as secondary proxy.",
+   "severity": "medium",
+   "why": "No lock gates the classifier model-id string or precision on the report surface; judge locks verify result values, not the scorer's identity text.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:428 (Ch2)",
+   "claim": "TrustLLM evaluates sixteen LLMs over thirty datasets across six trust dimensions; SafetyBench tests twenty-five LLMs with 11,000+ MCQs.",
+   "severity": "medium",
+   "why": "These external-literature counts are not gated by any lock (ref locks check citation numbering only), so a citation-fitness error would not be caught.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:443 (Ch2)",
+   "claim": "Kharinaev et al. evaluate 66 quantized variants and find quantization can degrade safety alignment.",
+   "severity": "medium",
+   "why": "The '66 variants' external-literature figure is ungated; ref locks verify only the citation number/metadata, not the content claim.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:443 (Ch2)",
+   "claim": "Hong et al. report 4-bit broadly preserves trustworthiness across five compression methods and eight trust dimensions, erosion at 3-bit.",
+   "severity": "medium",
+   "why": "The five-methods/eight-dimensions/3-bit literature figures are not gated by any lock and are presented as the nearest prior analogue to the study's null.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:472-477 (Table 3.1)",
+   "claim": "Three primary pairs with model_ids Qwen/Qwen3-1.7B (1.7B), Qwen/Qwen3-4B (4B), meta-llama/Llama-3.2-3B-Instruct (3B); members share model_id.",
+   "severity": "low",
+   "why": "No lock gates the Table 3.1 model_id/parameter-count table text; result locks reference aliases but not this config surface.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:558 (Ch3.9)",
+   "claim": "Single seed (42) propagated to Python random, NumPy, and PyTorch RNGs at start of each run.",
+   "severity": "low",
+   "why": "The tc1Yaml lock structurally checks the seed key in the appendix YAML, but the Ch3.9 prose asserting seed=42 and RNG propagation is not gated.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:555 (Ch3.8)",
+   "claim": "Evidence-status definitions (confirmed/directional/null/unknown) and Qwen-4B labelled alignment_degradation, evidence_status directional (CI touches zero).",
+   "severity": "low",
+   "why": "The qwen_4b CI-touches-zero fact is locked via the registry cell, but the evidence-status rubric definitions and qwen_4b's label string are not gated (judge_agreement label lock covers only Phi).",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:529-535 (Ch3.7 equations)",
+   "claim": "Metric definitions: ASR=mean of harmful-compliance indicators; \u0394M=M_4bit\u2212M_baseline; \u0394M_rel=(M_4bit\u2212M_baseline)/M_baseline when baseline\u22600.",
+   "severity": "low",
+   "why": "No lock gates the equation/metric-definition prose; it is methodology text with no computed check.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:536 (Ch3.7)",
+   "claim": "Bootstrap 95% CIs computed by resampling per-prompt records; reflect prompt-sampling variance only.",
+   "severity": "low",
+   "why": "The ref lock gates only the '[19]' citation string; the CI-methodology description itself is ungated.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:537 (Ch3.7)",
+   "claim": "Paired significance test is McNemar's exact test; min(b,c)~Binomial(b+c,0.5), two-sided p doubles the lower tail.",
+   "severity": "low",
+   "why": "The ref lock gates only the '[20]' citation; the test-mechanics description is not covered by any computed check.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:412 (Ch1 Contributions)",
+   "claim": "Six diagnostic labels (alignment degradation/improvement, capability collapse masquerading as safety, over-refusal regression, robust preservation, broad degradation), each with two-layer evidence status.",
+   "severity": "low",
+   "why": "No lock gates the diagnostic-label name list or the two-layer evidence-status framework.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:393-397 (Ch1 RQs)",
+   "claim": "Five research questions (RQ1 HarmBench ASR, RQ2 XSTest, RQ3 MMLU, RQ4 Qwen3-1.7B vs 4B scale, RQ5 robustness across Llama/Mistral/Phi and INT8/NF4).",
+   "severity": "low",
+   "why": "The RQ framing list is config prose with no corresponding lock.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:401 (Ch1 Scope)",
+   "claim": "Main study applies BitsAndBytes NF4 on the fly; precision point (\u00a76.15) adds INT8/LLM.int8 spanning fp16\u2192INT8\u2192NF4.",
+   "severity": "low",
+   "why": "No lock gates this scope/quantization-approach framing text.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:418 (Ch1 Structure)",
+   "claim": "Original three pairs completed on TC1 2026-05-27; two cross-family pairs on 2026-06-15; eight appendices.",
+   "severity": "low",
+   "why": "No lock gates the run dates or the appendix count.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:301 (cover)",
+   "claim": "Scope: five matched pairs across four families at three precisions (fp16\u2192INT8\u2192NF4); HarmBench ASR judge-primary (D16), cross-checked by a second judge.",
+   "severity": "low",
+   "why": "Cover-page scope framing is not gated by any lock.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:344-349 (List of Figures)",
+   "claim": "Six figures listed (forge plot, capability-anchored safety space, multi-seed Qwen3-1.7B, per-category HarmBench, scorer-validation \u03ba, precision sweep).",
+   "severity": "low",
+   "why": "No lock gates the List of Figures captions or figure count.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:359-363 (List of Tables)",
+   "claim": "Table 6.1 five pairs with bootstrap 95% CIs; Table 6.3 judge vs v2 on HarmBench (n=200 each); Table 6.5 \u0394ASR across 128/512 budgets.",
+   "severity": "low",
+   "why": "The List of Tables captions (including the n=200 mention) are not gated on this ToC surface by any lock.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:3-7 (header comment)",
+   "claim": "v5 build reports HarmBench ASR at 512-token budget as PRIMARY, 128 retained as explicit comparison.",
+   "severity": "low",
+   "why": "No lock gates the build-header framing string on the report surface (the '512-token reference budget' pin targets the thesis builder).",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:269 (cover)",
+   "claim": "Title: five matched pairs, judge-validated study of quantized compact language models.",
+   "severity": "low",
+   "why": "No lock gates the cover title text.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:276 (cover)",
+   "claim": "Project Code: CCDS25-1136.",
+   "severity": "low",
+   "why": "No lock gates the project-code string.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:281-296 (cover)",
+   "claim": "Student TAN UEI HORNG (UTAN001); supervisor Dr. Zhang Jiehuang; document date 2 July 2026.",
+   "severity": "low",
+   "why": "No lock gates the author/supervisor/date cover metadata.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:33-36 (doc constants)",
+   "claim": "A4 page geometry PAGE_W=11906, PAGE_H=16838, MARGIN=1440, CONTENT_W=9026.",
+   "severity": "low",
+   "why": "No lock gates the page-geometry layout constants.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_interim.js:133 (abstract)",
+   "claim": "At 512 tokens no pair shows a significant increase in harmful compliance; not one HarmBench contrast survives Benjamini-Hochberg correction.",
+   "severity": "high",
+   "why": "The RQ1/BH null verdict is not gated by any build_fyp_interim.js lock; the 'Not one HarmBench ASR contrast survives' gate reads report/thesis, not the interim file.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:133 (abstract)",
+   "claim": "Effects surviving multiplicity are capability losses and one benign over-refusal change; INT8 essentially free; 128-token INT8-specific safety increase vanishes at 512.",
+   "severity": "high",
+   "why": "This synthesis verdict (incl. the Phi over-refusal survivor and INT8 vanishing) has no interim-targeted lock; only 'classifier delta +0.005' is gated here.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:283-286 (ch6.1 Table 6.1)",
+   "claim": "Judge-vs-regex kappa by family: Qwen 0.36-0.59 (regex 0.595 vs judge 0.255 on 1.7B base); Mistral 0.25-0.29 (regex 0.890 vs judge 0.565 on 4-bit); Llama 0.71-0.84; Phi 0.67-0.77.",
+   "severity": "high",
+   "why": "The scorer-validation family kappas and 0.595/0.255/0.890/0.565 values are gated only in report/thesis ja locks; no interim lock reads this table.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:297 (ch6.2)",
+   "claim": "Only exact-test-significant over-refusal delta is Phi-4-mini's decrease dOR = -0.048, CI [-0.076, -0.020], regex-scored; independent judge dOR +0.016 strict / -0.004 broad.",
+   "severity": "high",
+   "why": "The -0.048 BH survivor with CI and the strict/broad judge reversal are gated only in report/thesis; interim lock #1 does not include -0.048 or the judge deltas.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:307-311 (ch6.6 Table 6.3)",
+   "claim": "Precision sweep judge ASR fp16/INT8/NF4: qwen_2b 0.255/0.245/0.255; qwen_4b 0.115/0.125/0.155; llama 0.100/0.105/0.060; mistral 0.585/0.565/0.565; phi 0.070/0.090/0.090.",
+   "severity": "high",
+   "why": "These 15 result cells are hardcoded (not registry-rendered) and the matching precision_sweep lock targets build_fyp_thesis_v4.js, not the interim surface.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:317 (ch6.7)",
+   "claim": "BH-FDR (q<0.05) over twenty contrasts: exactly three survive, none harmful-compliance: Qwen MMLU (-0.090, q=0.008), Llama ARC (-0.032, q=0.008), Phi over-refusal (-0.048, q=0.012); not one HarmBench ASR contrast survives.",
+   "severity": "high",
+   "why": "The three-survivor count, q-values, -0.048, and 'not one HarmBench survives' verdict are gated only in report/thesis mc locks; interim gates only -0.090*/-0.032*.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:317 (ch6.7)",
+   "claim": "Validation-informed parallel correction leaves two contrasts surviving, both capability: Qwen MMLU (q=0.008), Llama ARC (q=0.008).",
+   "severity": "high",
+   "why": "multiple_comparisons_judge_strict n_bh==2 is gated only in report/thesis locks; no interim lock reads this validation-informed verdict.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:322 (ch7)",
+   "claim": "RQ answers RQ1-RQ5 (no significant harmful-compliance increase; no significant over-refusal increase; capability loss survives correction; smallest model most sensitive; power-bounded safety null with capability cliff).",
+   "severity": "high",
+   "why": "The five headline RQ verdicts have no build_fyp_interim.js-targeted lock.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:358 (ch10)",
+   "claim": "None of five pairs shows a significant increase in harmful compliance at NF4; not one ASR contrast survives correction; only individually significant move is a decrease; surviving effects are capability losses and one benign over-refusal change.",
+   "severity": "high",
+   "why": "The conclusion verdict is not gated by any interim-targeted lock; matching mc gates read report/thesis files.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:133 (abstract)",
+   "claim": "Judge-versus-regex agreement is family-dependent, Cohen's kappa 0.25 to 0.84.",
+   "severity": "medium",
+   "why": "The 0.25-0.84 range is gated only in report/thesis ja locks; interim gates classifier k 0.59 / regex 0.11 but not this overall range.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:133 (abstract)",
+   "claim": "Qwen3-1.7B 128-token ASR delta +0.055 dissolves to 0.000 under classifier at 512, McNemar p=1.000 (second judge +0.005).",
+   "severity": "medium",
+   "why": "Only 'classifier delta +0.005' and the +0.055-is-128-scoped structural guard apply on interim; the 512 value 0.000 and p=1.000 are not value-gated here.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:177 (ch1.2)",
+   "claim": "HarmBench authors show token-budget swings of up to 30 percent and standardize the budget to 512 tokens.",
+   "severity": "medium",
+   "why": "The 30-percent figure and 512 standardization are not gated by any interim lock.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:222-225 (ch3.3 Table 3.2)",
+   "claim": "Benchmark sample budgets: HarmBench n=200; XSTest n=250; MMLU n=300; ARC-Challenge n=1172.",
+   "severity": "medium",
+   "why": "The num_records 200/250/300/1172 lock targets build_fyp_report_v5.js; no interim lock reads these sample sizes.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:228 (ch3.3)",
+   "claim": "ASR equals HarmBench's DirectRequest baseline, the weakest threat model; no GCG, PAIR, or AutoDAN attack augmentation.",
+   "severity": "medium",
+   "why": "The 'no GCG, PAIR, AutoDAN' scope caveat is a thesis-targeted pinned string, not gated on the interim surface.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:243 (ch3.6)",
+   "claim": "Greedy temp 0.0 seed 42; paired-bootstrap 95% CIs, 2,000 resamples; McNemar exact; BH-FDR over twenty-contrast primary family; MDE ~0.04-0.09; multi-seed temp 0.7, five seeds, all five pairs.",
+   "severity": "medium",
+   "why": "This methodology block (twenty-contrast family size, 2000 resamples, MDE range) is not gated by any interim lock.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:262-272 (ch5 Table 5.1)",
+   "claim": "Config summary incl. Llama-Guard-3-8B third judge revision-pinned, bootstrap 2000 + McNemar + BH-FDR, V100-32GB, max_new_tokens 512 (128 retained).",
+   "severity": "medium",
+   "why": "The Table 5.1 config values (esp. Llama-Guard revision-pinning) are not gated on the interim surface.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:275 (ch5)",
+   "claim": "Zero classifier parse errors over 3,000 judged generations at the 512-token budget.",
+   "severity": "medium",
+   "why": "The '3 000' judged-lines / zero-parse-error lock targets build_fyp_report_v5.js; no interim lock reads this count.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:281 (ch6.1)",
+   "claim": "At 128 tokens, regex placed significant increases on Qwen3-4B and Mistral, classifier on Qwen3-1.7B alone; at 512 the classifier removes every significant increase.",
+   "severity": "medium",
+   "why": "This comparative significance narrative is not gated on interim; lock #3 only enforces that +0.055 lines are 128-scoped.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:281 (ch6.1)",
+   "claim": "Regex over-flagged 101 responses, classifier 18, human 37 (of 200).",
+   "severity": "medium",
+   "why": "Interim gates 'over-flagged 101 responses' but not the classifier-18 or human-37 counts (those are in report-targeted human_validation locks).",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:289 (ch6.1 Figure 1)",
+   "claim": "Eight of ten points lie below the diagonal; two marginal exceptions Llama base and Phi 4-bit.",
+   "severity": "medium",
+   "why": "The 8/10 figure claim and named exceptions are not gated by any interim lock.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:291 (ch6.2)",
+   "claim": "Only ASR delta with CI excluding zero is Llama -0.040 [-0.075, -0.010], McNemar p=0.021; does not survive multiplicity correction.",
+   "severity": "medium",
+   "why": "The -0.040 CI is gated on interim, but p=0.021 and the 'only CI excluding zero' verdict are not gated here.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:297 (ch6.2)",
+   "claim": "Qwen3-1.7B over-refusal decrease -0.024, CI [-0.048, 0.000], McNemar p=0.109, non-significant.",
+   "severity": "medium",
+   "why": "The qwen_2b.xstest -0.024/p=0.109 lock targets build_fyp_report_v5.js; no interim lock reads this value.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:297 (ch6.2)",
+   "claim": "Qwen3-1.7B ASR delta exactly zero at 512; thirty-two discordant prompts split sixteen against sixteen.",
+   "severity": "medium",
+   "why": "The 0.000-at-512 and n01/n10==16 gate targets report; interim only enforces +0.055-is-128-scoped.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:299 (ch6.3)",
+   "claim": "60.3 percent of 2,000 paired responses cut off, 30.5 percent stop naturally, 9.2 percent diverge (excluded, making 60.3 a floor).",
+   "severity": "medium",
+   "why": "'60.3 percent' is gated on interim, but the 2,000-total, 30.5 percent, and 9.2 percent components are gated only in report/thesis.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:299 (ch6.3)",
+   "claim": "Truncation is family-heterogeneous: 93.5-98.0 percent for Mistral, 3.0-4.0 percent for Llama.",
+   "severity": "medium",
+   "why": "The genlen per-family truncation ranges are gated in report, not on the interim surface.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:299 (ch6.3)",
+   "claim": "Qwen3-1.7B ASR +0.055 (McNemar p=0.027) at 128 to exactly 0.000 (p=1.000) under classifier at 512, second judge +0.005 (p=1.000).",
+   "severity": "medium",
+   "why": "Only +0.005 and +0.055-128-scoping are covered on interim; p=0.027, 0.000, and p=1.000 are not value-gated here.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:299 (ch6.3)",
+   "claim": "Five-seed decoding arm: per-seed dASR mean +0.013, range [0.000, +0.035], no seed significant, all five deltas non-negative.",
+   "severity": "medium",
+   "why": "The sensitivity_multiseed qwen_2b lock targets report/thesis; no interim lock reads these seed statistics.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:299 (ch6.3)",
+   "claim": "Five-pair extended multi-seed: Qwen3-4B mean +0.029 (1/5 sig); Llama -0.024 (2/5 decreases); Mistral +0.012 (0/5); Phi -0.012 (1/5).",
+   "severity": "medium",
+   "why": "The 5-pair multiseed means/sig counts are gated in report only; no interim lock reads them.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:299 (ch6.3)",
+   "claim": "Greedy inside seed range for three original pairs; outside with sign flip for Mistral (greedy -0.020) and Phi (greedy +0.020); gaps at most 0.04; one Phi seed significant at -0.055 (p=0.043).",
+   "severity": "medium",
+   "why": "The greedy-in-range / Mistral / Phi seed details are gated in report, not on the interim surface.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:301 (ch6.4)",
+   "claim": "Capability point estimates non-positive under NF4 except Mistral +0.9 percentage points on ARC (n.s.).",
+   "severity": "medium",
+   "why": "The mistral.arc +0.009 value is gated in report/thesis; no interim lock reads this prose claim.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:301 (ch6.4)",
+   "claim": "Significant capability loss also Qwen3-4B ARC -0.016; Qwen3-1.7B ARC -0.009 not significant.",
+   "severity": "medium",
+   "why": "-0.090/-0.032 are gated on interim, but the prose -0.016 (registry only binds the Table 6.2 cell) and -0.009 are not gated here.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:301 (ch6.4)",
+   "claim": "Llama pair labelled capability collapse masquerading as safety rather than alignment improvement.",
+   "severity": "medium",
+   "why": "The Llama interpretation label is not gated by any lock (the thesis_table_6_2 registry lock checks deltas/CIs, not label text).",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:303 (ch6.5)",
+   "claim": "Qwen3-1.7B pair's thirty-two discordant prompts split exactly sixteen to sixteen (symmetric flips).",
+   "severity": "medium",
+   "why": "The n01/n10==16 gate targets report; no interim lock reads this 16/16 split.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:305 (ch6.6)",
+   "claim": "INT8 MMLU/ARC within ~1.3 percentage points of fp16, below NF4 losses of three to nine points; significant capability losses all at NF4.",
+   "severity": "medium",
+   "why": "These INT8-vs-NF4 magnitude comparisons are not gated by any interim lock.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:305 (ch6.6)",
+   "claim": "128-era Llama INT8-specific increase +0.040 does not replicate at 512: classifier +0.005 (p=1.000), GPT-4o +0.010 (p=0.688); Llama truncates 3-4 percent.",
+   "severity": "medium",
+   "why": "Only 'classifier delta +0.005' is covered on interim; +0.040, p=1.000, +0.010, p=0.688, and 3-4 percent are gated only in report/thesis.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:316 (ch6.7)",
+   "claim": "CIs about +/-0.05; MDE for 80% power about 0.06 for a representative pair; per-pair 0.04-0.09 at n=200.",
+   "severity": "medium",
+   "why": "The power_analysis representative MDE (0.0594) lock targets report; no interim lock reads these power figures.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:326 (ch7.2)",
+   "claim": "Cross-judge agreement Cohen's kappa 0.68-0.95 across all ten models at the reference budget.",
+   "severity": "medium",
+   "why": "Interim gates classifier k 0.59 / regex 0.11 but not the cross-judge 0.68-0.95 range (that lock targets report).",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:326 (ch7.2)",
+   "claim": "gpt-4o three-class judge re-scored all 3,750 benign responses, zero parse failures; Phi dOR reverses to +0.016 strict (p=0.597) / -0.004 broad (p=1.000); judge ~4x more refusals, mean OR 0.171 strict vs regex 0.044; per-alias kappa -0.01 to 0.50.",
+   "severity": "medium",
+   "why": "The xstest_judge and 3,750-sidecar locks target report; none read these values on the interim surface.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:326 (ch7.2)",
+   "claim": "200-item blinded human audit (mechanical Outcome J, one disclosed deviation): judge strict kappa 0.485 vs regex -0.006; regex recovered only 2 of the annotator's 63 full refusals.",
+   "severity": "medium",
+   "why": "The xstest_human_validation lock targets report; no interim lock reads 0.485 / -0.006 / 2 of 63.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:334 (ch8)",
+   "claim": "200 HarmBench prompts give ~+/-0.05 CIs; MDE at 80% power ~0.06 representative (0.04-0.09 across pairs).",
+   "severity": "medium",
+   "why": "Same power figures as ch6.7 but at a distinct interim location; no interim lock reads them.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:336 (ch8)",
+   "claim": "Judge grounding: classifier kappa 0.59 vs regex 0.11; over-refusal 200-item blinded audit judge strict kappa 0.485 vs regex -0.006.",
+   "severity": "medium",
+   "why": "k 0.59/0.11 is covered on interim, but 0.485 / -0.006 are gated only in report/thesis.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:338 (ch8)",
+   "claim": "128-era signals: Qwen3-1.7B NF4 +0.055 via truncation; Llama-3B INT8 +0.040 via cross-run divergence, Llama truncates 3-4 percent.",
+   "severity": "medium",
+   "why": "+0.055 is only 128-scope-guarded on interim; +0.040 and the 3-4 percent truncation figure are not value-gated here.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:346 (ch9.1)",
+   "claim": "Llama-Guard-3-8B across fifteen aliases: Cohen's kappa 0.36-0.92 against classifier over ten base/NF4 aliases, every per-pair dASR non-significant.",
+   "severity": "medium",
+   "why": "The judge_pairwise_agreement_llamaguard lock targets report; no interim lock reads the 0.36-0.92 range or the per-pair null.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:364-388 (References)",
+   "claim": "25 numbered IEEE references; key citations LLM.int8() arXiv:2208.07339, QLoRA arXiv:2305.14314, HarmBench arXiv:2402.04249, XSTest arXiv:2308.01263, MMLU arXiv:2009.03300, Llama Guard arXiv:2312.06674.",
+   "severity": "medium",
+   "why": "Only the IEEE Access citation string is pinned on interim; there is no interim structural ref-numbering lock (unlike report/thesis) and the arXiv IDs / 25-count are ungated.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:393 (Appendix A)",
+   "claim": "Checksum manifest pins 300 immutable raw files across both results trees and the multi-seed arm.",
+   "severity": "medium",
+   "why": "The 300 immutable-files count is not gated by any interim lock.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:6 (header)",
+   "claim": "Output docx is docs/FYP_Interim_2026-07-10.docx, ~25-30 pages.",
+   "severity": "low",
+   "why": "No lock reads the interim output filename or page count.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:108 (cover)",
+   "claim": "Title subtitle spans three precisions fp16 -> INT8 -> NF4.",
+   "severity": "low",
+   "why": "No interim lock gates this cover subtitle string.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:109 (cover)",
+   "claim": "Project Code is CCDS25-1136.",
+   "severity": "low",
+   "why": "No lock reads the project code.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:110-113 (cover)",
+   "claim": "Student TAN UEI HORNG (UTAN001); supervisor Dr. Zhang Jiehuang; interim report dated 10 July 2026.",
+   "severity": "low",
+   "why": "No lock reads student/supervisor/date fields.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:114 (cover)",
+   "claim": "Five matched pairs / ten models / four families, three precisions, four benchmarks, HarmBench 512-token reference budget.",
+   "severity": "low",
+   "why": "This cover config line is not gated by any interim lock.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:132 (abstract)",
+   "claim": "Five model pairs across four families (Qwen3-1.7B, Qwen3-4B, Llama-3.2-3B, Mistral-7B-v0.3, Phi-4-mini), ~1.7 to 7.2B params, three precisions (fp16, INT8, NF4), four benchmarks.",
+   "severity": "low",
+   "why": "This descriptive config is not gated on the interim surface.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:132 (abstract)",
+   "claim": "Primary judge official HarmBench classifier; second judge GPT-4o; refusal regex retained as demoted proxy.",
+   "severity": "low",
+   "why": "No interim lock gates this judge-config description.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:132 (abstract)",
+   "claim": "512-token primary budget with 128-token controlled comparison; deltas carry paired-bootstrap CIs and McNemar exact tests.",
+   "severity": "low",
+   "why": "No interim lock gates this methodology description.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:134 (abstract)",
+   "claim": "All experiments complete plus two-judge cross-check and single-annotator 200-item validation; outstanding items are a second annotator and thesis write-up.",
+   "severity": "low",
+   "why": "This completion/status claim is not gated by any interim lock.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:180-184 (ch1.3)",
+   "claim": "Five research questions RQ1-RQ5.",
+   "severity": "low",
+   "why": "The RQ enumeration is not gated by any interim lock.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:186 (ch1.4)",
+   "claim": "The 128-token budget truncated 60.3 percent of generations and manufactured a statistically significant safety regression not present at 512 tokens.",
+   "severity": "low",
+   "why": "'60.3 percent' is gated on interim, but the 'manufactured significant regression not at 512' framing is not significance-gated here.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:186 (ch1.4)",
+   "claim": "Five contributions across five matched pairs, four families, three precisions, and two generation budgets.",
+   "severity": "low",
+   "why": "This contributions-count claim is not gated by any interim lock.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:194 (ch2.1)",
+   "claim": "Two bitsandbytes schemes evaluated: NF4 with double quantization, and LLM.int8() 8-bit mixed-precision.",
+   "severity": "low",
+   "why": "This method description is not gated on the interim surface.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:198 (ch2.3)",
+   "claim": "Human-label validation is on a stratified 200-item single-annotator gold set.",
+   "severity": "low",
+   "why": "The 200-item n is gated only in report human_validation locks; not read on interim.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:210-214 (ch3.1 Table 3.1)",
+   "claim": "Model-pairs table: aliases, model IDs, and parameter sizes for the five pairs.",
+   "severity": "low",
+   "why": "No interim lock reads the model-pairs table values.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:230 (ch3.4)",
+   "claim": "Primary scorer cais/HarmBench-Llama-2-13b-cls full precision; second judge GPT-4o; MMLU/ARC exact match; XSTest over-refusal regex.",
+   "severity": "low",
+   "why": "This scorer-config description is not gated on the interim surface.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:234-239 (ch3.5 Table 3.3)",
+   "claim": "Six interpretation labels: broad_degradation, alignment_degradation, alignment_improvement, capability_collapse_masquerading_as_safety, over_refusal_regression, robust_preservation.",
+   "severity": "low",
+   "why": "The label taxonomy is not gated by any interim lock.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:253 (ch4.3)",
+   "claim": "Verification phrase rendered from CLAIMS.render.verification_phrase (claim-registry-injected test count).",
+   "severity": "low",
+   "why": "No lock pins the verification_phrase value; interim structural lock only asserts absence of stale counts (329/339/382), not the correct number.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:260 (ch5)",
+   "claim": "Hardware NVIDIA Tesla V100 32 GB on NTU TC1; two budgets 512 (primary) and 128 (comparison).",
+   "severity": "low",
+   "why": "No interim lock reads the hardware/budget description.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:326 (ch7.2)",
+   "claim": "Human-label subset over-weights judge-vs-regex disagreement cases (~3x population rate); annotation view capped at first 2,000 characters.",
+   "severity": "low",
+   "why": "These methodology details are not gated by any interim lock.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:328 (ch7.3)",
+   "claim": "External validity bounded by five pairs, one decoding regime plus multi-seed arm, two bitsandbytes methods, direct requests, English-only; MDE ~0.04-0.09.",
+   "severity": "low",
+   "why": "This external-validity/limitations block is not gated on the interim surface.",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:346 (ch9.1)",
+   "claim": "Complete: five-seed sensitivity arm (all five pairs), first-token refusal-margin probe, fp16->INT8->NF4 precision sweep.",
+   "severity": "low",
+   "why": "This completion-status claim is not gated by any interim lock (only the embedded k 0.59/0.11 is covered).",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_interim.js:351 (ch9.2)",
+   "claim": "Future work: second human annotator extending single-annotator validation.",
+   "severity": "low",
+   "why": "This future-work item is not gated by any interim lock (embedded k 0.59/0.11 is covered).",
+   "chunk": "interim"
+  },
+  {
+   "location": "build_fyp_report_v5.js:954-960 (\u00a76.16 Table 6.5)",
+   "claim": "128-vs-512 \u0394ASR table: @128-classifier column Qwen3-4B +0.025, Llama 0.000, Mistral -0.040, Phi 0.000; and @512-gpt-4o column Qwen3-4B +0.040, Mistral -0.005, Phi +0.020.",
+   "severity": "high",
+   "why": "Only the Qwen3-1.7B row (+0.055@128 #17, 0.000@512 #5, +0.005 gpt-4o #18) and Llama gpt-4o -0.035 (#18) are locked; the rest of the @128 classifier column and the qwen_4b/mistral/phi gpt-4o cells have no lock, yet this is the central token-budget robustness table.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:942 (\u00a76.15)",
+   "claim": "Significance verdict: no INT8 MMLU/ARC delta is significant for any pair (INT8 is capability-lossless); every significant capability loss appears only at four-bit.",
+   "severity": "high",
+   "why": "precision_sweep locks (#41/#42) cover INT8 HarmBench only and #43 covers XSTest only; no lock evaluates INT8 MMLU/ARC significance, so this headline \u00a76.15 verdict is unchecked.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:936 (\u00a76.14)",
+   "claim": "Paired margin shift \u0394m significant every pair (Wilcoxon p<0.001, n=200); comply-ward Qwen1.7B +1.2, Qwen4B +4.0; refuse-ward Llama -1.1, Phi -0.3; Cohen dz -0.74 to +1.8; Qwen4B baseline margin median 13.0 vs 1.7B 3.8; flips 9 vs 21.",
+   "severity": "high",
+   "why": "No lock references \u00a76.14 mechanistic analysis at all; these are significance verdicts and result numbers with zero coverage.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:935 (\u00a76.14)",
+   "claim": "Central mechanistic result: pooled margin-flip AUC 0.76, z-scored 0.64, near-chance Qwen1.7B 0.61 / Mistral 0.54; of 92 flips 50 harmful-ward / 42 safe-ward; four valid-proxy families lean ~2:1 harmful-ward (30 vs 14).",
+   "severity": "high",
+   "why": "Entire \u00a76.14 is outside the lock inventory; these AUC/flip figures carry the mechanistic conclusion and are unchecked.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:934 (\u00a76.14)",
+   "claim": "First-token refusal-margin AUC 0.86-0.90 for Qwen1.7B/Qwen4B/Llama/Phi vs 0.69 for Mistral; well-discriminating pairs have 8-13 baseline-harmful prompts, Mistral's positive class is 77.",
+   "severity": "medium",
+   "why": "\u00a76.14 has no lock; AUCs and per-pair positive-class counts are unverified.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:937 (\u00a76.14)",
+   "claim": "Entropy confound control: Qwen1.7B neutral-token entropy rises ~10x more than harmful (+0.21 vs +0.02); control is n=100 unpaired neutral prompts.",
+   "severity": "medium",
+   "why": "No lock covers \u00a76.14; the entropy figures and n=100 are unchecked.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:964 (\u00a76.16)",
+   "claim": "128-token capability deltas Qwen1.7B \u0394MMLU -0.087, Llama \u0394ARC -0.028, Qwen4B \u0394ARC -0.021 (paired with locked 512-token -0.090/-0.032/-0.016).",
+   "severity": "medium",
+   "why": "Only the 512-token values are locked (#44/#46/#51); the 128-token counterparts used for the 'third-decimal' comparison have no lock.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:813,833,861,927 / \u00a76.11.5 (interpretation labels)",
+   "claim": "Pair labels: Qwen1.7B broad_degradation (confirmed), Qwen4B alignment_degradation (directional), Llama capability_collapse_masquerading_as_safety, Mistral alignment_improvement (directional).",
+   "severity": "medium",
+   "why": "Only the Phi-4-mini label/evidence-status is locked (#10); the other four pairs' interpretation verdicts and evidence statuses are pinned nowhere.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:784,805,833,907 (recurring)",
+   "claim": "Qwen3-4B HarmBench McNemar p=0.096 (the closest-to-significant NF4 ASR increase; recurs \u00a76.2, \u00a76.5, \u00a76.8, \u00a76.12 Result 3).",
+   "severity": "medium",
+   "why": "McNemar p-values are locked for qwen_2b (1.000), llama (0.021), mistral (0.627), phi (0.424), and qwen_2b xstest (0.109), but qwen_4b's harmbench p=0.096 appears in no lock, despite being the load-bearing support for 'no significant increase'.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:782,833,848,879 (recurring)",
+   "claim": "Qwen3-4B \u0394MMLU -0.003 (-0.3 pp) with CI [-0.040, +0.033], n.s.",
+   "severity": "medium",
+   "why": "pairwise_deltas MMLU deltas are locked for qwen_2b/llama/mistral/phi but qwen_4b.mmlu delta and its CI are absent from every lock; recurs across \u00a76.2/\u00a76.8/RQ3/RQ4/\u00a76.11.4.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:802,805,852,879 (recurring)",
+   "claim": "Qwen3-1.7B lenient-parser \u0394ARC -0.009 (n.s.), used to argue the ARC ordering reverses vs the strict -0.343.",
+   "severity": "medium",
+   "why": "Only the strict-parser ARC -0.343 (#37) is locked; the lenient primary ARC delta -0.009 for qwen_2b is unlocked (and it is the value the 'ordering reverses' argument turns on).",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:826-827 (\u00a76.6.2)",
+   "claim": "Qwen1.7B per-category HarmBench \u0394ASR: misinfo +0.18, harassment +0.11, illegal +0.03, generic +0.05, cybercrime -0.18, chem/bio -0.14; per-category counts 19-58.",
+   "severity": "medium",
+   "why": "No lock covers the per-category HarmBench breakdown; only the aggregate 0.000 is locked (#5).",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:890-901 (\u00a76.12 Table 6.3)",
+   "claim": "Judge-vs-v2 agreement percentage column (65.0/68.5/85.0/85.0/95.0/98.0/68.0/66.5/95.5/96.5) plus the 4-bit v2 absolute cells (0.570, 0.305, 0.090, 0.070, 0.075, 0.075).",
+   "severity": "medium",
+   "why": "The \u03ba column (#23) and judge-ASR cells (#5/#7/#8/#9/#11) and some base v2 values (#27/#28) are locked, but the entire agreement-% column and the 4-bit v2 absolute cells are pinned by no lock (only derivable, not directly checked).",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:909 (\u00a76.12 Result 5)",
+   "claim": "Human validation derived rates: classifier flags confirmed 61% vs regex 23%; the 200-item set is '120 of 200 disagreement cases'; ~57% of responses exceed the 2,000-char annotation truncation.",
+   "severity": "medium",
+   "why": "#40 locks the \u03ba (0.59/0.11), harmful counts (37/46/132) and over/miss counts, but the 61%/23% confirmation rates, the 120-disagreement figure, and the ~57% truncation share are not in any lock (the genlen 62% char-ceiling is a different quantity).",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:771 (\u00a76.1.1)",
+   "claim": "v1->v2 regex \u0394ASR shifts: Qwen1.7B -0.120->-0.025, Qwen4B -0.045->+0.065, Llama +0.030->0.000; MMLU unchanged.",
+   "severity": "medium",
+   "why": "These v1/v2 scorer-migration shift values are pinned by no lock (the +0.065 here differs from the +0.070 v2-proxy delta at #50, so #50 does not cover it).",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:805 (\u00a76.5)",
+   "claim": "Parser fallback accuracies: MMLU fallback 46% vs leading-letter 75%, ARC fallback 66%; fp16 MMLU fallback rate 3.3%; strict MMLU CI [-0.350, -0.237].",
+   "severity": "medium",
+   "why": "#37 locks the fallback RATES (0.523 ARC, 0.487 MMLU, base 0.025) and strict point deltas, but the fallback ACCURACIES (46%/75%/66%), the 3.3% fp16 MMLU rate, and the strict MMLU CI are unlocked.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:846 (RQ2) / :929 (\u00a76.13)",
+   "claim": "Phi-4-mini over-refusal baseline 0.128->0.080 with McNemar p=0.002; Mistral over-refusal 0.000 (0.004->0.004).",
+   "severity": "medium",
+   "why": "#49 locks Phi \u0394OR -0.048 and CI, and #3 locks its BH q=0.0122, but the raw McNemar p=0.002 and the 0.128->0.080 base/quantized cells are not gated; Mistral's xstest 0.004->0.004 is only in the artifact-vs-artifact check (#43, no report-surface text gate).",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:759 (\u00a76.1) / :923 (Table 6.4 caption)",
+   "claim": "Bootstrap methodology: paired bootstrap 2,000 resamples (seed 42) for main CIs and 10,000 resamples for \u00a76.16/Table 6.4 judge CIs; significance = 95% CI excludes zero AND McNemar exact p<0.05.",
+   "severity": "medium",
+   "why": "The resample counts (2,000 / 10,000) and the two-criterion significance definition are methodology values pinned by no lock (genlen's n=2000 is a generation count, not the bootstrap-resample count).",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:823 (\u00a76.6.1)",
+   "claim": "Per-pair minimum detectable \u0394ASR 0.079 for Qwen1.7B at n=200; five pairs span MDE 0.044-0.086.",
+   "severity": "medium",
+   "why": "#4 computes only the representative MDE 0.0594 and has no text gate; the per-pair MDE 0.079 and the 0.044-0.086 span are not in any lock.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:834-835 (\u00a76.8)",
+   "claim": "Qwen3-4B MMLU per-subject deltas: business ethics -4.0 pp, college biology -3.0 pp, macroeconomics +1.1 pp, three subjects unchanged.",
+   "severity": "medium",
+   "why": "No lock covers MMLU subject-level deltas.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:770 (\u00a76.1.1)",
+   "claim": "v2 scorer provenance: version tag v2_expanded_refusal_patterns_2026-05-28; v1 used 14 refusal patterns; v2 validated by manual stratified audit of 55 responses across six runs.",
+   "severity": "medium",
+   "why": "The pattern count (14), audit size (55), and run count (six) are unlocked methodology figures.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:672-687 (\u00a75.1 Table 5.1)",
+   "claim": "TC1 hardware/policy: partition UGGPU-TC1, V100 32GB x3/node, 20 CPU cores/user, 64GB mem/user, walltime 06:00:00, MaxJobsPU 2, ~300GB storage, account window Mar-Nov 2026, login host 10.96.189.11, user utan001.",
+   "severity": "medium",
+   "why": "The tc1Yaml lock (#39) only checks tc1_512.yaml run keys (max_new_tokens/log_dir/temperature/seed); no lock touches the \u00a75.1 hardware/policy config values.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:694-696 (\u00a75.2 Table 5.2)",
+   "claim": "Software stack: Python 3.11.15, torch 2.11.0+cu130, transformers 5.5.0.",
+   "severity": "medium",
+   "why": "No lock covers the \u00a75.2 software-version table; a version drift would go uncaught.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:717,743,732,861 / Ch6 intro (job IDs)",
+   "claim": "SLURM job IDs and runtimes throughout: smoke 60975 (33 s), production 60976-60981, cross-family 61121/61122/61123/61125 + classifier 61134, primary study 61524, judge 61047/61134; Llama fp16 6 min 15 s / NF4 13 min 9 s; pre-cache sizes 4.08/8.06/12.9 GB.",
+   "severity": "low",
+   "why": "No lock pins any SLURM job ID, runtime, or pre-cache size; these are provenance details.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:717 (\u00a75.4.1)",
+   "claim": "Smoke job 60975 attack_success_rate 0.6 over five HarmBench prompts, runtime_device=cuda, no malformed outputs.",
+   "severity": "low",
+   "why": "The smoke ASR 0.6 and 5-prompt count are unlocked (they are a sanity check, not a study result).",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:664 (\u00a75.1)",
+   "claim": "Seven nodes TC1N01-TC1N07 x three V100 = twenty-one GPUs.",
+   "severity": "low",
+   "why": "Node/GPU counts are pinned by no lock.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:805 (\u00a76.5)",
+   "claim": "MMLU subset per-subject counts: business_ethics 25, college_biology 33, human_aging 44, clinical_knowledge 48, high_school_world_history 56, high_school_macroeconomics 94.",
+   "severity": "low",
+   "why": "Only the 300-total is locked (#63); the per-subject breakdown is unlocked.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:906 (\u00a76.12 Result 2)",
+   "claim": "Llama v2-proxy \u0394ASR -0.020 (0.090->0.070).",
+   "severity": "low",
+   "why": "#50 locks the pairwise_deltas HarmBench deltas for qwen_2b/qwen_4b/mistral only; llama's v2-proxy delta is not among them.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:924 (\u00a76.12 human gold)",
+   "claim": "Judge produced 52 over-flags on the human gold set, of which 25 lie on the partial-vs-full-refusal boundary.",
+   "severity": "low",
+   "why": "#58 locks the \u03ba, missed-refusal counts (regex 2 / judge 2 of 63) and 3-class exact 0.695, but the 52 over-flags and 25-boundary breakdown are not gated.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:1074 (References [16])",
+   "claim": "Decoding Compressed Trust ref metadata: ICML PMLR vol. 235, 2024, arXiv:2403.15447",
+   "severity": "medium",
+   "why": "Refs structural lock verifies numbering/first-use order and pins only [11]/[12]/[13]/[19]/[20] tokens plus the IEEE Access string; ref [16]'s journal/volume/arXiv metadata is not pinned (numbering-only, never fitness).",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:1078 (References [20])",
+   "claim": "McNemar 1947 ref: Psychometrika vol. 12, no. 2, pp. 153-157, 1947",
+   "severity": "medium",
+   "why": "Lock pins the token 'McNemar's exact test [20]' (number binding) but not the Psychometrika volume/issue/pages/year; metadata values unverified.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:1081 (References [23])",
+   "claim": "Benjamini & Hochberg BH-FDR ref: JRSS Series B vol. 57, no. 1, pp. 289-300, 1995",
+   "severity": "medium",
+   "why": "Ref [23] metadata not among any pinned gate string; refs lock checks numbering integrity only, so vol/pp/year could drift undetected.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:1082 (References [24])",
+   "claim": "Cohen kappa ref: Educational and Psychological Measurement vol. 20, no. 1, pp. 37-46, 1960",
+   "severity": "medium",
+   "why": "Ref [24] bibliographic metadata not pinned by any lock; only the citation-numbering invariant is enforced.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:1083 (References [25])",
+   "claim": "Landis & Koch ref: Biometrics vol. 33, no. 1, pp. 159-174, 1977",
+   "severity": "medium",
+   "why": "Ref [25] metadata not pinned by any lock; numbering-only coverage.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:1070 (References [12])",
+   "claim": "Kharinaev et al. also carries arXiv:2502.15799",
+   "severity": "low",
+   "why": "The IEEE Access vol.14/pp.96771-96793/2026/doi string IS pinned as a gate, but the accompanying arXiv identifier 2502.15799 is not pinned as a positive gate anywhere in report_v5.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:1101-1108 (App A YAML qwen_2b_base)",
+   "claim": "model_id Qwen/Qwen3-1.7B, revision 70d244cc86ccca08cf5af4e1e306ecf908b1ad5e, size_b 1.7, benchmarks [harmbench,xstest,mmlu,arc]",
+   "severity": "medium",
+   "why": "tc1Yaml structural lock compares the embedded YAML to configs/tc1_512.yaml on only max_new_tokens/log_dir/temperature/seed; model_id, revision hash, size_b and benchmarks list are unchecked and could drift from the real config.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:1122-1130 (App A YAML qwen_4b_base)",
+   "claim": "model_id Qwen/Qwen3-4B, revision 1cfa9a7208912126459214e8b04321603b3df60c, size_b 4.0",
+   "severity": "medium",
+   "why": "Revision hash / model_id / size_b are outside the four keys the tc1Yaml lock verifies against configs/tc1_512.yaml; no other lock pins them.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:1143-1152 (App A YAML llama_3_2_3b_base)",
+   "claim": "model_id meta-llama/Llama-3.2-3B-Instruct, revision 0cb88a4f764b7a12671c53f0838cd831a0843b95, size_b 3.0",
+   "severity": "medium",
+   "why": "Model revision/id/size not among the tc1Yaml lock's checked keys; unverified.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:1168-1177 (App A YAML mistral_7b_base)",
+   "claim": "model_id mistralai/Mistral-7B-Instruct-v0.3, revision c170c708c41dac9275d15a8fff4eca08d52bab71, size_b 7.2",
+   "severity": "medium",
+   "why": "Revision hash / model_id / size_b outside the tc1Yaml lock's 4 verified keys; no lock pins them.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:1190-1200 (App A YAML phi4_mini_base)",
+   "claim": "model_id microsoft/Phi-4-mini-instruct, revision cfbefacb99257ffa30c83adab238a50856ac3083, size_b 3.8, attn_implementation eager",
+   "severity": "medium",
+   "why": "Revision/id/size and the eager attn_implementation flag are unchecked by the tc1Yaml lock (only max_new_tokens/log_dir/temperature/seed are compared).",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:1214-1220 (App A YAML decoding)",
+   "claim": "top_p 1.0, repetition_penalty 1.0, max_input_tokens 1024, use_chat_template true",
+   "severity": "medium",
+   "why": "tc1Yaml lock covers max_new_tokens (512) and temperature (0.0) only; top_p, repetition_penalty, max_input_tokens and use_chat_template are not among its checked keys.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:1238-1250 (App A YAML mmlu)",
+   "claim": "mmlu: dataset cais/mmlu, split test, max_samples 300, batch_size 4, 6 subjects (business_ethics, clinical_knowledge, college_biology, high_school_world_history, high_school_macroeconomics, human_aging)",
+   "severity": "medium",
+   "why": "No lock pins the MMLU subject list or config; the tc1Yaml lock only checks 4 decoding/log keys, and the locked num_records==300 is a coincidental match while subjects/dataset/split/batch stay unverified.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:1223-1228 (App A YAML harmbench)",
+   "claim": "harmbench: dataset walledai/HarmBench, config standard, split train, max_samples 400, batch_size 4",
+   "severity": "low",
+   "why": "Benchmark dataset/config/split/max_samples/batch_size are outside the tc1Yaml lock's checked keys; no other lock pins them.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:1230-1236 (App A YAML xstest)",
+   "claim": "xstest: dataset paul-rottger/xstest-prompts, local_csv data/xstest_v2_prompts.csv, split prompts, max_samples 400, batch_size 4, benign_only true",
+   "severity": "low",
+   "why": "The csv-row lock only checks data/xstest_v2_prompts.csv content (450 rows/250 benign); the YAML config's dataset/path/split/max_samples/benign_only fields are not pinned.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:1251-1256 (App A YAML arc)",
+   "claim": "arc: dataset allenai/ai2_arc, config ARC-Challenge, split test, max_samples 1200, batch_size 4",
+   "severity": "low",
+   "why": "ARC benchmark config fields are outside the tc1Yaml lock's 4 keys and pinned by no other lock.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:1258-1267 (App A YAML slurm)",
+   "claim": "slurm: partition UGGPU-TC1, qos normal, gpus 1, cpus_per_task 1, mem 10G, time 06:00:00, work_dir /tc1home/FYP/utan001/fyp_quant/repo",
+   "severity": "low",
+   "why": "The SLURM block is not among the tc1Yaml lock's verified keys; none of these values are pinned by a computed check.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:1300-1305 (App B sbatch)",
+   "claim": "Example sbatch runs run_quant_matrix.py --config configs/tc1.yaml --model qwen_2b_4bit --seed 42 --device cuda",
+   "severity": "low",
+   "why": "No lock covers Appendix-B sbatch example content; the tc1Yaml lock targets Appendix-A YAML only, so the command/flags/seed are unverified.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:1309 (App A intro)",
+   "claim": "Retired 128-token config configs/tc1.yaml is max_new_tokens 128 writing to results/; primary is configs/tc1_512.yaml (D41)",
+   "severity": "low",
+   "why": "The tc1Yaml lock only verifies configs/tc1_512.yaml; the descriptive claim that configs/tc1.yaml has max_new_tokens 128 and writes to results/ is not pinned.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:1334 (App C ModelConfig)",
+   "claim": "quant_method nf4 default or int8, validator rejects other values and rejects field on baseline entry",
+   "severity": "low",
+   "why": "No lock covers the Appendix-C schema-description prose about quant_method accepted values or validator behavior.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:1343-1347 (App C DecodingConfig)",
+   "claim": "DecodingConfig ranges: max_new_tokens int >=1, temperature 0.0-2.0, top_p 0.0-1.0, repetition_penalty >=1.0, max_input_tokens int >=1",
+   "severity": "low",
+   "why": "No lock verifies the schema validation ranges stated in Appendix C.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:1433 (App G 2026-07-19 13:30)",
+   "claim": "~0.06 MDE scoped as representative/median-pair; per-pair MDEs span 0.044-0.086",
+   "severity": "medium",
+   "why": "power_analysis lock recomputes representative_mde_delta_asr==0.0594 but is annotated 'no text gate', so the App G text is not asserted; and the per-pair span endpoints 0.044/0.086 are not checked by any lock.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:1435 (App G 2026-07-14 12:00) [strict-parser row]",
+   "claim": "4-bit ARC primary delta -0.009; MMLU lenient fallback 48.7% and fp16 fallbacks 2.5%/3.3%",
+   "severity": "medium",
+   "why": "parser_strict_sensitivity lock pins ARC -0.343, MMLU -0.293 and '52.3%' only; the ARC primary delta -0.009, the MMLU 48.7% text, and the 3.3% fp16 MMLU fallback are not gated (48.7%/2.5% are artifact-checked without a text gate).",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:1436 (App G 2026-07-12 18:00)",
+   "claim": "XSTest judge is gpt-4o snapshot gpt-4o-2024-08-06",
+   "severity": "medium",
+   "why": "The 3,750-response / zero-parse / Phi delta-OR +0.016/-0.004 values are locked, but the specific model snapshot string 'gpt-4o-2024-08-06' (a reproducibility-relevant config value) is not pinned anywhere.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:1437 (App G 2026-07-11 16:00)",
+   "claim": "HarmBench ASR per-pair minimum detectable effects about 0.04-0.09 at 200 items",
+   "severity": "medium",
+   "why": "Only representative_mde_delta_asr==0.0594 is artifact-checked (no text gate); the per-pair MDE range endpoints 0.04-0.09 are not pinned by any lock.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:1441 (App G 2026-06-15 18:00) [T26 results row]",
+   "claim": "T26 128-era: Mistral judge dASR -0.040 (v2 proxy +0.055; second-judge kappa 0.60-0.63), Phi dASR 0.000 (robust_preservation, kappa 0.67), Phi dOR -0.028 significant decrease",
+   "severity": "medium",
+   "why": "Only the era-scoping (that +0.055 / kappa 0.19-0.11 lines contain '128') and the ten-model 0.60-0.95 span are locked; the specific 128-era values Mistral -0.040, v2 proxy +0.055, second-judge 0.60-0.63, Phi 0.000/kappa 0.67, and Phi dOR -0.028 are not value-checked.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:1442 (App G 2026-06-14 15:45)",
+   "claim": "T18 multi-seed Qwen 1.7B dASR mean +0.024 across 5 seeds; +0.055 rising in 5/6 harm categories; T22 gpt-4o kappa 0.69-0.94, reproduces +0.045 vs +0.055, McNemar p=0.122",
+   "severity": "medium",
+   "why": "Only +0.055 greedy is era-locked; the 128-era seed-mean +0.024, the 5/6-category spread, the kappa 0.69-0.94 range, the +0.045 reproduction, and p=0.122 are not pinned (current multiseed lock holds the 512 value 0.013, not these).",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:1443 (App G 2026-06-06)",
+   "claim": "D16 judge validation: job 61047, n=200x6, 0 parse errors; regex over-counts Qwen kappa~0.19-0.37, Llama kappa~0.69-0.79; dASR moved to Qwen 1.7B +0.055 CI [+0.010,+0.100]; test suite 176->178",
+   "severity": "medium",
+   "why": "Only +0.055@128 is locked (with sig_ci truthy, not exact bounds); job id 61047, n=200x6, the Qwen 0.19-0.37 and Llama 0.69-0.79 128-era kappa ranges, the exact CI [+0.010,+0.100], and the 176->178 test counts are unverified.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:1435 (App G 2026-07-14 12:00) [XSTest/inventory row]",
+   "claim": "Test inventory 382 across 29 files (was 339/26); XSTest discordant split b=2, c=8",
+   "severity": "low",
+   "why": "No lock verifies the report_v5 test-inventory counts 382/29 or 339/26 (thesis/interim locks only require those strings ABSENT there); the discordant lock checks the sum b+c==10, not the b=2/c=8 split.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:1440 (App G 2026-06-29 12:00)",
+   "claim": "Test inventory 329 automated tests across 25 files",
+   "severity": "low",
+   "why": "INT8 Llama +0.040@128 is locked, but the historical count 329/25 is pinned by no lock (thesis/interim structural locks only require '329' ABSENT there, not present in report_v5).",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:1449 (App G 2026-05-28 12:00)",
+   "claim": "T13 v1->v2 dASR flips: Qwen 4B -0.045->+0.065, Qwen 1.7B -0.120->-0.025, Llama +0.030->0.000; test suite grew to 163",
+   "severity": "low",
+   "why": "These superseded pre-judge v1/v2 delta values and the 163 test count are historical and not pinned by any lock.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:1450 (App G 2026-05-28 01:00)",
+   "claim": "T12: paired bootstrap 95% CIs added; test suite grew to 126 (added 3 tests)",
+   "severity": "low",
+   "why": "Historical process/count claim; no lock covers the 126 test count or the CI-addition event.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:1451 (App G 2026-05-28 00:30)",
+   "claim": "alignment_improvement label fires when dASR <= -0.02 with capability/over-refusal preserved; taxonomy now five labels",
+   "severity": "low",
+   "why": "No lock pins the interpretation-label threshold (-0.02) or the five-label taxonomy definition.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:1452 (App G 2026-05-27 23:30)",
+   "claim": "Reclassifications using harm_tol=0.02: Qwen 4B robust_preservation->broad_degradation (|dASR|=0.045), Llama broad_degradation->alignment_degradation (dASR=+0.030)",
+   "severity": "low",
+   "why": "128-era threshold and delta values (harm_tol=0.02, 0.045, +0.030) are not pinned by any lock.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:1454 (App G 2026-05-27 21:00)",
+   "claim": "Qwen family delta magnitude ratio 22:1 MMLU",
+   "severity": "low",
+   "why": "The 22:1 magnitude ratio is a derived historical figure pinned by no lock.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:1455 (App G 2026-05-27 20:00)",
+   "claim": "Qwen 4B 4-bit (job 60979): ASR=0.815, OR=0.016, MMLU=0.743",
+   "severity": "low",
+   "why": "128-era raw values and job id 60979 are not pinned; current qwen_4b locks hold the 512-era numbers, not these.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:1456 (App G 2026-05-27 19:00)",
+   "claim": "Qwen 4B baseline (job 60978): ASR=0.860, OR=0.016, MMLU=0.747",
+   "severity": "low",
+   "why": "128-era ASR 0.860, OR 0.016 and job id 60978 are unlocked (only MMLU 0.747 coincides with a separately locked baseline value).",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:1467 (App G 2026-05-23 evening)",
+   "claim": "Initial interim report ~30 pages, three pairs, NF4 quantization",
+   "severity": "low",
+   "why": "Historical narrative (page count / three-pair scope) pinned by no lock.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:1522 (App H.3 table)",
+   "claim": "scores.judge.harmbench_cls.jsonl produced by TC1 judge jobs: 512-token job 61524; 128-token jobs 61047/61134",
+   "severity": "low",
+   "why": "The scores.judge lock checks the 15-alias / 3000-line total but pins no job IDs; 61524/61047/61134 are unverified provenance.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:1507 (App H.1)",
+   "claim": "v2 regex moved Qwen 4B to dASR +0.065 (128-era)",
+   "severity": "low",
+   "why": "The +0.055@128 and 0.000@512 endpoints are locked, but the historical v2-regex Qwen 4B +0.065 value is not pinned by any lock.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:1506 (App H.1)",
+   "claim": "Original v1 refusal parser had only fourteen regex patterns; six TC1 jobs had already completed",
+   "severity": "low",
+   "why": "The 'fourteen patterns' and 'six TC1 jobs' counts are historical and pinned by no lock.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:1529 (App H.4)",
+   "claim": "512-token job 61524 (2,000 + 1,000 INT8); 128-token jobs 61047/61134 (2,000 generations each)",
+   "severity": "low",
+   "why": "Only the 512-tree 3,000-line total is locked; the job IDs and the '128-token jobs = 2,000 generations' detail are not verified.",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:1435 (App G 2026-07-14 12:00) [List of Tables]",
+   "claim": "List of Tables lists Tables 6.2-6.4",
+   "severity": "low",
+   "why": "The p=0.109 value is locked, but no lock asserts the List-of-Tables enumeration spans exactly Tables 6.2-6.4 (only Table 6.4 prose existence is pinned).",
+   "chunk": "report"
+  },
+  {
+   "location": "build_fyp_report_v5.js:1441 (App G 2026-06-15 18:00) [T26 scope row]",
+   "claim": "T26 extension takes study to five pairs / ten models / four families; Mistral-7B-Instruct-v0.3 and Phi-4-mini-instruct run on TC1 2026-06-15",
+   "severity": "low",
+   "why": "The 5-pair scale is only implied by the multiseed/LlamaGuard artifact locks (15 aliases); the 'ten models / four families' framing, the model names, and the 2026-06-15 run date are not directly pinned as report text.",
+   "chunk": "report"
+  },
+  {
+   "chunk": "thesis",
+   "location": "build_fyp_thesis_v4.js:278 (\u00a76.1)",
+   "claim": "Scorer-relocation verdicts: at 128 regex placed significant increases on Qwen3-4B and Mistral, classifier on Qwen3-1.7B alone; at 512 the classifier removes every significant increase.",
+   "severity": "high",
+   "why": "Significance-relocation verdict unpinned on the thesis surface (report-side locks don't read this builder; only the structural 128-scoping guard applies)."
+  },
+  {
+   "chunk": "thesis",
+   "location": "build_fyp_thesis_v4.js:303 (\u00a76.6)",
+   "claim": "INT8 capability verdict: every INT8 MMLU/ARC point within ~1.3pp of fp16, below NF4 losses of 3\u20139 points.",
+   "severity": "high",
+   "why": "Same gap as report \u00a76.15: no lock evaluates INT8 MMLU/ARC anywhere; thesis instance also unpinned."
+  },
+  {
+   "chunk": "thesis",
+   "location": "build_fyp_thesis_v4.js:321 (ch7)",
+   "claim": "RQ1\u2013RQ5 answer block (no significant harmful-compliance increase; no over-refusal rise under any scorer; capability-only survivors; power-bounded null).",
+   "severity": "high",
+   "why": "The verdict block restates locked facts but no lock reads these sentences; drift here would pass."
+  },
+  {
+   "chunk": "thesis",
+   "location": "build_fyp_thesis_v4.js:325 (\u00a77.2)",
+   "claim": "LlamaGuard block: \u03ba 0.36\u20130.92 per alias (Llama 0.89/0.92 high, Phi 0.36/0.38 low), every per-pair \u0394ASR n.s., largest Qwen3-1.7B \u22120.050 p=0.076.",
+   "severity": "high",
+   "why": "llamaguard lock targets the report builder only; thesis instance unpinned."
+  },
+  {
+   "chunk": "thesis",
+   "location": "build_fyp_thesis_v4.js:326 (\u00a77.2)",
+   "claim": "XSTest human gold: strict \u03ba 0.485 vs \u22120.006, broad 0.662 vs 0.054; regex 2/63 full refusals; deviation footprint \u226414/200, gap +0.51.",
+   "severity": "high",
+   "why": "xstest_human_validation locks target the report builder; thesis instances unpinned."
+  }
+ ],
+ "thesis_medium_low_note": "thesis diff run inline by orchestrator (workflow agent hit session limit); mediums ~18 (duplicate-instance numbers, config tables, Fig-1 8-of-10, Llama label, family truncation ranges, multiseed 4-pair duplicates), lows ~14 (cover/labels/quotes/restatements) \u2014 folded into the pattern findings rather than enumerated"
+}
