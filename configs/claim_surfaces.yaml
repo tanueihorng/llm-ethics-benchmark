@@ -52,6 +52,7 @@ surfaces:
   - {id: project_metrics, path: docs/PROJECT_METRICS.md, lifecycle: current-reference, profiles: []}
   - {id: quickstart, path: docs/QUICKSTART.md, lifecycle: current-reference, profiles: []}
   - {id: report_claim_audit, path: docs/REPORT_CLAIM_AUDIT_v5.md, lifecycle: audit-snapshot, profiles: []}
+  - {id: report_structure_proposal, path: docs/REPORT_STRUCTURE_PROPOSAL.md, lifecycle: current-reference, profiles: []}
   - {id: reproducibility, path: docs/REPRODUCIBILITY.md, lifecycle: current-reference, profiles: [volatile_free]}
   - {id: tc1_agent_checklist, path: docs/TC1_AGENT_CHECKLIST.md, lifecycle: generated-live, profiles: []}
   - {id: tc1_cluster_runbook, path: docs/TC1_CLUSTER_RUNBOOK.md, lifecycle: current-reference, profiles: []}

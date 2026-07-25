@@ -19,7 +19,7 @@ PYTEST_ARGS ?= -q
 TASK ?=
 AGENT ?=
 
-.PHONY: smoke run matrix analyze prefetch report thesis interim report-humanized thesis-humanized interim-humanized claim-registry claim-surfaces verify-claims verify-claim-surfaces architecture-diagram cluster-generate cluster-submit cluster-dry cluster-check cluster-all cluster-smoke agent-start agent-status agent-check agent-manifest agent-handoff agent-dashboard agent-tc1-checklist harness-eval dashboard
+.PHONY: smoke run matrix analyze prefetch report thesis interim report-humanized thesis-humanized interim-humanized claim-registry claim-surfaces verify-claims verify-claim-surfaces architecture-diagram diagrams cluster-generate cluster-submit cluster-dry cluster-check cluster-all cluster-smoke agent-start agent-status agent-check agent-manifest agent-handoff agent-dashboard agent-tc1-checklist harness-eval dashboard
 
 dashboard:
 	$(PYTHON) -m streamlit run dashboard/app.py
@@ -92,6 +92,14 @@ claim-registry:
 
 claim-surfaces: claim-registry
 	$(PYTHON) scripts/sync_claim_surfaces.py --write
+
+# Schematic diagrams embedded in Chapters 3-5 of every document (study design,
+# system architecture, TC1 execution). Hand-authored SVG → PNG via
+# @resvg/resvg-js; deterministic, so a rebuild is a no-op unless the script
+# changed. Data plots stay in scripts/make_figures.py.
+# Output: docs/figures/{study_design,system_architecture,tc1_execution}.png
+diagrams:
+	node scripts/make_diagrams.js
 
 report: claim-surfaces
 	NODE_PATH=$$(npm root -g) node scripts/build_fyp_report_v5.js

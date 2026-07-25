@@ -341,12 +341,15 @@ const toc = [
 
 const lof = [
   H1("List of Figures and Tables"),
-  P("Figure 1  Quantization effect on harmful compliance (per-pair judge ΔASR forest plot).", { after: 60 }),
-  P("Figure 2  The capability-anchored safety space (ΔMMLU vs judge ΔASR, with label regions).", { after: 60 }),
-  P("Figure 3  Multi-seed decoding sensitivity for Qwen3-1.7B (greedy vs stochastic).", { after: 60 }),
-  P("Figure 4  Per-category HarmBench ASR for Qwen3-1.7B, fp16 vs NF4.", { after: 60 }),
-  P("Figure 5  Scorer validation: judge ASR vs regex proxy, and judge-vs-proxy Cohen's κ.", { after: 60 }),
-  P("Figure 6  Precision sweep fp16 → INT8 → NF4 (HarmBench ASR, MMLU, ARC).", { after: 60 }),
+  P("Figure 1  Study design: matched pairs, the precision arm, the benchmark battery, and the inference pipeline.", { after: 60 }),
+  P("Figure 2  System architecture: configuration, execution, benchmark plugins, scoring, and analysis.", { after: 60 }),
+  P("Figure 3  TC1 execution model: workstation, head node, GPU compute node, and the return path.", { after: 60 }),
+  P("Figure 4  Quantization effect on harmful compliance (per-pair judge ΔASR forest plot).", { after: 60 }),
+  P("Figure 5  The capability-anchored safety space (ΔMMLU vs judge ΔASR, with label regions).", { after: 60 }),
+  P("Figure 6  Multi-seed decoding sensitivity for Qwen3-1.7B (greedy vs stochastic).", { after: 60 }),
+  P("Figure 7  Per-category HarmBench ASR for Qwen3-1.7B, fp16 vs NF4.", { after: 60 }),
+  P("Figure 8  Scorer validation: judge ASR vs regex proxy, and judge-vs-proxy Cohen's κ.", { after: 60 }),
+  P("Figure 9  Precision sweep fp16 → INT8 → NF4 (HarmBench ASR, MMLU, ARC).", { after: 60 }),
   P("Table 3.1  Model pair selection matrix.", { after: 60 }),
   P("Table 3.2  Benchmark selection, primary metrics, and sample budgets.", { after: 60 }),
   P("Table 3.3  Decoding controls used during inference.", { after: 60 }),
@@ -463,6 +466,8 @@ const ch3 = [
   PJ("The study adopts a matched-pair comparative experimental design. Each model under study is evaluated as a pair: a baseline variant loaded in the default high-precision dtype, and a four-bit variant produced by applying BitsAndBytes NF4 quantization on the fly at load time. Both pair members are loaded from exactly the same Hugging Face model_id; no separately uploaded \"pre-quantized\" checkpoint is used. The only operational difference between the two members of a pair is the presence of a BitsAndBytesConfig object in the from_pretrained call."),
   PJ("This design choice is the strongest internal-validity property of the study. By construction, both pair members share identical baseline weights, the same tokenizer, the same chat template, and the same release artifact. By construction this isolates the quantization step from checkpoint-provenance confounds — separate fine-tuning, conversion artifacts, or a re-uploaded checkpoint — so any observed delta is best attributed to quantization or to measurement noise rather than to a different underlying model. This is the strongest practical isolation available under the recorded matched-pair configuration; the exact runtime environment is a separate, documented reproducibility caveat (Chapter 8), not a confound this design removes. The on-the-fly NF4 path is the most direct way to operationalise the counterfactual \"the same model, quantized\" in code."),
   PJ("The independent variables are quantization state (baseline versus four-bit), model scale (1.7 billion versus four billion parameters within the Qwen family), and model family (Qwen versus Llama in the primary design, extended to Mistral and Phi in the cross-family replication of §6.13). The dependent variables are harmful compliance, over-refusal on benign prompts, and general capability, each measured by a corresponding benchmark."),
+
+  ...Figure("study_design.png", "Study design. Five matched model pairs spanning four families are evaluated at fp16 and NF4 four-bit, with an INT8 precision point as a third level, across four benchmarks. Both members of a pair share the same checkpoint and pinned revision, the same prompts, the same seed and the same decoding settings, so numerical precision is the only difference between them. Every pair-level contrast passes through the same paired-inference pipeline before it is labelled."),
 
   H2("3.2 Model Selection"),
   PJ("Three model pairs form the primary controlled design. The Qwen pairs at 1.7 billion and four billion parameters [17] serve as the primary within-family comparison and provide both a quantization axis and a scale axis. The Llama 3.2 3B pair [18] sits between them by parameter count and serves as a cross-family robustness check. Table 3.1 summarises this primary matrix; a cross-family extension later adds two further matched pairs (Mistral-7B and Phi-4-mini, introduced with the experimental setup in Chapter 5 and analysed in §6.13), taking the study to five pairs across four families."),
@@ -588,6 +593,8 @@ const ch4 = [
   ),
   P("Table 4.1  Repository module responsibilities.", { size: 18 }),
 
+  ...Figure("system_architecture.png", "System architecture. A YAML configuration is validated by the Pydantic schema into a typed run specification; each model alias is then loaded once and quantization is applied on the fly at load time, so both pair members derive from identical baseline weights. Benchmark plugins share one abstract interface and hand responses to a per-benchmark scorer stack in which the primary and secondary scorers are named explicitly. All artifacts are written before any analysis runs, and raw.jsonl is never modified afterwards."),
+
   H2("4.2 Configuration Schema"),
   PJ("All runtime parameters are specified by a YAML configuration file (typically configs/tc1.yaml for cluster runs, configs/default.yaml for local development). The configuration is loaded and validated by a Pydantic schema (config_schema.py) that enforces structural and semantic invariants. The top-level schema has four sections: models, decoding, benchmarks, and slurm."),
   PJ("Each model entry must specify family, size_b, quantized, pair_id, model_id, trust_remote_code, dtype, and a benchmarks list, plus an optional attn_implementation (the attention backend passed to from_pretrained; restricted to eager, sdpa, or flash_attention_2, and omitted entirely when unset so the existing models' load call is unchanged). The schema enforces two cross-references: every benchmark name appearing in a model's benchmarks list must also appear as a top-level benchmarks entry, and every pair_id must have at least one model with quantized=false and at least one with quantized=true. These invariants make it impossible to configure a study that omits a baseline or compares a model only against itself."),
@@ -709,6 +716,8 @@ const ch5 = [
   PJ("The TC1 user guide imposes strict workflow rules that shape how this study is executed. The headline rule is that user code may not be executed on the head node (CCDS-TC1). The guide states: \"DO NOT execute your coding on TC1 Head Node ... For the user process found executing coding and occupying high CPU and Memory usage in the Head Node will be terminated with no prior notification. Repeated offenders will be banned from TC1.\" GPU verification commands such as nvidia-smi and nvcc --version are also explicitly forbidden on the head node, because the GPU cards reside on the compute nodes (TC1N01–TC1N07) and not on the head node."),
   PJ("By contrast, package installation, file transfers, conda environment management, dataset downloads, and small administrative commands (squeue, scontrol, sacct, MyTCinfo, MyJobHistory, seff) are explicitly demonstrated as head-node activities throughout the user guide. The study's pre-cache step (see §5.5) therefore runs entirely on the head node and is policy-equivalent to a conda install."),
   PJ("The guide also recommends sbatch over srun for all real job submission: \"Avoid using the command 'srun' to submit job ... all users are advised to use the command 'sbatch' for job submission. Then exit from the session, access later to see the result.\" This study therefore submits every job, including the initial smoke validation, via sbatch."),
+
+  ...Figure("tc1_execution.png", "Execution model on the TC1 cluster. The head node is restricted to repository synchronisation, dataset and weight pre-caching, and job submission: no user code runs there. All computation runs in offline batch jobs inside the QoS envelope, and every analysis, figure and document build happens off-cluster on the workstation, which needs no GPU."),
 
   H2("5.4 Hugging Face Access and Gating"),
   PJ("The Qwen pairs draw from open-access official Qwen3 checkpoints (Qwen/Qwen3-1.7B and Qwen/Qwen3-4B) and require no authentication. The Llama pair uses meta-llama/Llama-3.2-3B-Instruct, which is gated under the Meta Llama community license, and HarmBench currently also requires accepted Hugging Face dataset access conditions. Access is handled by logging into Hugging Face once on the TC1 head node with a read-scoped personal access token. As of 2026-05-26, token registration and gated-access acceptance have been verified by a successful full pre-cache of both Llama 3.2 3B and HarmBench."),

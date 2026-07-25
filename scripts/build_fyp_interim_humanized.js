@@ -159,9 +159,12 @@ const toc = [
   P("Table 6.1  Judge-versus-regex agreement (Cohen's κ) by model family.", { after: 60 }),
   P("Table 6.2  Main study at the 512-token reference budget: per-pair deltas and labels (fp16 vs NF4).", { after: 60 }),
   P("Table 6.3  Precision sweep: HarmBench ASR at fp16 / INT8 / NF4 (judge).", { after: 60 }),
-  P("Figure 1  Scorer validation: judge ASR vs regex proxy, and judge-vs-proxy Cohen's κ.", { after: 60 }),
-  P("Figure 2  The capability-anchored safety space (ΔMMLU vs judge ΔASR, with label regions).", { after: 60 }),
-  P("Figure 3  Precision sweep fp16 → INT8 → NF4 (HarmBench ASR, MMLU, ARC).", { after: 60 }),
+  P("Figure 1  Study design: matched pairs, the precision arm, the benchmark battery, and the inference pipeline.", { after: 60 }),
+  P("Figure 2  System architecture: configuration, execution, benchmark plugins, scoring, and analysis.", { after: 60 }),
+  P("Figure 3  TC1 execution model: workstation, head node, GPU compute node, and the return path.", { after: 60 }),
+  P("Figure 4  Scorer validation: judge ASR vs regex proxy, and judge-vs-proxy Cohen's κ.", { after: 60 }),
+  P("Figure 5  The capability-anchored safety space (ΔMMLU vs judge ΔASR, with label regions).", { after: 60 }),
+  P("Figure 6  Precision sweep fp16 → INT8 → NF4 (HarmBench ASR, MMLU, ARC).", { after: 60 }),
   new Paragraph({ children: [new PageBreak()] }),
 ];
 
@@ -214,6 +217,8 @@ const ch3 = [
     ["phi4_mini", "Phi", "Phi-4-mini-instruct", "3.8"],
   ], [1900, 1700, 3760, 2000]),
   CAP("Table 3.1  Model pairs, families, and parameter scales."),
+  ...FIG("study_design.png", "Study design. Five matched model pairs spanning four families are evaluated at fp16 and NF4 four-bit, with an INT8 precision point as a third level, across four benchmarks. Both members of a pair share the same checkpoint and pinned revision, the same prompts, the same seed and the same decoding settings, so numerical precision is the only difference between them. Every pair-level contrast passes through the same paired-inference pipeline before it is labelled."),
+
   H2("3.2  Quantization methods and the precision sweep"),
   PJ("The main study compares fp16 against NF4 four-bit quantization. A separate precision point adds INT8 (LLM.int8), so each pair can be traced across fp16 → INT8 → NF4. INT8 is a distinct mixed-precision method, not a lower-bit NF4; treating it as a separate precision dimension lets the study ask whether degradation is graded with bit-width or concentrated at a particular method. To keep the evaluated main study untouched, the INT8 members live in a separate configuration and are analysed by a dedicated precision-sweep script rather than entering the base-versus-4bit pairwise pipeline."),
   H2("3.3  Benchmarks and metrics"),
@@ -247,6 +252,8 @@ const ch4 = [
   H1("Chapter 4  System Design and Implementation"),
   H2("4.1  Architecture"),
   PJ("The framework is a Python package organised around plugins and configuration. A YAML configuration, validated by a Pydantic schema, declares the models, decoding settings, benchmarks, and cluster parameters. A model loader resolves dtype and device and applies quantization on the fly; a shared text generator batches prompts through the model using the tokenizer's chat template; benchmark plugins implement a common contract for loading items, building prompts, scoring responses, and aggregating metrics; and an analysis layer computes pairwise deltas, confidence intervals, and interpretation labels."),
+  ...FIG("system_architecture.png", "System architecture. A YAML configuration is validated by the Pydantic schema into a typed run specification; each model alias is then loaded once and quantization is applied on the fly at load time, so both pair members derive from identical baseline weights. Benchmark plugins share one abstract interface and hand responses to a per-benchmark scorer stack in which the primary and secondary scorers are named explicitly. All artifacts are written before any analysis runs, and raw.jsonl is never modified afterwards."),
+
   H2("4.2  Extensibility and the plugin contract"),
   PJ("Adding a model requires only a configuration entry; adding a benchmark requires implementing four methods (load, build prompt, score, aggregate) and registering one line; adding a quantization method extends the loader's method branch. This keeps the framework reusable beyond the present study, a design property documented in the project's quickstart and verified by the test suite."),
   H2("4.3  Reliability safeguards"),
@@ -273,6 +280,7 @@ const ch5 = [
   ], [3600, 5760]),
   CAP("Table 5.1  Experimental configuration summary."),
   PJ("The five NF4 pairs, the INT8 precision point, both judge validations, and the multi-seed sensitivity arm all ran at the 512-token reference budget (the primary study throughout, with zero classifier parse errors over 3,000 judged generations); the 128-token artefacts are retained unchanged for the generation-length comparison. The GPT-4o second judge runs locally against an API. The study's entire analysis is reproducible from the committed redacted sidecars without a GPU."),
+  ...FIG("tc1_execution.png", "Execution model on the TC1 cluster. The head node is restricted to repository synchronisation, dataset and weight pre-caching, and job submission: no user code runs there. All computation runs in offline batch jobs inside the QoS envelope, and every analysis, figure and document build happens off-cluster on the workstation, which needs no GPU."),
 ];
 
 const ch6 = [
