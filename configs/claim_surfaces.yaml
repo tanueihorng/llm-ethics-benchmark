@@ -49,6 +49,7 @@ surfaces:
   - {id: handoff, path: docs/HANDOFF.md, lifecycle: generated-live, profiles: []}
   - {id: harness_self_eval, path: docs/HARNESS_SELF_EVAL.md, lifecycle: current-reference, profiles: []}
   - {id: human_label_protocol, path: docs/HUMAN_LABEL_PROTOCOL.md, lifecycle: current-reference, profiles: []}
+  - {id: project_metrics, path: docs/PROJECT_METRICS.md, lifecycle: current-reference, profiles: []}
   - {id: quickstart, path: docs/QUICKSTART.md, lifecycle: current-reference, profiles: []}
   - {id: report_claim_audit, path: docs/REPORT_CLAIM_AUDIT_v5.md, lifecycle: audit-snapshot, profiles: []}
   - {id: reproducibility, path: docs/REPRODUCIBILITY.md, lifecycle: current-reference, profiles: [volatile_free]}
@@ -62,6 +63,7 @@ surfaces:
   - {id: datasets_doc, path: docs/datasets.md, lifecycle: current-reference, profiles: []}
   - {id: june_email_early, path: docs/email_drZhang_2026-06-09.md, lifecycle: snapshot, availability: gitignored_optional, profiles: []}
   - {id: july_email, path: docs/email_drZhang_july.md, lifecycle: current, availability: gitignored_optional, profiles: [volatile_free]}
+  - {id: august_email, path: docs/email_drZhang_august.md, lifecycle: current, availability: gitignored_optional, profiles: [volatile_free]}
   - {id: june_email, path: docs/email_drZhang_june.md, lifecycle: snapshot, availability: gitignored_optional, profiles: []}
   - {id: evaluation_metrics_doc, path: docs/evaluation_metrics.md, lifecycle: current-reference, profiles: []}
   - {id: extensibility_doc, path: docs/extensibility.md, lifecycle: current-reference, profiles: []}
@@ -143,6 +145,7 @@ surfaces:
     source: fyp_submission/report_latex/interim_report/mythesis.tex
     zip_member: interim_report/mythesis.tex
   - {id: local_july_email, path: fyp_submission/emails/email_drZhang_july.md, lifecycle: local-current, availability: local_optional, profiles: [volatile_free]}
+  - {id: local_august_email, path: fyp_submission/emails/email_drZhang_august.md, lifecycle: local-current, availability: local_optional, profiles: [volatile_free]}
   - {id: local_june_email, path: fyp_submission/emails/email_drZhang_june.md, lifecycle: snapshot, availability: local_optional, profiles: []}
   - {id: local_july_deck, path: fyp_submission/decks/fyp_status_2026-07.html, lifecycle: local-current, availability: local_optional, profiles: [volatile_free]}
   - {id: local_june_deck, path: fyp_submission/decks/fyp_status_2026-06-13.html, lifecycle: snapshot, availability: local_optional, profiles: []}

@@ -159,9 +159,14 @@ Planned by Fable 5; **execution assigned to Opus 4.8**. Durable record: PROJECT_
 
 ## [T1] Send the July progress email to Dr. Zhang (READY — user reviews + sends)
 
-**Why:** deliberate supervisor-update pacing. June update SENT 2026-06-13
-(`docs/email_drZhang_june.md`); the follow-up reporting the completed 512 rerun +
-revised headline is drafted and its deck is built — held for a July send.
+**Why:** deliberate supervisor-update pacing. June update SENT 2026-06-26 21:44
+(`docs/email_drZhang_june.md`; date corrected 2026-07-25 from the message header — the
+old 2026-06-13 record was the draft date); the follow-up reporting the completed 512
+rerun + revised headline is drafted and its deck is built — held for a July send.
+
+**Voice lock (2026-07-25):** the body was rewritten to match the as-sent June voice — no
+em dashes, no bold/italics, no contractions, "pp" units not decimals, American spelling,
+comma splices left intact. Do not re-introduce formatting on any future edit.
 
 **Ready-to-paste:**
 - To: `jiehuang.zhang@ntu.edu.sg`
@@ -170,6 +175,26 @@ revised headline is drafted and its deck is built — held for a July send.
 - Attach: `docs/fyp_status_2026-07.html` **or** `_v2` (both refreshed to 512; pick the design). If NTU mail blocks the `.html`, zip or export to PDF.
 
 **Guardrails:** don't cross the decks (July email ↔ `fyp_status_2026-07.html`; June ↔ archived `fyp_status_2026-06-13.html`). After sending: PROJECT_LOG §4 row + tick T1 + mark the email file header SENT.
+
+**Numbers verified 2026-07-25** against `results_512/analysis` directly (not against report prose). One overclaim was caught and fixed: a proposed multi-seed sentence claimed no seed anywhere shows a significant increase, but `sensitivity_multiseed.json` has qwen_4b seed2 at +0.050, p=0.0129, significant. The clause is now scoped to qwen_2b (the pair that moved at 128), which is the only pair with 0/5 significant seeds. Do not re-broaden it.
+
+---
+
+## [T1b] Send the August progress email to Dr. Zhang (DRAFTED — gated on T15)
+
+**Why:** the July email deliberately no longer carries the scorer-validation work, so August has its own subject and zero overlap (machine-checked, 0 shared sentences).
+
+**Ready-to-paste:**
+- To: `jiehuang.zhang@ntu.edu.sg`
+- Subject: `FYP August Update: interim report submitted, scorer validation closed (CCDS25-1136)`
+- Body: `docs/email_drZhang_august.md` (gitignored)
+- Attach: the interim report
+
+**SEND GATE:** the first line asserts the interim report has been submitted. Do not send until T15 is actually done, or rewrite that line first. Send order is July then August.
+
+**Content:** T30 HarmBench gold set (κ 0.59 vs 0.11), T36 XSTest gold set (regex 2/63 vs judge 61/63), T37 LlamaGuard (κ 0.36–0.92, all per-pair n.s.), and the Phi over-refusal paragraph that reports against the project's own surviving finding. All numbers verified against artifacts 2026-07-25; the per-file provenance is in the email's header block.
+
+**Known follow-up question:** the email never claims the labelling was blinded, but if he asks, the XSTest gold set carries the disclosed T41/D52 protocol deviation (prompt-wide blindness exclusion, prereg §8 badge withdrawn, ≤14/200 footprint, κ gap unchanged).
 
 ---
 
