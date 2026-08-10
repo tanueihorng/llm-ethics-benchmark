@@ -38,12 +38,19 @@ python -m venv .venv && source .venv/bin/activate
 ```
 
 ```bash
-pip install -r requirements.txt -c constraints-tested.txt
+pip install -r requirements.txt
 ```
 
-`constraints-tested.txt` pins the versions this project was actually tested with. Without
-`-c`, pip resolves to newer majors (transformers 5.x and so on) that nothing here has been
-run against.
+> **Known problem, and you should know about it before an examiner asks (T60).**
+> `constraints-tested.txt` exists to stop pip resolving to untested major versions, but it
+> **cannot currently be applied**: `pip install -r requirements.txt -c constraints-tested.txt`
+> fails with `ResolutionImpossible`, because four pins in it sit *below* the floors in
+> `requirements.txt` (transformers 4.32.1 < 4.41.0, datasets 2.12.0 < 2.19.0, pyyaml
+> 6.0 < 6.0.0, pytest 7.4.0 < 8.0.0). So a clean install today resolves to **transformers
+> 5.x**, which is exactly what that file was written to prevent. Treat
+> `constraints-tested.txt` as a *record* of the tested analysis interpreter, not as an
+> installable overlay. The analysis replays fine either way — it reads committed sidecars,
+> not models — but do not claim the environment is version-locked, because it is not.
 
 ```bash
 pip install -r requirements-dashboard.txt

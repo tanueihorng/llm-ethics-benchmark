@@ -20,7 +20,7 @@
 | Hyper-parameters / decoding controls | `generation_config` in every `summary.json` (greedy, `temperature=0.0`, seed 42, `max_new_tokens=512` primary — `128` in the retained comparison tree) | ✅ |
 | Evaluation-measure definitions | `docs/evaluation_metrics.md`; ASR / over-refusal / accuracy defined | ✅ |
 | Compute infrastructure | `summary.judge.*.json` records GPU + precision (Tesla V100-32GB); `docs/TC1_CLUSTER_RUNBOOK.md` | ✅ |
-| Number of runs / variance | greedy is deterministic; a multi-seed (T=0.7) sensitivity arm at the 512-token budget quantifies generation variance for three of the five pairs | ✅ |
+| Number of runs / variance | greedy is deterministic; a multi-seed (T=0.7, top-p 0.8, five seeds) sensitivity arm at the 512-token budget quantifies generation variance for **all five pairs** (T39, `results_512/analysis/sensitivity_multiseed.json`). Disclosed nuance: the greedy point estimate sits inside the seed range for the three original pairs, and just outside a narrow zero-straddling range for the two cross-family pairs (Mistral-7B, Phi-4-mini) — report §6.6.1 | ✅ |
 | Statistical significance | paired bootstrap 95% CIs (2 000 resamples, seed 42) + McNemar exact test; Benjamini-Hochberg FDR correction over the 20-contrast NF4 family (report §6.5.1) | ✅ |
 | Central tendency + variation | deltas with CIs in `pairwise_deltas.json` / report Tables 6.1–6.2 | ✅ |
 
@@ -34,7 +34,7 @@
   come from a complete record set with exactly the configured prompt count.
 - **Immutable raw artefacts** — `raw.jsonl` / `summary.json` are TC1-originals,
   never overwritten; all corrections/judging write *derived sidecars*. Integrity
-  is pinned in `results/raw_artifact_manifest.sha256` (300 files across the 128, 512, and multi-seed-512 trees) and checked by
+  is pinned in `results/raw_artifact_manifest.sha256` (340 files across the 128, 512, and multi-seed-512 trees) and checked by
   `make agent-check`.
 - **Provenance in every record** — `raw.jsonl` carries `pair_id`, `quantized`,
   `model_id`, `model_alias`, `seed`, `generation_config`, and `timestamp` (the

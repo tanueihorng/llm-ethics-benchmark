@@ -241,6 +241,22 @@ stale_text:
     - docs/TC1_AGENT_CHECKLIST.md
     - docs/CODEX_MEETUP_BRIEF.md
     - docs/AGENTIC_WORKFLOW.md
+    # Added 2026-08-11. docs/REPRODUCIBILITY.md carried "three of the five pairs" for
+    # three weeks after T39 completed the arm, and a "300 files" manifest count after it
+    # reached 340 — neither was caught, because the pattern existed and the FILE was not
+    # scanned. Same shape as T56 and D49: a gate asserts a property of the files it is
+    # pointed at, never of the document set. These are the current-facing docs that make
+    # live methodological claims; preregistrations, dated audit ledgers and archived
+    # snapshots stay out on purpose, since they legitimately quote retired wording.
+    - docs/REPRODUCIBILITY.md
+    - docs/methodology.md
+    - docs/limitations.md
+    - docs/evaluation_metrics.md
+    - docs/datasets.md
+    - docs/QUICKSTART.md
+    - docs/USER_GUIDE.md
+    - docs/SUBMISSION_RUNBOOK.md
+    - docs/viva/VIVA_QA_BANK.md
     - docs/architecture/*.md
     - docs/architecture/*.svg
     - docs/architecture/*.drawio
@@ -447,7 +463,17 @@ stale_text:
     # carry a YYYY-MM date and are exempt from all four.
     # (1) The multi-seed arm covers ALL FIVE pairs; the retired "three of the five
     #     pairs" was a live contradiction in report §6.6.1 / Chapter 7.
-    - '^(?!.*20[0-9]{2}-[0-9]{2}).*three of the five pairs'
+    #
+    #     BROADENED 2026-08-11. The original pattern matched one exact phrasing, so it
+    #     caught nothing when the same claim reappeared as "three of five pairs",
+    #     "only three pairs" and "3 pairs · 5 seeds" in the defence deck — a file the
+    #     scan DID cover. This is the D51/T51 lesson: name the claim SHAPE, not the
+    #     words. The pattern now requires a multi-seed context term on the line, so it
+    #     fires on any three-pair coverage claim about the seed arm while leaving
+    #     unrelated "three pairs" prose (e.g. the D26-era study scope) alone.
+    #     The \b on "3 pairs" is load-bearing: without it the alternative matched
+    #     "Qwen3 pairs" in the correct five-pair sentence of four builders.
+    - '^(?!.*20[0-9]{2}-[0-9]{2})(?=.*(?:multi-?seed|multiseed|sensitivity arm|seeds?\s*1|T\s*=\s*0\.7|temperature 0\.7)).*(?:three of (?:the )?five pairs|three of 5 pairs|3 of (?:the )?5 pairs|only three pairs|\b3 pairs\b)'
     # (2) Three pairs ARE sign-consistent (qwen_2b non-negative, qwen_4b all-positive,
     #     llama all-negative); the retired "no pair is sign-consistent" is false. The
     #     live claim is "no pair is robustly positive".

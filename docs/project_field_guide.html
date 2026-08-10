@@ -379,7 +379,7 @@ dd b,dd strong{color:var(--color-ink)}
   <div class="note">
     <span class="tag">Immutability &amp; privacy invariants — worth internalising</span>
     <ul>
-      <li><code>raw.jsonl</code> + <code>summary.json</code> are immutable TC1 originals, hash-pinned in a committed manifest (300 files across the 128, 512, and sensitivity trees). The gate fails on any mutation, any unmanifested new raw, and any partial local deletion.</li>
+      <li><code>raw.jsonl</code> + <code>summary.json</code> are immutable TC1 originals, hash-pinned in a committed manifest (340 files across the 128, 512, and sensitivity trees). The gate fails on any mutation, any unmanifested new raw, and any partial local deletion.</li>
       <li>Nothing containing raw prompt/response text is ever committed (the repo is public). Committed evidence = redacted sidecars + aggregates, and the redaction gate scans them.</li>
       <li>Resume logic keys on <code>prompt_id</code>, so interrupted cluster runs continue without double-counting.</li>
     </ul>

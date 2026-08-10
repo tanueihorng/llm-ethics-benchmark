@@ -234,6 +234,14 @@ def test_real_policy_stale_kappa_guards_fire_and_exempt(tmp_path: Path) -> None:
         "every per-pair seed-mean |ΔASR| ≤ 0.029, no pair is sign-consistent, and the only",
         "a revision-pinned Llama-Guard-3-8B, whose fully reproducible re-scoring agrees at κ 0.36–0.92.",
         "the human gold set (200 items, blinded single annotator, pre-registered Outcome J) grounds it.",
+        # 2026-08-11: the T41 multi-seed guard matched ONE exact phrasing, so the same
+        # retired claim survived in docs/REPRODUCIBILITY.md and in three places in the
+        # defence deck under different wordings. Each retired form is pinned here.
+        "a multi-seed (T=0.7) sensitivity arm at the 512-token budget quantifies variance for three of the five pairs",
+        "Multi-seed covers three of five pairs.",
+        "Multi-seed arm — 512 tokens, temperature 0.7, seeds 1–5, 3 pairs",
+        "200 HarmBench prompts, and multi-seed coverage for only three pairs.",
+        "the multi-seed sensitivity arm reaches 3 of the 5 pairs",
     ):
         assert scan(bad) == "fail", bad
     for ok in (
@@ -271,6 +279,17 @@ def test_real_policy_stale_kappa_guards_fire_and_exempt(tmp_path: Path) -> None:
         'the clean confirmatory "pre-registered Outcome J" badge is withdrawn; reported as a disclosed-deviation validation.',
         "2026-07-19: the residual 'three of the five pairs' phrasing was removed.",
         '2026-07-19: restated from a clean "pre-registered Outcome J" to a disclosed-deviation validation.',
+        # 2026-08-11: the broadened multi-seed guard must not fire on the CORRECT
+        # sentence. "Qwen3 pairs" contains the literal "3 pairs", and a first draft of
+        # the pattern failed all four interim/thesis builders on exactly that — the
+        # word boundary is what keeps this legal.
+        "one decoding regime (greedy primary, with a five-pair multi-seed arm; the two Qwen3 pairs run in non-default non-thinking mode)",
+        "Multi-seed covers all five pairs; the greedy point sits inside the seed range for the three original pairs.",
+        "Multi-seed arm — 512 tokens, temperature 0.7, seeds 1–5, all five pairs",
+        # Three pairs being sign-consistent is a live, correct claim about the arm.
+        "the multi-seed arm covers all five pairs, and three pairs are sign-consistent",
+        # Dated rows recording the correction stay legal.
+        "2026-08-11: the multi-seed guard was broadened; 'three of five pairs' and '3 pairs' now fire.",
     ):
         assert scan(ok) == "pass", ok
 

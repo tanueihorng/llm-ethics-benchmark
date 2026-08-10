@@ -334,7 +334,7 @@ python scripts/verify_report_claims.py                                # re-check
 For a faithful environment, install against the tested version set (loose lower bounds otherwise resolve to untested majors):
 
 ```bash
-pip install -r requirements.txt -c constraints-tested.txt
+pip install -r requirements.txt
 ```
 
 ---

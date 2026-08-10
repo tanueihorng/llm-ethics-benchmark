@@ -362,7 +362,7 @@ Partly, and I should be honest about which part. On a fresh clone, `judge_agreem
 
 Four things, and preparing for today I found a real defect in my own instructions. One, hardware: a V100-class GPU on SLURM, and Mistral-7B is gated on HuggingFace so you need an accepted licence and a token. Measured from the record timestamps the full ten-alias sweep is about fourteen GPU-hours — twenty minutes to under four hours per model, well inside the six-hour cap. Two, environment, and this is the defect: my README tells you to install with `constraints-tested.txt`, and that command fails with a resolution error, because the constraints file records my local *analysis* interpreter at transformers 4.32.1 while requirements floors it at 4.41. Bitsandbytes isn't constrained at all. Three, no pip freeze and no CUDA pin, so I expect near-identical, not bit-identical, generations. What does reproduce exactly today is the analysis layer, seeded at forty-two.
 
-**Concede:** `docs/REPRODUCIBILITY.md` also carries at least two stale rows — a "three of five pairs" line for the multi-seed arm, now five, and a "300 files" manifest count, now 340.
+**Concede:** the constraints defect is real and is tracked as T60 — say so plainly rather than talking around it. (Both stale rows this answer originally cited in `docs/REPRODUCIBILITY.md`, the multi-seed pair count and the manifest count, were corrected on 2026-08-11; the install-resolution defect is the one that remains open.)
 
 ---
 
