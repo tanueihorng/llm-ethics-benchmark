@@ -57,8 +57,21 @@ terminal_log*.txt
 ~$*.docx
 ~$*.html
 
-# Note: we DO commit .docx and .html under docs/ — the FYP report is a
-# deliverable and docs/archive/ history is preserved in git.
+# Generated FYP documents are NOT committed (2026-08-10). The repository is
+# public, and a publicly indexed copy of a report that has not yet been submitted
+# can be returned as a similarity match against the student's own submission.
+# The builders under scripts/ remain tracked and regenerate every document, so
+# nothing is lost: run `make report`, `make thesis`, or the rewrite/interim
+# builders after cloning. Surfaces are marked `gitignored_optional` in
+# configs/claim_surfaces.yaml so the gates check them locally and skip on a clone.
+#
+# NOTE: removing these files from tracking does NOT remove them from git history,
+# and the builders themselves contain the full prose. Making the repository
+# private is the only measure that actually withdraws the text.
+docs/*.docx
+docs/archive/*.docx
+# NTU-supplied documents (cluster user guide, FYP application form)
+docs/CCDSGPU-TC1-*.pdf
 
 # Supervisor correspondence drafts — keep local, never commit
 docs/email_*.md

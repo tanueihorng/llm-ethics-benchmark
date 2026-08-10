@@ -93,12 +93,12 @@ surfaces:
   - {id: interim_builder, path: scripts/build_fyp_interim.js, lifecycle: current, profiles: [registry_consumer, volatile_free]}
   - {id: interim_humanized_builder, path: scripts/build_fyp_interim_humanized.js, lifecycle: current, profiles: [registry_consumer, volatile_free]}
 
-  - {id: report_docx, path: docs/FYP_Report_2026-07-01_v5.docx, lifecycle: generated, source: scripts/build_fyp_report_v5.js, profiles: [docx_primary, volatile_free, fresh_from_source]}
-  - {id: report_humanized_docx, path: docs/FYP_Report_2026-07-01_humanized.docx, lifecycle: generated, source: scripts/build_fyp_report_humanized.js, profiles: [docx_primary, volatile_free, fresh_from_source]}
-  - {id: thesis_docx, path: docs/FYP_Thesis_2026-07-02_v4.docx, lifecycle: generated, source: scripts/build_fyp_thesis_v4.js, profiles: [docx_primary, volatile_free, fresh_from_source]}
-  - {id: thesis_humanized_docx, path: docs/FYP_Thesis_2026-07-02_humanized.docx, lifecycle: generated, source: scripts/build_fyp_thesis_humanized.js, profiles: [docx_primary, volatile_free, fresh_from_source]}
-  - {id: interim_docx, path: docs/FYP_Interim_2026-07-10.docx, lifecycle: generated, source: scripts/build_fyp_interim.js, profiles: [docx_primary, volatile_free, fresh_from_source]}
-  - {id: interim_humanized_docx, path: docs/FYP_Interim_2026-07-10_humanized.docx, lifecycle: generated, source: scripts/build_fyp_interim_humanized.js, profiles: [docx_primary, volatile_free, fresh_from_source]}
+  - {id: report_docx, path: docs/FYP_Report_2026-07-01_v5.docx, availability: gitignored_optional, lifecycle: generated, source: scripts/build_fyp_report_v5.js, profiles: [docx_primary, volatile_free, fresh_from_source]}
+  - {id: report_humanized_docx, path: docs/FYP_Report_2026-07-01_humanized.docx, availability: gitignored_optional, lifecycle: generated, source: scripts/build_fyp_report_humanized.js, profiles: [docx_primary, volatile_free, fresh_from_source]}
+  - {id: thesis_docx, path: docs/FYP_Thesis_2026-07-02_v4.docx, availability: gitignored_optional, lifecycle: generated, source: scripts/build_fyp_thesis_v4.js, profiles: [docx_primary, volatile_free, fresh_from_source]}
+  - {id: thesis_humanized_docx, path: docs/FYP_Thesis_2026-07-02_humanized.docx, availability: gitignored_optional, lifecycle: generated, source: scripts/build_fyp_thesis_humanized.js, profiles: [docx_primary, volatile_free, fresh_from_source]}
+  - {id: interim_docx, path: docs/FYP_Interim_2026-07-10.docx, availability: gitignored_optional, lifecycle: generated, source: scripts/build_fyp_interim.js, profiles: [docx_primary, volatile_free, fresh_from_source]}
+  - {id: interim_humanized_docx, path: docs/FYP_Interim_2026-07-10_humanized.docx, availability: gitignored_optional, lifecycle: generated, source: scripts/build_fyp_interim_humanized.js, profiles: [docx_primary, volatile_free, fresh_from_source]}
   # v6 = corpus-voice rewrite of report_docx (T47), remediated against the 2026-07-26
   # claim-to-source audit (T48). It was previously registered as a profile-less snapshot
   # because the locks match exact snippets and v6 rewords by design; that gap was audit
@@ -117,13 +117,13 @@ surfaces:
   # Separate corpus-informed rewrite requested by the user. It remains independent
   # of the canonical v5 and the v6 comparison draft, but it is live generated work
   # and therefore carries the same primary-claim and freshness gates.
-  - {id: rewritten_report_v1, path: docs/rewritten_fyp_report_v1.docx, lifecycle: generated, source: scripts/build_rewritten_fyp_report_v1.py, profiles: [docx_primary, volatile_free, fresh_from_source]}
+  - {id: rewritten_report_v1, path: docs/rewritten_fyp_report_v1.docx, availability: gitignored_optional, lifecycle: generated, source: scripts/build_rewritten_fyp_report_v1.py, profiles: [docx_primary, volatile_free, fresh_from_source]}
   # T53: the interim submission artefact. Same body, same primary-claim gates.
-  - {id: rewritten_interim_v1, path: docs/rewritten_fyp_interim_v1.docx, lifecycle: generated, source: scripts/build_rewritten_fyp_interim_v1.py, profiles: [docx_primary, volatile_free, fresh_from_source]}
-  - {id: report_v6_voice_draft, path: docs/FYP_Report_2026-07-25_v6.docx, lifecycle: generated, source: scripts/build_fyp_report_v6.js, profiles: [docx_primary, volatile_free, fresh_from_source]}
-  - {id: agentic_workflow_docx, path: docs/Agentic_AI_Workflow_Report_2026-06-26.docx, lifecycle: snapshot, profiles: []}
-  - {id: meetup_report_docx, path: docs/Codex_Meetup_Agent_Harness_Report.docx, lifecycle: snapshot, profiles: []}
-  - {id: architecture_guide_docx, path: docs/FYP_Agent_Harness_Architecture_Guide_2026-06-09.docx, lifecycle: snapshot, profiles: []}
+  - {id: rewritten_interim_v1, path: docs/rewritten_fyp_interim_v1.docx, availability: gitignored_optional, lifecycle: generated, source: scripts/build_rewritten_fyp_interim_v1.py, profiles: [docx_primary, volatile_free, fresh_from_source]}
+  - {id: report_v6_voice_draft, path: docs/FYP_Report_2026-07-25_v6.docx, availability: gitignored_optional, lifecycle: generated, source: scripts/build_fyp_report_v6.js, profiles: [docx_primary, volatile_free, fresh_from_source]}
+  - {id: agentic_workflow_docx, path: docs/Agentic_AI_Workflow_Report_2026-06-26.docx, availability: gitignored_optional, lifecycle: snapshot, profiles: []}
+  - {id: meetup_report_docx, path: docs/Codex_Meetup_Agent_Harness_Report.docx, availability: gitignored_optional, lifecycle: snapshot, profiles: []}
+  - {id: architecture_guide_docx, path: docs/FYP_Agent_Harness_Architecture_Guide_2026-06-09.docx, availability: gitignored_optional, lifecycle: snapshot, profiles: []}
 
   - {id: defense_deck, path: docs/fyp-report-defense-deck-2026-07.html, lifecycle: generated, profiles: [generated_defense_asr, volatile_free]}
   # Descriptive style-analysis deck: computed from local gitignored raw outputs
