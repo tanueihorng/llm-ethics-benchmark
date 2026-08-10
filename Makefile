@@ -19,7 +19,7 @@ PYTEST_ARGS ?= -q
 TASK ?=
 AGENT ?=
 
-.PHONY: smoke run matrix analyze prefetch report thesis interim rewrite rewrite-interim viva report-humanized thesis-humanized interim-humanized claim-registry claim-surfaces verify-claims verify-claim-surfaces architecture-diagram diagrams cluster-generate cluster-submit cluster-dry cluster-check cluster-all cluster-smoke agent-start agent-status agent-check agent-manifest agent-handoff agent-dashboard agent-tc1-checklist harness-eval dashboard
+.PHONY: backup smoke run matrix analyze prefetch report thesis interim rewrite rewrite-interim viva report-humanized thesis-humanized interim-humanized claim-registry claim-surfaces verify-claims verify-claim-surfaces architecture-diagram diagrams cluster-generate cluster-submit cluster-dry cluster-check cluster-all cluster-smoke agent-start agent-status agent-check agent-manifest agent-handoff agent-dashboard agent-tc1-checklist harness-eval dashboard
 
 dashboard:
 	$(PYTHON) -m streamlit run dashboard/app.py
@@ -132,6 +132,18 @@ rewrite-interim: claim-surfaces
 viva:
 	$(PYTHON) scripts/build_viva_deck.py
 	$(PYTHON) scripts/build_viva_deck_html.py
+
+# Archive the parts of this project that exist ONLY on this machine: the raw model
+# outputs (~97 MB, unreproducible without TC1 GPU hours and gated weights), the two
+# hand-labelled gold sets, the supervisor correspondence, and the submission tree.
+# Those are correctly NOT in git -- .gitignore says the correspondence is "never
+# commit", D60 untracked the documents, and the raw outputs hold unredacted harmful
+# text -- which is exactly why a laptop failure would lose them and git will not help.
+# DEST must be outside the repo; the script refuses otherwise.
+#   make backup DEST=~/Dropbox/fyp_backup
+backup:
+	@test -n "$(DEST)" || { echo "usage: make backup DEST=/path/outside/the/repo"; exit 2; }
+	$(PYTHON) scripts/backup_local.py --dest $(DEST)
 
 # Deterministic claim lock (D43): every load-bearing number in the canonical
 # report builder is asserted against the committed analysis artifacts. Also

@@ -239,13 +239,35 @@ If this machine dies, these are gone. They are not in git, by deliberate decisio
 | School guidance capture | `fyp_submission/report_latex/SCHOOL_GUIDELINES.md` | The page bands and presentation rules — the key parts are quoted in §8 so they survive |
 | All generated `.docx` | `docs/*.docx` | Rebuildable from the tracked builders (§4) |
 
-**Back these up now, outside the repo** — a cloud folder or an external drive.
+**The list above understates it.** The largest irreplaceable thing is not in that table:
 
-> **Before you copy anything anywhere:** `results/*/raw.jsonl` and the two sheets under
-> `human_labels/` contain **unredacted harmful prompts and model responses**. That is normal
-> for this kind of study and they are correctly kept out of git, but do not sync them to a
-> shared drive, and do not attach them to an email. Everything committed is redacted —
-> IDs, counts and booleans only.
+| What | Size | Can it be regenerated? |
+|---|---|---|
+| `results*/**/raw.jsonl` | **97 MB, 60 files** | **No.** Needs TC1 GPU hours *and* accepted HuggingFace licences for the gated weights |
+| `human_labels/` | 1.4 MB | **No.** Two 200-item gold sets you labelled by hand |
+| `fyp_submission/` | 18 MB | Painfully — LaTeX sources, Overleaf bundles |
+| `docs/email_*.md` | 18 KB | No — written once |
+
+None of it is in git, and all of those decisions are correct: `.gitignore` marks the
+correspondence "never commit", D60 untracked the documents, and the raw outputs hold
+unredacted harmful text. Git is not the fix. **A backup is:**
+
+```bash
+make backup DEST=~/Dropbox/fyp_backup
+```
+
+That writes one verified `.tar.gz` (~52 MB compressed from ~133 MB) containing all four
+categories plus a `MANIFEST.txt` saying what is inside. It refuses to write anywhere
+inside the repo, and it re-reads the archive to confirm the member count before
+reporting success. Add `--no-sensitive` to exclude the raw outputs and gold sets.
+
+**Do it today, and again after anything changes.** Losing `raw.jsonl` does not cost you
+a rebuild; it costs you the experiment.
+
+> **Where you put it matters.** The default archive contains **unredacted harmful prompts
+> and model responses**. That is normal for this kind of study, but the destination should
+> be an encrypted disk or a private drive — never a shared team folder, and never an email
+> attachment. Everything committed to git is redacted: IDs, counts and booleans only.
 
 ---
 
