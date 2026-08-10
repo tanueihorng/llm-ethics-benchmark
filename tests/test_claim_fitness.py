@@ -135,6 +135,55 @@ def test_hedge_scan_is_configured_over_the_canonical_builder() -> None:
     )
 
 
+# The v5 line is knowingly frozen: T48 remediated v6 and left v5 byte-identical on
+# purpose, so it still carries 34 and 33 hits. Scanning it would fail the gate
+# permanently for a surface nobody is submitting. Any OTHER current builder missing
+# from the scan is the T56 defect, and the assertion below is what catches it.
+HEDGE_SCAN_EXEMPT = {
+    "scripts/build_fyp_report_v5.js": "frozen v5 comparison artifact (T48 left it untouched)",
+    "scripts/build_fyp_report_humanized.js": "humanized twin of the frozen v5 build",
+}
+
+
+def test_every_current_builder_is_hedge_scanned() -> None:
+    """Symmetry check (D54): audit from the document set, not from the scan list.
+
+    T56 existed because `epistemic_hedge.scan_paths` named four files and nobody
+    asked which files it was MISSING. The interim and thesis builders were outside
+    it, so the T48/D56 remediation never reached them and each kept shipping the
+    C07 over-claim for weeks under a green gate.
+
+    This derives the expected set from the surface registry instead: every builder
+    registered as a CURRENT surface must be hedge-scanned, or must appear in
+    HEDGE_SCAN_EXEMPT with a stated reason. Adding a new builder without doing
+    either fails here, which is the whole point.
+    """
+    import yaml
+
+    surfaces = yaml.safe_load((REPO_ROOT / "configs" / "claim_surfaces.yaml").read_text())
+    scanned = set(load_policy(REPO_ROOT)["epistemic_hedge"]["scan_paths"])
+
+    current_builders = {
+        s["path"] for s in surfaces["surfaces"]
+        if s.get("lifecycle") == "current"
+        and s["path"].startswith("scripts/build_")
+    }
+    assert current_builders, "no current builder surfaces found; the registry shape changed"
+
+    unscanned = sorted(current_builders - scanned - set(HEDGE_SCAN_EXEMPT))
+    assert not unscanned, (
+        "current document builders outside the claim-fitness scan: "
+        f"{unscanned}. Either add them to epistemic_hedge.scan_paths (and fix what "
+        "fires), or add them to HEDGE_SCAN_EXEMPT with the reason. An unscanned "
+        "current builder is exactly the T56 defect."
+    )
+    stale_exempt = sorted(set(HEDGE_SCAN_EXEMPT) - current_builders)
+    assert not stale_exempt, (
+        f"HEDGE_SCAN_EXEMPT names surfaces that are no longer current builders: "
+        f"{stale_exempt}. Remove them so the exemption list cannot quietly grow."
+    )
+
+
 def test_hedge_scan_is_clean_on_the_real_repo() -> None:
     policy = load_policy(REPO_ROOT)
     result = _scan_policy_group(REPO_ROOT, policy["epistemic_hedge"], "epistemic-hedge")
