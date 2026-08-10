@@ -234,3 +234,65 @@ confirmed by the 25.5 GB prefetch; still worth the exact number.
   a different quant family (GPTQ/AWQ/GGUF); Arditi activation-direction probe.
 - **Housekeeping:** stale merged branches prunable (`t26-add-mistral-phi-pairs`,
   `mechanism-refusal-margin`, `int8-precision-point`, `harden/latent-six-audit`).
+
+## 2026-07-27 — v6 report: finish the claim-fitness enumeration, then freeze
+
+**State.** v6 passes everything mechanical: 294/294 surface checks, 506 tests,
+9/9 agent-check gates, v5 byte-identical to HEAD. Three independent audit rounds
+have been remediated (T48, and two re-audits). Chapter 6 is 12 946 words, down
+from 21 135.
+
+**Do NOT freeze on a green gate.** Two independent auditors have each found real
+defects in text the other had just cleared, and my own `epistemic_hedge` gate
+cleared text containing a defect it had a pattern for (line-level `allow`
+suppressed it — fixed, span-scoped now). A green harness has been a poor
+predictor of semantic correctness here, three times running.
+
+### Next action — the sweep RAN; 22 live findings already folded in (2026-07-27 02:30 row).
+### What remains is its INCOMPLETE COVERAGE
+An exhaustive claim-enumeration sweep was launched and its raw output is saved:
+
+- `docs/audits/2026-07-27_claim_sweep/still_present.json`  — 170 candidate
+  sentences that ARE in the current builder
+- `docs/audits/2026-07-27_claim_sweep/already_fixed.json`  — 11 the sweep found
+  that this session already fixed (it read a pre-fix snapshot)
+- `sweep_partial_findings.json` — all 181 raw
+
+The sweep over-reports by design (finders were told to be exhaustive); only
+~25 of 132 adversarial verdicts came back `is_real=true`. **The raw list is NOT
+a defect list** — each candidate must pass the refutation step before it is
+actioned.
+
+**Appendix I (8 400 words) has ZERO verified findings — every verify agent for it died on the session limit, as did the completeness critic. Resume to finish it:** (completed
+agents are cached, so this costs almost nothing):
+
+```
+Workflow({scriptPath: "/Users/tanueihorng/.claude/projects/-Users-tanueihorng-fyp-quant/5b90599c-4ee9-48ca-9a73-9afd0d327912/workflows/scripts/unsupported-claim-sweep-wf_75fd20ca-00a.js", resumeFromRunId: "wf_75fd20ca-00a"})
+```
+
+Same-session only. If that has expired, re-run the script from scratch after
+re-extracting the per-chapter text (the extractor is inline in the 2026-07-27
+transcript; it dumps the rendered docx to one .txt per chapter).
+
+### Then, in order
+1. Fix the verifier-confirmed findings using `scripts/report_tools/` (gates
+   above). Add a pattern to `configs/artifact_policy.yaml:epistemic_hedge` for
+   each defect CLASS found, and a must-fire test in `tests/test_claim_fitness.py`.
+   **Name the claim SHAPE, not the words** — rounds 1-3 all failed because the
+   patterns matched vocabulary (`de facto standard`) and the defect recurred as
+   a paraphrase (`commonly deployed`, `routinely integrated`, `widely used`).
+2. **T49** — Appendix I is ~8 400 words with ZERO tables, ~19-24 rendered pages.
+   The chosen option was a COMPACT appendix (detail as tables); prose was
+   relocated instead. Convert I.1 / I.3 / I.10 / I.12 to tables. Chapter 6 is
+   ~1 900 words above its ~11k target.
+3. **T50 freeze checklist** — open the docx in Word, Ctrl+A then F9, CONFIRM the
+   Table of Contents populates, then export the PDF. The TOC is a field
+   (`TOC \\h \\o "1-3"`, `updateFields=True`); it is blank in every non-Word
+   renderer. v5 behaves identically — this is not a v6 defect.
+4. Only then freeze the builder hash and run one final enumeration pass.
+
+### Decision still open
+v6 is NOT canonical: `make report`, CLAUDE.md and AGENTS.md still name v5. That
+swap touches the build/submission path and is waiting on the student reading v6.
+Note v5 still carries 19 of the original 26 findings — it was deliberately left
+byte-identical for side-by-side comparison.

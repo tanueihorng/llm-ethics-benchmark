@@ -496,6 +496,30 @@ def test_docx_fixture_with_all_claims_passes(tmp_path: Path) -> None:
     assert _docx_failures(tmp_path, GOOD_UNITS) == []
 
 
+def test_python_registry_consumer_profile_must_fire(tmp_path: Path) -> None:
+    registry = build_registry(ROOT)
+    path = tmp_path / "builder.py"
+    surface = {"path": "builder.py", "profiles": ["registry_consumer_python"]}
+
+    path.write_text(
+        'CLAIM_REGISTRY = loadClaimRegistry(CLAIMS_PATH)\nvalue = CLAIMS["pairs"]\n',
+        encoding="utf-8",
+    )
+    assert validate_surface(surface, registry, tmp_path) == [
+        ("registry_consumer_python", True, "imports and consumes registry")
+    ]
+
+    path.write_text('value = CLAIMS["pairs"]\n', encoding="utf-8")
+    assert validate_surface(surface, registry, tmp_path) == [
+        ("registry_consumer_python", False, "missing loadClaimRegistry")
+    ]
+
+    path.write_text("CLAIM_REGISTRY = loadClaimRegistry(CLAIMS_PATH)\n", encoding="utf-8")
+    assert validate_surface(surface, registry, tmp_path) == [
+        ('registry_consumer_python', False, 'missing CLAIMS["')
+    ]
+
+
 def test_docx_fixture_additive_contradiction_fails(tmp_path: Path) -> None:
     failures = _docx_failures(tmp_path, GOOD_UNITS + ["HarmBench ASR survives BH-FDR."])
     assert failures == ["docx_primary.contradiction:asr-survival"]

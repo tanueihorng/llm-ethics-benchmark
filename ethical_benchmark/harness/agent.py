@@ -199,18 +199,49 @@ def _project_overview_tail(path: Path) -> str:
     return text[idx:]
 
 
-def _line_matches(path: Path, regexes: list[re.Pattern[str]]) -> list[str]:
+def _line_matches(
+    path: Path,
+    regexes: list[re.Pattern[str]],
+    allow: list[re.Pattern[str]] | None = None,
+) -> list[str]:
     hits: list[str] = []
     try:
         lines = path.read_text(encoding="utf-8").splitlines()
     except UnicodeDecodeError:
         return hits
     for lineno, line in enumerate(lines, start=1):
+        # An allow entry exempts only the SPAN it matches, not the whole line.
+        # Line-level suppression hid a real defect: report line 521 carried both
+        # an allowlisted phrase ("the strongest internal-validity property of the
+        # study") and an unearned superlative ("the strongest practical isolation
+        # available"), and the allowlist silenced the line, so epistemic-hedge
+        # reported clean while the superlative survived (found by an independent
+        # re-audit, 2026-07-26). Blank out allowed spans, then scan the remainder.
+        probe = line
+        for a in allow:
+            probe = a.sub(lambda m: " " * len(m.group(0)), probe)
         for regex in regexes:
-            if regex.search(line):
+            if regex.search(probe):
                 hits.append(f"{path.as_posix()}:{lineno}: {regex.pattern}")
                 break
     return hits
+
+
+_SISTER_FILENAME = re.compile(r"\b(?:CLAUDE|AGENTS)\.md\b")
+# The opening block (title, one-line audience tagline, sister-file pointer)
+# legitimately differs between the two files; everything after it must match.
+_HEADER_BLOCK_LINES = 5
+
+
+def _instruction_head(path: Path) -> list[str]:
+    """The shared rules half: everything above '## Project Overview', minus the
+    opening pointer block, with the two filenames normalised so the intentional
+    mirror ('Keeping CLAUDE.md and AGENTS.md in sync' vs the reverse) is not
+    read as divergence."""
+    text = path.read_text(encoding="utf-8")
+    head = text.split("## Project Overview", 1)[0]
+    lines = head.splitlines()[_HEADER_BLOCK_LINES:]
+    return [_SISTER_FILENAME.sub("SISTER.md", line).rstrip() for line in lines]
 
 
 def check_agent_docs_sync(repo_root: Path) -> CheckResult:
@@ -224,6 +255,23 @@ def check_agent_docs_sync(repo_root: Path) -> CheckResult:
             "fail",
             "AGENTS.md and CLAUDE.md diverge below Project Overview.",
             ["Run diff AGENTS.md CLAUDE.md and sync the shared body."],
+        )
+    # T48/D56: the tail check alone reported PASS while an entire standing-rule
+    # section was missing from AGENTS.md, because every project rule (PROJECT_LOG
+    # discipline, D42, D54, D56) lives ABOVE "## Project Overview" and nothing
+    # compared that half. Both files' own text promises they are identical; the
+    # gate now checks the half that carries the instructions.
+    head_a, head_c = _instruction_head(agents), _instruction_head(claude)
+    if head_a != head_c:
+        only_c = [line for line in head_c if line not in head_a][:5]
+        only_a = [line for line in head_a if line not in head_c][:5]
+        return CheckResult(
+            "agent-doc-sync",
+            "fail",
+            "AGENTS.md and CLAUDE.md diverge ABOVE Project Overview (the rules half).",
+            [f"only in CLAUDE.md: {line[:110]}" for line in only_c]
+            + [f"only in AGENTS.md: {line[:110]}" for line in only_a]
+            or ["Run diff AGENTS.md CLAUDE.md and sync the shared body."],
         )
     return CheckResult("agent-doc-sync", "pass", "AGENTS.md and CLAUDE.md shared body is synchronized.")
 
@@ -310,10 +358,16 @@ def _scan_policy_group(repo_root: Path, group: dict[str, Any], name: str) -> Che
     patterns = [re.compile(item, re.IGNORECASE) for item in group.get("patterns", [])]
     if not patterns:
         return CheckResult(name, "pass", "No scan patterns configured.")
+    # Optional line-level allowlist. A scan whose patterns are deliberately broad
+    # (see `epistemic_hedge`) needs a way to exempt a specific legitimate line
+    # without weakening the pattern for everything else. Absent = no suppression,
+    # so every existing group behaves exactly as before.
+    allow = [re.compile(item, re.IGNORECASE) for item in group.get("allow", [])]
     paths = _iter_paths(repo_root, group.get("scan_paths", []), group.get("exclude", []))
     hits: list[str] = []
     for path in paths:
-        hits.extend(_line_matches(path, patterns))
+        for hit in _line_matches(path, patterns, allow):
+            hits.append(hit)
     if hits:
         return CheckResult(name, "fail", f"{name} scan found {len(hits)} hit(s).", hits[:40])
     return CheckResult(name, "pass", f"{name} scan clean across {len(paths)} files.")
@@ -378,6 +432,7 @@ def run_agent_checks(
         check_immutable_artifacts(repo_root, policy),
         _scan_policy_group(repo_root, policy.get("redaction", {}), "redaction"),
         _scan_policy_group(repo_root, policy.get("stale_text", {}), "stale-text"),
+        _scan_policy_group(repo_root, policy.get("epistemic_hedge", {}), "epistemic-hedge"),
         check_report_freshness(repo_root, policy),
     ]
     if include_diff_check:

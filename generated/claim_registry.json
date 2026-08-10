@@ -920,7 +920,7 @@
       "three_class_agreement": 0.695
     }
   },
-  "registry_fingerprint": "b44ad94a593709b2c08f3bb1249641704609ff89f1c700121520b2c12e7ac0fd",
+  "registry_fingerprint": "6f7a6cf6052cb04d807049d48a9266bc3d2316525f2b428ca00aaa80b515d3f8",
   "render": {
     "asr_forest_caption": "Quantization effect on harmful compliance at the 512-token reference budget: per-pair judge ΔASR (4-bit − fp16) with paired-bootstrap 95% confidence intervals. Filled markers denote intervals that exclude zero; only Llama-3.2-3B reaches significance, and it is a decrease (safety-improving) — no pair shows a significant increase. Source: results_512/analysis/judge_agreement.json.",
     "bh_survivor_sentence": "Exactly 3 primary contrasts survive BH-FDR: Qwen3-1.7B MMLU (−0.090, q = 0.008), Llama-3.2-3B ARC (−0.032, q = 0.008), Phi-4-mini over-refusal (−0.048, q = 0.012). No HarmBench ASR contrast survives.",
@@ -1308,6 +1308,233 @@
         "0.703",
         "0.677",
         "−0.027 [−0.063, +0.010]",
+        "no"
+      ]
+    ],
+    "report_table_6_1_full": [
+      [
+        "qwen_2b",
+        "HarmBench ASR (judge)",
+        "0.255",
+        "0.255",
+        "0.000 [−0.055, +0.055]",
+        "1.000",
+        "no"
+      ],
+      [
+        "qwen_2b",
+        "  HarmBench non-refusal (v2 proxy)",
+        "0.595",
+        "0.570",
+        "−0.025 [−0.070, +0.020]",
+        "n/a",
+        "no"
+      ],
+      [
+        "qwen_2b",
+        "XSTest over-refusal",
+        "0.052",
+        "0.028",
+        "−0.024 [−0.048, 0.000]",
+        "0.109",
+        "no"
+      ],
+      [
+        "qwen_2b",
+        "MMLU accuracy",
+        "0.643",
+        "0.553",
+        "−0.090 [−0.140, −0.043]",
+        "0.001",
+        "yes"
+      ],
+      [
+        "qwen_2b",
+        "ARC-Challenge accuracy",
+        "0.723",
+        "0.713",
+        "−0.009 [−0.032, +0.014]",
+        "0.462",
+        "no"
+      ],
+      [
+        "qwen_4b",
+        "HarmBench ASR (judge)",
+        "0.115",
+        "0.155",
+        "+0.040 [0.000, +0.080]",
+        "0.096",
+        "no"
+      ],
+      [
+        "qwen_4b",
+        "  HarmBench non-refusal (v2 proxy)",
+        "0.235",
+        "0.305",
+        "+0.070 [+0.030, +0.115]",
+        "n/a",
+        "(proxy)"
+      ],
+      [
+        "qwen_4b",
+        "XSTest over-refusal",
+        "0.028",
+        "0.024",
+        "−0.004 [−0.020, +0.008]",
+        "1.000",
+        "no"
+      ],
+      [
+        "qwen_4b",
+        "MMLU accuracy",
+        "0.747",
+        "0.743",
+        "−0.003 [−0.040, +0.033]",
+        "1.000",
+        "no"
+      ],
+      [
+        "qwen_4b",
+        "ARC-Challenge accuracy",
+        "0.876",
+        "0.860",
+        "−0.016 [−0.032, −0.002]",
+        "0.042",
+        "yes"
+      ],
+      [
+        "llama_3_2_3b",
+        "HarmBench ASR (judge)",
+        "0.100",
+        "0.060",
+        "−0.040 [−0.075, −0.010]",
+        "0.021",
+        "yes"
+      ],
+      [
+        "llama_3_2_3b",
+        "  HarmBench non-refusal (v2 proxy)",
+        "0.090",
+        "0.070",
+        "−0.020 [−0.050, +0.010]",
+        "n/a",
+        "no"
+      ],
+      [
+        "llama_3_2_3b",
+        "XSTest over-refusal",
+        "0.032",
+        "0.048",
+        "+0.016 [−0.004, +0.040]",
+        "0.289",
+        "no"
+      ],
+      [
+        "llama_3_2_3b",
+        "MMLU accuracy",
+        "0.610",
+        "0.573",
+        "−0.037 [−0.073, 0.000]",
+        "0.080",
+        "no"
+      ],
+      [
+        "llama_3_2_3b",
+        "ARC-Challenge accuracy",
+        "0.730",
+        "0.698",
+        "−0.032 [−0.049, −0.013]",
+        "0.001",
+        "yes"
+      ],
+      [
+        "mistral_7b",
+        "HarmBench ASR (judge)",
+        "0.585",
+        "0.565",
+        "−0.020 [−0.080, +0.040]",
+        "0.627",
+        "no"
+      ],
+      [
+        "mistral_7b",
+        "  HarmBench non-refusal (v2 proxy)",
+        "0.830",
+        "0.890",
+        "+0.060 [+0.015, +0.105]",
+        "n/a",
+        "(proxy)"
+      ],
+      [
+        "mistral_7b",
+        "XSTest over-refusal",
+        "0.004",
+        "0.004",
+        "0.000 [−0.012, +0.012]",
+        "1.000",
+        "no"
+      ],
+      [
+        "mistral_7b",
+        "MMLU accuracy",
+        "0.633",
+        "0.613",
+        "−0.020 [−0.057, +0.017]",
+        "0.392",
+        "no"
+      ],
+      [
+        "mistral_7b",
+        "ARC-Challenge accuracy",
+        "0.734",
+        "0.743",
+        "+0.009 [−0.005, +0.025]",
+        "0.284",
+        "no"
+      ],
+      [
+        "phi4_mini",
+        "HarmBench ASR (judge)",
+        "0.070",
+        "0.090",
+        "+0.020 [−0.015, +0.055]",
+        "0.424",
+        "no"
+      ],
+      [
+        "phi4_mini",
+        "  HarmBench non-refusal (v2 proxy)",
+        "0.075",
+        "0.075",
+        "0.000 [−0.025, +0.025]",
+        "n/a",
+        "no"
+      ],
+      [
+        "phi4_mini",
+        "XSTest over-refusal",
+        "0.128",
+        "0.080",
+        "−0.048 [−0.076, −0.020]",
+        "0.002",
+        "yes"
+      ],
+      [
+        "phi4_mini",
+        "MMLU accuracy",
+        "0.703",
+        "0.677",
+        "−0.027 [−0.063, +0.010]",
+        "0.215",
+        "no"
+      ],
+      [
+        "phi4_mini",
+        "ARC-Challenge accuracy",
+        "0.813",
+        "0.799",
+        "−0.015 [−0.032, +0.001]",
+        "0.093",
         "no"
       ]
     ],

@@ -765,6 +765,16 @@ def validate_surface(
             tokens = ("loadClaimRegistry", "CLAIMS.render")
             missing = [token for token in tokens if token not in text]
             results.append((profile, not missing, "imports and consumes registry" if not missing else f"missing {missing[0]}"))
+        elif profile == "registry_consumer_python":
+            tokens = ("loadClaimRegistry", 'CLAIMS["')
+            missing = [token for token in tokens if token not in text]
+            results.append((
+                profile,
+                not missing,
+                "imports and consumes registry"
+                if not missing
+                else f"missing {missing[0]}",
+            ))
         elif profile == "volatile_free":
             live_text = text
             if path.suffix == ".docx" and "Appendix G: Document Revision History" in live_text:

@@ -265,6 +265,41 @@ def build_registry(root: Path = ROOT) -> dict[str, Any]:
                 ]
             )
 
+    # T49: the v6 results table. report_table_6_1 above is frozen for v5 and the
+    # humanized build; this one ADDS the two things the per-pair prose was the only
+    # carrier of — ARC rows and the exact McNemar p-value. Chapter 6 narrated every
+    # interval and p-value in sentences (21 135 words against 161 words of table
+    # data, the inverse of the strong reports in the NTU corpus); the prose can only
+    # be compressed once the table actually holds what the prose was saying.
+    report_61_full: list[list[str]] = []
+    for pair_id in pair_order:
+        pair = pairs[pair_id]
+        for metric_name, label, sig_mode in (
+            ("asr", "HarmBench ASR (judge)", "normal"),
+            ("asr_v2_proxy", "  HarmBench non-refusal (v2 proxy)", "proxy"),
+            ("xstest", "XSTest over-refusal", "normal"),
+            ("mmlu", "MMLU accuracy", "normal"),
+            ("arc", "ARC-Challenge accuracy", "normal"),
+        ):
+            metric = pair[metric_name]
+            sig = (
+                "(proxy)"
+                if sig_mode == "proxy" and metric["significant"]
+                else "yes" if metric["significant"] else "no"
+            )
+            p_value = metric.get("p_value")
+            report_61_full.append(
+                [
+                    pair_id,
+                    label,
+                    _fmt(metric["baseline"]),
+                    _fmt(metric["nf4"]),
+                    _fmt_ci(metric["delta"], *metric["ci"]),
+                    "n/a" if p_value is None else f"{p_value:.3f}",
+                    sig,
+                ]
+            )
+
     report_62 = [
         [
             "HarmBench ΔASR (judge)",
@@ -375,6 +410,7 @@ def build_registry(root: Path = ROOT) -> dict[str, Any]:
     )
     render = {
         "report_table_6_1": report_61,
+        "report_table_6_1_full": report_61_full,
         "report_table_6_2": report_62,
         "thesis_table_6_2": thesis_62,
         "deck_pairs": deck_pairs,

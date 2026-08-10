@@ -88,3 +88,8 @@ results_dev/
 # pytest-cov by-product
 .coverage
 .local_build_state
+
+# Third-party reference corpus: past students' FYP reports and copyrighted papers.
+# Read locally for the corpus style study and the claim-fitness audits; never
+# redistributed — this repository is public.
+Examples of Past FYP Papers/

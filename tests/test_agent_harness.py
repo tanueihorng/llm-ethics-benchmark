@@ -173,6 +173,7 @@ def test_real_policy_stale_kappa_guards_fire_and_exempt(tmp_path: Path) -> None:
     policy = load_policy(repo)
     stale = policy["stale_text"]
     assert "scripts/build_fyp_report_v5.js" in stale["scan_paths"]
+    assert "scripts/build_rewritten_fyp_report_v1.py" in stale["scan_paths"]
 
     group = {"scan_paths": ["README.md"], "patterns": stale["patterns"]}
 
@@ -530,3 +531,45 @@ def test_retired_builders_carry_superseded_execution_guard() -> None:
         assert "FYP_BUILD_SUPERSEDED" not in text, (
             f"{rel} is canonical and must not carry the superseded guard"
         )
+
+
+def test_doc_sync_gate_covers_the_rules_half(tmp_path: Path) -> None:
+    """T48/D56 must-fire: the sync gate reported PASS while an entire standing-rule
+    section was missing from AGENTS.md, because it only compared below
+    '## Project Overview' and every project rule lives above it. Removing a
+    rules-half section from one file must now fail.
+    """
+    import shutil
+
+    from ethical_benchmark.harness.agent import check_agent_docs_sync
+
+    repo = Path(__file__).resolve().parents[1]
+    for name in ("CLAUDE.md", "AGENTS.md"):
+        shutil.copy(repo / name, tmp_path / name)
+    assert check_agent_docs_sync(tmp_path).status == "pass", "faithful copies must pass"
+
+    text = (tmp_path / "AGENTS.md").read_text(encoding="utf-8")
+    start = text.index("## Claims must fit their sources")
+    end = text.index("## Keeping AGENTS.md and CLAUDE.md in sync")
+    (tmp_path / "AGENTS.md").write_text(text[:start] + text[end:], encoding="utf-8")
+
+    result = check_agent_docs_sync(tmp_path)
+    assert result.status == "fail", (
+        "dropping a rules-half section from AGENTS.md did not fail the sync gate"
+    )
+    assert any("only in CLAUDE.md" in d for d in (result.details or []))
+
+
+def test_doc_sync_gate_tolerates_the_intentional_filename_mirror(tmp_path: Path) -> None:
+    """The two files legitimately swap their own names ('Keeping CLAUDE.md and
+    AGENTS.md in sync' vs the reverse). That must not read as divergence, or the
+    gate would be permanently red and would get switched off.
+    """
+    import shutil
+
+    from ethical_benchmark.harness.agent import check_agent_docs_sync
+
+    repo = Path(__file__).resolve().parents[1]
+    for name in ("CLAUDE.md", "AGENTS.md"):
+        shutil.copy(repo / name, tmp_path / name)
+    assert check_agent_docs_sync(tmp_path).status == "pass"

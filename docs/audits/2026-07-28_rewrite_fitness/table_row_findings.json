@@ -1,0 +1,42 @@
+[
+ {
+  "row": "HarmBench [24] (Mazeika et al., 2024, ICML) — row i=1 of Table 2.1",
+  "column": "Main boundary",
+  "current_value": "Threat model must be stated",
+  "verdict": "MISLEADING",
+  "why": "Technically defensible as a transfer condition, but phrased as an imperative it reads as a deficiency HarmBench does not have. The paper formally defines the threat model in Section 3.1 and devotes Appendix B.3, titled 'Supported Threat Models', to enumerating attacker access levels (transfer / black-box / white-box) and defense categories, explicitly stating it focuses its large-scale comparison on model-level defenses. It also includes a 'Direct Request' baseline (Appendix C.1: 'uses the behavior strings themselves as test cases... when the requests are not obfuscated in any way'), i.e. the very no-attack threat model this study adopts. The real boundary is that HarmBench ASR is conditional on which threat model is selected (Direct Request through GCG), not that HarmBench leaves it unstated. Every other row in the column states a property of the cited work ('Model treated as fixed', 'Attack-dependent construct', 'Efficiency and capability focus'); the imperative phrasing here breaks that parallel and invites the misreading.",
+  "proposed_value": "ASR conditional on the selected threat model"
+ },
+ {
+  "row": "Kharinaev et al. [10]",
+  "column": "Scorer",
+  "current_value": "Automated",
+  "verdict": "WRONG",
+  "why": "The paper's abstract plainly establishes the opposite, and human evaluation is its headline contribution. Abstract: \"We publicly release human safety evaluations for four LLMs (both quantized and full-precision), totaling 4,268 annotated question-answer pairs\" and the assessment runs \"across four safety benchmarks-including human-centric evaluations.\" Section 4.3 opens: \"We used four benchmarks combining automated evaluation and human assessment.\" Section 4.3.1 documents five paid linguistic experts, randomized model order, a four-way Safe/Unsafe/Error/Ambiguous label scheme, Krippendorff's alpha = 0.623, and 21,328 human evaluations (Conclusion); contribution bullet 2 is the release of those annotations. The Gemma-2-27B LLM-as-a-Judge is explicitly validated AGAINST the human labels (92% agreement), i.e. the automated scorer is subordinate to the human one, not a substitute for it. The paper's own Table 1 lists its Evaluation column as \"Human Evaluation, multiple-choice questions, AlignScore, LLM as a Judge\" and marks itself apart from prior work precisely on this axis. This is not a silence case the caption protects: the cell asserts a positive value that the abstract contradicts. It is also the example pattern for WRONG - the paper has a whole section on the property the cell denies. Note the table already carries the right vocabulary: row 2 (XSTest/OR-Bench) uses \"Human / mixed\" and row 7 uses \"Human-grounded.\" Scope caveat to state honestly in the fix: the human layer covers 4 variants of Llama-3.1-8B (FP16, Abliterated, QUIK int4, QUIP# int2), while the full 66-variant grid is scored automatically - which is what \"Human / mixed\" means, and why \"mixed\" rather than \"Human\" is the correct value. The current cell also reads as a deficiency the paper does not have: human grounding of the judge is exactly this paper's strength, and it is the same design move the thesis itself makes with its own human gold set, so mislabelling it as merely \"Automated\" erases the closest methodological precedent for the thesis's own scorer-validation work.",
+  "proposed_value": "Human / mixed"
+ },
+ {
+  "row": "Kharinaev et al. [10]",
+  "column": "Over-refusal",
+  "current_value": "Related",
+  "verdict": "OVERSTATED",
+  "why": "The paper measures no over-refusal construct at all, so \"Related\" credits it with adjacent coverage it does not have. A dehyphenated full-text search returns zero hits for \"over-refusal\", \"exaggerated\", \"false refusal\", \"benign\", and \"XSTest\"; there is no benign-prompt set anywhere in the four benchmarks (XSafety, OpenSafetyMini, SafetyBench, HotPotQA). The paper actively disclaims the property for the one benchmark that might carry it: SafetyBench is used \"to assess a model's understanding of safety concepts rather than its refusal behavior\" (Section 4.3.2). In the open-ended arm the label set is Safe/Unsafe/Error/Ambiguous, where a refusal simply counts as Safe - appropriate and inappropriate refusal are never separated. The only refusal-adjacent object is the GPT-4o \"deflection score\" (Section 3), but it is a dataset-CONSTRUCTION filter, not an outcome measure, and it runs in the opposite direction: prompts are kept when deflection > 50, i.e. OpenSafetyMini is deliberately composed of provocative questions where refusing is the correct behaviour. That is the inverse of over-refusal, which is refusal on prompts that should be answered. If \"Related\" was intended to gesture at the deflection score, the fitness problem stands - a filtering heuristic applied to unsafe prompts does not establish an over-refusal property. Per the caption's own definition, a property the consulted source did not establish is exactly what \"Not reported\" encodes, and that value is already used for this column in rows 1, 5 and 6. Worth flagging to the author that this correction strengthens rather than weakens the thesis: the surrounding argument claims a gap on over-refusal under quantization, and softening the closest prior work to \"Related\" concedes ground the paper never actually occupies.",
+  "proposed_value": "Not reported"
+ },
+ {
+  "row": "HarmLevelBench [35]",
+  "column": "Scorer",
+  "current_value": "Automated",
+  "verdict": "WRONG",
+  "why": "The paper's scoring is human-inclusive, not automated. Section 2.2 (Metrics) lays out three ASR methods -- human annotation, string detection, and an LLM (GPT) judge -- and the authors report all three side by side in every results table: Tables 2, 3 and 4 each carry a 'Human ASR' column (given first position, e.g. AutoDAN 100 Human ASR on standard Vicuna 13B v1.5, PAIR 94.6 -> 66.1 AWQ / 64.3 GPTQ under transfer), and Figures 2, 4, 5 and 6 each devote a dedicated heatmap panel to Human ASR alongside String and GPT panels. Human annotation is therefore an established, co-primary scorer, not an absent one. The column's own vocabulary elsewhere in Table 2.1 distinguishes this ('Human / mixed' for row 2, 'Human-grounded' for row 7, 'Classifier' for row 1), so labelling HarmLevelBench 'Automated' places it in a category the paper plainly does not occupy and strips it of the human grounding the comparison treats as a strength.",
+  "proposed_value": "Human / mixed"
+ },
+ {
+  "row": "HarmLevelBench [35]",
+  "column": "Capability",
+  "current_value": "Limited",
+  "verdict": "OVERSTATED",
+  "why": "The paper reports no capability or utility measurement of any kind -- no perplexity, no MMLU or other task benchmark, no accuracy metric on non-adversarial inputs. Every number in the paper is an ASR under one of 7 jailbreak techniques. The authors state this themselves in the Limitations paragraph of Section 5: 'while quantization appears to enhance robustness in this study, it is essential to investigate the trade-offs in performance and accuracy that may arise from the quantization process' -- i.e. capability evaluation is explicitly named as work they did NOT do. (The only performance-adjacent remarks are non-measurements: Vicuna was chosen for its 'strong performance across a variety of natural language processing tasks', uncited, and Llama 'obtained lower performance', which refers to jailbreak results, not capability.) Under the table's own caption convention, a property the consulted source does not establish is 'Not reported'; 'Limited' sits in the column's graded vocabulary between 'Partial' and 'Not reported' and so credits the paper with a small-but-real capability check it never performed.",
+  "proposed_value": "Not reported"
+ }
+]

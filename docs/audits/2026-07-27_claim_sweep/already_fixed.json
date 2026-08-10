@@ -1,0 +1,79 @@
+[
+ {
+  "sentence": "Compact instruction-tuned language models are commonly deployed quantized, yet their safety is typically validated on the full-precision release.",
+  "defect_class": "(a) PREVALENCE / ADOPTION",
+  "cited": "No — no citation marker is attached to this sentence (the extracted abstract carries no bracketed citations at all).",
+  "why_unsupported": "Two independent prevalence claims in one sentence. \"commonly deployed quantized\" asserts real-world deployment frequency/market practice, which nothing in the reference list establishes — the model-release papers (Qwen3, Llama 3, Phi-4-Mini, Mistral 7B) establish capability, size and availability, not integration or deployment share, and the quantization-method papers (AWQ, GPTQ, QLoRA, LLM.int8) establish that methods exist and work, not that deployments routinely use them. \"typically validated on the full-precision release\" is a second prevalence claim, this time about the norms of the whole safety-evaluation literature, and would require a survey of release/safety-card practice that the report does not have. This is the exact wording (\"commonly deployed quantized\") that prior audits flagged, so it is a live regression, not a new phrasing.",
+  "proposed_fix": "Replace with a capability/motivation framing that does not quantify practice: \"Quantization makes compact instruction-tuned language models cheap enough to run on constrained hardware, but published safety evaluations are generally reported for the full-precision release, so the quantized artefact is not the artefact that was safety-tested.\" If a frequency claim is wanted, it must cite a deployment survey or telemetry source; absent one, drop \"commonly\" and \"typically\"."
+ },
+ {
+  "sentence": "These models are routinely integrated into lightweight agent frameworks and consumer applications, where their compact size enables genuinely local execution.",
+  "defect_class": "(a) prevalence / adoption",
+  "cited": "No citation on this sentence; the preceding sentence cites the model-release papers [1] Qwen3, [2] Llama 3, [3] Phi-4-mini, [4] Gemma 2.",
+  "why_unsupported": "\"Routinely integrated\" is an adoption claim about real-world deployment practice. The only nearby sources are vendor model-release technical reports, which establish each model's size, capability and availability but say nothing about how often third parties integrate them into agent frameworks or consumer applications. This is exactly the phrase previous audits flagged and it survives here. It also sits two paragraphs above the report's own disclaimer that \"How widely each path is used in practice is not measured here, and no prevalence figure is claimed for it,\" so the chapter contradicts itself.",
+  "proposed_fix": "\"These models are released at sizes that permit genuinely local execution in lightweight agent frameworks and consumer applications.\" (Keeps the enabling point; drops the adoption claim.)"
+ },
+ {
+  "sentence": "Several PTQ families dominate current practice.",
+  "defect_class": "(a) prevalence / adoption",
+  "cited": "No citation on this sentence; [6] GPTQ, [5] AWQ and [30] SmoothQuant are cited in the sentences that follow.",
+  "why_unsupported": "\"Dominate current practice\" asserts market share / usage share across deployed systems. The three method papers establish that these algorithms exist and what they achieve on their own benchmarks; none surveys what practitioners actually run. No usage survey is cited anywhere in the reference list.",
+  "proposed_fix": "\"Several PTQ families illustrate the main design choices in post-training quantization.\" (Keeps the framing for the three descriptions that follow; drops the dominance claim.)"
+ },
+ {
+  "sentence": "Among PTQ approaches, the NF4 quantization scheme introduced as part of QLoRA [32] has become particularly prevalent in the open-source ecosystem.",
+  "defect_class": "(a) prevalence / adoption",
+  "cited": "Yes — [32] QLoRA (Dettmers et al., NeurIPS 2023).",
+  "why_unsupported": "Attribution mismatch on top of a prevalence claim. QLoRA introduces NF4 and reports finetuning results; it cannot establish NF4's subsequent share of use in \"the open-source ecosystem,\" which post-dates it. The sentence needs an ecosystem usage survey, which is not in the reference list. The justification the paragraph actually needs — why NF4 was selected for this study — is supplied by the following sentences about BitsAndBytes/transformers integration.",
+  "proposed_fix": "\"Among PTQ approaches, the NF4 scheme introduced as part of QLoRA [32] is the four-bit scheme evaluated here; it is implemented in the BitsAndBytes library that Hugging Face transformers exposes directly.\""
+ },
+ {
+  "sentence": "Safety results are commonly reported under a single scorer whose agreement with human judgment is never measured, even though the multilingual evidence shows automatic metrics can understate a quantization effect by an order of magnitude.",
+  "defect_class": "(a) prevalence + (b) universal / never",
+  "cited": "No citation on the \"commonly reported ... never measured\" clause; the trailing clause is supported by [13] Marchisio et al. (1.7% automatic vs 16.0% human, Japanese).",
+  "why_unsupported": "Two overreaches in one clause. \"Commonly reported\" is a prevalence claim over the safety-evaluation literature with no survey behind it, and \"never measured\" is an unbounded universal negative — a single counterexample of a scorer-validation study falsifies it. The chapter's own evidence base is the ten rows of Table 2.1, whose caption explicitly warns that \"not reported\" means only that the property is absent from the source consulted.",
+  "proposed_fix": "\"Across the prior studies surveyed in Table 2.1, safety results are reported under a single scorer without any reported measurement of its agreement with human judgment, even though the multilingual evidence shows automatic metrics can understate a quantization effect by an order of magnitude.\""
+ },
+ {
+  "sentence": "No widely adopted convention exists for jointly interpreting safety and capability deltas under compression.",
+  "defect_class": "(b) universal / never",
+  "cited": "No citation on this sentence.",
+  "why_unsupported": "An unbounded existential negative over the whole field. Proving that no such convention exists anywhere requires a systematic survey; the chapter reviewed roughly ten studies chosen for proximity to its own design. The claim the review can actually support is that none of the reviewed studies uses one.",
+  "proposed_fix": "\"None of the work reviewed here offers a shared convention for jointly interpreting safety and capability deltas under compression.\""
+ },
+ {
+  "sentence": "Egashira et al. [12] show that widely used BitsAndBytes schemes, including NF4, can be manipulated so that a benign full-precision model becomes harmful once quantized.",
+  "defect_class": "(a) prevalence",
+  "cited": "Yes — [12] Egashira et al., NeurIPS 2024.",
+  "why_unsupported": "The attack result is correctly attributed; the modifier \"widely used\" is not. [12] evaluates the BitsAndBytes schemes but does not measure their usage share, so the adjective is the report's own prevalence claim riding on someone else's citation. It is also load-bearing here — it is what makes the attack sound like a broad threat rather than a scheme-specific one.",
+  "proposed_fix": "Drop the modifier — \"Egashira et al. [12] show that BitsAndBytes schemes, including NF4, can be manipulated so that a benign full-precision model becomes harmful once quantized\" — or attribute it: \"schemes that Egashira et al. [12] describe as widely used\"."
+ },
+ {
+  "sentence": "NF4 is the dominant on-the-fly quantization format in the open-source ecosystem, is supported natively by transformers without an offline calibration pass, and applies symmetrically to any model that can be loaded with from_pretrained.",
+  "defect_class": "(a) prevalence/adoption + (b) universal",
+  "cited": "No citation attached to this sentence. The nearest supporting reference in the list is [32] QLoRA (Dettmers et al., 2023), which introduces NF4 and the bitsandbytes integration.",
+  "why_unsupported": "\"Dominant ... in the open-source ecosystem\" is a market-share/adoption claim about the world; no source in the reference list measures format share across the ecosystem, and a method-introduction paper ([32]) establishes that NF4 exists and works, not that it dominates. \"Applies symmetrically to any model that can be loaded with from_pretrained\" is a universal claim the study did not test (it loaded five checkpoints, and bitsandbytes 4-bit support is in fact architecture- and version-dependent — the chapter's own Phi/eager and remote-code caveats show loadability is not uniform).",
+  "proposed_fix": "Rewrite as: \"NF4 [32] is natively supported in transformers with no offline calibration pass, and it was applicable without modification to every checkpoint used in this study.\" Drop \"dominant ... ecosystem\" and \"any model\"; if an adoption point is wanted, scope it to the concrete reason (\"it is the format exposed by the transformers/bitsandbytes path used here\")."
+ },
+ {
+  "sentence": "The on-the-fly NF4 path is the most direct way to operationalise the counterfactual \"the same model, quantized\" in code.",
+  "defect_class": "(c) superlative/exclusivity",
+  "cited": "No citation attached to this sentence.",
+  "why_unsupported": "\"The most direct way\" ranks this implementation against the full space of alternative implementations (GPTQ/AWQ pipelines, quantized re-uploads, custom kernels), none of which the study implemented or compared. The study establishes that this path works, not that no more direct path exists.",
+  "proposed_fix": "\"The on-the-fly NF4 path operationalises the counterfactual 'the same model, quantized' directly in code, without an intermediate checkpoint.\""
+ },
+ {
+  "sentence": "Phi-4-mini uses the eager attention backend (the V100 has no flash-attention kernels) and loads via native transformers Phi3; Mistral drops straight in.",
+  "defect_class": "(b) UNIVERSAL / NEVER — uncited absolute claim about external hardware/software support",
+  "cited": "No citation (this is an explanatory YAML comment in Appendix A, lines 131–133).",
+  "why_unsupported": "\"the V100 has no flash-attention kernels\" is an unqualified claim about third-party kernel support for a GPU architecture, offered as the causal justification for a configuration choice. The study measured no such thing; what it can attest to is that FlashAttention was not available/usable in the TC1 software environment at run time. Minor, but it is an unsupported statement about the world in a document that otherwise sources such claims.",
+  "proposed_fix": "Scope it to the observed environment: \"Phi-4-mini uses the eager attention backend (FlashAttention kernels were not available for the V100 in the TC1 environment) and loads via native transformers Phi3; Mistral drops straight in.\""
+ },
+ {
+  "sentence": "Investigate emerging \"safety-preserving\" quantization methods that explicitly seek to mitigate alignment degradation under PTQ, and compare them against the vanilla NF4 baseline studied here.",
+  "defect_class": "(a) claim about the state of the field, uncited",
+  "cited": "No citation, although Q-resafe [36] in the reference list is precisely such a method (quantization-aware safety patching).",
+  "why_unsupported": "The sentence asserts, as fact about the world, that a class of safety-preserving quantization methods exists and is emerging, with no source attached. This is the fixable direction of the defect: the report already carries a reference that supports it.",
+  "proposed_fix": "'Investigate safety-preserving quantization methods that explicitly seek to mitigate alignment degradation under PTQ, such as the quantization-aware safety patching of Q-resafe [36], and compare them against the vanilla NF4 baseline studied here.'"
+ }
+]

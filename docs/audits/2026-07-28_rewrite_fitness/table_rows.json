@@ -1,0 +1,170 @@
+[
+ {
+  "i": 0,
+  "headers": [
+   "Study",
+   "Precision intervention",
+   "Harmful compliance",
+   "Over-refusal",
+   "Capability",
+   "Scorer",
+   "Main boundary"
+  ],
+  "cells": [
+   "TrustLLM / DecodingTrust [20], [21]",
+   "Not reported",
+   "Broad",
+   "Partial",
+   "Yes",
+   "Automated",
+   "Model treated as fixed"
+  ]
+ },
+ {
+  "i": 1,
+  "headers": [
+   "Study",
+   "Precision intervention",
+   "Harmful compliance",
+   "Over-refusal",
+   "Capability",
+   "Scorer",
+   "Main boundary"
+  ],
+  "cells": [
+   "HarmBench [24]",
+   "Not reported",
+   "Yes",
+   "Not reported",
+   "Not reported",
+   "Classifier",
+   "Threat model must be stated"
+  ]
+ },
+ {
+  "i": 2,
+  "headers": [
+   "Study",
+   "Precision intervention",
+   "Harmful compliance",
+   "Over-refusal",
+   "Capability",
+   "Scorer",
+   "Main boundary"
+  ],
+  "cells": [
+   "XSTest / OR-Bench [18], [19]",
+   "Not reported",
+   "Contrast set only",
+   "Yes",
+   "Not reported",
+   "Human / mixed",
+   "Over-refusal focus; unsafe items are a calibration contrast"
+  ]
+ },
+ {
+  "i": 3,
+  "headers": [
+   "Study",
+   "Precision intervention",
+   "Harmful compliance",
+   "Over-refusal",
+   "Capability",
+   "Scorer",
+   "Main boundary"
+  ],
+  "cells": [
+   "GPTQ / AWQ / SmoothQuant [5], [6], [30]",
+   "Yes",
+   "Not reported",
+   "Not reported",
+   "Yes",
+   "Task metrics",
+   "Efficiency and capability focus"
+  ]
+ },
+ {
+  "i": 4,
+  "headers": [
+   "Study",
+   "Precision intervention",
+   "Harmful compliance",
+   "Over-refusal",
+   "Capability",
+   "Scorer",
+   "Main boundary"
+  ],
+  "cells": [
+   "Kharinaev et al. [10]",
+   "Yes",
+   "Yes",
+   "Related",
+   "Partial",
+   "Automated",
+   "Different model/method mix"
+  ]
+ },
+ {
+  "i": 5,
+  "headers": [
+   "Study",
+   "Precision intervention",
+   "Harmful compliance",
+   "Over-refusal",
+   "Capability",
+   "Scorer",
+   "Main boundary"
+  ],
+  "cells": [
+   "HarmLevelBench [35]",
+   "Yes",
+   "Graded",
+   "Not reported",
+   "Limited",
+   "Automated",
+   "Attack-dependent construct"
+  ]
+ },
+ {
+  "i": 6,
+  "headers": [
+   "Study",
+   "Precision intervention",
+   "Harmful compliance",
+   "Over-refusal",
+   "Capability",
+   "Scorer",
+   "Main boundary"
+  ],
+  "cells": [
+   "Q-Misalign [39]",
+   "Yes",
+   "Yes",
+   "Not reported",
+   "Utility",
+   "Automated",
+   "Adversarially prepared model"
+  ]
+ },
+ {
+  "i": 7,
+  "headers": [
+   "Study",
+   "Precision intervention",
+   "Harmful compliance",
+   "Over-refusal",
+   "Capability",
+   "Scorer",
+   "Main boundary"
+  ],
+  "cells": [
+   "StrongREJECT / SORRY-Bench [41], [42]",
+   "Not reported",
+   "Yes",
+   "Recommended",
+   "Recommended",
+   "Human-grounded",
+   "No matched precision intervention"
+  ]
+ }
+]

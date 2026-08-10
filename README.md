@@ -25,7 +25,7 @@
 
 Quantization — squeezing a model's weights from 16-bit down to 4-bit or 8-bit — is how small language models actually get deployed: on a phone, a laptop, an edge box, anywhere GPU memory is scarce. It is now the default, not the exception.
 
-That raises an uncomfortable question. **When you compress the weights, do you also compress the safety alignment?** A handful of papers report that quantized models comply with *more* harmful prompts. If true, that matters enormously — the cheapest, most widely deployed models would also be the least safe.
+That raises an uncomfortable question. **When you compress the weights, do you also compress the safety alignment?** A handful of papers report that quantized models comply with *more* harmful prompts. If true, that matters enormously — the cheapest models to run would also be the least safe.
 
 But there is a confound hiding in that claim. A quantized model isn't just "the same model, smaller" — it's often a slightly *worse* model. And a model that has gotten worse fails benchmarks in messy ways: it rambles, goes off-topic, emits broken text. A naïve scorer — say, a regular expression that flags "did it refuse?" by keyword — can easily mistake *degraded, off-topic output* for *harmful compliance*. So an apparent **safety** change can really be a **capability** change wearing a disguise.
 

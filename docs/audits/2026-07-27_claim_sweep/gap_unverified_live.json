@@ -1,0 +1,212 @@
+[
+ {
+  "sentence": "Regenerating the study at HarmBench's 512-token reference budget dissolved that 128-token Qwen3-1.7B increase to ΔASR 0.000 under both judges.",
+  "defect_class": "(e) ATTRIBUTION MISMATCH / uncited external claim",
+  "cited": "No citation attached; the HarmBench paper (M. Mazeika et al., ICML 2024, arXiv:2402.04249) is in the reference list but is not cited here.",
+  "why_unsupported": "\"HarmBench's 512-token reference budget\" is a factual claim about an external evaluation protocol — that 512 new tokens is the generation length HarmBench specifies. That proposition belongs to the HarmBench paper/codebase, not to this study's data, and the sentence gives the reader no way to check it. Everything else in the sentence (ΔASR 0.000) is this study's own measurement and is fine.",
+  "proposed_fix": "Attach the source and phrase it as a report of what that source specifies: \"Regenerating the study at the 512-token generation budget used in the HarmBench evaluation protocol [HarmBench ref] dissolved that 128-token Qwen3-1.7B increase to ΔASR 0.000 under both judges.\""
+ },
+ {
+  "sentence": "The current primary reading is therefore capability-driven: Qwen3-1.7B carries broad_degradation via its significant MMLU loss with the harm axis flat, and no pair shows a significant harmful-compliance increase.",
+  "defect_class": "(f) ABSENCE-OF-EVIDENCE STATED AS EVIDENCE-OF-ABSENCE",
+  "cited": "No citation (own-results sentence).",
+  "why_unsupported": "The second clause (\"no pair shows a significant harmful-compliance increase\") is correctly hedged, but \"with the harm axis flat\" asserts no effect on the harm axis. A point estimate of ΔASR 0.000 plus a non-significant over-refusal contrast does not establish flatness — the confidence intervals admit a range of non-zero effects, which is exactly the distinction the study's own equivalence/MDE work exists to make.",
+  "proposed_fix": "Replace \"with the harm axis flat\" with \"with the harm-axis point estimate at 0.000 and no statistically significant change on either harm measure\" (or, if the TOST result covers this pair, cite the equivalence bound instead of asserting flatness)."
+ },
+ {
+  "sentence": "The construct caveat is that it answers a looser safety question than the behaviour-specific classifier.",
+  "defect_class": "(e) ATTRIBUTION MISMATCH / uncited external claim",
+  "cited": "No citation attached; Inan et al. (Llama Guard, arXiv:2312.06674) and Mazeika et al. (HarmBench) are both in the reference list but neither is cited here.",
+  "why_unsupported": "This is a claim about what two third-party judge models are designed and trained to detect — Llama Guard's task framing versus the HarmBench classifier's behaviour-completion framing. It is a proposition about those artifacts' construct, not about this study's measurements, and the study did not characterise either model's training objective empirically. It is also the sentence that carries the interpretive weight for discounting the low Phi κ, so it needs a source.",
+  "proposed_fix": "Ground it in the two model papers: \"The construct caveat is that Llama Guard is trained to flag policy-violating content against a general safety taxonomy [Inan et al.], whereas the HarmBench classifier judges whether a specific target behaviour was completed [Mazeika et al.]; disagreement between the two is therefore expected and non-diagnostic.\""
+ },
+ {
+  "sentence": "The re-scoring by that guard model is revision-pinned and locally rerunnable, which the versioned API judge is not.",
+  "defect_class": "(b) UNIVERSAL / NEVER — uncited absolute negative about a third-party service",
+  "cited": "No citation.",
+  "why_unsupported": "Minor, but the trailing clause states a categorical property of a hosted vendor endpoint (that it cannot be pinned and rerun) rather than a property of this study's access to it. The study established only that it could not pin and locally rerun the API judge itself; vendor snapshot/retention policy is outside what it measured and outside any cited source.",
+  "proposed_fix": "Scope to the study's own reproducibility position: \"...revision-pinned and locally rerunnable, which this study cannot do for the hosted API judge, whose snapshot is reachable only through the vendor endpoint.\""
+ },
+ {
+  "sentence": "The primary scorer is unaffected either way.",
+  "defect_class": "(f) ABSENCE-OF-EVIDENCE STATED AS EVIDENCE-OF-ABSENCE (wording ambiguity)",
+  "cited": "No citation (own-design sentence).",
+  "why_unsupported": "The intended meaning is almost certainly the design statement \"the choice of primary scorer does not change\", which is in scope and fine. As written, \"unaffected\" reads equally as an empirical null — that the primary scorer's measurements are unchanged by the cross-checks — which is a stronger claim than three κ comparisons and a set of non-significant per-pair deltas support. \"Unaffected\" is exactly the epistemic_hedge trigger word this project's D56 rule flags.",
+  "proposed_fix": "Disambiguate to the design statement: \"The designation of the HarmBench classifier as the primary scorer is unchanged by these cross-checks.\""
+ },
+ {
+  "sentence": "The classifier was cross-checked three times: by an independent frontier-model second judge (gpt-4o, Section 6.9 Result 4), against human labels on a stratified subset (Section 6.9 Result 5), and by an open-weight guard model (Llama-Guard-3-8B, revision-pinned, Section 6.9).",
+  "defect_class": "(c) SUPERLATIVE / capability-tier characterisation",
+  "cited": "No citation.",
+  "why_unsupported": "Lowest-severity item. \"frontier-model\" asserts a capability-tier status for gpt-4o that the study did not measure and no cited source establishes; the property the sentence actually needs is that the second judge is independent of the HarmBench classifier and proprietary. Flagging only because the descriptor is doing rhetorical work (implying the cross-check comes from a stronger judge) that the evidence does not carry.",
+  "proposed_fix": "Drop the tier claim: \"...by an independent proprietary API second judge (gpt-4o, Section 6.9 Result 4), ...\""
+ },
+ {
+  "sentence": "The data therefore refute the optimistic narrative that NF4 quantization is a clean safety win in this scale range, while they also refute any claim of a safety regression that holds up statistically.",
+  "defect_class": "(f) absence-of-evidence as evidence-of-absence + (b) universal",
+  "cited": "No citation attached.",
+  "why_unsupported": "The second clause converts a set of non-significant ASR contrasts into a refutation. With per-pair MDEs of 0.044–0.086 at n = 200 (the report's own figure, Section 6.4 / I.1), a real regression smaller than the detection floor is entirely compatible with these data; non-significance cannot 'refute' it. 'Any claim' further universalises beyond the five pairs and one benchmark tested.",
+  "proposed_fix": "'The data therefore do not support the optimistic narrative that NF4 quantization is a clean safety win in this scale range, and they also provide no statistically significant evidence of a safety regression; with per-pair MDEs of 0.044–0.086, regressions below that floor cannot be excluded.'"
+ },
+ {
+  "sentence": "The conceptual conclusion is that quantization's effect on safety is neither bit-width-graded nor budget-robust.",
+  "defect_class": "(b) universal generalisation + (f) null read as a property of the method",
+  "cited": "No citation attached.",
+  "why_unsupported": "The evidence is five model pairs, two quantization methods (NF4, LLM.int8) via one library, one harm benchmark and two generation budgets. That licenses a statement about what was observed here, not a property of 'quantization's effect on safety' in general. The 'not bit-width-graded' half also rests on non-significant INT8-vs-NF4 differences, i.e. failure to detect a gradation rather than evidence against one.",
+  "proposed_fix": "'The conceptual conclusion drawn from these five pairs is that the safety effects observed here are neither bit-width-graded nor stable across generation budgets.'"
+ },
+ {
+  "sentence": "The only robust, budget-invariant precision effect is the capability cliff at four-bit, and no INT8 or NF4 harmful-compliance increase survives at the reference budget.",
+  "defect_class": "(c) superlative/exclusivity + (f)",
+  "cited": "No citation attached.",
+  "why_unsupported": "'The only ... effect' is an exclusivity claim over all precision effects, whereas the study measured four benchmarks on five pairs at two budgets and two quantization methods; effects on unmeasured axes (and effects below the study's 0.044–0.086 MDE) are simply untested, not absent.",
+  "proposed_fix": "'Of the effects measured here, the only one that is robust across both generation budgets is the capability loss at four-bit, and no INT8 or NF4 harmful-compliance increase reaches significance at the reference budget.'"
+ },
+ {
+  "sentence": "Both judges agree that at the reference budget NF4 does not raise harmful compliance in any pair.",
+  "defect_class": "(f) absence-of-evidence as evidence-of-absence + (b) universal",
+  "cited": "No citation attached.",
+  "why_unsupported": "'Does not raise ... in any pair' asserts a true zero effect from two sets of non-significant / near-zero point estimates on n = 200 per pair. The section itself states the correct entitlement two paragraphs earlier ('no detectable change at n = 200' rather than a proven zero) and reports MDEs of 0.044–0.086. Both judges agreeing on a null does not upgrade it to an established absence.",
+  "proposed_fix": "'Under both judges, no pair shows a statistically significant increase in harmful compliance at the reference budget.'"
+ },
+ {
+  "sentence": "Both judges agree that no pair shows a material harmful-compliance increase, and that Mistral-7B's proxy-driven 'increase' is an artefact.",
+  "defect_class": "(f) + (e) attribution of an authorial inference to the judges",
+  "cited": "No citation attached.",
+  "why_unsupported": "Two problems. First, 'no pair shows a material increase' states an absence from non-significant results without a defined materiality threshold or reference to the study's own MDE range. Second, the judges produce per-response harm labels; they cannot 'agree that' the proxy's increase is an artefact — that is the authors' interpretation of the discrepancy between scorers, not an output either judge asserts.",
+  "proposed_fix": "'Neither judge shows a statistically significant harmful-compliance increase in any pair, and under both judges Mistral-7B's proxy-driven \"increase\" does not reproduce, which is why it is read here as a scorer artefact.'"
+ },
+ {
+  "sentence": "That is far higher than the regex-versus-classifier agreement (κ ≈ 0.25–0.59 for Qwen and Mistral), which confirms that the regex, and not the classifier, was the outlier.",
+  "defect_class": "(e) over-strong inference from non-independent sources",
+  "cited": "No citation attached.",
+  "why_unsupported": "Two LLM-based harm classifiers agreeing with each other cannot 'confirm' which scorer is the outlier, because they are not independent measurements — the report concedes exactly this in I.5 ('both judges share the broad lineage of LLM-based harm classification'). High mutual agreement between correlated instruments is consistent with both being jointly biased. The human-label audit (I.4), not the second judge, is what carries this claim, and it is a single annotator on a disagreement-enriched slice.",
+  "proposed_fix": "'That is far higher than the regex-versus-classifier agreement (κ ≈ 0.25–0.59 for Qwen and Mistral), which is consistent with the regex rather than the classifier being the outlier; because both judges share the LLM-based-classification lineage, the decisive evidence on this point is the human-label audit below.'"
+ },
+ {
+  "sentence": "The classifier was rewritten with comprehensive coverage of standard refusal templates, validated by manual stratified audit of 55 sampled responses across all six runs.",
+  "defect_class": "(b) universal/completeness claim + (a) 'standard' as prevalence",
+  "cited": "No citation attached.",
+  "why_unsupported": "'Comprehensive coverage' claims completeness over the space of refusal phrasings; a 55-response audit on six runs can establish correctness on that sample only, which is what the following sentence actually says. 'Standard refusal templates' also presupposes an established, enumerated population of refusal phrasings that is neither cited nor characterised. The report's own XSTest human audit (I.7) then finds the regex detected 2 of 63 full refusals, directly contradicting 'comprehensive'.",
+  "proposed_fix": "'The classifier was rewritten to cover a broader set of refusal templates observed in these runs, and its correctness on a manual stratified audit of 55 sampled responses across all six runs was confirmed; coverage beyond that sample is not established, and the later XSTest human audit shows it remains far from complete.'"
+ },
+ {
+  "sentence": "There is no effect at the reference budget for sampling to attenuate.",
+  "defect_class": "(f) absence-of-evidence as evidence-of-absence",
+  "cited": "No citation attached.",
+  "why_unsupported": "This flatly asserts a zero effect, and it does so two sentences after the correct formulation in the same paragraph ('the claim established here is \"no detectable change at n = 200\" rather than a proven zero'), and after disclosing that all five seed deltas are non-negative and compatible with a small positive effect below the 0.079 MDE.",
+  "proposed_fix": "'There is no detectable effect at the reference budget for sampling to attenuate.'"
+ },
+ {
+  "sentence": "No ASR contrast survives multiple-comparison correction, and the one significant ASR delta, on Llama-3.2-3B, is a decrease that the label scheme correctly attributes to capability loss.",
+  "defect_class": "(d) causal attribution to an unverified mechanism",
+  "cited": "No citation attached.",
+  "why_unsupported": "'Correctly attributes to capability loss' asserts that the causal attribution is true. What the study has is co-occurrence — a significant ΔASR of −0.040 alongside a significant ΔARC of −0.032 — plus a labelling rule the authors wrote that maps that co-occurrence to the label. A rule firing as designed is not evidence that the safety decrease was caused by the capability decrease; no mediation or ablation test was run.",
+  "proposed_fix": "'No ASR contrast survives multiple-comparison correction, and the one significant ASR delta, on Llama-3.2-3B, is a decrease that co-occurs with a significant capability loss, which is what the label scheme flags as capability-driven rather than a genuine alignment gain.'"
+ },
+ {
+  "sentence": "Its apparent safety improvement is therefore diagnosed as capability-driven rather than a genuine alignment gain.",
+  "defect_class": "(d) causal attribution to an unverified mechanism",
+  "cited": "No citation attached.",
+  "why_unsupported": "The diagnosis rests entirely on two deltas moving in the same direction on the same pair. The study did not measure whether the reduced harmful compliance is produced by degraded capability (e.g. by testing whether the flipped prompts are the ones showing capability loss); the label is a decision rule applied to two co-occurring measurements, not a causal finding.",
+  "proposed_fix": "'Because its harmful-compliance decrease co-occurs with a confirmed capability loss, the label scheme classifies the apparent safety improvement as capability-driven rather than a genuine alignment gain; this is a co-occurrence-based label, not a demonstrated mechanism.'"
+ },
+ {
+  "sentence": "That 128-token effect was a truncation artefact, since 60 percent of 128-token responses were cut off before completion, and at 512 tokens the harm axis is flat (Section 6.12).",
+  "defect_class": "(d) causal attribution stated as established fact",
+  "cited": "No citation attached.",
+  "why_unsupported": "What is measured is (i) an aggregate 60.3% truncation rate across the 128-token corpus and (ii) the disappearance of the +0.055 at 512 tokens. Neither isolates truncation as the cause for this pair: the report itself documents a second, independent source of 128-vs-512 divergence (9.2% prefix mismatch from cross-run greedy non-determinism, I.12) and uses exactly that alternative to explain the Llama INT8 case. No controlled test (e.g. re-scoring 512-token generations truncated back to 128 tokens) was run.",
+  "proposed_fix": "'That 128-token effect is most plausibly a truncation artefact — 60 percent of 128-token responses were cut off before completion — and at 512 tokens the harm axis is flat (Section 6.12); truncation was not isolated experimentally as the cause.'"
+ },
+ {
+  "sentence": "It was an artefact of truncation (Section 6.12) rather than a stable property of the model, and it disappears alongside the aggregate +0.055 once responses are allowed to run to the reference budget.",
+  "defect_class": "(d) causal attribution stated as established fact",
+  "cited": "No citation attached.",
+  "why_unsupported": "Same defect as the 6.8.2 instance: the per-category rise vanishing at 512 tokens shows budget-dependence, not that truncation specifically caused it. Cross-run greedy divergence is an alternative the report elsewhere invokes for exactly this kind of 128-vs-512 instability, and per-category counts here are 19–58 prompts, which the paragraph itself calls descriptive.",
+  "proposed_fix": "'It was budget-dependent rather than a stable property of the model — most plausibly a truncation artefact (Section 6.12) — and it disappears alongside the aggregate +0.055 once responses are allowed to run to the reference budget.'"
+ },
+ {
+  "sentence": "The 128-token Llama-3.2-3B INT8 signal was therefore a budget-sensitive artefact, though of a different kind from the truncation that inflated the Qwen3-1.7B NF4 move.",
+  "defect_class": "(d) causal attribution embedded as presupposition",
+  "cited": "No citation attached.",
+  "why_unsupported": "The subordinate clause presupposes as settled fact that truncation inflated the Qwen3-1.7B move — the same unisolated causal attribution as above, here smuggled in as background rather than asserted and defended.",
+  "proposed_fix": "'... though of a different kind from the truncation that most plausibly inflated the Qwen3-1.7B NF4 move.'"
+ },
+ {
+  "sentence": "Because Llama-3.2-3B's generations truncate at only 3–4% (Section 6.12), the instability is attributable to cross-run greedy divergence on thin-margin prompts rather than to truncated responses.",
+  "defect_class": "(d) causal attribution to an unmeasured mechanism",
+  "cited": "No citation attached.",
+  "why_unsupported": "Ruling out truncation does not identify the remaining cause, and the qualifier 'on thin-margin prompts' adds a mechanism the study did not test for this arm: the refusal-margin analysis (I.10) was computed on fp16-vs-NF4 flips, not on the 128-vs-512 INT8 prefix mismatches, so no measurement links the diverging INT8 prompts to thin first-token margins.",
+  "proposed_fix": "'Because Llama-3.2-3B's generations truncate at only 3–4% (Section 6.12), the instability is not explained by truncated responses; the remaining candidate is cross-run greedy divergence, though this arm did not test whether the diverging prompts are the thin-margin ones.'"
+ },
+ {
+  "sentence": "This is benign run-to-run non-determinism between two separate executions at different max_new_tokens, arising from kernel and batching effects, and it was conservatively excluded from the truncated count, which makes 60.3 percent a floor.",
+  "defect_class": "(d) causal attribution to an unmeasured mechanism",
+  "cited": "No citation attached.",
+  "why_unsupported": "'Arising from kernel and batching effects' names a specific hardware/software cause for the 184 prefix mismatches. The study observed the mismatches but ran no diagnostic isolating kernel selection or batch composition (e.g. re-running at fixed batch size or with deterministic kernels), and no source is cited for the mechanism.",
+  "proposed_fix": "'This is run-to-run non-determinism between two separate executions at different max_new_tokens, most likely from non-deterministic kernel selection and batching, though this was not diagnosed here; it was conservatively excluded from the truncated count, which makes 60.3 percent a floor.'"
+ },
+ {
+  "sentence": "This is the reverse of the 128-token picture (Section 6.12), where multi-seed decoding attenuated a real greedy +0.055.",
+  "defect_class": "(f) inverted — a non-replicating result asserted as a real effect",
+  "cited": "No citation attached.",
+  "why_unsupported": "The report's own position, stated twice elsewhere in this same appendix (I.2 and 6.8.2), is that the 128-token +0.055 was an artefact rather than a genuine effect. Calling it 'a real greedy +0.055' asserts the opposite and is not supported by any analysis in the report — the +0.055 was a point estimate on n = 200 at a budget the report now treats as confounded.",
+  "proposed_fix": "'This is the reverse of the 128-token picture (Section 6.12), where multi-seed decoding attenuated the greedy +0.055 measured at that budget.'"
+ },
+ {
+  "sentence": "At similar MMLU capability (Qwen3-1.7B 0.643 and Llama-3.2-3B 0.610), the Llama model is more safety-calibrated than the smaller Qwen under the official classifier at the 512-token reference budget.",
+  "defect_class": "(b) model-level property inferred from a single benchmark; unsupported 'similar capability' premise",
+  "cited": "No citation attached.",
+  "why_unsupported": "Two over-reaches. (i) 'More safety-calibrated' asserts a general alignment property of the released model from one 200-prompt harm benchmark plus one over-refusal benchmark; safety calibration across attack types, languages and jailbreaks is untested here. (ii) The premise 'at similar MMLU capability' is asserted, not tested — the 3.3 pp gap is of the same order as deltas the report elsewhere treats as real capability losses (Llama's own −3.7 pp MMLU), and no equivalence test is reported for it in this sentence.",
+  "proposed_fix": "'On this 200-prompt HarmBench set at the 512-token reference budget, and at MMLU accuracies within 3.3 pp of each other (0.643 vs 0.610, a gap this study does not test for equivalence), Llama-3.2-3B has the lower baseline harmful-compliance rate of the two.'"
+ },
+ {
+  "sentence": "The first is the second-judge cross-check (Result 4), where an independent frontier judge agrees at κ 0.68–0.95 across all ten models and reproduces the finding's direction and magnitude.",
+  "defect_class": "(c)/(e) independence asserted, then contradicted",
+  "cited": "No citation attached.",
+  "why_unsupported": "'Independent' is the load-bearing word for the construct-validity argument, and the report itself qualifies it two paragraphs later ('both judges share the broad lineage of LLM-based harm classification'). The gpt-4o judge is independent of the HarmBench classifier in training provenance only, not in construct or in the failure modes the LLM-as-judge literature [51]–[53] documents; calling it independent without that qualifier over-states the cross-check.",
+  "proposed_fix": "'The first is the second-judge cross-check (Result 4), where a separately trained frontier judge — independent in provenance though not in construct, since both are LLM-based harm classifiers — agrees at κ 0.68–0.95 across all ten models and reproduces the finding's direction and magnitude.'"
+ },
+ {
+  "sentence": "Llama-Guard answers a looser question ('is this response unsafe?') than the HarmBench classifier ('is this generation an instance of the specific behavior?'), so where the two disagree, most visibly on the low Phi κ, the divergence is expected and non-diagnostic.",
+  "defect_class": "(d) unmeasured attribution used to discount contrary evidence",
+  "cited": "No citation attached (Llama Guard [48] is cited in the preceding paragraph, not here).",
+  "why_unsupported": "The construct difference is real, but attributing the Phi κ of 0.36–0.38 to it — rather than to classifier error on Phi outputs — is an unmeasured causal claim. No error analysis of the disagreeing items is reported, and the same construct difference applies to Llama-3.2-3B, where κ reaches 0.89–0.92; a factor that is constant across aliases cannot on its own explain an alias-specific low κ. Declaring disagreement 'non-diagnostic' by assumption makes the cross-check unfalsifiable.",
+  "proposed_fix": "'Llama-Guard answers a looser question ... than the HarmBench classifier ..., so some disagreement is expected by construction. Because the disagreeing items were not error-analysed, the low Phi κ cannot be assigned to the construct gap rather than to classifier error, and it is reported as unresolved rather than discounted.'"
+ },
+ {
+  "sentence": "Refusal-counting over-states harmful compliance not merely relative to the classifier but relative to human judgment, and the classifier is the substantially better scorer.",
+  "defect_class": "(b) generalisation from one instrument to a method class",
+  "cited": "No citation attached.",
+  "why_unsupported": "The evidence concerns this study's specific v2 regex on a 200-item, deliberately disagreement-enriched slice labelled by a single annotator. That does not license a claim about 'refusal-counting' as a scoring approach in general, nor an unscoped ranking of scorer quality; the same paragraph concedes the κ values are 'not population estimates'.",
+  "proposed_fix": "'On this audit slice, the v2 refusal regex over-states harmful compliance not merely relative to the classifier but relative to the annotator's judgment, and the classifier is substantially the closer of the two to that annotator.'"
+ },
+ {
+  "sentence": "No HarmBench ASR increase reaches significance on any pair, so ARC reinforces the reading that capability degradation, rather than harmful-compliance change, is the consistent cost of NF4.",
+  "defect_class": "(b) generalisation beyond the tested models",
+  "cited": "No citation attached.",
+  "why_unsupported": "'The consistent cost of NF4' states a property of the method rather than of the five pairs measured, and the same paragraph reports that two of five pairs (Mistral-7B, Phi-4-mini) show no individually significant capability loss and that Mistral's ARC moves in the improving direction — i.e. the cost is not consistent even within this sample.",
+  "proposed_fix": "'No HarmBench ASR increase reaches significance on any pair, so ARC reinforces the reading that across these five pairs capability degradation, rather than harmful-compliance change, is the more consistently observed cost of NF4.'"
+ },
+ {
+  "sentence": "That setting is temperature 0.7 with top-p 0.8, Qwen3's published non-thinking recommendation.",
+  "defect_class": "(e) uncited external-source claim",
+  "cited": "No citation attached (the Qwen3 technical report is reference [1], not cited here).",
+  "why_unsupported": "This asserts what a specific external publisher recommends. It is a checkable claim about a document outside the study, and it is load-bearing for the design justification, but no reference is given and the recommendation in question comes from the model card rather than necessarily from the cited technical report.",
+  "proposed_fix": "'That setting is temperature 0.7 with top-p 0.8, the non-thinking sampling setting recommended on the Qwen3 model card [1].'"
+ },
+ {
+  "sentence": "It was applied uniformly to all five pairs for cross-pair comparability rather than tuned per publisher, although Meta's Llama guidance is T = 0.6 / top-p 0.9.",
+  "defect_class": "(e) uncited external-source claim",
+  "cited": "No citation attached (the Llama 3 herd paper is reference [2], not cited here).",
+  "why_unsupported": "'Meta's Llama guidance is T = 0.6 / top-p 0.9' is an assertion about an external vendor's published guidance, given without a reference; those values come from model-card / default generation-config material rather than from the Llama 3 paper in the reference list.",
+  "proposed_fix": "'... rather than tuned per publisher, although Meta's Llama-3 model-card defaults are T = 0.6 / top-p 0.9 [2].'"
+ },
+ {
+  "sentence": "Having nothing left to answer, the model continues, and it often fabricates a synthetic next turn, inventing a follow-up user request and then answering it.",
+  "defect_class": "(a)-adjacent unquantified frequency claim + (d) motive attributed to the model",
+  "cited": "No citation attached.",
+  "why_unsupported": "'Often' is a frequency claim, but the paragraph states this surfaced qualitatively 'while inspecting responses' during the human-label audit; no count or rate of synthetic-turn generations is reported anywhere in the appendix. 'Having nothing left to answer' additionally ascribes a state to the model that was not measured — the observed fact is only that generation continues past the answer until the token budget.",
+  "proposed_fix": "'Once the answer is complete the generation loop continues to the token budget, and in responses inspected during the human-label audit it sometimes produced a synthetic next turn, inventing a follow-up user request and then answering it; the rate of this behaviour was not quantified.'"
+ }
+]

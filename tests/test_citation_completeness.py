@@ -19,6 +19,7 @@ method name and never weaken the lexicon without a logged decision.
 from __future__ import annotations
 
 import re
+import runpy
 from pathlib import Path
 
 import pytest
@@ -40,6 +41,9 @@ LEXICON = {
     r"Mann[-–]Whitney": "Mann",
     r"Fisher[’']?s? exact": "Fisher",
     r"Krippendorff": "Krippendorff",
+    # T48/C14: the INT8 equivalence claim names TOST, so it must carry
+    # Schuirmann (1987) in the same edit that introduces the method.
+    r"two[- ]one[- ]sided[- ]tests|\bTOST\b": "Schuirmann",
     r"Landis\s*(?:and|&)\s*Koch": "Landis",
     # T44 FS-11: the MDE/power method must carry its source (Connor 1987). Keyed
     # on the procedure names, not "Cohen's d" (the blind spot that let the
@@ -49,6 +53,8 @@ LEXICON = {
 
 BUILDERS = [
     "scripts/build_fyp_report_v5.js",
+    "scripts/build_fyp_report_v6.js",
+    "scripts/build_rewritten_fyp_report_v1.py",
     "scripts/build_fyp_report_humanized.js",
     "scripts/build_fyp_thesis_v4.js",
     "scripts/build_fyp_thesis_humanized.js",
@@ -68,6 +74,14 @@ def split_refs(text: str, path: str) -> tuple[str, str]:
         i1 = text.find(r"\end{thebibliography}", i0)
         assert i0 != -1 and i1 != -1, f"{path}: no thebibliography block"
         return text[:i0] + text[i1:], text[i0:i1]
+    if path.endswith(".py"):
+        source_path = REPO_ROOT / path
+        namespace = runpy.run_path(str(source_path))
+        references = namespace.get("REFERENCES")
+        assert isinstance(references, list) and references, (
+            f"{path}: no populated `REFERENCES` list"
+        )
+        return text, "\n".join(str(reference) for reference in references)
     i0 = text.find("const refs = [")
     i1 = text.find("];", i0)
     assert i0 != -1 and i1 != -1, f"{path}: no `const refs = [` block"
@@ -141,3 +155,17 @@ def test_gate_quiet_when_reference_present() -> None:
         '];\n'
     )
     assert uncited_methods(fake, "fake_builder.js") == []
+
+
+def test_gate_fires_on_python_builder(tmp_path: Path) -> None:
+    """Python report builders must receive the same usage→presence protection."""
+    path = tmp_path / "fake_builder.py"
+    path.write_text(
+        'METHOD = "McNemar exact test"\n'
+        'REFERENCES = ["B. Efron, An Introduction to the Bootstrap."]\n',
+        encoding="utf-8",
+    )
+    missing = uncited_methods(path.read_text(encoding="utf-8"), str(path))
+    assert any("McNemar" in item for item in missing), (
+        "gate failed to fire on an uncited method in a Python report builder"
+    )

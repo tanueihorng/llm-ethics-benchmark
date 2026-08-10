@@ -63,6 +63,16 @@ This rule generalises D40 ("sweep the instruction layer"): sweep every layer tha
 
 Any NAMED procedure (statistical test, correction, agreement coefficient, effect size) introduced into a document builder must land with its bibliography entry **in the same edit** — `tests/test_citation_completeness.py` enforces this (lexicon × all six builders + both LaTeX mirrors) and its lexicon should grow with any new named method. The `ieee_citations` lock checks the opposite direction only (every listed ref is bracket-cited in first-use order); it cannot see a method named with no bracket at all. Corollary for audits (D54): every presence-audit (verify what exists) must either pair with an absence-direction pass (what *should* exist and doesn't) or explicitly record that omissions are out of scope — the uncited-BH defect survived six audits because all of them enumerated from the reference list outward, and the one verifier that ran the reverse direction (2026-07-11 "25th verifier") was cut with its P3 finding left untracked.
 
+## Claims must fit their sources, and the gate is the wording (D56)
+
+A real, correctly formatted reference proves nothing about the sentence citing it. On 2026-07-26 an independent audit found 26 claims that stretched past what the cited paper shows, or cited nothing at all — with a clean bibliography and **19 of the 26 sitting in v5**, the report of record, under all 93 claim locks, after six prior audits. A lock asserts *"this number appears in this file"*; it can never assert *"this source entails this sentence."* Verifying a source EXISTS is not verifying it SUPPORTS the claim.
+
+- **`epistemic_hedge` (`configs/artifact_policy.yaml`) is a review trigger, not a vocabulary ban.** Clear a hit by rewording, or by an `allow` entry stating why that line is legitimate — **never by weakening a pattern**, which disarms the trigger for every future claim. Self-tested in `tests/test_claim_fitness.py`.
+- **Audit inward from the claim, not outward from the bibliography.** A presence-audit cannot find a misused source: it starts from the reference that already exists. This is D54's symmetry rule applied to entailment.
+- **Label evidence grade.** A bibliography entry with no archival venue is a preprint and must say so.
+- **Prefer the fix that adds rigour.** When a claim over-reaches, compute the thing it asserted (an equivalence test, a real MDE) rather than deleting the sentence.
+- **Re-verify at remediation time, against the primary artifact, never against the audit summary.** That audit over-scoped three findings, got the evidence wrong on one, and under-scoped one.
+
 ## Keeping AGENTS.md and CLAUDE.md in sync
 
 `AGENTS.md` and `CLAUDE.md` are intentional duplicates because different coding agents read different files. If you edit one, edit the other in the same commit. The content below the "Project Overview" header is identical between the two; only the opening pointer differs.

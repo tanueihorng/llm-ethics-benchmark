@@ -1,0 +1,11 @@
+pair_id,benchmark,contrast,n,b_gained,c_lost,discordant_rate,delta,se,ci90_low,ci90_high,tightest_equivalence_margin,margin,p_tost,equivalent,degenerate_zero_variance
+qwen_2b,mmlu,int8_vs_fp16,300,12,8,0.0667,0.0133,0.01489,-0.0112,0.0378,0.0378,0.05,0.00689,True,False
+qwen_2b,arc,int8_vs_fp16,1172,53,38,0.0776,0.0128,0.00813,-0.0006,0.0262,0.0262,0.05,2e-06,True,False
+qwen_4b,mmlu,int8_vs_fp16,300,7,9,0.0533,-0.0067,0.01333,-0.0286,0.0153,0.0286,0.05,0.000574,True,False
+qwen_4b,arc,int8_vs_fp16,1172,20,23,0.0367,-0.0026,0.00559,-0.0118,0.0066,0.0118,0.05,0.0,True,False
+llama_3_2_3b,mmlu,int8_vs_fp16,300,9,7,0.0533,0.0067,0.01333,-0.0153,0.0286,0.0286,0.05,0.000574,True,False
+llama_3_2_3b,arc,int8_vs_fp16,1172,24,32,0.0478,-0.0068,0.00638,-0.0173,0.0037,0.0173,0.05,0.0,True,False
+mistral_7b,mmlu,int8_vs_fp16,300,10,6,0.0533,0.0133,0.01331,-0.0086,0.0352,0.0352,0.05,0.002938,True,False
+mistral_7b,arc,int8_vs_fp16,1172,21,20,0.035,0.0009,0.00546,-0.0081,0.0098,0.0098,0.05,0.0,True,False
+phi4_mini,mmlu,int8_vs_fp16,300,5,7,0.04,-0.0067,0.01154,-0.0256,0.0123,0.0256,0.05,8.7e-05,True,False
+phi4_mini,arc,int8_vs_fp16,1172,19,18,0.0316,0.0009,0.00519,-0.0077,0.0094,0.0094,0.05,0.0,True,False

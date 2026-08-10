@@ -1,0 +1,740 @@
+[
+ {
+  "i": 0,
+  "chapter": "Chapter 1: Introduction",
+  "sentence": "Qwen3 [1], the Llama 3 family [2], Phi-4-mini [3], and Gemma 2 [4] illustrate the rapid development of models below the scale of frontier systems.",
+  "refs": {
+   "1": "A. Yang et al. (Qwen Team), “Qwen3 technical report,” Alibaba Group, 2025. arXiv:2505.09388.",
+   "2": "A. Grattafiori et al. (Meta AI), “The Llama 3 herd of models,” Meta AI, 2024. arXiv:2407.21783.",
+   "3": "A. Abouelenin et al., “Phi-4-Mini technical report: Compact yet powerful multimodal language models via Mixture-of-LoRAs,” Microsoft, 2025. arXiv:2503.01743.",
+   "4": "Gemma Team, Google DeepMind, “Gemma 2: Improving open language models at a practical size,” 2024. arXiv:2408.00118."
+  }
+ },
+ {
+  "i": 1,
+  "chapter": "Chapter 1: Introduction",
+  "sentence": "Full-precision inference can nevertheless exceed a target device's memory budget, which motivates deployment-oriented compression [5].",
+  "refs": {
+   "5": "J. Lin, J. Tang, H. Tang, S. Yang, W.-M. Chen, W.-C. Wang, G. Xiao, X. Dang, C. Gan, and S. Han, “AWQ: Activation-aware weight quantization for on-device LLM compression and acceleration,” in Proc. Machine Learning and Systems (MLSys), 2024."
+  }
+ },
+ {
+  "i": 2,
+  "chapter": "Chapter 1: Introduction",
+  "sentence": "AWQ reports deployment-oriented four-bit compression and acceleration on desktop and mobile GPUs [5].",
+  "refs": {
+   "5": "J. Lin, J. Tang, H. Tang, S. Yang, W.-M. Chen, W.-C. Wang, G. Xiao, X. Dang, C. Gan, and S. Han, “AWQ: Activation-aware weight quantization for on-device LLM compression and acceleration,” in Proc. Machine Learning and Systems (MLSys), 2024."
+  }
+ },
+ {
+  "i": 3,
+  "chapter": "Chapter 1: Introduction",
+  "sentence": "GPTQ demonstrates one-shot weight quantization at model scales up to 175 billion parameters [6].",
+  "refs": {
+   "6": "E. Frantar, S. Ashkboos, T. Hoefler, and D. Alistarh, “GPTQ: Accurate post-training quantization for generative pre-trained transformers,” in Proc. International Conference on Learning Representations (ICLR), 2023. arXiv:2210.17323."
+  }
+ },
+ {
+  "i": 4,
+  "chapter": "Chapter 1: Introduction",
+  "sentence": "Across a large scaling-law study, four-bit inference is often the most effective operating point under a fixed memory budget [7].",
+  "refs": {
+   "7": "T. Dettmers and L. Zettlemoyer, “The case for 4-bit precision: k-bit inference scaling laws,” in Proc. International Conference on Machine Learning (ICML), PMLR vol. 202, pp. 7750–7774, 2023. arXiv:2212.09720."
+  }
+ },
+ {
+  "i": 5,
+  "chapter": "Chapter 1: Introduction",
+  "sentence": "The quantization studies reviewed here report perplexity, accuracy, latency, or memory as primary outcomes [5]-[8].",
+  "refs": {
+   "5": "J. Lin, J. Tang, H. Tang, S. Yang, W.-M. Chen, W.-C. Wang, G. Xiao, X. Dang, C. Gan, and S. Han, “AWQ: Activation-aware weight quantization for on-device LLM compression and acceleration,” in Proc. Machine Learning and Systems (MLSys), 2024.",
+   "8": "R. Jin, J. Du, W. Huang, et al., “A comprehensive evaluation of quantization strategies for large language models,” in Findings of the Association for Computational Linguistics (ACL), 2024. arXiv:2402.16775."
+  }
+ },
+ {
+  "i": 6,
+  "chapter": "Chapter 1: Introduction",
+  "sentence": "Broad comparisons find that many tasks remain usable at four bits [8], [9].",
+  "refs": {
+   "8": "R. Jin, J. Du, W. Huang, et al., “A comprehensive evaluation of quantization strategies for large language models,” in Findings of the Association for Computational Linguistics (ACL), 2024. arXiv:2402.16775.",
+   "9": "S. Li, X. Ning, L. Wang, T. Liu, X. Shi, S. Yan, G. Dai, H. Yang, and Y. Wang, “Evaluating quantized large language models,” in Proc. International Conference on Machine Learning (ICML), 2024. arXiv:2402.18158."
+  }
+ },
+ {
+  "i": 7,
+  "chapter": "Chapter 1: Introduction",
+  "sentence": "Safety-specific studies now report that quantization effects vary across models, bit-widths, and methods [10].",
+  "refs": {
+   "10": "A. Kharinaev, V. Moskvoretskii, E. Shvetsov et al., “Investigating the impact of quantization methods on the safety and reliability of large language models,” IEEE Access, vol. 14, pp. 96771–96793, 2026, doi: 10.1109/ACCESS.2026.3703899. arXiv:2502.15799."
+  }
+ },
+ {
+  "i": 8,
+  "chapter": "Chapter 1: Introduction",
+  "sentence": "Quantization can also disturb confidence even when accuracy looks stable [11], create a condition that an attacker can exploit [12], and produce language-dependent damage that automatic metrics understate [13].",
+  "refs": {
+   "11": "I. Proskurina, L. Brun, G. Metzler, and J. Velcin, “When quantization affects confidence of large language models?,” in Findings of NAACL, 2024. arXiv:2405.00632.",
+   "12": "K. Egashira, M. Vero, R. Staab, J. He, and M. Vechev, “Exploiting LLM quantization,” in Proc. NeurIPS, 2024. arXiv:2405.18137.",
+   "13": "K. Marchisio, S. Dash, H. Chen, D. Aumiller, A. Üstün, S. Hooker, and S. Ruder, “How does quantization affect multilingual LLMs?,” in Findings of the Association for Computational Linguistics: EMNLP 2024, pp. 15928–15947, 2024. arXiv:2407.03211."
+  }
+ },
+ {
+  "i": 9,
+  "chapter": "Chapter 1: Introduction",
+  "sentence": "Helpful and harmless assistant training introduces a learned behavioural policy [14].",
+  "refs": {
+   "14": "Y. Bai et al., “Training a helpful and harmless assistant with reinforcement learning from human feedback,” Anthropic, 2022. arXiv:2204.05862 (preprint)."
+  }
+ },
+ {
+  "i": 10,
+  "chapter": "Chapter 1: Introduction",
+  "sentence": "Mechanistic work finds that refusal can be mediated by a concentrated direction in activation space [15], while other evidence suggests that safety alignment may be shallow in the generation process [16].",
+  "refs": {
+   "15": "A. Arditi, O. Obeso, A. Syed, D. Paleka, N. Panickssery, W. Gurnee, and N. Nanda, “Refusal in language models is mediated by a single direction,” in Proc. NeurIPS, 2024. arXiv:2406.11717.",
+   "16": "X. Qi, A. Panda, K. Lyu, X. Ma, S. Roy, A. Beirami, P. Mittal, and P. Henderson, “Safety alignment should be made more than just a few tokens deep,” in Proc. International Conference on Learning Representations (ICLR), 2025. arXiv:2406.05946."
+  }
+ },
+ {
+  "i": 11,
+  "chapter": "Chapter 1: Introduction",
+  "sentence": "Fine-tuning on a very small adversarial dataset can weaken safeguards [17].",
+  "refs": {
+   "17": "X. Qi, Y. Zeng, T. Xie, P.-Y. Chen, R. Jia, P. Mittal, and P. Henderson, “Fine-tuning aligned language models compromises safety, even when users do not intend to!,” in Proc. International Conference on Learning Representations (ICLR), 2024. arXiv:2310.03693."
+  }
+ },
+ {
+  "i": 12,
+  "chapter": "Chapter 1: Introduction",
+  "sentence": "XSTest was created to expose exaggerated safety on benign prompts [18], and OR-Bench later expanded the same concern at much larger scale [19].",
+  "refs": {
+   "18": "P. Röttger, H. R. Kirk, B. Vidgen, G. Attanasio, F. Bianchi, and D. Hovy, “XSTest: A test suite for identifying exaggerated safety behaviours in large language models,” in Proc. NAACL, 2024. arXiv:2308.01263.",
+   "19": "J. Cui, W.-L. Chiang, I. Stoica, and C.-J. Hsieh, “OR-Bench: An over-refusal benchmark for large language models,” in Proc. International Conference on Machine Learning (ICML), 2025. arXiv:2405.20947."
+  }
+ },
+ {
+  "i": 13,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "TrustLLM evaluates trustworthiness across safety, truthfulness, fairness, robustness, privacy, and machine ethics [20].",
+  "refs": {
+   "20": "Y. Huang, L. Sun, et al., “Position: TrustLLM: Trustworthiness in large language models,” in Proc. International Conference on Machine Learning (ICML), PMLR vol. 235, 2024. arXiv:2401.05561."
+  }
+ },
+ {
+  "i": 14,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "DecodingTrust provides another broad assessment, with detailed testing of toxicity, stereotypes, privacy, robustness, and related properties [21].",
+  "refs": {
+   "21": "B. Wang et al., “DecodingTrust: A comprehensive assessment of trustworthiness in GPT models,” in Proc. NeurIPS Datasets and Benchmarks Track, 2023. arXiv:2306.11698."
+  }
+ },
+ {
+  "i": 15,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "SafetyBench focuses more directly on safety knowledge through a large bilingual multiple-choice benchmark [22].",
+  "refs": {
+   "22": "Z. Zhang et al., “SafetyBench: Evaluating the safety of large language models,” in Proc. Association for Computational Linguistics (ACL), 2024. arXiv:2309.07045."
+  }
+ },
+ {
+  "i": 16,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "The InstructGPT study shows how human feedback can make a much smaller aligned model preferable to a far larger base model [23].",
+  "refs": {
+   "23": "L. Ouyang et al., “Training language models to follow instructions with human feedback,” in Advances in Neural Information Processing Systems (NeurIPS), vol. 35, 2022."
+  }
+ },
+ {
+  "i": 17,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "HarmBench then supplies a standardised framework for automated red teaming and harmful-compliance evaluation [24].",
+  "refs": {
+   "24": "M. Mazeika et al., “HarmBench: A standardized evaluation framework for automated red teaming and robust refusal,” in Proc. International Conference on Machine Learning (ICML), 2024. arXiv:2402.04249."
+  }
+ },
+ {
+  "i": 18,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "Universal suffix attacks can transfer across prompts and models [25], and model-generated red-team prompts can uncover failure cases at scale [26].",
+  "refs": {
+   "25": "A. Zou, Z. Wang, N. Carlini, M. Nasr, J. Z. Kolter, and M. Fredrikson, “Universal and transferable adversarial attacks on aligned language models,” 2023. arXiv:2307.15043 (preprint).",
+   "26": "E. Perez, S. Huang, F. Song, T. Cai, R. Ring, J. Aslanides, A. Glaese, N. McAleese, and G. Irving, “Red teaming language models with language models,” in Proc. Conference on Empirical Methods in Natural Language Processing (EMNLP), pp. 3419–3448, 2022, doi: 10.18653/v1/2022.emnlp-main.225."
+  }
+ },
+ {
+  "i": 19,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "MMLU measures broad academic and professional knowledge [27], while ARC-Challenge tests difficult science questions [28].",
+  "refs": {
+   "27": "D. Hendrycks, C. Burns, S. Basart, A. Zou, M. Mazeika, D. Song, and J. Steinhardt, “Measuring massive multitask language understanding,” in Proc. International Conference on Learning Representations (ICLR), 2021. arXiv:2009.03300.",
+   "28": "P. Clark, I. Cowhey, O. Etzioni, T. Khot, A. Sabharwal, C. Schoenick, and O. Tafjord, “Think you have solved question answering? Try ARC, the AI2 reasoning challenge,” arXiv:1803.05457, 2018 (preprint)."
+  }
+ },
+ {
+  "i": 20,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "SafetyBench's multiple-choice format is valuable for safety knowledge, but knowing the correct policy answer is not the same as refusing a harmful request during generation [22].",
+  "refs": {
+   "22": "Z. Zhang et al., “SafetyBench: Evaluating the safety of large language models,” in Proc. Association for Computational Linguistics (ACL), 2024. arXiv:2309.07045."
+  }
+ },
+ {
+  "i": 21,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "Scaling work shows that larger models often tolerate reduced precision better than smaller ones, but the relationship depends on model scale and task [29].",
+  "refs": {
+   "29": "S. Badshah and H. Sajjad, “Quantifying the capabilities of LLMs across scale and precision,” 2024. arXiv:2405.03146 (preprint)."
+  }
+ },
+ {
+  "i": 22,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "SmoothQuant migrates activation difficulty into weights to enable W8A8 inference [30].",
+  "refs": {
+   "30": "G. Xiao, J. Lin, M. Seznec, H. Wu, J. Demouth, and S. Han, “SmoothQuant: Accurate and efficient post-training quantization for large language models,” in Proc. International Conference on Machine Learning (ICML), PMLR vol. 202, 2023."
+  }
+ },
+ {
+  "i": 23,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "SparseGPT demonstrates that a different compression operation, pruning, can remove many weights in one shot [31].",
+  "refs": {
+   "31": "E. Frantar and D. Alistarh, “SparseGPT: Massive language models can be accurately pruned in one-shot,” in Proc. International Conference on Machine Learning (ICML), PMLR vol. 202, 2023."
+  }
+ },
+ {
+  "i": 24,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "NF4 was introduced with QLoRA as a four-bit data type suited to approximately normally distributed model weights [32].",
+  "refs": {
+   "32": "T. Dettmers, A. Pagnoni, A. Holtzman, and L. Zettlemoyer, “QLoRA: Efficient finetuning of quantized LLMs,” in Proc. NeurIPS, 2023. arXiv:2305.14314. (Introduces NF4 and the bitsandbytes integration.)"
+  }
+ },
+ {
+  "i": 25,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "LLM.int8 uses a different mixed-precision strategy that routes outlier features through a higher-precision path [33].",
+  "refs": {
+   "33": "T. Dettmers, M. Lewis, Y. Belkada, and L. Zettlemoyer, “LLM.int8(): 8-bit matrix multiplication for transformers at scale,” in Proc. NeurIPS, 2022. arXiv:2208.07339."
+  }
+ },
+ {
+  "i": 26,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "Modern neural networks are often poorly calibrated [34], and quantization-specific work reports that confidence changes concentrate on difficult or low-confidence inputs [11].",
+  "refs": {
+   "34": "C. Guo, G. Pleiss, Y. Sun, and K. Q. Weinberger, “On calibration of modern neural networks,” in Proc. International Conference on Machine Learning (ICML), PMLR vol. 70, pp. 1321–1330, 2017.",
+   "11": "I. Proskurina, L. Brun, G. Metzler, and J. Velcin, “When quantization affects confidence of large language models?,” in Findings of NAACL, 2024. arXiv:2405.00632."
+  }
+ },
+ {
+  "i": 27,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "GPTQ uses approximate second-order information to minimise reconstruction error during weight quantization [6].",
+  "refs": {
+   "6": "E. Frantar, S. Ashkboos, T. Hoefler, and D. Alistarh, “GPTQ: Accurate post-training quantization for generative pre-trained transformers,” in Proc. International Conference on Learning Representations (ICLR), 2023. arXiv:2210.17323."
+  }
+ },
+ {
+  "i": 28,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "AWQ's motivating analysis identifies approximately 0.1%–1% of weights as salient; its implemented method protects their contribution through activation-aware scaling rather than a literal mixed-precision layout [5].",
+  "refs": {
+   "5": "J. Lin, J. Tang, H. Tang, S. Yang, W.-M. Chen, W.-C. Wang, G. Xiao, X. Dang, C. Gan, and S. Han, “AWQ: Activation-aware weight quantization for on-device LLM compression and acceleration,” in Proc. Machine Learning and Systems (MLSys), 2024."
+  }
+ },
+ {
+  "i": 29,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "SmoothQuant addresses activation outliers through an equivalent transformation [30].",
+  "refs": {
+   "30": "G. Xiao, J. Lin, M. Seznec, H. Wu, J. Demouth, and S. Han, “SmoothQuant: Accurate and efficient post-training quantization for large language models,” in Proc. International Conference on Machine Learning (ICML), PMLR vol. 202, 2023."
+  }
+ },
+ {
+  "i": 30,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "NF4 uses a codebook designed for the distribution of neural weights [32], while LLM.int8 separates outlier features into a higher-precision path [33].",
+  "refs": {
+   "32": "T. Dettmers, A. Pagnoni, A. Holtzman, and L. Zettlemoyer, “QLoRA: Efficient finetuning of quantized LLMs,” in Proc. NeurIPS, 2023. arXiv:2305.14314. (Introduces NF4 and the bitsandbytes integration.)",
+   "33": "T. Dettmers, M. Lewis, Y. Belkada, and L. Zettlemoyer, “LLM.int8(): 8-bit matrix multiplication for transformers at scale,” in Proc. NeurIPS, 2022. arXiv:2208.07339."
+  }
+ },
+ {
+  "i": 31,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "Four-bit results are often close to full precision on aggregate tasks, especially as model size grows [7]-[9].",
+  "refs": {
+   "7": "T. Dettmers and L. Zettlemoyer, “The case for 4-bit precision: k-bit inference scaling laws,” in Proc. International Conference on Machine Learning (ICML), PMLR vol. 202, pp. 7750–7774, 2023. arXiv:2212.09720.",
+   "9": "S. Li, X. Ning, L. Wang, T. Liu, X. Shi, S. Yan, G. Dai, H. Yang, and Y. Wang, “Evaluating quantized large language models,” in Proc. International Conference on Machine Learning (ICML), 2024. arXiv:2402.18158."
+  }
+ },
+ {
+  "i": 32,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "show that multilingual quantization effects differ by language; on the paper's Japanese evaluation, the human-assessed loss is substantially larger than the automatic-metric loss [13].",
+  "refs": {
+   "13": "K. Marchisio, S. Dash, H. Chen, D. Aumiller, A. Üstün, S. Hooker, and S. Ruder, “How does quantization affect multilingual LLMs?,” in Findings of the Association for Computational Linguistics: EMNLP 2024, pp. 15928–15947, 2024. arXiv:2407.03211."
+  }
+ },
+ {
+  "i": 33,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "HarmLevelBench reports non-uniform safety changes across quantization methods and attack types [35].",
+  "refs": {
+   "35": "Y. Belkhiter, G. Zizzo, and S. Maffeis, “HarmLevelBench: Evaluating harm-level compliance and the impact of quantization on model alignment,” in Proc. NeurIPS 2024 Workshop on Safe Generative AI (SafeGenAI), 2024. arXiv:2411.06835."
+  }
+ },
+ {
+  "i": 34,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "Q-resafe similarly treats quantized safety degradation as a distinct problem and proposes quantization-aware repair [36].",
+  "refs": {
+   "36": "K. Chen, J. Zhang, J. Hu et al., “Q-resafe: Assessing safety risks and quantization-aware safety patching for quantized large language models,” in Proc. International Conference on Machine Learning (ICML), 2025. arXiv:2506.20251."
+  }
+ },
+ {
+  "i": 35,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "In contrast, Decoding Compressed Trust finds that four-bit quantization broadly preserves the trustworthiness dimensions it studies, while more extreme compression and pruning produce larger damage [37].",
+  "refs": {
+   "37": "J. Hong, J. Duan, C. Zhang, Z. Li, C. Xie, K. Lieberman, J. Diffenderfer, B. R. Bartoldson, A. K. Jaiswal, K. Xu, B. Kailkhura, D. Hendrycks, D. Song, Z. Wang, and B. Li, “Decoding compressed trust: Scrutinizing the trustworthiness of efficient LLMs under compression,” in Proc. International Conference on Machine Learning (ICML), PMLR vol. 235, 2024. arXiv:2403.15447."
+  }
+ },
+ {
+  "i": 36,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "OmniQuant learns weight-clipping and equivalent transformations during calibration [38].",
+  "refs": {
+   "38": "W. Shao et al., “OmniQuant: Omnidirectionally calibrated quantization for large language models,” in Proc. International Conference on Learning Representations (ICLR), 2024."
+  }
+ },
+ {
+  "i": 37,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "Q-Misalign goes further by preparing a model whose misalignment is triggered by quantization [39].",
+  "refs": {
+   "39": "P. Dong, H. Li, and S. Guo, “Durable quantization conditioned misalignment attack on large language models,” in Proc. International Conference on Learning Representations (ICLR), 2025."
+  }
+ },
+ {
+  "i": 38,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "Safety Layers argues that aligned behaviour can be concentrated in a subset of model layers [40].",
+  "refs": {
+   "40": "S. Li, L. Yao, L. Zhang, and Y. Li, “Safety layers in aligned large language models: The key to LLM security,” in Proc. International Conference on Learning Representations (ICLR), 2025."
+  }
+ },
+ {
+  "i": 39,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "Some studies use refusal or toxicity as a safety proxy, others use broad trustworthiness suites, and HarmLevelBench grades the level of harm in a response [35].",
+  "refs": {
+   "35": "Y. Belkhiter, G. Zizzo, and S. Maffeis, “HarmLevelBench: Evaluating harm-level compliance and the impact of quantization on model alignment,” in Proc. NeurIPS 2024 Workshop on Safe Generative AI (SafeGenAI), 2024. arXiv:2411.06835."
+  }
+ },
+ {
+  "i": 40,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "Q-Misalign shows that an attacker can create a durable quantization-conditioned failure [39], and Exploiting LLM Quantization shows another security-relevant pathway [12].",
+  "refs": {
+   "39": "P. Dong, H. Li, and S. Guo, “Durable quantization conditioned misalignment attack on large language models,” in Proc. International Conference on Learning Representations (ICLR), 2025.",
+   "12": "K. Egashira, M. Vero, R. Staab, J. He, and M. Vechev, “Exploiting LLM quantization,” in Proc. NeurIPS, 2024. arXiv:2405.18137."
+  }
+ },
+ {
+  "i": 41,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "Decoding Compressed Trust is the most compatible prior result because it observes broad four-bit preservation [37].",
+  "refs": {
+   "37": "J. Hong, J. Duan, C. Zhang, Z. Li, C. Xie, K. Lieberman, J. Diffenderfer, B. R. Bartoldson, A. K. Jaiswal, K. Xu, B. Kailkhura, D. Hendrycks, D. Song, Z. Wang, and B. Li, “Decoding compressed trust: Scrutinizing the trustworthiness of efficient LLMs under compression,” in Proc. International Conference on Machine Learning (ICML), PMLR vol. 235, 2024. arXiv:2403.15447."
+  }
+ },
+ {
+  "i": 42,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "StrongREJECT was motivated by 'empty jailbreaks': cases in which a target does not refuse but also does not provide useful harmful information [41].",
+  "refs": {
+   "41": "A. Souly et al., “A StrongREJECT for empty jailbreaks,” in Proc. NeurIPS Datasets and Benchmarks Track, 2024, doi: 10.52202/079017-3984."
+  }
+ },
+ {
+  "i": 43,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "SORRY-Bench evaluates safety refusal across 44 fine-grained unsafe topics, 440 balanced instructions, 20 linguistic augmentations, and 7,040 human annotations used in its evaluator study [42].",
+  "refs": {
+   "42": "T. Xie et al., “SORRY-Bench: Systematically evaluating large language model safety refusal,” in Proc. International Conference on Learning Representations (ICLR), 2025."
+  }
+ },
+ {
+  "i": 44,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "JailbreakBench standardises attack artefacts, chat templates, system prompts, scoring, and attack-efficiency measures [43].",
+  "refs": {
+   "43": "P. Chao et al., “JailbreakBench: An open robustness benchmark for jailbreaking large language models,” in Proc. NeurIPS Datasets and Benchmarks Track, 2024."
+  }
+ },
+ {
+  "i": 45,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "WildGuard spans direct and adversarial interactions and predicts prompt harmfulness, response harmfulness, and refusal [44].",
+  "refs": {
+   "44": "S. Han et al., “WildGuard: Open one-stop moderation tools for safety risks, jailbreaks, and refusals of LLMs,” in Proc. NeurIPS Datasets and Benchmarks Track, 2024."
+  }
+ },
+ {
+  "i": 46,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "JailbreakBench records these elements because otherwise two attack-success rates may not be comparable [43].",
+  "refs": {
+   "43": "P. Chao et al., “JailbreakBench: An open robustness benchmark for jailbreaking large language models,” in Proc. NeurIPS Datasets and Benchmarks Track, 2024."
+  }
+ },
+ {
+  "i": 47,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "XSTest is small enough for detailed human inspection and deliberately targets lexical and pragmatic triggers [18].",
+  "refs": {
+   "18": "P. Röttger, H. R. Kirk, B. Vidgen, G. Attanasio, F. Bianchi, and D. Hovy, “XSTest: A test suite for identifying exaggerated safety behaviours in large language models,” in Proc. NAACL, 2024. arXiv:2308.01263."
+  }
+ },
+ {
+  "i": 48,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "OR-Bench contains 80,000 prompts across ten rejection categories, a hard subset of about 1,000 prompts, and 600 toxic controls; the final ICML study evaluates 32 models across eight families [19].",
+  "refs": {
+   "19": "J. Cui, W.-L. Chiang, I. Stoica, and C.-J. Hsieh, “OR-Bench: An over-refusal benchmark for large language models,” in Proc. International Conference on Machine Learning (ICML), 2025. arXiv:2405.20947."
+  }
+ },
+ {
+  "i": 49,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "StrongREJECT introduces response quality into jailbreak evaluation [41].",
+  "refs": {
+   "41": "A. Souly et al., “A StrongREJECT for empty jailbreaks,” in Proc. NeurIPS Datasets and Benchmarks Track, 2024, doi: 10.52202/079017-3984."
+  }
+ },
+ {
+  "i": 50,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "SORRY-Bench's human-grounded refusal taxonomy shows that binary refusal is a simplification [42].",
+  "refs": {
+   "42": "T. Xie et al., “SORRY-Bench: Systematically evaluating large language model safety refusal,” in Proc. International Conference on Learning Representations (ICLR), 2025."
+  }
+ },
+ {
+  "i": 51,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "Do-Not-Answer evaluates 939 risky prompts and 5,634 responses and finds that a trained 600-million-parameter classifier can be competitive with a much larger judge in aggregate [45].",
+  "refs": {
+   "45": "Y. Wang, H. Li, X. Han, P. Nakov, and T. Baldwin, “Do-Not-Answer: Evaluating safeguards in LLMs,” in Findings of EACL, pp. 896–911, 2024, doi: 10.18653/v1/2024.findings-eacl.61."
+  }
+ },
+ {
+  "i": 52,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "Prometheus 2 provides an open evaluator for direct assessment and pairwise ranking under user-specified criteria [46].",
+  "refs": {
+   "46": "S. Kim et al., “Prometheus 2: An open source language model specialized in evaluating other language models,” in Proc. EMNLP, pp. 4334–4353, 2024, doi: 10.18653/v1/2024.emnlp-main.248."
+  }
+ },
+ {
+  "i": 53,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "MT-Bench reports more than 80% agreement between strong LLM judges and human preferences in its tested setting, while also documenting position bias, verbosity bias, self-enhancement, and limited grading ability on some reasoning questions [47].",
+  "refs": {
+   "47": "L. Zheng et al., “Judging LLM-as-a-judge with MT-Bench and Chatbot Arena,” in Proc. NeurIPS Datasets and Benchmarks Track, 2023. arXiv:2306.05685."
+  }
+ },
+ {
+  "i": 54,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "Prometheus 2 is designed for evaluation under user-specified criteria [46], while WildGuard targets prompt harmfulness, response harmfulness, and refusal [44].",
+  "refs": {
+   "46": "S. Kim et al., “Prometheus 2: An open source language model specialized in evaluating other language models,” in Proc. EMNLP, pp. 4334–4353, 2024, doi: 10.18653/v1/2024.emnlp-main.248.",
+   "44": "S. Han et al., “WildGuard: Open one-stop moderation tools for safety risks, jailbreaks, and refusals of LLMs,” in Proc. NeurIPS Datasets and Benchmarks Track, 2024."
+  }
+ },
+ {
+  "i": 55,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "TrustLLM / DecodingTrust [20], [21]",
+  "refs": {
+   "20": "Y. Huang, L. Sun, et al., “Position: TrustLLM: Trustworthiness in large language models,” in Proc. International Conference on Machine Learning (ICML), PMLR vol. 235, 2024. arXiv:2401.05561.",
+   "21": "B. Wang et al., “DecodingTrust: A comprehensive assessment of trustworthiness in GPT models,” in Proc. NeurIPS Datasets and Benchmarks Track, 2023. arXiv:2306.11698."
+  }
+ },
+ {
+  "i": 56,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "XSTest / OR-Bench [18], [19]",
+  "refs": {
+   "18": "P. Röttger, H. R. Kirk, B. Vidgen, G. Attanasio, F. Bianchi, and D. Hovy, “XSTest: A test suite for identifying exaggerated safety behaviours in large language models,” in Proc. NAACL, 2024. arXiv:2308.01263.",
+   "19": "J. Cui, W.-L. Chiang, I. Stoica, and C.-J. Hsieh, “OR-Bench: An over-refusal benchmark for large language models,” in Proc. International Conference on Machine Learning (ICML), 2025. arXiv:2405.20947."
+  }
+ },
+ {
+  "i": 57,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "GPTQ / AWQ / SmoothQuant [5], [6], [30]",
+  "refs": {
+   "5": "J. Lin, J. Tang, H. Tang, S. Yang, W.-M. Chen, W.-C. Wang, G. Xiao, X. Dang, C. Gan, and S. Han, “AWQ: Activation-aware weight quantization for on-device LLM compression and acceleration,” in Proc. Machine Learning and Systems (MLSys), 2024.",
+   "6": "E. Frantar, S. Ashkboos, T. Hoefler, and D. Alistarh, “GPTQ: Accurate post-training quantization for generative pre-trained transformers,” in Proc. International Conference on Learning Representations (ICLR), 2023. arXiv:2210.17323.",
+   "30": "G. Xiao, J. Lin, M. Seznec, H. Wu, J. Demouth, and S. Han, “SmoothQuant: Accurate and efficient post-training quantization for large language models,” in Proc. International Conference on Machine Learning (ICML), PMLR vol. 202, 2023."
+  }
+ },
+ {
+  "i": 58,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "StrongREJECT / SORRY-Bench [41], [42]",
+  "refs": {
+   "41": "A. Souly et al., “A StrongREJECT for empty jailbreaks,” in Proc. NeurIPS Datasets and Benchmarks Track, 2024, doi: 10.52202/079017-3984.",
+   "42": "T. Xie et al., “SORRY-Bench: Systematically evaluating large language model safety refusal,” in Proc. International Conference on Learning Representations (ICLR), 2025."
+  }
+ },
+ {
+  "i": 59,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "Quantization-conditioned attacks show that worst-case failures are possible [12], [39].",
+  "refs": {
+   "12": "K. Egashira, M. Vero, R. Staab, J. He, and M. Vechev, “Exploiting LLM quantization,” in Proc. NeurIPS, 2024. arXiv:2405.18137.",
+   "39": "P. Dong, H. Li, and S. Guo, “Durable quantization conditioned misalignment attack on large language models,” in Proc. International Conference on Learning Representations (ICLR), 2025."
+  }
+ },
+ {
+  "i": 60,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "Jailbreak benchmarks show that adversarial robustness requires an explicit attack [43].",
+  "refs": {
+   "43": "P. Chao et al., “JailbreakBench: An open robustness benchmark for jailbreaking large language models,” in Proc. NeurIPS Datasets and Benchmarks Track, 2024."
+  }
+ },
+ {
+  "i": 61,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "Judge research shows that automatic labels require grounding [45], [46].",
+  "refs": {
+   "45": "Y. Wang, H. Li, X. Han, P. Nakov, and T. Baldwin, “Do-Not-Answer: Evaluating safeguards in LLMs,” in Findings of EACL, pp. 896–911, 2024, doi: 10.18653/v1/2024.findings-eacl.61.",
+   "46": "S. Kim et al., “Prometheus 2: An open source language model specialized in evaluating other language models,” in Proc. EMNLP, pp. 4334–4353, 2024, doi: 10.18653/v1/2024.emnlp-main.248."
+  }
+ },
+ {
+  "i": 62,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "Work on how safety training fails under adversarial pressure provides a final caution [48].",
+  "refs": {
+   "48": "A. Wei, N. Haghtalab, and J. Steinhardt, “Jailbroken: How does LLM safety training fail?,” in Advances in Neural Information Processing Systems (NeurIPS), vol. 36, 2023."
+  }
+ },
+ {
+  "i": 63,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "Prior quantization evaluations often emphasise average benchmark retention and do not frame their outcomes as a declared multiplicity family [8]-[10].",
+  "refs": {
+   "8": "R. Jin, J. Du, W. Huang, et al., “A comprehensive evaluation of quantization strategies for large language models,” in Findings of the Association for Computational Linguistics (ACL), 2024. arXiv:2402.16775.",
+   "10": "A. Kharinaev, V. Moskvoretskii, E. Shvetsov et al., “Investigating the impact of quantization methods on the safety and reliability of large language models,” IEEE Access, vol. 14, pp. 96771–96793, 2026, doi: 10.1109/ACCESS.2026.3703899. arXiv:2502.15799."
+  }
+ },
+ {
+  "i": 64,
+  "chapter": "Chapter 2: Literature Review",
+  "sentence": "The literature on automatic judging makes clear that measurement systems evolve [45], [46].",
+  "refs": {
+   "45": "Y. Wang, H. Li, X. Han, P. Nakov, and T. Baldwin, “Do-Not-Answer: Evaluating safeguards in LLMs,” in Findings of EACL, pp. 896–911, 2024, doi: 10.18653/v1/2024.findings-eacl.61.",
+   "46": "S. Kim et al., “Prometheus 2: An open source language model specialized in evaluating other language models,” in Proc. EMNLP, pp. 4334–4353, 2024, doi: 10.18653/v1/2024.emnlp-main.248."
+  }
+ },
+ {
+  "i": 65,
+  "chapter": "Chapter 3: Methodology and Experimental Setup",
+  "sentence": "Prompt-level pairing is preserved in both the bootstrap interval [49] and the exact McNemar comparison [50].",
+  "refs": {
+   "49": "B. Efron and R. J. Tibshirani, An Introduction to the Bootstrap. New York: Chapman & Hall, 1993.",
+   "50": "Q. McNemar, “Note on the sampling error of the difference between correlated proportions or percentages,” Psychometrika, vol. 12, no. 2, pp. 153–157, 1947."
+  }
+ },
+ {
+  "i": 66,
+  "chapter": "Chapter 3: Methodology and Experimental Setup",
+  "sentence": "Mistral-7B provides the largest model in scope [51].",
+  "refs": {
+   "51": "A. Q. Jiang et al., “Mistral 7B,” Mistral AI, 2023. arXiv:2310.06825."
+  }
+ },
+ {
+  "i": 67,
+  "chapter": "Chapter 3: Methodology and Experimental Setup",
+  "sentence": "Paired bootstrap confidence intervals preserve prompt-level pairing [49].",
+  "refs": {
+   "49": "B. Efron and R. J. Tibshirani, An Introduction to the Bootstrap. New York: Chapman & Hall, 1993."
+  }
+ },
+ {
+  "i": 68,
+  "chapter": "Chapter 3: Methodology and Experimental Setup",
+  "sentence": "Binary outcomes are also tested with the exact McNemar test [50], which uses only discordant prompt pairs.",
+  "refs": {
+   "50": "Q. McNemar, “Note on the sampling error of the difference between correlated proportions or percentages,” Psychometrika, vol. 12, no. 2, pp. 153–157, 1947."
+  }
+ },
+ {
+  "i": 69,
+  "chapter": "Chapter 3: Methodology and Experimental Setup",
+  "sentence": "Benjamini and Hochberg's false-discovery-rate procedure controls multiplicity across that family [52].",
+  "refs": {
+   "52": "Y. Benjamini and Y. Hochberg, “Controlling the false discovery rate: A practical and powerful approach to multiple testing,” Journal of the Royal Statistical Society: Series B (Methodological), vol. 57, no. 1, pp. 289–300, 1995."
+  }
+ },
+ {
+  "i": 70,
+  "chapter": "Chapter 3: Methodology and Experimental Setup",
+  "sentence": "Cohen's kappa measures chance-corrected agreement between scorers [53].",
+  "refs": {
+   "53": "J. Cohen, “A coefficient of agreement for nominal scales,” Educational and Psychological Measurement, vol. 20, no. 1, pp. 37–46, 1960."
+  }
+ },
+ {
+  "i": 71,
+  "chapter": "Chapter 3: Methodology and Experimental Setup",
+  "sentence": "Sample-size and minimum-detectable-effect calculations follow paired-proportion power analysis [54], [55].",
+  "refs": {
+   "54": "R. J. Connor, “Sample size for testing differences in proportions for the paired-sample design,” Biometrics, vol. 43, no. 1, pp. 207–211, 1987.",
+   "55": "D. Card, P. Henderson, U. Khandelwal, R. Jia, K. Mahowald, and D. Jurafsky, “With little power comes great responsibility,” in Proc. Conference on Empirical Methods in Natural Language Processing (EMNLP), pp. 9263–9274, 2020."
+  }
+ },
+ {
+  "i": 72,
+  "chapter": "Chapter 3: Methodology and Experimental Setup",
+  "sentence": "Agreement methodology follows the caution that coefficient choice and prevalence affect interpretation [56], [57].",
+  "refs": {
+   "56": "R. Artstein and M. Poesio, “Survey article: Inter-coder agreement for computational linguistics,” Computational Linguistics, vol. 34, no. 4, pp. 555–596, 2008, doi: 10.1162/coli.07-034-R2.",
+   "57": "J. R. Landis and G. G. Koch, “The measurement of observer agreement for categorical data,” Biometrics, vol. 33, no. 1, pp. 159–174, 1977."
+  }
+ },
+ {
+  "i": 73,
+  "chapter": "Chapter 3: Methodology and Experimental Setup",
+  "sentence": "Llama Guard supplies the open-weight safety-moderation cross-check used in the scorer sensitivity analysis [58].",
+  "refs": {
+   "58": "H. Inan et al., “Llama Guard: LLM-based input-output safeguard for human-AI conversations,” Meta AI, 2023. arXiv:2312.06674 (preprint)."
+  }
+ },
+ {
+  "i": 74,
+  "chapter": "Chapter 3: Methodology and Experimental Setup",
+  "sentence": "The two one-sided tests procedure supplies the formal basis [59].",
+  "refs": {
+   "59": "D. J. Schuirmann, “A comparison of the two one-sided tests procedure and the power approach for assessing the equivalence of average bioavailability,” Journal of Pharmacokinetics and Biopharmaceutics, vol. 15, no. 6, pp. 657–680, 1987."
+  }
+ },
+ {
+  "i": 75,
+  "chapter": "Chapter 3: Methodology and Experimental Setup",
+  "sentence": "Data-contamination risk is disclosed because benchmark familiarity can inflate capability estimates [60].",
+  "refs": {
+   "60": "O. Sainz, J. Campos, I. García-Ferrero, J. Etxaniz, O. Lopez de Lacalle, and E. Agirre, “NLP evaluation in trouble: On the need to measure LLM data contamination for each benchmark,” in Findings of the Association for Computational Linguistics: EMNLP 2023, pp. 10776–10787, 2023."
+  }
+ },
+ {
+  "i": 76,
+  "chapter": "Chapter 3: Methodology and Experimental Setup",
+  "sentence": "LLM-as-a-judge research reports useful agreement with human preferences [47], while surveys catalogue position, verbosity, and other biases [61].",
+  "refs": {
+   "47": "L. Zheng et al., “Judging LLM-as-a-judge with MT-Bench and Chatbot Arena,” in Proc. NeurIPS Datasets and Benchmarks Track, 2023. arXiv:2306.05685.",
+   "61": "J. Gu et al., “A survey on LLM-as-a-judge,” arXiv:2411.15594, 2024 (preprint)."
+  }
+ },
+ {
+  "i": 77,
+  "chapter": "Chapter 3: Methodology and Experimental Setup",
+  "sentence": "Human grounding is necessary because automatic labels are not free evidence [62].",
+  "refs": {
+   "62": "M. Krumdick et al., “No free labels: Limitations of LLM-as-a-judge without human grounding,” arXiv:2503.05061, 2025 (preprint)."
+  }
+ },
+ {
+  "i": 78,
+  "chapter": "Chapter 3: Methodology and Experimental Setup",
+  "sentence": "Non-parametric sensitivity comparisons use the Wilcoxon procedure where applicable [63], and power interpretation follows standard behavioural-science guidance [64].",
+  "refs": {
+   "63": "F. Wilcoxon, “Individual comparisons by ranking methods,” Biometrics Bulletin, vol. 1, no. 6, pp. 80–83, 1945.",
+   "64": "J. Cohen, Statistical Power Analysis for the Behavioral Sciences, 2nd ed. Hillsdale, NJ: Lawrence Erlbaum Associates, 1988."
+  }
+ },
+ {
+  "i": 79,
+  "chapter": "Chapter 6: Discussion",
+  "sentence": "The result is closest to Decoding Compressed Trust, which reports broad preservation of trustworthiness at four bits and larger damage under more aggressive compression [37].",
+  "refs": {
+   "37": "J. Hong, J. Duan, C. Zhang, Z. Li, C. Xie, K. Lieberman, J. Diffenderfer, B. R. Bartoldson, A. K. Jaiswal, K. Xu, B. Kailkhura, D. Hendrycks, D. Song, Z. Wang, and B. Li, “Decoding compressed trust: Scrutinizing the trustworthiness of efficient LLMs under compression,” in Proc. International Conference on Machine Learning (ICML), PMLR vol. 235, 2024. arXiv:2403.15447."
+  }
+ },
+ {
+  "i": 80,
+  "chapter": "Chapter 6: Discussion",
+  "sentence": "report that quantization can degrade safety and that no method dominates across models and bit-widths [10].",
+  "refs": {
+   "10": "A. Kharinaev, V. Moskvoretskii, E. Shvetsov et al., “Investigating the impact of quantization methods on the safety and reliability of large language models,” IEEE Access, vol. 14, pp. 96771–96793, 2026, doi: 10.1109/ACCESS.2026.3703899. arXiv:2502.15799."
+  }
+ },
+ {
+  "i": 81,
+  "chapter": "Chapter 6: Discussion",
+  "sentence": "HarmLevelBench finds attack-dependent changes [35], while Q-resafe and Q-Misalign show that quantized safety can be both repaired and attacked [36], [39].",
+  "refs": {
+   "35": "Y. Belkhiter, G. Zizzo, and S. Maffeis, “HarmLevelBench: Evaluating harm-level compliance and the impact of quantization on model alignment,” in Proc. NeurIPS 2024 Workshop on Safe Generative AI (SafeGenAI), 2024. arXiv:2411.06835.",
+   "36": "K. Chen, J. Zhang, J. Hu et al., “Q-resafe: Assessing safety risks and quantization-aware safety patching for quantized large language models,” in Proc. International Conference on Machine Learning (ICML), 2025. arXiv:2506.20251.",
+   "39": "P. Dong, H. Li, and S. Guo, “Durable quantization conditioned misalignment attack on large language models,” in Proc. International Conference on Learning Representations (ICLR), 2025."
+  }
+ },
+ {
+  "i": 82,
+  "chapter": "Chapter 6: Discussion",
+  "sentence": "The scorer findings align with StrongREJECT's warning about empty jailbreaks [41] and SORRY-Bench's insistence that safety refusal be interpreted with utility [42].",
+  "refs": {
+   "41": "A. Souly et al., “A StrongREJECT for empty jailbreaks,” in Proc. NeurIPS Datasets and Benchmarks Track, 2024, doi: 10.52202/079017-3984.",
+   "42": "T. Xie et al., “SORRY-Bench: Systematically evaluating large language model safety refusal,” in Proc. International Conference on Learning Representations (ICLR), 2025."
+  }
+ },
+ {
+  "i": 83,
+  "chapter": "Chapter 6: Discussion",
+  "sentence": "Large evaluations often report good average retention at four bits [7]-[9], but the Qwen3-1.7B MMLU loss shows that compact models and task subsets can still contain material failures.",
+  "refs": {
+   "7": "T. Dettmers and L. Zettlemoyer, “The case for 4-bit precision: k-bit inference scaling laws,” in Proc. International Conference on Machine Learning (ICML), PMLR vol. 202, pp. 7750–7774, 2023. arXiv:2212.09720.",
+   "9": "S. Li, X. Ning, L. Wang, T. Liu, X. Shi, S. Yan, G. Dai, H. Yang, and Y. Wang, “Evaluating quantized large language models,” in Proc. International Conference on Machine Learning (ICML), 2024. arXiv:2402.18158."
+  }
+ },
+ {
+  "i": 84,
+  "chapter": "Chapter 6: Discussion",
+  "sentence": "Marchisio et al.'s multilingual result is methodologically relevant even though the present experiment is English-only [13].",
+  "refs": {
+   "13": "K. Marchisio, S. Dash, H. Chen, D. Aumiller, A. Üstün, S. Hooker, and S. Ruder, “How does quantization affect multilingual LLMs?,” in Findings of the Association for Computational Linguistics: EMNLP 2024, pp. 15928–15947, 2024. arXiv:2407.03211."
+  }
+ },
+ {
+  "i": 85,
+  "chapter": "Chapter 6: Discussion",
+  "sentence": "JailbreakBench evaluates a model under an attack procedure [43].",
+  "refs": {
+   "43": "P. Chao et al., “JailbreakBench: An open robustness benchmark for jailbreaking large language models,” in Proc. NeurIPS Datasets and Benchmarks Track, 2024."
+  }
+ },
+ {
+  "i": 86,
+  "chapter": "Chapter 6: Discussion",
+  "sentence": "Q-Misalign constructs a quantization-conditioned attack [39].",
+  "refs": {
+   "39": "P. Dong, H. Li, and S. Guo, “Durable quantization conditioned misalignment attack on large language models,” in Proc. International Conference on Learning Representations (ICLR), 2025."
+  }
+ },
+ {
+  "i": 87,
+  "chapter": "Chapter 6: Discussion",
+  "sentence": "Qwen and other multilingual families may respond differently in non-Latin scripts, and prior work reports disparate quantization effects by language [13].",
+  "refs": {
+   "13": "K. Marchisio, S. Dash, H. Chen, D. Aumiller, A. Üstün, S. Hooker, and S. Ruder, “How does quantization affect multilingual LLMs?,” in Findings of the Association for Computational Linguistics: EMNLP 2024, pp. 15928–15947, 2024. arXiv:2407.03211."
+  }
+ }
+]

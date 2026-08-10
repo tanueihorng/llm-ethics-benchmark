@@ -1,0 +1,11 @@
+pair_id,benchmark,contrast,n,discordant_rate,observed_delta,mde_80pct_power,observed_above_mde
+qwen_2b,mmlu,nf4_vs_fp16,300,0.1967,-0.09,0.0717,True
+qwen_2b,arc,nf4_vs_fp16,1172,0.1578,-0.0094,0.0325,False
+qwen_4b,mmlu,nf4_vs_fp16,300,0.1033,-0.0033,0.052,False
+qwen_4b,arc,nf4_vs_fp16,1172,0.0674,-0.0162,0.0212,False
+llama_3_2_3b,mmlu,nf4_vs_fp16,300,0.11,-0.0367,0.0536,False
+llama_3_2_3b,arc,nf4_vs_fp16,1172,0.0998,-0.0316,0.0259,True
+mistral_7b,mmlu,nf4_vs_fp16,300,0.1133,-0.02,0.0545,False
+mistral_7b,arc,nf4_vs_fp16,1172,0.0742,0.0094,0.0223,False
+phi4_mini,mmlu,nf4_vs_fp16,300,0.1067,-0.0267,0.0528,False
+phi4_mini,arc,nf4_vs_fp16,1172,0.0776,-0.0145,0.0228,False

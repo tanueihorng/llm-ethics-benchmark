@@ -109,6 +109,123 @@ redaction:
     - '"generation"\s*:'
     - '"behavior"\s*:'
 
+# T48 / D56. Claim-to-source fitness cannot be machine-checked, but the LANGUAGE
+# of over-claiming can. Every pattern below was derived from an actual defect in
+# the 2026-07-26 claim-to-source audit (26 findings, 19 of them inherited from
+# v5 and invisible to all 93 numeric claim locks, because a lock asserts "this
+# number appears in this file" and can never assert "this source entails this
+# sentence"). Nine of the 26 would have been caught by this scan alone.
+#
+# This is a REVIEW TRIGGER, not a vocabulary ban. A hit must be either reworded
+# or added to `allow` with a comment saying why that specific line is legitimate.
+# Do not weaken a pattern to clear a hit — that removes the trigger for every
+# future claim as well.
+epistemic_hedge:
+  scan_paths:
+    - scripts/build_fyp_report_v6.js
+    - scripts/build_rewritten_fyp_report_v1.py
+    - README.md
+    - docs/RESULTS_CARD.md
+  patterns:
+    # C14: absence of significance stated as equivalence
+    - '\bcapability-lossless\b'
+    - '\blossless\b'
+    - '\beffectively free\b'
+    # Too narrow: missed "effectively a free precision point" (re-audit 2026-07-26).
+    - '\beffectively a free\b'
+    - '\bfree precision point\b'
+    - '\bno capability delta\b'
+    # C07/C08: independence properties that the public record cannot establish
+    - '\barchitecturally (independent|unrelated|distinct|dissimilar)\b'
+    - '\bfully independent\b'
+    - '\bcompletely independent\b'
+    # C16/C17: untested method guarantees
+    - '\b(are|is) unaffected\b'
+    - '\bguarantees that\b'
+    - '\bprivacy guarantees\b'
+    - '\bimmune to\b'
+    - '\brules out\b'
+    # C21/C23: unearned superlatives and exclusivity
+    - '\bthe (one|only) (prior )?study\b'
+    - '\bstrongest practical\b'
+    - '\bthe strongest\b'
+    # Uncited superlatives the first pattern set did not cover.
+    - '\bmost widely adopted\b'
+    - '\bstrongest .{0,20}available\b'
+    # C09/C10: inference presented as prediction or cause
+    - '\bliterature predicts\b'
+    - '\bthe mechanistic reason\b'
+    - '\bproves that\b'
+    # C11/C12: uncited prevalence and market claims
+    - '\bde facto (compression )?standard\b'
+    - '\busers typically\b'
+    - '\btypically interact with\b'
+    # Prevalence claims outside the one paragraph the first fix touched.
+    - '\brarely deployed\b'
+    - '\balmost never (used|deployed)\b'
+    - '\broutine use of\b'
+    - '\bdeployment reality\b'
+    # Round 3: the gate missed every paraphrase below because the patterns named
+    # specific words rather than the CLASS. Prevalence/adoption is now covered by
+    # the adverb+verb shapes it actually takes in prose.
+    - '\bcommonly (deployed|used|reported|adopted)\b'
+    - '\btypically (validated|deployed|used|reported)\b'
+    - '\broutinely (integrated|deployed|used|ship)'
+    - '\bdominate current practice\b'
+    - '\b(particularly |increasingly |widely )?prevalent\b'
+    - '\bwidely (used|adopted|deployed)\b'
+    - '\bin the open-source ecosystem\b'
+    - '\bpredominantly evaluate\b'
+    # Universals a literature table cannot support.
+    - '\bis never measured\b'
+    - '\bnever measured\b'
+    - '\bno (prior )?stud(y|ies) (has|have)\b'
+    - '\ball prior work\b'
+    # Unmeasured mechanism asserted as cause. Found ONLY by independent
+    # re-verification after a batched verifier rejected it (2026-07-27).
+    - '\barising from kernel\b'
+    - '\bkernel and batching effects\b'
+    # C13: claim-strength inflation on a cited finding
+    - '\bstrip(s|ped)? alignment outright\b'
+    # C15: power asserted rather than computed
+    - '\benough power to\b'
+    # C25: universal-absence claims sourced to a call-for-work paper
+    - '\bno community-standard\b'
+    # C20 recurred in Chapter 8 with a comma the first sweep did not allow for.
+    - 'standard configuration,? which presents'
+    - 'evaluated in its standard configuration'
+    # Causal attribution to factors the study never measured.
+    - '\battributable to differences in\b'
+    - '\bat equivalent capability\b'
+  allow:
+    # Legitimate: the MMLU subject mix is literally the same prompt set in both
+    # conditions (same seed, same prompt IDs), so it is an identity, not an
+    # empirical guarantee, that it cannot confound a paired comparison.
+    - 'cross-condition comparisons are unaffected'
+    # Legitimate: the HarmBench judge scores HarmBench only, so XSTest and MMLU
+    # are untouched by the classifier-template caveat by construction.
+    - 'XSTest over-refusal and MMLU are unaffected'
+    # Legitimate: a scoped internal-validity statement, not a comparative
+    # superlative over the literature ("of the study", not "of any study").
+    - 'the strongest internal-validity property of the study'
+    # Legitimate: "strongest" compares the study's OWN findings/properties with
+    # each other, which needs no external evidence. The banned shape is a
+    # superlative over the literature (C23), not internal ranking.
+    - 'the strongest evidence for the boundary-instability reading'
+    - 'the strongest empirical finding is on the capability axis'
+    - 'Internal validity is the strongest property of the present design'
+    # Legitimate: a property of this study's own code, checkable in the loader.
+    - "The loader also guarantees that the NF4 compute dtype"
+    # Legitimate: NEGATED use — the report is arguing ARC is NOT immune.
+    - 'rather than evidence that ARC is immune to the shift'
+    # Legitimate: correctly bounded. This is the model form the C14/C19 family of
+    # defects should have taken: it rules out effects LARGER THAN the detectable
+    # effect, which is what a null with a known MDE actually licenses.
+    - 'rules out any harmful-compliance increase larger than that detectable effect'
+    # Legitimate: cross-check judges do not modify the primary scorer, by
+    # construction — the sidecars are additive and the primary is never rewritten.
+    - 'The primary scorer is unaffected either way'
+
 stale_text:
   scan_paths:
     - AGENTS.md
@@ -143,6 +260,9 @@ stale_text:
     # now scanned; retired report v1–v4 and thesis v1–v3 builders are excluded
     # below as historical sources.
     - scripts/build_fyp_report_v5.js
+    # T48: v6 is fully lock-covered and hedge-scanned; stale-text too.
+    - scripts/build_fyp_report_v6.js
+    - scripts/build_rewritten_fyp_report_v1.py
     - scripts/build_fyp_thesis_v4.js
     # 2026-07-15 verification round: the CURRENT submission alternates and the
     # interim builder are deliverables too, but were scanned by nothing — a retired

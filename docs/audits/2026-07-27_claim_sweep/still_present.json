@@ -1,0 +1,1192 @@
+[
+ {
+  "sentence": "Whether quantization shifts safety alignment, and whether an apparent shift is a genuine alignment change or a by-product of degraded capability, remains unresolved for the compact-deployment regime.",
+  "defect_class": "(b) UNIVERSAL / NEVER / ALWAYS",
+  "cited": "No — no citation marker attached.",
+  "why_unsupported": "\"remains unresolved\" is a categorical claim about the entire state of the literature — an absence claim that can only be supported by an exhaustive survey. It is also in direct tension with the report's own reference list, which contains at least five works squarely on quantization and safety/alignment: Kharinaev et al. (IEEE Access 2026, \"Investigating the impact of quantization methods on the safety and reliability of LLMs\"), Egashira et al. (NeurIPS 2024, \"Exploiting LLM quantization\"), Belkhiter et al. (HarmLevelBench, 2024), Chen et al. (Q-resafe, ICML 2025) and Hong et al. (\"Decoding compressed trust\", ICML 2024). The defensible gap is narrower — the capability-confound disambiguation at compact scale under matched pairs — not that the whole question is open.",
+  "proposed_fix": "Scope the gap to what is actually unaddressed and attach the prior work: \"Prior quantization-safety work [Kharinaev; Egashira; Belkhiter; Chen; Hong] largely reports safety deltas without a matched capability anchor, so for compact models it remains difficult to separate a genuine alignment shift from a by-product of degraded capability.\""
+ },
+ {
+  "sentence": "The institutional benchmarks TrustLLM, DecodingTrust and SafetyBench do not target it.",
+  "defect_class": "(b) UNIVERSAL / NEVER / ALWAYS (absence claim about named sources)",
+  "cited": "No bracketed marker, though the three benchmarks are named and all three appear in the reference list (Huang et al. ICML 2024; Wang et al. NeurIPS D&B 2023; Zhang et al. ACL 2024).",
+  "why_unsupported": "\"do not target it\" is stated as flat fact about three multi-hundred-page evaluation suites, and \"it\" is the compound antecedent from the previous sentence (the alignment-vs-capability disambiguation in the compact regime). The narrow, checkable version — that their published evaluations do not include quantized model variants — is defensible; the broad reading (that they have nothing to say about compact-model safety or capability confounding) is not, since TrustLLM and SafetyBench do evaluate small open models across safety and capability dimensions. As written the sentence stakes an unverifiable scope-exclusion on three sources rather than reporting what they do.",
+  "proposed_fix": "State the specific, checkable exclusion: \"The institutional trustworthiness suites — TrustLLM, DecodingTrust and SafetyBench — evaluate models at their released precision and do not include quantized variants as a controlled factor.\""
+ },
+ {
+  "sentence": "This work answers that question with a matched-pair, judge-validated study.",
+  "defect_class": "(f) ABSENCE-OF-EVIDENCE STATED AS EVIDENCE-OF-ABSENCE",
+  "cited": "No — no citation marker attached; this is a self-claim.",
+  "why_unsupported": "The question just posed is \"whether quantization shifts safety alignment.\" The study's actual result, stated two paragraphs later in the abstract's own words, is \"no detectable change at n = 200 rather than a proven zero\" — a non-significant result at a stated sample size. A non-rejection does not answer the question; it bounds it. \"Answers\" converts a null into a resolution and contradicts the abstract's own correctly-worded limitation sentence.",
+  "proposed_fix": "\"This work addresses that question with a matched-pair, judge-validated study.\" (or \"...tests that question...\"). \"Addresses\"/\"tests\" keeps the contribution claim and is consistent with the reported null."
+ },
+ {
+  "sentence": "The central methodological finding is that the scorer determines the conclusion.",
+  "defect_class": "(b) UNIVERSAL / NEVER / ALWAYS",
+  "cited": "No — no citation marker attached.",
+  "why_unsupported": "Stated as an unrestricted general law about scorers and conclusions. The evidence is one comparison, on one benchmark (HarmBench), between one regex implementation and one fine-tuned classifier, on this study's own prompt set — plus an over-refusal cross-check on XSTest. That supports \"the choice of scorer changed the conclusion here,\" not that scorers determine conclusions in general. The report's own results also cut against the strong reading: the headline RQ2 finding is stated scorer-invariantly (no scorer finds a significant over-refusal increase), i.e. at least one conclusion is explicitly scorer-independent.",
+  "proposed_fix": "\"The central methodological finding is that in this study the choice of HarmBench scorer changed the conclusion.\""
+ },
+ {
+  "sentence": "A refusal-counting regex over-counts harmful compliance, so HarmBench's own fine-tuned classifier replaces it.",
+  "defect_class": "(b) UNIVERSAL / NEVER / ALWAYS",
+  "cited": "No — no citation marker attached.",
+  "why_unsupported": "The indefinite article plus present tense reads as a property of refusal-counting regexes as a class. What was measured is that *this* study's v2 refusal regex over-counted ASR relative to the HarmBench classifier on these ten aliases (per-alias Cohen's κ roughly 0.25–0.84, i.e. the disagreement is itself strongly model-dependent, not uniform). Nothing here licenses the generic claim, and the wide κ spread argues against it.",
+  "proposed_fix": "\"The study's refusal-counting regex over-counts harmful compliance relative to HarmBench's own fine-tuned classifier, which therefore replaces it as the primary scorer.\""
+ },
+ {
+  "sentence": "Refusal-counting therefore overstates quantization harm.",
+  "defect_class": "(b) UNIVERSAL / NEVER / ALWAYS",
+  "cited": "No — no citation marker attached.",
+  "why_unsupported": "Generalises the same single-regex, single-benchmark observation into a standing claim about refusal-counting as a methodology and about \"quantization harm\" as a general quantity. The measured scope is: on HarmBench, at the 512-token budget, for these five pairs, the regex proxy attributed larger ASR increases to NF4 than the classifier did. It says nothing about refusal-counting under other quantization methods, other benchmarks, other model families, or other regex implementations.",
+  "proposed_fix": "\"Refusal-counting therefore overstated the apparent harm from quantization in this study's HarmBench contrasts.\""
+ },
+ {
+  "sentence": "The headline risk of four-bit quantization in small models is therefore capability degradation.",
+  "defect_class": "(b) UNIVERSAL / NEVER / ALWAYS (with an (f) component)",
+  "cited": "No — no citation marker attached.",
+  "why_unsupported": "Two overreaches. (1) Scope: \"four-bit quantization in small models\" is a claim about the class, generalised from five matched pairs, one quantization scheme (bitsandbytes NF4), one decoding setting and n = 200 per contrast; the report itself notes that two cross-family greedy deltas sit outside their seed ranges, so even within-study stability is qualified. (2) Epistemics: \"the headline risk *is* capability degradation\" implies the safety risk has been ruled out, which is exactly the inference the preceding sentence forbids (\"no detectable change at n = 200 rather than a proven zero\"). A ranking of risks requires an upper bound on the safety effect, not merely a failure to detect one — the equivalence/MDE analysis is what would license this, and the sentence does not invoke it.",
+  "proposed_fix": "\"Across the five pairs measured here, the effects that survive correction are capability losses, so capability degradation — not harmful-compliance increase — is the effect this study is powered to detect at four-bit precision.\" If the equivalence test is to be leaned on, cite its bound explicitly rather than asserting a risk ranking."
+ },
+ {
+  "sentence": "They are therefore consistent with the head-node activities explicitly demonstrated in the TC1 user guide (page 7–9, where conda install and pip install are shown executing on the head node).",
+  "defect_class": "e",
+  "cited": "Yes — an explicit citation to the TC1 user guide, pages 7–9, is attached to this sentence.",
+  "why_unsupported": "The cited pages establish that `conda install` / `pip install` are demonstrated on the head node. They do not establish that running a user-written Python program (`python scripts/prefetch_tc1.py`, plus an inline `python - <<'PY'` heredoc shown in Code listing 5.1) is within the same allowance. The guide's headline rule, quoted by the report itself in §5.3, forbids executing user code on the head node, and the report elsewhere (§4.11, Table 4.2) states flatly that \"head-node Python is disallowed\". The source therefore supports the narrower proposition (package installs are permitted), not the specific proposition asserted (this study's Python pre-cache is permitted). This is an inference by the authors dressed as a finding of the cited document.",
+  "proposed_fix": "Replace \"They are therefore consistent with the head-node activities explicitly demonstrated in the TC1 user guide (page 7–9, ...)\" with: \"The guide demonstrates conda install and pip install on the head node (pages 7–9); the pre-cache step was run there on the judgement that a download-and-write script has a comparable footprint, and its CPU and memory use were kept minimal.\" — i.e. present it as the study's own operational judgement rather than as something the guide establishes."
+ },
+ {
+  "sentence": "The study's pre-cache step, described in Section 5.5, therefore runs entirely on the head node and is policy-equivalent to a conda install.",
+  "defect_class": "e",
+  "cited": "No direct citation on this sentence; it rests on the preceding sentence's appeal to the TC1 user guide.",
+  "why_unsupported": "\"Policy-equivalent\" asserts a fact about how the cluster operator's policy classifies this study's script. The user guide is quoted in §5.3 as forbidding user code execution and as demonstrating installs; neither statement adjudicates a user-written Python prefetch script. No confirmation from the TC1 administrators is reported. The study cannot determine a third party's policy classification from its own reading, and the claim sits in direct tension with §4.11's \"head-node Python is disallowed\".",
+  "proposed_fix": "Reword to: \"The study's pre-cache step therefore runs on the head node. Its resource footprint is comparable to the conda and pip installs the user guide demonstrates there, and it was run on that basis; it performs downloads and file writes only, and no benchmark computation.\""
+ },
+ {
+  "sentence": "This is because the GPU cards reside on the compute nodes (TC1N01–TC1N07) rather than on the head node.",
+  "defect_class": "d",
+  "cited": "No — no citation is attached; the surrounding guide quotations cover the prohibition itself, not its rationale.",
+  "why_unsupported": "The sentence attributes a cause to the operator's policy decision. The report quotes the guide for what is forbidden, but nothing in the quoted material states why nvidia-smi and nvcc are forbidden on the head node, and the study did not (and by policy could not) investigate the head node's hardware. The stated reason is a plausible guess presented as fact; the prohibition could equally be about load, support burden, or uniform enforcement.",
+  "proposed_fix": "Drop the causal framing: \"The GPU cards reside on the compute nodes (TC1N01–TC1N07), not on the head node.\" — state the configuration without claiming it is the operator's reason for the rule."
+ },
+ {
+  "sentence": "The downloads themselves are pure HTTP file transfers with negligible CPU and memory cost.",
+  "defect_class": "f",
+  "cited": "No citation attached.",
+  "why_unsupported": "No CPU or memory measurement of the pre-cache step is reported anywhere in Chapter 5 (and the guide-forbidden monitoring commands mean none was taken on the head node). \"Negligible\" is an assertion of effectively-zero cost standing in for an absent measurement, and it is used to license the head-node execution. It is also imprecise: `prefetch_tc1.py` loads datasets through the `datasets` library and writes to the HF cache, which is not \"pure HTTP file transfer\".",
+  "proposed_fix": "\"The pre-cache step performs dataset and weight downloads and writes them to the Hugging Face cache; it runs no model inference. Its measured peak resident memory and CPU time on the head node were <X> and <Y>.\" If no measurement exists, drop the quantitative claim: \"...it runs no model inference and performs no benchmark computation.\""
+ },
+ {
+  "sentence": "The study can be re-executed from scratch from any repository checkout, because the configs, seeds, prompts, and pipeline are committed.",
+  "defect_class": "b",
+  "cited": "No citation attached.",
+  "why_unsupported": "\"Any repository checkout\" is an unconditional claim that the committed artifacts are sufficient for re-execution. The report itself contradicts this in §5.4: Llama-3.2-3B-Instruct is gated under the Meta community licence, Mistral-7B-Instruct-v0.3 is gated (§5.5), and HarmBench requires accepted Hugging Face dataset access conditions — so re-execution additionally requires an authenticated HF account with three separate gated-access acceptances, plus a CUDA device (§4.3 raises a RuntimeError for a 4-bit load on non-CUDA). The sufficiency of a checkout is a claim about external access conditions the study does not control.",
+  "proposed_fix": "\"The study can be re-executed from a repository checkout given a CUDA GPU and a Hugging Face account with the gated Llama, Mistral and HarmBench access conditions accepted, because the configs, seeds, prompts, and pipeline are committed.\""
+ },
+ {
+  "sentence": "An online re-execution therefore loads byte-identical weights rather than whatever revision happens to be current at fetch time.",
+  "defect_class": "b",
+  "cited": "No citation attached.",
+  "why_unsupported": "\"Byte-identical\" is an unconditional guarantee about the future behaviour of a third-party service. Revision pinning fixes which snapshot is requested; it cannot guarantee that the snapshot remains hosted, un-withdrawn, or unmodified, and gated repositories can be taken down or relicensed. The study verified the pins it used, not the Hub's future state.",
+  "proposed_fix": "\"An online re-execution therefore requests the pinned snapshot rather than whatever revision is current at fetch time, so long as those revisions remain available on the Hub.\""
+ },
+ {
+  "sentence": "Qwen3.x-family tokenizers have chat templates that default to enabling a multi-step thinking block, so without the flag they would silently consume the entire max_new_tokens budget producing <thinking>...</thinking> output before reaching the answer.",
+  "defect_class": "b",
+  "cited": "No — no citation attached, although the Qwen3 technical report is in the reference list.",
+  "why_unsupported": "Two over-reaches. First, the claim is generalised to the whole \"Qwen3.x-family\" of tokenizers; the study used two checkpoints (Qwen3-1.7B and Qwen3-4B) and observed those. Second, \"would silently consume the entire max_new_tokens budget\" is an absolute counterfactual about a configuration the study deliberately never ran at scale — no without-flag ablation is reported anywhere in Chapters 4–6. (The tag name is also wrong for Qwen3, which emits <think>.)",
+  "proposed_fix": "\"The Qwen3 tokenizers used here (Qwen3-1.7B and Qwen3-4B) ship chat templates that enable a thinking block by default; with the flag unset, generation can spend much or all of the max_new_tokens budget on the reasoning trace before reaching the answer, which was observed during pilot runs.\""
+ },
+ {
+  "sentence": "This prevents accidental CPU execution of a four-bit path that BitsAndBytes does not support.",
+  "defect_class": "b",
+  "cited": "No citation attached; the reference list contains QLoRA and LLM.int8() but neither is cited here.",
+  "why_unsupported": "An unqualified statement about a third-party library's capability across all versions and backends. bitsandbytes' multi-backend work has added non-CUDA (including CPU) execution paths for 4-bit, so the blanket \"does not support\" is version- and build-dependent, and the study measured nothing about CPU 4-bit support — it simply refuses to run there.",
+  "proposed_fix": "\"This prevents accidental CPU execution of the four-bit path, which the CUDA bitsandbytes build pinned in this study does not provide.\" — scope the claim to the pinned build rather than to the library in general."
+ },
+ {
+  "sentence": "Without it, stacking-induced out-of-memory errors would occur immediately when a second model is loaded into the same job.",
+  "defect_class": "b",
+  "cited": "No citation attached.",
+  "why_unsupported": "\"Would occur immediately\" asserts a deterministic outcome for a configuration the study did not systematically test; whether a second load OOMs depends on the two models' sizes and the GPU's free memory, and the very next sentence concedes the situation \"does arise in local development\" only — i.e. an incidental observation, not a characterised failure mode. The report also states this case is structurally avoided on TC1, so no cluster evidence exists.",
+  "proposed_fix": "\"Without it, the first model's allocations can remain resident, and loading a second model into the same job risks an out-of-memory failure; this was observed during local development.\""
+ },
+ {
+  "sentence": "Because the /tmp filesystem is local to each node and is not shared, the compute node could not find the file.",
+  "defect_class": "d",
+  "cited": "No citation attached.",
+  "why_unsupported": "The observed evidence is a missing-file failure on the compute node. The stated cause — that TC1's /tmp is node-local rather than shared — is an inference about the cluster's storage configuration that the report neither cites to the TC1 user guide nor verifies (a directory listing on the compute node would have shown it). It is plausible, but it is presented as the established cause of the failure.",
+  "proposed_fix": "\"The compute node could not find the file, which is consistent with /tmp being node-local rather than shared across TC1 nodes.\" Alternatively, cite the relevant page of the TC1 user guide for the /tmp semantics."
+ },
+ {
+  "sentence": "Not used on TC1, where head-node Python is disallowed.",
+  "defect_class": "b",
+  "cited": "No — the cell points to \"Section 5, TC1 runbook\" for the submission method, not for this policy assertion.",
+  "why_unsupported": "A blanket statement about the operator's policy (\"head-node Python is disallowed\") that the report's own §5.5 violates: the pre-cache step runs `python scripts/prefetch_tc1.py` and an inline `python - <<'PY'` login heredoc on the head node, and §5.3 defends that as permitted. The guide, as quoted in §5.3, forbids executing coding / high-CPU-and-memory user processes, which is narrower than \"Python is disallowed\". One of the two statements must be wrong as written.",
+  "proposed_fix": "\"Not used on TC1: the user guide forbids running user compute on the head node, and this subcommand would execute the submission logic there. TC1 jobs are submitted with direct sbatch.\" — and align §5.5's justification with the same wording."
+ },
+ {
+  "sentence": "XSTest is not fetched from Hugging Face, because the canonical CSV is bundled in the repository as data/xstest_v2_prompts.csv.",
+  "defect_class": "c",
+  "cited": "No — no citation attached, although the XSTest paper (Röttger et al., NAACL 2024) is in the reference list.",
+  "why_unsupported": "\"The canonical CSV\" asserts that the bundled file is the authoritative version of the XSTest prompt set — an exclusivity claim about an external artifact that is neither cited to the XSTest authors' release nor checked against it (no hash or revision is given for the bundled copy). Minor, but it is the kind of authority claim that should carry its source.",
+  "proposed_fix": "\"XSTest is not fetched from Hugging Face, because the v2 prompt CSV released by Röttger et al. [XSTest ref] is bundled in the repository as data/xstest_v2_prompts.csv (SHA-256 recorded in the artifact manifest).\""
+ },
+ {
+  "sentence": "Because the compute nodes may not have outbound internet access, and because runtime downloads risk burning the six-hour walltime budget on slow Hugging Face mirrors, this study adopts a strict offline-mode strategy.",
+  "defect_class": "b",
+  "cited": "No citation attached.",
+  "why_unsupported": "\"Slow Hugging Face mirrors\" characterises the throughput of third-party infrastructure as a general property. No download-throughput measurement from TC1 compute nodes is reported (and the offline strategy means none was taken). The first clause is properly hedged (\"may not\"); the second is not.",
+  "proposed_fix": "\"...and because runtime downloads would place unmeasured and unpredictable network transfer time inside the six-hour walltime budget, this study adopts a strict offline-mode strategy.\""
+ },
+ {
+  "sentence": "MMLU [27], the Massive Multitask Language Understanding benchmark, has become a standard general-capability anchor in safety studies.",
+  "defect_class": "(a) prevalence + (e) attribution mismatch",
+  "cited": "Yes — [27] Hendrycks et al., ICLR 2021 (the MMLU paper).",
+  "why_unsupported": "\"Has become a standard ... in safety studies\" is a claim about adoption within a subsequent literature. [27] is the 2021 benchmark-introduction paper; it predates the safety-quantization literature entirely and reports nothing about how other authors use MMLU. Establishing that a benchmark exists is not establishing that it is standard practice in a downstream field.",
+  "proposed_fix": "\"MMLU [27], the Massive Multitask Language Understanding benchmark, measures multiple-choice accuracy across academic and professional subjects and is used here as the general-capability anchor.\""
+ },
+ {
+  "sentence": "By measuring multiple-choice accuracy across a broad spectrum of academic and professional subjects, MMLU provides a capability signal that is largely independent of refusal behaviour.",
+  "defect_class": "(e) attribution mismatch (unsupported empirical property)",
+  "cited": "No citation on this sentence; [27] appears two sentences earlier.",
+  "why_unsupported": "Statistical independence between MMLU accuracy and refusal behaviour is an empirical relationship. [27] measures multitask accuracy only and never studies refusal; this study does not measure the correlation either. The defensible version of the point is structural, not statistical: MMLU is scored by exact-match on multiple-choice answers, so it does not pass through the refusal parser.",
+  "proposed_fix": "\"MMLU is scored by exact match over multiple-choice answers rather than over free-form text, so its capability signal does not depend on the refusal parser used for the safety benchmarks.\""
+ },
+ {
+  "sentence": "Two benchmarks have emerged as the practical standards for measuring opposite sides of this trade-off.",
+  "defect_class": "(a) prevalence + (c) superlative / exclusivity",
+  "cited": "No citation on this sentence; [24] HarmBench and [18] XSTest are cited in the two sentences that follow.",
+  "why_unsupported": "\"The practical standards\" asserts both field-wide adoption and exclusivity (i.e. these two and not others). The benchmark papers establish that each instrument exists and what it measures, not that the field has settled on them; the chapter itself then describes OR-Bench [19] as an alternative over-refusal instrument at 320x the prompt count, which cuts against the exclusivity.",
+  "proposed_fix": "\"Two benchmarks, used here, measure opposite sides of this trade-off.\""
+ },
+ {
+  "sentence": "The existence of OR-Bench nevertheless establishes that over-refusal is now treated as a first-class safety axis rather than a footnote.",
+  "defect_class": "(e) attribution mismatch + (a) prevalence",
+  "cited": "Attached by reference to [19] OR-Bench in the preceding sentences.",
+  "why_unsupported": "\"Establishes\" over-claims what one benchmark can show. The existence of a single dedicated benchmark demonstrates that its authors treat over-refusal as a first-class axis; it does not establish how the field at large now treats it. The verb is the problem — the sentence asserts entailment from one artifact to a community-wide norm.",
+  "proposed_fix": "\"OR-Bench nevertheless shows that over-refusal is now the subject of dedicated, large-scale benchmarks in its own right.\""
+ },
+ {
+  "sentence": "Most quantization studies focus on the seven-billion-to-thirteen-billion parameter range and above.",
+  "defect_class": "(a) prevalence",
+  "cited": "No citation on this sentence.",
+  "why_unsupported": "\"Most\" is a quantified claim over the quantization literature with no bibliometric survey behind it. The chapter's actual evidence is the ten-row Table 2.1, which is a convenience selection of the closest studies, not a representative sample — and one of its own rows, Kharinaev et al. [10], spans 66 variants of unstated size.",
+  "proposed_fix": "\"The quantization studies surveyed in Table 2.1 concentrate on models of seven billion parameters and above.\""
+ },
+ {
+  "sentence": "The studies that measure safety carefully tend not to hold a capability anchor on the same models, and the studies that measure capability carefully tend not to measure safety at all.",
+  "defect_class": "(f) absence of evidence stated as evidence of absence",
+  "cited": "Rests on Table 2.1, whose entries are cited per-row.",
+  "why_unsupported": "This reads the table's \"not reported\" cells as evidence that the property is absent from those studies, which the table's own caption forbids in the same breath: \"Entries are compiled from each paper's abstract and stated scope. 'Not reported' means the property is not stated in the source consulted, and should not be read as evidence that the authors did not consider it.\" Compiling from abstracts cannot show that a paper did not measure something. The generalisation is also stated over \"the studies\" rather than over the ten rows.",
+  "proposed_fix": "\"Across the rows of Table 2.1, the studies that measure safety carefully mostly do not report a capability anchor on the same models, and those that measure capability carefully mostly do not report a safety measurement — subject to the caption's caveat that these entries reflect the sources consulted rather than what the authors did.\""
+ },
+ {
+  "sentence": "These benchmarks have published leaderboards that cover popular open-weight model families such as Llama, Mistral, Qwen, and Falcon, and they have meaningfully shifted the conversation around what constitutes an acceptable safety profile in publicly released models.",
+  "defect_class": "(d) causal attribution to unmeasured factors + (a) prevalence",
+  "cited": "[20] TrustLLM, [21] DecodingTrust, [22] SafetyBench are cited earlier in the paragraph.",
+  "why_unsupported": "Two problems. \"Meaningfully shifted the conversation\" is a claim about a benchmark's downstream influence on community norms — a benchmark paper cannot evidence its own field-level impact, and no citation-impact or norms study is in the reference list. \"Popular\" is a separate, unsupported prevalence adjective; the leadership fact the sentence needs is only that the leaderboards cover these families.",
+  "proposed_fix": "\"These benchmarks publish leaderboards covering open-weight model families such as Llama, Mistral, Qwen, and Falcon, and each states explicit criteria for what an acceptable safety profile looks like in a publicly released model.\""
+ },
+ {
+  "sentence": "Second, they focus on mid-to-large models in the seven-billion-to-seventy-billion parameter range, where alignment training tends to be strongest.",
+  "defect_class": "(b) universal / general empirical generalisation",
+  "cited": "No citation on the trailing clause.",
+  "why_unsupported": "The first half is a checkable statement about the three named frameworks; the trailing clause \"where alignment training tends to be strongest\" is a general empirical claim that alignment quality scales with parameter count. Nothing in the reference list measures alignment strength as a function of scale — [7] Dettmers and Zettlemoyer and [29] Badshah and Sajjad are capability-scaling results only, and the chapter itself says of them, \"Both results concern capability alone.\" The clause also does load-bearing work: it is the premise of Gap 1's \"weaker case\" argument.",
+  "proposed_fix": "\"Second, they focus on mid-to-large models in the seven-billion-to-seventy-billion parameter range, leaving the compact regime that this study targets under-covered.\""
+ },
+ {
+  "sentence": "A central, well-documented limitation of static safety benchmarks is their difficulty in jointly capturing the tension between helpfulness and harmlessness.",
+  "defect_class": "(b) vague attribution / \"well-documented\"",
+  "cited": "No citation on this sentence.",
+  "why_unsupported": "\"Well-documented\" asserts a body of published evidence without naming any of it — the classic uncited appeal to consensus. The relevant sources do exist ([18] XSTest for exaggerated safety, [14] Bai et al. for the helpfulness/harmlessness tension) but neither is attached here, so as written the reader cannot check the claim.",
+  "proposed_fix": "Either attach the sources — \"A limitation of static safety benchmarks, documented by [14] and [18], is ...\" — or drop the intensifier: \"A limitation of static safety benchmarks is their difficulty in jointly capturing the tension between helpfulness and harmlessness.\""
+ },
+ {
+  "sentence": "Instruction tuning with human feedback is a primary reason these models are usable as assistants: for GPT-3 it made a 1.3-billion-parameter model's outputs preferred over those of the 175-billion-parameter base model, improved truthfulness, and produced small reductions in toxic output under respectful prompting, though no improvement in bias [23].",
+  "defect_class": "(d) causal attribution to unmeasured factors",
+  "cited": "Yes — [23] Ouyang et al., NeurIPS 2022 (InstructGPT).",
+  "why_unsupported": "The colon presents the InstructGPT result as evidence for the general claim in the lead clause, but the two are not commensurate. [23] is a single-family ablation showing that InstructGPT outputs were preferred over GPT-3 outputs; it does not establish that instruction tuning is \"a primary reason\" modern assistants generally are usable, which would require attributing usability across models to one training stage among many (pretraining scale, data curation, chat templating, system prompting) that neither [23] nor this study measures. The clause after the colon is accurate and fully supported.",
+  "proposed_fix": "\"Instruction tuning with human feedback is one route to making a base model usable as an assistant: for GPT-3 it made a 1.3-billion-parameter model's outputs preferred over those of the 175-billion-parameter base model, improved truthfulness, and produced small reductions in toxic output under respectful prompting, though no improvement in bias [23].\""
+ },
+ {
+  "sentence": "That finding is the nearest prior analogue to the null-safety-at-four-bit picture found here, although their study covers larger models and a different trust taxonomy.",
+  "defect_class": "(c) superlative / exclusivity",
+  "cited": "Refers to [37] Hong et al., ICML 2024.",
+  "why_unsupported": "\"The nearest prior analogue\" is a superlative over the entire prior literature, which would require having surveyed it exhaustively; the chapter surveyed a selected set of about ten studies. The trailing clause hedges the differences but not the ranking. The same superlative recurs in the section heading and in \"Table 2.1 places the closest prior studies side by side\", where it is a selection descriptor and reads less strongly.",
+  "proposed_fix": "\"Among the studies reviewed here, that finding is the closest analogue to the null-safety-at-four-bit picture found in this study, although their study covers larger models and a different trust taxonomy.\""
+ },
+ {
+  "sentence": "None of the three frameworks makes quantization a controlled experimental variable, and for the API-served systems that DecodingTrust covers the serving precision is not disclosed at all.",
+  "defect_class": "(b) universal / never",
+  "cited": "Refers to [20], [21], [22]; no citation for the disclosure claim.",
+  "why_unsupported": "The first clause is a bounded negative over three enumerated, checkable sources and is fine. The second is an unbounded claim about a third party's disclosure practices — that the serving precision of the GPT-3.5/GPT-4 endpoints is \"not disclosed at all\", anywhere, by anyone. Nothing in the reference list documents an absence of vendor disclosure, and the claim would have to be re-verified over time to stay true.",
+  "proposed_fix": "\"None of the three frameworks makes quantization a controlled experimental variable, and neither DecodingTrust nor this review identifies a stated serving precision for the API-served systems it covers.\""
+ },
+ {
+  "sentence": "What the literature does not settle is how to read them jointly when the model has been compressed.",
+  "defect_class": "(b) universal / all prior work",
+  "cited": "No citation on this sentence.",
+  "why_unsupported": "\"The literature\" is unbounded. The supportable version is scoped to what Section 2.2 actually reviewed. This is the same overreach as the Gap 3 sentence, in softer form, and it can be fixed with one word.",
+  "proposed_fix": "\"What the work reviewed here does not settle is how to read them jointly when the model has been compressed.\""
+ },
+ {
+  "sentence": "A substantial adjacent literature instead attacks the model.",
+  "defect_class": "(a) prevalence",
+  "cited": "No citation on this sentence; [25], [17], [26] follow.",
+  "why_unsupported": "Minor, but \"substantial\" quantifies the size of a body of work without a survey. The three citations that follow show the literature exists and is influential, not that it is substantial in volume. The sentence loses nothing by dropping the adjective.",
+  "proposed_fix": "\"An adjacent literature instead attacks the model.\""
+ },
+ {
+  "sentence": "Section 2.3 turns to the compact models and on-device deployment setting that make the question practically urgent.",
+  "defect_class": "(a) prevalence / adoption",
+  "cited": "No citation (chapter roadmap sentence).",
+  "why_unsupported": "Minor, but \"practically urgent\" derives its force from an implied prevalence of on-device quantized deployment — precisely the claim Section 2.3 later declines to make (\"How widely each path is used in practice is not measured here, and no prevalence figure is claimed for it\"). The roadmap sentence should not assert what the section it introduces explicitly disclaims.",
+  "proposed_fix": "\"Section 2.3 turns to the compact models and on-device deployment setting that motivate the question.\""
+ },
+ {
+  "sentence": "XSTest is the canonical over-refusal benchmark.",
+  "defect_class": "(c) superlative/exclusivity",
+  "cited": "No citation attached to this sentence. [18] Röttger et al. (XSTest) and [19] Cui et al. (OR-Bench) are both in the reference list.",
+  "why_unsupported": "\"The canonical\" asserts singular field-wide status. The report's own reference list contains a competing over-refusal benchmark ([19] OR-Bench), which contradicts exclusivity. The XSTest paper establishes what the suite is, not that it is the field's canonical instrument.",
+  "proposed_fix": "\"XSTest [18] is a widely used over-refusal test suite, and is the over-refusal benchmark used here.\" (Optionally add: \"other over-refusal suites exist, e.g. OR-Bench [19]; they are not evaluated in this study.\")"
+ },
+ {
+  "sentence": "This design choice is the strongest internal-validity property of the study.",
+  "defect_class": "(c) superlative",
+  "cited": "No citation attached to this sentence.",
+  "why_unsupported": "A ranking claim over all of the study's validity properties (against seed control, fixed prompt order, immutable artifacts, judge validation) that is asserted rather than argued or measured. Superlative framing of this kind is what the report elsewhere commits to avoiding.",
+  "proposed_fix": "\"This design choice is a core internal-validity property of the study.\" Or state the substance without the ranking: \"This design choice removes checkpoint provenance as a confound.\""
+ },
+ {
+  "sentence": "The textbook-correct significance test is therefore McNemar's exact test [40] on the discordant prompts, those scored harmful under exactly one member, rather than an unpaired two-proportion test.",
+  "defect_class": "(b) universal / appeal to unstated consensus",
+  "cited": "Yes — [40] Q. McNemar, Psychometrika, 1947.",
+  "why_unsupported": "[40] introduces the paired test for correlated proportions; it does not establish that this test is \"the textbook-correct\" choice for this endpoint, and \"textbook-correct\" asserts a field-wide methodological consensus with no source. The exact conditional test is a defensible choice, not a uniquely correct one (exact-vs-asymptotic McNemar, and paired bootstrap, are all live options — the study itself reports two criteria).",
+  "proposed_fix": "\"Because the contrast is paired-binary, the appropriate test is McNemar's exact test [40] on the discordant prompts ... rather than an unpaired two-proportion test.\" Drop \"textbook-correct\"."
+ },
+ {
+  "sentence": "Any within-cluster correlation would work against the reported nulls rather than for them.",
+  "defect_class": "(b) universal claim, unmeasured",
+  "cited": "No citation attached to this sentence. [45] Card et al. (statistical power) is in the reference list but is not invoked here.",
+  "why_unsupported": "\"Any\" makes this a categorical claim about all possible clustering structures, and no design effect or intra-class correlation was estimated anywhere in the study (the preceding sentence, \"the effective information content is at most the nominal n\", is likewise asserted without an estimate). The stated direction is also not demonstrated: reducing effective n widens intervals, which generally makes a non-significant result more likely to persist, not less — so the sentence's directional claim needs an argument, not an assertion.",
+  "proposed_fix": "\"Item clustering by category or subject is not modelled here; the effective sample size may therefore be smaller than the nominal n. No design effect was estimated, so the direction and size of that impact on the reported intervals is unquantified.\""
+ },
+ {
+  "sentence": "Because decoding is deterministic at temperature 0.0, there is no within-condition stochastic variance.",
+  "defect_class": "(f) absence of evidence stated as evidence of absence",
+  "cited": "No citation attached to this sentence.",
+  "why_unsupported": "Zero within-condition variance is asserted, not measured: the study reports no repeat-run replication under identical settings. Greedy decoding removes sampling variance by construction, but it does not remove run-to-run non-determinism from GPU kernel selection, batching, or reduction order, which the study did not test for.",
+  "proposed_fix": "\"Greedy decoding at temperature 0.0 removes sampling variance by construction, so the intervals reflect prompt-sampling variance only. Residual run-to-run non-determinism from GPU kernel and batching effects was not measured.\""
+ },
+ {
+  "sentence": "Safety and capability preserved and over-refusal not worsened (stable or improved): quantization preserves alignment.",
+  "defect_class": "(f) absence of evidence stated as evidence of absence",
+  "cited": "No citation attached (Table 3.4, robust_preservation row).",
+  "why_unsupported": "The label is assigned when point-estimate deltas stay inside ±0.02/−0.03 tolerances; the gloss then upgrades \"no threshold-crossing change was detected\" into the positive proposition that alignment is preserved. Section 3.8 itself concedes the opposite (\"null for robust_preservation, because a bounded CI cannot positively certify a null\"), so the table gloss contradicts the chapter's own evidence-status semantics.",
+  "proposed_fix": "\"Safety and capability preserved and over-refusal not worsened (stable or improved): no threshold-crossing change in alignment was detected (evidence_status = null; this does not certify equivalence).\""
+ },
+ {
+  "sentence": "ASR in this study therefore measures harmful compliance under direct requests, which is the weakest threat model in the HarmBench taxonomy and is equivalent to HarmBench's DirectRequest baseline.",
+  "defect_class": "(c) superlative + (e) attribution (uncited external claim)",
+  "cited": "No citation attached to this sentence, although [24] Mazeika et al. (HarmBench) is in the reference list and is the source being characterised.",
+  "why_unsupported": "Two claims about an external artefact carry no attribution: that direct requests are \"the weakest\" threat model in HarmBench's taxonomy (a ranking over that paper's attack set), and that this study's setup is \"equivalent to\" the paper's named DirectRequest baseline (an equivalence to another paper's protocol, which the study did not verify against that paper's implementation).",
+  "proposed_fix": "\"ASR in this study measures harmful compliance under direct, unmodified requests — the no-attack condition, corresponding to HarmBench's DirectRequest baseline [24] and the least adversarial setting in that suite.\" Attach [24] and soften \"equivalent to\" to \"corresponding to\" unless the implementation was checked against HarmBench's own."
+ },
+ {
+  "sentence": "HarmBench is selected as the harmful-compliance benchmark because it is a standardized harmful-behaviour benchmark with a stable, published definition of attack success.",
+  "defect_class": "(e) attribution — external claim with no citation",
+  "cited": "No citation attached to this sentence; [24] Mazeika et al. (HarmBench) exists in the reference list and is the obvious source.",
+  "why_unsupported": "\"Standardized\" and \"stable, published definition of attack success\" are claims about the external benchmark's status and content, stated in the report's own voice with no reference. The very next sentences then qualify the release actually used (the walledai pooled 200-behaviour config, which does not preserve the official validation/test partition), so the \"standardized\" framing needs to be tied to the source it is claimed from.",
+  "proposed_fix": "\"HarmBench [24] is selected as the harmful-compliance benchmark because it defines harmful behaviours and attack success in a published, reusable protocol.\""
+ },
+ {
+  "sentence": "XSTest's own protocol relies on LLM-based three-way labelling (full compliance / partial refusal / full refusal) rather than a released fine-tuned classifier.",
+  "defect_class": "(e) attribution — external claim, including an absence claim, with no citation",
+  "cited": "No citation attached to this sentence; [18] Röttger et al. (XSTest) is in the reference list.",
+  "why_unsupported": "This describes another paper's scoring protocol and additionally asserts a negative about it (that no fine-tuned classifier was released) in the report's own voice, with no reference. Absence claims about what a third party did or did not release require either a citation or an explicit scoping to what was checked and when.",
+  "proposed_fix": "\"XSTest's own protocol scores responses with LLM-based three-way labelling (full compliance / partial refusal / full refusal) [18]; no fine-tuned scorer was released with the suite as of the version bundled here.\""
+ },
+ {
+  "sentence": "ARC-Challenge (allenai/ai2_arc) is added as a structurally different second capability benchmark, comprising roughly 1,172 grade-school science questions designed to resist retrieval shortcuts and scored by the identical exact-match rule as MMLU.",
+  "defect_class": "(e) attribution — external design claim with no citation",
+  "cited": "No citation attached to this sentence; [28] Clark et al. (ARC) is in the reference list.",
+  "why_unsupported": "\"Designed to resist retrieval shortcuts\" is a claim about the intent and construction of an external dataset (the Challenge split was formed from questions that retrieval and word-co-occurrence baselines answered incorrectly). That is a proposition owned by the ARC paper and must be cited to it; the study did not verify shortcut-resistance itself.",
+  "proposed_fix": "Attach the citation: \"... comprising 1,172 grade-school science questions whose Challenge split was constructed from items that retrieval- and co-occurrence-based baselines answered incorrectly [28] ...\""
+ },
+ {
+  "sentence": "The Llama-3.2-3B pair [2] sits between them by parameter count and serves as a cross-family check.",
+  "defect_class": "(e) attribution mismatch",
+  "cited": "Yes — [2] A. Grattafiori et al., \"The Llama 3 herd of models,\" 2024, arXiv:2407.21783.",
+  "why_unsupported": "The Llama 3 Herd paper documents the Llama 3 / 3.1 releases (8B, 70B, 405B). It does not introduce or document meta-llama/Llama-3.2-3B-Instruct, which was a later release with its own model card. The reference is real but does not establish the specific model used here.",
+  "proposed_fix": "Either cite the Llama 3.2 release/model card for the 3B-Instruct checkpoint and keep [2] for the family lineage (\"the Llama 3 family [2]; the 3.2-3B-Instruct checkpoint used here is documented in its release card [new ref]\"), or reword to \"a Llama-family model from the Llama 3 lineage [2]\"."
+ },
+ {
+  "sentence": "However, the CPU path is not used for quantized runs, because BitsAndBytes requires a CUDA device.",
+  "defect_class": "(b) universal claim about external software",
+  "cited": "No citation attached to this sentence.",
+  "why_unsupported": "Stated as a property of the library in general. bitsandbytes device support is version-dependent (non-CUDA backends have since been added), so the unqualified \"requires a CUDA device\" is an over-general claim; what the study can attest to is the behaviour of the pinned version in its environment, plus its own loader's refusal to quantize on CPU.",
+  "proposed_fix": "\"However, the CPU path is not used for quantized runs: in the pinned bitsandbytes version used here, 4-bit loading requires a CUDA device.\""
+ },
+ {
+  "sentence": "Switching to the official Qwen3 release, Qwen/Qwen3-1.7B and Qwen/Qwen3-4B, eliminated all external dependencies.",
+  "defect_class": "(b) universal",
+  "cited": "No citation attached to this sentence.",
+  "why_unsupported": "\"All external dependencies\" is contradicted by the immediately following sentence, which notes the models still load and run via transformers and bitsandbytes. What was eliminated was the extra custom-kernel dependency (causal-conv1d, flash-linear-attention), not external dependencies as a class.",
+  "proposed_fix": "\"Switching to the official Qwen3 release, Qwen/Qwen3-1.7B and Qwen/Qwen3-4B, removed the extra custom-kernel dependencies.\""
+ },
+ {
+  "sentence": "Those checkpoints use a hybrid linear-attention/SSM architecture that requires the causal-conv1d and flash-linear-attention libraries at runtime.",
+  "defect_class": "(b) universal / (e) uncited external claim",
+  "cited": "No citation attached to this sentence; the checkpoints are not in the reference list.",
+  "why_unsupported": "An architectural and runtime-requirement claim about third-party uploads, generalised from a single failed job in one cluster environment, with no model card, paper, or documentation cited. The study observed a specific failure mode; it did not establish that the libraries are required in general.",
+  "proposed_fix": "\"Those checkpoints are documented as using a hybrid linear-attention/SSM architecture [cite model card]; in the TC1 environment, loading them without causal-conv1d and flash-linear-attention failed at the first inference batch.\""
+ },
+ {
+  "sentence": "The libraries require custom CUDA kernel compilation against the cluster's specific driver version and are not trivially installable in an offline environment.",
+  "defect_class": "(b) universal / (e) uncited external claim",
+  "cited": "No citation attached to this sentence.",
+  "why_unsupported": "\"Not trivially installable\" is stated as a general property of the libraries. The evidence available to the study is that installation was judged infeasible under TC1's offline, no-head-node-compute policy — an environment-specific finding, and the chapter does not report that an installation was actually attempted.",
+  "proposed_fix": "\"Installing them requires compiling CUDA kernels against the node's driver version, which was judged infeasible under TC1's offline execution policy (Section 5.x); installation was therefore not attempted.\""
+ },
+ {
+  "sentence": "It is the scorer for XSTest over-refusal, and for HarmBench it is retained as a secondary, refusal-based upper-bound proxy, because it measures non-refusal rather than genuine harmful compliance.",
+  "defect_class": "(e) attribution mismatch (construct)",
+  "cited": "No citation attached to this sentence.",
+  "why_unsupported": "\"Genuine harmful compliance\" is the classifier's output treated as ground truth for the construct. The study's own validation grounds the classifier only imperfectly (a human-agreement κ around 0.59 and cross-judge κ ranges well below 1), so the classifier is a better-validated proxy, not a measurement of the genuine construct. Also affects the parallel phrase in Section 3.5's next paragraph (\"diverges from genuine harmful-compliance scoring\") — fix both.",
+  "proposed_fix": "\"... retained as a secondary, refusal-based upper-bound proxy, because it measures non-refusal, whereas the classifier is trained to judge harmful compliance directly (its agreement with human labels is reported in Section 6.9).\""
+ },
+ {
+  "sentence": "HarmBench's reference generation budget for the primary study.",
+  "defect_class": "(e) attribution — external protocol value with no citation",
+  "cited": "No citation attached (Table 3.3, max_new_tokens rationale cell); [24] Mazeika et al. (HarmBench) is in the reference list.",
+  "why_unsupported": "Attributes a specific numeric protocol setting (512 new tokens) to the HarmBench reference implementation without citing it, so the reader cannot check whether 512 is HarmBench's documented budget or this study's choice. This matters because the 128-vs-512 comparison in Section 6.12 is load-bearing for a retracted result.",
+  "proposed_fix": "\"Matches the generation budget used in the HarmBench reference implementation [24]; the 128-token run is retained only as the Section 6.12 generation-length comparison.\""
+ },
+ {
+  "sentence": "The last two years have seen a rapid proliferation of compact instruction-tuned large language models (LLMs) in the one-to-four-billion-parameter range.",
+  "defect_class": "(a) prevalence / adoption",
+  "cited": "No citation attached to this sentence (the citations [1]-[4] appear only in the following sentence).",
+  "why_unsupported": "\"Rapid proliferation\" is a quantitative claim about release volume and market trend over a stated time window. The report measures nothing about the population of released models, and the four model-release papers that follow establish only that four specific model families exist.",
+  "proposed_fix": "Replace with an existence claim the citations support: \"Several capable instruction-tuned LLMs have been released in the one-to-four-billion-parameter range [1]-[4].\""
+ },
+ {
+  "sentence": "Models such as Qwen 2.5 and 3.x [1], Llama 3.2 [2], Microsoft Phi-4-mini [3], and Google Gemma 2 [4] have demonstrated that capable reasoning and instruction following are achievable well below frontier parameter counts, and the smallest members of these families are sized for consumer hardware, mobile chipsets, and edge accelerators [2], [3].",
+  "defect_class": "(e) attribution mismatch",
+  "cited": "Yes — [1], [2], [3], [4], and [2], [3] again for the second clause.",
+  "why_unsupported": "Two mismatches. (i) [1] is the *Qwen3* technical report (arXiv:2505.09388); it is cited for \"Qwen 2.5\", a different model generation with its own report. (ii) [2] is \"The Llama 3 herd of models\" (arXiv:2407.21783), which describes the Llama 3/3.1 8B-405B models; it does not describe the Llama 3.2 1B/3B lightweight models, and it is then re-cited as evidence that the smallest members are \"sized for consumer hardware, mobile chipsets, and edge accelerators\" — an on-device sizing claim the herd paper does not make. Per the brief's own note, a release paper establishes capability, size and availability, not edge-deployment framing.",
+  "proposed_fix": "Cite the generation actually referenced (add the Qwen2.5 technical report and a Llama 3.2 source, or drop \"Qwen 2.5\" and write \"Llama 3 [2]\"), and support the edge-sizing clause only with the source that states it: \"...and the smallest members are released at sizes intended for on-device use [3].\""
+ },
+ {
+  "sentence": "This has shifted the practical envelope of LLM deployment.",
+  "defect_class": "(a) prevalence / adoption",
+  "cited": "No citation attached to this sentence.",
+  "why_unsupported": "An assertion about how LLMs are actually deployed in the world. Neither this study nor the cited model-release papers measure deployment practice; availability of small models does not establish that deployment has shifted.",
+  "proposed_fix": "Scope it to capability rather than practice: \"This makes local execution technically feasible at parameter counts that previously required server-class hardware.\""
+ },
+ {
+  "sentence": "Tasks that previously required cloud-hosted seven-to-seventy-billion-parameter models can now be executed locally, which keeps user data on the device and can reduce inference latency [5].",
+  "defect_class": "(e) attribution mismatch",
+  "cited": "Yes — [5] (AWQ, MLSys 2024).",
+  "why_unsupported": "AWQ reports on-device speedups for quantized models; it does not establish the comparative claim that tasks formerly requiring 7B-70B cloud models are now served by compact local models, which would require a capability-transfer measurement across the two deployment regimes. The report measures nothing about task migration either.",
+  "proposed_fix": "State only what [5] supports: \"Quantized models can be run on desktop and mobile hardware, which keeps user data on the device and can reduce inference latency [5].\""
+ },
+ {
+  "sentence": "Consequently, four bits is the operating point that compression research targets for on-device inference.",
+  "defect_class": "(a) prevalence / adoption; (c) exclusivity",
+  "cited": "No citation attached to this sentence (supporting citations appear in the next sentence).",
+  "why_unsupported": "\"The operating point that compression research targets\" is a field-wide characterisation asserting that four bits is the target of the research area as a whole. The evidence assembled is one scaling-law result [7] and a handful of exemplar papers; no survey of the literature's operating points is cited or performed.",
+  "proposed_fix": "Downgrade to an exemplar claim: \"Four bits is accordingly a common operating point in on-device compression work.\" — or delete, since the following sentence already carries the supported version."
+ },
+ {
+  "sentence": "AWQ is designed explicitly for on-device compression and ships four-bit weights in its own desktop and mobile runtime [5], and four bits is where the compression literature concentrates its own evaluation effort [8], [9].",
+  "defect_class": "(a) prevalence / adoption",
+  "cited": "Yes — [5] for the first clause, [8], [9] for the second.",
+  "why_unsupported": "The second clause generalises from two evaluation papers to where an entire literature \"concentrates its evaluation effort\". [8] and [9] are individual evaluation studies that happen to include four-bit settings (both also evaluate other bit-widths); they are evidence that four bits is evaluated, not evidence about the distribution of effort across the field.",
+  "proposed_fix": "\"...and four bits is among the settings evaluated in recent quantization-evaluation studies [8], [9].\""
+ },
+ {
+  "sentence": "Quantization has historically been treated as a numerical optimisation technique whose primary cost is a small loss in perplexity or downstream accuracy [6], [7].",
+  "defect_class": "(b) universal / general characterisation of prior work",
+  "cited": "Yes — [6], [7].",
+  "why_unsupported": "\"Has historically been treated as\" is a claim about how a field as a whole has framed a technique over time. Two method papers are exemplars of that framing, not evidence of its historical dominance; no historiographic survey is cited.",
+  "proposed_fix": "Attribute the framing to the exemplars: \"Quantization is commonly evaluated as a numerical optimisation whose primary cost is a small loss in perplexity or downstream accuracy; both [6] and [7] assess it on those terms.\""
+ },
+ {
+  "sentence": "However, a growing body of evidence challenges this view.",
+  "defect_class": "(a) prevalence / trend claim about the literature",
+  "cited": "No citation attached to this sentence.",
+  "why_unsupported": "\"Growing\" asserts a trend in publication volume over time, which is not established by the four individual papers cited in the sentences that follow, and is not measured here.",
+  "proposed_fix": "\"However, several recent results challenge this view.\""
+ },
+ {
+  "sentence": "Quantization degrades the confidence calibration of model predictions even where accuracy is preserved [11], and it can degrade safety alignment itself, with no single method dominating across models and bit-widths [10].",
+  "defect_class": "(b) universal claim stated as fact",
+  "cited": "Yes — [11] for the first clause, [10] for the second.",
+  "why_unsupported": "The first clause is stated unconditionally, as a property of quantization in general. [11] is titled \"When quantization affects confidence of large language models?\" and reports calibration effects for the specific models, methods and bit-widths it studies — its own framing is conditional. The second clause is appropriately hedged (\"can\"); the first is not.",
+  "proposed_fix": "Match the hedging of the second clause: \"Quantization can degrade the confidence calibration of model predictions even where accuracy is preserved [11], and it can degrade safety alignment itself...\""
+ },
+ {
+  "sentence": "Evidence from multilingual evaluation shows how easily such damage is missed, because automatic metrics there understated the harm in Japanese by roughly an order of magnitude relative to human judgment, and the paper reports that languages are disparately affected [13].",
+  "defect_class": "(e) attribution mismatch",
+  "cited": "Yes — [13].",
+  "why_unsupported": "The antecedent of \"such damage\" is quantization-induced calibration and *safety-alignment* damage, established in the preceding two sentences. [13] measures multilingual output quality, not safety alignment, so it supports \"automatic quality metrics can understate degradation\" rather than \"safety damage is easily missed\".",
+  "proposed_fix": "Name the scope of the evidence: \"A parallel measurement problem is documented for multilingual quality: automatic metrics understated degradation in Japanese by roughly an order of magnitude relative to human judgment, and languages were disparately affected [13].\""
+ },
+ {
+  "sentence": "Safety alignment is a learned behaviour, instilled by preference optimisation over human feedback [14].",
+  "defect_class": "(b) universal claim stated as fact",
+  "cited": "Yes — [14] (Bai et al., listed in the reference list as a preprint).",
+  "why_unsupported": "Stated as a universal property of safety alignment. Preference optimisation over human feedback is one route; supervised safety fine-tuning, data filtering and system-level guardrails are others, and [14] documents one lab's RLHF procedure rather than establishing that all safety alignment is instilled this way. The evidence grade (preprint) is also not flagged.",
+  "proposed_fix": "\"Safety alignment is a learned behaviour, typically instilled by supervised fine-tuning and preference optimisation over human feedback [14], [22].\""
+ },
+ {
+  "sentence": "It is mediated by a concentrated activation direction [15], and it is often shallow, adapting the output distribution mainly over the first few generated tokens [16].",
+  "defect_class": "(b) universal claim stated as fact",
+  "cited": "Yes — [15] for the first clause, [16] for the second.",
+  "why_unsupported": "The first clause states as a general property of refusal what [15] reports for a specific set of open chat models it probed; it is not phrased as an attribution. (The second clause is properly hedged with \"often\".)",
+  "proposed_fix": "\"In the open chat models probed by [15], refusal is mediated by a single activation direction, and it is often shallow...\""
+ },
+ {
+  "sentence": "Weight-modifying operations are already known to disturb it, since fine-tuning on as few as ten adversarially chosen examples can substantially compromise safety guardrails [17].",
+  "defect_class": "(b) generalisation from a single instance",
+  "cited": "Yes — [17].",
+  "why_unsupported": "The claim is about weight-modifying operations as a class; the evidence is a single such operation (adversarial fine-tuning). The generalisation is precisely the inferential step the chapter needs in order to reach quantization, so it should not be asserted as already established.",
+  "proposed_fix": "\"At least one weight-modifying operation is already known to disturb it: fine-tuning on as few as ten adversarially chosen examples can substantially compromise safety guardrails [17].\""
+ },
+ {
+  "sentence": "This failure mode is well documented, and over-refusal on benign prompts is now measured by dedicated benchmarks precisely because safety optimisation can make a model less helpful [18], [19].",
+  "defect_class": "(a) prevalence claim about the evidence base",
+  "cited": "Yes — [18], [19].",
+  "why_unsupported": "\"Well documented\" asserts a body of evidence for the specific failure mode named in the preceding sentence — a refusal-prone model being *scored as safer* by a compliance-only benchmark. [18] and [19] document exaggerated safety behaviour and provide benchmarks for it; they do not document the mis-scoring failure mode, and two papers do not establish \"well documented\".",
+  "proposed_fix": "\"Over-refusal on benign prompts is measured by dedicated benchmarks precisely because safety optimisation can make a model less helpful [18], [19].\" (drop \"This failure mode is well documented\")"
+ },
+ {
+  "sentence": "The other dominant post-training families, GPTQ [6] and AWQ [5], are excluded because each rests on a different error model, GPTQ compensating layer-wise quantization error with approximate second-order information while AWQ scales and protects a small set of salient weight channels, and each would require its own calibration pipeline, so folding them in would change two variables at once rather than one.",
+  "defect_class": "(a) prevalence / adoption",
+  "cited": "Yes — [6], [5] (attached to the method names, not to the dominance claim).",
+  "why_unsupported": "\"Dominant\" is an adoption/market-share claim about post-training quantization families. [6] and [5] are the methods' own papers: they establish that the methods exist and perform well, not that they dominate usage. This is the same defect class as the \"de facto standard\" and \"most widely adopted\" phrasings already removed elsewhere in the report.",
+  "proposed_fix": "\"Two other widely studied post-training families, GPTQ [6] and AWQ [5], are excluded because...\" — or simply \"The other post-training families, GPTQ [6] and AWQ [5], are excluded because...\""
+ },
+ {
+  "sentence": "This regime corresponds to the practical envelope of contemporary on-device deployment.",
+  "defect_class": "(a) prevalence / adoption",
+  "cited": "No citation attached to this sentence.",
+  "why_unsupported": "Asserts that the 1.7-7.2B band is what is actually deployed on device today. The study selected this band for tractability and hardware reasons; it measures nothing about deployment practice, and no source is offered for the envelope.",
+  "proposed_fix": "State the selection rationale instead: \"This regime was chosen because models of this size can be loaded and evaluated on a single 32 GB GPU and are the sizes released for on-device use by their publishers [2], [3].\""
+ },
+ {
+  "sentence": "A broad multi-axis ethical evaluation is already covered by larger institutional benchmarks.",
+  "defect_class": "(a) prevalence / coverage claim",
+  "cited": "No citation attached to this sentence, although [20]-[22] (TrustLLM, DecodingTrust, SafetyBench) are in the reference list.",
+  "why_unsupported": "Asserts as fact that broad ethical evaluation is \"already covered\" by other work, with nothing cited at the point of claim; coverage is also a completeness claim the report does not establish.",
+  "proposed_fix": "Attach the sources and soften to existence: \"Broad multi-axis ethical evaluation is the subject of larger institutional benchmarks [20]-[22].\""
+ },
+ {
+  "sentence": "A scorer-validity result with consequences beyond this study.",
+  "defect_class": "(c) exclusivity / external-generality claim",
+  "cited": "No citation; this is the report's own claim about its contribution.",
+  "why_unsupported": "Claims external validity for a result obtained on five model pairs, one benchmark and one regex implementation. The study can demonstrate the effect within its own scope; whether it generalises beyond is not measured.",
+  "proposed_fix": "\"A scorer-validity result with implications for how HarmBench-style compliance is scored.\""
+ },
+ {
+  "sentence": "Refusal-counting therefore overstates quantization harm, and that is a cautionary lesson for safety evaluation generally.",
+  "defect_class": "(b) universal generalisation beyond own data",
+  "cited": "No citation; asserted from the study's own results.",
+  "why_unsupported": "Two over-reaches in one sentence: (i) \"refusal-counting overstates quantization harm\" is stated as a general property of the method class, whereas the evidence is one specific v2 regex on HarmBench prompts over five pairs; (ii) \"a cautionary lesson for safety evaluation generally\" extends it to safety evaluation as a whole, which nothing here measures.",
+  "proposed_fix": "\"In this study, refusal-counting overstated quantization harm relative to the validated classifier, which suggests that regex-based compliance scoring should be validated before it is relied on.\""
+ },
+ {
+  "sentence": "This eliminates publisher-asymmetry and conversion-pipeline asymmetry, two confounds that affect comparisons assembled from separately published checkpoints.",
+  "defect_class": "(b) universal claim about prior work",
+  "cited": "No citation attached to this sentence.",
+  "why_unsupported": "The design claim (own study) is fine, but the appositive asserts as fact that these confounds \"affect\" comparisons built from separately published checkpoints — an empirical claim about other studies' results that is neither cited nor measured here.",
+  "proposed_fix": "Mark it as a risk rather than a demonstrated effect, or cite an instance: \"...two confounds that can affect comparisons assembled from separately published checkpoints.\""
+ },
+ {
+  "sentence": "The effect is also not bit-width-graded, in that a 128-token apparent increase in the smallest model does not replicate at the reference budget (Section 6.12).",
+  "defect_class": "(f) absence of evidence stated as evidence of absence (with a supporting clause that does not support it)",
+  "cited": "Internal cross-reference to Section 6.12; no external citation.",
+  "why_unsupported": "Two problems. (i) \"is not bit-width-graded\" asserts the absence of a gradient; the study reports non-significant contrasts, which licenses \"no bit-width gradient was detected\", not that none exists — unless an equivalence test is quoted. (ii) The justification given varies the *generation-token budget* (128 vs 512), not the bit width, so it cannot bear on bit-width grading at all; the fp16 -> INT8 -> NF4 comparison is the relevant evidence and is not the one cited here.",
+  "proposed_fix": "Separate the two claims and hedge the null: \"No bit-width gradient is detected across fp16, INT8 and NF4 (Section 6.11). Separately, the 128-token apparent increase in the smallest model does not replicate at the 512-token reference budget (Section 6.12).\""
+ },
+ {
+  "sentence": "Consequently the harmful-compliance null does not speak to robustness under optimised attacks (GCG, PAIR, and similar), which is precisely the regime where prior quantization-safety work reports attack-dependent effects.",
+  "defect_class": "(b) universal/exclusive characterisation of prior work, with (e) attribution mismatch",
+  "cited": "No citation attached to this sentence (the prior-work citations [10], [35], [36] appear only in 7.7).",
+  "why_unsupported": "\"precisely the regime where prior quantization-safety work reports attack-dependent effects\" makes two unsupported moves: it generalises over the whole prior literature with no citation, and the word \"precisely\" implies attack-mediated settings are the ONLY regime in which prior work reports quantization-safety effects. That is false against the report's own reference list: Kharinaev et al. [10] and Hong et al. [37] report method- and model-dependent safety/trust effects without optimised attacks, and Egashira et al. [12] exploit the quantization step itself rather than a prompt attack.",
+  "proposed_fix": "\"Consequently the harmful-compliance null does not speak to robustness under optimised attacks (GCG, PAIR, and similar); prior quantization-safety work that evaluates under such attacks reports attack-dependent effects [10], [35], [36].\" (Drop \"precisely the regime\"; attach the citations.)"
+ },
+ {
+  "sentence": "In addition, quantization's interaction with thinking-mode generation is untested here, and it is through that mode of generation that Qwen3 delivers much of its capability and some of its safety behaviour.",
+  "defect_class": "(e) attribution mismatch / (d) causal attribution to an unmeasured factor",
+  "cited": "No citation attached; the Qwen3 technical report [1] is not bracketed here.",
+  "why_unsupported": "The clause asserts a causal fact about Qwen3's behaviour — that thinking mode delivers \"much of its capability\" and, more strongly, \"some of its safety behaviour.\" The Qwen3 technical report establishes reasoning-benchmark gains under thinking mode; it does not establish that thinking mode carries part of the model's safety behaviour. The present study measured only non-thinking mode, so it supplies no evidence for either half of the claim. (The preceding sentence, \"This is not those models' default operating configuration,\" is also an uncited external claim and should carry the same citation.)",
+  "proposed_fix": "\"In addition, quantization's interaction with thinking-mode generation is untested here; the Qwen3 technical report [1] attributes a substantial part of the models' reasoning-benchmark performance to that mode, and its effect on safety behaviour is not characterised in this study.\""
+ },
+ {
+  "sentence": "These construct boundaries are common in safety evaluation, but they should be borne in mind when interpreting the results.",
+  "defect_class": "(a) prevalence / typicality",
+  "cited": "No citation attached.",
+  "why_unsupported": "\"are common in safety evaluation\" is a prevalence claim about how the field as a whole operationalises safety and capability. The study surveyed no sample of safety evaluations and cites nothing here; the claim also functions rhetorically to normalise the study's own limitations by asserting that everyone else shares them.",
+  "proposed_fix": "\"These construct boundaries follow from the specific benchmarks and protocols chosen here, and should be borne in mind when interpreting the results.\" (Or, if the point is worth keeping, name the specific evaluations that share the boundary and cite them, e.g. [20], [21], [24].)"
+ },
+ {
+  "sentence": "The saved generations were re-scored by a second frontier judge from a different provider (gpt-4o), applying the same HarmBench rubric.",
+  "defect_class": "(c) superlative / evaluative category claim about an external system",
+  "cited": "No citation attached.",
+  "why_unsupported": "Minor, but \"frontier\" asserts a standing for gpt-4o in the model landscape that the study did not assess and does not cite. The load-bearing properties for the argument are that the judge is independent of the provider and pipeline of the primary classifier — not that it sits at the capability frontier.",
+  "proposed_fix": "\"The saved generations were re-scored by a second, commercially hosted API judge from a different provider (gpt-4o), applying the same HarmBench rubric.\""
+ },
+ {
+  "sentence": "Llama-Guard answers a looser 'is this response unsafe?' question than the behaviour-specific HarmBench classifier, so its disagreements are expected and non-diagnostic, and it serves as a reproducibility cross-check rather than a second construct-validity oracle.",
+  "defect_class": "(d) causal attribution to a factor the study did not measure",
+  "cited": "No citation attached; Llama Guard (Inan et al.) is not bracketed anywhere in this chapter.",
+  "why_unsupported": "The first clause is a legitimate description of the two constructs. The second clause is not: it attributes the observed disagreements (κ as low as 0.36 on Phi) to the construct difference and declares them \"non-diagnostic,\" without any reported error analysis of the disagreeing items. The study measured agreement, not the source of disagreement, so the causal explanation is asserted rather than shown — and \"non-diagnostic\" pre-emptively rules out the alternative reading (that the low-κ alias is where at least one judge is unreliable).",
+  "proposed_fix": "\"Llama-Guard [ref] answers a looser 'is this response unsafe?' question than the behaviour-specific HarmBench classifier, so a construct difference is one plausible explanation for the disagreements; this study did not analyse the disagreeing items, so their source is not established. Llama-Guard is therefore used as a reproducibility cross-check rather than a second construct-validity oracle.\""
+ },
+ {
+  "sentence": "Qwen and Llama differ in tokenizer, pre-training corpus, instruction-tuning recipe, and safety-alignment methodology.",
+  "defect_class": "(e) attribution mismatch — uncited empirical claim about external systems",
+  "cited": "No citation attached ([1] and [2] are not bracketed in this chapter).",
+  "why_unsupported": "This is a four-way factual comparison of two external model families, made with no citation. The tokenizer and post-training differences are documented in the respective technical reports [1], [2], but neither release fully discloses its pre-training corpus or its safety-alignment methodology, so those two items cannot be asserted flatly on the public record. The sentence is doing real work in the chapter (it grounds the \"descriptive only\" caveat), so it should be anchored.",
+  "proposed_fix": "\"Qwen and Llama differ in tokenizer, training data and post-training/alignment recipe as far as their technical reports disclose [1], [2]; neither release documents its pre-training corpus or safety-alignment procedure in full.\""
+ },
+ {
+  "sentence": "Deterministic decoding (temperature 0.0) eliminates within-condition variance from generation.",
+  "defect_class": "(f) absence of evidence stated as evidence of absence — an absolute \"eliminates\"",
+  "cited": "No citation attached.",
+  "why_unsupported": "\"Eliminates\" is an absolute claim about the behaviour of greedy decoding in general. Greedy decoding removes sampling variance, but not batching-, kernel- or hardware-level non-determinism; and the report's own multi-seed arm (Section 6.5.1/6.6.1) reports per-seed RANGES for greedy deltas, which is only coherent if some within-condition variance survives temperature 0.0. The strong form is both unsupported and in tension with the chapter's own later text.",
+  "proposed_fix": "\"Deterministic decoding (temperature 0.0) removes sampling variance from generation; residual variation from batching and hardware non-determinism is quantified by the multi-seed check in Section 6.5.1.\""
+ },
+ {
+  "sentence": "A team that validates on the full-precision 1.7B release and ships the 4-bit build should expect a lower capability level than they signed off on (−9.0 pp MMLU) rather than a higher harmful-compliance rate.",
+  "defect_class": "(f) non-significant result converted into a prediction of no effect",
+  "cited": "No citation attached (it is a deployment prediction, not a literature claim).",
+  "why_unsupported": "The \"rather than a higher harmful-compliance rate\" clause turns a null ΔASR into an affirmative expectation of no harm increase, and projects it onto arbitrary deployments. The study measured no significant ASR increase under direct requests, at one budget, on a fixed prompt set, with the acknowledged MDE of a 400-prompt paired design — which does not license telling a deployer they should not expect one. The −9.0 pp figure is also a zero-shot MMLU-subset delta, not a general \"capability level\".",
+  "proposed_fix": "\"A team that validates on the full-precision 1.7B release and ships the 4-bit build should expect a materially lower capability level than they signed off on (−9.0 pp on this study's zero-shot MMLU subset). This study found no significant change in harmful compliance under direct requests, but a non-significant result at this sample size does not establish that none occurs.\""
+ },
+ {
+  "sentence": "The cost of NF4 in this regime is therefore degraded competence rather than eroded guardrails, and it holds at both generation budgets.",
+  "defect_class": "(f) absence of evidence stated as evidence of absence",
+  "cited": "No citation attached.",
+  "why_unsupported": "\"rather than eroded guardrails\" states the safety null as a positive finding of no guardrail erosion. What the data support is that no ASR contrast reached significance and none survived BH correction — an undetected effect, not a demonstrated absence. The chapter is entitled to \"no detected erosion\", not to \"not eroded guardrails\". (The equivalence testing referenced elsewhere in the project would be the way to earn the stronger form, and if it has been run the sentence should point at it.)",
+  "proposed_fix": "\"The cost of NF4 that this study can detect in this regime is therefore degraded competence; no erosion of guardrails was detected at either generation budget, within the sensitivity of the design (Section 6.8).\""
+ },
+ {
+  "sentence": "Its dependable effect is capability loss, worst in the smallest model, which is precisely the size class most likely to be quantized for on-device or edge use.",
+  "defect_class": "(a) prevalence / adoption, plus (b) over-general \"dependable\"",
+  "cited": "No citation attached.",
+  "why_unsupported": "Two separate overreaches in one sentence. (i) \"precisely the size class most likely to be quantized for on-device or edge use\" is a claim about real-world deployment practice — a comparative likelihood across size classes — which this study did not measure and no cited source establishes; model-release papers ([1], [3]) establish that small models exist and are capable, not how often they are quantized or where they are deployed. (ii) \"dependable effect\" generalises a five-pair result into a reliable property of NF4, and is undercut two sentences later, where Qwen3-4B's MMLU is \"essentially preserved\".",
+  "proposed_fix": "\"The effect this study observes consistently across the five pairs is capability loss, largest in the smallest model — the size class for which aggressive quantization is most often proposed for on-device or edge deployment.\" If the on-device framing is to be kept as a factual claim rather than a motivation, attach a source that actually surveys deployment practice; otherwise drop the clause."
+ },
+ {
+  "sentence": "The operational recommendations that follow are to re-run evaluation on the exact quantized artefact that will be deployed rather than on the full-precision release, to evaluate at the deployment generation budget rather than a truncated one, and to prefer the largest model that fits the memory budget over aggressively quantizing a smaller one.",
+  "defect_class": "(e) recommendation not entailed by the study's design",
+  "cited": "No citation attached.",
+  "why_unsupported": "The first two recommendations follow directly from the results. The third does not: it is a cross-model, equal-memory trade-off recommendation (\"largest model that fits the memory budget\" vs \"aggressively quantizing a smaller one\"), and the study's design is strictly within-model matched pairs on the same checkpoint. No configuration in this study compares two different models at a matched memory footprint, so the design cannot adjudicate that trade-off; at most the results show that the magnitude of NF4 capability loss was largest for the smallest pair.",
+  "proposed_fix": "Either scope the third item — \"and, given that the observed NF4 capability loss was largest for the smallest pair, to treat aggressive quantization of the smallest models with particular caution (this study did not compare different models at a matched memory budget)\" — or move it to Chapter 9 as future work."
+ },
+ {
+  "sentence": "The closest prior comparison in trustworthiness scope is Hong et al. [37], which also isolates quantization at four bits and works across a broader trust taxonomy.",
+  "defect_class": "(c) superlative / exclusivity",
+  "cited": "Yes — [37], Hong et al., \"Decoding compressed trust\".",
+  "why_unsupported": "The citation supports what Hong et al. did; it cannot support the ranking claim that this is the CLOSEST prior comparison in the literature. Establishing \"closest\" would require a systematic comparison across the candidate prior works (e.g. [10], [20], [21], [35], [36]) on a stated similarity criterion, which the report does not present.",
+  "proposed_fix": "\"The most directly comparable prior work in trustworthiness scope among the studies reviewed in Section 2.4 is Hong et al. [37], which also isolates quantization at four bits and works across a broader trust taxonomy.\""
+ },
+ {
+  "sentence": "The Egashira et al. [12] result that BitsAndBytes NF4 specifically can turn a benign model harmful is the closest prior analogue to the mechanism studied here.",
+  "defect_class": "(c) superlative / exclusivity",
+  "cited": "Yes — [12], Egashira et al., \"Exploiting LLM quantization\".",
+  "why_unsupported": "The description of what Egashira et al. show is accurate and is properly qualified in the following sentence. The problem is \"the closest prior analogue\": that is a ranking over the whole prior literature, and the cited paper establishes only its own result, not its rank relative to [10], [35], [36] or others.",
+  "proposed_fix": "\"Among the reviewed prior work, Egashira et al. [12] examine the same loading path most directly: they show that BitsAndBytes NF4 specifically can turn a benign model harmful.\""
+ },
+ {
+  "sentence": "Distinguishing these cases from a genuine alignment shift is exactly what the cited single-axis studies are not structured to do.",
+  "defect_class": "(b) universal negative about prior work, with (e) attribution mismatch",
+  "cited": "No citation attached to the sentence; \"the cited single-axis studies\" is not enumerated.",
+  "why_unsupported": "This asserts a capability gap across an unenumerated set of prior studies, and it is in tension with the same section's own characterisation of Hong et al. [37], which is described two paragraphs earlier as working \"across a broader trust taxonomy\" and which reports benign task performance alongside trust dimensions — i.e. it is not single-axis. As written the claim both over-generalises and mislabels at least one work the chapter itself cites.",
+  "proposed_fix": "\"Studies that report a single non-refusal or ASR axis without a paired capability anchor cannot separate these cases from a genuine alignment shift; that separation is what the matched-pair design adds here.\" (Name the specific studies meant, and exclude [37], which reports a capability axis.)"
+ },
+ {
+  "sentence": "First, baseline safety profiles differ substantially between families even at matched factual capability, so calibration is a property of the release rather than of model size.",
+  "defect_class": "(d) causal attribution to factors the study did not measure",
+  "cited": "No citation attached to this sentence.",
+  "why_unsupported": "The study measured fp16 baselines for one model per family (plus two Qwen sizes). Observing that baselines differ across families licenses no conclusion about *what* determines calibration. \"A property of the release\" attributes calibration to training/alignment recipe, which the study never varied or measured, and \"rather than of model size\" is directly contradicted by the report's own within-Qwen claim that scaling 1.7B->4B lowered baseline ASR by 14.0 pp (line 499) and by the fact that model size is confounded with release in every pair.",
+  "proposed_fix": "\"First, baseline safety profiles differ substantially between families even at matched factual capability. This study does not vary training or alignment recipe and so cannot say which release-level factor drives that difference.\""
+ },
+ {
+  "sentence": "This points the same direction as the broader literature on quantization sensitivity declining with model size.",
+  "defect_class": "(e) attribution mismatch / uncited appeal to a body of literature",
+  "cited": "No citation attached; no reference number appears in or near this sentence.",
+  "why_unsupported": "An empirical claim about what \"the broader literature\" shows, with nothing cited. The chapter elsewhere cites exactly one source for this proposition (Badshah and Sajjad [29], and it is labelled a preprint at line 1031); [7] Dettmers and Zettlemoyer concerns optimal bit allocation at a fixed total-bit budget, not sensitivity declining with size. \"The broader literature\" implies a settled consensus the report has not established.",
+  "proposed_fix": "\"This points the same direction as Badshah and Sajjad's preprint report [29] that larger models are more resilient to four-bit precision reduction.\""
+ },
+ {
+  "sentence": "The present result extends that picture downward into the compact-deployment regime, where the scaling evidence had suggested alignment would be most fragile.",
+  "defect_class": "(e) attribution mismatch — cited/implied sources concern capability, not alignment",
+  "cited": "The sentence sits immediately after a citation to Hong et al. [37], but the clause about \"the scaling evidence\" carries no citation of its own.",
+  "why_unsupported": "No reference in the list establishes that scaling evidence predicts *alignment* fragility at small scale. [29] Badshah and Sajjad and [7] Dettmers and Zettlemoyer are capability/precision-scaling results; [37] Hong et al. report preservation of trustworthiness at 7B+, which is the opposite prediction. The clause manufactures a prior expectation that no cited source supports.",
+  "proposed_fix": "Delete the clause, or scope it to capability: \"...downward into the compact-deployment regime, below the 7B-and-above range Hong et al. evaluate, where capability is known to be more sensitive to four-bit reduction [29].\""
+ },
+ {
+  "sentence": "It is adopted because it is the field-standard reference classifier specified by the HarmBench paper [24], run at full precision with deterministic greedy decoding and zero parse failures on this dataset.",
+  "defect_class": "(a) prevalence / adoption",
+  "cited": "Yes — [24] Mazeika et al., HarmBench (ICML 2024), attached to this sentence.",
+  "why_unsupported": "[24] establishes that the classifier exists, how it was trained, and that HarmBench specifies it for its own evaluation. It cannot establish that the classifier is the \"field-standard\" — i.e. that the wider research community has adopted it as its reference scorer. That is an adoption/market-share claim about the field, and no cited source measures it.",
+  "proposed_fix": "\"It is adopted because it is the reference classifier specified by the HarmBench paper [24], run at full precision with deterministic greedy decoding and zero parse failures on this dataset.\""
+ },
+ {
+  "sentence": "The composite picture is that NF4 quantization does not produce a significant or uniform safety regression in any family or at any scale.",
+  "defect_class": "(b) universal scope + (f) absence of evidence as evidence of absence",
+  "cited": "No citation attached (internal cross-references only).",
+  "why_unsupported": "\"In any family or at any scale\" reads as a claim over families and scales in general. The study covers four families (one model per family, two for Qwen) spanning 1.7B–7.2B, and its own power analysis (line 567) puts the ASR detection floor at roughly +/-0.06, so an unobserved regression below that floor is undetectable rather than absent. The sentence upgrades \"no significant increase in five pairs\" into a scale-general negative.",
+  "proposed_fix": "\"The composite picture is that NF4 quantization produces no statistically significant safety regression in any of the five pairs studied (four families, 1.7B–7.2B), bounded by the +/-0.06 detection floor of Section 6.4.1.\""
+ },
+ {
+  "sentence": "At the 512-token reference budget it does not, and it does not significantly increase it in any pair either.",
+  "defect_class": "(f) absence of evidence stated as evidence of absence",
+  "cited": "No citation attached; this is the direct answer to RQ1 (\"Does 4-bit NF4 quantization increase harmful compliance?\").",
+  "why_unsupported": "The bare \"it does not\" asserts a true null, whereas the study only failed to reject one. The same chapter states the minimum detectable ΔASR is roughly +/-0.06 with a representative MDE of 0.059 and that \"the study is therefore underpowered for the small safety effects it might have detected\" (lines 567–569). Two pairs sit at +0.040 and +0.020, both inside the undetectable band. The trailing clause is correct; the leading clause overreaches, and the report's own later formulation (\"The data do not support a claim that NF4 raises harmful compliance\", line 979) is the entitled version.",
+  "proposed_fix": "\"At the 512-token reference budget no pair shows a statistically significant increase, and effects smaller than the +/-0.06 detection floor of Section 6.4.1 could not have been resolved.\""
+ },
+ {
+  "sentence": "The RQ2 deployment message that NF4 does not make models more trigger-happy on benign prompts therefore survives the extension.",
+  "defect_class": "(f) absence of evidence stated as evidence of absence, generalised to \"models\"",
+  "cited": "No citation attached.",
+  "why_unsupported": "\"Does not make models more trigger-happy\" is a general negative about models, drawn from five non-significant (or benign-direction) over-refusal contrasts on 250 prompts each. The report itself flags this axis as scorer-dependent and the one significant contrast as most plausibly a regex artefact, and no power floor is reported for over-refusal. Absence of a detected increase in five pairs is not a property of models under NF4.",
+  "proposed_fix": "\"The RQ2 message therefore survives the extension: no pair in this study shows a statistically significant over-refusal increase under NF4, under either scorer.\""
+ },
+ {
+  "sentence": "For the study's largest model, NF4 leaves genuine harmful compliance unchanged-to-slightly-lower while preserving capability.",
+  "defect_class": "(f) absence of evidence stated as evidence of absence",
+  "cited": "No citation attached.",
+  "why_unsupported": "Mistral-7B's ΔASR is −0.020 with CI [−0.080, +0.040] and McNemar p = 0.627, and its capability deltas are MMLU −2.0 pp and ARC +0.9 pp, all non-significant and all inside the study's own detection floors (ASR ~0.06; MMLU 0.052–0.072). \"Leaves ... unchanged\" and \"preserving capability\" assert null effects that the data cannot distinguish from real effects of the size the CIs permit. Note the contrast with Section 6.11, where an equivalence claim is only made after an explicit TOST; no equivalence test was run here.",
+  "proposed_fix": "\"For the study's largest model, no significant change in genuine harmful compliance or capability was detected under NF4; the confidence intervals still admit effects of up to about four percentage points on each axis.\""
+ },
+ {
+  "sentence": "The 4B model is essentially unaffected, with MMLU moving by only 0.3 percentage points, well within sampling noise.",
+  "defect_class": "(f) absence of evidence stated as evidence of absence",
+  "cited": "No citation attached.",
+  "why_unsupported": "The same chapter reports MMLU minimum detectable effects of 0.052–0.072 at n = 300 and states that \"the remaining eight capability contrasts are underpowered in the same way the safety axis is\" (line 569). A −0.003 delta is far below that floor, so \"essentially unaffected\" is not measurable — a true effect of up to ~5 pp is compatible with the observation. The identical phrasing recurs at line 1001 (\"the 4B model's MMLU is essentially unaffected\") and needs the same edit.",
+  "proposed_fix": "\"The 4B model shows no detectable MMLU change, moving by only 0.3 percentage points — below the ~5 pp detection floor for this contrast (Section 6.4.1).\""
+ },
+ {
+  "sentence": "Under the primary (judge) scorer, Qwen3-1.7B's baseline HarmBench ASR is 0.255 while Qwen3-4B's is 0.115, so scaling from 1.7B to 4B reduces genuine baseline harmful compliance by 14.0 percentage points.",
+  "defect_class": "(d) causal attribution to a factor the study did not isolate",
+  "cited": "No citation attached.",
+  "why_unsupported": "\"Scaling ... reduces\" is causal language for an uncontrolled two-model observational contrast. The two Qwen checkpoints differ in parameter count but also in training mixture and post-training, none of which the study varied or measured, and no significance test or CI is reported for this between-model difference (unlike every within-pair delta). The same causal phrasing recurs at line 511 (\"scaling from 1.7B to 4B parameters shifts every dimension\"). It also sits in tension with the report's own claim at line 623 that calibration is a property of the release rather than of model size.",
+  "proposed_fix": "\"Under the primary (judge) scorer, Qwen3-1.7B's baseline HarmBench ASR is 0.255 while Qwen3-4B's is 0.115, a 14.0-point difference between the two checkpoints; the study does not isolate parameter count from the other differences between them.\""
+ },
+ {
+  "sentence": "The reason is that Mistral-7B frequently opens with a refusal-shaped preamble and then complies, so its refuse-versus-comply decision is resolved later than the first token.",
+  "defect_class": "(d) causal attribution to an unmeasured factor",
+  "cited": "No citation attached.",
+  "why_unsupported": "\"The reason is\" states a mechanism as established. The probe measured only first-token margins and AUC against the judge label (0.69 for Mistral); no count, rate, or example set of \"refusal-shaped preamble then compliance\" generations is reported anywhere in the chapter or its appendices as cited. The explanation is an untested hypothesis for the low AUC.",
+  "proposed_fix": "\"A plausible explanation, not tested here, is that Mistral-7B often opens with a refusal-shaped preamble and then complies, which would move its refuse-versus-comply decision past the first token.\""
+ },
+ {
+  "sentence": "Qwen produces a large volume of such ambiguous middle-ground text, whereas Llama mostly either refuses cleanly or complies, which leaves little for the regex to mis-score.",
+  "defect_class": "(d) causal attribution to an unmeasured property",
+  "cited": "No citation attached.",
+  "why_unsupported": "The study measured judge/regex disagreement rates and kappa; it did not measure or classify \"ambiguous middle-ground text\" volume per family. The response-style claim is inferred from the disagreement it is being used to explain, which is circular as stated. The parallel sentence at line 603 (\"Llama-3.2-3B mostly either refuses cleanly or complies, leaving little ambiguous middle ground for the regex to mis-score\") carries the same defect.",
+  "proposed_fix": "\"The disagreement pattern is consistent with Qwen producing more ambiguous middle-ground text than Llama, though this study does not directly quantify response style.\""
+ },
+ {
+  "sentence": "First, surface-level refusal metrics are unreliable without both a capability anchor and an accurate harmful-compliance scorer.",
+  "defect_class": "(b) universal generalisation from a single instrument",
+  "cited": "No citation attached.",
+  "why_unsupported": "The study validated one specific instrument, its own v2 refusal regex, against one classifier on one benchmark. \"Surface-level refusal metrics\" as a class covers instruments the study never examined, and the report's own results show the same regex tracks the judge closely for Llama and Phi (kappa 0.67–0.84), i.e. it is family-dependent rather than uniformly unreliable.",
+  "proposed_fix": "\"First, a surface-level refusal metric can be badly unreliable — the v2 regex used here over-counts ASR for Qwen and Mistral — so a refusal-based scorer should be validated against a behaviour-specific classifier and read alongside a capability anchor.\""
+ },
+ {
+  "sentence": "The capability cost of quantization is a cliff at four-bit rather than a graded decline.",
+  "defect_class": "(b) generalisation beyond the methods and models tested",
+  "cited": "No citation attached.",
+  "why_unsupported": "Two precisions below fp16 were evaluated, on five model pairs, using two *different algorithms* — LLM.int8() mixed-precision and NF4 — a distinction the section itself makes at line 879. A two-point comparison between different methods cannot establish that the cost is a function of bit-width shaped like a cliff; no intermediate bit-widths (e.g. 3-bit, 6-bit) or same-method bit sweeps were run. The near-identical claim at line 891 (\"Within the compact-deployment regime, the capability cost of quantization is a clean cliff at four-bit\") needs the same edit, and \"clean\" there is additionally undercut by the borderline Phi-4-mini ΔARC cell acknowledged in the next sentence.",
+  "proposed_fix": "\"Across the two precision steps tested here, the capability cost appears only at four-bit NF4 and not at INT8; the study does not evaluate other bit-widths or methods, so this is a two-point contrast rather than a demonstrated bit-width curve.\""
+ },
+ {
+  "sentence": "A practitioner who needs to reduce memory but cannot accept the capability cost has an intermediate option, because INT8 preserves capability where four-bit NF4 does not.",
+  "defect_class": "(b) generalisation beyond the tested models + (f) partially",
+  "cited": "No citation attached.",
+  "why_unsupported": "The TOST result licenses \"equivalent to fp16 within +/-0.05 on these five pairs\", not \"INT8 preserves capability\" as a general property practitioners can rely on for other models. The second half is also loose in the other direction: NF4 capability loss reached significance on three of five pairs, and the report states the remaining capability contrasts were underpowered.",
+  "proposed_fix": "\"A practitioner who needs to reduce memory but cannot accept the capability cost may have an intermediate option: in all five pairs here, INT8 capability was statistically equivalent to fp16 within +/-0.05, whereas four-bit NF4 produced the study's only significant capability losses.\""
+ },
+ {
+  "sentence": "The answer to RQ1 is therefore scorer-dependent in the sense that a weaker scorer would have produced a different headline, and the scorer selected here is the one that agrees best with human annotators.",
+  "defect_class": "(c) superlative / exclusivity, generalised from a single non-independent annotator",
+  "cited": "No citation attached.",
+  "why_unsupported": "\"Human annotators\" (plural) rests on one annotator, the study's author, on a 200-item stratified subset that deliberately over-samples disagreement cases (line 789); a second annotator remains open work. Only two of the four scorers used (classifier, regex) were compared against human labels at all, so \"the one that agrees best\" is a superlative over a two-item comparison presented as a general ranking. The preceding sentence's \"The scorer question is settled against human judgment rather than by assertion\" overstates the same evidence.",
+  "proposed_fix": "\"...and of the two scorers compared against human labels, the classifier agreed substantially better with the single (author) annotator on a 200-item stratified subset (kappa 0.59 vs 0.11). A second annotator has not yet been run.\" Correspondingly soften \"settled\" to \"weighed against human labels rather than by assertion\"."
+ },
+ {
+  "sentence": "The full-precision baselines reveal that within the Qwen family the larger model is both more capable and more refusal-calibrated.",
+  "defect_class": "(b) generalisation from two checkpoints to a family",
+  "cited": "No citation attached.",
+  "why_unsupported": "Two Qwen3 checkpoints were evaluated (1.7B and 4B). \"Within the Qwen family the larger model\" reads as a property of the family, which contains many other sizes and releases the study did not measure. The parallel sentence at line 513 (\"Within Qwen the larger model dominates the smaller one on every dimension\") has the same scope problem.",
+  "proposed_fix": "\"The full-precision baselines show that of the two Qwen3 checkpoints evaluated here, the 4B is both more capable and more refusal-calibrated than the 1.7B.\""
+ },
+ {
+  "sentence": "A plausible mechanism for the directional increase is the same NF4 degradation of refusal precision seen elsewhere.",
+  "defect_class": "(e) uncited presupposition of an established phenomenon",
+  "cited": "No citation attached; \"seen elsewhere\" is not resolved to a section or a reference.",
+  "why_unsupported": "The hedge \"a plausible mechanism\" covers the attribution but not the presupposition that an \"NF4 degradation of refusal precision\" has in fact been \"seen elsewhere\". No other pair in this study shows a significant refusal-precision degradation (the mechanism probe of Section 6.10 reads the Qwen3-1.7B case as boundary instability, not targeted erosion), and no external source is cited for the phenomenon.",
+  "proposed_fix": "Either point the phrase at a source (\"the refusal-boundary instability described in Section 6.10\" or a specific reference), or reword: \"One possible mechanism for the directional increase is a loss of refusal precision under NF4; this study does not test it for this pair.\""
+ },
+ {
+  "sentence": "No pair shows a significant harmful-compliance increase, so the only individually-significant NF4 ΔASR is a safety-improving decrease.",
+  "defect_class": "(d) interpretive attribution the study's own analysis contradicts",
+  "cited": "No citation attached.",
+  "why_unsupported": "The only individually-significant ΔASR is Llama-3.2-3B's −0.040, which Sections 6.3 and 6.7 label capability_collapse_masquerading_as_safety and explicitly warn must not be read as \"NF4 makes Llama safer\" (line 607). Calling it \"a safety-improving decrease\" asserts the very interpretation the framework was built to reject. Elsewhere the report uses the safer directional shorthand (\"in the safety-improving direction\").",
+  "proposed_fix": "\"No pair shows a significant harmful-compliance increase; the only individually-significant NF4 ΔASR is a decrease, which Section 6.7 diagnoses as capability collapse rather than a safety improvement.\""
+ },
+ {
+  "sentence": "Therefore the apparent safety improvement is diagnosed as a by-product of a less-capable model refusing, or failing to produce coherent harmful content, more often, rather than as a strengthening of alignment.",
+  "defect_class": "(d) causal attribution to unmeasured mechanisms",
+  "cited": "No citation attached.",
+  "why_unsupported": "MMLU and ARC measure multiple-choice accuracy; neither measures instruction-following capacity nor the coherence of harmful generations. Neither of the two proposed mechanisms (refusing more often because less capable; failing to produce coherent harmful content) was measured for this pair — the refusal-margin probe of Section 6.10 reports its capability-versus-alignment control only for Qwen3-1.7B, Qwen3-4B and Mistral-7B.",
+  "proposed_fix": "\"The co-occurring capability loss is therefore why the apparent safety improvement is labelled capability collapse rather than strengthened alignment; the study does not measure which mechanism (fewer coherent harmful completions, or more refusals) produces the change.\""
+ },
+ {
+  "sentence": "The two judges agree per prompt at Cohen κ 0.68–0.95, matching the 0.60–0.95 range reported for the 128-token run, so the scorer is no less reliable at the reference budget.",
+  "defect_class": "(f) absence of evidence stated as evidence of absence",
+  "cited": "No citation attached.",
+  "why_unsupported": "Two overlapping ranges of per-alias kappas are not a test of equal reliability, and no comparison test or interval on the difference is reported. Inter-judge agreement is also not the same construct as scorer reliability. The observation supports \"comparable\", not \"no less reliable\".",
+  "proposed_fix": "\"The two judges agree per prompt at Cohen κ 0.68–0.95, comparable to the 0.60–0.95 range at the 128-token run; no test of a difference in agreement between budgets was performed.\""
+ },
+ {
+  "sentence": "To rule out the possibility that the result is an artefact of the single HarmBench classifier, the saved generations were independently re-scored by a second frontier judge from a different provider, gpt-4o, run on 2026-06-14 via the OpenAI API.",
+  "defect_class": "(c) unsupported tier claim about a third-party product",
+  "cited": "No citation attached; no reference for gpt-4o appears in the reference list.",
+  "why_unsupported": "\"Frontier\" is a capability-tier claim about a commercial model that the report neither cites nor measures, and it is doing rhetorical work (implying the cross-check is strong because the judge is top-tier). The chapter's own caveats in the same paragraph note the architecture is undisclosed and the dated snapshot was not recorded. The same word recurs at line 1025 (\"A second frontier judge...\").",
+  "proposed_fix": "\"...re-scored by a second, independently developed API judge from a different provider, gpt-4o, run on 2026-06-14 via the OpenAI API.\""
+ },
+ {
+  "sentence": "During post-hoc review, it became clear that the parser missed common modern instruction-model refusal templates, including straight- and curly-apostrophe variants of phrases such as \"I can't fulfil this request\", \"I cannot provide\", and \"I'm unable to assist\".",
+  "defect_class": "(a) PREVALENCE / ADOPTION",
+  "cited": "No citation attached to this sentence (Appendix H carries no bracketed references at all).",
+  "why_unsupported": "\"common modern instruction-model refusal templates\" asserts that these phrasings are typical of instruction-tuned models in general. The study only observed which strings appeared in its own five model pairs' saved generations; it ran no survey of refusal phrasing across instruction models, and no cited source in the reference list characterises the distribution of refusal templates (Roettger et al. XSTest and Mazeika et al. HarmBench define benchmarks, not refusal-phrasing prevalence).",
+  "proposed_fix": "Replace with: \"the parser missed refusal templates produced by the evaluated models, including straight- and curly-apostrophe variants of phrases such as ...\" (scopes the claim to this study's own outputs, which is all that is needed for the argument)."
+ },
+ {
+  "sentence": "Regenerating the study at HarmBench's 512-token reference budget dissolved that 128-token Qwen3-1.7B increase to ΔASR 0.000 under both judges.",
+  "defect_class": "(e) ATTRIBUTION MISMATCH / uncited external claim",
+  "cited": "No citation attached; the HarmBench paper (M. Mazeika et al., ICML 2024, arXiv:2402.04249) is in the reference list but is not cited here.",
+  "why_unsupported": "\"HarmBench's 512-token reference budget\" is a factual claim about an external evaluation protocol — that 512 new tokens is the generation length HarmBench specifies. That proposition belongs to the HarmBench paper/codebase, not to this study's data, and the sentence gives the reader no way to check it. Everything else in the sentence (ΔASR 0.000) is this study's own measurement and is fine.",
+  "proposed_fix": "Attach the source and phrase it as a report of what that source specifies: \"Regenerating the study at the 512-token generation budget used in the HarmBench evaluation protocol [HarmBench ref] dissolved that 128-token Qwen3-1.7B increase to ΔASR 0.000 under both judges.\""
+ },
+ {
+  "sentence": "The current primary reading is therefore capability-driven: Qwen3-1.7B carries broad_degradation via its significant MMLU loss with the harm axis flat, and no pair shows a significant harmful-compliance increase.",
+  "defect_class": "(f) ABSENCE-OF-EVIDENCE STATED AS EVIDENCE-OF-ABSENCE",
+  "cited": "No citation (own-results sentence).",
+  "why_unsupported": "The second clause (\"no pair shows a significant harmful-compliance increase\") is correctly hedged, but \"with the harm axis flat\" asserts no effect on the harm axis. A point estimate of ΔASR 0.000 plus a non-significant over-refusal contrast does not establish flatness — the confidence intervals admit a range of non-zero effects, which is exactly the distinction the study's own equivalence/MDE work exists to make.",
+  "proposed_fix": "Replace \"with the harm axis flat\" with \"with the harm-axis point estimate at 0.000 and no statistically significant change on either harm measure\" (or, if the TOST result covers this pair, cite the equivalence bound instead of asserting flatness)."
+ },
+ {
+  "sentence": "The construct caveat is that it answers a looser safety question than the behaviour-specific classifier.",
+  "defect_class": "(e) ATTRIBUTION MISMATCH / uncited external claim",
+  "cited": "No citation attached; Inan et al. (Llama Guard, arXiv:2312.06674) and Mazeika et al. (HarmBench) are both in the reference list but neither is cited here.",
+  "why_unsupported": "This is a claim about what two third-party judge models are designed and trained to detect — Llama Guard's task framing versus the HarmBench classifier's behaviour-completion framing. It is a proposition about those artifacts' construct, not about this study's measurements, and the study did not characterise either model's training objective empirically. It is also the sentence that carries the interpretive weight for discounting the low Phi κ, so it needs a source.",
+  "proposed_fix": "Ground it in the two model papers: \"The construct caveat is that Llama Guard is trained to flag policy-violating content against a general safety taxonomy [Inan et al.], whereas the HarmBench classifier judges whether a specific target behaviour was completed [Mazeika et al.]; disagreement between the two is therefore expected and non-diagnostic.\""
+ },
+ {
+  "sentence": "The re-scoring by that guard model is revision-pinned and locally rerunnable, which the versioned API judge is not.",
+  "defect_class": "(b) UNIVERSAL / NEVER — uncited absolute negative about a third-party service",
+  "cited": "No citation.",
+  "why_unsupported": "Minor, but the trailing clause states a categorical property of a hosted vendor endpoint (that it cannot be pinned and rerun) rather than a property of this study's access to it. The study established only that it could not pin and locally rerun the API judge itself; vendor snapshot/retention policy is outside what it measured and outside any cited source.",
+  "proposed_fix": "Scope to the study's own reproducibility position: \"...revision-pinned and locally rerunnable, which this study cannot do for the hosted API judge, whose snapshot is reachable only through the vendor endpoint.\""
+ },
+ {
+  "sentence": "The primary scorer is unaffected either way.",
+  "defect_class": "(f) ABSENCE-OF-EVIDENCE STATED AS EVIDENCE-OF-ABSENCE (wording ambiguity)",
+  "cited": "No citation (own-design sentence).",
+  "why_unsupported": "The intended meaning is almost certainly the design statement \"the choice of primary scorer does not change\", which is in scope and fine. As written, \"unaffected\" reads equally as an empirical null — that the primary scorer's measurements are unchanged by the cross-checks — which is a stronger claim than three κ comparisons and a set of non-significant per-pair deltas support. \"Unaffected\" is exactly the epistemic_hedge trigger word this project's D56 rule flags.",
+  "proposed_fix": "Disambiguate to the design statement: \"The designation of the HarmBench classifier as the primary scorer is unchanged by these cross-checks.\""
+ },
+ {
+  "sentence": "The classifier was cross-checked three times: by an independent frontier-model second judge (gpt-4o, Section 6.9 Result 4), against human labels on a stratified subset (Section 6.9 Result 5), and by an open-weight guard model (Llama-Guard-3-8B, revision-pinned, Section 6.9).",
+  "defect_class": "(c) SUPERLATIVE / capability-tier characterisation",
+  "cited": "No citation.",
+  "why_unsupported": "Lowest-severity item. \"frontier-model\" asserts a capability-tier status for gpt-4o that the study did not measure and no cited source establishes; the property the sentence actually needs is that the second judge is independent of the HarmBench classifier and proprietary. Flagging only because the descriptor is doing rhetorical work (implying the cross-check comes from a stronger judge) that the evidence does not carry.",
+  "proposed_fix": "Drop the tier claim: \"...by an independent proprietary API second judge (gpt-4o, Section 6.9 Result 4), ...\""
+ },
+ {
+  "sentence": "It focuses on a research question that institutional benchmarks have not directly answered.",
+  "defect_class": "(b) universal / never / no-study-has",
+  "cited": "No — no bracketed citation on this sentence; no section cross-reference either.",
+  "why_unsupported": "This asserts a negative fact about the published literature (that the class of 'institutional benchmarks' has not directly answered this question). The study surveyed some benchmarks; it did not and could not establish an absence across the field. The reference list in fact contains work that partly addresses the compression-x-trustworthiness question directly — Hong et al., 'Decoding compressed trust' (ICML 2024, arXiv:2403.15447) and Kharinaev et al., 'Investigating the impact of quantization methods on the safety and reliability of large language models' (IEEE Access 2026) — so the unqualified negative is also in tension with the report's own bibliography.",
+  "proposed_fix": "Rescope to what the review found: 'It focuses on a research question that the trustworthiness benchmarks reviewed in Chapter 2 [TrustLLM], [DecodingTrust], [SafetyBench] do not address directly, and that the compression-safety literature [Hong et al.], [Kharinaev et al.] addresses only partially.'"
+ },
+ {
+  "sentence": "The INT8 precision point (Section 6.11) adds that the safety axis is neither bit-width-graded nor budget-robust, because the apparent Llama INT8 move at 128 tokens vanishes at the reference budget under both judges.",
+  "defect_class": "(f) absence-of-evidence stated as evidence-of-absence, with (b) over-generalisation",
+  "cited": "No external citation; internal cross-reference to Section 6.11 only.",
+  "why_unsupported": "'The safety axis is neither bit-width-graded' is a general property claim about quantization asserted from null results at two precision points (NF4 and INT8) in five pairs, with a self-reported minimum detectable DeltaASR of 0.04-0.09 (stated one paragraph earlier). Failing to detect gradation at that power is not evidence that no gradation exists. The subject is also unscoped — 'the safety axis' reads as a property of quantized models in general rather than of the ten aliases measured here.",
+  "proposed_fix": "'The INT8 precision point (Section 6.11) adds that, within this study's detection bounds, no bit-width gradation of the safety axis is detectable, and the apparent Llama INT8 move at 128 tokens does not persist at the reference budget under either judge.'"
+ },
+ {
+  "sentence": "By contrast, the four-bit capability cliff is the one precision effect that holds at both budgets.",
+  "defect_class": "(c) superlative / exclusivity",
+  "cited": "No — no citation and no section cross-reference on this sentence.",
+  "why_unsupported": "'The one precision effect that holds at both budgets' is an exclusivity claim over the space of precision effects, but the study measured two precisions, two budgets and four metrics on five pairs. It can say which of its own measured effects replicated; it cannot say that this is the only such effect. The unqualified phrasing generalises past the measured set.",
+  "proposed_fix": "'By contrast, the four-bit capability loss is the only precision effect measured in this study that holds at both budgets.' (Consider also dropping 'cliff', which characterises a magnitude the corrected results do not show for four of five pairs.)"
+ },
+ {
+  "sentence": "The Qwen3-4B pair is directional alignment_degradation (ΔASR +0.040, not significant) with capability essentially preserved.",
+  "defect_class": "(f) absence-of-evidence stated as evidence-of-absence",
+  "cited": "No citation; no supporting equivalence test referenced.",
+  "why_unsupported": "Verified against results_512/analysis/multiple_comparisons.json: the Qwen3-4B NF4 ARC contrast is delta = -0.0162, p = 0.042, uncorrected_significant = true (BH q = 0.169). 'Capability essentially preserved' converts non-survival of a BH correction into a positive claim of preservation, and it contradicts this chapter's own RQ3 sentence, which states that NF4 'significantly degrades capability ... on ARC for the Qwen3-4B and Llama-3.2-3B pairs'. results_512/analysis/capability_equivalence.csv contains only int8_vs_fp16 rows, so no equivalence test backs a preservation claim for any NF4 pair.",
+  "proposed_fix": "'The Qwen3-4B pair is directional alignment_degradation (ΔASR +0.040, not significant); its only capability movement, ARC −0.016, is significant uncorrected (p = 0.042) but does not survive BH correction.'"
+ },
+ {
+  "sentence": "By contrast, the 4B pair preserves capability and shows only a directional, non-significant safety nudge (RQ4).",
+  "defect_class": "(f) absence-of-evidence stated as evidence-of-absence",
+  "cited": "No citation; RQ4 label only.",
+  "why_unsupported": "Same defect as the Qwen3-4B sentence in the diagnostic-profile paragraph, but stated more strongly ('preserves capability' rather than 'essentially preserved'). The pair has an uncorrected-significant ARC loss (-0.0162, p = 0.042) and no equivalence test was run for any NF4 capability contrast (capability_equivalence.csv is int8-only), so nothing in the study licenses a positive preservation claim.",
+  "proposed_fix": "'By contrast, no capability contrast for the 4B pair survives correction (ARC −0.016, p = 0.042 uncorrected), and its safety movement is directional and non-significant (RQ4).'"
+ },
+ {
+  "sentence": "Mistral-7B's apparent proxy-driven rise is absent under the judge (ΔASR −0.020, not significant) at preserved capability, and Phi-4-mini shows a non-significant +0.020 ΔASR whose only significant move is a decrease in over-refusal.",
+  "defect_class": "(f) absence-of-evidence stated as evidence-of-absence",
+  "cited": "No citation; Section 6.8.6 cross-reference in the preceding sentence.",
+  "why_unsupported": "'At preserved capability' asserts that Mistral-7B's capability did not change. The supporting numbers are non-significant only (verified: MMLU -0.020, p = 0.39; ARC +0.0094, p = 0.28), and no NF4 equivalence test exists — results_512/analysis/capability_equivalence.csv contains only int8_vs_fp16 contrasts. Non-significance at n = 300 (MMLU) does not establish preservation.",
+  "proposed_fix": "Replace 'at preserved capability' with 'with no significant capability change (MMLU −0.020, p = 0.39; ARC +0.009, p = 0.28; no equivalence test was run for the NF4 capability contrasts)'."
+ },
+ {
+  "sentence": "The data therefore refute the optimistic claim that quantization reliably improves safety.",
+  "defect_class": "(e) attribution mismatch, with (f) overstated inferential strength",
+  "cited": "No — the 'optimistic claim' is attributed to no one; no bracketed citation on this sentence.",
+  "why_unsupported": "Two problems. First, an existing position in the literature ('the optimistic claim') is characterised with no source; the reader cannot check that anyone holds it in the form stated. Second, 'refute' overstates what the design supports: the study reports four null ASR contrasts and one safety-ward decrease across five pairs of one quantization method at one budget, with a self-reported MDE of 0.04-0.09. Non-replication in five pairs is failure to support, not refutation.",
+  "proposed_fix": "'These data give no support for the view that quantization reliably improves safety [attach the specific source, e.g. the compression-safety results in Hong et al. or Kharinaev et al.]: only one of five pairs moves significantly on the safety axis, and no ASR contrast survives correction.'"
+ },
+ {
+  "sentence": "The smallest model is the most sensitive, but on the capability axis.",
+  "defect_class": "(c) superlative / exclusivity",
+  "cited": "No citation; RQ4 context.",
+  "why_unsupported": "Stated as an unscoped generalisation about model scale, but the evidence is a five-pair sample with one model per size point (1.7B, 3B, 4B, 3.8B-class, 7B) drawn from four different families, so size is fully confounded with family and training recipe. The report can rank its own five pairs; it cannot establish that smallness is what makes a model most sensitive.",
+  "proposed_fix": "'Among the five pairs evaluated, the smallest model shows the largest capability loss, though size is confounded with model family in this sample.'"
+ },
+ {
+  "sentence": "The +0.055 increase seen at the truncated 128-token budget was a generation-length artefact, because 60 percent of 128-token responses were truncated, and it does not replicate at 512.",
+  "defect_class": "(d) causal attribution to a factor the study did not isolate",
+  "cited": "No citation; Section 6.12/6.16 cross-references appear elsewhere in the chapter.",
+  "why_unsupported": "The study measured a truncation rate and a non-replication at the longer budget; it did not test truncation as a mediator (e.g. by comparing the +0.055 among truncated versus untruncated items). 'Was a generation-length artefact, because 60 percent ... were truncated' states the mechanism as established rather than as the most plausible explanation for a budget-dependent result.",
+  "proposed_fix": "'The +0.055 increase seen at the truncated 128-token budget does not replicate at 512, and is most consistent with a generation-length artefact: 60 percent of 128-token responses were truncated.'"
+ },
+ {
+  "sentence": "What determines the conclusion is the choice of scorer rather than the choice of judge or budget.",
+  "defect_class": "(b) universal / general statement beyond the tested set",
+  "cited": "No citation; presented as 'a central methodological result'.",
+  "why_unsupported": "Framed as a general methodological law about what determines conclusions in this area, but the evidence is one scorer swap (regex proxy vs HarmBench classifier), three judges (HarmBench classifier, gpt-4o, LlamaGuard) and two budgets (128, 512) on one benchmark. Robustness across three judges and two budgets does not establish that judge and budget choice are generally non-determinative.",
+  "proposed_fix": "'In this study, the conclusion is sensitive to the choice of scorer but not to the three judges or the two generation budgets tested.' Apply the same rewording to the near-identical twin sentence in the diagnostic-profile paragraph ('... and what determines the conclusion is the choice of scorer rather than the choice of judge or budget')."
+ },
+ {
+  "sentence": "Within those detection bounds, the cost of NF4 that survives correction and holds at both generation budgets is degraded competence rather than eroded guardrails.",
+  "defect_class": "(b) over-generalisation beyond the evaluated sample",
+  "cited": "No citation; Section 6.4.1 cross-reference in the preceding sentence.",
+  "why_unsupported": "'The cost of NF4' names a property of the quantization method in general. The evidence is five matched pairs from four families, one benchmark suite, one seed for the headline numbers, and one hardware/precision configuration. 'Within those detection bounds' scopes the statistical power but not the population of models to which the conclusion is being extended.",
+  "proposed_fix": "'Within those detection bounds, the cost of NF4 in the five pairs evaluated here — the effect that survives correction and holds at both generation budgets — is degraded competence rather than eroded guardrails.'"
+ },
+ {
+  "sentence": "It does not establish that the null would survive optimised adversarial attack, which is where prior quantization-safety work reports effects.",
+  "defect_class": "(b) universal/general claim about the prior literature",
+  "cited": "No citation on this clause. [25] (Zou et al., GCG) appears earlier in the paragraph, attached only to the naming of the GCG attack.",
+  "why_unsupported": "The relative clause asserts that the prior quantization-safety literature locates its effects under optimised adversarial attack. The report's own bibliography contradicts this: Kharinaev et al. [10], Q-resafe [36] and Hong et al. [37] report quantization-related safety/trustworthiness effects from benchmark and direct-request evaluation, not from optimisation-based jailbreaks. Only [12] and [35] are attack-linked, and [12] is attack-on-the-model-supplier, not prompt attack. A blanket 'this is where prior work reports effects' is a claim about the whole field that no cited source establishes.",
+  "proposed_fix": "Replace with: '...would survive optimised adversarial attack, a setting in which some prior quantization-safety work reports effects [35].'"
+ },
+ {
+  "sentence": "This would upgrade the direct-request compliance result (Chapter 3 threat model) to a quantization-versus-safety-under-attack result, and it would directly engage the attack-dependent effects reported by HarmLevelBench [35] and Egashira et al. [12].",
+  "defect_class": "(e) attribution mismatch",
+  "cited": "Yes — [35] HarmLevelBench and [12] Egashira et al.",
+  "why_unsupported": "The proposed extension is a prompt-space attack arm (GCG/PAIR on the study's own downloaded checkpoints). Egashira et al. [12] study a different threat model entirely: an adversary crafts weights that appear benign in full precision and become malicious only once quantized. Running GCG or PAIR against off-the-shelf Qwen/Llama/Mistral/Phi checkpoints would not engage that effect, so [12] does not support the proposition that this arm 'would directly engage' it. [35] does plausibly support the clause.",
+  "proposed_fix": "Split the attributions: '...and it would directly engage the attack-dependent effects reported by HarmLevelBench [35]. A separate line of work exploits the quantization step itself, by distributing weights that are benign at fp16 and harmful once quantized [12]; that adversary model is not addressed by a prompt-attack arm.'"
+ },
+ {
+  "sentence": "This is a material limitation rather than a neutral one, because quantization is known to affect languages unequally and to harm non-Latin-script languages worst, with automatic metrics substantially understating the damage relative to human judgment [13].",
+  "defect_class": "(b) universal/general + (c) superlative ('worst')",
+  "cited": "Yes — [13] (Marchisio et al., Findings of EMNLP 2024).",
+  "why_unsupported": "'Quantization is known to' promotes the findings of a single study on a specific model family and quantization set into established general knowledge about quantization as such, and 'harm non-Latin-script languages worst' is a superlative over all script classes. [13] reports exactly these observations for its own models and methods; it does not license a general 'is known to' framing. The report's own out-of-scope-safe form (a statement of what a cited paper reports, phrased as such) is available here and is not used.",
+  "proposed_fix": "Reword as a report-attribution: '...because [13] finds that quantization damages languages unequally in its evaluation, with non-Latin-script languages affected most and automatic metrics substantially understating the damage relative to human judgment.'"
+ },
+ {
+  "sentence": "The headline result (Section 6.11) is on the capability axis, and it does not depend on the generation budget or the quantization method.",
+  "defect_class": "(f) absence of evidence as evidence of absence + (b) over-generalisation",
+  "cited": "No citation; refers to Section 6.11.",
+  "why_unsupported": "Two quantization methods were evaluated, both from bitsandbytes (NF4 and LLM.int8) — the same paragraph later concedes 'the two bitsandbytes algorithms evaluated here' and lists GPTQ/AWQ/GGUF as unrun. Independence from 'the quantization method' unqualified reads as independence from quantization method in general, which the design cannot test.",
+  "proposed_fix": "'...and it holds at both generation budgets and under both bitsandbytes methods evaluated here (NF4 and LLM.int8); other quantization families were not tested.'"
+ },
+ {
+  "sentence": "Capability loss is a clean cliff at four-bit, because no INT8 MMLU/ARC delta is significant for any pair.",
+  "defect_class": "(f) absence of evidence stated as evidence of absence",
+  "cited": "No citation; refers to Section 6.11.",
+  "why_unsupported": "A 'clean cliff' asserts that INT8 capability loss is genuinely zero (or negligible) while four-bit loss is real. The stated ground is only that no INT8 delta reached significance at this sample size. Section 8's own MDE discussion establishes that this design cannot separate small deltas from zero, so non-significance at INT8 does not establish a clean step. No equivalence test at INT8 is reported to back the word 'clean'.",
+  "proposed_fix": "'Capability loss is concentrated at four-bit: no INT8 MMLU/ARC delta reaches significance for any pair, although the design's minimum detectable effect leaves small INT8 losses unexcluded.' (Stronger fix, in the spirit of D56: run the TOST/equivalence test at INT8 and cite the bound.)"
+ },
+ {
+  "sentence": "The evidence rules out any harmful-compliance increase larger than that detectable effect, rather than showing that the change is exactly zero.",
+  "defect_class": "(f) absence of evidence stated as evidence of absence",
+  "cited": "No citation; refers to Section 6.4.1.",
+  "why_unsupported": "'Rules out' overstates what a minimum-detectable-effect calculation licenses. An MDE is the effect size the design would detect with a stated power (conventionally 80%); a true effect at or somewhat above the MDE is still missed a substantial fraction of the time, so nothing is strictly ruled out. The claim a null study can make is a confidence-interval upper bound or an equivalence-test margin, not exclusion.",
+  "proposed_fix": "'The evidence bounds any harmful-compliance increase at roughly that detectable effect — increases larger than it would probably have been detected — rather than showing that the change is exactly zero.' Better still, quote the upper confidence limit or the equivalence margin actually computed."
+ },
+ {
+  "sentence": "The fix for future runs is straightforward, namely adding the chat turn-end token to the stop criteria, and the artefact does not affect any result reported here.",
+  "defect_class": "(f) absence of evidence as evidence of absence + (b) universal ('any result')",
+  "cited": "No citation; refers to Section 6.12.",
+  "why_unsupported": "'Does not affect any result' is an unqualified universal over every number in the report, offered without a measurement. The paragraph's supporting argument covers only the HarmBench classifier (which scores the full response); it says nothing about over-refusal parsing, MMLU/ARC letter extraction, or the response-length statistics used in the 512-versus-128 comparison, all of which are sensitive to run-on continuations. The proposed fix is also asserted to work without having been run.",
+  "proposed_fix": "'A likely fix for future runs is to add the chat turn-end token to the stop criteria. The artefact is not expected to affect the results reported here — the primary classifier scores the whole response — but its impact was not separately quantified for the over-refusal or capability parsers.'"
+ },
+ {
+  "sentence": "It inflates response length, but it is produced identically by both pair members, so its effect is matched across the pair by construction.",
+  "defect_class": "(f) absence of a differential effect asserted without measurement",
+  "cited": "No citation; refers to Section 6.12.",
+  "why_unsupported": "What is identical by construction is the decoding configuration, not the behaviour. Whether a model role-plays synthetic follow-up turns is a property of the weights, and the entire premise of the study is that the fp16 and NF4 members behave differently. No per-member rate of the artefact is reported, so 'produced identically' and 'matched by construction' are asserted rather than shown.",
+  "proposed_fix": "'It inflates response length. The decoding configuration that produces it is identical for both pair members, but the per-member incidence of the artefact was not measured, so it cannot be assumed to cancel exactly within a pair.'"
+ },
+ {
+  "sentence": "Whether benchmark items appear in the evaluated models' pretraining data is not measured here, and the literature has called for per-benchmark contamination measurement precisely because such instruments are not yet routine [50].",
+  "defect_class": "(a) prevalence/adoption ('not yet routine')",
+  "cited": "Yes — [50] (Sainz et al., Findings of EMNLP 2023).",
+  "why_unsupported": "The first half (the literature has called for per-benchmark contamination measurement) is squarely supported by [50]. The causal rider 'because such instruments are not yet routine' is a present-tense claim about how common contamination measurement is in current practice, resting on a 2023 position paper and stated as fact several years later. [50] argues for measurement; it does not establish a current adoption rate.",
+  "proposed_fix": "Drop the prevalence rationale or date-stamp it: '...and the literature has called for per-benchmark contamination measurement [50].' or '...which [50] argued in 2023 was not yet standard practice.'"
+ },
+ {
+  "sentence": "GGUF is the deployment-relevant format named in the motivation (Chapter 1), so it is the priority method.",
+  "defect_class": "(a) prevalence/adoption + (c) exclusivity (definite article)",
+  "cited": "No citation; cross-references Chapter 1.",
+  "why_unsupported": "'The deployment-relevant format' asserts that GGUF is uniquely, or at least pre-eminently, the format used in deployment. This is the same family of claim previous audits removed ('de facto standard', 'most widely adopted'). No source in the reference list measures format share; GGUF is not cited anywhere. Being named in the report's own motivation section establishes only what the report said earlier, not a fact about deployment practice.",
+  "proposed_fix": "'GGUF is the deployment-oriented format named in the motivation (Chapter 1), so it is prioritised here.'"
+ },
+ {
+  "sentence": "The safety effect is therefore neither bit-width-graded nor stable across generation budgets.",
+  "defect_class": "(f) absence of evidence stated as evidence of absence",
+  "cited": "No citation; refers to Section 6.11.",
+  "why_unsupported": "Every safety contrast in the INT8 arm is reported as non-significant, so there is no established safety effect whose bit-width grading can be characterised. Concluding it is 'neither bit-width-graded' converts a set of null results into a positive statement about the shape of an effect. The 'not stable across budgets' half is supported (the 128-token Llama INT8 result does not reproduce at 512).",
+  "proposed_fix": "'No graded-by-bit-width safety effect is detectable here, and the one candidate INT8 effect seen at 128 tokens does not reproduce at the reference budget.'"
+ },
+ {
+  "sentence": "The only precision effect that is stable across budgets and methods is therefore the four-bit capability cliff.",
+  "defect_class": "(c) exclusivity + (f) resting on non-significance",
+  "cited": "No citation; refers to Section 6.11.",
+  "why_unsupported": "'The only ... across budgets and methods' reads as an exclusivity claim over precision effects and quantization methods generally, when the evidence base is two bitsandbytes methods, two generation budgets, four benchmarks and five pairs — and the exclusion of the other candidates rests on non-significance rather than on demonstrated absence.",
+  "proposed_fix": "'Among the precisions, budgets and benchmarks evaluated here, the four-bit capability drop is the only effect that reproduces across both generation budgets and both bitsandbytes methods.'"
+ },
+ {
+  "sentence": "That is small noise around zero rather than a masked stochastic effect.",
+  "defect_class": "(f) absence of evidence stated as evidence of absence",
+  "cited": "No citation; refers to Section 6.5.1.",
+  "why_unsupported": "The preceding sentence discloses that for the two cross-family pairs the greedy point sits outside the seed range — i.e. the greedy result is not reproduced by any of the five sampled seeds. A five-seed arm at one temperature/top-p setting cannot distinguish 'small noise' from a masked effect; asserting the benign reading as fact overstates what the arm can resolve.",
+  "proposed_fix": "'This is most plausibly small noise around zero, though a five-seed arm at a single stochastic setting cannot exclude a masked effect of the size involved.'"
+ },
+ {
+  "sentence": "At 512 it corroborates the null-safety result rather than tempering a real effect.",
+  "defect_class": "(f) absence of evidence stated as evidence of absence",
+  "cited": "No citation; refers to Section 6.5.1.",
+  "why_unsupported": "Same defect as the Chapter 8 sentence above, restated in Future Work. 'Rather than tempering a real effect' asserts that no real effect exists to be tempered, on the basis of five seeds at one sampling setting, all non-significant — and the same paragraph concedes that two greedy points fall outside their seed ranges.",
+  "proposed_fix": "'At 512 it is consistent with the null-safety result: no seed shows a significant increase, though the arm's five seeds at a single sampling setting do not exclude a small effect.'"
+ },
+ {
+  "sentence": "This is the highest-leverage extension of the safety axis.",
+  "defect_class": "(c) superlative",
+  "cited": "No citation.",
+  "why_unsupported": "A ranking over all possible extensions of the safety axis, stated as fact. Nothing in the study or the cited literature compares the expected yield of an attack arm against, say, a multilingual arm or a second-annotator arm. Chapter 8's parallel formulation ('is flagged as the highest-leverage extension') is self-descriptive and fine; this one asserts the ranking.",
+  "proposed_fix": "'This is the extension with the greatest expected leverage on the safety axis, and Chapter 8 flags it as such.' or simply 'This is the priority extension of the safety axis.'"
+ },
+ {
+  "sentence": "Together they take the study to five pairs across four families (Qwen, Llama, Mistral, Phi) and add a seven-billion-parameter point at the upper edge of the compact-deployment regime.",
+  "defect_class": "(a) prevalence/adoption (implicit claim about deployment practice)",
+  "cited": "No citation on the sentence; the model-release references [41] Mistral 7B and [3] Phi-4-Mini are not attached here.",
+  "why_unsupported": "'The upper edge of the compact-deployment regime' asserts a fact about deployment practice — that there is a recognised compact-deployment size band and that ~7B sits at its ceiling. No source in the reference list measures deployment size distributions, and model-release papers establish a model's size and availability but not where practitioners draw a deployment boundary.",
+  "proposed_fix": "'...and add a seven-billion-parameter point at the upper end of the size range covered by this study.'"
+ },
+ {
+  "sentence": "Replicate the matched-pair design in Chinese (where Qwen is natively strong) and in one low-resource language, to test whether quantization-induced safety changes are language-dependent.",
+  "defect_class": "(e) uncited empirical claim about a model's capability",
+  "cited": "No citation on the sentence. The Qwen3 technical report [1] is in the reference list and would support the parenthetical.",
+  "why_unsupported": "'Where Qwen is natively strong' is an empirical claim about Qwen's Chinese-language capability relative to other models. Nothing in this study measures multilingual capability (Chapter 8 scopes the work as English-only), so the claim must rest on an external source, and none is attached.",
+  "proposed_fix": "Attach the release paper: '...in Chinese (a language for which the Qwen3 release reports strong native performance [1])...'"
+ },
+ {
+  "sentence": "It is adopted because it is the field-standard reference classifier specified by the HarmBench paper [24], run at full precision, with deterministic greedy decoding and zero parse failures on this dataset.",
+  "defect_class": "(a) prevalence/adoption + (e) attribution mismatch",
+  "cited": "Yes — [24] Mazeika et al., HarmBench (ICML 2024), attached to this sentence.",
+  "why_unsupported": "[24] establishes that this classifier is the one HarmBench specifies for its own benchmark. It does not establish that the classifier is the standard of the field, i.e. that it is widely adopted across safety evaluation practice. 'Field-standard' is an adoption/prevalence claim about the research community that no cited source in the reference list measures.",
+  "proposed_fix": "Replace with 'It is adopted because it is the reference classifier specified by the HarmBench paper [24], run at full precision, with deterministic greedy decoding and zero parse failures on this dataset.'"
+ },
+ {
+  "sentence": "The data therefore refute the optimistic narrative that NF4 quantization is a clean safety win in this scale range, while they also refute any claim of a safety regression that holds up statistically.",
+  "defect_class": "(f) absence-of-evidence as evidence-of-absence + (b) universal",
+  "cited": "No citation attached.",
+  "why_unsupported": "The second clause converts a set of non-significant ASR contrasts into a refutation. With per-pair MDEs of 0.044–0.086 at n = 200 (the report's own figure, Section 6.4 / I.1), a real regression smaller than the detection floor is entirely compatible with these data; non-significance cannot 'refute' it. 'Any claim' further universalises beyond the five pairs and one benchmark tested.",
+  "proposed_fix": "'The data therefore do not support the optimistic narrative that NF4 quantization is a clean safety win in this scale range, and they also provide no statistically significant evidence of a safety regression; with per-pair MDEs of 0.044–0.086, regressions below that floor cannot be excluded.'"
+ },
+ {
+  "sentence": "The conceptual conclusion is that quantization's effect on safety is neither bit-width-graded nor budget-robust.",
+  "defect_class": "(b) universal generalisation + (f) null read as a property of the method",
+  "cited": "No citation attached.",
+  "why_unsupported": "The evidence is five model pairs, two quantization methods (NF4, LLM.int8) via one library, one harm benchmark and two generation budgets. That licenses a statement about what was observed here, not a property of 'quantization's effect on safety' in general. The 'not bit-width-graded' half also rests on non-significant INT8-vs-NF4 differences, i.e. failure to detect a gradation rather than evidence against one.",
+  "proposed_fix": "'The conceptual conclusion drawn from these five pairs is that the safety effects observed here are neither bit-width-graded nor stable across generation budgets.'"
+ },
+ {
+  "sentence": "The only robust, budget-invariant precision effect is the capability cliff at four-bit, and no INT8 or NF4 harmful-compliance increase survives at the reference budget.",
+  "defect_class": "(c) superlative/exclusivity + (f)",
+  "cited": "No citation attached.",
+  "why_unsupported": "'The only ... effect' is an exclusivity claim over all precision effects, whereas the study measured four benchmarks on five pairs at two budgets and two quantization methods; effects on unmeasured axes (and effects below the study's 0.044–0.086 MDE) are simply untested, not absent.",
+  "proposed_fix": "'Of the effects measured here, the only one that is robust across both generation budgets is the capability loss at four-bit, and no INT8 or NF4 harmful-compliance increase reaches significance at the reference budget.'"
+ },
+ {
+  "sentence": "Both judges agree that at the reference budget NF4 does not raise harmful compliance in any pair.",
+  "defect_class": "(f) absence-of-evidence as evidence-of-absence + (b) universal",
+  "cited": "No citation attached.",
+  "why_unsupported": "'Does not raise ... in any pair' asserts a true zero effect from two sets of non-significant / near-zero point estimates on n = 200 per pair. The section itself states the correct entitlement two paragraphs earlier ('no detectable change at n = 200' rather than a proven zero) and reports MDEs of 0.044–0.086. Both judges agreeing on a null does not upgrade it to an established absence.",
+  "proposed_fix": "'Under both judges, no pair shows a statistically significant increase in harmful compliance at the reference budget.'"
+ },
+ {
+  "sentence": "Both judges agree that no pair shows a material harmful-compliance increase, and that Mistral-7B's proxy-driven 'increase' is an artefact.",
+  "defect_class": "(f) + (e) attribution of an authorial inference to the judges",
+  "cited": "No citation attached.",
+  "why_unsupported": "Two problems. First, 'no pair shows a material increase' states an absence from non-significant results without a defined materiality threshold or reference to the study's own MDE range. Second, the judges produce per-response harm labels; they cannot 'agree that' the proxy's increase is an artefact — that is the authors' interpretation of the discrepancy between scorers, not an output either judge asserts.",
+  "proposed_fix": "'Neither judge shows a statistically significant harmful-compliance increase in any pair, and under both judges Mistral-7B's proxy-driven \"increase\" does not reproduce, which is why it is read here as a scorer artefact.'"
+ },
+ {
+  "sentence": "That is far higher than the regex-versus-classifier agreement (κ ≈ 0.25–0.59 for Qwen and Mistral), which confirms that the regex, and not the classifier, was the outlier.",
+  "defect_class": "(e) over-strong inference from non-independent sources",
+  "cited": "No citation attached.",
+  "why_unsupported": "Two LLM-based harm classifiers agreeing with each other cannot 'confirm' which scorer is the outlier, because they are not independent measurements — the report concedes exactly this in I.5 ('both judges share the broad lineage of LLM-based harm classification'). High mutual agreement between correlated instruments is consistent with both being jointly biased. The human-label audit (I.4), not the second judge, is what carries this claim, and it is a single annotator on a disagreement-enriched slice.",
+  "proposed_fix": "'That is far higher than the regex-versus-classifier agreement (κ ≈ 0.25–0.59 for Qwen and Mistral), which is consistent with the regex rather than the classifier being the outlier; because both judges share the LLM-based-classification lineage, the decisive evidence on this point is the human-label audit below.'"
+ },
+ {
+  "sentence": "With that scope established, the v1 classifier (pre-2026-05-28) used a narrow set of 14 refusal patterns that missed the most common modern refusal templates, including \"I can't fulfill this request\", \"I cannot provide\", \"I'm unable to assist\", and curly-apostrophe variants used by Qwen3 output.",
+  "defect_class": "(a) prevalence",
+  "cited": "No citation attached.",
+  "why_unsupported": "'The most common modern refusal templates' asserts a frequency ranking over refusal phrasing across contemporary models. The evidence is the phrasings observed in this study's own six runs plus a 55-response manual audit; no survey of refusal-template frequency across models is cited or conducted.",
+  "proposed_fix": "'... used a narrow set of 14 refusal patterns that missed refusal templates common in this study's own outputs, including \"I can't fulfill this request\", \"I cannot provide\", \"I'm unable to assist\", and curly-apostrophe variants produced by Qwen3.'"
+ },
+ {
+  "sentence": "The classifier was rewritten with comprehensive coverage of standard refusal templates, validated by manual stratified audit of 55 sampled responses across all six runs.",
+  "defect_class": "(b) universal/completeness claim + (a) 'standard' as prevalence",
+  "cited": "No citation attached.",
+  "why_unsupported": "'Comprehensive coverage' claims completeness over the space of refusal phrasings; a 55-response audit on six runs can establish correctness on that sample only, which is what the following sentence actually says. 'Standard refusal templates' also presupposes an established, enumerated population of refusal phrasings that is neither cited nor characterised. The report's own XSTest human audit (I.7) then finds the regex detected 2 of 63 full refusals, directly contradicting 'comprehensive'.",
+  "proposed_fix": "'The classifier was rewritten to cover a broader set of refusal templates observed in these runs, and its correctness on a manual stratified audit of 55 sampled responses across all six runs was confirmed; coverage beyond that sample is not established, and the later XSTest human audit shows it remains far from complete.'"
+ },
+ {
+  "sentence": "There is no effect at the reference budget for sampling to attenuate.",
+  "defect_class": "(f) absence-of-evidence as evidence-of-absence",
+  "cited": "No citation attached.",
+  "why_unsupported": "This flatly asserts a zero effect, and it does so two sentences after the correct formulation in the same paragraph ('the claim established here is \"no detectable change at n = 200\" rather than a proven zero'), and after disclosing that all five seed deltas are non-negative and compatible with a small positive effect below the 0.079 MDE.",
+  "proposed_fix": "'There is no detectable effect at the reference budget for sampling to attenuate.'"
+ },
+ {
+  "sentence": "No ASR contrast survives multiple-comparison correction, and the one significant ASR delta, on Llama-3.2-3B, is a decrease that the label scheme correctly attributes to capability loss.",
+  "defect_class": "(d) causal attribution to an unverified mechanism",
+  "cited": "No citation attached.",
+  "why_unsupported": "'Correctly attributes to capability loss' asserts that the causal attribution is true. What the study has is co-occurrence — a significant ΔASR of −0.040 alongside a significant ΔARC of −0.032 — plus a labelling rule the authors wrote that maps that co-occurrence to the label. A rule firing as designed is not evidence that the safety decrease was caused by the capability decrease; no mediation or ablation test was run.",
+  "proposed_fix": "'No ASR contrast survives multiple-comparison correction, and the one significant ASR delta, on Llama-3.2-3B, is a decrease that co-occurs with a significant capability loss, which is what the label scheme flags as capability-driven rather than a genuine alignment gain.'"
+ },
+ {
+  "sentence": "Its apparent safety improvement is therefore diagnosed as capability-driven rather than a genuine alignment gain.",
+  "defect_class": "(d) causal attribution to an unverified mechanism",
+  "cited": "No citation attached.",
+  "why_unsupported": "The diagnosis rests entirely on two deltas moving in the same direction on the same pair. The study did not measure whether the reduced harmful compliance is produced by degraded capability (e.g. by testing whether the flipped prompts are the ones showing capability loss); the label is a decision rule applied to two co-occurring measurements, not a causal finding.",
+  "proposed_fix": "'Because its harmful-compliance decrease co-occurs with a confirmed capability loss, the label scheme classifies the apparent safety improvement as capability-driven rather than a genuine alignment gain; this is a co-occurrence-based label, not a demonstrated mechanism.'"
+ },
+ {
+  "sentence": "That 128-token effect was a truncation artefact, since 60 percent of 128-token responses were cut off before completion, and at 512 tokens the harm axis is flat (Section 6.12).",
+  "defect_class": "(d) causal attribution stated as established fact",
+  "cited": "No citation attached.",
+  "why_unsupported": "What is measured is (i) an aggregate 60.3% truncation rate across the 128-token corpus and (ii) the disappearance of the +0.055 at 512 tokens. Neither isolates truncation as the cause for this pair: the report itself documents a second, independent source of 128-vs-512 divergence (9.2% prefix mismatch from cross-run greedy non-determinism, I.12) and uses exactly that alternative to explain the Llama INT8 case. No controlled test (e.g. re-scoring 512-token generations truncated back to 128 tokens) was run.",
+  "proposed_fix": "'That 128-token effect is most plausibly a truncation artefact — 60 percent of 128-token responses were cut off before completion — and at 512 tokens the harm axis is flat (Section 6.12); truncation was not isolated experimentally as the cause.'"
+ },
+ {
+  "sentence": "It was an artefact of truncation (Section 6.12) rather than a stable property of the model, and it disappears alongside the aggregate +0.055 once responses are allowed to run to the reference budget.",
+  "defect_class": "(d) causal attribution stated as established fact",
+  "cited": "No citation attached.",
+  "why_unsupported": "Same defect as the 6.8.2 instance: the per-category rise vanishing at 512 tokens shows budget-dependence, not that truncation specifically caused it. Cross-run greedy divergence is an alternative the report elsewhere invokes for exactly this kind of 128-vs-512 instability, and per-category counts here are 19–58 prompts, which the paragraph itself calls descriptive.",
+  "proposed_fix": "'It was budget-dependent rather than a stable property of the model — most plausibly a truncation artefact (Section 6.12) — and it disappears alongside the aggregate +0.055 once responses are allowed to run to the reference budget.'"
+ },
+ {
+  "sentence": "The 128-token Llama-3.2-3B INT8 signal was therefore a budget-sensitive artefact, though of a different kind from the truncation that inflated the Qwen3-1.7B NF4 move.",
+  "defect_class": "(d) causal attribution embedded as presupposition",
+  "cited": "No citation attached.",
+  "why_unsupported": "The subordinate clause presupposes as settled fact that truncation inflated the Qwen3-1.7B move — the same unisolated causal attribution as above, here smuggled in as background rather than asserted and defended.",
+  "proposed_fix": "'... though of a different kind from the truncation that most plausibly inflated the Qwen3-1.7B NF4 move.'"
+ },
+ {
+  "sentence": "Because Llama-3.2-3B's generations truncate at only 3–4% (Section 6.12), the instability is attributable to cross-run greedy divergence on thin-margin prompts rather than to truncated responses.",
+  "defect_class": "(d) causal attribution to an unmeasured mechanism",
+  "cited": "No citation attached.",
+  "why_unsupported": "Ruling out truncation does not identify the remaining cause, and the qualifier 'on thin-margin prompts' adds a mechanism the study did not test for this arm: the refusal-margin analysis (I.10) was computed on fp16-vs-NF4 flips, not on the 128-vs-512 INT8 prefix mismatches, so no measurement links the diverging INT8 prompts to thin first-token margins.",
+  "proposed_fix": "'Because Llama-3.2-3B's generations truncate at only 3–4% (Section 6.12), the instability is not explained by truncated responses; the remaining candidate is cross-run greedy divergence, though this arm did not test whether the diverging prompts are the thin-margin ones.'"
+ },
+ {
+  "sentence": "This is benign run-to-run non-determinism between two separate executions at different max_new_tokens, arising from kernel and batching effects, and it was conservatively excluded from the truncated count, which makes 60.3 percent a floor.",
+  "defect_class": "(d) causal attribution to an unmeasured mechanism",
+  "cited": "No citation attached.",
+  "why_unsupported": "'Arising from kernel and batching effects' names a specific hardware/software cause for the 184 prefix mismatches. The study observed the mismatches but ran no diagnostic isolating kernel selection or batch composition (e.g. re-running at fixed batch size or with deterministic kernels), and no source is cited for the mechanism.",
+  "proposed_fix": "'This is run-to-run non-determinism between two separate executions at different max_new_tokens, most likely from non-deterministic kernel selection and batching, though this was not diagnosed here; it was conservatively excluded from the truncated count, which makes 60.3 percent a floor.'"
+ },
+ {
+  "sentence": "This is the reverse of the 128-token picture (Section 6.12), where multi-seed decoding attenuated a real greedy +0.055.",
+  "defect_class": "(f) inverted — a non-replicating result asserted as a real effect",
+  "cited": "No citation attached.",
+  "why_unsupported": "The report's own position, stated twice elsewhere in this same appendix (I.2 and 6.8.2), is that the 128-token +0.055 was an artefact rather than a genuine effect. Calling it 'a real greedy +0.055' asserts the opposite and is not supported by any analysis in the report — the +0.055 was a point estimate on n = 200 at a budget the report now treats as confounded.",
+  "proposed_fix": "'This is the reverse of the 128-token picture (Section 6.12), where multi-seed decoding attenuated the greedy +0.055 measured at that budget.'"
+ },
+ {
+  "sentence": "At similar MMLU capability (Qwen3-1.7B 0.643 and Llama-3.2-3B 0.610), the Llama model is more safety-calibrated than the smaller Qwen under the official classifier at the 512-token reference budget.",
+  "defect_class": "(b) model-level property inferred from a single benchmark; unsupported 'similar capability' premise",
+  "cited": "No citation attached.",
+  "why_unsupported": "Two over-reaches. (i) 'More safety-calibrated' asserts a general alignment property of the released model from one 200-prompt harm benchmark plus one over-refusal benchmark; safety calibration across attack types, languages and jailbreaks is untested here. (ii) The premise 'at similar MMLU capability' is asserted, not tested — the 3.3 pp gap is of the same order as deltas the report elsewhere treats as real capability losses (Llama's own −3.7 pp MMLU), and no equivalence test is reported for it in this sentence.",
+  "proposed_fix": "'On this 200-prompt HarmBench set at the 512-token reference budget, and at MMLU accuracies within 3.3 pp of each other (0.643 vs 0.610, a gap this study does not test for equivalence), Llama-3.2-3B has the lower baseline harmful-compliance rate of the two.'"
+ },
+ {
+  "sentence": "The first is the second-judge cross-check (Result 4), where an independent frontier judge agrees at κ 0.68–0.95 across all ten models and reproduces the finding's direction and magnitude.",
+  "defect_class": "(c)/(e) independence asserted, then contradicted",
+  "cited": "No citation attached.",
+  "why_unsupported": "'Independent' is the load-bearing word for the construct-validity argument, and the report itself qualifies it two paragraphs later ('both judges share the broad lineage of LLM-based harm classification'). The gpt-4o judge is independent of the HarmBench classifier in training provenance only, not in construct or in the failure modes the LLM-as-judge literature [51]–[53] documents; calling it independent without that qualifier over-states the cross-check.",
+  "proposed_fix": "'The first is the second-judge cross-check (Result 4), where a separately trained frontier judge — independent in provenance though not in construct, since both are LLM-based harm classifiers — agrees at κ 0.68–0.95 across all ten models and reproduces the finding's direction and magnitude.'"
+ },
+ {
+  "sentence": "Llama-Guard answers a looser question ('is this response unsafe?') than the HarmBench classifier ('is this generation an instance of the specific behavior?'), so where the two disagree, most visibly on the low Phi κ, the divergence is expected and non-diagnostic.",
+  "defect_class": "(d) unmeasured attribution used to discount contrary evidence",
+  "cited": "No citation attached (Llama Guard [48] is cited in the preceding paragraph, not here).",
+  "why_unsupported": "The construct difference is real, but attributing the Phi κ of 0.36–0.38 to it — rather than to classifier error on Phi outputs — is an unmeasured causal claim. No error analysis of the disagreeing items is reported, and the same construct difference applies to Llama-3.2-3B, where κ reaches 0.89–0.92; a factor that is constant across aliases cannot on its own explain an alias-specific low κ. Declaring disagreement 'non-diagnostic' by assumption makes the cross-check unfalsifiable.",
+  "proposed_fix": "'Llama-Guard answers a looser question ... than the HarmBench classifier ..., so some disagreement is expected by construction. Because the disagreeing items were not error-analysed, the low Phi κ cannot be assigned to the construct gap rather than to classifier error, and it is reported as unresolved rather than discounted.'"
+ },
+ {
+  "sentence": "Refusal-counting over-states harmful compliance not merely relative to the classifier but relative to human judgment, and the classifier is the substantially better scorer.",
+  "defect_class": "(b) generalisation from one instrument to a method class",
+  "cited": "No citation attached.",
+  "why_unsupported": "The evidence concerns this study's specific v2 regex on a 200-item, deliberately disagreement-enriched slice labelled by a single annotator. That does not license a claim about 'refusal-counting' as a scoring approach in general, nor an unscoped ranking of scorer quality; the same paragraph concedes the κ values are 'not population estimates'.",
+  "proposed_fix": "'On this audit slice, the v2 refusal regex over-states harmful compliance not merely relative to the classifier but relative to the annotator's judgment, and the classifier is substantially the closer of the two to that annotator.'"
+ },
+ {
+  "sentence": "No HarmBench ASR increase reaches significance on any pair, so ARC reinforces the reading that capability degradation, rather than harmful-compliance change, is the consistent cost of NF4.",
+  "defect_class": "(b) generalisation beyond the tested models",
+  "cited": "No citation attached.",
+  "why_unsupported": "'The consistent cost of NF4' states a property of the method rather than of the five pairs measured, and the same paragraph reports that two of five pairs (Mistral-7B, Phi-4-mini) show no individually significant capability loss and that Mistral's ARC moves in the improving direction — i.e. the cost is not consistent even within this sample.",
+  "proposed_fix": "'No HarmBench ASR increase reaches significance on any pair, so ARC reinforces the reading that across these five pairs capability degradation, rather than harmful-compliance change, is the more consistently observed cost of NF4.'"
+ },
+ {
+  "sentence": "That setting is temperature 0.7 with top-p 0.8, Qwen3's published non-thinking recommendation.",
+  "defect_class": "(e) uncited external-source claim",
+  "cited": "No citation attached (the Qwen3 technical report is reference [1], not cited here).",
+  "why_unsupported": "This asserts what a specific external publisher recommends. It is a checkable claim about a document outside the study, and it is load-bearing for the design justification, but no reference is given and the recommendation in question comes from the model card rather than necessarily from the cited technical report.",
+  "proposed_fix": "'That setting is temperature 0.7 with top-p 0.8, the non-thinking sampling setting recommended on the Qwen3 model card [1].'"
+ },
+ {
+  "sentence": "It was applied uniformly to all five pairs for cross-pair comparability rather than tuned per publisher, although Meta's Llama guidance is T = 0.6 / top-p 0.9.",
+  "defect_class": "(e) uncited external-source claim",
+  "cited": "No citation attached (the Llama 3 herd paper is reference [2], not cited here).",
+  "why_unsupported": "'Meta's Llama guidance is T = 0.6 / top-p 0.9' is an assertion about an external vendor's published guidance, given without a reference; those values come from model-card / default generation-config material rather than from the Llama 3 paper in the reference list.",
+  "proposed_fix": "'... rather than tuned per publisher, although Meta's Llama-3 model-card defaults are T = 0.6 / top-p 0.9 [2].'"
+ },
+ {
+  "sentence": "Having nothing left to answer, the model continues, and it often fabricates a synthetic next turn, inventing a follow-up user request and then answering it.",
+  "defect_class": "(a)-adjacent unquantified frequency claim + (d) motive attributed to the model",
+  "cited": "No citation attached.",
+  "why_unsupported": "'Often' is a frequency claim, but the paragraph states this surfaced qualitatively 'while inspecting responses' during the human-label audit; no count or rate of synthetic-turn generations is reported anywhere in the appendix. 'Having nothing left to answer' additionally ascribes a state to the model that was not measured — the observed fact is only that generation continues past the answer until the token budget.",
+  "proposed_fix": "'Once the answer is complete the generation loop continues to the token budget, and in responses inspected during the human-label audit it sometimes produced a synthetic next turn, inventing a follow-up user request and then answering it; the rate of this behaviour was not quantified.'"
+ }
+]
