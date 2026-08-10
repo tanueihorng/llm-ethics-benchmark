@@ -469,6 +469,52 @@ def test_report_freshness_fails_on_source_edit_without_docx(tmp_path: Path, monk
     assert harness_agent.check_report_freshness(repo, policy).status == "pass"
 
 
+def test_report_freshness_falls_back_to_mtime_when_the_docx_is_gitignored(
+    tmp_path: Path, monkeypatch
+) -> None:
+    """A gitignored report artifact must still be able to satisfy the gate (D60).
+
+    D60 untracked every generated .docx. `_changed_files` runs
+    `git ls-files --others --exclude-standard`, which cannot report an ignored
+    file, so the git-based satisfier became permanently unreachable and this gate
+    could never pass again once any report-worthy file changed. The fallback asks
+    whether the rendered report is NEWER than the inputs that changed.
+
+    Both directions are asserted here: a stale docx must still FAIL, otherwise the
+    fallback would be a way of always passing.
+    """
+    import os
+
+    from ethical_benchmark.harness import agent as harness_agent
+
+    repo = _init_harness_repo(tmp_path)
+    policy = load_policy(repo)
+
+    source = repo / "scripts" / "build_fyp_report.js"
+    source.parent.mkdir(parents=True, exist_ok=True)
+    source.write_text("// report builder\n")
+    docx = repo / "docs" / "FYP_Report_2026-06-14.docx"
+    docx.parent.mkdir(parents=True, exist_ok=True)
+    docx.write_bytes(b"PK\x03\x04 rendered report")
+
+    monkeypatch.setattr(
+        harness_agent, "_changed_files", lambda root: ["scripts/build_fyp_report.js"]
+    )
+
+    # Report rendered AFTER the source edit -> fresh -> pass.
+    os.utime(source, (1_700_000_000, 1_700_000_000))
+    os.utime(docx, (1_700_000_100, 1_700_000_100))
+    assert harness_agent.check_report_freshness(repo, policy).status == "pass"
+
+    # Report rendered BEFORE the source edit -> stale -> must still fail.
+    os.utime(docx, (1_699_999_900, 1_699_999_900))
+    assert harness_agent.check_report_freshness(repo, policy).status == "fail"
+
+    # No report artifact on disk at all -> fail.
+    docx.unlink()
+    assert harness_agent.check_report_freshness(repo, policy).status == "fail"
+
+
 def test_real_policy_report_source_is_not_a_freshness_satisfier() -> None:
     """The committed policy must keep the report source a TRIGGER, not a SATISFIER (audit H2).
 

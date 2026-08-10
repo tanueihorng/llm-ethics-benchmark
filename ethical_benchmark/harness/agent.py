@@ -391,6 +391,32 @@ def check_report_freshness(repo_root: Path, policy: dict[str, Any]) -> CheckResu
             "Report-worthy files changed and report artifact/source is also changed.",
             changed_required,
         )
+
+    # D60 untracked every generated .docx, and _changed_files() runs
+    # `git ls-files --others --exclude-standard`, which by definition cannot see an
+    # ignored file. That left the satisfier permanently unreachable: after D60 this
+    # gate could never pass again once any report-worthy file changed. Fall back to
+    # the property the gate actually cares about -- is the rendered report newer than
+    # the inputs that changed? -- which is a stronger question than "did both appear
+    # in one diff", and keeps the report SOURCE a trigger rather than a satisfier
+    # (audit H2, tests/test_agent_harness.py).
+    newest_input = 0.0
+    for path in report_worthy:
+        candidate = repo_root / path
+        if candidate.exists():
+            newest_input = max(newest_input, candidate.stat().st_mtime)
+    fresh: list[str] = []
+    for pattern in required:
+        for artifact in sorted(repo_root.glob(pattern)):
+            if artifact.is_file() and artifact.stat().st_mtime >= newest_input:
+                fresh.append(str(artifact.relative_to(repo_root)))
+    if fresh and newest_input:
+        return CheckResult(
+            "report-freshness",
+            "pass",
+            "Report-worthy files changed and the report artifact on disk is newer than them.",
+            fresh,
+        )
     return CheckResult(
         "report-freshness",
         "fail",

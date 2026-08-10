@@ -316,7 +316,7 @@ Neither is wrong — they're two different scorers, and the report uses the one 
 
 Three layers. First, every `raw.jsonl` and `summary.json` is SHA-256 hashed into a manifest — three hundred and forty entries across the 128 tree, the 512 tree and the multi-seed arm — and `make agent-check` recomputes them and fails on a changed hash or on a raw file present but not listed. Second, the runner refuses to delete: a guard function raises if a restart would unlink a raw file inside the protected trees, unless you set an explicit override variable. Third, `verify_report_claims` re-derives ninety-three locked numbers from the artefacts and fails if the document and the evidence disagree.
 
-**Point at:** `results/raw_artifact_manifest.sha256` (340 lines, tracked); `_guard_protected_delete` in `run_quant_benchmark.py`; `make verify-claims`, which runs the claim registry, the 93 report-number checks, and 342 surface checks.
+**Point at:** `results/raw_artifact_manifest.sha256` (340 lines, tracked); `_guard_protected_delete` in `run_quant_benchmark.py`; `make verify-claims`, which runs the claim registry, the report-number checks and the surface checks (run it in the room rather than quoting a total — the counts move with every commit).
 
 **Concede:** Two honest limits. The check tolerates *absence* by design, so on a clean clone it passes vacuously. And the manifest is a file I can rewrite — this is tamper-evidence, and the real audit trail is the git history of that manifest.
 
@@ -332,7 +332,7 @@ By never writing back. Every rescoring reads `raw.jsonl` and writes a *new* deri
 
 ---
 
-### **"You have 560 tests. What do they prove — and what don't they touch?"**
+### **"You have several hundred tests. What do they prove — and what don't they touch?"**
 
 They prove the plumbing, not the physics. Concretely: the config schema rejects bad configs, the SLURM generator emits the right bootstrap block and rejects an ambiguous walltime, the matrix runner loads each model exactly once, a generator returning fewer responses than prompts raises instead of silently dropping them, the judge layer never writes text fields, and ninety-three report numbers match the artefacts. What they do not touch: no test runs on a GPU, none loads a real model, and none validates the NF4 numerics — the model stack is monkeypatched with a dummy loader so the suite runs on my laptop in seconds. So the tests can tell you my pipeline is correct *given* the generations; they cannot tell you the generations are correct.
 
@@ -511,4 +511,4 @@ At two hundred paired prompts and the flip rates I observe, my minimum detectabl
 | **Refusal-margin gate AUC** | 0.864 / 0.871 / 0.871 / 0.902, Mistral **0.692**; pooled flip AUC 0.763 |
 | **Scale** | 5 pairs, 4 families, 1.7–7.2B; n=200 HarmBench, 250 XSTest, 300 MMLU, 1172 ARC |
 | **Repo** | 9,505 lines in `ethical_benchmark`; 340 manifest hashes; 3,000 judge classifications, 0 parse errors |
-| **Repo counts that move** | Test, claim-lock and surface-check totals change with every commit — do **not** memorise them. If an examiner asks, say "around five hundred and sixty tests, and I can run them now", then run `make agent-check`. It prints the live figures. (For reference only, 2026-08-11: 565 tests, 342 surface checks.) |
+| **Repo counts that move** | Test, claim-lock and surface-check totals change with every commit — do **not** memorise them. If an examiner asks, say "several hundred, and I can run them right now", then run `make agent-check` and read the live figures off the screen. That is a stronger answer than a memorised total, and it cannot be stale. |
