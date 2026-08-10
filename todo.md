@@ -7,6 +7,21 @@
 
 ---
 
+## Hard deadlines (CCDS FYP, AY2026 Sem 1 — recorded 2026-08-10)
+
+Full table + task numbers in PROJECT_LOG §1. School-set; everything else in this file is self-imposed.
+
+| Date | Milestone | Task |
+|---|---|---|
+| **Mon 24 Aug 2026** | Interim report → supervisor | **T53** ← nearest |
+| **Mon 19 Oct 2026** | Final report → supervisor + examiners (**this is the graded version**) | T15 |
+| **Fri 13 Nov 2026** | Amended final + DR-NTU deposit (no changes after) | T54 |
+| **4 / 7 / 8 Dec 2026** | Oral presentation (20 min + 10 min Q&A) | T55 |
+
+T53 is a *send* action — `docs/FYP_Interim_2026-07-10.docx` already exists and is current. T1 (July email) goes before it or with it; T1b (August email) is gated behind it.
+
+---
+
 ## Current state (2026-07-08)
 
 The study is **complete and submission-ready**. D44 pre-submission audit is DONE,
@@ -180,7 +195,7 @@ comma splices left intact. Do not re-introduce formatting on any future edit.
 
 ---
 
-## [T1b] Send the August progress email to Dr. Zhang (DRAFTED — gated on T15)
+## [T1b] Send the August progress email to Dr. Zhang (DRAFTED — gated on T53, the INTERIM submission)
 
 **Why:** the July email deliberately no longer carries the scorer-validation work, so August has its own subject and zero overlap (machine-checked, 0 shared sentences).
 
@@ -190,7 +205,7 @@ comma splices left intact. Do not re-introduce formatting on any future edit.
 - Body: `docs/email_drZhang_august.md` (gitignored)
 - Attach: the interim report
 
-**SEND GATE:** the first line asserts the interim report has been submitted. Do not send until T15 is actually done, or rewrite that line first. Send order is July then August.
+**SEND GATE:** the first line asserts the **interim** report has been submitted, so the gate is **T53** (interim, due Mon 24 Aug 2026) — *not* T15, which is the final report due 19 Oct 2026. This entry previously named T15; corrected 2026-08-10 when the CCDS deadlines were recorded. Do not send until T53 is actually done, or rewrite that line first. Send order is July then August.
 
 **Content:** T30 HarmBench gold set (κ 0.59 vs 0.11), T36 XSTest gold set (regex 2/63 vs judge 61/63), T37 LlamaGuard (κ 0.36–0.92, all per-pair n.s.), and the Phi over-refusal paragraph that reports against the project's own surviving finding. All numbers verified against artifacts 2026-07-25; the per-file provenance is in the email's header block.
 

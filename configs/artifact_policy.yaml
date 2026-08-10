@@ -124,6 +124,10 @@ epistemic_hedge:
   scan_paths:
     - scripts/build_fyp_report_v6.js
     - scripts/build_rewritten_fyp_report_v1.py
+    # T53: the interim build derives its prose from the rewrite, but it is its own
+    # deliverable and is scanned in its own right — an unscanned document surface
+    # is exactly the T56 gap.
+    - scripts/build_rewritten_fyp_interim_v1.py
     - README.md
     - docs/RESULTS_CARD.md
   patterns:
@@ -263,6 +267,7 @@ stale_text:
     # T48: v6 is fully lock-covered and hedge-scanned; stale-text too.
     - scripts/build_fyp_report_v6.js
     - scripts/build_rewritten_fyp_report_v1.py
+    - scripts/build_rewritten_fyp_interim_v1.py
     - scripts/build_fyp_thesis_v4.js
     # 2026-07-15 verification round: the CURRENT submission alternates and the
     # interim builder are deliverables too, but were scanned by nothing — a retired

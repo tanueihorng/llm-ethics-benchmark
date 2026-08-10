@@ -17,6 +17,7 @@ discovery:
   - scripts/build_fyp_report_v5.js
   - scripts/build_fyp_report_v6.js
   - scripts/build_rewritten_fyp_report_v1.py
+  - scripts/build_rewritten_fyp_interim_v1.py
   - scripts/build_fyp_report_humanized.js
   - scripts/build_fyp_thesis_v4.js
   - scripts/build_fyp_thesis_humanized.js
@@ -83,6 +84,9 @@ surfaces:
   # T48: the remediated v6 builder is a first-class surface, not an unclassified file.
   - {id: report_builder_v6, path: scripts/build_fyp_report_v6.js, lifecycle: current, profiles: [registry_consumer, volatile_free]}
   - {id: rewritten_report_v1_builder, path: scripts/build_rewritten_fyp_report_v1.py, lifecycle: current, profiles: [registry_consumer_python, volatile_free]}
+  # T53 interim build. It imports the rewrite builder rather than copying it, so its
+  # prose cannot drift from the report; only the self-naming strings differ.
+  - {id: rewritten_interim_v1_builder, path: scripts/build_rewritten_fyp_interim_v1.py, lifecycle: current, profiles: [volatile_free]}
   - {id: report_humanized_builder, path: scripts/build_fyp_report_humanized.js, lifecycle: current, profiles: [registry_consumer, volatile_free]}
   - {id: thesis_builder, path: scripts/build_fyp_thesis_v4.js, lifecycle: current, profiles: [registry_consumer, volatile_free]}
   - {id: thesis_humanized_builder, path: scripts/build_fyp_thesis_humanized.js, lifecycle: current, profiles: [registry_consumer, volatile_free]}
@@ -114,6 +118,8 @@ surfaces:
   # of the canonical v5 and the v6 comparison draft, but it is live generated work
   # and therefore carries the same primary-claim and freshness gates.
   - {id: rewritten_report_v1, path: docs/rewritten_fyp_report_v1.docx, lifecycle: generated, source: scripts/build_rewritten_fyp_report_v1.py, profiles: [docx_primary, volatile_free, fresh_from_source]}
+  # T53: the interim submission artefact. Same body, same primary-claim gates.
+  - {id: rewritten_interim_v1, path: docs/rewritten_fyp_interim_v1.docx, lifecycle: generated, source: scripts/build_rewritten_fyp_interim_v1.py, profiles: [docx_primary, volatile_free, fresh_from_source]}
   - {id: report_v6_voice_draft, path: docs/FYP_Report_2026-07-25_v6.docx, lifecycle: generated, source: scripts/build_fyp_report_v6.js, profiles: [docx_primary, volatile_free, fresh_from_source]}
   - {id: agentic_workflow_docx, path: docs/Agentic_AI_Workflow_Report_2026-06-26.docx, lifecycle: snapshot, profiles: []}
   - {id: meetup_report_docx, path: docs/Codex_Meetup_Agent_Harness_Report.docx, lifecycle: snapshot, profiles: []}

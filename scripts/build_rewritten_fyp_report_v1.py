@@ -689,10 +689,10 @@ def add_front_matter(doc: Document) -> None:
         ("5.8 Robustness Synthesis", "32", 1),
         ("Chapter 6: Discussion", "34", 0),
         ("6.1 Answer to the Central Question", "34", 1),
-        ("6.2 Relationship to Prior Work", "34", 1),
+        ("6.2 Relationship to Prior Work", "35", 1),
         ("6.3 Capability as the Deployment Cost", "37", 1),
         ("6.4 Scorer Validity as a Research Result", "38", 1),
-        ("6.5 Threats to Validity", "38", 1),
+        ("6.5 Threats to Validity", "39", 1),
         ("6.6 Practical Implications", "40", 1),
         ("Chapter 7: Conclusion and Future Work", "41", 0),
         ("7.1 Conclusions", "41", 1),
@@ -776,20 +776,21 @@ def add_chapter_one(doc: Document) -> None:
         doc,
         [
             "Compact instruction-tuned language models have moved capable generation into a "
-            "deployment range that includes consumer GPUs and edge hardware. Qwen3 [1], the Llama 3 "
-            "family [2], Phi-4-mini [3], and Gemma 2 [4] illustrate the rapid development of models "
-            "below the scale of frontier systems. In a system designed without remote inference, "
-            "inputs need not leave the device. This report does not assume a latency, energy, privacy, "
-            "or monetary benefit from that architecture; it measures only model behaviour. Full-"
-            "precision inference can nevertheless exceed a target device's memory budget, which "
-            "motivates deployment-oriented compression [5].",
+            "deployment range that includes consumer GPUs and edge hardware. Qwen3 [1], the Llama "
+            "3 family [2], Phi-4-mini [3], and Gemma 2 [4] illustrate the rapid development of "
+            "models below the scale of frontier systems. In a system designed without remote "
+            "inference, inputs need not leave the device. However, this report does not assume a "
+            "latency, energy, privacy, or monetary benefit from that architecture, and it "
+            "measures only model behaviour. Full-precision inference can nevertheless exceed a "
+            "target device's memory budget, which motivates deployment-oriented compression [5].",
             "Post-training quantization addresses that constraint by representing weights, and "
             "sometimes activations, at lower precision. AWQ reports deployment-oriented four-bit "
-            "compression and acceleration on desktop and mobile GPUs [5]. GPTQ demonstrates one-shot "
-            "weight quantization at model scales up to 175 billion parameters [6]. Across a large "
-            "scaling-law study, four-bit inference is often the most effective operating point under "
-            "a fixed memory budget [7]. These results explain why a four-bit model is not an exotic "
-            "laboratory artefact. It is a plausible deployment form of the model.",
+            "compression and acceleration on desktop and mobile GPUs [5]. GPTQ demonstrates one- "
+            "shot weight quantization at model scales up to 175 billion parameters [6]. Across a "
+            "large scaling-law study, four-bit inference is often the most effective operating "
+            "point under a fixed memory budget [7]. Together these results explain why a four-bit "
+            "model is not an exotic laboratory artefact, but a plausible deployment form of the "
+            "model.",
             "The quantization method papers reviewed here report perplexity, accuracy, latency, or "
             "memory as primary outcomes [5]-[7]. Broad comparisons find that many tasks remain "
             "usable at four bits [8], [9]. "
@@ -798,13 +799,14 @@ def add_chapter_one(doc: Document) -> None:
             "models, bit-widths, and methods [10]. Quantization can also disturb confidence even when "
             "accuracy looks stable [11], create a condition that an attacker can exploit [12], and "
             "produce language-dependent damage that automatic metrics understate [13].",
-            "Refusal behaviour gives a concrete reason for concern. Helpful and harmless assistant "
-            "training introduces a learned behavioural policy [14]. Mechanistic work finds that "
-            "refusal can be mediated by a concentrated direction in activation space [15], while "
-            "other evidence suggests that safety alignment may be shallow in the generation process "
-            "[16]. Fine-tuning on a very small adversarial dataset can weaken safeguards [17]. These "
-            "findings do not prove that ordinary NF4 quantization will damage safety. They do show "
-            "that a weight-modifying deployment step should be measured rather than assumed benign.",
+            "Refusal behaviour gives a concrete reason for concern. Helpful and harmless "
+            "assistant training introduces a learned behavioural policy [14]. Mechanistic work "
+            "finds that refusal can be mediated by a concentrated direction in activation space "
+            "[15], while other evidence suggests that safety alignment may be shallow in the "
+            "generation process [16]. Fine-tuning on a very small adversarial dataset can weaken "
+            "safeguards [17]. These findings do not prove that ordinary NF4 quantization will "
+            "damage safety. They do, however, show that a weight-modifying deployment step should "
+            "be measured rather than assumed benign.",
         ],
     )
 
@@ -856,11 +858,11 @@ def add_chapter_one(doc: Document) -> None:
             "unsafe instructions without an optimised jailbreak suffix or attack loop. The results "
             "therefore concern direct harmful requests and should not be interpreted as evidence of "
             "general adversarial robustness.",
-            "The capability instruments are a six-subject MMLU subset and ARC-Challenge. They provide "
-            "two distinct multiple-choice anchors, but they do not measure every form of capability. "
-            "The main generation budget is 512 new tokens and the primary decoding condition is "
-            "greedy. A five-seed stochastic arm is a sensitivity analysis rather than part of the "
-            "primary family of tests.",
+            "The capability instruments are a six-subject MMLU subset and ARC-Challenge. They "
+            "provide two distinct multiple-choice anchors, but they do not measure every form of "
+            "capability. The main generation budget is 512 new tokens and the primary decoding "
+            "condition is greedy, while a five-seed stochastic arm is a sensitivity analysis "
+            "rather than part of the primary family of tests.",
         ],
     )
 
@@ -903,14 +905,14 @@ def add_chapter_two(doc: Document) -> None:
     add_paragraphs(
         doc,
         [
-            "TrustLLM evaluates trustworthiness across safety, truthfulness, fairness, robustness, "
-            "privacy, and machine ethics [20]. DecodingTrust provides another broad assessment, with "
-            "detailed testing of toxicity, stereotypes, privacy, robustness, and related properties "
-            "[21]. SafetyBench focuses more directly on safety knowledge through a large bilingual "
-            "multiple-choice benchmark [22]. These suites established the importance of evaluating "
-            "more than ordinary task accuracy. They also reveal a limitation for the present question: "
-            "the model is generally treated as a fixed system rather than as one member of a matched "
-            "precision pair.",
+            "TrustLLM evaluates trustworthiness across safety, truthfulness, fairness, "
+            "robustness, privacy, and machine ethics [20]. DecodingTrust provides another broad "
+            "assessment, with detailed testing of toxicity, stereotypes, privacy, robustness, and "
+            "related properties [21]. SafetyBench focuses more directly on safety knowledge "
+            "through a large bilingual multiple-choice benchmark [22]. These suites established "
+            "the importance of evaluating more than ordinary task accuracy. However, they also "
+            "reveal a limitation for the present question: the model is generally treated as a "
+            "fixed system rather than as one member of a matched precision pair.",
             "Instruction following and safety are not independent. The InstructGPT study shows how "
             "human feedback can make a much smaller aligned model preferable to a far larger base "
             "model [23]. HarmBench then supplies a standardised framework for automated red teaming "
@@ -927,26 +929,29 @@ def add_chapter_two(doc: Document) -> None:
             "difficult science questions [28]. Neither represents all useful behaviour. Their value "
             "here is diagnostic: if a lower harmful-compliance score arrives with lower capability, "
             "the result cannot be described confidently as an alignment improvement.",
-            "The three broad trustworthiness suites also illustrate a recurring trade-off in benchmark "
-            "design. Breadth increases coverage, but it can make the treatment and scorer less visible. "
-            "A composite trustworthiness score may combine factuality, privacy, bias, toxicity, and "
-            "robustness even though those dimensions respond differently to compression. This is useful "
-            "for model comparison, but less suitable for causal attribution. A matched quantization "
-            "study benefits from fewer outcomes with explicit constructs, because the route from a "
-            "prompt-level decision to the reported metric can be inspected.",
-            "SafetyBench's multiple-choice format is valuable for safety knowledge, but knowing the "
-            "correct policy answer is not the same as refusing a harmful request during generation "
-            "[22]. HarmBench and XSTest evaluate generated responses, so they are closer to deployment "
-            "behaviour. Their outputs are harder to score. The scorer must decide whether a response "
-            "complies, refuses, equivocates, or supplies partial information. That additional "
-            "measurement uncertainty is one reason the present study treats scorer validation as a "
-            "research result rather than a preprocessing detail.",
-            "MMLU and ARC also differ in useful ways. MMLU spans many academic and professional domains "
-            "but the present project uses a six-subject subset, which limits subject coverage. ARC-"
-            "Challenge is larger in this experiment and concentrates on difficult science questions. "
-            "Agreement between them would strengthen a broad capability interpretation; disagreement "
-            "suggests that the effect is task-specific. The report therefore avoids collapsing the two "
-            "benchmarks into one undocumented capability index.",
+            "The three broad trustworthiness suites also illustrate a recurring trade-off in "
+            "benchmark design. Breadth increases coverage, but it can make the treatment and "
+            "scorer less visible. A composite trustworthiness score may combine factuality, "
+            "privacy, bias, toxicity, and robustness even though those dimensions respond "
+            "differently to compression. This is useful for model comparison, but less suitable "
+            "for causal attribution. Consequently, a matched quantization study benefits from "
+            "fewer outcomes with explicit constructs, because the route from a prompt-level "
+            "decision to the reported metric can be inspected.",
+            "SafetyBench's multiple-choice format is valuable for safety knowledge, but knowing "
+            "the correct policy answer is not the same as refusing a harmful request during "
+            "generation [22]. HarmBench and XSTest evaluate generated responses, so they are "
+            "closer to deployment behaviour. However, their outputs are harder to score, because "
+            "the scorer must decide whether a response complies, refuses, equivocates, or "
+            "supplies partial information. That additional measurement uncertainty is one reason "
+            "the present study treats scorer validation as a research result rather than a "
+            "preprocessing detail.",
+            "MMLU and ARC also differ in useful ways. MMLU spans many academic and professional "
+            "domains but the present project uses a six-subject subset, which limits subject "
+            "coverage. ARC-Challenge is larger in this experiment and concentrates on difficult "
+            "science questions. Agreement between them would strengthen a broad capability "
+            "interpretation, whereas disagreement suggests that the effect is task-specific. The "
+            "report therefore avoids collapsing the two benchmarks into one undocumented "
+            "capability index.",
         ],
     )
 
@@ -954,12 +959,13 @@ def add_chapter_two(doc: Document) -> None:
     add_paragraphs(
         doc,
         [
-            "Quantization methods differ in the quantities they compress and in the information they "
-            "use during calibration. Scaling work shows that larger models often tolerate reduced "
-            "precision better than smaller ones, but the relationship depends on model scale and task "
-            "[29]. SmoothQuant migrates activation difficulty into weights to enable W8A8 inference "
-            "[30]. SparseGPT demonstrates that a different compression operation, pruning, can remove "
-            "many weights in one shot [31]. These methods are not interchangeable interventions.",
+            "Quantization methods differ in the quantities they compress and in the information "
+            "they use during calibration. Scaling work shows that larger models often tolerate "
+            "reduced precision better than smaller ones, but the relationship depends on model "
+            "scale and task [29]. SmoothQuant migrates activation difficulty into weights to "
+            "enable W8A8 inference [30], while SparseGPT demonstrates that a different "
+            "compression operation, pruning, can remove many weights in one shot [31]. Therefore, "
+            "these methods are not interchangeable interventions.",
             "NF4 was introduced with QLoRA as a four-bit data type suited to approximately normally "
             "distributed model weights [32]. In this project, the BitsAndBytes implementation applies "
             "it when the checkpoint is loaded, which enables a matched comparison from identical weights. "
@@ -987,13 +993,13 @@ def add_chapter_two(doc: Document) -> None:
             "task-specific optimisation step that could be used to preserve a hypothesised safety-"
             "sensitive subspace. The present study measures this load-time path rather than tuning the "
             "quantizer to preserve benchmark behaviour.",
-            "Capability-focused evaluations provide a useful prior expectation. Four-bit results are "
-            "often close to full precision on aggregate tasks, especially as model size grows [7]-[9]. "
-            "However, average resilience can conceal subgroup damage. Marchisio et al. show that "
-            "multilingual quantization effects differ by language; on the paper's Japanese evaluation, "
-            "the human-assessed loss is substantially larger than the automatic-metric loss [13]. The parallel for safety is "
-            "direct: a headline average is insufficient if scorer error is concentrated in one model "
-            "family or response style.",
+            "Capability-focused evaluations provide a useful prior expectation. Four-bit results "
+            "are often close to full precision on aggregate tasks, especially as model size grows "
+            "[7]-[9]. However, average resilience can conceal subgroup damage. Marchisio et al. "
+            "show that multilingual quantization effects differ by language, and on the paper's "
+            "Japanese evaluation the human-assessed loss is substantially larger than the "
+            "automatic-metric loss [13]. The parallel for safety is direct: a headline average is "
+            "insufficient if scorer error is concentrated in one model family or response style.",
             "The INT8 arm helps separate aggressiveness from method. If safety and capability changed "
             "smoothly as precision fell, a graded fp16–INT8–NF4 curve would be plausible. A non-"
             "monotonic pattern would instead implicate model-specific numerics, distinct algorithms, "
@@ -1032,11 +1038,12 @@ def add_chapter_two(doc: Document) -> None:
             "such as GGUF. This distinction explains why the present project prioritises internal "
             "validity for one quantization path over breadth across many community artefacts.",
             "They also differ in outcome construction. Some studies use refusal or toxicity as a "
-            "safety proxy, others use broad trustworthiness suites, and HarmLevelBench grades the level "
-            "of harm in a response [35]. These are related but non-identical constructs. A quantized "
-            "model could become more willing to answer without becoming more capable of completing a "
-            "harmful task, or it could retain its refusal language while leaking information. The "
-            "chosen evaluator determines which of these changes is counted.",
+            "safety proxy, others use broad trustworthiness suites, and HarmLevelBench grades the "
+            "level of harm in a response [35]. These are related but non-identical constructs. "
+            "For example, a quantized model could become more willing to answer without becoming "
+            "more capable of completing a harmful task, or it could retain its refusal language "
+            "while leaking information. Consequently, the chosen evaluator determines which of "
+            "these changes is counted.",
             "The adversarial studies establish possibility rather than prevalence. Q-Misalign shows "
             "that an attacker can create a durable quantization-conditioned failure [39], and "
             "Exploiting LLM Quantization shows another security-relevant pathway [12]. Those results "
@@ -1091,12 +1098,13 @@ def add_chapter_two(doc: Document) -> None:
             "for a paired multi-model experiment with human validation, but it cannot claim the breadth "
             "of the larger corpus. A future extension should test whether the scorer findings persist "
             "across OR-Bench categories.",
-            "StrongREJECT introduces response quality into jailbreak evaluation [41]. That move is "
-            "conceptually close to capability anchoring: both prevent inability from being counted as "
-            "safety. The implementations differ. StrongREJECT assesses how fully an unsafe request is "
-            "answered, while this study uses independent MMLU and ARC tasks to detect broader capability "
-            "loss. The latter cannot tell whether a particular harmful answer is low quality, but it "
-            "can reveal a general degradation that would make a safe-ward shift less persuasive.",
+            "StrongREJECT introduces response quality into jailbreak evaluation [41]. That move "
+            "is conceptually close to capability anchoring, because both prevent inability from "
+            "being counted as safety. However, the implementations differ: StrongREJECT assesses "
+            "how fully an unsafe request is answered, while this study uses independent MMLU and "
+            "ARC tasks to detect broader capability loss. The latter cannot tell whether a "
+            "particular harmful answer is low quality, but it can reveal a general degradation "
+            "that would make a safe-ward shift less persuasive.",
             "SORRY-Bench grounds refusal evaluation in a human-in-the-loop taxonomy of unsafe topics, and "
             "scores refusal on an explicitly binary scale, leaving finer-grained harmfulness scoring "
             "as future work [42]. That binary refusal is itself a simplification is shown instead by "
@@ -1195,11 +1203,11 @@ def add_chapter_two(doc: Document) -> None:
             "declared family of paired tests, and independent scorer validation. It does not attempt "
             "to establish a universal law of quantization. Its contribution is a controlled estimate "
             "under a well-defined deployment and measurement setting.",
-            "The gap is not merely that no earlier paper used the same list of benchmarks. The missing "
-            "link is inferential. Prior work often demonstrates that a metric changes, but the change "
-            "is not always separated from capability, scorer error, truncation, or multiplicity. This "
-            "study builds those alternatives into the design. A safety claim becomes credible only "
-            "after the neighbouring explanations have been tested.",
+            "The gap is not merely that no earlier paper used the same list of benchmarks. The "
+            "missing link is inferential: prior work often demonstrates that a metric changes, "
+            "but the change is not always separated from capability, scorer error, truncation, or "
+            "multiplicity. This study builds those alternatives into the design, because a safety "
+            "claim becomes credible only after the neighbouring explanations have been tested.",
             "The literature also sets the report's claim boundary. Quantization-conditioned attacks "
             "show that worst-case failures are possible [12], [39]. Jailbreak benchmarks show that "
             "adversarial robustness requires an explicit attack [43]. Judge research shows that "
@@ -1216,12 +1224,12 @@ def add_chapter_two(doc: Document) -> None:
     add_paragraphs(
         doc,
         [
-            "The reviewed literature suggests that a convincing quantization-safety experiment must "
-            "control three layers at once. The model layer requires identical checkpoint provenance "
-            "within a pair. The evaluation layer requires safety, benign refusal, and capability "
-            "outcomes. The inference layer requires fixed prompt formatting, decoding controls, and "
-            "generation budgets. A weakness in any layer can create a treatment effect that is not "
-            "caused by the quantizer.",
+            "The reviewed literature suggests that a convincing quantization-safety experiment "
+            "must control three layers at once. The model layer requires identical checkpoint "
+            "provenance within a pair, the evaluation layer requires safety, benign refusal, and "
+            "capability outcomes, and the inference layer requires fixed prompt formatting, "
+            "decoding controls, and generation budgets. Crucially, a weakness in any layer can "
+            "create a treatment effect that is not caused by the quantizer.",
             "Statistical design is equally important. Twenty model–outcome contrasts create many "
             "opportunities for an isolated p-value below 0.05. Prior quantization evaluations often "
             "emphasise average benchmark retention and do not frame their outcomes as a declared "
@@ -1250,34 +1258,39 @@ def add_chapter_three(doc: Document) -> None:
         doc,
         [
             "Each experimental unit is a matched pair containing a baseline model and a quantized "
-            "model. Both members use the same model identifier and pinned revision. The baseline is "
-            "loaded at the resolved full precision used by the TC1 CUDA environment. The treatment "
-            "member is loaded from the same weights with a BitsAndBytes quantization configuration. "
-            "This design removes checkpoint provenance as a confound and isolates the load-time "
-            "precision intervention within a single execution environment. Table A.1 records the "
-            "quantization settings and the declared dependency constraints.",
-            "The primary treatment is NF4 four-bit quantization with double quantization and a compute "
-            "dtype that follows the resolved model dtype. INT8 uses LLM.int8 and is analysed as a "
-            "separate precision arm. It is not placed inside the primary fp16–NF4 multiplicity family. "
-            "All primary runs use seed 42, the model's native chat template, temperature 0.0, and a "
-            "512-token maximum generation budget. Figure 3.1 shows the study design.",
-            "The independent variable is therefore the precision-loading path. The dependent variables "
-            "are prompt-level harmful-compliance labels, prompt-level refusal labels, and exact-match "
-            "capability scores. Model family and scale are observed grouping variables rather than "
-            "randomised treatments. Generation budget, decoding rule, prompt order, benchmark sample, "
-            "and chat-template path are controlled within a matched pair.",
-            "Pairing is essential because the same prompt can be intrinsically easy or difficult for "
-            "both models. An unpaired comparison would treat that shared difficulty as independent "
-            "noise. The paired analysis instead asks how often the two precision conditions disagree "
-            "on the same item. This increases statistical efficiency and gives discordant counts a "
-            "direct interpretation.",
-            "The study was expanded in stages, but the current analysis presents the complete five-pair "
-            "matrix under one primary configuration. Historical 128-token outputs are not mixed into "
-            "the 512-token estimates. They appear only in the generation-length sensitivity analysis. "
-            "This separation prevents a shorter pilot budget from silently determining the headline.",
+            "model, and both members use the same model identifier and pinned revision. The "
+            "baseline is loaded at the resolved full precision used by the TC1 CUDA environment, "
+            "whereas the treatment member is loaded from the same weights with a BitsAndBytes "
+            "quantization configuration. This design therefore removes checkpoint provenance as a "
+            "confound and isolates the load-time precision intervention within a single execution "
+            "environment. Table A.1 records the quantization settings and the declared dependency "
+            "constraints.",
+            "The primary treatment is NF4 four-bit quantization with double quantization and a "
+            "compute dtype that follows the resolved model dtype. INT8 uses LLM.int8 and is "
+            "analysed as a separate precision arm, so it is not placed inside the primary "
+            "fp16–NF4 multiplicity family. All primary runs use seed 42, the model's native chat "
+            "template, temperature 0.0, and a 512-token maximum generation budget. Figure 3.1 "
+            "shows the study design.",
+            "The independent variable is therefore the precision-loading path, and the dependent "
+            "variables are prompt-level harmful-compliance labels, prompt-level refusal labels, "
+            "and exact-match capability scores. Model family and scale are observed grouping "
+            "variables rather than randomised treatments. In addition, generation budget, "
+            "decoding rule, prompt order, benchmark sample, and chat-template path are all "
+            "controlled within a matched pair.",
+            "Pairing is essential because the same prompt can be intrinsically easy or difficult "
+            "for both models, and an unpaired comparison would treat that shared difficulty as "
+            "independent noise. The paired analysis instead asks how often the two precision "
+            "conditions disagree on the same item. This increases statistical efficiency and "
+            "gives discordant counts a direct interpretation.",
+            "The study was expanded in stages, but the current analysis presents the complete "
+            "five-pair matrix under one primary configuration. Historical 128-token outputs are "
+            "not mixed into the 512-token estimates, and they appear only in the generation- "
+            "length sensitivity analysis. This separation prevents a shorter pilot budget from "
+            "silently determining the headline.",
             "Prompt-level pairing is preserved in both the bootstrap interval [49] and the exact "
-            "McNemar comparison [50]. These methods are introduced here because pairing is part of the "
-            "design, not a post hoc statistical convenience.",
+            "McNemar comparison [50]. These methods are introduced here rather than in the "
+            "analysis chapter because pairing is part of the design, not a post hoc statistical "
+            "convenience.",
         ],
     )
     add_figure(
@@ -1314,22 +1327,25 @@ def add_chapter_three(doc: Document) -> None:
         doc,
         [
             "The selected models span four families and approximately 1.7–7.2 billion parameters. "
-            "Qwen contributes two sizes within one family, which permits a limited within-family scale "
-            "comparison. Llama, Mistral, and Phi broaden the architectural and training diversity. "
-            "Mistral-7B provides the largest model in scope [51]. Phi-4-mini uses eager attention on "
-            "the V100; both members of the Phi pair use the same setting.",
+            "Qwen contributes two sizes within one family, which permits a limited within-family "
+            "scale comparison, while Llama, Mistral, and Phi broaden the architectural and "
+            "training diversity. Mistral-7B provides the largest model in scope [51]. Phi-4-mini "
+            "uses eager attention on the V100, and both members of the Phi pair use the same "
+            "setting.",
             "Model selection was constrained by reproducible access, V100 compatibility, and the "
-            "availability of instruction-tuned checkpoints. The design does not sample randomly from "
-            "the population of open models. Cross-family claims are consequently descriptive of the "
-            "evaluated set rather than population estimates.",
-            "The two Qwen sizes provide the only controlled scale comparison within a family. The "
-            "Llama, Mistral, and Phi additions increase architectural diversity but confound family, "
-            "training data, alignment recipe, tokenizer, and size. Their purpose is replication across "
-            "distinct deployed artefacts, not estimation of a pure family effect.",
-            "Each pair shares its model revision exactly. This control is stronger than matching only "
-            "the public model name, because a repository can change configuration or weights over time. "
-            "The revisions are recorded in the configuration and used by the loader. The INT8 aliases "
-            "use the same revisions as the corresponding fp16 and NF4 conditions.",
+            "availability of instruction-tuned checkpoints. Because the design does not sample "
+            "randomly from the population of open models, cross-family claims are descriptive of "
+            "the evaluated set rather than population estimates.",
+            "The two Qwen sizes provide the only controlled scale comparison within a family. "
+            "However, the Llama, Mistral, and Phi additions increase architectural diversity "
+            "while confounding family, training data, alignment recipe, tokenizer, and size. "
+            "Their purpose is therefore replication across distinct deployed artefacts, not "
+            "estimation of a pure family effect.",
+            "Each pair shares its model revision exactly, which is a stronger control than "
+            "matching only the public model name, because a repository can change configuration "
+            "or weights over time. The revisions are recorded in the configuration and used by "
+            "the loader, and the INT8 aliases use the same revisions as the corresponding fp16 "
+            "and NF4 conditions.",
         ],
     )
 
@@ -1351,24 +1367,28 @@ def add_chapter_three(doc: Document) -> None:
     add_paragraphs(
         doc,
         [
-            "HarmBench supplies unsafe behaviours and its official classifier is the primary scorer. "
-            "The study uses direct requests rather than an optimised attack. XSTest supplies benign "
-            "prompts with lexical or pragmatic features that can trigger exaggerated safety. Its "
-            "pre-specified deterministic scorer remains the primary scorer of record, while a "
-            "three-class semantic judge provides a validation-informed sensitivity analysis.",
-            "MMLU is evaluated on six subjects with zero-shot multiple-choice prompts. ARC-Challenge "
-            "provides a larger second anchor with a different task structure. Exact-match parsing is "
-            "used for both. The two capability benchmarks are interpreted jointly in discussion, but "
-            "the registered primary family retains them as separate outcomes.",
+            "HarmBench supplies unsafe behaviours, and its official classifier is the primary "
+            "scorer. Although the benchmark also supports optimised attacks, this study uses "
+            "direct requests only. XSTest supplies benign prompts with lexical or pragmatic "
+            "features that can trigger exaggerated safety. Its pre-specified deterministic scorer "
+            "remains the primary scorer of record, while a three-class semantic judge provides a "
+            "validation-informed sensitivity analysis.",
+            "MMLU is evaluated on six subjects with zero-shot multiple-choice prompts, and ARC- "
+            "Challenge provides a larger second anchor with a different task structure. Exact- "
+            "match parsing is used for both. The two capability benchmarks are interpreted "
+            "jointly in discussion, but the registered primary family retains them as separate "
+            "outcomes.",
             "Sample sizes reflect the benchmark resources and compute budget. HarmBench uses 200 "
-            "behaviours per alias, which allows item-level matching across precision. XSTest uses its "
-            "250 benign prompts. The MMLU subset contains 300 items, and ARC-Challenge contains 1,172. "
-            "The unequal sizes yield different detection thresholds, which is why a similar absolute "
-            "delta can be significant on ARC and unresolved on HarmBench.",
-            "Prompt formatting is benchmark-specific but invariant within a pair. The generator applies "
-            "the model's native chat template with thinking disabled where the template exposes that "
-            "option. Raw-prompt fallback is not used for the successful primary runs. The saved metadata "
-            "records the resolved generation configuration for each response.",
+            "behaviours per alias, which allows item-level matching across precision, and XSTest "
+            "uses its 250 benign prompts. The MMLU subset contains 300 items, and ARC-Challenge "
+            "contains 1,172. Consequently, the unequal sizes yield different detection "
+            "thresholds, which is why a similar absolute delta can be significant on ARC and "
+            "unresolved on HarmBench.",
+            "Prompt formatting is benchmark-specific but invariant within a pair. The generator "
+            "applies the model's native chat template with thinking disabled where the template "
+            "exposes that option, and raw-prompt fallback is not used for the successful primary "
+            "runs. The saved metadata records the resolved generation configuration for each "
+            "response.",
         ],
     )
 
@@ -1376,30 +1396,34 @@ def add_chapter_three(doc: Document) -> None:
     add_paragraphs(
         doc,
         [
-            "A response is a HarmBench success only when the official behaviour-specific classifier "
-            "judges that it fulfils the unsafe request. A refusal-regex proxy is retained for "
-            "transparency and comparison, but it is not the primary harmful-compliance outcome. The "
-            "classifier is cross-checked against a versioned API judge and Llama Guard. A "
-            "stratified 200-item human-labelled sample grounds the primary classifier and the regex.",
-            "XSTest is scored first by the pre-specified regex. The sensitivity judge assigns full "
-            "compliance, partial refusal, or full refusal. Strict over-refusal counts only full refusal; "
-            "the broad mapping also counts partial refusal. A separate 200-item human sample evaluates "
-            "both mappings. This arrangement keeps the original analysis visible while testing whether "
-            "its conclusion survives a more semantic instrument.",
-            "The refusal proxy originally used for HarmBench identifies explicit refusal patterns and "
-            "treats their absence as a successful attack. That rule is deterministic and auditable, but "
-            "it cannot assess whether harmful information was actually provided. The HarmBench "
-            "classifier receives the behaviour and response and returns the benchmark's binary success "
-            "judgement. Judge parsing failures are counted rather than discarded; the reported runs "
-            "contain zero parse failures.",
-            "The API second judge uses a condensed yes/no rubric aligned to the same harmful-behaviour "
-            "criterion. Llama Guard is intentionally treated as a looser construct cross-check. It "
-            "classifies whether the response is unsafe under its taxonomy rather than whether a named "
-            "behaviour was completed. This difference is stated before agreement is interpreted.",
-            "Human-validation items are stored outside the public result surface because they contain "
-            "prompt and response text. Committed summaries retain counts, labels, agreement, precision, "
-            "recall, and redacted identifiers. The HarmBench sample is enriched for scorer disagreement; "
-            "the XSTest sample is drawn under the documented blindness rule and its disclosed deviation.",
+            "A response is a HarmBench success only when the official behaviour-specific "
+            "classifier judges that it fulfils the unsafe request. A refusal-regex proxy is "
+            "retained for transparency and comparison, but it is not the primary harmful- "
+            "compliance outcome. The classifier is cross-checked against a versioned API judge "
+            "and Llama Guard, and a stratified 200-item human-labelled sample grounds both the "
+            "primary classifier and the regex.",
+            "XSTest is scored first by the pre-specified regex, after which the sensitivity judge "
+            "assigns full compliance, partial refusal, or full refusal. Strict over-refusal "
+            "counts only full refusal, whereas the broad mapping also counts partial refusal, and "
+            "a separate 200-item human sample evaluates both mappings. This arrangement keeps the "
+            "original analysis visible while testing whether its conclusion survives a more "
+            "semantic instrument.",
+            "The refusal proxy originally used for HarmBench identifies explicit refusal patterns "
+            "and treats their absence as a successful attack. That rule is deterministic and "
+            "auditable, but it cannot assess whether harmful information was actually provided. "
+            "By contrast, the HarmBench classifier receives both the behaviour and the response "
+            "and returns the benchmark's binary success judgement. Judge parsing failures are "
+            "counted rather than discarded, and the reported runs contain zero parse failures.",
+            "The API second judge uses a condensed yes/no rubric aligned to the same harmful- "
+            "behaviour criterion. Llama Guard, however, is intentionally treated as a looser "
+            "construct cross-check, because it classifies whether the response is unsafe under "
+            "its taxonomy rather than whether a named behaviour was completed. This difference is "
+            "stated before agreement is interpreted.",
+            "Human-validation items are stored outside the public result surface because they "
+            "contain prompt and response text. Committed summaries therefore retain counts, "
+            "labels, agreement, precision, recall, and redacted identifiers. The HarmBench sample "
+            "is enriched for scorer disagreement, while the XSTest sample is drawn under the "
+            "documented blindness rule and its disclosed deviation.",
         ],
     )
 
@@ -1407,45 +1431,53 @@ def add_chapter_three(doc: Document) -> None:
     add_paragraphs(
         doc,
         [
-            "For each pair and outcome, the effect is the quantized rate or accuracy minus the baseline "
-            "value. Paired bootstrap confidence intervals preserve prompt-level pairing [49]. Binary "
-            "outcomes are also tested with the exact McNemar test [50], which uses only discordant "
-            "prompt pairs. The null hypothesis is equal marginal probability within the pair.",
+            "For each pair and outcome, the effect is the quantized rate or accuracy minus the "
+            "baseline value, and paired bootstrap confidence intervals preserve prompt-level "
+            "pairing [49]. Binary outcomes are also tested with the exact McNemar test [50], "
+            "which uses only discordant prompt pairs and whose null hypothesis is equal marginal "
+            "probability within the pair.",
             "The registered NF4 family contains 20 contrasts: five model pairs multiplied by four "
-            "outcomes. Benjamini and Hochberg's false-discovery-rate procedure controls multiplicity "
-            "across that family [52]. A result is described as surviving correction only when its "
-            "adjusted q-value is below 0.05. Uncorrected significance remains visible in the tables but "
-            "does not determine the study headline.",
-            "Cohen's kappa measures chance-corrected agreement between scorers [53]. The report presents "
-            "the coefficient with raw agreement and task context rather than treating verbal bands as "
-            "universal truth. Sample-size and minimum-detectable-effect calculations follow paired-"
-            "proportion power analysis [54], [55]. Agreement methodology follows the caution that "
-            "coefficient choice and prevalence affect interpretation [56], [57].",
-            "Llama Guard supplies the open-weight safety-moderation cross-check used in the scorer "
-            "sensitivity analysis [58]. Its construct is broader than the HarmBench behaviour label.",
-            "Equivalence is assessed only where the pre-specified margin and test are appropriate. The "
-            "two one-sided tests procedure supplies the formal basis [59]. Data-contamination risk is "
-            "disclosed because benchmark familiarity can inflate capability estimates [60]. The "
-            "sensitivity analyses are labelled separately so that they strengthen or qualify the "
-            "interpretation without silently changing the registered family.",
-            "For a binary outcome, let b be the number of prompts on which the baseline is negative and "
-            "the quantized condition is positive, and c the reverse. The observed paired difference is "
-            "(b−c)/n under the report's harmful-ward sign convention. McNemar's exact test conditions on "
-            "b+c and evaluates whether the two discordant directions are equally likely. Items on which "
-            "both conditions agree do not contribute to that test statistic.",
-            "The bootstrap resamples matched prompt pairs with replacement. For each replicate, the "
-            "quantized-minus-baseline difference is recomputed, preserving within-item dependence. The "
-            "reported 95% interval is the empirical percentile interval. Because a confidence interval "
-            "and an exact paired test answer related but not identical questions, both remain visible.",
+            "outcomes. Benjamini and Hochberg's false-discovery-rate procedure controls "
+            "multiplicity across that family [52], and a result is described as surviving "
+            "correction only when its adjusted q-value is below 0.05. Uncorrected significance "
+            "remains visible in the tables, but it does not determine the study headline.",
+            "Cohen's kappa measures chance-corrected agreement between scorers [53]. The report "
+            "presents the coefficient with raw agreement and task context rather than treating "
+            "verbal bands as universal truth. Sample-size and minimum-detectable-effect "
+            "calculations follow paired-proportion power analysis [54], [55], and agreement "
+            "methodology follows the caution that coefficient choice and prevalence affect "
+            "interpretation [56], [57].",
+            "Llama Guard supplies the open-weight safety-moderation cross-check used in the "
+            "scorer sensitivity analysis [58], and its construct is deliberately broader than the "
+            "HarmBench behaviour label.",
+            "Equivalence is assessed only where the pre-specified margin and test are "
+            "appropriate, and the two one-sided tests procedure supplies the formal basis [59]. "
+            "Data-contamination risk is disclosed because benchmark familiarity can inflate "
+            "capability estimates [60]. Finally, the sensitivity analyses are labelled separately "
+            "so that they strengthen or qualify the interpretation without silently changing the "
+            "registered family.",
+            "For a binary outcome, let b be the number of prompts on which the baseline is "
+            "negative and the quantized condition is positive, and c the reverse. The observed "
+            "paired difference is then (b−c)/n under the report's harmful-ward sign convention. "
+            "McNemar's exact test conditions on b+c and evaluates whether the two discordant "
+            "directions are equally likely, so items on which both conditions agree do not "
+            "contribute to that test statistic.",
+            "The bootstrap resamples matched prompt pairs with replacement, and for each "
+            "replicate the quantized-minus-baseline difference is recomputed, preserving within- "
+            "item dependence. The reported 95% interval is the empirical percentile interval. "
+            "Because a confidence interval and an exact paired test answer related but not "
+            "identical questions, both remain visible.",
             "The BH procedure sorts the 20 primary p-values and compares them with rank-dependent "
-            "thresholds. It controls the expected false-discovery proportion among rejected hypotheses "
-            "under its assumptions. It does not remove construct error from the three surviving effects; "
-            "scorer validation remains necessary after statistical correction.",
-            "Interpretation labels combine direction and capability context. Alignment degradation means "
-            "harmful compliance rises while capability is broadly preserved; alignment improvement is "
-            "the converse. Capability collapse masquerading as safety is used when harmful compliance "
-            "falls alongside capability. Broad degradation denotes adverse capability movement without "
-            "a clean safety interpretation. The labels summarise a pattern and do not establish a "
+            "thresholds, controlling the expected false-discovery proportion among rejected "
+            "hypotheses under its assumptions. However, it does not remove construct error from "
+            "the three surviving effects, so scorer validation remains necessary after "
+            "statistical correction.",
+            "Interpretation labels combine direction and capability context. Alignment "
+            "degradation means harmful compliance rises while capability is broadly preserved, "
+            "and alignment improvement is the converse. Capability collapse masquerading as "
+            "safety is used when harmful compliance falls alongside capability, whereas broad "
+            "degradation denotes adverse capability movement without a clean safety "
+            "interpretation. In every case the labels summarise a pattern and do not establish a "
             "mechanism.",
         ],
     )
@@ -1454,34 +1486,39 @@ def add_chapter_three(doc: Document) -> None:
     add_paragraphs(
         doc,
         [
-            "The implementation is a benchmark framework rather than the main research contribution. "
-            "A validated YAML configuration defines models, revisions, benchmarks, decoding controls, "
-            "and cluster settings. A loader resolves dtype and applies quantization. A shared generator "
-            "uses the native chat template, batches prompts, and records generation metadata. Benchmark "
-            "plugins prepare inputs and calculate benchmark-specific fields. Matrix orchestration loads "
-            "one model once and evaluates its benchmarks sequentially before releasing GPU memory.",
-            "Runs were executed through SLURM on an NTU TC1 node with a 32 GB Tesla V100 GPU. Compute "
-            "jobs used offline Hugging Face modes after models and datasets were cached. The job "
-            "scripts preserved the required module, environment, work-directory, and offline bootstrap "
-            "commands. Resume logic skips prompt identifiers already present in the output, which "
-            "allows interrupted jobs to continue without duplicating records.",
-            "Original raw generations and summaries are treated as immutable run artefacts. Revised "
-            "scorers, judge outputs, and diagnostics are written to separate redacted sidecars "
-            "containing identifiers and labels rather than harmful text. This separation keeps the "
-            "audit trail intact and avoids rewriting history when a scorer is corrected.",
-            "The command-line interface exposes single-run, matrix, analysis, and agent-status paths. "
-            "The dashboard reads the result trees but does not alter them. New user-generated "
-            "configurations are written outside the committed primary configuration. This boundary "
-            "prevents an interface action from changing the evidence underlying the report.",
-            "Cluster policy affects reproducibility. User compute runs only through batch jobs, and "
-            "compute nodes operate in offline mode. Models and datasets are cached beforehand on the "
-            "head node. The job files use absolute log paths and preserve the environment bootstrap. "
-            "These details are operational, but they determine whether a rerun loads the intended "
-            "artefacts instead of silently contacting a newer upstream revision.",
-            "Testing covers configuration validation, model reuse, result resumption, refusal parsing, "
-            "pairwise analysis, judge redaction, report claims, and artifact policy. Passing tests show "
-            "that the implemented checks behave as specified. They do not substitute for scientific "
-            "review, visual inspection, or source verification.",
+            "The implementation is a benchmark framework rather than the main research "
+            "contribution. A validated YAML configuration defines models, revisions, benchmarks, "
+            "decoding controls, and cluster settings, and a loader resolves dtype and applies "
+            "quantization. A shared generator then uses the native chat template, batches "
+            "prompts, and records generation metadata, while benchmark plugins prepare inputs and "
+            "calculate benchmark-specific fields. Matrix orchestration loads one model once and "
+            "evaluates its benchmarks sequentially before releasing GPU memory.",
+            "Runs were executed through SLURM on an NTU TC1 node with a 32 GB Tesla V100 GPU, and "
+            "compute jobs used offline Hugging Face modes after models and datasets were cached. "
+            "The job scripts preserved the required module, environment, work-directory, and "
+            "offline bootstrap commands. Resume logic skips prompt identifiers already present in "
+            "the output, which allows interrupted jobs to continue without duplicating records.",
+            "Original raw generations and summaries are treated as immutable run artefacts. "
+            "Revised scorers, judge outputs, and diagnostics are instead written to separate "
+            "redacted sidecars containing identifiers and labels rather than harmful text. This "
+            "separation keeps the audit trail intact and avoids rewriting history when a scorer "
+            "is corrected.",
+            "The command-line interface exposes single-run, matrix, analysis, and agent-status "
+            "paths. The dashboard reads the result trees but does not alter them, and new user- "
+            "generated configurations are written outside the committed primary configuration. "
+            "This boundary prevents an interface action from changing the evidence underlying the "
+            "report.",
+            "Cluster policy also affects reproducibility. User compute runs only through batch "
+            "jobs, compute nodes operate in offline mode, and models and datasets are cached "
+            "beforehand on the head node. The job files use absolute log paths and preserve the "
+            "environment bootstrap. These details are operational, but they determine whether a "
+            "rerun loads the intended artefacts instead of silently contacting a newer upstream "
+            "revision.",
+            "Testing covers configuration validation, model reuse, result resumption, refusal "
+            "parsing, pairwise analysis, judge redaction, report claims, and artifact policy. "
+            "Passing tests show that the implemented checks behave as specified. They do not, "
+            "however, substitute for scientific review, visual inspection, or source "
+            "verification.",
         ],
     )
 
@@ -1489,13 +1526,13 @@ def add_chapter_three(doc: Document) -> None:
     add_paragraphs(
         doc,
         [
-            "Every model revision in the primary configuration is pinned. The report records the "
-            "sample counts, seed, generation budget, decoding rule, attention exception, quantization "
-            "configuration, scorer identity, and GPU class needed to reconstruct the run. The exact "
-            "historical environment of the earliest artefacts was not captured with perfect package-"
-            "level provenance, so the report does not claim bit-for-bit reproduction of those runs. "
-            "It does support deterministic replay of the committed analysis and a fresh rerun from the "
-            "pinned configuration.",
+            "Every model revision in the primary configuration is pinned, and the report records "
+            "the sample counts, seed, generation budget, decoding rule, attention exception, "
+            "quantization configuration, scorer identity, and GPU class needed to reconstruct the "
+            "run. However, the exact historical environment of the earliest artefacts was not "
+            "captured with perfect package-level provenance, so the report does not claim bit- "
+            "for-bit reproduction of those runs. It does support deterministic replay of the "
+            "committed analysis and a fresh rerun from the pinned configuration.",
             "The project uses automated tests and claim verification to detect stale numbers and "
             "inconsistent surfaces. These checks support document integrity, but they do not prove that "
             "a citation entails a sentence or that a construct is valid. Source fitness and scorer "
@@ -1504,16 +1541,17 @@ def add_chapter_three(doc: Document) -> None:
             "[61]. Human grounding is necessary because automatic labels are not free evidence [62]. "
             "Non-parametric sensitivity comparisons use the Wilcoxon procedure where applicable [63], "
             "and power interpretation follows standard behavioural-science guidance [64].",
-            "Reproduction has two levels. Analysis replay starts from the committed redacted scores and "
-            "regenerates deltas, tests, figures, and report tables. Full experimental reproduction loads "
-            "the pinned models, regenerates responses, and reruns the scorers. The first is deterministic "
-            "on an ordinary workstation. The second requires compatible GPU hardware, accepted gated-"
-            "model conditions, cached datasets, and a software environment satisfying the dependency "
-            "constraints in Table A.1.",
-            "The report avoids a stronger claim of exact historical rerun because not every earliest "
-            "package version was captured in the immutable outputs. Current pipeline code records richer "
-            "environment provenance for future runs. The limitation is disclosed rather than repaired "
-            "by editing historical artefacts.",
+            "Reproduction has two levels. Analysis replay starts from the committed redacted "
+            "scores and regenerates deltas, tests, figures, and report tables, whereas full "
+            "experimental reproduction loads the pinned models, regenerates responses, and reruns "
+            "the scorers. The first is deterministic on an ordinary workstation. The second "
+            "requires compatible GPU hardware, accepted gated-model conditions, cached datasets, "
+            "and a software environment satisfying the dependency constraints in Table A.1 of "
+            "Appendix A.",
+            "The report avoids a stronger claim of exact historical rerun because not every "
+            "earliest package version was captured in the immutable outputs. Although current "
+            "pipeline code records richer environment provenance for future runs, the limitation "
+            "is disclosed rather than repaired by editing historical artefacts.",
         ],
     )
 
@@ -1521,20 +1559,21 @@ def add_chapter_three(doc: Document) -> None:
     add_paragraphs(
         doc,
         [
-            "The analysis begins by joining baseline and quantized records on prompt identifier. "
-            "Cardinality checks fail if either condition is missing an item or if a generated response "
-            "count differs from the input count. Per-alias summaries are then rebuilt from the selected "
-            "scorer sidecars. Pairwise deltas, discordant counts, bootstrap intervals, and exact tests "
-            "are generated before interpretation labels are assigned.",
-            "Multiplicity correction is performed from the complete 20-row registry rather than from "
-            "a hand-selected result table. The same registry supplies recurring values to the report "
-            "builders and other current-facing surfaces. This reduces transcription drift between an "
-            "analysis file, a table, an abstract, and a conclusion.",
-            "Figures are produced by scripts from the analysis JSON rather than drawn manually. The "
-            "forest plot uses the classifier deltas and paired intervals. The capability plot joins "
-            "MMLU and classifier ASR by pair. The precision figure reads the fp16–INT8–NF4 analysis. "
-            "This report references each figure before it appears and keeps the underlying path out of "
-            "the reader-facing caption.",
+            "The analysis begins by joining baseline and quantized records on prompt identifier, "
+            "and cardinality checks fail if either condition is missing an item or if a generated "
+            "response count differs from the input count. Per-alias summaries are then rebuilt "
+            "from the selected scorer sidecars. Finally, pairwise deltas, discordant counts, "
+            "bootstrap intervals, and exact tests are generated before interpretation labels are "
+            "assigned.",
+            "Multiplicity correction is performed from the complete 20-row registry rather than "
+            "from a hand-selected result table, and the same registry supplies recurring values "
+            "to the report builders and other current-facing surfaces. This reduces transcription "
+            "drift between an analysis file, a table, an abstract, and a conclusion.",
+            "Figures are produced by scripts from the analysis JSON rather than drawn manually. "
+            "The forest plot uses the classifier deltas and paired intervals, the capability plot "
+            "joins MMLU and classifier ASR by pair, and the precision figure reads the "
+            "fp16–INT8–NF4 analysis. This report references each figure before it appears and "
+            "keeps the underlying path out of the reader-facing caption.",
             "Quality control has both machine and human components. Tests detect schema failures, stale "
             "claims, altered immutable files, redaction leaks, and inconsistent generated surfaces. "
             "Source-to-claim review checks whether the citation supports the wording, and rendered page "
@@ -1609,12 +1648,14 @@ def add_chapter_four(doc: Document) -> None:
             "stories. The corrected evidence is concentrated on capability, while the single "
             "over-refusal survivor moves downward and is later shown to depend on the scorer.",
             "Tables 4.1 and 4.2 separate safety from capability so that each comparison remains "
-            "readable. Baseline and NF4 columns show the practical rates. Delta and confidence "
-            "interval columns show magnitude and uncertainty. The p/q columns distinguish an "
-            "individually unusual paired result from one that survives family-wide correction.",
+            "readable. The baseline and NF4 columns show the practical rates, while the delta and "
+            "confidence-interval columns show magnitude and uncertainty. The p/q columns then "
+            "distinguish an individually unusual paired result from one that survives family-wide "
+            "correction.",
             "The sign convention is consistent: positive ASR and over-refusal deltas are adverse, "
-            "while negative capability deltas are adverse. A safe-ward ASR movement and an adverse "
-            "capability movement do not cancel. Together they weaken the claim that alignment improved.",
+            "while negative capability deltas are adverse. A safe-ward ASR movement and an "
+            "adverse capability movement do not cancel, and together they weaken the claim that "
+            "alignment improved.",
         ],
     )
     add_table(
@@ -1640,36 +1681,40 @@ def add_chapter_four(doc: Document) -> None:
     add_paragraphs(
         doc,
         [
-            "No NF4 harmful-compliance contrast survives multiplicity correction. Figure 4.1 shows "
-            "that the five point estimates range from −0.040 to +0.040, with intervals that cross or "
-            "touch zero except for the uncorrected Llama decrease. This is evidence against a large, "
-            "consistent harmful-ward shift under NF4 in the evaluated setting.",
-            "Qwen3-1.7B is exactly flat in aggregate at 0.255 for both precisions. The aggregate null "
-            "does not mean every prompt is stable: sixteen prompts flip toward harmful compliance and "
-            "sixteen flip toward safety, producing McNemar p = 1.000. Qwen3-4B increases by 0.040, but "
-            "the confidence interval touches zero and the adjusted q-value is 0.2406. Phi-4-mini "
-            "increases by 0.020 with a wide interval and no statistical support.",
+            "No NF4 harmful-compliance contrast survives multiplicity correction. Figure 4.1 "
+            "shows that the five point estimates range from −0.040 to +0.040, with intervals that "
+            "cross or touch zero except for the uncorrected Llama decrease. Overall, this is "
+            "evidence against a large, consistent harmful-ward shift under NF4 in the evaluated "
+            "setting.",
+            "Qwen3-1.7B is exactly flat in aggregate at 0.255 for both precisions. The aggregate "
+            "null does not mean every prompt is stable: sixteen prompts flip toward harmful "
+            "compliance and sixteen flip toward safety, producing McNemar p = 1.000. Qwen3-4B "
+            "increases by 0.040, but the confidence interval touches zero and the adjusted "
+            "q-value is 0.2406. Similarly, Phi-4-mini increases by 0.020 with a wide interval and "
+            "no statistical support.",
             "Llama-3.2-3B decreases from 0.100 to 0.060. Its individually significant ΔASR is "
-            "−0.040, a decrease that does not survive the 20-test correction. More importantly, the model "
-            "also loses ARC accuracy. A lower ASR cannot be interpreted as a clean alignment gain when "
-            "capability moves in the same adverse direction. Mistral-7B decreases by 0.020 with "
-            "substantial prompt-level disagreement and no significant aggregate change.",
-            "The five models differ substantially in baseline susceptibility. Mistral's baseline ASR "
-            "is 0.585, more than eight times Phi's 0.070. Paired deltas remain comparable as treatment "
-            "effects, but their operational implications differ. A two-point change at a high baseline "
-            "does not make the model safe, and a two-point change at a low baseline does not establish "
-            "a general regression.",
-            "Qwen3-4B is the largest harmful-ward point estimate. Thirteen prompts change from safe "
-            "under fp16 to harmful under NF4, while five move the other way. The exact p-value is "
-            "0.0963. This is a directional signal worth replication, but the present evidence does not "
-            "justify a confirmed increase.",
-            "For Llama, nine prompts move from harmful to safe and one moves from safe to harmful. The "
-            "imbalance produces the individually significant decrease. Section 4.4 explains the "
-            "caution: ARC accuracy falls by 0.0316 in the same precision contrast. The paired data show "
-            "co-movement, not that one change caused the other.",
-            "The cross-family pattern is heterogeneous in direction but homogeneous in inferential "
-            "status after correction. Two pairs point upward, two downward, and one is flat. No common "
-            "harmful-ward NF4 effect is visible.",
+            "−0.040, a decrease that does not survive the 20-test correction. More importantly, "
+            "the model also loses ARC accuracy, and a lower ASR cannot be interpreted as a clean "
+            "alignment gain when capability moves in the same adverse direction. Mistral-7B "
+            "decreases by 0.020 with substantial prompt-level disagreement and no significant "
+            "aggregate change.",
+            "The five models differ substantially in baseline susceptibility. For example, "
+            "Mistral's baseline ASR is 0.585, more than eight times Phi's 0.070. Paired deltas "
+            "remain comparable as treatment effects, but their operational implications differ. A "
+            "two-point change at a high baseline does not make the model safe, and a two-point "
+            "change at a low baseline does not establish a general regression.",
+            "Qwen3-4B is the largest harmful-ward point estimate. Thirteen prompts change from "
+            "safe under fp16 to harmful under NF4, while five move the other way, and the exact "
+            "p-value is 0.0963. This is therefore a directional signal worth replication, but the "
+            "present evidence does not justify a confirmed increase.",
+            "For Llama, nine prompts move from harmful to safe and one moves from safe to "
+            "harmful, and that imbalance produces the individually significant decrease. Section "
+            "4.4 explains the caution: ARC accuracy falls by 0.0316 in the same precision "
+            "contrast. The paired data therefore show co-movement, not that one change caused the "
+            "other.",
+            "The cross-family pattern is heterogeneous in direction but homogeneous in "
+            "inferential status after correction. Two pairs point upward, two downward, and one "
+            "is flat, so no common harmful-ward NF4 effect is visible.",
         ],
     )
     add_figure(
@@ -1684,29 +1729,34 @@ def add_chapter_four(doc: Document) -> None:
     add_paragraphs(
         doc,
         [
-            "No pair shows a statistically significant increase in over-refusal. Four pairs are "
-            "non-significant. Phi-4-mini's −0.048 over-refusal decrease under the pre-specified regex "
-            "is scorer-dependent: the independent semantic judge does not reproduce it. The direction "
-            "under the original scorer is benign because the NF4 model refuses fewer benign prompts.",
-            "Qwen3-1.7B decreases by 0.024. Its bootstrap interval reaches zero and the exact paired "
-            "test gives p = 0.109, so it is a null rather than a borderline finding. Qwen3-4B changes by "
-            "−0.004, Llama by +0.016, and Mistral by 0.000. These values do not support a general claim "
-            "that NF4 makes compact models more prone to exaggerated safety.",
-            "The primary family retains the regex result because it was the pre-specified outcome. "
-            "The validation-informed family replaces it with judge-strict over-refusal and leaves only "
-            "two survivors, both capability losses. This distinction avoids rewriting the analysis "
-            "after seeing the data while still giving more weight to the better-grounded instrument.",
-            "Phi's regex over-refusal rate falls from 0.056 to 0.008. The absolute change corresponds "
-            "to twelve fewer regex-flagged benign prompts in the 250-item condition. The magnitude is "
-            "large enough to survive correction under the original scorer. It is also exactly the kind "
-            "of result that requires construct validation, because a small number of pattern matches "
-            "can move the rate materially.",
-            "Llama has the only upward over-refusal estimate, from 0.032 to 0.048. Four additional "
-            "benign prompts are flagged under NF4. The paired interval spans −0.004 to 0.040 and the "
-            "exact p-value is 0.289, so the data do not support a meaningful increase.",
-            "Mistral is at a near-floor rate of 0.004 in both conditions. Floor effects make a decrease "
-            "difficult to observe and can depress kappa despite high raw agreement. This baseline "
-            "dependence is another reason not to treat over-refusal as a cross-model leaderboard.",
+            "No pair shows a statistically significant increase in over-refusal, and four pairs "
+            "are non-significant. Phi-4-mini's −0.048 over-refusal decrease under the pre- "
+            "specified regex is scorer-dependent, because the independent semantic judge does not "
+            "reproduce it. The direction under the original scorer is in any case benign, since "
+            "the NF4 model refuses fewer benign prompts.",
+            "Qwen3-1.7B decreases by 0.024. Its bootstrap interval reaches zero and the exact "
+            "paired test gives p = 0.109, so it is a null rather than a borderline finding. "
+            "Qwen3-4B changes by −0.004, Llama by +0.016, and Mistral by 0.000. Overall, these "
+            "values do not support a general claim that NF4 makes compact models more prone to "
+            "exaggerated safety.",
+            "The primary family retains the regex result because it was the pre-specified "
+            "outcome. By contrast, the validation-informed family replaces it with judge-strict "
+            "over-refusal and leaves only two survivors, both capability losses. This distinction "
+            "avoids rewriting the analysis after seeing the data while still giving more weight "
+            "to the better-grounded instrument.",
+            "Phi's regex over-refusal rate falls from 0.056 to 0.008. In deployment terms the "
+            "absolute change corresponds to twelve fewer regex-flagged benign prompts in the "
+            "250-item condition, which is large enough to survive correction under the original "
+            "scorer. It is also exactly the kind of result that requires construct validation, "
+            "because a small number of pattern matches can move the rate materially.",
+            "Llama has the only upward over-refusal estimate, from 0.032 to 0.048, with four "
+            "additional benign prompts flagged under NF4. However, the paired interval spans "
+            "−0.004 to 0.040 and the exact p-value is 0.289, so the data do not support a "
+            "meaningful increase.",
+            "Mistral is at a near-floor rate of 0.004 in both conditions. Consequently, floor "
+            "effects make a decrease difficult to observe and can depress kappa despite high raw "
+            "agreement. This baseline dependence is another reason not to treat over-refusal as a "
+            "cross-model leaderboard.",
         ],
     )
 
@@ -1715,36 +1765,37 @@ def add_chapter_four(doc: Document) -> None:
         doc,
         [
             "Capability contains the clearest costs. Qwen3-1.7B MMLU falls from 0.643 to 0.553, a "
-            "decrease of 0.090. In deployment terms, the NF4 model misses roughly nine additional "
-            "questions per hundred that its fp16 counterpart answers correctly. This contrast survives "
-            "BH-FDR with q = 0.008.",
+            "decrease of 0.090 that survives BH-FDR with q = 0.008. In deployment terms, the NF4 "
+            "model misses roughly nine additional questions per hundred that its fp16 counterpart "
+            "answers correctly.",
             "Llama-3.2-3B has an ARC contrast of −0.032 (unrounded: −0.0316), which survives "
             "BH-FDR correction with q = 0.008. "
             "Qwen3-4B ARC decreases by 0.0162 and is individually significant, but it does not survive "
             "the full correction. The other capability contrasts are non-significant. Mistral-7B ARC "
             "is the only positive point estimate, at +0.0094, which is also non-significant.",
-            "The two anchors prevent overgeneralisation from one benchmark. Qwen3-1.7B has a large MMLU "
-            "loss but only a small ARC decrease. Llama shows the reverse pattern more clearly on ARC "
-            "than on MMLU. The conclusion is therefore not that every model suffers a uniform "
-            "capability collapse. It is that capability produces the largest corrected effects and "
-            "that its expression depends on the benchmark.",
-            "Qwen3-4B preserves MMLU almost exactly, moving from 0.747 to 0.743. ARC falls from 0.876 "
-            "to 0.860. The ARC result is individually significant because the benchmark has 1,172 "
-            "paired items, but its adjusted q-value is 0.1074. Sample size and multiplicity therefore "
-            "change the evidence attached to a small absolute effect.",
+            "The two anchors prevent overgeneralisation from one benchmark. Qwen3-1.7B has a "
+            "large MMLU loss but only a small ARC decrease, whereas Llama shows the reverse "
+            "pattern more clearly on ARC than on MMLU. The conclusion is therefore not that every "
+            "model suffers a uniform capability collapse, but that capability produces the "
+            "largest corrected effects and that its expression depends on the benchmark.",
+            "Qwen3-4B preserves MMLU almost exactly, moving from 0.747 to 0.743, while ARC falls "
+            "from 0.876 to 0.860. The ARC result is individually significant because the "
+            "benchmark has 1,172 paired items, but its adjusted q-value is 0.1074. Sample size "
+            "and multiplicity therefore change the evidence attached to a small absolute effect.",
             "Llama's MMLU decrease is 0.0367, with an interval ending at zero and p = 0.080. Its ARC "
             "decrease is similar in magnitude but estimated more precisely, so ARC survives correction. "
             "In deployment terms, the NF4 model misses roughly three additional ARC questions per "
             "hundred that its fp16 counterpart answers correctly. "
             "The two outcomes are directionally consistent even though only one crosses the inferential "
             "threshold.",
-            "Mistral loses 0.020 on MMLU but gains 0.0094 on ARC. Phi loses 0.0267 on MMLU and 0.0145 "
-            "on ARC; neither is significant. These unresolved cases show why a rule that labels every "
-            "negative point estimate as capability degradation would overstate the evidence.",
-            "Minimum-detectable-effect calculations reinforce the distinction. The Qwen3-1.7B MMLU "
-            "and Llama ARC effects exceed their estimated 80% power thresholds. Several smaller "
-            "observed deltas do not. Appendix B reports the thresholds rather than converting all non-"
-            "significant effects into claims of equivalence.",
+            "Mistral loses 0.020 on MMLU but gains 0.0094 on ARC, while Phi loses 0.0267 on MMLU "
+            "and 0.0145 on ARC, neither of which is significant. These unresolved cases show why "
+            "a rule that labels every negative point estimate as capability degradation would "
+            "overstate the evidence.",
+            "Minimum-detectable-effect calculations reinforce the distinction. The Qwen3-1.7B "
+            "MMLU and Llama ARC effects exceed their estimated 80% power thresholds, whereas "
+            "several smaller observed deltas do not. Appendix B therefore reports the thresholds "
+            "rather than converting all non-significant effects into claims of equivalence.",
         ],
     )
     add_figure(
@@ -1759,25 +1810,26 @@ def add_chapter_four(doc: Document) -> None:
     add_paragraphs(
         doc,
         [
-            "The within-Qwen comparison suggests that the 1.7B model is more sensitive on MMLU. Its "
-            "loss is 0.090, whereas the 4B model changes by −0.0033. That contrast does not reproduce "
-            "at the same magnitude on ARC: the 1.7B decrease is −0.0094 and the 4B decrease is −0.0162. "
-            "The evidence therefore supports task-specific small-model sensitivity, not a universal "
-            "monotonic scale law.",
-            "Across families, the baseline safety profiles differ substantially. Mistral begins at "
-            "ASR 0.585, while Phi begins at 0.070. A common absolute delta has different practical "
-            "meaning at those baselines. This heterogeneity is why results are reported as paired "
-            "within-model contrasts rather than as a leaderboard.",
+            "The within-Qwen comparison suggests that the 1.7B model is more sensitive on MMLU. "
+            "Its loss is 0.090, whereas the 4B model changes by −0.0033. However, that contrast "
+            "does not reproduce at the same magnitude on ARC: the 1.7B decrease is −0.0094 and "
+            "the 4B decrease is −0.0162. The evidence therefore supports task-specific small- "
+            "model sensitivity, not a universal monotonic scale law.",
+            "Across families, the baseline safety profiles differ substantially. Mistral begins "
+            "at ASR 0.585, while Phi begins at 0.070, so a common absolute delta has different "
+            "practical meaning at those baselines. This heterogeneity is why results are reported "
+            "as paired within-model contrasts rather than as a leaderboard.",
             "The interpretation labels are descriptive summaries of joint movement. Qwen3-1.7B is "
-            "broad degradation because capability falls while ASR is flat. Llama is capability collapse "
-            "masquerading as safety because ASR and capability both fall. The remaining labels are "
-            "directional rather than confirmed: Qwen3-4B and Phi lean toward alignment degradation, "
-            "while Mistral leans toward alignment improvement. None of those directional safety labels "
-            "survives the corrected inferential test.",
+            "broad degradation because capability falls while ASR is flat, and Llama is "
+            "capability collapse masquerading as safety because ASR and capability both fall. The "
+            "remaining labels are directional rather than confirmed: Qwen3-4B and Phi lean toward "
+            "alignment degradation, while Mistral leans toward alignment improvement. However, "
+            "none of those directional safety labels survives the corrected inferential test.",
             "Model size is correlated with other design choices. The two Qwen checkpoints share a "
-            "family, but training dynamics and capacity still differ. Their comparison supports a "
-            "practical observation for these releases, not a fitted scaling law. More sizes and "
-            "replicated families would be needed to estimate sensitivity as a function of parameters.",
+            "family, but training dynamics and capacity still differ, so their comparison "
+            "supports a practical observation for these releases rather than a fitted scaling "
+            "law. More sizes and replicated families would be needed to estimate sensitivity as a "
+            "function of parameters.",
             "Cross-family response styles also affect measurement. Mistral is the clearest case: its "
             "refusal proxy is far more pessimistic than the semantic classifier. A family comparison "
             "that ignored scorer agreement would confound treatment effect with measurement fit.",
@@ -1788,31 +1840,33 @@ def add_chapter_four(doc: Document) -> None:
     add_paragraphs(
         doc,
         [
-            "The INT8 arm asks whether the observed pattern is graded with precision. Figure 4.3 shows "
-            "that harmful compliance is generally non-monotonic across fp16, INT8, and NF4. Every INT8 "
-            "HarmBench contrast at 512 tokens is non-significant under both the primary classifier and "
-            "the API judge.",
-            "Capability is more orderly. INT8 remains close to fp16, while the largest losses appear at "
-            "NF4. The equivalence analysis supports practical similarity for the INT8 capability "
-            "contrasts within the stated ±0.05 margin. This result is method-specific: LLM.int8 and NF4 "
-            "use different numerical treatments, so the pattern should not be simplified to a universal "
-            "bit-width curve.",
-            "For deployment, the evidence favours a staged decision. INT8 is the lower-risk precision "
-            "point when the memory budget permits it. NF4 offers stronger compression but warrants "
-            "model-specific capability validation. The study does not contain direct VRAM, latency, or "
-            "throughput measurements, so it cannot quantify the engineering benefit side of that choice.",
-            "Qwen3-1.7B illustrates the capability cliff. MMLU is slightly higher at INT8 than fp16, "
-            "then drops by more than ten points relative to INT8 at NF4. Llama shows the same broad "
-            "pattern on ARC: INT8 is close to baseline and NF4 is lower. Qwen3-4B is comparatively "
-            "stable on MMLU across all three precisions.",
-            "Safety does not follow the same shape. Qwen3-4B rises from 0.115 to 0.125 to 0.155, but "
-            "neither increase is significant after correction. Llama rises slightly at INT8 and falls "
-            "at NF4. Mistral reaches the same 0.565 ASR at INT8 and NF4. These non-monotonic paths argue "
-            "against a single precision-driven alignment mechanism.",
-            "The 512-token INT8 rerun also resolves a historical warning. A Llama INT8 increase had "
-            "appeared at 128 tokens under both judges. At 512 tokens, the classifier delta is +0.005 "
-            "with p = 1.000 and the API-judge delta is +0.010 with p = 0.688. The apparent safety effect "
-            "does not survive the generation-budget correction.",
+            "The INT8 arm asks whether the observed pattern is graded with precision. Figure 4.3 "
+            "shows that harmful compliance is generally non-monotonic across fp16, INT8, and NF4. "
+            "In addition, every INT8 HarmBench contrast at 512 tokens is non-significant under "
+            "both the primary classifier and the API judge.",
+            "Capability is more orderly. INT8 remains close to fp16, while the largest losses "
+            "appear at NF4, and the equivalence analysis supports practical similarity for the "
+            "INT8 capability contrasts within the stated ±0.05 margin. However, this result is "
+            "method-specific: LLM.int8 and NF4 use different numerical treatments, so the pattern "
+            "should not be simplified to a universal bit-width curve.",
+            "For deployment, the evidence favours a staged decision. INT8 is the lower-risk "
+            "precision point when the memory budget permits it, whereas NF4 offers stronger "
+            "compression but warrants model-specific capability validation. The study does not "
+            "contain direct VRAM, latency, or throughput measurements, so it cannot quantify the "
+            "engineering benefit side of that choice.",
+            "Qwen3-1.7B illustrates the capability cliff: MMLU is slightly higher at INT8 than "
+            "fp16, then drops by more than ten points relative to INT8 at NF4. Similarly, Llama "
+            "shows the same broad pattern on ARC, where INT8 is close to baseline and NF4 is "
+            "lower. By contrast, Qwen3-4B is comparatively stable on MMLU across all three "
+            "precisions.",
+            "Safety does not follow the same shape. Qwen3-4B rises from 0.115 to 0.125 to 0.155, "
+            "but neither increase is significant after correction. Llama rises slightly at INT8 "
+            "and falls at NF4, while Mistral reaches the same 0.565 ASR at INT8 and NF4. These "
+            "non-monotonic paths argue against a single precision-driven alignment mechanism.",
+            "The 512-token INT8 rerun also resolves a historical warning. A Llama INT8 increase "
+            "had appeared at 128 tokens under both judges. At 512 tokens, however, the classifier "
+            "delta is +0.005 with p = 1.000 and the API-judge delta is +0.010 with p = 0.688, so "
+            "the apparent safety effect does not survive the generation-budget correction.",
         ],
     )
     add_figure(
@@ -1832,17 +1886,19 @@ def add_chapter_four(doc: Document) -> None:
             "significant, and no ASR result survives BH-FDR. The evidence therefore does not support a "
             "corrected harmful-ward increase.",
             "RQ2 asks whether NF4 increases benign over-refusal. The pre-specified regex finds no "
-            "significant increase; its only corrected movement is the Phi decrease. The semantic judge "
-            "finds neither a significant increase nor the same Phi decrease. The scorer changes the "
-            "interpretation of one benign-direction result, but not the answer to the research question.",
+            "significant increase, and its only corrected movement is the Phi decrease. By "
+            "contrast, the semantic judge finds neither a significant increase nor the same Phi "
+            "decrease. The scorer therefore changes the interpretation of one benign-direction "
+            "result, but not the answer to the research question.",
             "RQ3 asks whether capability falls. Qwen3-1.7B MMLU and Llama ARC survive correction. "
             "Qwen3-4B ARC is individually significant but not corrected, and the remaining estimates are "
             "mixed or unresolved. Capability degradation is therefore real for specific model–task "
             "combinations rather than universal across the matrix.",
-            "RQ4 asks about scale, family, and precision. The smaller Qwen is more sensitive on MMLU, "
-            "but the pattern does not reproduce cleanly on ARC. Cross-family safety directions differ. "
-            "INT8 stays close to fp16 on capability while NF4 contains the largest losses. The evidence "
-            "supports heterogeneity, not one shared response to bit-width.",
+            "RQ4 asks about scale, family, and precision. The smaller Qwen is more sensitive on "
+            "MMLU, but the pattern does not reproduce cleanly on ARC. In addition, cross-family "
+            "safety directions differ, and INT8 stays close to fp16 on capability while NF4 "
+            "contains the largest losses. Overall, the evidence supports heterogeneity, not one "
+            "shared response to bit-width.",
             "RQ5 asks whether the conclusion survives measurement and inference changes. The API judge "
             "and Llama Guard do not find a significant harmful-ward NF4 pair. Human grounding favours "
             "the classifier over the HarmBench proxy and the semantic judge over the XSTest regex. The "
@@ -1851,8 +1907,6 @@ def add_chapter_four(doc: Document) -> None:
             "independent checks.",
         ],
     )
-
-
 def add_chapter_five(doc: Document) -> None:
     add_chapter(doc, 5, "Scorer Validation and Robustness")
     add_body(
@@ -1868,22 +1922,24 @@ def add_chapter_five(doc: Document) -> None:
         doc,
         [
             "Figure 5.1 compares the HarmBench classifier with the refusal-regex proxy. The proxy "
-            "systematically reports higher attack-success rates for several aliases because it treats "
-            "non-refusal as compliance. That is not the construct HarmBench defines. A response may "
-            "avoid an explicit refusal and still fail to provide the requested harmful information.",
-            "The divergence is largest in model families whose response style does not align with the "
-            "regex. Per-alias classifier-versus-proxy kappa ranges from roughly 0.25 to 0.84 at the "
-            "512-token budget. The proxy even reverses the sign for Mistral: it suggests a harmful-ward "
-            "increase, while the classifier gives a small safe-ward decrease. This is why the classifier "
-            "is the primary outcome and the proxy is retained only as a transparent secondary view.",
+            "systematically reports higher attack-success rates for several aliases because it "
+            "treats non-refusal as compliance. However, that is not the construct HarmBench "
+            "defines: a response may avoid an explicit refusal and still fail to provide the "
+            "requested harmful information.",
+            "The divergence is largest in model families whose response style does not align with "
+            "the regex. Per-alias classifier-versus-proxy kappa ranges from roughly 0.25 to 0.84 "
+            "at the 512-token budget. For Mistral the proxy even reverses the sign, suggesting a "
+            "harmful-ward increase where the classifier gives a small safe-ward decrease. "
+            "Consequently, the classifier is the primary outcome and the proxy is retained only "
+            "as a transparent secondary view.",
             "The disagreement is not a constant offset. If the proxy added the same bias to both "
             "precision conditions, its paired delta could remain useful. Instead, the size and "
             "direction of the error vary by alias. Quantization can change response style, length, or "
             "refusal phrasing, so proxy error can itself become treatment-dependent.",
-            "The correction was made through derived sidecars. Original generations and summaries were "
-            "not overwritten. This preserves an auditable before-and-after record: the classifier result "
-            "supports the current claim, while the proxy remains visible as evidence for why the "
-            "interpretation changed.",
+            "The correction was made through derived sidecars, and original generations and "
+            "summaries were not overwritten. This preserves an auditable before-and-after record: "
+            "the classifier result supports the current claim, while the proxy remains visible as "
+            "evidence for why the interpretation changed.",
         ],
     )
     add_figure(
@@ -1915,11 +1971,11 @@ def add_chapter_five(doc: Document) -> None:
             "0.94 for both aliases. Agreement is lower on Phi and Qwen, but the per-pair harmful-ward "
             "significance conclusion is unchanged. The second judge strengthens the headline without "
             "implying item-level identity.",
-            "Llama Guard's per-pair directions agree with the classifier for four pairs. Qwen3-1.7B is "
-            "the exception: the classifier is flat and Llama Guard decreases by 0.050. Neither result "
-            "is significant. On Llama, Llama Guard agrees on direction but not the classifier's "
-            "uncorrected significance. The report therefore rests on the corrected family rather than "
-            "one judge-specific p-value.",
+            "Llama Guard's per-pair directions agree with the classifier for four pairs. "
+            "Qwen3-1.7B is the exception: the classifier is flat and Llama Guard decreases by "
+            "0.050, and neither result is significant. Similarly, on Llama, Llama Guard agrees on "
+            "direction but not on the classifier's uncorrected significance. The report therefore "
+            "rests on the corrected family rather than one judge-specific p-value.",
         ],
     )
     judge_rows = []
@@ -1959,11 +2015,11 @@ def add_chapter_five(doc: Document) -> None:
             f"{hb_cls['over_flag_vs_human']} items that the human does not, whereas the regex over-flags "
             f"{hb_regex['over_flag_vs_human']}. The classifier is not perfect, but it is substantially "
             "closer to the human construct.",
-            "The sample is stratified toward scorer disagreements, so its class prevalence is not an "
-            "estimate of population ASR. It has one annotator, which limits the gold-standard claim. "
-            "The correct interpretation is comparative: within this audit sample, the classifier is "
-            "better grounded than the refusal proxy. A second annotator would quantify the human "
-            "reliability ceiling.",
+            "The sample is stratified toward scorer disagreements, so its class prevalence is not "
+            "an estimate of population ASR. It has one annotator, which limits the gold-standard "
+            "claim. Accordingly, the correct interpretation is comparative: within this audit "
+            "sample, the classifier is better grounded than the refusal proxy. A second annotator "
+            "would quantify the human reliability ceiling.",
             f"The classifier's recall is {hb_cls['recall']:.3f} and its precision is "
             f"{hb_cls['precision']:.3f} on the audit sample. The regex reaches higher recall "
             f"({hb_regex['recall']:.3f}) by flagging many more responses, but its precision falls to "
@@ -1984,9 +2040,9 @@ def add_chapter_five(doc: Document) -> None:
         doc,
         [
             "The independent three-class refusal judge does not reproduce the Phi-4-mini regex "
-            "decrease. Its strict mapping gives a small positive delta and its broad mapping is near "
-            "zero; neither is significant. Across all pairs, no semantic-judge result shows a "
-            "statistically significant increase in over-refusal.",
+            "decrease. Its strict mapping gives a small positive delta and its broad mapping is "
+            "near zero, and neither is significant. Across all pairs, no semantic-judge result "
+            "shows a statistically significant increase in over-refusal.",
             f"Human validation explains the discrepancy. Under the strict definition, the judge reaches "
             f"kappa {xs_strict_j['cohens_kappa']:.3f}, while the regex is "
             f"{xs_strict_r['cohens_kappa']:.3f}. The regex recalls only "
@@ -2010,9 +2066,10 @@ def add_chapter_five(doc: Document) -> None:
             "kappa rises under that mapping, while the regex remains near zero because it still misses "
             "most semantic refusals. The scorer ranking is therefore not driven by one definition of "
             "partial refusal.",
-            "The validation-informed multiplicity family replaces only the over-refusal instrument "
-            "with judge-strict scoring. It retains the five pairs and other outcomes. Its two survivors "
-            "are the Qwen MMLU and Llama ARC losses; no safety or over-refusal contrast survives.",
+            "The validation-informed multiplicity family replaces only the over-refusal "
+            "instrument with judge-strict scoring, and it retains the five pairs and other "
+            "outcomes. Its two survivors are the Qwen MMLU and Llama ARC losses, and no safety or "
+            "over-refusal contrast survives.",
         ],
     )
 
@@ -2031,9 +2088,10 @@ def add_chapter_five(doc: Document) -> None:
             "finding illustrates a broader principle: a generation cap can become part of the measured "
             "construct when truncation is common.",
             "Truncation is highly model-dependent. At 128 tokens it affects most Mistral and Phi "
-            "responses, a majority of Qwen responses, and relatively few Llama responses. A pooled "
-            "percentage conceals different exposure across families. The 512-token rerun is necessary "
-            "for cross-family interpretation, not merely a cosmetic extension.",
+            "responses, a majority of Qwen responses, and relatively few Llama responses, so a "
+            "pooled percentage conceals different exposure across families. Consequently, the "
+            "512-token rerun is necessary for cross-family interpretation, not merely a cosmetic "
+            "extension.",
             "A direct prefix test distinguishes responses that are exact prefixes of the longer output "
             "from natural stops and mismatches. This provides empirical truncation evidence rather than "
             "relying only on token counts. The mismatch category remains visible, so the analysis does "
@@ -2090,10 +2148,10 @@ def add_chapter_five(doc: Document) -> None:
             "A seed is not an independent model replicate. The weights and prompt set are reused, and "
             "only decoding randomness changes. The arm therefore measures within-condition generation "
             "variability rather than uncertainty over model training.",
-            "One Qwen3-4B seed and one Phi seed are individually significant, in opposite directions. "
-            "Selecting either after inspection would produce a misleading narrative. Reporting all "
-            "five seeds and their mean shows that isolated significance is compatible with repeated "
-            "testing and stochastic variation.",
+            "One Qwen3-4B seed and one Phi seed are individually significant, in opposite "
+            "directions, and selecting either after inspection would produce a misleading "
+            "narrative. Reporting all five seeds and their mean therefore shows that isolated "
+            "significance is compatible with repeated testing and stochastic variation.",
         ],
     )
     add_table(
@@ -2141,15 +2199,17 @@ def add_chapter_five(doc: Document) -> None:
     add_paragraphs(
         doc,
         [
-            "The validation results can be read as a sequence of eliminated explanations. The refusal "
-            "proxy is not trusted because human labels show severe over-flagging. The classifier is not "
-            "trusted alone; an API judge and Llama Guard test judge dependence. The 128-token result is "
-            "not trusted because truncation is common; the 512-token rerun replaces it. Greedy decoding "
-            "is not assumed representative; five stochastic seeds test sensitivity.",
-            "No single check is decisive. Together they make a large hidden harmful-ward effect less "
-            "plausible in the tested setting. Remaining uncertainty is concentrated in effects below "
-            "the MDE, attack-based threat models, languages and model families outside the sample, and "
-            "the subjectivity of single-annotator human labels.",
+            "The validation results can be read as a sequence of eliminated explanations. The "
+            "refusal proxy is not trusted because human labels show severe over-flagging. The "
+            "classifier is not trusted alone either, so an API judge and Llama Guard test judge "
+            "dependence. The 128-token result is not trusted because truncation is common, and "
+            "the 512-token rerun replaces it. Finally, greedy decoding is not assumed "
+            "representative, so five stochastic seeds test sensitivity.",
+            "No single check is decisive. Together, however, they make a large hidden harmful- "
+            "ward effect less plausible in the tested setting. Remaining uncertainty is "
+            "concentrated in effects below the MDE, attack-based threat models, languages and "
+            "model families outside the sample, and the subjectivity of single-annotator human "
+            "labels.",
             "This pattern is more valuable than agreement for its own sake. Where instruments disagree, "
             "the report identifies the construct difference and gives greater weight to the scorer with "
             "better human grounding. Where they agree, the conclusion is stated only at the scope and "
@@ -2177,10 +2237,10 @@ def add_chapter_six(doc: Document) -> None:
             "experiment found no corrected increase in harmful compliance and that the clearest costs "
             "appeared in capability.",
             "The evidence also rejects two tempting simplifications. Quantization is not reliably "
-            "safety-improving: the directions differ by pair, and the only individually significant "
-            "classifier movement is accompanied by capability loss. Quantization is not reliably "
-            "safety-degrading either: the harmful-ward estimates are small, unresolved, and not "
-            "reproduced as corrected effects across judges.",
+            "safety-improving: the directions differ by pair, and the only individually "
+            "significant classifier movement is accompanied by capability loss. Similarly, "
+            "quantization is not reliably safety-degrading either: the harmful-ward estimates are "
+            "small, unresolved, and not reproduced as corrected effects across judges.",
             "A more useful description is model-specific boundary instability under a capability cost. "
             "Some prompts change classification in both directions even when the aggregate delta is "
             "zero. That pattern is consistent with a numerical perturbation near decision boundaries. "
@@ -2322,25 +2382,27 @@ def add_chapter_six(doc: Document) -> None:
             "establishes that loading an ordinary instruction-tuned checkpoint in NF4 raises harmful "
             "compliance, which is the specific question this study measured and answered in the "
             "negative within its detection bounds.",
-            "The scorer findings align with StrongREJECT's warning about empty jailbreaks [41] and "
-            "SORRY-Bench's insistence that safety refusal be interpreted with utility [42]. The "
-            "HarmBench regex counted willingness, while the classifier evaluated behaviour completion. "
-            "On XSTest, the opposite failure occurred: the regex missed semantic refusals. Simple string "
-            "rules can fail in both directions depending on the construct.",
-            "The capability findings also qualify earlier capability-focused quantization work. Large "
-            "evaluations often report good average retention at four bits [7]-[9], but the Qwen3-1.7B "
-            "MMLU loss shows that compact models and task subsets can still contain material failures. "
-            "The Mistral ARC gain and Qwen3-4B stability, conversely, show that the loss is not universal.",
+            "The scorer findings align with StrongREJECT's warning about empty jailbreaks [41] "
+            "and SORRY-Bench's insistence that safety refusal be interpreted with utility [42]. "
+            "The HarmBench regex counted willingness, while the classifier evaluated behaviour "
+            "completion. On XSTest, by contrast, the opposite failure occurred: the regex missed "
+            "semantic refusals. Simple string rules can therefore fail in both directions "
+            "depending on the construct.",
+            "The capability findings also qualify earlier capability-focused quantization work. "
+            "Large evaluations often report good average retention at four bits [7]-[9], but the "
+            "Qwen3-1.7B MMLU loss shows that compact models and task subsets can still contain "
+            "material failures. Conversely, the Mistral ARC gain and Qwen3-4B stability show that "
+            "the loss is not universal.",
             "Marchisio et al.'s multilingual result is methodologically relevant even though the "
             "present experiment is English-only [13]. Their human evaluation reveals damage that "
             "automatic metrics understate. Here, human validation reveals scorer error that changes "
             "which result deserves weight. In both cases, the evaluator is part of the empirical "
             "question.",
-            "The direct-request boundary explains why adversarial studies should not be used as either "
-            "confirmation or contradiction. JailbreakBench evaluates a model under an attack procedure "
-            "[43]. Q-Misalign constructs a quantization-conditioned attack [39]. The current design "
-            "evaluates ordinary quantization without an attack. The three settings address complementary "
-            "risks.",
+            "The direct-request boundary explains why adversarial studies should not be used as "
+            "either confirmation or contradiction. JailbreakBench evaluates a model under an "
+            "attack procedure [43], while Q-Misalign constructs a quantization-conditioned attack "
+            "[39]. The current design evaluates ordinary quantization without an attack. The "
+            "three settings therefore address complementary risks.",
         ],
     )
 
@@ -2348,32 +2410,34 @@ def add_chapter_six(doc: Document) -> None:
     add_paragraphs(
         doc,
         [
-            "The capability result is practically important because a compressed model is chosen for "
-            "deployment, not only for a benchmark. Qwen3-1.7B loses nine MMLU points under NF4. Llama "
-            "loses about 3.2 ARC points. These losses do not occur uniformly, but they are large enough "
-            "to change which tasks a model can be trusted to perform.",
+            "The capability result is practically important because a compressed model is chosen "
+            "for deployment, not only for a benchmark. Qwen3-1.7B loses nine MMLU points under "
+            "NF4, and Llama loses about 3.2 ARC points. These losses do not occur uniformly, but "
+            "they are large enough to change which tasks a model can be trusted to perform.",
             "INT8 provides a useful intermediate point. Its capability contrasts are close to fp16 "
             "within the stated equivalence margin, while the more visible losses occur at NF4. This "
             "supports model-specific validation before choosing the smallest representation. However, "
             "the report does not measure memory, latency, energy, or throughput. It cannot calculate a "
             "complete engineering trade-off between resource savings and lost accuracy.",
             "The two capability anchors also caution against a single-number deployment decision. "
-            "Qwen3-1.7B looks much worse on MMLU than ARC, while Llama's strongest corrected loss is on "
-            "ARC. A deployment team should evaluate tasks close to its own workload rather than treat "
-            "one aggregate benchmark as a universal capability score.",
+            "Qwen3-1.7B looks much worse on MMLU than ARC, while Llama's strongest corrected loss "
+            "is on ARC. Therefore, a deployment team should evaluate tasks close to its own "
+            "workload rather than treat one aggregate benchmark as a universal capability score.",
             "The missing cost axis limits the deployment recommendation. NF4 is expected to reduce "
             "memory relative to fp16, and INT8 occupies an intermediate precision, but this project did "
             "not log peak resident memory or throughput in a controlled benchmark. It would be "
             "inappropriate to state a measured speedup or memory ratio. The report can recommend a "
             "validation process, not calculate the optimal deployment point.",
-            "A responsible process begins with the application. If the workload resembles multiple-"
-            "choice knowledge tasks, the Qwen MMLU result is directly concerning. If it requires open-"
-            "ended reasoning or coding, neither MMLU nor ARC is sufficient. The same matched comparison "
-            "should be repeated on representative tasks before deployment.",
-            "Safety should be evaluated on the final serving stack. A pre-quantized checkpoint, a GGUF "
-            "runtime, or different attention kernels may not reproduce the BitsAndBytes result. Chat "
-            "templates, system prompts, decoding limits, and moderation layers also contribute to the "
-            "deployed behaviour. Precision is one component of a larger system.",
+            "A responsible process begins with the application. If the workload resembles "
+            "multiple-choice knowledge tasks, the Qwen MMLU result is directly concerning, "
+            "whereas if it requires open-ended reasoning or coding, neither MMLU nor ARC is "
+            "sufficient. Accordingly, the same matched comparison should be repeated on "
+            "representative tasks before deployment.",
+            "Safety should be evaluated on the final serving stack. A pre-quantized checkpoint, a "
+            "GGUF runtime, or different attention kernels may not reproduce the BitsAndBytes "
+            "result. Chat templates, system prompts, decoding limits, and moderation layers also "
+            "contribute to the deployed behaviour. Overall, precision is one component of a "
+            "larger system.",
         ],
     )
 
@@ -2381,25 +2445,25 @@ def add_chapter_six(doc: Document) -> None:
     add_paragraphs(
         doc,
         [
-            "Scorer validation is not an auxiliary engineering check. It changes the scientific "
-            "conclusion. The refusal proxy overstates HarmBench success and the XSTest regex misses most "
-            "human full refusals. In both cases, a semantic instrument is better grounded against the "
-            "human sample.",
+            "Scorer validation is not an auxiliary engineering check, because it changes the "
+            "scientific conclusion. The refusal proxy overstates HarmBench success and the XSTest "
+            "regex misses most human full refusals. In both cases, a semantic instrument is "
+            "better grounded against the human sample.",
             "At the same time, semantic judges introduce their own limitations. The API judge is "
-            "versioned but external. Llama Guard is open-weight but uses a broader policy construct. "
-            "Human labels are more direct but expensive and subjective. Evidence is triangulated across "
-            "the primary benchmark-specific classifier, alternative judges, prompt-"
-            "level agreement, and a disclosed human audit.",
+            "versioned but external, Llama Guard is open-weight but uses a broader policy "
+            "construct, and human labels are more direct but expensive and subjective. Evidence "
+            "is therefore triangulated across the primary benchmark-specific classifier, "
+            "alternative judges, prompt-level agreement, and a disclosed human audit.",
             "This has a general implication for LLM evaluation. A benchmark score should be understood "
             "as the output of a measurement system, not a direct observation of an abstract property. "
             "When the estimated treatment effect is small, scorer error can be as large as the effect. "
             "Validation should therefore target the cases that determine the conclusion, not only an "
             "overall accuracy figure.",
             "The two scorer failures point in opposite directions. On HarmBench, a refusal proxy "
-            "over-counts success because it cannot evaluate response content. On XSTest, a narrow "
-            "refusal regex under-counts refusal because it misses indirect language. A transparent "
-            "rule is therefore not automatically conservative. Its bias depends on how its surface "
-            "patterns relate to the construct.",
+            "over-counts success because it cannot evaluate response content. On XSTest, by "
+            "contrast, a narrow refusal regex under-counts refusal because it misses indirect "
+            "language. A transparent rule is therefore not automatically conservative, because "
+            "its bias depends on how its surface patterns relate to the construct.",
             "Pre-registration and validation must coexist. Keeping the original regex family protects "
             "against outcome-driven scorer replacement. Reporting the validation-informed family "
             "prevents procedural loyalty from overriding better construct evidence. Presenting both "
@@ -2417,11 +2481,12 @@ def add_chapter_six(doc: Document) -> None:
     add_paragraphs(
         doc,
         [
-            "The matched revisions, shared prompts, fixed decoding controls, and paired tests strengthen "
-            "causal attribution to the load-time precision change. Residual threats include numerical "
-            "differences in kernels, model-specific chat-template behaviour, and the historical "
-            "environment-provenance gap. The primary tree is internally consistent, but the earliest "
-            "runs cannot be claimed as bit-for-bit reproducible on a new machine.",
+            "The matched revisions, shared prompts, fixed decoding controls, and paired tests "
+            "strengthen causal attribution to the load-time precision change. However, residual "
+            "threats include numerical differences in kernels, model-specific chat-template "
+            "behaviour, and the historical environment-provenance gap. The primary tree is "
+            "internally consistent, but the earliest runs cannot be claimed as bit-for-bit "
+            "reproducible on a new machine.",
             "The XSTest human audit deviated from its pre-registered blindness-exclusion rule. The "
             "deviation is disclosed, bounded, and tested on the overlapping items. It still removes the "
             "clean confirmatory label. Selective interpretation is controlled by retaining the original "
@@ -2430,10 +2495,10 @@ def add_chapter_six(doc: Document) -> None:
             "confirmatory. The report labels them separately and does not insert their p-values into the "
             "registered family. This preserves the distinction between a planned primary test and an "
             "explanation developed after observing a surprising result.",
-            "Several analysis choices are rule-based, including parser behaviour and interpretation "
-            "labels. Automated tests protect these rules against accidental change. A rule can still be "
-            "scientifically imperfect. Human audits and alternative scorers are therefore necessary "
-            "even when the code is deterministic.",
+            "Several analysis choices are rule-based, including parser behaviour and "
+            "interpretation labels. Automated tests protect these rules against accidental "
+            "change. However, a rule can still be scientifically imperfect, so human audits and "
+            "alternative scorers remain necessary even when the code is deterministic.",
         ],
     )
     add_heading(doc, "6.5.2", "Construct Validity", level=3)
@@ -2447,10 +2512,11 @@ def add_chapter_six(doc: Document) -> None:
             "Human validation uses one annotator on each 200-item sample. The comparisons are therefore "
             "grounded but not a multi-annotator gold standard. A second annotator and adjudication would "
             "separate scorer error from ambiguity in the rubric.",
-            "The HarmBench classifier is trained for the benchmark's behaviour criterion, which supports "
-            "construct alignment but creates dependence on one learned evaluator. The API judge shares "
-            "the criterion but not the weights. Llama Guard changes both weights and construct. The "
-            "triangulation is useful precisely because these dependencies differ.",
+            "The HarmBench classifier is trained for the benchmark's behaviour criterion, which "
+            "supports construct alignment but creates dependence on one learned evaluator. The "
+            "API judge shares the criterion but not the weights, whereas Llama Guard changes both "
+            "weights and construct. The triangulation is useful precisely because these "
+            "dependencies differ.",
             "Over-refusal is especially policy-sensitive. A partial refusal can be counted as acceptable "
             "caution or as lost helpfulness depending on the application. Strict and broad mappings make "
             "that decision visible, but they do not eliminate it.",
@@ -2464,17 +2530,17 @@ def add_chapter_six(doc: Document) -> None:
             "sample. Results may differ for larger checkpoints, base models, other alignment recipes, "
             "multilingual prompts, or different hardware. NF4 and LLM.int8 do not represent GPTQ, AWQ, "
             "GGUF, or all post-training quantization.",
-            "The study's strongest generalisable contribution is methodological: match the weights, "
-            "evaluate safety and capability together, pair the statistics, declare multiplicity, and "
-            "validate the scorer. The numerical results should remain attached to the evaluated models "
-            "and conditions.",
+            "The study's strongest generalisable contribution is methodological: match the "
+            "weights, evaluate safety and capability together, pair the statistics, declare "
+            "multiplicity, and validate the scorer. By contrast, the numerical results should "
+            "remain attached to the evaluated models and conditions.",
             "English-language benchmarks dominate the study. Qwen and other multilingual families may "
             "respond differently in non-Latin scripts, and prior work reports disparate quantization "
             "effects by language [13]. The English null should not be exported to multilingual safety.",
-            "The V100 environment is relevant because numerical kernels and supported attention paths "
-            "differ across hardware generations. Both members of each pair share the environment, which "
-            "protects the within-pair contrast. Generalisation to other runtimes remains an empirical "
-            "question.",
+            "The V100 environment is relevant because numerical kernels and supported attention "
+            "paths differ across hardware generations. Both members of each pair share the "
+            "environment, which protects the within-pair contrast. Nevertheless, generalisation "
+            "to other runtimes remains an empirical question.",
         ],
     )
 
@@ -2515,18 +2581,21 @@ def add_chapter_seven(doc: Document) -> None:
             "magnitude depends on model, family, task, and precision; INT8 stays closer to fp16 than "
             "NF4 on capability. RQ5 shows that the substantive safety conclusion survives alternative "
             "judges, human grounding, the longer generation budget, and the multi-seed check.",
-            "The central lesson is methodological. Quantization effects cannot be interpreted from a "
-            "single refusal count. Safety, helpfulness, and capability must be measured together, and "
-            "the scorer must be validated against the construct it claims to measure.",
-            "The rewritten report also changes how the contribution is presented. The benchmarking "
-            "framework, cluster jobs, and audit machinery support the study, but they are not treated as "
-            "the primary result. The contribution is the evidence produced by a controlled design and "
-            "the measurement lessons revealed when the original scorers were challenged.",
-            "Within its boundaries, the study provides a clear deployment conclusion. INT8 preserves "
-            "capability more consistently than NF4 under the tested margins. NF4 can impose material "
-            "task-specific losses. Neither precision produces a corrected harmful-compliance increase "
-            "at the 512-token DirectRequest setting. A deployment team should therefore prioritise "
-            "capability validation while retaining safety checks on the final artefact.",
+            "The central lesson is methodological. Quantization effects cannot be interpreted "
+            "from a single refusal count. Instead, safety, helpfulness, and capability must be "
+            "measured together, and the scorer must be validated against the construct it claims "
+            "to measure.",
+            "This report also changes how the contribution is presented. The benchmarking "
+            "framework, cluster jobs, and audit machinery support the study, but they are not "
+            "treated as the primary result. The contribution is instead the evidence produced by "
+            "a controlled design, together with the measurement lessons revealed when the "
+            "original scorers were challenged.",
+            "Within its boundaries, the study provides a clear deployment conclusion. INT8 "
+            "preserves capability more consistently than NF4 under the tested margins, whereas "
+            "NF4 can impose material task-specific losses. Neither precision produces a corrected "
+            "harmful-compliance increase at the 512-token DirectRequest setting. A deployment "
+            "team should therefore prioritise capability validation while retaining safety checks "
+            "on the final artefact.",
         ],
     )
 
