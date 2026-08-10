@@ -58,6 +58,13 @@ jobs:
           # This file pins the exact versions the suite actually passes on, and it
           # already carries the dashboard extras that tests/test_dashboard_theme.py
           # and tests/test_dashboard_data.py need.
+          # CPU-only torch FIRST. The pinned torch==2.6.0 from PyPI drags in the whole
+          # nvidia-cu12 stack (several GB) and the runner dies with
+          # "[Errno 28] No space left on device" -- which is what happened on the first
+          # attempt at this change. A GitHub runner has no GPU, and nothing in the suite
+          # loads a model, so the CPU wheel is the honest install. The pin is unchanged;
+          # only the wheel flavour differs, and the line below then sees it satisfied.
+          python -m pip install torch==2.6.0 --index-url https://download.pytorch.org/whl/cpu
           python -m pip install -r requirements-analysis.txt
           python -m pip install -e .
 
