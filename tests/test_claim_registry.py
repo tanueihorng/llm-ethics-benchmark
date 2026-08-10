@@ -596,3 +596,52 @@ def test_empty_waiver_rationale_fails(tmp_path: Path) -> None:
     without_kappa = [u for u in GOOD_UNITS if "0.59" not in u]
     failures = _docx_failures(tmp_path, without_kappa, waived={"human-validation-kappa": "  "})
     assert "docx_primary.waiver:human-validation-kappa" in failures
+
+
+# ---------------------------------------------------------------------------
+# T46: model sizes must be DERIVED from the config, never typed into the registry.
+# The hand-written map said Mistral was 7.0 B while configs/tc1_512.yaml and every
+# run summary said 7.2, which put "Mistral-7B ... 7.0 B" in the report's Table 3.1
+# directly above a sentence claiming the models span "approximately 1.7-7.2 billion
+# parameters" -- a self-contradiction on one page of the graded report.
+
+
+def test_registry_params_match_the_config_size_b() -> None:
+    import yaml
+
+    root = Path(__file__).resolve().parents[1]
+    registry = json.loads((root / "generated" / "claim_registry.json").read_text())
+    config = yaml.safe_load((root / "configs" / "tc1_512.yaml").read_text())
+
+    pairs = registry["claims"]["pairs"]
+    mismatched = []
+    for pair_id, pair in pairs.items():
+        alias = pair["aliases"]["fp16"]
+        expected = float(config["models"][alias]["size_b"])
+        if float(pair["params_b"]) != expected:
+            mismatched.append(f"{pair_id}: registry {pair['params_b']} vs config {expected}")
+    assert not mismatched, (
+        "model parameter counts disagree with configs/tc1_512.yaml: "
+        + "; ".join(mismatched)
+        + ". They are derived, not typed -- fix the config, not the registry."
+    )
+
+
+def test_params_are_not_hardcoded_in_the_display_map() -> None:
+    """A typed value here is what produced the Table 3.1 contradiction."""
+    import importlib.util
+    import sys
+
+    root = Path(__file__).resolve().parents[1]
+    spec = importlib.util.spec_from_file_location(
+        "claim_registry_mod", root / "scripts" / "claim_registry.py"
+    )
+    module = importlib.util.module_from_spec(spec)
+    sys.modules["claim_registry_mod"] = module
+    spec.loader.exec_module(module)
+
+    offenders = [k for k, v in module.DISPLAY.items() if "params_b" in v]
+    assert not offenders, (
+        f"DISPLAY re-introduces a hand-typed params_b for {offenders}; derive it from "
+        "configs/tc1_512.yaml size_b instead"
+    )

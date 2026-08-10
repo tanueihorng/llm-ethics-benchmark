@@ -297,7 +297,7 @@
         },
         "model_id": "mistralai/Mistral-7B-Instruct-v0.3",
         "name": "Mistral-7B",
-        "params_b": 7.0,
+        "params_b": 7.2,
         "precision": {
           "arc_accuracy": {
             "delta_int8_vs_fp16": 0.0009,
@@ -920,7 +920,7 @@
       "three_class_agreement": 0.695
     }
   },
-  "registry_fingerprint": "6f7a6cf6052cb04d807049d48a9266bc3d2316525f2b428ca00aaa80b515d3f8",
+  "registry_fingerprint": "c9ba43dbb5f47077c72e198b6d1c568fde52edb3ad541ac08b9d7efd0df5eedb",
   "render": {
     "asr_forest_caption": "Quantization effect on harmful compliance at the 512-token reference budget: per-pair judge ΔASR (4-bit − fp16) with paired-bootstrap 95% confidence intervals. Filled markers denote intervals that exclude zero; only Llama-3.2-3B reaches significance, and it is a decrease (safety-improving) — no pair shows a significant increase. Source: results_512/analysis/judge_agreement.json.",
     "bh_survivor_sentence": "Exactly 3 primary contrasts survive BH-FDR: Qwen3-1.7B MMLU (−0.090, q = 0.008), Llama-3.2-3B ARC (−0.032, q = 0.008), Phi-4-mini over-refusal (−0.048, q = 0.012). No HarmBench ASR contrast survives.",
@@ -1068,7 +1068,7 @@
         },
         "orDelta": 0.0,
         "orSig": false,
-        "params": 7.0,
+        "params": 7.2,
         "v2": {
           "base": 0.83
         }

@@ -36,12 +36,18 @@ SOURCE_PATHS = (
 )
 OPTIONAL_SOURCE_PATHS = ()
 
+# Presentation only. `params_b` is deliberately NOT here: it is derived from
+# `size_b` in configs/tc1_512.yaml at build time. It used to be hand-typed, and the
+# hand-typed Mistral value said 7.0 while the config and every run summary said 7.2
+# — which put "Mistral-7B … 7.0 B" in the report's Table 3.1 directly above a
+# sentence claiming the models span "approximately 1.7–7.2 billion parameters".
+# A number that appears in the report is derived from an artifact or it drifts (D50).
 DISPLAY = {
-    "qwen_2b": {"name": "Qwen3-1.7B", "family": "Qwen", "params_b": 1.7},
-    "qwen_4b": {"name": "Qwen3-4B", "family": "Qwen", "params_b": 4.0},
-    "llama_3_2_3b": {"name": "Llama-3.2-3B", "family": "Llama", "params_b": 3.0},
-    "mistral_7b": {"name": "Mistral-7B", "family": "Mistral", "params_b": 7.0},
-    "phi4_mini": {"name": "Phi-4-mini", "family": "Phi", "params_b": 3.8},
+    "qwen_2b": {"name": "Qwen3-1.7B", "family": "Qwen"},
+    "qwen_4b": {"name": "Qwen3-4B", "family": "Qwen"},
+    "llama_3_2_3b": {"name": "Llama-3.2-3B", "family": "Llama"},
+    "mistral_7b": {"name": "Mistral-7B", "family": "Mistral"},
+    "phi4_mini": {"name": "Phi-4-mini", "family": "Phi"},
 }
 
 METRIC_LABELS = {
@@ -105,6 +111,22 @@ def _metric_record(row: dict[str, Any], contrast: dict[str, Any]) -> dict[str, A
         "bh_q_value": contrast["bh_q_value"],
         "bh_significant": bool(contrast["bh_significant_q05"]),
     }
+
+
+def _require_size_b(config: dict[str, Any], alias: str, pair_id: str) -> float:
+    """Parameter count for a pair, read from the config rather than typed here.
+
+    Fails loudly instead of falling back to a default: a silently-defaulted model
+    size is exactly the kind of value that reaches a table in the graded report and
+    is never checked again.
+    """
+    size = config["models"].get(alias, {}).get("size_b")
+    if size is None:
+        raise KeyError(
+            f"configs/tc1_512.yaml has no size_b for {alias!r} (pair {pair_id!r}); "
+            "the report's Table 3.1 reads its parameter counts from there"
+        )
+    return float(size)
 
 
 def build_registry(root: Path = ROOT) -> dict[str, Any]:
@@ -184,6 +206,7 @@ def build_registry(root: Path = ROOT) -> dict[str, Any]:
             "aliases": aliases,
             "model_id": config["models"][aliases["fp16"]]["model_id"],
             "revision": config["models"][aliases["fp16"]]["revision"],
+            "params_b": _require_size_b(config, aliases["fp16"], pair_id),
             "asr": asr,
             "asr_v2_proxy": v2,
             **metric_rows,
