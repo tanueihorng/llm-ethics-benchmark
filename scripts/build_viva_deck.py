@@ -487,7 +487,8 @@ def build() -> Path:
             "Pydantic-validated YAML configs; a pair is invalid unless it has a baseline and a quantized member.",
             "SLURM job generation for the university GPU cluster, offline-mode and policy-compliant.",
             "Raw outputs are immutable. Every rescoring writes a redacted derived sidecar, never an edit.",
-            "560 automated tests, plus gates that assert the report's numbers against the artifacts.",
+            "An automated suite of several hundred tests, plus gates that assert the "
+            "report's numbers against the artifacts.",
         ],
         image="system_architecture.png",
         image_caption="Framework architecture",

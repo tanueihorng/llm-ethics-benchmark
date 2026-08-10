@@ -20,6 +20,7 @@ Clearing a failure here means fixing the deck, never relaxing the assertion.
 
 from __future__ import annotations
 
+import html
 import json
 import re
 from pathlib import Path
@@ -92,6 +93,48 @@ def test_timed_notes_fit_the_twenty_minute_talk(deck) -> None:
 
 
 QA_BANK = REPO_ROOT / "docs" / "viva" / "VIVA_QA_BANK.md"
+DECK_HTML = REPO_ROOT / "docs" / "viva" / "FYP_Viva_Deck.html"
+
+
+def test_html_showcase_has_not_drifted_from_the_pptx(deck) -> None:
+    """The two renderers share one source, so they must agree slide for slide.
+
+    build_viva_deck_html.py imports the pptx builder and records its slides rather
+    than restating them, which is what makes drift impossible by construction. This
+    asserts the property anyway: if someone ever replaces the recorder with a copy
+    of the content, this is what catches it.
+
+    The HTML is deliberately NOT registered in configs/claim_surfaces.yaml — it
+    lives in a subdirectory that no discovery glob matches, and pointing the
+    volatile-count scan at 1.5 MB of base64 image data would false-positive on
+    digit runs inside the encoding.
+    """
+    if not DECK_HTML.exists():
+        pytest.skip("FYP_Viva_Deck.html is not present; run scripts/build_viva_deck_html.py")
+    html_text = DECK_HTML.read_text(encoding="utf-8")
+
+    n_html = html_text.count('<section class="slide')
+    assert n_html == len(deck.slides), f"HTML has {n_html} slides, pptx has {len(deck.slides)}"
+
+    def norm(s: str) -> str:
+        """Compare CONTENT, not presentation.
+
+        The two renderers legitimately differ in casing and separators: the pptx
+        uppercases each kicker in Python, the HTML does it in CSS, and the pptx
+        joins with a spaced middot where the HTML emits an entity. Comparing raw
+        strings flags those as drift, which they are not.
+        """
+        s = html.unescape(s).replace("·", " ").replace("&middot;", " ")
+        return " ".join(s.split()).casefold()
+
+    html_norm = norm(html_text)
+    missing = []
+    for slide in deck.slides:
+        for line in slide_text(slide).split("\n"):
+            candidate = norm(line)
+            if len(candidate) > 25 and candidate not in html_norm:
+                missing.append(line.strip()[:70])
+    assert not missing, f"text present in the pptx but not in the HTML: {missing[:4]}"
 
 
 def test_qa_bank_cheat_table_matches_the_artifacts() -> None:

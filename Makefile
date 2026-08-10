@@ -19,7 +19,7 @@ PYTEST_ARGS ?= -q
 TASK ?=
 AGENT ?=
 
-.PHONY: smoke run matrix analyze prefetch report thesis interim rewrite rewrite-interim report-humanized thesis-humanized interim-humanized claim-registry claim-surfaces verify-claims verify-claim-surfaces architecture-diagram diagrams cluster-generate cluster-submit cluster-dry cluster-check cluster-all cluster-smoke agent-start agent-status agent-check agent-manifest agent-handoff agent-dashboard agent-tc1-checklist harness-eval dashboard
+.PHONY: smoke run matrix analyze prefetch report thesis interim rewrite rewrite-interim viva report-humanized thesis-humanized interim-humanized claim-registry claim-surfaces verify-claims verify-claim-surfaces architecture-diagram diagrams cluster-generate cluster-submit cluster-dry cluster-check cluster-all cluster-smoke agent-start agent-status agent-check agent-manifest agent-handoff agent-dashboard agent-tc1-checklist harness-eval dashboard
 
 dashboard:
 	$(PYTHON) -m streamlit run dashboard/app.py
@@ -123,6 +123,15 @@ rewrite: claim-surfaces
 rewrite-interim: claim-surfaces
 	$(PYTHON) scripts/build_rewritten_fyp_interim_v1.py
 	@touch .local_build_state
+
+# Oral-defence deck (T55, 4/7/8 Dec 2026). Two renderers over ONE source: the HTML
+# builder imports the pptx builder and records its slides, so the showcase copy
+# cannot drift from the graded one. Numbers are read from results_512/analysis at
+# build time and the build FAILS if an ASR contrast ever survives BH correction.
+# Outputs: docs/viva/FYP_Viva_Deck.{pptx,html}
+viva:
+	$(PYTHON) scripts/build_viva_deck.py
+	$(PYTHON) scripts/build_viva_deck_html.py
 
 # Deterministic claim lock (D43): every load-bearing number in the canonical
 # report builder is asserted against the committed analysis artifacts. Also

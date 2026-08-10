@@ -336,7 +336,7 @@ By never writing back. Every rescoring reads `raw.jsonl` and writes a *new* deri
 
 They prove the plumbing, not the physics. Concretely: the config schema rejects bad configs, the SLURM generator emits the right bootstrap block and rejects an ambiguous walltime, the matrix runner loads each model exactly once, a generator returning fewer responses than prompts raises instead of silently dropping them, the judge layer never writes text fields, and ninety-three report numbers match the artefacts. What they do not touch: no test runs on a GPU, none loads a real model, and none validates the NF4 numerics — the model stack is monkeypatched with a dummy loader so the suite runs on my laptop in seconds. So the tests can tell you my pipeline is correct *given* the generations; they cannot tell you the generations are correct.
 
-**Point at:** `pytest --collect-only` → 560; `tests/test_slurm_helpers.py::test_slurm_time_rejects_bare_minutes`; the short-generator `RuntimeError` case in `tests/test_quant_smoke.py`.
+**Point at:** `pytest --collect-only` (read the live number off the screen rather than quoting one); `tests/test_slurm_helpers.py::test_slurm_time_rejects_bare_minutes`; the short-generator `RuntimeError` case in `tests/test_quant_smoke.py`.
 
 **If they push — "do your gates prove they'd catch a regression?":** For the locks I added in the R2 hardening pass, yes — `tests/test_r2_locks_must_fire.py` deliberately regresses each and asserts the gate fires. That's four must-fire tests plus a clean-state test, not blanket coverage of all ninety-three.
 
