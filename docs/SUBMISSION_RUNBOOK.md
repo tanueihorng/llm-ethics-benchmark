@@ -38,19 +38,27 @@ python -m venv .venv && source .venv/bin/activate
 ```
 
 ```bash
+pip install -r requirements-analysis.txt
+```
+
+That is the machine you are almost certainly on: it computes the statistics, runs the
+tests and builds the documents, and it **never loads a model**. The versions are exact
+and are the ones everything here actually passes on.
+
+Only if you are re-running experiments on a GPU do you want the other one:
+
+```bash
 pip install -r requirements.txt
 ```
 
-> **Known problem, and you should know about it before an examiner asks (T60).**
-> `constraints-tested.txt` exists to stop pip resolving to untested major versions, but it
-> **cannot currently be applied**: `pip install -r requirements.txt -c constraints-tested.txt`
-> fails with `ResolutionImpossible`, because four pins in it sit *below* the floors in
-> `requirements.txt` (transformers 4.32.1 < 4.41.0, datasets 2.12.0 < 2.19.0, pyyaml
-> 6.0 < 6.0.0, pytest 7.4.0 < 8.0.0). So a clean install today resolves to **transformers
-> 5.x**, which is exactly what that file was written to prevent. Treat
-> `constraints-tested.txt` as a *record* of the tested analysis interpreter, not as an
-> installable overlay. The analysis replays fine either way — it reads committed sidecars,
-> not models — but do not claim the environment is version-locked, because it is not.
+> **Why there are two, in case an examiner asks (T60).** They describe different
+> machines, and cannot be combined. `requirements.txt` floors transformers at 4.41
+> because the study's Qwen3, Mistral and Phi-4-mini models cannot be loaded below that —
+> verified: the 4.32.1 on this Mac supports Llama and none of the other three. The
+> analysis environment pins 4.32.1 and is unaffected, because it only ever reads
+> committed result files. Until 2026-08-11 this was a single file called
+> `constraints-tested.txt` that tried to be both, and the install command in the README
+> failed outright.
 
 ```bash
 pip install -r requirements-dashboard.txt

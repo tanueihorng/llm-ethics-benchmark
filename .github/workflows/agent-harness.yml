@@ -51,11 +51,14 @@ jobs:
       - name: Install project dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install -r requirements.txt
-          # dashboard/data.py is Streamlit-free and covered by the main suite, so the
-          # dashboard extras carry real test dependencies (plotly, pandas). Omitting
-          # this file aborted collection on tests/test_dashboard_theme.py.
-          python -m pip install -r requirements-dashboard.txt
+          # The ANALYSIS environment, not the GPU pipeline: this job runs the test
+          # suite and builds documents, and nothing here loads a model. Installing
+          # requirements.txt instead would resolve the loose floors to whatever is
+          # newest (transformers 5.x today) and exercise an environment nobody uses.
+          # This file pins the exact versions the suite actually passes on, and it
+          # already carries the dashboard extras that tests/test_dashboard_theme.py
+          # and tests/test_dashboard_data.py need.
+          python -m pip install -r requirements-analysis.txt
           python -m pip install -e .
 
       # T59 (a): D60 untracked every generated .docx, so a clone has no documents to

@@ -331,11 +331,25 @@ python scripts/verify_report_claims.py                                # re-check
 # note: --results-dir defaults to results/ (the retired 128-token secondary tree); the primary study lives in results_512/
 ```
 
-For a faithful environment, install against the tested version set (loose lower bounds otherwise resolve to untested majors):
+There are **two environments**, and which one you want depends on what you are doing.
+
+To re-derive the analysis, run the tests, or rebuild the documents — none of which
+load a model — install the exact set this work was done on:
+
+```bash
+pip install -r requirements-analysis.txt
+```
+
+To re-run the experiments on a GPU, install the pipeline set instead:
 
 ```bash
 pip install -r requirements.txt
 ```
+
+They are **not** interchangeable and cannot be combined with `-c`. `requirements.txt`
+floors transformers at 4.41 because the study's Qwen3, Mistral and Phi-4-mini models
+cannot be loaded below it; the analysis machine pins 4.32.1, which is harmless there
+precisely because it never loads a model.
 
 ---
 
