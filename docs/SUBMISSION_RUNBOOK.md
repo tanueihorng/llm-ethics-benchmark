@@ -74,6 +74,27 @@ npm install
 Only needed to build the older JavaScript documents (v5, v6, thesis, the humanized
 alternates). The two documents you actually submit are built by Python and do not need it.
 
+### One command to run next time you are on TC1
+
+The experiments ran inside the cluster conda environment `fyp-tc1`. The repo records
+that **name** — every sbatch file says `source activate fyp-tc1` — but nowhere records
+what is *in* it. So "the cluster environment is fixed" is currently something you assert
+rather than something you can show.
+
+Next time you log into the TC1 head node, run this once and commit the output:
+
+```bash
+module load anaconda && source activate fyp-tc1 && conda list --export > docs/tc1_environment.txt
+```
+
+Conda environment management is explicitly permitted on the head node (TC1 runbook §
+"Allowed"), so this breaks no policy — it is not running project code.
+
+It takes seconds and it converts the claim into a record: the exact `bitsandbytes`,
+`transformers` and CUDA-side versions that produced every number in the report. Without
+it, an examiner asking "which version of bitsandbytes produced these results?" has no
+answer in the repo, and neither will you in December. Tracked as **T61**.
+
 **LibreOffice** is optional. Only `scripts/report_tools/check_pagination.py` uses it, to
 render a docx and confirm the front-matter page numbers are right. Without LibreOffice that
 check *skips silently* — it does not fail. If you want it, install LibreOffice normally;
