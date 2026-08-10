@@ -2,13 +2,12 @@
 
 ## Mode
 
-Executor → next session. Doubles as fresh-session recovery, because **nothing in the report line
-is committed yet** and that is the first thing the next agent must deal with.
+Executor → next session.
 
 ## Objective
 
-Commit the standing work, then finish the report line: three style residuals, the freeze checklist,
-and the outward tasks that only the student can do.
+Finish the report line: three style residuals, the freeze checklist, and the outward tasks that
+only the student can do.
 
 ## Source Of Truth
 
@@ -23,8 +22,10 @@ and the outward tasks that only the student can do.
 
 **Verified from the repo this session.**
 
-- The last commit is `d7c1a8b` (2026-07-25). Everything after it — the whole v6 / rewrite / audit
-  line, roughly a fortnight of document work — is uncommitted in the working tree.
+- The whole v6 / rewrite / audit line — roughly a fortnight of document work that had been sitting
+  uncommitted — was committed and pushed as `d6fbd03` on 2026-08-02. The working tree is clean.
+- `Examples of Past FYP Papers/` (110 MB of past students' reports and copyrighted papers) is now
+  **gitignored**. It was untracked but not ignored, and this repository is public. Keep it local.
 - `docs/rewritten_fyp_report_v1.docx` is the selected submission candidate (D59, T52). It is
   **57 A4 pages** as rendered by the bundled LibreOffice, up from 56 before this session.
 - `docs/FYP_Report_2026-07-01_v5.docx` and `scripts/build_fyp_report_v5.js` are **byte-identical
@@ -92,8 +93,12 @@ If v5 has changed, stop and restore it with `git checkout HEAD -- <path>` before
 
 ## Risks / Things To Distrust
 
-1. **Uncommitted work is the biggest risk in the repo right now.** A rewritten report, two audits,
-   two new analyses and this session's gap-6 pass exist only on local disk.
+1. **The primary sources are not in the repo and never will be.** `Examples of Past FYP Papers/`
+   is gitignored, so a fresh clone cannot re-read the papers behind Table 6.2 or the corpus study.
+   Two of the five sources ([37], [39]) exist only as local PDFs; the other three are re-readable
+   from arXiv. `PROVENANCE.md` records the locating evidence precisely so a verifier can find each
+   figure again, but it is not a substitute for the source. Do not re-derive these numbers from the
+   provenance file — go back to the paper.
 2. **`v5` carries the same two citation defects** at its own numbering, `[14]` and `[15]`. It was
    left frozen deliberately, on the student's standing instruction. It is flagged, not fixed.
    Decide explicitly rather than discovering it later.
@@ -108,17 +113,15 @@ If v5 has changed, stop and restore it with `git checkout HEAD -- <path>` before
 
 ## Next Actions
 
-1. **Commit.** Suggested split: one commit for the report line through 2026-07-29, one for this
-   session's gap-6 work. Nothing has been pushed.
-2. **T47 (a)** — the three marginal style residuals are all that remains of T47. Everything
+1. **T47 (a)** — the three marginal style residuals are all that remains of T47. Everything
    substantive is closed.
-3. **T50 freeze checklist** — open the chosen docx in Word, `Ctrl+A` then `F9`, confirm the Table
+2. **T50 freeze checklist** — open the chosen docx in Word, `Ctrl+A` then `F9`, confirm the Table
    of Contents populates, export the PDF. The TOC is a real Word field and is blank in every
    non-Word renderer.
-4. **Student-only, in rough priority:** T1 (July email to Dr. Zhang, voice-locked and ready),
+3. **Student-only, in rough priority:** T1 (July email to Dr. Zhang, voice-locked and ready),
    T15 (submit), T34 (Overleaf upload), T3 (`MyTCinfo`), and deleting the OpenAI key now that T35
    is complete.
-5. **Open research, not blocking:** T30b, a second annotator for both human gold sets.
+4. **Open research, not blocking:** T30b, a second annotator for both human gold sets.
 
 ## Do Not Touch / Do Not Revert
 
