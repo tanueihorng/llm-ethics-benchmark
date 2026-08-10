@@ -22,6 +22,7 @@ from __future__ import annotations
 import argparse
 import ast
 import json
+import math
 import re
 import shutil
 import subprocess
@@ -159,33 +160,92 @@ def printed_labels(texts: list[str]) -> list[int | None]:
     return labels
 
 
+LABEL_RE = re.compile(r"((?:Figure|Table)\s+[A-Z0-9]+\.\d+\.)")
+
+# Dropped before measuring caption overlap: they carry no identifying signal and
+# would let a stray sentence score highly on "the/of/and" alone.
+_STOPWORDS = frozenset(
+    "a an and are as at be by for from in into is it its of on or the their this to "
+    "with within under over across using used versus vs per".split()
+)
+
+
+def _content_words(text: str) -> list[str]:
+    return [
+        w for w in re.findall(r"[0-9A-Za-zͰ-Ͽ∆-]+", text.lower())
+        if len(w) > 1 and w not in _STOPWORDS
+    ]
+
+
 def entry_probe(kind: str, title: str) -> str:
     """The shortest string that uniquely identifies this entry in the body.
 
     Figure and table list titles are abbreviated relative to the real captions,
     so those match on the label only. Contents entries reproduce the heading
-    text exactly.
+    text exactly. The label alone is NOT sufficient on its own -- see
+    ``caption_words`` and ``locate``.
     """
     if kind in {"figures", "tables"}:
-        match = re.match(r"((?:Figure|Table)\s+[A-Z0-9]+\.\d+\.)", title)
+        match = LABEL_RE.match(title)
         if match:
             return match.group(1)
     return title
 
 
-def locate(texts: list[str], labels: list[int | None], probe: str) -> int | None:
-    """Printed page of the first numbered page with a line *starting* with ``probe``.
+def caption_words(kind: str, title: str) -> list[str] | None:
+    """Content words following the label, used to confirm a line is the caption.
 
-    Line-start matching is what separates a caption or heading from an in-text
-    cross-reference: "Table A.1. Primary run controls" opens a line, while
-    "summarised in Table A.1" does not.
+    ``None`` for contents entries, whose probe is already the full heading.
     """
+    if kind not in {"figures", "tables"}:
+        return None
+    match = LABEL_RE.match(title)
+    if not match:
+        return None
+    return _content_words(title[match.end():])
+
+
+def locate(
+    texts: list[str],
+    labels: list[int | None],
+    probe: str,
+    caption_words: list[str] | None = None,
+    min_overlap: float = 0.6,
+) -> int | None:
+    """Printed page of the first numbered page whose line *is* this entry.
+
+    Line-start matching separates a caption from most in-text cross-references:
+    "Table A.1. Primary run controls" opens a line, "summarised in Table A.1"
+    usually does not. **Usually is not always**, and that was T57: the Chapter
+    3-4 flow pass reflowed a sentence ending "in Table A.1." onto a line start,
+    and the checker reported Table A.1 on page 18 instead of 46 -- a false
+    mismatch with no pagination error behind it. Line-start position is a
+    property of the current line breaks, so it cannot carry the whole check.
+
+    The fix strengthens the probe rather than relaxing it (D55/D56): when
+    ``caption_words`` is supplied, the line must also repeat enough of the
+    caption's own wording. Overlap rather than an exact prefix, because the
+    front-matter list is an abbreviation of the caption -- "Table 2.1.
+    Positioning of representative prior work" in the list against "Table 2.1.
+    Scoped positioning of representative prior work..." on the page -- so an
+    exact match would fail on real, correct captions.
+    """
+    required = 0
+    if caption_words:
+        required = max(1, math.ceil(min_overlap * len(caption_words)))
+
     for text, label in zip(texts, labels):
         if label is None:
             continue  # front matter: the contents lists live here themselves
         for line in text.splitlines():
-            if line.strip().startswith(probe):
-                return label
+            stripped = line.strip()
+            if not stripped.startswith(probe):
+                continue
+            if required:
+                rest = set(_content_words(stripped[len(probe):]))
+                if sum(1 for w in caption_words if w in rest) < required:
+                    continue  # a cross-reference that merely opens a line
+            return label
     return None
 
 
@@ -205,7 +265,7 @@ def check(docx: Path = REPORT, pdf: Path | None = None) -> dict:
     for kind, entries in claimed.items():
         for title, page in entries:
             probe = entry_probe(kind, title)
-            actual = locate(texts, labels, probe)
+            actual = locate(texts, labels, probe, caption_words(kind, title))
             results.append(
                 {
                     "list": kind,

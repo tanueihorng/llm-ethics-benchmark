@@ -85,3 +85,54 @@ def test_checker_distinguishes_a_caption_from_a_cross_reference() -> None:
     ]
     labels = checker.printed_labels(texts)
     assert checker.locate(texts, labels, "Table A.1.") == 18
+
+
+def test_line_initial_cross_reference_does_not_win_over_the_caption() -> None:
+    """T57: line-start position alone is a property of the current line breaks.
+
+    The Chapter 3-4 flow pass reflowed a sentence ending "in Table A.1." onto a
+    line start, and the checker reported Table A.1 on page 18 instead of 46 -- a
+    false mismatch with no pagination error behind it. The workaround at the time
+    was to reword the sentence, which left the gate green for a reason any future
+    reflow could undo.
+
+    The fix requires the caption's own wording, not just the label. Both halves
+    are asserted here: without the caption words the checker still picks the
+    wrong page (which is exactly the defect), and with them it picks the right
+    one. If someone ever weakens the matcher back, the first assertion is what
+    documents what they are giving up.
+    """
+    checker = load_checker()
+    texts = [
+        # p18: a body sentence that happens to begin a line with the label.
+        "Benchmarking\n18\nrun controls are summarised in\n"
+        "Table A.1. The remaining decoding settings follow the same policy.",
+        # p46: the real caption.
+        "Benchmarking\n46\nTable A.1. Primary run controls",
+    ]
+    labels = checker.printed_labels(texts)
+    words = checker.caption_words("tables", "Table A.1. Primary run controls")
+
+    assert checker.locate(texts, labels, "Table A.1.") == 18, (
+        "label-only matching should still be fooled; if this changed, the "
+        "regression test below is no longer testing anything"
+    )
+    assert checker.locate(texts, labels, "Table A.1.", words) == 46
+
+
+def test_caption_overlap_tolerates_an_abbreviated_front_matter_title() -> None:
+    """The list is an abbreviation of the caption, so exact prefix would misfire.
+
+    "Table 2.1. Positioning of representative prior work" in the List of Tables
+    against "Table 2.1. Scoped positioning of representative prior work..." on
+    the page. Overlap accepts that; an exact match would report not_found on a
+    correct document, which is a worse failure than the one being fixed.
+    """
+    checker = load_checker()
+    texts = [
+        "Benchmarking\n10\nTable 2.1. Scoped positioning of representative prior "
+        "work. Entries are compiled from each cited paper's own reporting.",
+    ]
+    labels = checker.printed_labels(texts)
+    words = checker.caption_words("tables", "Table 2.1. Positioning of representative prior work")
+    assert checker.locate(texts, labels, "Table 2.1.", words) == 10
