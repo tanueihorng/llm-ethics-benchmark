@@ -19,7 +19,7 @@ PYTEST_ARGS ?= -q
 TASK ?=
 AGENT ?=
 
-.PHONY: smoke run matrix analyze prefetch report thesis interim report-humanized thesis-humanized interim-humanized claim-registry claim-surfaces verify-claims verify-claim-surfaces architecture-diagram diagrams cluster-generate cluster-submit cluster-dry cluster-check cluster-all cluster-smoke agent-start agent-status agent-check agent-manifest agent-handoff agent-dashboard agent-tc1-checklist harness-eval dashboard
+.PHONY: smoke run matrix analyze prefetch report thesis interim rewrite rewrite-interim report-humanized thesis-humanized interim-humanized claim-registry claim-surfaces verify-claims verify-claim-surfaces architecture-diagram diagrams cluster-generate cluster-submit cluster-dry cluster-check cluster-all cluster-smoke agent-start agent-status agent-check agent-manifest agent-handoff agent-dashboard agent-tc1-checklist harness-eval dashboard
 
 dashboard:
 	$(PYTHON) -m streamlit run dashboard/app.py
@@ -103,6 +103,25 @@ diagrams:
 
 report: claim-surfaces
 	NODE_PATH=$$(npm root -g) node scripts/build_fyp_report_v5.js
+	@touch .local_build_state
+
+# The corpus-informed rewrite — the SUBMISSION CANDIDATE selected in T52/D59.
+# `make report` above still builds v5, which remains the canonical build path until
+# a deliberate promotion (a T15 decision); these targets exist because until
+# 2026-08-10 the Makefile had no way at all to rebuild the document being submitted,
+# so the only route was knowing the script path by heart.
+# Python builders, not docx-js: use $(PYTHON), no NODE_PATH. Needs python-docx.
+# Output: docs/rewritten_fyp_report_v1.docx
+rewrite: claim-surfaces
+	$(PYTHON) scripts/build_rewritten_fyp_report_v1.py
+	@touch .local_build_state
+
+# Interim-submission build of the same prose (T53, due 2026-08-24). NOTE: this
+# imports the report builder and calls build_report(), so it rewrites
+# docs/rewritten_fyp_report_v1.docx as a side effect before writing its own output.
+# Output: docs/rewritten_fyp_interim_v1.docx
+rewrite-interim: claim-surfaces
+	$(PYTHON) scripts/build_rewritten_fyp_interim_v1.py
 	@touch .local_build_state
 
 # Deterministic claim lock (D43): every load-bearing number in the canonical

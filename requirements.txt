@@ -23,6 +23,21 @@ tiktoken>=0.7.0
 # HarmBench scorer (harmbench_cls) and the rest of the pipeline do not need it.
 openai>=1.0.0
 
+# Required to build and check the submission documents. python-docx builds the
+# corpus-informed rewrite (scripts/build_rewritten_fyp_report_v1.py and its interim
+# sibling — the artefacts actually submitted); PyMuPDF reads the rendered PDF in
+# scripts/report_tools/check_pagination.py. Neither was declared until 2026-08-10,
+# so a fresh `pip install -r requirements.txt` could not rebuild the report, and
+# tests/test_report_pagination.py silently `importorskip`-ed its way to green.
+python-docx>=1.1.0
+PyMuPDF>=1.24.0
+
+# Required to regenerate the figures and to re-run the post-hoc analyses whose
+# outputs are committed under results_512/analysis/. Undeclared until 2026-08-10.
+matplotlib>=3.7.0          # scripts/make_figures.py
+scipy>=1.11.0              # scripts/refusal_margin_analysis.py
+scikit-learn>=1.3.0        # scripts/refusal_margin_analysis.py
+
 # Development / testing
 pytest>=8.0.0
 pytest-cov>=5.0.0

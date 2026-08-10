@@ -19,7 +19,13 @@ jobs:
       - name: Install lightweight harness dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install pytest pyyaml
+          # `datasets` looks out of place in a "lightweight" job, but it is required:
+          # tests/conftest.py imports the legacy loaders in ethical_benchmark/datasets/,
+          # each of which does `from datasets import load_dataset` at module scope, so
+          # collecting ANY test needs it. Without it harness_eval.py aborts at collection
+          # (ModuleNotFoundError: datasets) — which it did on every run from 2026-07-25.
+          # It stays lightweight in the sense that matters: no torch, no transformers.
+          python -m pip install pytest pyyaml datasets
 
       - name: Run lightweight agent checks
         run: python scripts/agent_check.py --skip-pytest --skip-diff-check
@@ -46,7 +52,26 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install -r requirements.txt
+          # dashboard/data.py is Streamlit-free and covered by the main suite, so the
+          # dashboard extras carry real test dependencies (plotly, pandas). Omitting
+          # this file aborted collection on tests/test_dashboard_theme.py.
+          python -m pip install -r requirements-dashboard.txt
           python -m pip install -e .
+
+      # T59 (a): D60 untracked every generated .docx, so a clone has no documents to
+      # check and the document gates silently stop running — measured in a throwaway
+      # clone, 109 surface checks against 342 locally. The builders ARE tracked and
+      # deterministic, so CI rebuilds the submission line before pytest. One command
+      # produces both files: the interim builder imports the report builder and calls
+      # build_report() first. Measured effect: 109 -> 151 surface checks, and
+      # test_report_scope_invariants.py / test_rewritten_report_v1.py run instead of skip.
+      # Still NOT restored: the five JS-built documents (v5, v6, thesis, both humanized)
+      # need Node + `npm install` — that is T59 (b) — and test_report_pagination.py
+      # keeps skipping because it shells out to LibreOffice, which is absent here.
+      - name: Build the submission-line documents
+        run: |
+          python scripts/claim_registry.py --write
+          python scripts/build_rewritten_fyp_interim_v1.py
 
       - name: Run full pytest suite
         run: pytest tests/ -q
