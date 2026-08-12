@@ -69,19 +69,45 @@ jobs:
           python -m pip install -e .
 
       # T59 (a): D60 untracked every generated .docx, so a clone has no documents to
-      # check and the document gates silently stop running — measured in a throwaway
-      # clone, 109 surface checks against 342 locally. The builders ARE tracked and
-      # deterministic, so CI rebuilds the submission line before pytest. One command
-      # produces both files: the interim builder imports the report builder and calls
-      # build_report() first. Measured effect: 109 -> 151 surface checks, and
-      # test_report_scope_invariants.py / test_rewritten_report_v1.py run instead of skip.
-      # Still NOT restored: the five JS-built documents (v5, v6, thesis, both humanized)
-      # need Node + `npm install` — that is T59 (b) — and test_report_pagination.py
-      # keeps skipping because it shells out to LibreOffice, which is absent here.
+      # check and the document gates silently stop running. The builders ARE tracked
+      # and deterministic, so CI rebuilds them before pytest. One command produces
+      # both submission-line files: the interim builder imports the report builder
+      # and calls build_report() first.
       - name: Build the submission-line documents
         run: |
           python scripts/claim_registry.py --write
           python scripts/build_rewritten_fyp_interim_v1.py
+
+      # T59 (b): the seven docx-js documents (v5, v6, thesis, interim, and the three
+      # humanized alternates) need Node. Counted in a throwaway clone of HEAD rather
+      # than estimated -- bare clone 119 surface checks, 161 after the step above,
+      # 308 after this one, against 394 on the author's machine.
+      #
+      # The remaining 86 are NOT a coverage gap to close here. Every one is either
+      # gitignored correspondence (a standing privacy decision) or the local
+      # fyp_submission/ staging tree, and neither can exist on a runner. Note the
+      # LaTeX mirrors specifically cannot be rebuilt from a clone at all: they need
+      # fyp_submission/report_latex/final_thesis/Thesis.cls, an NTU-supplied class
+      # file that is gitignored, so `make rewrite-latex` fails there. That is a real
+      # single-machine dependency in the LaTeX submission line, not a CI problem.
+      #
+      # Still skipping regardless of this change: test_report_pagination.py shells out
+      # to LibreOffice, which is absent on the runner.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Build the docx-js documents
+        run: |
+          npm ci
+          node scripts/build_fyp_report_v5.js
+          node scripts/build_fyp_report_v6.js
+          node scripts/build_fyp_thesis_v4.js
+          node scripts/build_fyp_interim.js
+          node scripts/build_fyp_report_humanized.js
+          node scripts/build_fyp_thesis_humanized.js
+          node scripts/build_fyp_interim_humanized.js
 
       - name: Run full pytest suite
         run: pytest tests/ -q
