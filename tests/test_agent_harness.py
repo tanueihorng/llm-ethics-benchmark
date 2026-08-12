@@ -638,3 +638,38 @@ def test_doc_sync_gate_tolerates_the_intentional_filename_mirror(tmp_path: Path)
     for name in ("CLAUDE.md", "AGENTS.md"):
         shutil.copy(repo / name, tmp_path / name)
     assert check_agent_docs_sync(tmp_path).status == "pass"
+
+
+def test_next_action_follows_the_nearest_deadline_not_a_hand_ordered_list() -> None:
+    """The handoff's "next action" used a priority list frozen in June.
+
+    It named T21 and T22 (both closed that month) and ranked T15, due 19 Oct,
+    above T53, due 24 Aug — so on 2026-08-13, with the interim submission
+    eleven days out, the generated handoff pointed a fresh session at October.
+    The dates live in the task text; the suggestion now reads them.
+    """
+    from ethical_benchmark.harness.agent import _suggest_next_action
+
+    status = {
+        "git": {"changed_files": []},
+        "project_log": {"open_actions": [
+            "**T15. Submit the final report — DUE Mon 19 Oct 2026 (CCDS deadline).**",
+            "**T53. Submit the interim report — DUE Mon 24 Aug 2026 (CCDS deadline).**",
+            "**T54. Amended final — DUE Fri 13 Nov 2026 (CCDS deadline).**",
+        ]},
+    }
+    assert "**T53." in _suggest_next_action(status), (
+        "next action ignored the nearest DUE date; a hand-ordered list has "
+        "gone stale again"
+    )
+
+
+def test_next_action_falls_back_when_no_deadline_is_left() -> None:
+    """Undated backlog must still get a suggestion rather than nothing."""
+    from ethical_benchmark.harness.agent import _suggest_next_action
+
+    status = {
+        "git": {"changed_files": []},
+        "project_log": {"open_actions": ["**T3. Run `MyTCinfo` on TC1.**"]},
+    }
+    assert "**T3." in _suggest_next_action(status)

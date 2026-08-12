@@ -710,13 +710,47 @@ def _suggest_next_action(status: dict[str, Any]) -> str:
             return "Run make agent-check, review the diff, then commit or hand off the current change."
         return "Finish the current change, update docs/PROJECT_LOG.md, then run make agent-check."
     open_actions = status["project_log"]["open_actions"]
-    for preferred in ("T21", "T22", "T15", "T1", "T3"):
+    dated = _actions_by_due_date(open_actions)
+    if dated:
+        return f"Next project action from PROJECT_LOG.md: {dated[0][1]}"
+    # No dated deadline left. The list below is a hand-ordered fallback and has
+    # been wrong before -- it named T21 and T22, both closed in June -- so it is
+    # consulted only after the dates, never instead of them.
+    for preferred in ("T15", "T1", "T3"):
         for action in open_actions:
             if f"**{preferred}." in action:
                 return f"Next project action from PROJECT_LOG.md: {action}"
     if open_actions:
         return f"Next project action from PROJECT_LOG.md: {open_actions[0]}"
     return "No open actions found; refresh PROJECT_LOG.md before starting new work."
+
+
+_DUE_RE = re.compile(
+    r"DUE\s+(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun)\s+(\d{1,2})\s+"
+    r"(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{4})",
+    re.IGNORECASE,
+)
+_MONTHS = {m: i for i, m in enumerate(
+    ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"], 1)}
+
+
+def _actions_by_due_date(open_actions: list[str]) -> list[tuple[datetime, str]]:
+    """Open actions that carry an explicit `DUE <Day> <D> <Mon> <YYYY>`, soonest first.
+
+    The hardcoded priority list this replaced was written in June and never
+    revisited: it ranked T15 (19 Oct) above T53 (24 Aug), so the generated
+    handoff pointed a fresh session at the October deadline while the August one
+    was eleven days away. The school-set dates are IN the task text; read them
+    rather than maintaining a parallel ordering by hand.
+    """
+    dated: list[tuple[datetime, str]] = []
+    for action in open_actions:
+        match = _DUE_RE.search(action)
+        if not match:
+            continue
+        day, month, year = match.groups()
+        dated.append((datetime(int(year), _MONTHS[month.lower()], int(day)), action))
+    return sorted(dated, key=lambda item: item[0])
 
 
 def build_agent_status(repo_root: Path, policy: dict[str, Any] | None = None) -> dict[str, Any]:
