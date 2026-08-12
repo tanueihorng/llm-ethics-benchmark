@@ -1,6 +1,6 @@
 # Handoff
 
-Last refreshed: 2026-08-13 00:36:32 UTC+8 by Codex harness.
+Last refreshed: 2026-08-13 00:37:29 UTC+8 by Codex harness.
 
 ## Mode
 
@@ -48,7 +48,7 @@ python scripts/generate_agent_dashboard.py
 
 ## Next Actions
 
-1. Finish the current change, update docs/PROJECT_LOG.md, then run make agent-check.
+1. Next project action from PROJECT_LOG.md: - [ ] **T53. Submit the interim report to Dr. Zhang — DUE Mon 24 Aug 2026 (CCDS deadline, Sem 1 Wk 3).** School-set date, recorded 2026-08-10 from the CCDS FYP timeline; see the deadline table in §1. The deliverable exists and is current: `docs/FYP_Interim_2026-07-10.docx` (registry-backed; LaTeX mirror in `fyp_submission/report_latex/interim_report/` compiles clean, named PDF copy byte-matches). **The artefact to send is now `docs/rewritten_fyp_interim_v1.docx`** (built 2026-08-10 from `scripts/build_rewritten_fyp_interim_v1.py`; same body as the submission candidate, titled "Interim Report"), which supersedes `docs/FYP_Interim_2026-07-10.docx` for this purpose and sidesteps T56. **This is a send action, not a writing action** — decide docx vs PDF (if PDF, open in Word and update fields first so the TOC populates) and whether the July email (T1) carries it or a separate submission message does. **Ordering constraint:** the drafted August email (T1b in `todo.md`) opens by asserting the interim report has been submitted, so its send gate opens only after T53 is done; the July email (T1) should go first or be folded in. User-owned action.
 2. If editing report-worthy content, edit `scripts/build_fyp_report_v5.js` and run `make report`.
 3. Regenerate this handoff and the dashboard after meaningful harness or state changes.
 
