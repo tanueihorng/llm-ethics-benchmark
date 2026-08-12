@@ -184,6 +184,54 @@ def test_every_current_builder_is_hedge_scanned() -> None:
     )
 
 
+# Prose surfaces that are current but carry no first-person claim about the study,
+# so a claim-fitness scan has nothing to assert about them. Empty today, and kept
+# so a future exclusion has to be written down rather than assumed.
+HEDGE_PROSE_EXEMPT: dict[str, str] = {}
+
+
+def test_every_current_prose_surface_is_hedge_scanned() -> None:
+    """The same symmetry question as above, asked about prose instead of builders.
+
+    T56 was closed by widening the scan over the four missing BUILDERS, and the
+    test written to prevent a recurrence enumerated `scripts/build_*` — so it
+    could only ever re-find that one shape of the defect. Every current surface
+    that is not a builder stayed outside both, and on 2026-08-13 the field guide
+    was found carrying the C07 over-claim twice, plus "INT8 is effectively free"
+    for a study that measures no cost axis, under a green gate. Same defect,
+    same week it was declared closed, one door over.
+
+    Enumerating from the registry rather than from the scan list is the point
+    (D54): a surface is in scope because it is CURRENT, not because someone
+    remembered to list it.
+    """
+    import yaml
+
+    surfaces = yaml.safe_load((REPO_ROOT / "configs" / "claim_surfaces.yaml").read_text())
+    scanned = set(load_policy(REPO_ROOT)["epistemic_hedge"]["scan_paths"])
+
+    current_prose = {
+        s["path"] for s in surfaces["surfaces"]
+        if s.get("lifecycle") == "current"
+        and not s["path"].startswith("scripts/build_")
+        and Path(s["path"]).suffix in {".md", ".html"}
+    }
+    assert current_prose, "no current prose surfaces found; the registry shape changed"
+
+    unscanned = sorted(current_prose - scanned - set(HEDGE_PROSE_EXEMPT))
+    assert not unscanned, (
+        "current prose surfaces outside the claim-fitness scan: "
+        f"{unscanned}. Either add them to epistemic_hedge.scan_paths (and fix what "
+        "fires), or add them to HEDGE_PROSE_EXEMPT with the reason. A deck or an "
+        "instruction file states claims to a reader exactly as a report does."
+    )
+    stale_exempt = sorted(set(HEDGE_PROSE_EXEMPT) - current_prose)
+    assert not stale_exempt, (
+        f"HEDGE_PROSE_EXEMPT names surfaces that are no longer current prose: "
+        f"{stale_exempt}. Remove them so the exemption list cannot quietly grow."
+    )
+
+
 def test_hedge_scan_is_clean_on_the_real_repo() -> None:
     policy = load_policy(REPO_ROOT)
     result = _scan_policy_group(REPO_ROOT, policy["epistemic_hedge"], "epistemic-hedge")

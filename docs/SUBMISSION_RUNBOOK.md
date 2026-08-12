@@ -131,12 +131,17 @@ put the progress framing in the covering email rather than in the document. A fi
 report submitted at the interim stage is not a defect — being *ahead* is not a problem — but
 an examiner who expects a progress statement should not have to hunt for one.
 
-> The rewrite-interim also carries a real advantage: `docs/FYP_Interim_2026-07-10.docx`
-> contains a claim the project itself verified as an over-claim — it calls the gpt-4o second
-> judge "architecturally independent" four times, which cannot be asserted about a
-> closed-weight model. That phrase was removed from the rewrite line and appears **0 times**
-> in `rewritten_fyp_interim_v1.docx`. It is still present in the old interim, and in the
-> thesis (3×) and v5 (2×). Tracked as **T56**.
+> **This paragraph used to give a third reason to prefer the rewrite-interim, and that
+> reason has expired.** It said the old interim calls the gpt-4o second judge
+> "architecturally independent" four times — a claim the project verified as an over-claim,
+> since a closed-weight model's architecture is not public. **T56 closed on 2026-08-11 and
+> rebuilt that document.** Re-counted on 2026-08-13 in the rendered files, not the builders:
+> the phrase appears **0×** in the old interim, **0×** in the rewrite-interim, **0×** in the
+> thesis and **0×** in v6. It survives only in v5 (2×) and its humanized twin (2×), both
+> knowingly frozen comparison artifacts nobody is submitting.
+>
+> So this is no longer a differentiator. **Decide on length and framing alone** — the two
+> points above.
 
 **Whichever you send, do this:**
 

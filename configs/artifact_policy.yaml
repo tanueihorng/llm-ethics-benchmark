@@ -144,6 +144,22 @@ epistemic_hedge:
     - scripts/build_fyp_thesis_v4.js
     - scripts/build_fyp_interim_humanized.js
     - scripts/build_fyp_thesis_humanized.js
+    # 2026-08-13. T56 closed the BUILDER half of the door and left the prose half
+    # open: the scan and its symmetry test both enumerated `scripts/build_*`, so
+    # every current non-builder surface — the two agent instruction files, the two
+    # supervisor emails, the two status decks and the field guide — sat outside it.
+    # Measured before widening: only the field guide fired (4 hits, all real —
+    # the C07 over-claim twice, an absolute "are unaffected", and "INT8 is
+    # effectively free" for a study that measures no cost axis at all). All four
+    # were reworded, so this widening is satisfied by the TEXT, not by a waiver.
+    # A claim made to the supervisor is still a claim; the emails are in scope.
+    - AGENTS.md
+    - CLAUDE.md
+    - docs/project_field_guide.html
+    - docs/fyp_status_2026-07.html
+    - docs/fyp_status_2026-07_v2.html
+    - docs/email_drZhang_july.md
+    - docs/email_drZhang_august.md
     # DELIBERATELY EXCLUDED, recorded rather than left implicit (D54 symmetry): the v5
     # line carries 34 and 33 hits and is a knowingly frozen comparison artifact that
     # T48 left byte-identical on purpose, so scanning it would fail the gate
@@ -158,6 +174,15 @@ epistemic_hedge:
     - '\beffectively free\b'
     # Too narrow: missed "effectively a free precision point" (re-audit 2026-07-26).
     - '\beffectively a free\b'
+    # Still too narrow: the 2026-07-26 re-audit widened "effectively" and stopped
+    # there, so "INT8 is ESSENTIALLY free" survived in nine places across four
+    # current builders and the field guide, under a green gate, until 2026-08-13.
+    # The hedge word is the variable; generalise over it rather than chase it.
+    # (Legitimate use is a claim of statistical equivalence with a stated margin,
+    # which the artifact supports — capability_equivalence.json, TOST, 10/10 — so
+    # the fix is to state the margin, never to say "free".)
+    - '\b(essentially|practically|virtually|basically|near(?:ly)?|almost)\s+(free|costless|cost-free)\b'
+    - '\b(at no cost|for free|costs nothing|free lunch)\b'
     - '\bfree precision point\b'
     - '\bno capability delta\b'
     # C07/C08: independence properties that the public record cannot establish
