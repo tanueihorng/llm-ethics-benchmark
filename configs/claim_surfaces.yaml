@@ -39,6 +39,13 @@ discovery:
   - fyp_submission/report_latex/interim_report/mythesis.tex
   - fyp_submission/report_latex/interim_report/mythesis.pdf
   - fyp_submission/report_latex/interim_report_overleaf.zip
+  - scripts/build_rewritten_latex.py
+  - fyp_submission/report_latex/rewritten_final/mythesis.tex
+  - fyp_submission/report_latex/rewritten_final/mythesis.pdf
+  - fyp_submission/report_latex/rewritten_final_overleaf.zip
+  - fyp_submission/report_latex/rewritten_interim/mythesis.tex
+  - fyp_submission/report_latex/rewritten_interim/mythesis.pdf
+  - fyp_submission/report_latex/rewritten_interim_overleaf.zip
 
 surfaces:
   - {id: agents, path: AGENTS.md, lifecycle: current, profiles: [volatile_free]}
@@ -99,6 +106,10 @@ surfaces:
   # T53 interim build. It imports the rewrite builder rather than copying it, so its
   # prose cannot drift from the report; only the self-naming strings differ.
   - {id: rewritten_interim_v1_builder, path: scripts/build_rewritten_fyp_interim_v1.py, lifecycle: current, profiles: [volatile_free]}
+  # LaTeX/Overleaf mirrors of the same prose. Same construction again: it records
+  # the rewrite builder's output instead of transcribing it, so the tex cannot
+  # drift from the docx the way the two hand-maintained mirrors can (T44 FS-16).
+  - {id: rewritten_latex_builder, path: scripts/build_rewritten_latex.py, lifecycle: current, profiles: [volatile_free]}
   - {id: report_humanized_builder, path: scripts/build_fyp_report_humanized.js, lifecycle: current, profiles: [registry_consumer, volatile_free]}
   - {id: thesis_builder, path: scripts/build_fyp_thesis_v4.js, lifecycle: current, profiles: [registry_consumer, volatile_free]}
   - {id: thesis_humanized_builder, path: scripts/build_fyp_thesis_humanized.js, lifecycle: current, profiles: [registry_consumer, volatile_free]}
@@ -192,6 +203,36 @@ surfaces:
     profiles: [zip_matches_tex]
     source: fyp_submission/report_latex/interim_report/mythesis.tex
     zip_member: interim_report/mythesis.tex
+  # LaTeX mirrors of the rewrite line (T52/D59 submission candidate). Unlike the
+  # two mirrors above these are GENERATED from the docx builder by
+  # scripts/build_rewritten_latex.py, so they cannot drift from the submitted
+  # prose -- the FS-16 drift hole does not apply to them.
+  - id: local_rewrite_final_tex
+    path: fyp_submission/report_latex/rewritten_final/mythesis.tex
+    lifecycle: local-generated
+    availability: local_optional
+    profiles: [latex_primary, volatile_free]
+  - id: local_rewrite_interim_tex
+    path: fyp_submission/report_latex/rewritten_interim/mythesis.tex
+    lifecycle: local-generated
+    availability: local_optional
+    profiles: [latex_primary, volatile_free]
+  - {id: local_rewrite_final_pdf, path: fyp_submission/report_latex/rewritten_final/mythesis.pdf, lifecycle: local-generated, availability: local_optional, source: fyp_submission/report_latex/rewritten_final/mythesis.tex, profiles: [pdf, fresh_from_source]}
+  - {id: local_rewrite_interim_pdf, path: fyp_submission/report_latex/rewritten_interim/mythesis.pdf, lifecycle: local-generated, availability: local_optional, source: fyp_submission/report_latex/rewritten_interim/mythesis.tex, profiles: [pdf, fresh_from_source]}
+  - id: local_rewrite_final_zip
+    path: fyp_submission/report_latex/rewritten_final_overleaf.zip
+    lifecycle: local-generated
+    availability: local_optional
+    profiles: [zip_matches_tex]
+    source: fyp_submission/report_latex/rewritten_final/mythesis.tex
+    zip_member: rewritten_final/mythesis.tex
+  - id: local_rewrite_interim_zip
+    path: fyp_submission/report_latex/rewritten_interim_overleaf.zip
+    lifecycle: local-generated
+    availability: local_optional
+    profiles: [zip_matches_tex]
+    source: fyp_submission/report_latex/rewritten_interim/mythesis.tex
+    zip_member: rewritten_interim/mythesis.tex
   - {id: local_july_email, path: fyp_submission/emails/email_drZhang_july.md, lifecycle: local-current, availability: local_optional, profiles: [volatile_free]}
   - {id: local_august_email, path: fyp_submission/emails/email_drZhang_august.md, lifecycle: local-current, availability: local_optional, profiles: [volatile_free]}
   - {id: local_june_email, path: fyp_submission/emails/email_drZhang_june.md, lifecycle: snapshot, availability: local_optional, profiles: []}

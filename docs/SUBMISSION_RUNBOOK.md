@@ -111,6 +111,11 @@ There are two candidates and they are **not** equivalent.
 | `docs/rewritten_fyp_interim_v1.docx` | 57 pp | **Yes, anywhere** | **No** — same body as the final |
 | `docs/FYP_Interim_2026-07-10.docx` | 38 pp | Word only (blank elsewhere until F9) | **Yes** — has a progress chapter |
 
+> A LaTeX build of the first candidate now exists too —
+> `fyp_submission/report_latex/rewritten_interim/mythesis.pdf`, 67 pages (10 front matter +
+> 57 numbered), same prose, generated from the same builder. Submit whichever format you
+> prefer; the docx is the shorter of the two on a physical-page count.
+
 **Two things to decide, and they pull in opposite directions.**
 
 1. **Length.** The school guidance on file says an interim report is *about 50% of the
@@ -158,6 +163,19 @@ make rewrite-interim
 effect, because it imports the report builder rather than copying its prose.
 
 ```bash
+make rewrite-latex
+```
+→ `fyp_submission/report_latex/rewritten_final/` and `rewritten_interim/`, plus an Overleaf
+zip beside each. **These are the LaTeX versions of the two documents you actually submit.**
+They are generated from the same builder as the docx — the prose is recorded, not retyped —
+so they cannot drift from it. Compiles both with `tectonic` if it is installed.
+
+> **The two older LaTeX folders are not your submission.** `final_thesis/` and
+> `interim_report/` mirror the *previous* document line (the thesis and the old interim),
+> are maintained by hand, and were last built in July. They still compile and are kept as
+> history. If you want the submitted report in Overleaf, use the `rewritten_*` bundles.
+
+```bash
 make report
 ```
 → `docs/FYP_Report_2026-07-01_v5.docx`. **This is NOT your submission document.** v5 is the
@@ -186,6 +204,7 @@ document you are exporting. Measured, not assumed:
 |---|---|
 | `rewritten_fyp_report_v1.docx` | **Populated** — carries a cached result |
 | `rewritten_fyp_interim_v1.docx` | **Populated** — carries a cached result |
+| `rewritten_{final,interim}/mythesis.pdf` | **N/A** — LaTeX builds its own contents page |
 | `FYP_Interim_2026-07-10.docx` | **Blank** |
 | `FYP_Report_2026-07-01_v5.docx` | **Blank** |
 | `FYP_Report_2026-07-25_v6.docx` | **Blank** |

@@ -16,6 +16,7 @@ Mirrors are gitignored → every check SKIPS gracefully on a fresh clone.
 
 from __future__ import annotations
 
+import importlib.util
 from pathlib import Path
 
 import pytest
@@ -115,3 +116,82 @@ def test_gate_quiet_on_clean_pair() -> None:
     if not THESIS_TEX.exists():
         pytest.skip("mirror absent")
     assert not check_stale(THESIS_TEX.read_text(encoding="utf-8"), interim=False)
+
+
+# ---------------------------------------------------------------------------
+# Generated rewrite-line mirrors (scripts/build_rewritten_latex.py).
+#
+# These are a different class of artefact from the two above. The hand-maintained
+# mirrors need a drift gate because a human retypes their prose; these are recorded
+# from the docx builder, so prose drift is structurally impossible. What CAN break
+# is the part the recorder does not derive: the self-naming cover, which LaTeX draws
+# from Thesis.cls rather than from mythesis.tex. The first build of that script
+# passed a tex-only check while rendering a "final" title page reading INTERIM
+# REPORT, so these lock the class file, not the tex.
+# ---------------------------------------------------------------------------
+
+REWRITE_FINAL = ROOT / "fyp_submission/report_latex/rewritten_final"
+REWRITE_INTERIM = ROOT / "fyp_submission/report_latex/rewritten_interim"
+
+FINAL_COVER = "FINAL YEAR PROJECT REPORT"
+INTERIM_COVER = "FINAL YEAR PROJECT --- INTERIM REPORT"
+
+
+def _cls(tree: Path) -> str:
+    return _require(tree / "Thesis.cls")
+
+
+def cover_problems(cls_text: str, *, interim: bool) -> list[str]:
+    """Return the ways a class file misnames its document (empty = correct)."""
+    want = INTERIM_COVER if interim else FINAL_COVER
+    other = FINAL_COVER if interim else INTERIM_COVER
+    problems = []
+    if cls_text.count(want) != 1:
+        problems.append(f"expected 1 {want!r}, found {cls_text.count(want)}")
+    if other in cls_text:
+        problems.append(f"also names itself {other!r}")
+    title_block = cls_text.split("maketitleforreview")[0]
+    if not interim and "interim" in title_block.lower():
+        problems.append("'interim' survives in the final title page")
+    return problems
+
+
+@pytest.mark.parametrize("tree,interim", [(REWRITE_FINAL, False), (REWRITE_INTERIM, True)])
+def test_generated_mirror_names_itself_correctly(tree: Path, interim: bool) -> None:
+    problems = cover_problems(_cls(tree), interim=interim)
+    assert not problems, f"{tree.name}/Thesis.cls: {problems}"
+
+
+def test_generated_mirrors_share_one_body() -> None:
+    """The interim and final trees must differ ONLY in how they name themselves."""
+    final = _require(REWRITE_FINAL / "mythesis.tex").splitlines()
+    interim = _require(REWRITE_INTERIM / "mythesis.tex").splitlines()
+    assert len(final) == len(interim), "trees have different line counts"
+    differing = [a for a, b in zip(final, interim) if a != b]
+    assert len(differing) == 1, f"expected 1 differing line (the header), got {len(differing)}"
+    assert differing[0].lstrip("%").strip().startswith("FINAL YEAR PROJECT")
+
+
+def test_generated_mirror_has_no_unmapped_unicode() -> None:
+    """A missing escape silently renders as mojibake rather than failing."""
+    spec = importlib.util.spec_from_file_location(
+        "build_rewritten_latex", ROOT / "scripts/build_rewritten_latex.py"
+    )
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    tex = _require(REWRITE_FINAL / "mythesis.tex")
+    assert not module.unknown_non_ascii(tex), "unmapped non-ASCII reached the tex"
+
+
+# ---- must-fire self-tests ----
+
+def test_cover_gate_fires_on_swapped_cover() -> None:
+    assert cover_problems(f"\\textbf{{\\large {INTERIM_COVER}}}", interim=False)
+
+
+def test_cover_gate_fires_on_missing_cover() -> None:
+    assert cover_problems("a class file that names nothing", interim=True)
+
+
+def test_cover_gate_quiet_on_correct_cover() -> None:
+    assert not cover_problems(f"\\textbf{{\\large {FINAL_COVER}}}", interim=False)

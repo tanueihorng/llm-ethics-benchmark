@@ -19,7 +19,7 @@ PYTEST_ARGS ?= -q
 TASK ?=
 AGENT ?=
 
-.PHONY: backup smoke run matrix analyze prefetch report thesis interim rewrite rewrite-interim viva report-humanized thesis-humanized interim-humanized claim-registry claim-surfaces verify-claims verify-claim-surfaces architecture-diagram diagrams cluster-generate cluster-submit cluster-dry cluster-check cluster-all cluster-smoke agent-start agent-status agent-check agent-manifest agent-handoff agent-dashboard agent-tc1-checklist harness-eval dashboard
+.PHONY: backup smoke run matrix analyze prefetch report thesis interim rewrite rewrite-interim rewrite-latex viva report-humanized thesis-humanized interim-humanized claim-registry claim-surfaces verify-claims verify-claim-surfaces architecture-diagram diagrams cluster-generate cluster-submit cluster-dry cluster-check cluster-all cluster-smoke agent-start agent-status agent-check agent-manifest agent-handoff agent-dashboard agent-tc1-checklist harness-eval dashboard
 
 dashboard:
 	$(PYTHON) -m streamlit run dashboard/app.py
@@ -123,6 +123,15 @@ rewrite: claim-surfaces
 rewrite-interim: claim-surfaces
 	$(PYTHON) scripts/build_rewritten_fyp_interim_v1.py
 	@touch .local_build_state
+
+# Overleaf/LaTeX mirrors of the rewrite line, GENERATED from the docx builder rather
+# than hand-maintained: the builder's content helpers are swapped for recorders, so
+# the tex carries the same prose and the same registry-derived numbers as the docx.
+# The two older mirrors (final_thesis/, interim_report/) track the superseded
+# JS builders and are left untouched. --compile verifies with tectonic if installed.
+# Outputs: fyp_submission/report_latex/rewritten_{final,interim}/ + _overleaf.zip
+rewrite-latex: claim-surfaces
+	$(PYTHON) scripts/build_rewritten_latex.py --compile
 
 # Oral-defence deck (T55, 4/7/8 Dec 2026). Two renderers over ONE source: the HTML
 # builder imports the pptx builder and records its slides, so the showcase copy
