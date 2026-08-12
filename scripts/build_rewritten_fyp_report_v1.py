@@ -733,7 +733,7 @@ def add_front_matter(doc: Document) -> None:
         ("Table 4.1. NF4 safety and over-refusal results", "20"),
         ("Table 4.2. NF4 capability results", "20"),
         ("Table 5.1. Per-pair HarmBench deltas under three judges", "28"),
-        ("Table 5.2. HarmBench classifier deltas at 128 and 512 tokens", "30"),
+        ("Table 5.2. HarmBench classifier deltas at 128 and 512 tokens", "31"),
         ("Table 5.3. Five-seed HarmBench sensitivity", "31"),
         ("Table 6.1. Competing explanations for the HarmBench null", "34"),
         ("Table 6.2. Published quantization effects placed beside this study's", "35"),
@@ -1968,9 +1968,11 @@ def add_chapter_five(doc: Document) -> None:
             "most from HarmBench's behaviour-specific criterion. This disagreement is informative "
             "rather than proof that one scorer is mechanically wrong.",
             "The API judge and classifier agree most strongly on the Llama pair, where kappa exceeds "
-            "0.94 for both aliases. Agreement is lower on Phi and Qwen, but the per-pair harmful-ward "
-            "significance conclusion is unchanged. The second judge strengthens the headline without "
-            "implying item-level identity.",
+            "0.94 for both aliases. Every other alias falls in a single lower band from 0.68 to 0.83, "
+            "with the minimum on Phi-4-mini at fp16 and the Qwen3-4B pair next; no other family is "
+            "systematically separated within that band. The per-pair harmful-ward significance "
+            "conclusion is unchanged across all of them. The second judge strengthens the headline "
+            "without implying item-level identity.",
             "Llama Guard's per-pair directions agree with the classifier for four pairs. "
             "Qwen3-1.7B is the exception: the classifier is flat and Llama Guard decreases by "
             "0.050, and neither result is significant. Similarly, on Llama, Llama Guard agrees on "
