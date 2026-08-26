@@ -68,6 +68,33 @@ def test_discovery_rejects_an_unregistered_deliverable(tmp_path: Path) -> None:
     assert unregistered_surfaces(manifest, tmp_path) == {"docs/forgotten.html"}
 
 
+def test_discovery_ignores_transient_editor_artifacts(tmp_path: Path) -> None:
+    """A document open in Word must not turn the gate red.
+
+    Word writes ``docs/~$name.docx`` beside a document for as long as it is
+    open. It matches the ``docs/*.docx`` discovery glob, so before this was
+    filtered it was reported as an unregistered surface and failed
+    ``make agent-check`` for the duration — a red gate caused by nothing but a
+    file being open. A real unregistered document must still be caught, which
+    is what the last assertion pins.
+    """
+    docs = tmp_path / "docs"
+    docs.mkdir()
+    (docs / "registered.docx").write_text("ok", encoding="utf-8")
+    (docs / "~$registered.docx").write_text("word owner lock", encoding="utf-8")
+    (docs / ".~lock.registered.docx#").write_text("libreoffice lock", encoding="utf-8")
+    (docs / ".registered.docx.swp").write_text("vim swap", encoding="utf-8")
+    (docs / "registered.docx~").write_text("editor backup", encoding="utf-8")
+    manifest = {
+        "discovery": ["docs/*.docx", "docs/*.docx*", "docs/.*"],
+        "surfaces": [{"path": "docs/registered.docx"}],
+    }
+    assert unregistered_surfaces(manifest, tmp_path) == set()
+
+    (docs / "forgotten.docx").write_text("a real unregistered surface", encoding="utf-8")
+    assert unregistered_surfaces(manifest, tmp_path) == {"docs/forgotten.docx"}
+
+
 def test_generated_deck_validation_is_semantic() -> None:
     registry = build_registry(ROOT)
     text = (ROOT / "docs/fyp_showcase.html").read_text(encoding="utf-8")
@@ -182,6 +209,69 @@ def test_asr_survival_claim_against_zero_survivor_registry_fails() -> None:
     )
     status = _claim_status(units)
     assert not status["no-asr-survivor"]
+
+
+# --- v5 language-cleared phrasing (2026-08-25) ------------------------------
+# The v5 line states the same propositions without survival shorthand
+# ("remained statistically significant after Benjamini–Hochberg correction").
+# The checks must accept the cleared phrasing AND keep biting on it: a wrong
+# count or an un-negated post-correction significance claim in the new
+# vocabulary must still fail its contradiction half.
+
+CLEARED_UNITS = [
+    GOOD_UNITS[0],
+    "Exactly 3 primary comparisons remained statistically significant after "
+    "Benjamini–Hochberg false-discovery-rate correction.",
+    "Under the validation-informed parallel analysis, exactly two comparisons "
+    "remained statistically significant after correction, both capability decreases.",
+    "No HarmBench result remains statistically significant after "
+    "Benjamini–Hochberg correction.",
+    GOOD_UNITS[3],
+    GOOD_UNITS[4],
+    GOOD_UNITS[5],
+    GOOD_UNITS[6],
+]
+
+
+def test_cleared_significance_phrasing_satisfies_counts() -> None:
+    # Only the multiplicity-related keys: CLEARED_UNITS is scoped to this check
+    # family and deliberately omits the value-bearing survivor/kappa units.
+    status = _claim_status(CLEARED_UNITS)
+    assert status["survivor-count"], "cleared exact-count sentence not accepted"
+    assert status["vi-survivor-count"], "cleared scoped VI count not accepted"
+    assert status["no-asr-survivor"], "cleared negated ASR sentence not accepted"
+    assert status["contradiction:survivor-count"]
+    assert status["contradiction:asr-survival"]
+
+
+def test_cleared_phrasing_bites_on_wrong_count() -> None:
+    units = list(CLEARED_UNITS)
+    units[1] = (
+        "Exactly 4 primary comparisons remained statistically significant after "
+        "Benjamini–Hochberg false-discovery-rate correction."
+    )
+    status = _claim_status(units)
+    assert not status["contradiction:survivor-count"]
+
+
+def test_cleared_phrasing_bites_on_hedged_count() -> None:
+    units = list(CLEARED_UNITS)
+    units[1] = (
+        "At least 3 primary comparisons remained statistically significant after "
+        "Benjamini–Hochberg false-discovery-rate correction."
+    )
+    status = _claim_status(units)
+    assert not status["contradiction:survivor-count"]
+
+
+def test_cleared_unnegated_asr_postcorrection_fails() -> None:
+    units = list(CLEARED_UNITS)
+    units.append(
+        "The HarmBench result remains statistically significant after "
+        "Benjamini–Hochberg correction."
+    )
+    status = _claim_status(units)
+    assert not status["contradiction:asr-survival"]
 
 
 def test_docx_older_than_builder_fails(tmp_path: Path) -> None:

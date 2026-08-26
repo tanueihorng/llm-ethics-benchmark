@@ -48,7 +48,7 @@ rewritten before it entered the builder.
 | Study | Value | Located at | Verified |
 |---|---|---|---|
 | Decoding Compressed Trust [37] | MMLU 53.6 → 52.1 (−1.5) at 13B; −1.6 at 7B; −0.9 at 70B | Table 3 p.16, MMLU column, all three size blocks | local PDF, both lenses |
-| Kharinaev et al. [10] | "Difference from FP 16": XSafety +0.571 / +0.536 / +4.500; OpenSafetyMini +3.561 / −0.187 / +8.622 | v2 PDF Table 9 (= v1 Table 2), Llama-3.1-8B-Instruct block, int4 rows | arXiv v1 and v2, values identical; both lenses |
+| Kharinaev et al. [10] | "Difference from FP 16": XSafety +0.571 / +0.536 / +4.500; OpenSafetyMini +3.561 / −0.187 / +8.622 | **v2 PDF Table 9** ("LLM-as-a-Judge safety evaluation on XSafety and OpenSafetyMini"), Llama-3.1-8B-Instruct block, int4 rows. **Renumbered from v1's Table 2 — see the version-ambiguity warning below before re-checking.** | arXiv v1 and v2, values identical; both lenses |
 | HarmLevelBench [35] | Human ASR, Simple Query: 33.9 → 44.6 (+10.7) | Table 2 vs Table 3, "Simple Query" row, Human ASR column | arXiv HTML, both lenses |
 | Q-resafe [36] | ASR 29.8 → 37.1 (+7.3) at τ(0.95); range +4.5 to +17.3 | Table 4, Llama sub-table, Baseline and AWQ 4-bit rows | arXiv HTML, both lenses |
 | Q-Misalign [39] | Control column: 0.07→0.07, 0.05→0.05, 0.00→0.00 | Table 1 p.8, "Pre-trained Model Mp" column | local PDF, both lenses |
@@ -63,6 +63,30 @@ over its far more quotable headline, and the direct-query condition for [35] ove
   read (bot-blocked), but the venue is confirmed via the Crossref record for
   doi:10.1109/ACCESS.2026.3703899 — *IEEE Access*, vol. 14, pp. 96771–96793, matching title and
   authors. The imported figures are from the version-stable Llama block, not the v2-only Qwen rows.
+
+  > ⚠️ **"Table 2" means two different tables in this paper, depending on version. Cite the
+  > version, the table number AND the column — never a bare table number.** v1 numbered the
+  > LLM-as-a-Judge safety table as Table 2; v2 renumbered that table to **Table 9** and introduced
+  > a *different* **Table 2**, "Human safety evaluation results of Llama-3.1-8B-Instruct", whose
+  > columns are Safe / Unsafe / Error rather than safety ratio and difference-from-FP16. The two
+  > tables report different modalities with different baselines: v2 Table 2 gives FP 16 Safe
+  > 90.59% and Abliterated 58.67%, while v2 Table 9 gives FP 16 XSafety 93.75 and Abliterated
+  > 83.32. **Added 2026-08-13 after a citation-fitness audit in a parallel session spliced the two
+  > — taking the FP 16 baseline from one table and the Abliterated figure from the other — while
+  > re-verifying this row.** The earlier wording here, "v2 PDF Table 9 (= v1 Table 2)", was
+  > accurate as a renumbering note and is exactly the phrasing that invited the splice.
+  >
+  > **The polarity question this row flags is now settled against the paper, three ways.** (1) The
+  > safety ratio counts *safe* responses, so higher is safer: the deliberately safety-stripped
+  > Abliterated variant scores *lower* on both tables (90.59 → 58.67 human; 93.75 → 83.32 judge),
+  > and §5.1 states outright that it is the least safe model. (2) The subtraction runs
+  > **FP 16 minus quantized**: that direction reproduces the printed "Difference from FP 16" column
+  > on 6 of 6 rows, the reverse on 0 of 6 (e.g. 93.75 − 93.179 = 0.571; 93.06 − 93.247 = −0.187).
+  > (3) Therefore a **positive** difference is safety **lost**. Report §6.2 renders +0.571 as
+  > "falls 0.571 points" and −0.187 as "QUIK rises 0.187", which is correct; **nothing in
+  > Table 6.2 needs to flip.** Note that (1) alone is not sufficient — the subtraction direction is
+  > what makes the implication follow, and an independent reader who assumed
+  > quantized-minus-FP 16 reached the opposite conclusion from the same paper.
 - **[36] Q-resafe.** Genuinely archival, and the citation was **wrong in two ways**. Verified
   against the PMLR v267 proceedings listing and publisher page: the version of record is titled
   "Assessing Safety Risks and Quantization-aware Safety Patching for Quantized Large Language

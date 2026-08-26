@@ -252,6 +252,7 @@ def test_hedge_scan_is_clean_on_the_real_repo() -> None:
         ("This is what the mechanistic literature predicts.", "C09"),
         ("That headroom is the mechanistic reason the pair is intact.", "C10"),
         ("four-bit has become the de facto compression standard.", "C11"),
+        ("Prior quantization evaluations often emphasise average retention.", "T62 prevalence"),
         ("it does have enough power to resolve the capability losses.", "C15"),
         ("there is no community-standard instrument for measuring it.", "C25"),
         ("the null result rules out any safety regression.", "H01"),
@@ -277,6 +278,7 @@ def test_hedge_scan_fires_on_each_audited_defect(tmp_path: Path, line: str, find
         "The closest prior comparison in trustworthiness scope is Hong et al.",
         "it provides controlled isolation of the quantization step.",
         "This is what an extrapolation from the mechanistic literature would suggest.",
+        "The three quantization evaluations reviewed here emphasise average retention.",
     ],
 )
 def test_hedge_scan_accepts_the_corrected_wording(tmp_path: Path, line: str) -> None:

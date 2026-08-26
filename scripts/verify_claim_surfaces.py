@@ -47,11 +47,33 @@ def load_manifest(path: Path = MANIFEST) -> dict[str, Any]:
     return yaml.safe_load(path.read_text(encoding="utf-8"))
 
 
+# Transient files that editors and Office apps create beside a document while
+# it is open. They match the discovery globs (docs/*.docx and friends) but are
+# not surfaces: Word writes docs/~$name.docx for as long as the user has that
+# document open, which used to report an "unregistered surface" and turn the
+# whole gate red for the duration.
+#
+# NOTE: deliberately a transient-artifact pattern rather than a .gitignore
+# filter. 41 of the 107 registered surfaces are gitignored on purpose (every
+# submission docx per D60, both LaTeX mirrors, the supervisor email drafts), so
+# skipping gitignored paths would remove 38% of the surface set from coverage
+# and, worse, would stop a NEW gitignored claim-bearing document from ever
+# being flagged as unregistered — the exact category behind the D42 stale-claim
+# incidents. Per-surface validation iterates the manifest, not this function,
+# so nothing registered is affected either way.
+TRANSIENT_BASENAME = re.compile(
+    r"^~\$"        # Word / Excel / PowerPoint owner-lock file
+    r"|^\.~lock\."  # LibreOffice lock file
+    r"|\.sw[a-p]$"  # Vim swap file
+    r"|~$"          # Editor backup copy
+)
+
+
 def discover_paths(manifest: dict[str, Any], root: Path = ROOT) -> set[str]:
     found: set[str] = set()
     for pattern in manifest["discovery"]:
         for path in root.glob(pattern):
-            if path.is_file():
+            if path.is_file() and not TRANSIENT_BASENAME.search(path.name):
                 found.add(path.relative_to(root).as_posix())
     return found
 
@@ -420,9 +442,22 @@ def _validate_primary_claims(
         rf"|\bthe ({count}|{word}) contrasts that (do )?survive\b",
         re.IGNORECASE,
     )
-    hit = next((s for s in sentences if exact_re.search(s)
-                and _has_any(s, ("surviv",))
-                and _has_any(s, ("BH", "Benjamini", "FDR", "false-discovery", "false discovery", "multiplicity"))), None)
+    # v5 language-cleared equivalent (2026-08-25): the SAME proposition — an
+    # exact count anchored to the comparisons noun and tied to post-correction
+    # significance — stated without survival shorthand. The BH-context word
+    # list below is unchanged for both phrasings.
+    exact_cleared_re = re.compile(
+        rf"\bexactly ({count}|{word})( [a-z-]+)? comparisons?\b[^.;]*?"
+        rf"(?:remain(?:s|ed)?|is|are)[^.;]*?statistically significant after"
+        rf"|\b({count}|{word})( [a-z-]+)? comparisons? (?:remain(?:s|ed)?|are|is) statistically significant after"
+        rf"|\bthe ({count}|{word}) comparisons that (?:remain(?:s|ed)?|are) statistically significant after",
+        re.IGNORECASE,
+    )
+    bh_context = ("BH", "Benjamini", "FDR", "false-discovery", "false discovery", "multiplicity")
+    hit = next((s for s in sentences
+                if (exact_re.search(s) and _has_any(s, ("surviv",))
+                    or exact_cleared_re.search(s))
+                and _has_any(s, bh_context)), None)
     results.append(("survivor-count", hit is not None,
                     "exact survivor count asserted with BH-FDR context" if hit else "no exact BH-FDR survivor-count statement"))
     # The validation-informed PARALLEL family (post-hoc, added after T36
@@ -433,7 +468,8 @@ def _validate_primary_claims(
     if vi:
         vi_word = number_words[vi["survivor_count"]]
         vi_re = re.compile(
-            rf"\b(exactly )?({vi['survivor_count']}|{vi_word})( [a-z-]+)? (contrasts? )?surviv",
+            rf"\b(exactly )?({vi['survivor_count']}|{vi_word})( [a-z-]+)? "
+            rf"(contrasts? |comparisons? )?(?:surviv|(?:remain(?:s|ed)?|are|is) statistically significant)",
             re.IGNORECASE,
         )
         hit = next((s for s in sentences if _has_any(s, _VI_SCOPE) and vi_re.search(s)), None)
@@ -455,14 +491,20 @@ def _validate_primary_claims(
     # Hedges and wrong counts must anchor to the contrasts noun or the
     # survival verb directly — "at least one benchmark … survives" is not a
     # survivor-count statement.
+    # v5 cleared-phrasing equivalents anchor the count to the comparisons noun
+    # and post-correction significance, so the guards keep biting without the
+    # survival verb (D54 symmetry: extend the detector with the vocabulary).
+    _sig_after = r"(?:remain(?:s|ed)?[^.;]{0,30}?)?statistically significant after"
     hedge_re = re.compile(
         rf"\b(at least|more than|at minimum|upwards of) ({number_alt})( [a-z-]+)? contrasts?\b[^.;]*?surviv"
-        rf"|\b(at least|more than|at minimum|upwards of) ({number_alt}) (contrasts? )?surviv",
+        rf"|\b(at least|more than|at minimum|upwards of) ({number_alt}) (contrasts? )?surviv"
+        rf"|\b(at least|more than|at minimum|upwards of) ({number_alt})( [a-z-]+)? (comparisons?|results?)\b[^.;]*?{_sig_after}",
         re.IGNORECASE,
     )
     wrong_re = re.compile(
         rf"\b(exactly|only) (?!(?:{count}|{word})\b)({number_alt})( [a-z-]+)? contrasts?\b[^.;]*?surviv"
-        rf"|\b(exactly|only) (?!(?:{count}|{word})\b)({number_alt}) (contrasts? )?surviv",
+        rf"|\b(exactly|only) (?!(?:{count}|{word})\b)({number_alt}) (contrasts? )?surviv"
+        rf"|\b(exactly|only) (?!(?:{count}|{word})\b)({number_alt})( [a-z-]+)? (comparisons?|results?)\b[^.;]*?{_sig_after}",
         re.IGNORECASE,
     )
 
@@ -492,17 +534,28 @@ def _validate_primary_claims(
         results.append(("no-asr-survivor", False, "registry itself reports an ASR BH survivor"))
         results.append(("contradiction:asr-survival", False, "registry itself reports an ASR BH survivor"))
     else:
+        # v5 cleared phrasing: a NEGATED ASR/HarmBench result tied to
+        # post-correction significance states the same proposition.
+        asr_nonsig_cleared_re = re.compile(
+            r"\b(?:no|none of the)\b[^.;]{0,80}?"
+            r"(?:asr|harmbench|attack.success|harmful.compliance)[^.;]{0,120}?"
+            r"(?:remain(?:s|ed)?|is|are) statistically significant after",
+            re.IGNORECASE,
+        )
         hit = next((s for s in sentences
-                    if _has_any(s, ("no ", "none", "not one"))
-                    and _has_any(s, ("surviv",))
-                    and _has_any(s, _ASR_SURVIVAL_MARKERS)), None)
+                    if ((_has_any(s, ("no ", "none", "not one"))
+                         and _has_any(s, ("surviv",))
+                         and _has_any(s, _ASR_SURVIVAL_MARKERS))
+                        or (asr_nonsig_cleared_re.search(s)
+                            and _has_any(s, ("BH", "Benjamini", "FDR", "false-discovery",
+                                             "false discovery", "multiplicity"))))), None)
         results.append(("no-asr-survivor", hit is not None,
                         "ASR non-survival stated" if hit else "no statement that no ASR contrast survives BH-FDR"))
         # The ASR marker must be clause-adjacent to the survival verb — mere
         # co-occurrence would flag family-definition enumerations ("five
         # pairs × HarmBench ASR, MMLU, ARC … exactly three survive").
         asr_survives_re = re.compile(
-            r"(asr|harmbench|attack.success|harmful.compliance)[^,;.()]{0,40}surviv"
+            r"(asr|harmbench|attack.success|harmful.compliance)[^,;.()]{0,40}(?:surviv|(?:is|are|remain(?:s|ed)?) statistically significant after)"
             r"|surviv[a-z]*[^,;.()]{0,40}(asr|harmbench|attack.success)",
             re.IGNORECASE,
         )

@@ -1,0 +1,327 @@
+# Machine-readable registry of every FYP report / thesis / interim document
+# version, its builder, and its status. Consumed by
+# scripts/report_tools/report_version_diff.py (`all` regenerates
+# docs/report_versions/ and docs/REPORT_VERSIONS.md) and enforced by
+# tests/test_report_versions.py.
+#
+# Conventions
+# -----------
+# - `path` values are repo-relative and point at rendered .docx artifacts.
+#   Per D60 (2026-08-10) every generated .docx is GITIGNORED — the builders
+#   under scripts/ are the tracked deliverable. This registry therefore records
+#   LOCAL artifacts; the gate skips existence checks on a fresh clone.
+# - `status` vocabulary: canonical | selected | current-reference |
+#   comparison-draft | fallback | reference | archived.
+# - `decisions` cite PROJECT_LOG §3 decision IDs that establish the status.
+# - `builder_provenance: name-inferred` marks builders inferred from the file
+#   naming convention rather than pinned by a log row; everything else is
+#   builder-exact.
+# - Families with `diff: consecutive` get pairwise chapter/paragraph change
+#   records. A chain gap (a version that never existed) is recorded explicitly
+#   under `chain_notes` so absence stays auditable instead of silent.
+version: 1
+
+output_dir: docs/report_versions
+index_path: docs/REPORT_VERSIONS.md
+
+families:
+  # ---------------------------------------------------------------------
+  - id: report_canonical
+    label: Full FYP report (docx-js line)
+    description: >
+      The original nine-chapter full report, built by the successive
+      build_fyp_report*.js docx-js builders. v5 is the canonical build path
+      (D41); v6 is the remediated comparison draft; earlier versions are
+      archived history.
+    diff: consecutive
+    versions:
+      - path: docs/archive/FYP_Report_2026-05-23.docx
+        label: First full draft (2026-05-23)
+        date: 2026-05-23
+        builder: scripts/build_fyp_report.js
+        builder_provenance: name-inferred
+        status: archived
+      - path: docs/archive/FYP_Report_2026-05-24.docx
+        label: Draft update (2026-05-24)
+        date: 2026-05-24
+        builder: scripts/build_fyp_report.js
+        builder_provenance: name-inferred
+        status: archived
+      - path: docs/archive/FYP_Report_2026-06-14.docx
+        label: Draft update (2026-06-14)
+        date: 2026-06-14
+        builder: scripts/build_fyp_report.js
+        builder_provenance: name-inferred
+        status: archived
+      - path: docs/archive/FYP_Report_2026-06-26_v2.docx
+        label: v2
+        date: 2026-06-26
+        builder: scripts/build_fyp_report_v2.js
+        builder_provenance: name-inferred
+        status: archived
+      - path: docs/archive/FYP_Report_2026-06-26_v3.docx
+        label: v3
+        date: 2026-06-26
+        builder: scripts/build_fyp_report_v3.js
+        builder_provenance: name-inferred
+        status: archived
+      - path: docs/archive/FYP_Report_2026-06-30_v4.docx
+        label: v4 (128-token era)
+        date: 2026-06-30
+        builder: scripts/build_fyp_report_v4.js
+        builder_provenance: name-inferred
+        status: archived
+      - path: docs/FYP_Report_2026-07-01_v5.docx
+        label: v5 (512-token primary re-base)
+        date: 2026-07-01
+        builder: scripts/build_fyp_report_v5.js
+        status: canonical
+        decisions: [D41]
+        note: Canonical `make report` output; 512-token-primary study.
+      - path: docs/FYP_Report_2026-07-25_v6.docx
+        label: v6 (remediated comparison draft)
+        date: 2026-07-25
+        builder: scripts/build_fyp_report_v6.js
+        status: comparison-draft
+        note: Live claim surface kept beside canonical v5 for comparison.
+
+  # ---------------------------------------------------------------------
+  - id: thesis_line
+    label: Standalone thesis
+    description: >
+      The separate full research thesis (not touched by `make report`).
+      Thesis v4 is the 512-primary mirrored master (D43).
+    diff: consecutive
+    versions:
+      - path: docs/archive/FYP_Thesis_2026-06-18.docx
+        label: Thesis v1 (early)
+        date: 2026-06-18
+        builder: scripts/build_fyp_thesis.js
+        builder_provenance: name-inferred
+        status: archived
+      - path: docs/archive/FYP_Thesis_2026-06-26_v2.docx
+        label: Thesis v2
+        date: 2026-06-26
+        builder: scripts/build_fyp_thesis_v2.js
+        builder_provenance: name-inferred
+        status: archived
+      - path: docs/archive/FYP_Thesis_2026-06-26_v3.docx
+        label: Thesis v3
+        date: 2026-06-26
+        builder: scripts/build_fyp_thesis_v3.js
+        builder_provenance: name-inferred
+        status: archived
+      - path: docs/FYP_Thesis_2026-07-02_v4.docx
+        label: Thesis v4 (512-primary mirror)
+        date: 2026-07-02
+        builder: scripts/build_fyp_thesis_v4.js
+        status: canonical
+        decisions: [D43]
+        note: "Output of `make thesis`; standalone thesis master."
+
+  # ---------------------------------------------------------------------
+  - id: interim_classic
+    label: Interim report (docx-js line)
+    description: >
+      The registry-backed interim master of 2026-07-10. Superseded for the
+      T53 send action by the rewritten interim line, but still a live claim
+      surface and LaTeX mirror source.
+    diff: none
+    versions:
+      - path: docs/FYP_Interim_2026-07-10.docx
+        label: Interim master (2026-07-10)
+        date: 2026-07-10
+        builder: scripts/build_fyp_interim.js
+        status: current-reference
+        note: Superseded for submission by the rewritten interim line (T53).
+
+  # ---------------------------------------------------------------------
+  - id: rewrite_report
+    label: Rewritten full report (plain-academic line)
+    description: >
+      The corpus-informed then plain-academic rewrite of the full report,
+      built by Python (python-docx) builders. v3 carries the user-selected
+      voice (D65); v4 adds the HW0288 funnel introduction (D66/D68).
+    diff: consecutive
+    chain_notes:
+      - "No v0 exists: this line starts at rewritten_fyp_report_v1.docx (T52/D57)."
+    versions:
+      - path: docs/rewritten_fyp_report_v1.docx
+        label: Rewrite v1 (corpus-informed)
+        date: 2026-07-27
+        builder: scripts/build_rewritten_fyp_report_v1.py
+        status: reference
+        decisions: [D57, D58, D59, D65]
+        note: Demoted to reference by the user's D65 voice choice.
+      - path: docs/rewritten_fyp_report_v2.docx
+        label: Rewrite v2 (plain-academic pass)
+        date: 2026-08-21
+        builder: scripts/build_rewritten_fyp_report_v2.py
+        status: comparison-draft
+        decisions: [D63, D65]
+        note: Dominated by v3 (430/480 shared paragraphs); kept for comparison.
+      - path: docs/rewritten_fyp_report_v3.docx
+        label: Rewrite v3 (selected plain-academic voice)
+        date: 2026-08-21
+        builder: scripts/build_rewritten_fyp_report_v3.py
+        status: selected
+        decisions: [D64, D65]
+        note: The user-selected prose register for the submission line.
+      - path: docs/rewritten_fyp_report_v4.docx
+        label: Rewrite v4 (HW0288 funnel introduction)
+        date: 2026-08-22
+        builder: scripts/build_rewritten_fyp_report_v4.py
+        status: selected
+        decisions: [D66, D67, D68, D69]
+        note: v3 plus the author's funnel Chapter 1 and completed remediation.
+      - path: docs/rewritten_fyp_report_v5.docx
+        label: Rewrite v5 (language-cleanup line)
+        date: 2026-08-25
+        builder: scripts/build_rewritten_fyp_report_v5.py
+        status: reference
+        decisions: [D75]
+        note: >
+          Language-cleanup rewrite of the verified v4 line (T70 closed by its
+          creating session): 137 exact-substring corrections replacing
+          compressed statistical shorthand with conventional academic English.
+          Numbers, citation markers, research questions, headings, tables and
+          figures are asserted equal to v4 at build time; see
+          docs/audits/2026-08-25_language_pass_v5/. Not selected for T53
+          (progress copy remains the sent artifact); candidate base for the
+          T15 final report.
+
+  # ---------------------------------------------------------------------
+  - id: rewrite_interim
+    label: Rewritten interim report (submission line)
+    description: >
+      The interim-submission derivatives of the rewrite line. The selected
+      T53 artifact is docs/rewritten_fyp_interim_progress.docx (D72/D73);
+      the others remain as dated fallbacks.
+    diff: consecutive
+    chain_notes:
+      - "Verified absence (2026-08-25): no rewritten_fyp_interim_v2.docx was ever
+         built or logged — the interim chain jumps v1 to v3 because the v2
+         editorial pass was applied to the report line only (D63)."
+    versions:
+      - path: docs/rewritten_fyp_interim_v1.docx
+        label: Interim v1 (retitle-only of rewrite v1)
+        date: 2026-08-10
+        builder: scripts/build_rewritten_fyp_interim_v1.py
+        status: fallback
+        decisions: [D59]
+        note: Word-verified fallback (58 pages); rebuild side effect rewrites the v1 report.
+      - path: docs/rewritten_fyp_interim_v3.docx
+        label: Interim v3 (retitle-only of rewrite v3)
+        date: 2026-08-22
+        builder: scripts/build_rewritten_fyp_interim_v3.py
+        status: fallback
+        decisions: [D65]
+        note: Superseded for sending by interim v4 (D70).
+      - path: docs/rewritten_fyp_interim_v4.docx
+        label: Interim v4 (funnel intro, comprehensive fallback)
+        date: 2026-08-22
+        builder: scripts/build_rewritten_fyp_interim_v4.py
+        status: fallback
+        decisions: [D68, D70]
+        note: Comprehensive 59-page fallback after D70 promotion and T67 remediation.
+      - path: docs/rewritten_fyp_interim_compact.docx
+        label: Interim compact (progress-centred)
+        date: 2026-08-24
+        builder: scripts/build_rewritten_fyp_interim_compact.py
+        status: fallback
+        decisions: [D71, D72]
+        note: 36-page build; superseded for sending by the progress copy (D72).
+      - path: docs/rewritten_fyp_interim_progress.docx
+        label: Interim progress (SELECTED T53 artifact)
+        date: 2026-08-24
+        builder: scripts/build_rewritten_fyp_interim_progress.py
+        status: selected
+        decisions: [D72, D73]
+        note: Uses supplied Ch1 + full v4 Ch2-4, replaces detailed scorer/discussion
+          chapters with Ch5 Progress and Remaining Work; repaired in place 2026-08-25 (D73).
+      - path: docs/rewritten_fyp_interim_v5.docx
+        label: Interim v5 (retitle-only of rewrite v5)
+        date: 2026-08-25
+        builder: scripts/build_rewritten_fyp_interim_v5.py
+        status: fallback
+        decisions: [D75]
+        note: >
+          Same retitle-only contract as the other interim derivatives, over the
+          v5 language-cleanup line (D75). Comprehensive fallback; the D73
+          progress copy remains the selected T53 artifact.
+
+  # ---------------------------------------------------------------------
+  - id: humanized_report
+    label: Humanized alternate — full report
+    description: Submission-alternate re-render of canonical v5 with the
+      humanized styling pass.
+    diff: consecutive
+    versions:
+      - path: docs/FYP_Report_2026-07-01_v5.docx
+        label: Base — report v5
+        date: 2026-07-01
+        builder: scripts/build_fyp_report_v5.js
+        status: canonical
+        decisions: [D41]
+        alias: base
+      - path: docs/FYP_Report_2026-07-01_humanized.docx
+        label: Humanized report alternate
+        date: 2026-07-01
+        builder: scripts/build_fyp_report_humanized.js
+        status: fallback
+        alias: variant
+        note: Separate submission alternate (PROJECT_LOG §1 Current documents).
+
+  - id: humanized_thesis
+    label: Humanized alternate — thesis
+    description: Submission-alternate re-render of thesis v4 with the humanized
+      styling pass.
+    diff: consecutive
+    versions:
+      - path: docs/FYP_Thesis_2026-07-02_v4.docx
+        label: Base — thesis v4
+        date: 2026-07-02
+        builder: scripts/build_fyp_thesis_v4.js
+        status: canonical
+        decisions: [D43]
+        alias: base
+      - path: docs/FYP_Thesis_2026-07-02_humanized.docx
+        label: Humanized thesis alternate
+        date: 2026-07-02
+        builder: scripts/build_fyp_thesis_humanized.js
+        status: fallback
+        alias: variant
+
+  - id: humanized_interim
+    label: Humanized alternate — interim
+    description: Submission-alternate re-render of the 2026-07-10 interim with
+      the humanized styling pass.
+    diff: consecutive
+    versions:
+      - path: docs/FYP_Interim_2026-07-10.docx
+        label: Base — interim master
+        date: 2026-07-10
+        builder: scripts/build_fyp_interim.js
+        status: current-reference
+        alias: base
+      - path: docs/FYP_Interim_2026-07-10_humanized.docx
+        label: Humanized interim alternate
+        date: 2026-07-10
+        builder: scripts/build_fyp_interim_humanized.js
+        status: fallback
+        alias: variant
+
+# Documents that are inventoried but not part of any report-version chain.
+standalone_documents:
+  - path: docs/FYP_Agent_Harness_Architecture_Guide_2026-06-09.docx
+    note: Word architecture guide for the agent harness.
+  - path: docs/Codex_Meetup_Agent_Harness_Report.docx
+    note: Meetup report on the repo-native agent harness.
+  - path: docs/Agentic_AI_Workflow_Report_2026-06-26.docx
+    note: Agentic workflow report deck companion.
+  - path: docs/archive/FYP_TC1_Full_Session_Report_2026-04-08.docx
+    note: Archived TC1 session record.
+  - path: docs/archive/FYP_Decision_Register_and_Compressed_Work_Plan_2026-05-13.docx
+    note: Archived early decision register.
+  - path: docs/archive/FYP_Decisions_and_Plan_2026-05-13.docx
+    note: Archived early decisions and plan.

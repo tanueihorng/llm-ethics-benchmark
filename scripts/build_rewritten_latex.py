@@ -53,6 +53,15 @@ CLASS_SOURCE = LATEX_ROOT / "final_thesis" / "Thesis.cls"
 FINAL_DIR = LATEX_ROOT / "rewritten_final"
 INTERIM_DIR = LATEX_ROOT / "rewritten_interim"
 
+# Readable copies of the compiled PDFs, for sending to a human.
+# The compiled file is always mythesis.pdf: tectonic names its output after the
+# .tex, and mythesis.tex is the name the Overleaf zip member and the registered
+# claim surfaces both expect, so renaming in place would be undone by the next
+# compile. A copy beside them is the convention the older mirrors already use
+# (fyp_submission/FYP_Interim_Report_LaTeX.pdf). Copied here rather than by hand
+# so it cannot fall behind the PDF it is named after.
+NAMED_PDF = {INTERIM_DIR: LATEX_ROOT.parent / "FYPinterim_latex.pdf"}
+
 # How the document names itself. In LaTeX this lives on the title page, which the
 # CLASS file draws -- not the .tex. A guard that reads only mythesis.tex would have
 # passed while the final tree rendered a title page reading "INTERIM REPORT"; that
@@ -397,6 +406,11 @@ PREAMBLE = r"""%% !TEX program = pdflatex
 \usepackage{{enumitem}}
 \usepackage{{booktabs}}
 \usepackage{{array}}
+\usepackage{{tabularx}}
+%% Wrapping table column. Bare l columns let a long prose cell run straight
+%% off the page: every table in the 2026-08-19 build was overfull, Table 6.2
+%% by 2462pt (about seven text widths). L wraps inside a fixed \textwidth.
+\newcolumntype{{L}}{{>{{\raggedright\arraybackslash}}X}}
 \usepackage{{float}}
 \usepackage{{longtable}}
 \usepackage[square, numbers, comma, sort&compress]{{natbib}}
@@ -404,6 +418,10 @@ PREAMBLE = r"""%% !TEX program = pdflatex
 
 %% Float placement. The defaults sent three tables to near-empty pages of their
 %% own (6, 22 and 2 words), which is how a 57-page docx became a 67-page PDF.
+%% The class's \backmatter and book's thebibliography both print \bibname,
+%% so the heading is named here rather than added a second time in the body.
+\renewcommand{{\bibname}}{{References}}
+
 \renewcommand{{\topfraction}}{{0.9}}
 \renewcommand{{\bottomfraction}}{{0.8}}
 \renewcommand{{\textfraction}}{{0.07}}
@@ -495,13 +513,21 @@ def render_body(events: list[dict], figures: dict[str, str]) -> str:
             text = event["text"].strip()
             if text == "References":
                 flush_bibliography()
-                out.append("\n\\backmatter\n\\addtotoc{References}")
-                out.append("\\chapter*{References}\n")
+                out.append("\n\\backmatter\n")
                 continue
             if text.startswith("Appendix"):
                 flush_bibliography()
                 if not in_appendix:
-                    out.append("\n\\appendix\n\\mainmatter\n")
+                    # \mainmatter would be the obvious way to get numbered
+                    # appendix chapters back after \backmatter, but it also
+                    # runs \pagenumbering{arabic}, which resets the page
+                    # counter: the appendices printed 1, 2, 3 straight after
+                    # body page 54. Setting the flag alone restores chapter
+                    # numbering without touching pagination.
+                    out.append(
+                        "\n\\appendix\n"
+                        "\\makeatletter\\@mainmattertrue\\makeatother\n"
+                    )
                     in_appendix = True
                 # "Appendix A: Reproducibility Summary" -> the title alone;
                 # \appendix supplies the letter.
@@ -556,10 +582,17 @@ def render_table(event: dict) -> str:
     rows = event["rows"]
     # Right-align columns whose body cells are consistently numeric.
     numeric = re.compile(r"^[\s$+\u2212<>=~-]*[\d.,%\[\]/ ]+$")
-    spec = "".join(
-        "r" if all(numeric.match(str(r[i])) for r in rows if i < len(r)) and rows else "l"
+    is_numeric = [
+        bool(rows) and all(numeric.match(str(r[i])) for r in rows if i < len(r))
         for i in range(len(headers))
-    )
+    ]
+    # Text columns must wrap. With bare l columns a long prose cell runs off the
+    # page instead of breaking, which is why every table in the 2026-08-19 build
+    # was overfull. L is a \textwidth-constrained wrapping column; numeric columns
+    # stay r so figures are not stretched apart. tabularx needs something to
+    # stretch, so an all-numeric table keeps the plain tabular it already fitted.
+    wrapping = not all(is_numeric)
+    spec = "".join("r" if n else ("L" if wrapping else "l") for n in is_numeric)
     lines = [
         "\\begin{table}[htbp]",
         "\\centering",
@@ -567,15 +600,21 @@ def render_table(event: dict) -> str:
     ]
     if event.get("caption", True):
         lines.append(f"\\caption{{{tex_escape(event['title'])}}}")
+    open_env = (
+        f"\\begin{{tabularx}}{{\\textwidth}}{{{spec}}}"
+        if wrapping
+        else f"\\begin{{tabular}}{{{spec}}}"
+    )
+    close_env = "\\end{tabularx}" if wrapping else "\\end{tabular}"
     lines += [
-        f"\\begin{{tabular}}{{{spec}}}",
+        open_env,
         "\\toprule",
         " & ".join(f"\\textbf{{{tex_escape(h)}}}" for h in headers) + " \\\\",
         "\\midrule",
     ]
     for row in rows:
         lines.append(" & ".join(tex_escape(str(v)) for v in row) + " \\\\")
-    lines += ["\\bottomrule", "\\end{tabular}", "\\end{table}", ""]
+    lines += ["\\bottomrule", close_env, "\\end{table}", ""]
     return "\n".join(lines)
 
 
@@ -745,6 +784,10 @@ def main() -> int:
             print(f"  compile {dest.name}: {'OK' if ok else 'FAILED'}")
             if not ok:
                 return 1
+            named = NAMED_PDF.get(dest)
+            if named is not None:
+                shutil.copyfile(dest / "mythesis.pdf", named)
+                print(f"  {named}")
     return 0
 
 

@@ -1,0 +1,1195 @@
+{
+ "generated": "2026-08-26 20:20:51",
+ "generator": "scripts/report_tools/report_version_diff.py",
+ "registry": "configs/report_versions.yaml",
+ "note": "Rendered docx are gitignored local artifacts (D60); builders are tracked.",
+ "documents": [
+  {
+   "path": "docs/archive/FYP_Report_2026-05-23.docx",
+   "family": "report_canonical",
+   "label": "First full draft (2026-05-23)",
+   "status": "archived",
+   "builder": "scripts/build_fyp_report.js",
+   "date": "2026-05-23",
+   "decisions": [],
+   "alias": "",
+   "note": "",
+   "builder_provenance": "name-inferred",
+   "exists": true,
+   "size_bytes": 46915,
+   "mtime": "2026-05-23 18:13:27",
+   "sha256_12": "58e1cf150b8c",
+   "structure": {
+    "blocks": 466,
+    "headings_h1": 20,
+    "first_chapter": "Chapter 1 — Introduction",
+    "words": 9789
+   }
+  },
+  {
+   "path": "docs/archive/FYP_Report_2026-05-24.docx",
+   "family": "report_canonical",
+   "label": "Draft update (2026-05-24)",
+   "status": "archived",
+   "builder": "scripts/build_fyp_report.js",
+   "date": "2026-05-24",
+   "decisions": [],
+   "alias": "",
+   "note": "",
+   "builder_provenance": "name-inferred",
+   "exists": true,
+   "size_bytes": 51679,
+   "mtime": "2026-05-27 00:36:40",
+   "sha256_12": "8cd89c656e25",
+   "structure": {
+    "blocks": 500,
+    "headings_h1": 21,
+    "first_chapter": "Chapter 1 — Introduction",
+    "words": 11005
+   }
+  },
+  {
+   "path": "docs/archive/FYP_Report_2026-06-14.docx",
+   "family": "report_canonical",
+   "label": "Draft update (2026-06-14)",
+   "status": "archived",
+   "builder": "scripts/build_fyp_report.js",
+   "date": "2026-06-14",
+   "decisions": [],
+   "alias": "",
+   "note": "",
+   "builder_provenance": "name-inferred",
+   "exists": true,
+   "size_bytes": 104378,
+   "mtime": "2026-06-27 00:35:27",
+   "sha256_12": "91516313abe3",
+   "structure": {
+    "blocks": 670,
+    "headings_h1": 22,
+    "first_chapter": "Chapter 1 — Introduction",
+    "words": 30197
+   }
+  },
+  {
+   "path": "docs/archive/FYP_Report_2026-06-26_v2.docx",
+   "family": "report_canonical",
+   "label": "v2",
+   "status": "archived",
+   "builder": "scripts/build_fyp_report_v2.js",
+   "date": "2026-06-26",
+   "decisions": [],
+   "alias": "",
+   "note": "",
+   "builder_provenance": "name-inferred",
+   "exists": true,
+   "size_bytes": 677454,
+   "mtime": "2026-06-26 15:49:53",
+   "sha256_12": "2a4d820f45f6",
+   "structure": {
+    "blocks": 694,
+    "headings_h1": 22,
+    "first_chapter": "Chapter 1 — Introduction",
+    "words": 31128
+   }
+  },
+  {
+   "path": "docs/archive/FYP_Report_2026-06-26_v3.docx",
+   "family": "report_canonical",
+   "label": "v3",
+   "status": "archived",
+   "builder": "scripts/build_fyp_report_v3.js",
+   "date": "2026-06-26",
+   "decisions": [],
+   "alias": "",
+   "note": "",
+   "builder_provenance": "name-inferred",
+   "exists": true,
+   "size_bytes": 677737,
+   "mtime": "2026-06-29 16:14:50",
+   "sha256_12": "2fba537a0de0",
+   "structure": {
+    "blocks": 694,
+    "headings_h1": 22,
+    "first_chapter": "Chapter 1: Introduction",
+    "words": 31012
+   }
+  },
+  {
+   "path": "docs/archive/FYP_Report_2026-06-30_v4.docx",
+   "family": "report_canonical",
+   "label": "v4 (128-token era)",
+   "status": "archived",
+   "builder": "scripts/build_fyp_report_v4.js",
+   "date": "2026-06-30",
+   "decisions": [],
+   "alias": "",
+   "note": "",
+   "builder_provenance": "name-inferred",
+   "exists": true,
+   "size_bytes": 680810,
+   "mtime": "2026-06-30 12:35:51",
+   "sha256_12": "ed220328659c",
+   "structure": {
+    "blocks": 701,
+    "headings_h1": 22,
+    "first_chapter": "Chapter 1: Introduction",
+    "words": 31875
+   }
+  },
+  {
+   "path": "docs/FYP_Report_2026-07-01_v5.docx",
+   "family": "report_canonical",
+   "label": "v5 (512-token primary re-base)",
+   "status": "canonical",
+   "builder": "scripts/build_fyp_report_v5.js",
+   "date": "2026-07-01",
+   "decisions": [
+    "D41"
+   ],
+   "alias": "",
+   "note": "Canonical `make report` output; 512-token-primary study.",
+   "exists": true,
+   "size_bytes": 1397730,
+   "mtime": "2026-08-25 21:53:58",
+   "sha256_12": "ff7e3be2615a",
+   "structure": {
+    "blocks": 763,
+    "headings_h1": 24,
+    "first_chapter": "Chapter 1: Introduction",
+    "words": 44026
+   }
+  },
+  {
+   "path": "docs/FYP_Report_2026-07-25_v6.docx",
+   "family": "report_canonical",
+   "label": "v6 (remediated comparison draft)",
+   "status": "comparison-draft",
+   "builder": "scripts/build_fyp_report_v6.js",
+   "date": "2026-07-25",
+   "decisions": [],
+   "alias": "",
+   "note": "Live claim surface kept beside canonical v5 for comparison.",
+   "exists": true,
+   "size_bytes": 1402732,
+   "mtime": "2026-08-13 01:03:09",
+   "sha256_12": "7345d9eb3dc1",
+   "structure": {
+    "blocks": 989,
+    "headings_h1": 24,
+    "first_chapter": "Chapter 1: Introduction",
+    "words": 46754
+   }
+  },
+  {
+   "path": "docs/archive/FYP_Thesis_2026-06-18.docx",
+   "family": "thesis_line",
+   "label": "Thesis v1 (early)",
+   "status": "archived",
+   "builder": "scripts/build_fyp_thesis.js",
+   "date": "2026-06-18",
+   "decisions": [],
+   "alias": "",
+   "note": "",
+   "builder_provenance": "name-inferred",
+   "exists": true,
+   "size_bytes": 30827,
+   "mtime": "2026-07-02 16:57:09",
+   "sha256_12": "1ed9b8817e1e",
+   "structure": {
+    "blocks": 167,
+    "headings_h1": 19,
+    "first_chapter": "Chapter 1 Introduction",
+    "words": 5715
+   }
+  },
+  {
+   "path": "docs/archive/FYP_Thesis_2026-06-26_v2.docx",
+   "family": "thesis_line",
+   "label": "Thesis v2",
+   "status": "archived",
+   "builder": "scripts/build_fyp_thesis_v2.js",
+   "date": "2026-06-26",
+   "decisions": [],
+   "alias": "",
+   "note": "",
+   "builder_provenance": "name-inferred",
+   "exists": true,
+   "size_bytes": 435540,
+   "mtime": "2026-07-02 16:57:09",
+   "sha256_12": "06037b6d2c35",
+   "structure": {
+    "blocks": 177,
+    "headings_h1": 19,
+    "first_chapter": "Chapter 1 Introduction",
+    "words": 6172
+   }
+  },
+  {
+   "path": "docs/archive/FYP_Thesis_2026-06-26_v3.docx",
+   "family": "thesis_line",
+   "label": "Thesis v3",
+   "status": "archived",
+   "builder": "scripts/build_fyp_thesis_v3.js",
+   "date": "2026-06-26",
+   "decisions": [],
+   "alias": "",
+   "note": "",
+   "builder_provenance": "name-inferred",
+   "exists": true,
+   "size_bytes": 435490,
+   "mtime": "2026-07-02 16:57:09",
+   "sha256_12": "36594ad6f54f",
+   "structure": {
+    "blocks": 177,
+    "headings_h1": 19,
+    "first_chapter": "Chapter 1 Introduction",
+    "words": 6124
+   }
+  },
+  {
+   "path": "docs/FYP_Thesis_2026-07-02_v4.docx",
+   "family": "thesis_line",
+   "label": "Thesis v4 (512-primary mirror)",
+   "status": "canonical",
+   "builder": "scripts/build_fyp_thesis_v4.js",
+   "date": "2026-07-02",
+   "decisions": [
+    "D43"
+   ],
+   "alias": "",
+   "note": "Output of `make thesis`; standalone thesis master.",
+   "exists": true,
+   "size_bytes": 1140379,
+   "mtime": "2026-08-13 00:33:41",
+   "sha256_12": "3167e2bbca75",
+   "structure": {
+    "blocks": 192,
+    "headings_h1": 19,
+    "first_chapter": "Chapter 1 Introduction",
+    "words": 10750
+   }
+  },
+  {
+   "path": "docs/FYP_Interim_2026-07-10.docx",
+   "family": "interim_classic",
+   "label": "Interim master (2026-07-10)",
+   "status": "current-reference",
+   "builder": "scripts/build_fyp_interim.js",
+   "date": "2026-07-10",
+   "decisions": [],
+   "alias": "",
+   "note": "Superseded for submission by the rewritten interim line (T53).",
+   "exists": true,
+   "size_bytes": 1137174,
+   "mtime": "2026-08-13 00:33:41",
+   "sha256_12": "d37f7c0b2266",
+   "structure": {
+    "blocks": 196,
+    "headings_h1": 19,
+    "first_chapter": "Chapter 1 Introduction",
+    "words": 9564
+   }
+  },
+  {
+   "path": "docs/rewritten_fyp_report_v1.docx",
+   "family": "rewrite_report",
+   "label": "Rewrite v1 (corpus-informed)",
+   "status": "reference",
+   "builder": "scripts/build_rewritten_fyp_report_v1.py",
+   "date": "2026-07-27",
+   "decisions": [
+    "D57",
+    "D58",
+    "D59",
+    "D65"
+   ],
+   "alias": "",
+   "note": "Demoted to reference by the user's D65 voice choice.",
+   "exists": true,
+   "size_bytes": 819354,
+   "mtime": "2026-08-22 22:02:12",
+   "sha256_12": "bce4a59d95f8",
+   "structure": {
+    "blocks": 493,
+    "headings_h1": 11,
+    "first_chapter": "Chapter 1: Introduction",
+    "words": 18065
+   }
+  },
+  {
+   "path": "docs/rewritten_fyp_report_v2.docx",
+   "family": "rewrite_report",
+   "label": "Rewrite v2 (plain-academic pass)",
+   "status": "comparison-draft",
+   "builder": "scripts/build_rewritten_fyp_report_v2.py",
+   "date": "2026-08-21",
+   "decisions": [
+    "D63",
+    "D65"
+   ],
+   "alias": "",
+   "note": "Dominated by v3 (430/480 shared paragraphs); kept for comparison.",
+   "exists": true,
+   "size_bytes": 819149,
+   "mtime": "2026-08-22 22:02:08",
+   "sha256_12": "658ebf751f64",
+   "structure": {
+    "blocks": 493,
+    "headings_h1": 11,
+    "first_chapter": "Chapter 1: Introduction",
+    "words": 18405
+   }
+  },
+  {
+   "path": "docs/rewritten_fyp_report_v3.docx",
+   "family": "rewrite_report",
+   "label": "Rewrite v3 (selected plain-academic voice)",
+   "status": "selected",
+   "builder": "scripts/build_rewritten_fyp_report_v3.py",
+   "date": "2026-08-21",
+   "decisions": [
+    "D64",
+    "D65"
+   ],
+   "alias": "",
+   "note": "The user-selected prose register for the submission line.",
+   "exists": true,
+   "size_bytes": 819891,
+   "mtime": "2026-08-22 22:02:14",
+   "sha256_12": "0c05e02b3967",
+   "structure": {
+    "blocks": 493,
+    "headings_h1": 11,
+    "first_chapter": "Chapter 1: Introduction",
+    "words": 18199
+   }
+  },
+  {
+   "path": "docs/rewritten_fyp_report_v4.docx",
+   "family": "rewrite_report",
+   "label": "Rewrite v4 (HW0288 funnel introduction)",
+   "status": "selected",
+   "builder": "scripts/build_rewritten_fyp_report_v4.py",
+   "date": "2026-08-22",
+   "decisions": [
+    "D66",
+    "D67",
+    "D68",
+    "D69"
+   ],
+   "alias": "",
+   "note": "v3 plus the author's funnel Chapter 1 and completed remediation.",
+   "exists": true,
+   "size_bytes": 904524,
+   "mtime": "2026-08-24 22:17:50",
+   "sha256_12": "c8ff594517d9",
+   "structure": {
+    "blocks": 489,
+    "headings_h1": 11,
+    "first_chapter": "Chapter 1: Introduction",
+    "words": 18378
+   }
+  },
+  {
+   "path": "docs/rewritten_fyp_report_v5.docx",
+   "family": "rewrite_report",
+   "label": "Rewrite v5 (language-cleanup line)",
+   "status": "reference",
+   "builder": "scripts/build_rewritten_fyp_report_v5.py",
+   "date": "2026-08-25",
+   "decisions": [
+    "D75"
+   ],
+   "alias": "",
+   "note": "Language-cleanup rewrite of the verified v4 line (T70 closed by its creating session): 137 exact-substring corrections replacing compressed statistical shorthand with conventional academic English. Numbers, citation markers, research questions, headings, tables and figures are asserted equal to v4 at build time; see docs/audits/2026-08-25_language_pass_v5/. Not selected for T53 (progress copy remains the sent artifact); candidate base for the T15 final report.",
+   "exists": true,
+   "size_bytes": 820335,
+   "mtime": "2026-08-25 09:36:53",
+   "sha256_12": "98856d0e247f",
+   "structure": {
+    "blocks": 489,
+    "headings_h1": 11,
+    "first_chapter": "Chapter 1: Introduction",
+    "words": 18806
+   }
+  },
+  {
+   "path": "docs/rewritten_fyp_interim_v1.docx",
+   "family": "rewrite_interim",
+   "label": "Interim v1 (retitle-only of rewrite v1)",
+   "status": "fallback",
+   "builder": "scripts/build_rewritten_fyp_interim_v1.py",
+   "date": "2026-08-10",
+   "decisions": [
+    "D59"
+   ],
+   "alias": "",
+   "note": "Word-verified fallback (58 pages); rebuild side effect rewrites the v1 report.",
+   "exists": true,
+   "size_bytes": 820378,
+   "mtime": "2026-08-22 22:02:12",
+   "sha256_12": "ae994c573d0f",
+   "structure": {
+    "blocks": 493,
+    "headings_h1": 11,
+    "first_chapter": "Chapter 1: Introduction",
+    "words": 18063
+   }
+  },
+  {
+   "path": "docs/rewritten_fyp_interim_v3.docx",
+   "family": "rewrite_interim",
+   "label": "Interim v3 (retitle-only of rewrite v3)",
+   "status": "fallback",
+   "builder": "scripts/build_rewritten_fyp_interim_v3.py",
+   "date": "2026-08-22",
+   "decisions": [
+    "D65"
+   ],
+   "alias": "",
+   "note": "Superseded for sending by interim v4 (D70).",
+   "exists": true,
+   "size_bytes": 820905,
+   "mtime": "2026-08-22 22:02:14",
+   "sha256_12": "f88cb84044a6",
+   "structure": {
+    "blocks": 493,
+    "headings_h1": 11,
+    "first_chapter": "Chapter 1: Introduction",
+    "words": 18197
+   }
+  },
+  {
+   "path": "docs/rewritten_fyp_interim_v4.docx",
+   "family": "rewrite_interim",
+   "label": "Interim v4 (funnel intro, comprehensive fallback)",
+   "status": "fallback",
+   "builder": "scripts/build_rewritten_fyp_interim_v4.py",
+   "date": "2026-08-22",
+   "decisions": [
+    "D68",
+    "D70"
+   ],
+   "alias": "",
+   "note": "Comprehensive 59-page fallback after D70 promotion and T67 remediation.",
+   "exists": true,
+   "size_bytes": 820919,
+   "mtime": "2026-08-24 02:49:58",
+   "sha256_12": "e25cf66f9988",
+   "structure": {
+    "blocks": 489,
+    "headings_h1": 11,
+    "first_chapter": "Chapter 1: Introduction",
+    "words": 18376
+   }
+  },
+  {
+   "path": "docs/rewritten_fyp_interim_compact.docx",
+   "family": "rewrite_interim",
+   "label": "Interim compact (progress-centred)",
+   "status": "fallback",
+   "builder": "scripts/build_rewritten_fyp_interim_compact.py",
+   "date": "2026-08-24",
+   "decisions": [
+    "D71",
+    "D72"
+   ],
+   "alias": "",
+   "note": "36-page build; superseded for sending by the progress copy (D72).",
+   "exists": true,
+   "size_bytes": 800058,
+   "mtime": "2026-08-24 22:52:29",
+   "sha256_12": "f508b7d1310c",
+   "structure": {
+    "blocks": 328,
+    "headings_h1": 8,
+    "first_chapter": "Chapter 1: Introduction",
+    "words": 12122
+   }
+  },
+  {
+   "path": "docs/rewritten_fyp_interim_progress.docx",
+   "family": "rewrite_interim",
+   "label": "Interim progress (SELECTED T53 artifact)",
+   "status": "selected",
+   "builder": "scripts/build_rewritten_fyp_interim_progress.py",
+   "date": "2026-08-24",
+   "decisions": [
+    "D72",
+    "D73"
+   ],
+   "alias": "",
+   "note": "Uses supplied Ch1 + full v4 Ch2-4, replaces detailed scorer/discussion chapters with Ch5 Progress and Remaining Work; repaired in place 2026-08-25 (D73).",
+   "exists": true,
+   "size_bytes": 735270,
+   "mtime": "2026-08-25 01:23:21",
+   "sha256_12": "cfef9af11182",
+   "structure": {
+    "blocks": 290,
+    "headings_h1": 6,
+    "first_chapter": "Chapter 1: Introduction",
+    "words": 11357
+   }
+  },
+  {
+   "path": "docs/rewritten_fyp_interim_v5.docx",
+   "family": "rewrite_interim",
+   "label": "Interim v5 (retitle-only of rewrite v5)",
+   "status": "fallback",
+   "builder": "scripts/build_rewritten_fyp_interim_v5.py",
+   "date": "2026-08-25",
+   "decisions": [
+    "D75"
+   ],
+   "alias": "",
+   "note": "Same retitle-only contract as the other interim derivatives, over the v5 language-cleanup line (D75). Comprehensive fallback; the D73 progress copy remains the selected T53 artifact.",
+   "exists": true,
+   "size_bytes": 821271,
+   "mtime": "2026-08-25 09:36:53",
+   "sha256_12": "29660d3d2555",
+   "structure": {
+    "blocks": 489,
+    "headings_h1": 11,
+    "first_chapter": "Chapter 1: Introduction",
+    "words": 18804
+   }
+  },
+  {
+   "path": "docs/FYP_Report_2026-07-01_v5.docx",
+   "family": "humanized_report",
+   "label": "Base — report v5",
+   "status": "canonical",
+   "builder": "scripts/build_fyp_report_v5.js",
+   "date": "2026-07-01",
+   "decisions": [
+    "D41"
+   ],
+   "alias": "base",
+   "note": "",
+   "exists": true,
+   "size_bytes": 1397730,
+   "mtime": "2026-08-25 21:53:58",
+   "sha256_12": "ff7e3be2615a",
+   "structure": {
+    "blocks": 763,
+    "headings_h1": 24,
+    "first_chapter": "Chapter 1: Introduction",
+    "words": 44026
+   }
+  },
+  {
+   "path": "docs/FYP_Report_2026-07-01_humanized.docx",
+   "family": "humanized_report",
+   "label": "Humanized report alternate",
+   "status": "fallback",
+   "builder": "scripts/build_fyp_report_humanized.js",
+   "date": "2026-07-01",
+   "decisions": [],
+   "alias": "variant",
+   "note": "Separate submission alternate (PROJECT_LOG §1 Current documents).",
+   "exists": true,
+   "size_bytes": 1393682,
+   "mtime": "2026-08-13 01:03:13",
+   "sha256_12": "bccf4ebd2360",
+   "structure": {
+    "blocks": 753,
+    "headings_h1": 22,
+    "first_chapter": "Chapter 1: Introduction",
+    "words": 42928
+   }
+  },
+  {
+   "path": "docs/FYP_Thesis_2026-07-02_v4.docx",
+   "family": "humanized_thesis",
+   "label": "Base — thesis v4",
+   "status": "canonical",
+   "builder": "scripts/build_fyp_thesis_v4.js",
+   "date": "2026-07-02",
+   "decisions": [
+    "D43"
+   ],
+   "alias": "base",
+   "note": "",
+   "exists": true,
+   "size_bytes": 1140379,
+   "mtime": "2026-08-13 00:33:41",
+   "sha256_12": "3167e2bbca75",
+   "structure": {
+    "blocks": 192,
+    "headings_h1": 19,
+    "first_chapter": "Chapter 1 Introduction",
+    "words": 10750
+   }
+  },
+  {
+   "path": "docs/FYP_Thesis_2026-07-02_humanized.docx",
+   "family": "humanized_thesis",
+   "label": "Humanized thesis alternate",
+   "status": "fallback",
+   "builder": "scripts/build_fyp_thesis_humanized.js",
+   "date": "2026-07-02",
+   "decisions": [],
+   "alias": "variant",
+   "note": "",
+   "exists": true,
+   "size_bytes": 1140076,
+   "mtime": "2026-08-13 01:03:13",
+   "sha256_12": "a26d08051aae",
+   "structure": {
+    "blocks": 190,
+    "headings_h1": 19,
+    "first_chapter": "Chapter 1 Introduction",
+    "words": 10736
+   }
+  },
+  {
+   "path": "docs/FYP_Interim_2026-07-10.docx",
+   "family": "humanized_interim",
+   "label": "Base — interim master",
+   "status": "current-reference",
+   "builder": "scripts/build_fyp_interim.js",
+   "date": "2026-07-10",
+   "decisions": [],
+   "alias": "base",
+   "note": "",
+   "exists": true,
+   "size_bytes": 1137174,
+   "mtime": "2026-08-13 00:33:41",
+   "sha256_12": "d37f7c0b2266",
+   "structure": {
+    "blocks": 196,
+    "headings_h1": 19,
+    "first_chapter": "Chapter 1 Introduction",
+    "words": 9564
+   }
+  },
+  {
+   "path": "docs/FYP_Interim_2026-07-10_humanized.docx",
+   "family": "humanized_interim",
+   "label": "Humanized interim alternate",
+   "status": "fallback",
+   "builder": "scripts/build_fyp_interim_humanized.js",
+   "date": "2026-07-10",
+   "decisions": [],
+   "alias": "variant",
+   "note": "",
+   "exists": true,
+   "size_bytes": 1137739,
+   "mtime": "2026-08-13 01:03:13",
+   "sha256_12": "25148cef5a61",
+   "structure": {
+    "blocks": 197,
+    "headings_h1": 19,
+    "first_chapter": "Chapter 1 Introduction",
+    "words": 9670
+   }
+  },
+  {
+   "path": "docs/FYP_Agent_Harness_Architecture_Guide_2026-06-09.docx",
+   "family": "(standalone)",
+   "label": "",
+   "status": "",
+   "builder": "",
+   "date": "",
+   "decisions": [],
+   "alias": "",
+   "note": "Word architecture guide for the agent harness.",
+   "exists": true,
+   "size_bytes": 1052231,
+   "mtime": "2026-06-09 00:43:01",
+   "sha256_12": "e5f7feb7735a"
+  },
+  {
+   "path": "docs/Codex_Meetup_Agent_Harness_Report.docx",
+   "family": "(standalone)",
+   "label": "",
+   "status": "",
+   "builder": "",
+   "date": "",
+   "decisions": [],
+   "alias": "",
+   "note": "Meetup report on the repo-native agent harness.",
+   "exists": true,
+   "size_bytes": 1190450,
+   "mtime": "2026-06-15 20:26:14",
+   "sha256_12": "684a976e669d"
+  },
+  {
+   "path": "docs/Agentic_AI_Workflow_Report_2026-06-26.docx",
+   "family": "(standalone)",
+   "label": "",
+   "status": "",
+   "builder": "",
+   "date": "",
+   "decisions": [],
+   "alias": "",
+   "note": "Agentic workflow report deck companion.",
+   "exists": true,
+   "size_bytes": 377123,
+   "mtime": "2026-06-26 15:45:25",
+   "sha256_12": "61d832372f77"
+  },
+  {
+   "path": "docs/archive/FYP_TC1_Full_Session_Report_2026-04-08.docx",
+   "family": "(standalone)",
+   "label": "",
+   "status": "",
+   "builder": "",
+   "date": "",
+   "decisions": [],
+   "alias": "",
+   "note": "Archived TC1 session record.",
+   "exists": true,
+   "size_bytes": 13742,
+   "mtime": "2026-04-08 17:32:06",
+   "sha256_12": "7b05485b9872"
+  },
+  {
+   "path": "docs/archive/FYP_Decision_Register_and_Compressed_Work_Plan_2026-05-13.docx",
+   "family": "(standalone)",
+   "label": "",
+   "status": "",
+   "builder": "",
+   "date": "",
+   "decisions": [],
+   "alias": "",
+   "note": "Archived early decision register.",
+   "exists": true,
+   "size_bytes": 12462,
+   "mtime": "2026-05-13 21:34:06",
+   "sha256_12": "93f2bb5d4974"
+  },
+  {
+   "path": "docs/archive/FYP_Decisions_and_Plan_2026-05-13.docx",
+   "family": "(standalone)",
+   "label": "",
+   "status": "",
+   "builder": "",
+   "date": "",
+   "decisions": [],
+   "alias": "",
+   "note": "Archived early decisions and plan.",
+   "exists": true,
+   "size_bytes": 352423,
+   "mtime": "2026-05-13 21:35:51",
+   "sha256_12": "49c0e54accba"
+  }
+ ],
+ "edges": [
+  {
+   "family_id": "report_canonical",
+   "family_label": "Full FYP report (docx-js line)",
+   "from_label": "First full draft (2026-05-23)",
+   "to_label": "Draft update (2026-05-24)",
+   "from_path": "docs/archive/FYP_Report_2026-05-23.docx",
+   "to_path": "docs/archive/FYP_Report_2026-05-24.docx",
+   "decisions": [],
+   "slug": "report_canonical__first_full_draft_2026_05_23_to_draft_update_2026_05_24",
+   "counts": {
+    "added": 37,
+    "removed": 6,
+    "edited": 10,
+    "renumber_only": 0
+   }
+  },
+  {
+   "family_id": "report_canonical",
+   "family_label": "Full FYP report (docx-js line)",
+   "from_label": "Draft update (2026-05-24)",
+   "to_label": "Draft update (2026-06-14)",
+   "from_path": "docs/archive/FYP_Report_2026-05-24.docx",
+   "to_path": "docs/archive/FYP_Report_2026-06-14.docx",
+   "decisions": [],
+   "slug": "report_canonical__draft_update_2026_05_24_to_draft_update_2026_06_14",
+   "counts": {
+    "added": 172,
+    "removed": 36,
+    "edited": 43,
+    "renumber_only": 0
+   }
+  },
+  {
+   "family_id": "report_canonical",
+   "family_label": "Full FYP report (docx-js line)",
+   "from_label": "Draft update (2026-06-14)",
+   "to_label": "v2",
+   "from_path": "docs/archive/FYP_Report_2026-06-14.docx",
+   "to_path": "docs/archive/FYP_Report_2026-06-26_v2.docx",
+   "decisions": [],
+   "slug": "report_canonical__draft_update_2026_06_14_to_v2",
+   "counts": {
+    "added": 36,
+    "removed": 13,
+    "edited": 30,
+    "renumber_only": 0
+   }
+  },
+  {
+   "family_id": "report_canonical",
+   "family_label": "Full FYP report (docx-js line)",
+   "from_label": "v2",
+   "to_label": "v3",
+   "from_path": "docs/archive/FYP_Report_2026-06-26_v2.docx",
+   "to_path": "docs/archive/FYP_Report_2026-06-26_v3.docx",
+   "decisions": [],
+   "slug": "report_canonical__v2_to_v3",
+   "counts": {
+    "added": 0,
+    "removed": 0,
+    "edited": 133,
+    "renumber_only": 0
+   }
+  },
+  {
+   "family_id": "report_canonical",
+   "family_label": "Full FYP report (docx-js line)",
+   "from_label": "v3",
+   "to_label": "v4 (128-token era)",
+   "from_path": "docs/archive/FYP_Report_2026-06-26_v3.docx",
+   "to_path": "docs/archive/FYP_Report_2026-06-30_v4.docx",
+   "decisions": [],
+   "slug": "report_canonical__v3_to_v4_128_token_era",
+   "counts": {
+    "added": 6,
+    "removed": 0,
+    "edited": 3,
+    "renumber_only": 0
+   }
+  },
+  {
+   "family_id": "report_canonical",
+   "family_label": "Full FYP report (docx-js line)",
+   "from_label": "v4 (128-token era)",
+   "to_label": "v5 (512-token primary re-base)",
+   "from_path": "docs/archive/FYP_Report_2026-06-30_v4.docx",
+   "to_path": "docs/FYP_Report_2026-07-01_v5.docx",
+   "decisions": [
+    "D41"
+   ],
+   "slug": "report_canonical__v4_128_token_era_to_v5_512_token_primary_re_base",
+   "counts": {
+    "added": 141,
+    "removed": 81,
+    "edited": 100,
+    "renumber_only": 0
+   }
+  },
+  {
+   "family_id": "report_canonical",
+   "family_label": "Full FYP report (docx-js line)",
+   "from_label": "v5 (512-token primary re-base)",
+   "to_label": "v6 (remediated comparison draft)",
+   "from_path": "docs/FYP_Report_2026-07-01_v5.docx",
+   "to_path": "docs/FYP_Report_2026-07-25_v6.docx",
+   "decisions": [
+    "D41"
+   ],
+   "slug": "report_canonical__v5_512_token_primary_re_base_to_v6_remediated_comparison_draft",
+   "counts": {
+    "added": 350,
+    "removed": 132,
+    "edited": 128,
+    "renumber_only": 0
+   }
+  },
+  {
+   "family_id": "thesis_line",
+   "family_label": "Standalone thesis",
+   "from_label": "Thesis v1 (early)",
+   "to_label": "Thesis v2",
+   "from_path": "docs/archive/FYP_Thesis_2026-06-18.docx",
+   "to_path": "docs/archive/FYP_Thesis_2026-06-26_v2.docx",
+   "decisions": [],
+   "slug": "thesis_line__thesis_v1_early_to_thesis_v2",
+   "counts": {
+    "added": 13,
+    "removed": 3,
+    "edited": 5,
+    "renumber_only": 0
+   }
+  },
+  {
+   "family_id": "thesis_line",
+   "family_label": "Standalone thesis",
+   "from_label": "Thesis v2",
+   "to_label": "Thesis v3",
+   "from_path": "docs/archive/FYP_Thesis_2026-06-26_v2.docx",
+   "to_path": "docs/archive/FYP_Thesis_2026-06-26_v3.docx",
+   "decisions": [],
+   "slug": "thesis_line__thesis_v2_to_thesis_v3",
+   "counts": {
+    "added": 0,
+    "removed": 0,
+    "edited": 26,
+    "renumber_only": 0
+   }
+  },
+  {
+   "family_id": "thesis_line",
+   "family_label": "Standalone thesis",
+   "from_label": "Thesis v3",
+   "to_label": "Thesis v4 (512-primary mirror)",
+   "from_path": "docs/archive/FYP_Thesis_2026-06-26_v3.docx",
+   "to_path": "docs/FYP_Thesis_2026-07-02_v4.docx",
+   "decisions": [
+    "D43"
+   ],
+   "slug": "thesis_line__thesis_v3_to_thesis_v4_512_primary_mirror",
+   "counts": {
+    "added": 47,
+    "removed": 33,
+    "edited": 32,
+    "renumber_only": 17
+   }
+  },
+  {
+   "family_id": "rewrite_report",
+   "family_label": "Rewritten full report (plain-academic line)",
+   "from_label": "Rewrite v1 (corpus-informed)",
+   "to_label": "Rewrite v2 (plain-academic pass)",
+   "from_path": "docs/rewritten_fyp_report_v1.docx",
+   "to_path": "docs/rewritten_fyp_report_v2.docx",
+   "decisions": [
+    "D57",
+    "D58",
+    "D59",
+    "D63",
+    "D65"
+   ],
+   "slug": "rewrite_report__rewrite_v1_corpus_informed_to_rewrite_v2_plain_academic_pass",
+   "counts": {
+    "added": 63,
+    "removed": 63,
+    "edited": 188,
+    "renumber_only": 0
+   }
+  },
+  {
+   "family_id": "rewrite_report",
+   "family_label": "Rewritten full report (plain-academic line)",
+   "from_label": "Rewrite v2 (plain-academic pass)",
+   "to_label": "Rewrite v3 (selected plain-academic voice)",
+   "from_path": "docs/rewritten_fyp_report_v2.docx",
+   "to_path": "docs/rewritten_fyp_report_v3.docx",
+   "decisions": [
+    "D63",
+    "D64",
+    "D65"
+   ],
+   "slug": "rewrite_report__rewrite_v2_plain_academic_pass_to_rewrite_v3_selected_plain_academic_voice",
+   "counts": {
+    "added": 46,
+    "removed": 46,
+    "edited": 9,
+    "renumber_only": 0
+   }
+  },
+  {
+   "family_id": "rewrite_report",
+   "family_label": "Rewritten full report (plain-academic line)",
+   "from_label": "Rewrite v3 (selected plain-academic voice)",
+   "to_label": "Rewrite v4 (HW0288 funnel introduction)",
+   "from_path": "docs/rewritten_fyp_report_v3.docx",
+   "to_path": "docs/rewritten_fyp_report_v4.docx",
+   "decisions": [
+    "D64",
+    "D65",
+    "D66",
+    "D67",
+    "D68",
+    "D69"
+   ],
+   "slug": "rewrite_report__rewrite_v3_selected_plain_academic_voice_to_rewrite_v4_hw0288_funnel_introduction",
+   "counts": {
+    "added": 10,
+    "removed": 14,
+    "edited": 48,
+    "renumber_only": 87
+   }
+  },
+  {
+   "family_id": "rewrite_report",
+   "family_label": "Rewritten full report (plain-academic line)",
+   "from_label": "Rewrite v4 (HW0288 funnel introduction)",
+   "to_label": "Rewrite v5 (language-cleanup line)",
+   "from_path": "docs/rewritten_fyp_report_v4.docx",
+   "to_path": "docs/rewritten_fyp_report_v5.docx",
+   "decisions": [
+    "D66",
+    "D67",
+    "D68",
+    "D69",
+    "D75"
+   ],
+   "slug": "rewrite_report__rewrite_v4_hw0288_funnel_introduction_to_rewrite_v5_language_cleanup_line",
+   "counts": {
+    "added": 16,
+    "removed": 16,
+    "edited": 132,
+    "renumber_only": 0
+   }
+  },
+  {
+   "family_id": "rewrite_interim",
+   "family_label": "Rewritten interim report (submission line)",
+   "from_label": "Interim v1 (retitle-only of rewrite v1)",
+   "to_label": "Interim v3 (retitle-only of rewrite v3)",
+   "from_path": "docs/rewritten_fyp_interim_v1.docx",
+   "to_path": "docs/rewritten_fyp_interim_v3.docx",
+   "decisions": [
+    "D59",
+    "D65"
+   ],
+   "slug": "rewrite_interim__interim_v1_retitle_only_of_rewrite_v1_to_interim_v3_retitle_only_of_rewrite_v3",
+   "counts": {
+    "added": 64,
+    "removed": 64,
+    "edited": 191,
+    "renumber_only": 0
+   }
+  },
+  {
+   "family_id": "rewrite_interim",
+   "family_label": "Rewritten interim report (submission line)",
+   "from_label": "Interim v3 (retitle-only of rewrite v3)",
+   "to_label": "Interim v4 (funnel intro, comprehensive fallback)",
+   "from_path": "docs/rewritten_fyp_interim_v3.docx",
+   "to_path": "docs/rewritten_fyp_interim_v4.docx",
+   "decisions": [
+    "D65",
+    "D68",
+    "D70"
+   ],
+   "slug": "rewrite_interim__interim_v3_retitle_only_of_rewrite_v3_to_interim_v4_funnel_intro_comprehensive_fa",
+   "counts": {
+    "added": 10,
+    "removed": 14,
+    "edited": 48,
+    "renumber_only": 87
+   }
+  },
+  {
+   "family_id": "rewrite_interim",
+   "family_label": "Rewritten interim report (submission line)",
+   "from_label": "Interim v4 (funnel intro, comprehensive fallback)",
+   "to_label": "Interim compact (progress-centred)",
+   "from_path": "docs/rewritten_fyp_interim_v4.docx",
+   "to_path": "docs/rewritten_fyp_interim_compact.docx",
+   "decisions": [
+    "D68",
+    "D70",
+    "D71",
+    "D72"
+   ],
+   "slug": "rewrite_interim__interim_v4_funnel_intro_comprehensive_fa_to_interim_compact_progress_centred",
+   "counts": {
+    "added": 19,
+    "removed": 166,
+    "edited": 74,
+    "renumber_only": 47
+   }
+  },
+  {
+   "family_id": "rewrite_interim",
+   "family_label": "Rewritten interim report (submission line)",
+   "from_label": "Interim compact (progress-centred)",
+   "to_label": "Interim progress (SELECTED T53 artifact)",
+   "from_path": "docs/rewritten_fyp_interim_compact.docx",
+   "to_path": "docs/rewritten_fyp_interim_progress.docx",
+   "decisions": [
+    "D71",
+    "D72",
+    "D73"
+   ],
+   "slug": "rewrite_interim__interim_compact_progress_centred_to_interim_progress_selected_t53_artifact",
+   "counts": {
+    "added": 66,
+    "removed": 92,
+    "edited": 52,
+    "renumber_only": 54
+   }
+  },
+  {
+   "family_id": "rewrite_interim",
+   "family_label": "Rewritten interim report (submission line)",
+   "from_label": "Interim progress (SELECTED T53 artifact)",
+   "to_label": "Interim v5 (retitle-only of rewrite v5)",
+   "from_path": "docs/rewritten_fyp_interim_progress.docx",
+   "to_path": "docs/rewritten_fyp_interim_v5.docx",
+   "decisions": [
+    "D72",
+    "D73",
+    "D75"
+   ],
+   "slug": "rewrite_interim__interim_progress_selected_t53_artifact_to_interim_v5_retitle_only_of_rewrite_v5",
+   "counts": {
+    "added": 199,
+    "removed": 26,
+    "edited": 86,
+    "renumber_only": 11
+   }
+  },
+  {
+   "family_id": "humanized_report",
+   "family_label": "Humanized alternate — full report",
+   "from_label": "Base — report v5",
+   "to_label": "Humanized report alternate",
+   "from_path": "docs/FYP_Report_2026-07-01_v5.docx",
+   "to_path": "docs/FYP_Report_2026-07-01_humanized.docx",
+   "decisions": [
+    "D41"
+   ],
+   "slug": "humanized_report__base_report_v5_to_humanized_report_alternate",
+   "counts": {
+    "added": 0,
+    "removed": 8,
+    "edited": 145,
+    "renumber_only": 0
+   }
+  },
+  {
+   "family_id": "humanized_thesis",
+   "family_label": "Humanized alternate — thesis",
+   "from_label": "Base — thesis v4",
+   "to_label": "Humanized thesis alternate",
+   "from_path": "docs/FYP_Thesis_2026-07-02_v4.docx",
+   "to_path": "docs/FYP_Thesis_2026-07-02_humanized.docx",
+   "decisions": [
+    "D43"
+   ],
+   "slug": "humanized_thesis__base_thesis_v4_to_humanized_thesis_alternate",
+   "counts": {
+    "added": 1,
+    "removed": 3,
+    "edited": 56,
+    "renumber_only": 0
+   }
+  },
+  {
+   "family_id": "humanized_interim",
+   "family_label": "Humanized alternate — interim",
+   "from_label": "Base — interim master",
+   "to_label": "Humanized interim alternate",
+   "from_path": "docs/FYP_Interim_2026-07-10.docx",
+   "to_path": "docs/FYP_Interim_2026-07-10_humanized.docx",
+   "decisions": [],
+   "slug": "humanized_interim__base_interim_master_to_humanized_interim_alternate",
+   "counts": {
+    "added": 3,
+    "removed": 2,
+    "edited": 72,
+    "renumber_only": 0
+   }
+  }
+ ],
+ "chain_notes": [
+  {
+   "family": "rewrite_report",
+   "note": "No v0 exists: this line starts at rewritten_fyp_report_v1.docx (T52/D57)."
+  },
+  {
+   "family": "rewrite_interim",
+   "note": "Verified absence (2026-08-25): no rewritten_fyp_interim_v2.docx was ever built or logged — the interim chain jumps v1 to v3 because the v2 editorial pass was applied to the report line only (D63)."
+  }
+ ]
+}

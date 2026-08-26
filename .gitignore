@@ -106,3 +106,30 @@ results_dev/
 # Read locally for the corpus style study and the claim-fitness audits; never
 # redistributed — this repository is public.
 Examples of Past FYP Papers/
+
+# Consolidated copies of the cited papers, one PDF per reference in the interim
+# report (see Sources/README.md). Same third-party copyright position as the line
+# above, and ~194 MB that git history could not easily shed if it were committed.
+Sources/
+
+# Report version change records that quote report prose wholesale. The committed
+# .summary.md siblings cap quotes at 90 chars; these full extracts stay local so
+# the public repository never republishes submission text (same rationale as the
+# docs/**/*.docx rule from D60).
+docs/report_versions/changes/*.full.md
+docs/report_versions/changes/*.full.json
+
+# AETHERIA Three.js world (world3d/) — build/run outputs stay local; the app
+# source, package.json and e2e suite are tracked. Screenshots regenerate via
+# `npm run test:e2e`.
+world3d/dist/
+world3d/.npm-cache/
+world3d/.chrome-tmp/
+world3d/screenshots/
+
+# Scratch/working tree for audits and document renders: PDF/text extractions of
+# the built docx, per-audit chunk dumps, an ephemeral Chrome profile, and copies
+# of third-party source PDFs. All of it is regenerable from the builders and the
+# audit scripts, and some of it carries the same third-party-copyright and
+# submission-text concerns as the Sources/ and docs/**/*.docx rules above.
+tmp/

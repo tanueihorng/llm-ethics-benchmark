@@ -278,21 +278,57 @@ def fig_category_asr():
 # Figure 6: multi-seed decoding sensitivity for Qwen3-1.7B
 # ---------------------------------------------------------------------------
 def fig_multiseed():
+    """Greedy headline against every individual seed.
+
+    The earlier version plotted only mean ± sd plus an unlabelled min-max line,
+    with the legend sitting on top of the greedy marker and no x-axis labels --
+    three ways of making the reader guess. The per-seed deltas are committed in
+    `judge_delta.per_seed`, so the seeds are drawn individually and each marker
+    is named on the axis instead of in an overlapping legend.
+    """
     ms = {r["pair_id"]: r for r in load("sensitivity_multiseed.json")["per_pair"]}
     q = ms["qwen_2b"]["judge_delta"]
     greedy = ms["qwen_2b"]["greedy_judge_delta"]
-    fig, ax = plt.subplots(figsize=(5.2, 3.0))
-    ax.axhline(0, color="#9ca3af", lw=0.7)
-    ax.errorbar([0], [q["mean"]], yerr=[q["sd"]], fmt="o", ms=9, color="#2563eb",
-                capsize=5, label=f"multi-seed mean ± sd (n={q['n_seeds']})")
-    ax.scatter([0.35], [greedy], s=90, marker="D", color="#dc2626", zorder=4,
-               label="greedy (headline)")
-    ax.plot([0, 0], [q["min"], q["max"]], color="#2563eb", lw=1.0, alpha=0.5)
-    ax.set_xlim(-0.4, 0.9)
-    ax.set_xticks([])
+    # The 128-token tree's sensitivity_multiseed.json carries the aggregate only
+    # (no `per_seed`). Fail loudly rather than emit a figure with the seed layer
+    # silently missing -- a degenerate chart that still looks finished is worse
+    # than no chart. Regenerate that tree's figures only if per-seed data lands.
+    per_seed = q.get("per_seed")
+    if not per_seed:
+        raise KeyError(
+            f"judge_delta.per_seed missing from {ANALYSIS/'sensitivity_multiseed.json'}; "
+            "fig_multiseed plots individual seeds and cannot be drawn without them"
+        )
+    deltas = [s["delta"] for s in per_seed]
+
+    fig, ax = plt.subplots(figsize=(5.6, 3.2))
+    ax.axhline(0, color="#9ca3af", lw=0.7, zorder=1)
+
+    xs = list(range(1, len(deltas) + 1))
+    # The mean +/- sd band spans the seed region only, so it reads as a property
+    # of the seeds rather than of the whole axis.
+    ax.fill_between(
+        [0.5, len(deltas) + 0.5],
+        q["mean"] - q["sd"], q["mean"] + q["sd"],
+        color="#2563eb", alpha=0.13, lw=0, zorder=1,
+        label=f"seed mean ± sd  ({q['mean']:+.3f} ± {q['sd']:.3f})",
+    )
+    ax.hlines(q["mean"], 0.5, len(deltas) + 0.5, color="#2563eb", lw=1.2, zorder=2)
+    ax.scatter(xs, deltas, s=62, facecolors="white", edgecolors="#2563eb",
+               linewidths=1.6, zorder=4, label="individual seed")
+
+    ax.axhline(greedy, color="#dc2626", lw=1.0, ls="--", alpha=0.8, zorder=2)
+    ax.scatter([0], [greedy], s=105, marker="D", color="#dc2626", zorder=5,
+               label=f"greedy headline ({greedy:+.3f})")
+
+    ax.set_xlim(-0.7, len(deltas) + 0.9)
+    ax.set_xticks([0] + xs)
+    ax.set_xticklabels(["greedy"] + [f"seed {i}" for i in xs], fontsize=8.5)
     ax.set_ylabel("Δ HarmBench ASR, judge")
     ax.set_title("Qwen3-1.7B: headline vs stochastic decoding", fontweight="bold")
-    ax.legend(loc="lower right", fontsize=8, frameon=False)
+    # Upper left is the only region the data never enters, so the legend cannot
+    # sit on a marker the way the previous lower-right placement did.
+    ax.legend(loc="upper left", fontsize=8, frameon=False)
     fig.savefig(FIGDIR / "multiseed.png")
     plt.close(fig)
 

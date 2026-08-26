@@ -12,7 +12,8 @@ import pytest
 REPO_ROOT = Path(__file__).resolve().parents[1]
 REPORT = REPO_ROOT / "docs" / "rewritten_fyp_report_v1.docx"
 W_NS = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
-NS = {"w": W_NS}
+WP_NS = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"
+NS = {"w": W_NS, "wp": WP_NS}
 
 
 def report_parts() -> tuple[ElementTree.Element, ElementTree.Element]:
@@ -224,6 +225,11 @@ def test_t47_gap6_prior_work_figures_are_present() -> None:
     # un-attacked base rate that makes the reference level interpretable.
     assert "29.8 to 37.1 points at τ=0.95" in row_text
     assert "4.5 to 17.3 points across six" in row_text
+    assert (
+        "GPT-4 selects the highest-scoring response from 49 decoding configurations"
+        in row_text
+    )
+    assert "Refusal-suffix match over 49 sampled generations" not in row_text
     assert "scores 0.3 un-attacked" in row_text
 
     # Q-Misalign [39]: the control column, not the attacker-prepared headline.
@@ -272,3 +278,76 @@ def test_t47_gap6_refuted_figures_stay_out() -> None:
     # "no method dominates" was drafted as a quotation; that string appears in
     # neither arXiv version of Kharinaev et al.
     assert "no method dominates" not in haystack
+
+
+def test_submission_copy_carries_the_audited_editorial_repairs() -> None:
+    document, _ = report_parts()
+    visible_text = "\n".join(
+        paragraph_text(paragraph) for paragraph in document.findall(".//w:p", NS)
+    )
+
+    assert "citation metadata, numerical claims" in visible_text
+    assert "code, citations, numerical claims" not in visible_text
+    assert "five pairs across four families" in visible_text
+    assert "three judges; five families" not in visible_text
+
+    # A spaced hyphen is legitimate only for the suspended compound below.
+    split_compounds = re.findall(r"\b[A-Za-z]+- [A-Za-z][A-Za-z-]*", visible_text)
+    assert split_compounds == ["model- and"], split_compounds
+
+
+def test_submission_copy_carries_verified_claim_and_reproducibility_repairs() -> None:
+    """Pin the six submission-readiness repairs verified on 2026-08-19."""
+    document, _ = report_parts()
+    visible_text = "\n".join(
+        paragraph_text(paragraph) for paragraph in document.findall(".//w:p", NS)
+    )
+
+    assert "Phi's regex over-refusal rate falls from 0.128 to 0.080" in visible_text
+    assert "Phi's regex over-refusal rate falls from 0.056 to 0.008" not in visible_text
+    assert "its adjusted q-value is 0.1687" in visible_text
+    assert "its adjusted q-value is 0.1074" not in visible_text
+
+    assert "exhibits or clearly attempts the target behaviour" in visible_text
+    assert "fulfils the unsafe request" not in visible_text
+    assert "exact dated snapshot was not recorded" in visible_text
+    assert "versioned API judge" not in visible_text
+
+    assert "The primary multiplicity family contains 20 NF4 contrasts" in visible_text
+    assert "The registered family contains" not in visible_text
+    assert "The registered NF4 family contains" not in visible_text
+    assert "registered primary family" not in visible_text
+    assert "three registered survivors" not in visible_text
+    assert "versioned but external" not in visible_text
+
+    for revision in (
+        "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+        "1cfa9a7208912126459214e8b04321603b3df60c",
+        "0cb88a4f764b7a12671c53f0838cd831a0843b95",
+        "c170c708c41dac9275d15a8fff4eca08d52bab71",
+        "cfbefacb99257ffa30c83adab238a50856ac3083",
+        "7327bd9f6efbbe6101dc6cc4736302b3cbb6e425",
+    ):
+        assert revision in visible_text
+    assert "cais/HarmBench-Llama-2-13b-cls" in visible_text
+    assert "gpt-4o-2024-08-06" in visible_text
+
+
+def test_every_figure_has_meaningful_alt_text() -> None:
+    document, _ = report_parts()
+    drawings = document.findall(".//wp:docPr", NS)
+    descriptions = [node.get("descr", "").strip() for node in drawings]
+    assert len(descriptions) == 6
+    assert all(text.startswith("Figure ") and len(text.split()) > 5 for text in descriptions)
+
+
+def test_submission_copy_contains_no_review_markup() -> None:
+    if not REPORT.exists():
+        pytest.skip(f"{REPORT} is not present in this checkout")
+    with zipfile.ZipFile(REPORT) as archive:
+        names = set(archive.namelist())
+        document = ElementTree.fromstring(archive.read("word/document.xml"))
+
+    assert "word/comments.xml" not in names
+    assert document.find(".//w:ins", NS) is None
+    assert document.find(".//w:del", NS) is None

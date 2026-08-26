@@ -1,0 +1,20 @@
+{
+  "name": "aetheria-world3d",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "AETHERIA — an interactive Three.js floating-islands world with a full day/night cycle, procedurally generated terrain and browser end-to-end tests.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test:e2e": "node tests/e2e.mjs"
+  },
+  "dependencies": {
+    "three": "^0.169.0"
+  },
+  "devDependencies": {
+    "puppeteer-core": "^23.11.1",
+    "vite": "^5.4.8"
+  }
+}

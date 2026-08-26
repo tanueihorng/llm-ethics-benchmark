@@ -108,7 +108,7 @@ There are two candidates and they are **not** equivalent.
 
 | Candidate | Length | Contents page renders | Has "progress / remaining work" framing |
 |---|---|---|---|
-| `docs/rewritten_fyp_interim_v1.docx` | 57 pp | **Yes, anywhere** | **No** — same body as the final |
+| `docs/rewritten_fyp_interim_v1.docx` | 58 pp | **Yes, anywhere** | **No** — same body as the final |
 | `docs/FYP_Interim_2026-07-10.docx` | 38 pp | Word only (blank elsewhere until F9) | **Yes** — has a progress chapter |
 
 > A LaTeX build of the first candidate now exists too —
@@ -119,7 +119,7 @@ There are two candidates and they are **not** equivalent.
 **Two things to decide, and they pull in opposite directions.**
 
 1. **Length.** The school guidance on file says an interim report is *about 50% of the
-   final*. The final is ~57 pages, so the rewrite-interim is ~100% of it, not 50%. The
+   final*. The final is ~58 pages, so the rewrite-interim is ~100% of it, not 50%. The
    older interim at 38 pp is closer but still above half.
 2. **Framing.** The interim submission is described as *"stating project progress"*. The
    rewrite-interim is a pure retitle of the final report — it changes the cover line and the
@@ -302,7 +302,7 @@ Prof. Chng Eng Siong's thesis-writing notes). **This is a capture of a paste, no
 CCDS document — check anything load-bearing against the current official version.**
 
 **Report**
-- Final report length: **40–65 pages**. The rewrite is ~57 pp — inside the band.
+- Final report length: **40–65 pages**. The rewrite is ~58 pp — inside the band.
 - Interim report ≈ **50% of the final**. (See §3 — this is the open tension.)
 - Must show: you defined the scope, did the work yourself, know the literature, built
   reasonable baselines, and proposed future work.

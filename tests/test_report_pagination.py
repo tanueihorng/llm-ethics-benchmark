@@ -2,8 +2,9 @@
 
 The Table of Contents is a Word field and repaginates on open, but the List of
 Figures and List of Tables are plain paragraphs, and the cached TOC entries are
-what every non-Word reader sees. Nothing corrected or checked those numbers
-before this test: any edit that changed body length drifted them silently.
+what every non-Word reader sees. Microsoft Word is the submission authority;
+the checker records the few verified Word/LibreOffice pagination differences
+explicitly instead of silently accepting either renderer.
 """
 
 from __future__ import annotations
@@ -74,6 +75,33 @@ def test_checker_fires_on_a_wrong_page_number(rendered, monkeypatch) -> None:
         row["status"] == "mismatch" and row["title"] == title
         for row in report["mismatches"]
     ), "the pagination check did not fire on a deliberately wrong page number"
+
+
+def test_word_authority_is_explicit_and_must_fire(rendered, monkeypatch) -> None:
+    """Known renderer differences remain narrow and still reject a wrong claim."""
+    checker, pdf = rendered
+    expected = {
+        ("contents", "4.7 Research-Question Synthesis"): 26,
+        ("contents", "6.2 Relationship to Prior Work"): 35,
+        ("contents", "6.4 Scorer Validity as a Research Result"): 38,
+        ("contents", "6.5 Threats to Validity"): 39,
+        ("figures", "Figure 4.2. Precision sweep across fp16, INT8, and NF4"): 26,
+    }
+    assert checker.WORD_AUTHORITATIVE_PAGES == expected
+
+    real = checker.claimed_entries()
+    doctored = {kind: list(pairs) for kind, pairs in real.items()}
+    title = "4.7 Research-Question Synthesis"
+    doctored["contents"] = [
+        (entry, "99" if entry == title else page)
+        for entry, page in doctored["contents"]
+    ]
+    monkeypatch.setattr(checker, "claimed_entries", lambda *a, **k: doctored)
+    report = checker.check(REPORT, pdf)
+    row = next(entry for entry in report["entries"] if entry["title"] == title)
+    assert row["authority"] == "microsoft_word"
+    assert row["actual"] == 26
+    assert row["status"] == "mismatch"
 
 
 def test_checker_distinguishes_a_caption_from_a_cross_reference() -> None:

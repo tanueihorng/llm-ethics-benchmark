@@ -548,6 +548,39 @@ def test_real_policy_report_source_is_not_a_freshness_satisfier() -> None:
     assert any("FYP_Report" in pat for pat in report_worthy["required_changed_patterns"])
 
 
+def test_report_worthy_covers_the_submission_line():
+    """The freshness gate must watch the document actually being submitted.
+
+    Until 2026-08-13 `changed_file_patterns` named only the six superseded JS
+    builders and `required_changed_patterns` matched only `docs/FYP_Report_*.docx`,
+    so editing the rewrite builder -- or a figure printed inside the rewrite --
+    reported "no report-worthy changed files", and any trigger that did fire could
+    be satisfied by v5's mtime. Both directions are pinned here.
+    """
+    repo = Path(__file__).resolve().parents[1]
+    report_worthy = load_policy(repo)["report_worthy"]
+    triggers = report_worthy["changed_file_patterns"]
+    required = report_worthy["required_changed_patterns"]
+
+    for builder in (
+        "scripts/build_rewritten_fyp_report_v1.py",
+        "scripts/build_rewritten_fyp_interim_v1.py",
+        "scripts/build_rewritten_latex.py",
+    ):
+        assert builder in triggers, f"{builder} must trigger the freshness gate"
+        # A source that satisfies its own gate can never force a rebuild.
+        assert builder not in required, f"{builder} must not satisfy its own gate"
+
+    # A figure is report content, not tooling.
+    assert "scripts/make_figures.py" in triggers
+    assert any("figures_512" in pat for pat in triggers)
+
+    assert any("rewritten_fyp_report" in pat for pat in required), (
+        "the rewrite's rendered docx must be able to satisfy the gate, or a "
+        "rewrite-builder edit is satisfied by the v5 artifact instead"
+    )
+
+
 RETIRED_BUILDERS = (
     "scripts/build_fyp_report.js",
     "scripts/build_fyp_report_v2.js",

@@ -60,10 +60,24 @@ BUILDERS = [
     "scripts/build_fyp_thesis_humanized.js",
     "scripts/build_fyp_interim.js",
     "scripts/build_fyp_interim_humanized.js",
+    # 2026-08-22 audit finding: the D54 usage→presence lock did not cover the
+    # SELECTED submission line (v3, D65) nor v2 — a rewritten paragraph naming a
+    # method with no bracket would have passed silently. Both are Python
+    # builders, which the gate already supports.
+    "scripts/build_rewritten_fyp_report_v2.py",
+    "scripts/build_rewritten_fyp_report_v3.py",
+    "scripts/build_rewritten_fyp_report_v4.py",
+    # v5 language-cleanup line: it names the same methods and inherits v1's
+    # bibliography, so the same usage->presence rule applies.
+    "scripts/build_rewritten_fyp_report_v5.py",
+    "scripts/build_rewritten_fyp_interim_progress.py",
 ]
 TEX_MIRRORS = [
     "fyp_submission/report_latex/final_thesis/mythesis.tex",
     "fyp_submission/report_latex/interim_report/mythesis.tex",
+    # Same gap as BUILDERS above: the rewrite line's generated mirrors.
+    "fyp_submission/report_latex/rewritten_final/mythesis.tex",
+    "fyp_submission/report_latex/rewritten_interim/mythesis.tex",
 ]
 
 
@@ -78,6 +92,16 @@ def split_refs(text: str, path: str) -> tuple[str, str]:
         source_path = REPO_ROOT / path
         namespace = runpy.run_path(str(source_path))
         references = namespace.get("REFERENCES")
+        if not isinstance(references, list) or not references:
+            # v2/v3 rewrite builders have no REFERENCES of their own: they import
+            # the v1 builder at build time and inherit its reference block (their
+            # citation-marker sequence is locked equal to v1's). Scanning v1's
+            # bibliography is therefore the same check against the block their
+            # docx actually prints.
+            if "build_rewritten_fyp_report_v1.py" not in text:
+                raise AssertionError(f"{path}: no populated `REFERENCES` list")
+            base = runpy.run_path(str(REPO_ROOT / "scripts/build_rewritten_fyp_report_v1.py"))
+            references = base.get("REFERENCES")
         assert isinstance(references, list) and references, (
             f"{path}: no populated `REFERENCES` list"
         )

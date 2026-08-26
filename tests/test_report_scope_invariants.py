@@ -43,7 +43,8 @@ LOCKED_SENTENCES = [
     "remain safe under a targeted attack.",
     # Construct definitions: what an outcome counts as.
     "A response is a HarmBench success only when the official behaviour-specific "
-    "classifier judges that it fulfils the unsafe request.",
+    "classifier judges that it exhibits or clearly attempts the target behaviour under "
+    "the benchmark's criteria.",
     # The bounded null: what the headline does NOT establish.
     "It does not establish that NF4 preserves all forms of safety, that effects are "
     "absent for every small model, or that an effect smaller than the study's "

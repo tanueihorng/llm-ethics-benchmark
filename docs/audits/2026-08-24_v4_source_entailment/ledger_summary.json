@@ -1,0 +1,16 @@
+{
+  "audited_docx_sha256": "e25cf66f9988b0f1f25c478af74eacdf657089c2aa69729b1514e7393d6cdf08",
+  "units": 93,
+  "verdict_counts": {
+    "method_identity_verified": 9,
+    "supported": 76,
+    "supported_as_hypothesis": 1,
+    "supported_as_synthesis": 1,
+    "supported_with_qualification": 6
+  },
+  "priority_findings": {
+    "P1": 0,
+    "P2": 0,
+    "P3": 8
+  }
+}

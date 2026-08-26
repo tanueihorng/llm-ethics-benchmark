@@ -469,6 +469,7 @@ def add_table(
     *,
     font_size: float = 8.4,
     show_caption: bool = True,
+    body_alignment=None,
 ) -> None:
     if abs(sum(widths_cm) - CONTENT_WIDTH_CM) > 0.05:
         raise ValueError(f"Table {number} widths sum to {sum(widths_cm):.2f} cm")
@@ -500,6 +501,8 @@ def add_table(
                 paragraph.paragraph_format.space_after = Pt(2)
                 paragraph.paragraph_format.line_spacing = 1.0
                 paragraph.paragraph_format.keep_with_next = False
+                if body_alignment is not None and row_index > 0:
+                    paragraph.alignment = body_alignment
                 for run in paragraph.runs:
                     run.font.name = FONT
                     run.font.size = Pt(font_size)
@@ -529,7 +532,10 @@ def add_figure(
     p.paragraph_format.keep_with_next = True
     p.paragraph_format.space_before = Pt(4)
     p.paragraph_format.space_after = Pt(4)
-    p.add_run().add_picture(str(resolve_figure(filename)), width=Cm(width_cm))
+    picture = p.add_run().add_picture(str(resolve_figure(filename)), width=Cm(width_cm))
+    alt_text = f"Figure {number}. {title}"
+    picture._inline.docPr.set("descr", alt_text)
+    picture._inline.docPr.set("title", alt_text)
     add_figure_caption(doc, number, title)
 
 
@@ -579,11 +585,19 @@ def add_cover(doc: Document) -> None:
     r.italic = True
     for _ in range(3):
         doc.add_paragraph()
+    # The degree line follows the corpus convention (P02, the most recent past paper):
+    # it sits between the supervisor and the year. Keep the wording identical to
+    # `\degreename` in scripts/build_rewritten_latex.py so the two mirrors agree.
     for line, bold in (
         ("Final Year Project Report", True),
         ("Project Code: CCDS25-1136", False),
         ("TAN UEI HORNG (UTAN001)", True),
         ("Supervisor: Dr. Zhang Jiehuang", False),
+        (
+            "Submitted in Partial Fulfilment of the Requirements for the Degree of "
+            "Bachelor of Engineering (Computer Science)",
+            False,
+        ),
         ("Academic Year 2025/2026", False),
     ):
         p = doc.add_paragraph()
@@ -606,7 +620,7 @@ def add_front_matter(doc: Document) -> None:
     add_body(
         doc,
         "Generative-AI tools assisted software implementation, test authoring, document review, and "
-        "language editing under my direction. I checked the resulting code, citations, numerical "
+        "language editing under my direction. I checked the resulting code, citation metadata, numerical "
         "claims, and prose, and I take responsibility for the final submission.",
     )
 
@@ -649,58 +663,58 @@ def add_front_matter(doc: Document) -> None:
         ("Chapter 1: Introduction", "1", 0),
         ("1.1 Background and Motivation", "1", 1),
         ("1.2 Problem Statement", "1", 1),
-        ("1.3 Research Questions", "2", 1),
-        ("1.4 Scope", "2", 1),
-        ("1.5 Contributions", "3", 1),
-        ("1.6 Report Structure", "3", 1),
-        ("Chapter 2: Literature Review", "4", 0),
-        ("2.1 Trustworthiness and Safety Evaluation", "4", 1),
-        ("2.2 Quantization Methods and Capability Effects", "5", 1),
-        ("2.3 Quantization and Safety Behaviour", "6", 1),
-        ("2.4 Refusal, Harmfulness, and Threat Models", "7", 1),
-        ("2.5 Automatic Evaluators and Human Grounding", "9", 1),
-        ("2.6 Synthesis and Research Gap", "10", 1),
-        ("2.7 Implications for Experimental Design", "11", 1),
-        ("Chapter 3: Methodology and Experimental Setup", "12", 0),
-        ("3.1 Matched-Pair Experimental Design", "12", 1),
-        ("3.2 Models and Precision Conditions", "13", 1),
-        ("3.3 Benchmarks and Outcomes", "14", 1),
-        ("3.4 Scoring and Validation", "15", 1),
-        ("3.5 Statistical Analysis", "15", 1),
-        ("3.6 Implementation and Execution", "17", 1),
-        ("3.7 Reproducibility Controls", "17", 1),
-        ("3.8 Analysis Workflow and Quality Control", "18", 1),
-        ("Chapter 4: Results", "20", 0),
-        ("4.1 Results at a Glance", "20", 1),
-        ("4.2 Harmful Compliance (RQ1)", "21", 1),
-        ("4.3 Over-Refusal on Benign Prompts (RQ2)", "22", 1),
-        ("4.4 Capability (RQ3)", "23", 1),
-        ("4.5 Model Scale and Family Differences (RQ4)", "24", 1),
+        ("1.3 Research Questions", "3", 1),
+        ("1.4 Scope", "3", 1),
+        ("1.5 Contributions", "4", 1),
+        ("1.6 Report Structure", "4", 1),
+        ("Chapter 2: Literature Review", "5", 0),
+        ("2.1 Trustworthiness and Safety Evaluation", "5", 1),
+        ("2.2 Quantization Methods and Capability Effects", "6", 1),
+        ("2.3 Quantization and Safety Behaviour", "7", 1),
+        ("2.4 Refusal, Harmfulness, and Threat Models", "8", 1),
+        ("2.5 Automatic Evaluators and Human Grounding", "10", 1),
+        ("2.6 Synthesis and Research Gap", "11", 1),
+        ("2.7 Implications for Experimental Design", "12", 1),
+        ("Chapter 3: Methodology and Experimental Setup", "13", 0),
+        ("3.1 Matched-Pair Experimental Design", "13", 1),
+        ("3.2 Models and Precision Conditions", "14", 1),
+        ("3.3 Benchmarks and Outcomes", "15", 1),
+        ("3.4 Scoring and Validation", "16", 1),
+        ("3.5 Statistical Analysis", "16", 1),
+        ("3.6 Implementation and Execution", "18", 1),
+        ("3.7 Reproducibility Controls", "19", 1),
+        ("3.8 Analysis Workflow and Quality Control", "19", 1),
+        ("Chapter 4: Results", "21", 0),
+        ("4.1 Results at a Glance", "21", 1),
+        ("4.2 Harmful Compliance (RQ1)", "22", 1),
+        ("4.3 Over-Refusal on Benign Prompts (RQ2)", "23", 1),
+        ("4.4 Capability (RQ3)", "24", 1),
+        ("4.5 Model Scale and Family Differences (RQ4)", "25", 1),
         ("4.6 INT8 Precision Point", "25", 1),
         ("4.7 Research-Question Synthesis", "26", 1),
-        ("Chapter 5: Scorer Validation and Robustness", "27", 0),
-        ("5.1 HarmBench Classifier versus Refusal Proxy", "27", 1),
-        ("5.2 Independent HarmBench Judges", "28", 1),
-        ("5.3 Human Grounding of Harmful-Compliance Scorers", "29", 1),
-        ("5.4 XSTest Scorer Sensitivity and Human Validation", "29", 1),
-        ("5.5 Generation-Length Robustness", "30", 1),
-        ("5.6 Multi-Seed Decoding Sensitivity", "31", 1),
-        ("5.7 Power and the Meaning of the Null", "32", 1),
-        ("5.8 Robustness Synthesis", "32", 1),
-        ("Chapter 6: Discussion", "34", 0),
-        ("6.1 Answer to the Central Question", "34", 1),
+        ("Chapter 5: Scorer Validation and Robustness", "28", 0),
+        ("5.1 HarmBench Classifier versus Refusal Proxy", "28", 1),
+        ("5.2 Independent HarmBench Judges", "29", 1),
+        ("5.3 Human Grounding of Harmful-Compliance Scorers", "30", 1),
+        ("5.4 XSTest Scorer Sensitivity and Human Validation", "30", 1),
+        ("5.5 Generation-Length Robustness", "31", 1),
+        ("5.6 Multi-Seed Decoding Sensitivity", "32", 1),
+        ("5.7 Power and the Meaning of the Null", "33", 1),
+        ("5.8 Robustness Synthesis", "34", 1),
+        ("Chapter 6: Discussion", "35", 0),
+        ("6.1 Answer to the Central Question", "35", 1),
         ("6.2 Relationship to Prior Work", "35", 1),
-        ("6.3 Capability as the Deployment Cost", "37", 1),
+        ("6.3 Capability as the Deployment Cost", "38", 1),
         ("6.4 Scorer Validity as a Research Result", "38", 1),
         ("6.5 Threats to Validity", "39", 1),
-        ("6.6 Practical Implications", "40", 1),
-        ("Chapter 7: Conclusion and Future Work", "41", 0),
-        ("7.1 Conclusions", "41", 1),
-        ("7.2 Prioritised Future Work", "41", 1),
-        ("References", "43", 0),
-        ("Appendix A: Reproducibility Summary", "46", 0),
-        ("Appendix B: Minimum Detectable Capability Effects", "47", 0),
-        ("Appendix C: Human-Validation Boundaries", "48", 0),
+        ("6.6 Practical Implications", "41", 1),
+        ("Chapter 7: Conclusion and Future Work", "42", 0),
+        ("7.1 Conclusions", "42", 1),
+        ("7.2 Prioritised Future Work", "42", 1),
+        ("References", "44", 0),
+        ("Appendix A: Reproducibility Summary", "47", 0),
+        ("Appendix B: Minimum Detectable Capability Effects", "48", 0),
+        ("Appendix C: Human-Validation Boundaries", "49", 0),
     ]
     toc_paragraphs = [
         add_contents_entry(doc, title, page, level=level, bold=level == 0)
@@ -715,30 +729,30 @@ def add_front_matter(doc: Document) -> None:
     doc.add_page_break()
     doc.add_paragraph("List of Figures", style="Front Matter Heading")
     for title, page in [
-        ("Figure 3.1. Matched pairs, precision arms, benchmark battery, and analysis flow", "13"),
-        ("Figure 4.1. Per-pair HarmBench classifier ΔASR with paired confidence intervals", "22"),
-        ("Figure 4.2. Capability-anchored safety space using MMLU and HarmBench deltas", "24"),
-        ("Figure 4.3. Precision sweep across fp16, INT8, and NF4", "26"),
-        ("Figure 5.1. HarmBench classifier ASR versus the refusal-regex proxy", "28"),
-        ("Figure 5.2. Qwen3-1.7B greedy result and five-seed HarmBench sensitivity", "32"),
+        ("Figure 1.1. Capability-anchored safety space using MMLU and HarmBench deltas", "3"),
+        ("Figure 3.1. Matched pairs, precision arms, benchmark battery, and analysis flow", "14"),
+        ("Figure 4.1. Per-pair HarmBench classifier ΔASR with paired confidence intervals", "23"),
+        ("Figure 4.2. Precision sweep across fp16, INT8, and NF4", "26"),
+        ("Figure 5.1. HarmBench classifier ASR versus the refusal-regex proxy", "29"),
+        ("Figure 5.2. Qwen3-1.7B greedy result and five-seed HarmBench sensitivity", "33"),
     ]:
         add_contents_entry(doc, title, page)
 
     doc.add_page_break()
     doc.add_paragraph("List of Tables", style="Front Matter Heading")
     for title, page in [
-        ("Table 2.1. Positioning of representative prior work", "10"),
-        ("Table 3.1. Model pairs and precision conditions", "13"),
-        ("Table 3.2. Benchmark roles, sample sizes, and primary outcomes", "14"),
-        ("Table 4.1. NF4 safety and over-refusal results", "20"),
-        ("Table 4.2. NF4 capability results", "20"),
-        ("Table 5.1. Per-pair HarmBench deltas under three judges", "28"),
-        ("Table 5.2. HarmBench classifier deltas at 128 and 512 tokens", "31"),
-        ("Table 5.3. Five-seed HarmBench sensitivity", "31"),
-        ("Table 6.1. Competing explanations for the HarmBench null", "34"),
-        ("Table 6.2. Published quantization effects placed beside this study's", "35"),
-        ("Table A.1. Primary run controls", "46"),
-        ("Table B.1. Capability effects and minimum detectable effects", "47"),
+        ("Table 2.1. Positioning of representative prior work", "11"),
+        ("Table 3.1. Model pairs and precision conditions", "14"),
+        ("Table 3.2. Benchmark roles, sample sizes, and primary outcomes", "15"),
+        ("Table 4.1. NF4 safety and over-refusal results", "21"),
+        ("Table 4.2. NF4 capability results", "21"),
+        ("Table 5.1. Per-pair HarmBench deltas under three judges", "29"),
+        ("Table 5.2. HarmBench classifier deltas at 128 and 512 tokens", "32"),
+        ("Table 5.3. Five-seed HarmBench sensitivity", "32"),
+        ("Table 6.1. Competing explanations for the HarmBench null", "35"),
+        ("Table 6.2. Published quantization effects placed beside this study's", "36"),
+        ("Table A.1. Primary run controls", "47"),
+        ("Table B.1. Capability effects and minimum detectable effects", "48"),
     ]:
         add_contents_entry(doc, title, page)
 
@@ -785,7 +799,7 @@ def add_chapter_one(doc: Document) -> None:
             "target device's memory budget, which motivates deployment-oriented compression [5].",
             "Post-training quantization addresses that constraint by representing weights, and "
             "sometimes activations, at lower precision. AWQ reports deployment-oriented four-bit "
-            "compression and acceleration on desktop and mobile GPUs [5]. GPTQ demonstrates one- "
+            "compression and acceleration on desktop and mobile GPUs [5]. GPTQ demonstrates one-"
             "shot weight quantization at model scales up to 175 billion parameters [6]. Across a "
             "large scaling-law study, four-bit inference is often the most effective operating "
             "point under a fixed memory budget [7]. Together these results explain why a four-bit "
@@ -827,7 +841,22 @@ def add_chapter_one(doc: Document) -> None:
             "attack-success rate is not evidence of improved alignment if the same model also loses "
             "the ability to answer ordinary questions. The study consequently evaluates the three "
             "axes together and validates the instruments used to score them.",
+            "Figure 1.1 previews the answer. Each pair is placed by its change in MMLU accuracy "
+            "and its change in judge-scored harmful compliance, with paired bootstrap intervals "
+            "on both axes, against the interpretation regions defined in Chapter 3. No interval "
+            "excludes zero in the harmful-increase direction. Llama's interval excludes zero only "
+            "in the safety-improving direction, while the point estimates on the capability axis "
+            "are negative for all five pairs. Chapter 4 reports which of these effects survive "
+            "multiplicity correction, and Chapter 5 examines whether the pattern holds under a "
+            "change of scorer.",
         ],
+    )
+    add_figure(
+        doc,
+        "1.1",
+        "Capability-anchored safety space using MMLU and HarmBench deltas.",
+        "capability_anchor.png",
+        13.8,
     )
 
     add_heading(doc, "1.3", "Research Questions")
@@ -1203,9 +1232,9 @@ def add_chapter_two(doc: Document) -> None:
             "declared family of paired tests, and independent scorer validation. It does not attempt "
             "to establish a universal law of quantization. Its contribution is a controlled estimate "
             "under a well-defined deployment and measurement setting.",
-            "The gap is not merely that no earlier paper used the same list of benchmarks. The "
-            "missing link is inferential: prior work often demonstrates that a metric changes, "
-            "but the change is not always separated from capability, scorer error, truncation, or "
+            "The gap is not merely the absence, in Table 2.1, of the same benchmark combination. "
+            "The missing link is inferential: across the studies reviewed there, a reported metric "
+            "change is not consistently separated from capability, scorer error, truncation, or "
             "multiplicity. This study builds those alternatives into the design, because a safety "
             "claim becomes credible only after the neighbouring explanations have been tested.",
             "The literature also sets the report's claim boundary. Quantization-conditioned attacks "
@@ -1231,9 +1260,10 @@ def add_chapter_two(doc: Document) -> None:
             "decoding controls, and generation budgets. Crucially, a weakness in any layer can "
             "create a treatment effect that is not caused by the quantizer.",
             "Statistical design is equally important. Twenty model–outcome contrasts create many "
-            "opportunities for an isolated p-value below 0.05. Prior quantization evaluations often "
-            "emphasise average benchmark retention and do not frame their outcomes as a declared "
-            "multiplicity family [8]-[10]. The present study uses paired tests and FDR control because "
+            "opportunities for an isolated p-value below 0.05. The three quantization evaluations "
+            "reviewed here emphasise average benchmark retention and do not frame their outcomes as "
+            "a declared multiplicity family [8]-[10]. The present study uses paired tests and FDR "
+            "control because "
             "its question is inferential: which observed changes remain credible after accounting for "
             "the number of comparisons?",
             "A null result also needs positive design. It should state what effect sizes the sample can "
@@ -1284,7 +1314,7 @@ def add_chapter_three(doc: Document) -> None:
             "gives discordant counts a direct interpretation.",
             "The study was expanded in stages, but the current analysis presents the complete "
             "five-pair matrix under one primary configuration. Historical 128-token outputs are "
-            "not mixed into the 512-token estimates, and they appear only in the generation- "
+            "not mixed into the 512-token estimates, and they appear only in the generation-"
             "length sensitivity analysis. This separation prevents a shorter pilot budget from "
             "silently determining the headline.",
             "Prompt-level pairing is preserved in both the bootstrap interval [49] and the exact "
@@ -1373,10 +1403,10 @@ def add_chapter_three(doc: Document) -> None:
             "features that can trigger exaggerated safety. Its pre-specified deterministic scorer "
             "remains the primary scorer of record, while a three-class semantic judge provides a "
             "validation-informed sensitivity analysis.",
-            "MMLU is evaluated on six subjects with zero-shot multiple-choice prompts, and ARC- "
-            "Challenge provides a larger second anchor with a different task structure. Exact- "
+            "MMLU is evaluated on six subjects with zero-shot multiple-choice prompts, and ARC-"
+            "Challenge provides a larger second anchor with a different task structure. Exact-"
             "match parsing is used for both. The two capability benchmarks are interpreted "
-            "jointly in discussion, but the registered primary family retains them as separate "
+            "jointly in discussion, but the primary multiplicity family retains them as separate "
             "outcomes.",
             "Sample sizes reflect the benchmark resources and compute budget. HarmBench uses 200 "
             "behaviours per alias, which allows item-level matching across precision, and XSTest "
@@ -1397,11 +1427,13 @@ def add_chapter_three(doc: Document) -> None:
         doc,
         [
             "A response is a HarmBench success only when the official behaviour-specific "
-            "classifier judges that it fulfils the unsafe request. A refusal-regex proxy is "
-            "retained for transparency and comparison, but it is not the primary harmful- "
-            "compliance outcome. The classifier is cross-checked against a versioned API judge "
-            "and Llama Guard, and a stratified 200-item human-labelled sample grounds both the "
-            "primary classifier and the regex.",
+            "classifier judges that it exhibits or clearly attempts the target behaviour under "
+            "the benchmark's criteria. A refusal-regex proxy is "
+            "retained for transparency and comparison, but it is not the primary harmful-"
+            "compliance outcome. The classifier is cross-checked against a gpt-4o API judge whose "
+            "exact dated snapshot was not recorded, and against revision-pinned Llama Guard. A "
+            "stratified 200-item human-labelled sample grounds both the primary classifier and "
+            "the regex.",
             "XSTest is scored first by the pre-specified regex, after which the sensitivity judge "
             "assigns full compliance, partial refusal, or full refusal. Strict over-refusal "
             "counts only full refusal, whereas the broad mapping also counts partial refusal, and "
@@ -1414,7 +1446,7 @@ def add_chapter_three(doc: Document) -> None:
             "By contrast, the HarmBench classifier receives both the behaviour and the response "
             "and returns the benchmark's binary success judgement. Judge parsing failures are "
             "counted rather than discarded, and the reported runs contain zero parse failures.",
-            "The API second judge uses a condensed yes/no rubric aligned to the same harmful- "
+            "The API second judge uses a condensed yes/no rubric aligned to the same harmful-"
             "behaviour criterion. Llama Guard, however, is intentionally treated as a looser "
             "construct cross-check, because it classifies whether the response is unsafe under "
             "its taxonomy rather than whether a named behaviour was completed. This difference is "
@@ -1436,17 +1468,17 @@ def add_chapter_three(doc: Document) -> None:
             "pairing [49]. Binary outcomes are also tested with the exact McNemar test [50], "
             "which uses only discordant prompt pairs and whose null hypothesis is equal marginal "
             "probability within the pair.",
-            "The registered NF4 family contains 20 contrasts: five model pairs multiplied by four "
+            "The primary NF4 multiplicity family contains 20 contrasts: five model pairs multiplied by four "
             "outcomes. Benjamini and Hochberg's false-discovery-rate procedure controls "
             "multiplicity across that family [52], and a result is described as surviving "
             "correction only when its adjusted q-value is below 0.05. Uncorrected significance "
             "remains visible in the tables, but it does not determine the study headline.",
-            "Cohen's kappa measures chance-corrected agreement between scorers [53]. The report "
+            "Cohen's kappa measures chance-corrected agreement between scorers [53]. "
+            "Sample-size and minimum-detectable-effect calculations follow paired-proportion "
+            "power analysis [54], [55]. Agreement methodology follows the caution that "
+            "coefficient choice and prevalence affect interpretation [56], so the report "
             "presents the coefficient with raw agreement and task context rather than treating "
-            "verbal bands as universal truth. Sample-size and minimum-detectable-effect "
-            "calculations follow paired-proportion power analysis [54], [55], and agreement "
-            "methodology follows the caution that coefficient choice and prevalence affect "
-            "interpretation [56], [57].",
+            "the verbal bands of Landis and Koch [57] as universal truth.",
             "Llama Guard supplies the open-weight safety-moderation cross-check used in the "
             "scorer sensitivity analysis [58], and its construct is deliberately broader than the "
             "HarmBench behaviour label.",
@@ -1455,7 +1487,7 @@ def add_chapter_three(doc: Document) -> None:
             "Data-contamination risk is disclosed because benchmark familiarity can inflate "
             "capability estimates [60]. Finally, the sensitivity analyses are labelled separately "
             "so that they strengthen or qualify the interpretation without silently changing the "
-            "registered family.",
+            "primary multiplicity family.",
             "For a binary outcome, let b be the number of prompts on which the baseline is "
             "negative and the quantized condition is positive, and c the reverse. The observed "
             "paired difference is then (b−c)/n under the report's harmful-ward sign convention. "
@@ -1463,7 +1495,7 @@ def add_chapter_three(doc: Document) -> None:
             "directions are equally likely, so items on which both conditions agree do not "
             "contribute to that test statistic.",
             "The bootstrap resamples matched prompt pairs with replacement, and for each "
-            "replicate the quantized-minus-baseline difference is recomputed, preserving within- "
+            "replicate the quantized-minus-baseline difference is recomputed, preserving within-"
             "item dependence. The reported 95% interval is the empirical percentile interval. "
             "Because a confidence interval and an exact paired test answer related but not "
             "identical questions, both remain visible.",
@@ -1504,7 +1536,7 @@ def add_chapter_three(doc: Document) -> None:
             "separation keeps the audit trail intact and avoids rewriting history when a scorer "
             "is corrected.",
             "The command-line interface exposes single-run, matrix, analysis, and agent-status "
-            "paths. The dashboard reads the result trees but does not alter them, and new user- "
+            "paths. The dashboard reads the result trees but does not alter them, and new user-"
             "generated configurations are written outside the committed primary configuration. "
             "This boundary prevents an interface action from changing the evidence underlying the "
             "report.",
@@ -1530,7 +1562,7 @@ def add_chapter_three(doc: Document) -> None:
             "the sample counts, seed, generation budget, decoding rule, attention exception, "
             "quantization configuration, scorer identity, and GPU class needed to reconstruct the "
             "run. However, the exact historical environment of the earliest artefacts was not "
-            "captured with perfect package-level provenance, so the report does not claim bit- "
+            "captured with perfect package-level provenance, so the report does not claim bit-"
             "for-bit reproduction of those runs. It does support deterministic replay of the "
             "committed analysis and a fresh rerun from the pinned configuration.",
             "The project uses automated tests and claim verification to detect stale numbers and "
@@ -1638,7 +1670,7 @@ def add_chapter_four(doc: Document) -> None:
     add_paragraphs(
         doc,
         [
-            f"The registered family contains {multiplicity['family_size']} NF4 contrasts. "
+            f"The primary multiplicity family contains {multiplicity['family_size']} NF4 contrasts. "
             "Exactly three contrasts survive BH-FDR correction, and none is a HarmBench "
             "harmful-compliance contrast. The survivors are Qwen3-1.7B MMLU "
             f"{fmt_delta(multiplicity['survivors'][0]['delta'])}, Llama-3.2-3B ARC "
@@ -1730,7 +1762,7 @@ def add_chapter_four(doc: Document) -> None:
         doc,
         [
             "No pair shows a statistically significant increase in over-refusal, and four pairs "
-            "are non-significant. Phi-4-mini's −0.048 over-refusal decrease under the pre- "
+            "are non-significant. Phi-4-mini's −0.048 over-refusal decrease under the pre-"
             "specified regex is scorer-dependent, because the independent semantic judge does not "
             "reproduce it. The direction under the original scorer is in any case benign, since "
             "the NF4 model refuses fewer benign prompts.",
@@ -1744,7 +1776,7 @@ def add_chapter_four(doc: Document) -> None:
             "over-refusal and leaves only two survivors, both capability losses. This distinction "
             "avoids rewriting the analysis after seeing the data while still giving more weight "
             "to the better-grounded instrument.",
-            "Phi's regex over-refusal rate falls from 0.056 to 0.008. In deployment terms the "
+            "Phi's regex over-refusal rate falls from 0.128 to 0.080. In deployment terms the "
             "absolute change corresponds to twelve fewer regex-flagged benign prompts in the "
             "250-item condition, which is large enough to survive correction under the original "
             "scorer. It is also exactly the kind of result that requires construct validation, "
@@ -1780,7 +1812,7 @@ def add_chapter_four(doc: Document) -> None:
             "largest corrected effects and that its expression depends on the benchmark.",
             "Qwen3-4B preserves MMLU almost exactly, moving from 0.747 to 0.743, while ARC falls "
             "from 0.876 to 0.860. The ARC result is individually significant because the "
-            "benchmark has 1,172 paired items, but its adjusted q-value is 0.1074. Sample size "
+            "benchmark has 1,172 paired items, but its adjusted q-value is 0.1687. Sample size "
             "and multiplicity therefore change the evidence attached to a small absolute effect.",
             "Llama's MMLU decrease is 0.0367, with an interval ending at zero and p = 0.080. Its ARC "
             "decrease is similar in magnitude but estimated more precisely, so ARC survives correction. "
@@ -1796,14 +1828,10 @@ def add_chapter_four(doc: Document) -> None:
             "MMLU and Llama ARC effects exceed their estimated 80% power thresholds, whereas "
             "several smaller observed deltas do not. Appendix B therefore reports the thresholds "
             "rather than converting all non-significant effects into claims of equivalence.",
+            "Figure 1.1 places all five pairs in the joint space these results define. The "
+            "capability axis carries a negative displacement for every pair, whereas the "
+            "harmful-compliance deltas are mixed in sign and none of them survives correction.",
         ],
-    )
-    add_figure(
-        doc,
-        "4.2",
-        "Capability-anchored safety space using MMLU and HarmBench deltas.",
-        "capability_anchor.png",
-        13.8,
     )
 
     add_heading(doc, "4.5", "Model Scale and Family Differences (RQ4)")
@@ -1813,7 +1841,7 @@ def add_chapter_four(doc: Document) -> None:
             "The within-Qwen comparison suggests that the 1.7B model is more sensitive on MMLU. "
             "Its loss is 0.090, whereas the 4B model changes by −0.0033. However, that contrast "
             "does not reproduce at the same magnitude on ARC: the 1.7B decrease is −0.0094 and "
-            "the 4B decrease is −0.0162. The evidence therefore supports task-specific small- "
+            "the 4B decrease is −0.0162. The evidence therefore supports task-specific small-"
             "model sensitivity, not a universal monotonic scale law.",
             "Across families, the baseline safety profiles differ substantially. Mistral begins "
             "at ASR 0.585, while Phi begins at 0.070, so a common absolute delta has different "
@@ -1840,7 +1868,7 @@ def add_chapter_four(doc: Document) -> None:
     add_paragraphs(
         doc,
         [
-            "The INT8 arm asks whether the observed pattern is graded with precision. Figure 4.3 "
+            "The INT8 arm asks whether the observed pattern is graded with precision. Figure 4.2 "
             "shows that harmful compliance is generally non-monotonic across fp16, INT8, and NF4. "
             "In addition, every INT8 HarmBench contrast at 512 tokens is non-significant under "
             "both the primary classifier and the API judge.",
@@ -1871,7 +1899,7 @@ def add_chapter_four(doc: Document) -> None:
     )
     add_figure(
         doc,
-        "4.3",
+        "4.2",
         "Precision sweep across fp16, INT8, and NF4 for safety and capability outcomes.",
         "precision_sweep.png",
         14.5,
@@ -2165,6 +2193,13 @@ def add_chapter_five(doc: Document) -> None:
         [3.6, 2.5, 2.8, 3.8, 2.9],
         font_size=8.2,
     )
+    add_body(
+        doc,
+        "Figure 5.2 shows the Qwen3-1.7B greedy headline against each individual seed. The "
+        "greedy delta coincides with the lowest two seed estimates and sits within the seed "
+        "mean plus or minus one standard deviation, so the headline is not separated from "
+        "what decoding variation alone produces on this pair.",
+    )
     add_figure(
         doc,
         "5.2",
@@ -2207,7 +2242,7 @@ def add_chapter_five(doc: Document) -> None:
             "dependence. The 128-token result is not trusted because truncation is common, and "
             "the 512-token rerun replaces it. Finally, greedy decoding is not assumed "
             "representative, so five stochastic seeds test sensitivity.",
-            "No single check is decisive. Together, however, they make a large hidden harmful- "
+            "No single check is decisive. Together, however, they make a large hidden harmful-"
             "ward effect less plausible in the tested setting. Remaining uncertainty is "
             "concentrated in effects below the MDE, attack-based threat models, languages and "
             "model families outside the sample, and the subjectivity of single-annotator human "
@@ -2230,7 +2265,7 @@ def add_chapter_six(doc: Document) -> None:
             "The study began with a distinction: an apparent safety change may reflect alignment, "
             "capability, or measurement. The results favour the latter two explanations. Under the "
             "primary HarmBench classifier at 512 tokens, NF4 produces no corrected harmful-ward "
-            "increase. Capability losses, by contrast, account for two of the three registered "
+            "increase. Capability losses, by contrast, account for two of the three multiplicity-robust "
             "survivors. The third survivor is a benign-direction over-refusal change that disappears "
             "under the better-grounded semantic scorer.",
             "This conclusion is deliberately bounded. It does not establish that NF4 preserves all "
@@ -2256,7 +2291,7 @@ def add_chapter_six(doc: Document) -> None:
         "Competing explanations for the HarmBench null",
         ["Candidate explanation", "Discriminating evidence", "Assessment"],
         [
-            ("True practical preservation", "No corrected ASR increase; three judges; five families", "Compatible within detection bounds"),
+            ("True practical preservation", "No corrected ASR increase; three judges; five pairs across four families", "Compatible within detection bounds"),
             ("Insufficient statistical power", "Per-pair MDE roughly 0.04–0.09", "Small effects remain possible"),
             ("Scorer insensitivity", "Classifier human κ 0.59; API and Llama Guard cross-checks", "Reduced but not eliminated"),
             ("Generation truncation", "60.3% truncation at 128; signal disappears at 512", "Explains the retired Qwen signal"),
@@ -2338,8 +2373,8 @@ def add_chapter_six(doc: Document) -> None:
                 "Llama-2-7B-Chat; AWQ 4-bit vs the same fp16 checkpoint",
                 "ASR rises 29.8 to 37.1 points at τ=0.95; the gap runs 4.5 to 17.3 points across six "
                 "sampling settings",
-                "Refusal-suffix match over 49 sampled generations",
-                "Measured under an active decoding attack, and scored as a best-of-49. The same fp16 "
+                "Decoding-attack ASR: GPT-4 selects the highest-scoring response from 49 decoding configurations",
+                "Measured under an active decoding attack with GPT-4 best-of-49 selection. The same fp16 "
                 "checkpoint scores 0.3 un-attacked, so almost all of the 29.8-point reference level is "
                 "attack effect rather than direct-request behaviour.",
             ),
@@ -2370,8 +2405,9 @@ def add_chapter_six(doc: Document) -> None:
         doc,
         [
             "Two features of the table deserve emphasis because they are easy to misread. Kharinaev et "
-            "al. report a safety ratio, so a positive difference there means the quantized model was "
-            "judged less safe, the opposite orientation to the attack success rates in the neighbouring "
+            "al. report a safety ratio and calculate the difference as FP16 minus quantized, so a "
+            "positive difference means the quantized model was judged less safe, the opposite "
+            "orientation to the attack success rates in the neighbouring "
             "rows [10]. And the only prior row measuring an unmodified checkpoint under ordinary "
             "quantization without an attack is Q-Misalign's control condition, which shows no change on "
             "three checkpoints [39]. That row agrees with the present null in direction, but it is "
@@ -2391,7 +2427,8 @@ def add_chapter_six(doc: Document) -> None:
             "semantic refusals. Simple string rules can therefore fail in both directions "
             "depending on the construct.",
             "The capability findings also qualify earlier capability-focused quantization work. "
-            "Large evaluations often report good average retention at four bits [7]-[9], but the "
+            "The three large evaluations reviewed here report good average retention at four bits "
+            "[7]-[9], but the "
             "Qwen3-1.7B MMLU loss shows that compact models and task subsets can still contain "
             "material failures. Conversely, the Mistral ARC gain and Qwen3-4B stability show that "
             "the loss is not universal.",
@@ -2451,8 +2488,9 @@ def add_chapter_six(doc: Document) -> None:
             "scientific conclusion. The refusal proxy overstates HarmBench success and the XSTest "
             "regex misses most human full refusals. In both cases, a semantic instrument is "
             "better grounded against the human sample.",
-            "At the same time, semantic judges introduce their own limitations. The API judge is "
-            "versioned but external, Llama Guard is open-weight but uses a broader policy "
+            "At the same time, semantic judges introduce their own limitations. The HarmBench API "
+            "judge is external and its exact dated snapshot was not recorded, Llama Guard is "
+            "open-weight but uses a broader policy "
             "construct, and human labels are more direct but expensive and subjective. Evidence "
             "is therefore triangulated across the primary benchmark-specific classifier, "
             "alternative judges, prompt-level agreement, and a disclosed human audit.",
@@ -2466,7 +2504,8 @@ def add_chapter_six(doc: Document) -> None:
             "contrast, a narrow refusal regex under-counts refusal because it misses indirect "
             "language. A transparent rule is therefore not automatically conservative, because "
             "its bias depends on how its surface patterns relate to the construct.",
-            "Pre-registration and validation must coexist. Keeping the original regex family protects "
+            "For the XSTest judge sensitivity study, its dated pre-registration and subsequent "
+            "validation must coexist. Keeping the original regex family protects "
             "against outcome-driven scorer replacement. Reporting the validation-informed family "
             "prevents procedural loyalty from overriding better construct evidence. Presenting both "
             "allows the reader to see that the headline is scorer-invariant where it matters: no "
@@ -2495,7 +2534,7 @@ def add_chapter_six(doc: Document) -> None:
             "regex family beside the validation-informed family.",
             "The sensitivity arms were conducted after the primary runs. Their role is diagnostic, not "
             "confirmatory. The report labels them separately and does not insert their p-values into the "
-            "registered family. This preserves the distinction between a planned primary test and an "
+            "primary multiplicity family. This preserves the distinction between the primary analysis and an "
             "explanation developed after observing a surprising result.",
             "Several analysis choices are rule-based, including parser behaviour and "
             "interpretation labels. Automated tests protect these rules against accidental "
@@ -2662,6 +2701,24 @@ def add_appendices(doc: Document) -> None:
                 "These are the declared floors; the exact runtime versions of the primary runs were "
                 "not captured in the immutable outputs",
             ),
+            (
+                "Target checkpoint revisions",
+                "Qwen/Qwen3-1.7B revision 70d244cc86ccca08cf5af4e1e306ecf908b1ad5e; "
+                "Qwen/Qwen3-4B revision 1cfa9a7208912126459214e8b04321603b3df60c; "
+                "meta-llama/Llama-3.2-3B-Instruct revision 0cb88a4f764b7a12671c53f0838cd831a0843b95; "
+                "mistralai/Mistral-7B-Instruct-v0.3 revision c170c708c41dac9275d15a8fff4eca08d52bab71; "
+                "microsoft/Phi-4-mini-instruct revision cfbefacb99257ffa30c83adab238a50856ac3083",
+            ),
+            (
+                "HarmBench primary judge",
+                "cais/HarmBench-Llama-2-13b-cls; the historical sidecars do not record a revision",
+            ),
+            (
+                "HarmBench cross-check judges",
+                "API: gpt-4o (exact dated snapshot not recorded); open-weight: "
+                "meta-llama/Llama-Guard-3-8B revision 7327bd9f6efbbe6101dc6cc4736302b3cbb6e425",
+            ),
+            ("XSTest API judge", "gpt-4o-2024-08-06"),
             ("HarmBench", "n=200 per alias; official HarmBench classifier primary"),
             ("XSTest", "n=250 per alias; regex primary plus three-class judge sensitivity"),
             ("MMLU", "Six-subject subset, n=300 per alias, exact match"),
@@ -2671,6 +2728,7 @@ def add_appendices(doc: Document) -> None:
         ],
         [4.0, 11.6],
         font_size=8.4,
+        body_alignment=WD_ALIGN_PARAGRAPH.LEFT,
     )
     add_body(
         doc,

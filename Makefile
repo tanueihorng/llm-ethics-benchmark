@@ -19,7 +19,7 @@ PYTEST_ARGS ?= -q
 TASK ?=
 AGENT ?=
 
-.PHONY: backup smoke run matrix analyze prefetch report thesis interim rewrite rewrite-interim rewrite-latex viva report-humanized thesis-humanized interim-humanized claim-registry claim-surfaces verify-claims verify-claim-surfaces architecture-diagram diagrams cluster-generate cluster-submit cluster-dry cluster-check cluster-all cluster-smoke agent-start agent-status agent-check agent-manifest agent-handoff agent-dashboard agent-tc1-checklist harness-eval dashboard
+.PHONY: backup smoke run matrix analyze prefetch report thesis interim rewrite rewrite-v2 rewrite-interim rewrite-interim-v3 rewrite-interim-v5 rewrite-interim-compact rewrite-interim-progress rewrite-latex viva report-humanized thesis-humanized interim-humanized claim-registry claim-surfaces verify-claims verify-claim-surfaces architecture-diagram diagrams cluster-generate cluster-submit cluster-dry cluster-check cluster-all cluster-smoke agent-start agent-status agent-check agent-manifest agent-handoff agent-dashboard agent-tc1-checklist harness-eval dashboard
 
 dashboard:
 	$(PYTHON) -m streamlit run dashboard/app.py
@@ -116,6 +116,27 @@ rewrite: claim-surfaces
 	$(PYTHON) scripts/build_rewritten_fyp_report_v1.py
 	@touch .local_build_state
 
+# Second, non-destructive editorial pass: replaces the repository/audit dialect
+# with conventional academic prose while preserving v1's citations and numbers.
+# Output: docs/rewritten_fyp_report_v2.docx
+rewrite-v2: claim-surfaces
+	$(PYTHON) scripts/build_rewritten_fyp_report_v2.py
+	@touch .local_build_state
+
+# Third, comprehensive natural human-academic essay pass: full essay flow across all
+# seven chapters while strictly locking numerical tokens and citation sequences.
+# Output: docs/rewritten_fyp_report_v3.docx
+rewrite-v3: claim-surfaces
+	$(PYTHON) scripts/build_rewritten_fyp_report_v3.py
+	@touch .local_build_state
+
+# Fourth rewrite line: preserves the v3 report while replacing the Chapter 1
+# opening with the author's HW0288 funnel introduction.
+# Output: docs/rewritten_fyp_report_v4.docx
+rewrite-v4: claim-surfaces
+	$(PYTHON) scripts/build_rewritten_fyp_report_v4.py
+	@touch .local_build_state
+
 # Interim-submission build of the same prose (T53, due 2026-08-24). NOTE: this
 # imports the report builder and calls build_report(), so it rewrites
 # docs/rewritten_fyp_report_v1.docx as a side effect before writing its own output.
@@ -123,6 +144,50 @@ rewrite: claim-surfaces
 rewrite-interim: claim-surfaces
 	$(PYTHON) scripts/build_rewritten_fyp_interim_v1.py
 	@touch .local_build_state
+
+# Interim-submission build of the V3 prose line (T53; the user selected the v3
+# plain-academic voice for submission after reviewing v1/v2/v3 side by side).
+# Same retitle-only contract as rewrite-interim above.
+# Output: docs/rewritten_fyp_interim_v3.docx
+rewrite-interim-v3: claim-surfaces
+	$(PYTHON) scripts/build_rewritten_fyp_interim_v3.py
+	@touch .local_build_state
+
+# Interim v4 copy of the v4 report line. The v3 interim remains unchanged.
+# Output: docs/rewritten_fyp_interim_v4.docx
+rewrite-interim-v4: claim-surfaces
+	$(PYTHON) scripts/build_rewritten_fyp_interim_v4.py
+	@touch .local_build_state
+
+# Language-cleanup rewrite of the v4 line (2026-08-25). Building the interim
+# also regenerates docs/rewritten_fyp_report_v5.docx as a side effect, exactly
+# like the rewrite-interim contract above.
+# Outputs: docs/rewritten_fyp_report_v5.docx + docs/rewritten_fyp_interim_v5.docx
+rewrite-interim-v5: claim-surfaces
+	$(PYTHON) scripts/build_rewritten_fyp_interim_v5.py
+	@touch .local_build_state
+
+# Compact progress-centred interim derived non-destructively from verified v4.
+# Output: docs/rewritten_fyp_interim_compact.docx
+rewrite-interim-compact: claim-surfaces
+	$(PYTHON) scripts/build_rewritten_fyp_interim_compact.py
+	@touch .local_build_state
+
+# User-directed interim: supplied Chapter 1, full v4 Chapters 2-4, then a
+# progress chapter that defers the detailed validation and discussion writing.
+# Output: docs/rewritten_fyp_interim_progress.docx
+rewrite-interim-progress: claim-surfaces
+	$(PYTHON) scripts/build_rewritten_fyp_interim_progress.py
+	@touch .local_build_state
+
+# Report version map: regenerate docs/REPORT_VERSIONS.md, the machine inventory
+# (docs/report_versions/inventory.json) and a chapter/paragraph-level change
+# record for every consecutive pair in every report lineage, driven by
+# configs/report_versions.yaml. The .full.md/.full.json siblings quote report
+# prose wholesale and stay gitignored (D60 rationale); summaries are committed.
+# Outputs: docs/REPORT_VERSIONS.md + docs/report_versions/
+report-versions:
+	$(PYTHON) scripts/report_tools/report_version_diff.py all
 
 # Overleaf/LaTeX mirrors of the rewrite line, GENERATED from the docx builder rather
 # than hand-maintained: the builder's content helpers are swapped for recorders, so
