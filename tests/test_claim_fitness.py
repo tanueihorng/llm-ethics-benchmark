@@ -431,3 +431,109 @@ def test_hedge_scan_fires_on_each_reaudit_defect(tmp_path: Path, line: str, find
     assert _scan_policy_group(tmp_path, group, "hedge").status == "fail", (
         f"{finding}: widened hedge scan did not fire on {line!r}"
     )
+
+
+# ---------------------------------------------------------------------------
+# 2026-09-07 (v2 claim audit). Defect CLASS: an INT8 capability-equivalence
+# claim presented without disclosing that the equivalence analysis is post hoc.
+#
+# results_512/analysis/capability_equivalence.json says it in its own fields:
+# the ±0.05 margin was "Fixed before computation on deployment-relevance
+# grounds", but "The analysis as a whole is post hoc: it was added after the
+# INT8 results were known." A reader who meets only the margin reads a planned
+# equivalence arm. This is an OMISSION defect, so no regex over the wording can
+# catch it — the shape is "claim present, disclosure absent", and it is checked
+# as a paired presence/omission test over the RENDERED document, not the builder
+# (source-level correctness is not rendered correctness; see the bibliography
+# gate above).
+
+INT8_EQUIVALENCE_CLAIM = re.compile(
+    r"INT8[^.]*\bequivalen|equivalen[^.]*\bINT8", re.IGNORECASE
+)
+POSTHOC_DISCLOSURE = re.compile(r"post[-\s]hoc", re.IGNORECASE)
+
+# Documents that make the claim and MUST carry the disclosure.
+POSTHOC_DISCLOSURE_REQUIRED = (
+    "docs/FYP_Report_2026-07-25_v6.docx",
+    "docs/rewritten_fyp_interim_progress_v2.docx",
+)
+
+# DELIBERATELY EXCLUDED, recorded rather than left implicit (D54 symmetry).
+# Measured 2026-09-07: every one of these makes the INT8 equivalence claim with
+# no post-hoc disclosure anywhere in the document. They are frozen comparison
+# artifacts, superseded fallbacks, or the already-submitted copy, and rewriting
+# a frozen artifact to satisfy a new gate is exactly what D54 forbids. Any of
+# them that is revived as a live deliverable must be remediated and moved into
+# POSTHOC_DISCLOSURE_REQUIRED first.
+POSTHOC_DISCLOSURE_UNREMEDIATED = {
+    "docs/FYP_Interim_2026-07-10.docx": "superseded docx-js interim line",
+    "docs/FYP_Interim_2026-07-10_humanized.docx": "superseded docx-js interim line",
+    "docs/FYP_Thesis_2026-07-02_v4.docx": "superseded thesis line",
+    "docs/FYP_Thesis_2026-07-02_humanized.docx": "superseded thesis line",
+    "docs/rewritten_fyp_report_v1.docx": "superseded rewrite fallback",
+    "docs/rewritten_fyp_report_v2.docx": "superseded rewrite fallback",
+    "docs/rewritten_fyp_report_v3.docx": "selected prose register, pre-dates this finding",
+    "docs/rewritten_fyp_report_v4.docx": "selected funnel intro, pre-dates this finding",
+    "docs/rewritten_fyp_report_v5.docx": "language-cleanup reference line",
+    "docs/rewritten_fyp_interim_v1.docx": "retitle-only fallback",
+    "docs/rewritten_fyp_interim_v3.docx": "retitle-only fallback",
+    "docs/rewritten_fyp_interim_v4.docx": "comprehensive fallback",
+    "docs/rewritten_fyp_interim_v5.docx": "retitle-only fallback",
+    "docs/rewritten_fyp_interim_compact.docx": "progress-centred fallback",
+    "docs/rewritten_fyp_interim_progress.docx": "SELECTED T53 artifact — open finding, see PROJECT_LOG",
+    "docs/rewritten_fyp_interim_progress_humanized.docx": "prose variant of the selected copy",
+    "docs/rewritten_fyp_interim_progress_lit_review_revised.docx": "comparison draft; immutable source of v2",
+}
+
+
+@pytest.mark.parametrize("rel", POSTHOC_DISCLOSURE_REQUIRED)
+def test_int8_equivalence_claim_discloses_that_it_is_post_hoc(rel: str) -> None:
+    path = REPO_ROOT / rel
+    if not path.exists():
+        pytest.skip(f"{rel} not present in this checkout")
+    rendered = docx_text(path)
+    claims = [p for p in rendered.split("\n") if INT8_EQUIVALENCE_CLAIM.search(p)]
+    if not claims:
+        pytest.skip(f"{rel} makes no INT8 equivalence claim")
+    assert POSTHOC_DISCLOSURE.search(rendered), (
+        f"{rel} asserts INT8 capability equivalence in {len(claims)} paragraph(s) "
+        f"but never discloses that the equivalence analysis is post hoc. "
+        f"capability_equivalence.json: 'The analysis as a whole is post hoc: it "
+        f"was added after the INT8 results were known.'"
+    )
+
+
+def test_posthoc_disclosure_gate_fires_on_an_undisclosed_claim() -> None:
+    """Must-fire: the detector catches the exact shipped wording it was written for."""
+    shipped = (
+        "INT8 remains close to fp16, while the largest losses appear at NF4, and "
+        "the equivalence analysis supports practical similarity for the INT8 "
+        "capability comparisons within the stated ±0.05 margin."
+    )
+    assert INT8_EQUIVALENCE_CLAIM.search(shipped)
+    assert not POSTHOC_DISCLOSURE.search(shipped)
+
+
+def test_every_document_making_the_claim_is_classified() -> None:
+    """Symmetry: a new document cannot make the claim and sit outside both sets.
+
+    This is the T56 shape — the earlier gates enumerated a fixed list, so each
+    new surface shipped unscanned by default.
+    """
+    unclassified = []
+    for path in sorted((REPO_ROOT / "docs").glob("*.docx")):
+        rel = f"docs/{path.name}"
+        if rel in POSTHOC_DISCLOSURE_REQUIRED or rel in POSTHOC_DISCLOSURE_UNREMEDIATED:
+            continue
+        try:
+            rendered = docx_text(path)
+        except Exception:  # not a readable wordprocessing package
+            continue
+        if INT8_EQUIVALENCE_CLAIM.search(rendered) and not POSTHOC_DISCLOSURE.search(rendered):
+            unclassified.append(rel)
+    assert not unclassified, (
+        "documents assert INT8 capability equivalence with no post-hoc "
+        f"disclosure and are in neither set: {unclassified}. Add the disclosure "
+        "and list them in POSTHOC_DISCLOSURE_REQUIRED, or record them in "
+        "POSTHOC_DISCLOSURE_UNREMEDIATED with the reason."
+    )

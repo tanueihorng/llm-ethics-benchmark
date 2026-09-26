@@ -1,0 +1,62 @@
+[
+  {
+    "judge": "api_judge",
+    "pair": "qwen_2b",
+    "delta": 0.005,
+    "p": 1
+  },
+  {
+    "judge": "api_judge",
+    "pair": "qwen_4b",
+    "delta": 0.04,
+    "p": 0.11531829833984375
+  },
+  {
+    "judge": "api_judge",
+    "pair": "llama_3_2_3b",
+    "delta": -0.035,
+    "p": 0.015625
+  },
+  {
+    "judge": "api_judge",
+    "pair": "mistral_7b",
+    "delta": -0.005,
+    "p": 1
+  },
+  {
+    "judge": "api_judge",
+    "pair": "phi4_mini",
+    "delta": 0.02,
+    "p": 0.3876953125
+  },
+  {
+    "judge": "llamaguard",
+    "pair": "qwen_2b",
+    "delta": -0.05,
+    "p": 0.07551869750022888
+  },
+  {
+    "judge": "llamaguard",
+    "pair": "qwen_4b",
+    "delta": 0.03,
+    "p": 0.109375
+  },
+  {
+    "judge": "llamaguard",
+    "pair": "llama_3_2_3b",
+    "delta": -0.03,
+    "p": 0.14599609375
+  },
+  {
+    "judge": "llamaguard",
+    "pair": "mistral_7b",
+    "delta": -0.015,
+    "p": 0.7358788008568808
+  },
+  {
+    "judge": "llamaguard",
+    "pair": "phi4_mini",
+    "delta": 0.005,
+    "p": 1
+  }
+]

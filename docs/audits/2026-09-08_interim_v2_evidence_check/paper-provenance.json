@@ -1,0 +1,302 @@
+[
+  {
+    "ref": 1,
+    "pdf": "Sources/[05] Lin et al. - AWQ - Activation-aware weight quantization for on-device LLM compression and acceleration.pdf",
+    "sha256": "cd7b88325267627b7159dfc32d3ee3fc5430718bd722afee6da25e14ff7525d6",
+    "fresh_text_matches_reviewed_extract": true
+  },
+  {
+    "ref": 2,
+    "pdf": "Sources/[06] Frantar et al. - GPTQ - Accurate post-training quantization for generative pre-trained transformers.pdf",
+    "sha256": "35e339171cd48bbf8dda246bd018b11aa33a5cda0c4a1587cdae574208f56396",
+    "fresh_text_matches_reviewed_extract": true
+  },
+  {
+    "ref": 3,
+    "pdf": "Sources/[07] Dettmers et al. - The case for 4-bit precision - k-bit inference scaling laws.pdf",
+    "sha256": "5800b6dabd730a17aa309da46ba0b322bdc00c359a0eb7d3f4241810f515a089",
+    "fresh_text_matches_reviewed_extract": true
+  },
+  {
+    "ref": 4,
+    "pdf": "Sources/[01] Yang et al. - Qwen3 technical report.pdf",
+    "sha256": "84a5e2b1fa04bb774bf12ae606d1e6d9dd2147ed2ebe78a4cfeb91ba380ffdd5",
+    "fresh_text_matches_reviewed_extract": true
+  },
+  {
+    "ref": 5,
+    "pdf": "Sources/[02] Grattafiori et al. - The Llama 3 herd of models.pdf",
+    "sha256": "481f1599468f95a07d05e97fafe55bbe786dc1624c6f881bcb4c7d14c933d083",
+    "fresh_text_matches_reviewed_extract": true
+  },
+  {
+    "ref": 6,
+    "pdf": "Sources/[03] Abouelenin et al. - Phi-4-Mini technical report - Compact yet powerful multimodal language models via Mixture-of-LoRAs.pdf",
+    "sha256": "51edb849958011b97b5aad904deebd9a4ea31d3c5839741d5e52810eaa9b3bcc",
+    "fresh_text_matches_reviewed_extract": true
+  },
+  {
+    "ref": 7,
+    "pdf": "Sources/[51] Jiang et al. - Mistral 7B.pdf",
+    "sha256": "dfbac4e7035344b305c947481f2e7e8a02f7a24a563917eb6e47f6591d14c5ae",
+    "fresh_text_matches_reviewed_extract": true
+  },
+  {
+    "ref": 8,
+    "pdf": "Sources/[08] Jin et al. - A comprehensive evaluation of quantization strategies for large language models.pdf",
+    "sha256": "fdf89c38a93fd00054c3b9dd8caa3ad74777a09f90a1ad6e2953d9ce37380ac0",
+    "fresh_text_matches_reviewed_extract": true
+  },
+  {
+    "ref": 9,
+    "pdf": "Sources/[09] Li et al. - Evaluating quantized large language models.pdf",
+    "sha256": "b23da5a1f66af7b35b36432ed75aade61face98d2f23ad5f87aa4abea4960b01",
+    "fresh_text_matches_reviewed_extract": true
+  },
+  {
+    "ref": 10,
+    "pdf": "Sources/[10.1] Kharinaev et al. - Investigating the impact of quantization methods on the safety and reliability of large language models (IEEE Access version of record).pdf",
+    "sha256": "65815bd38cd36426c46937779627b89018a868560c293c76e66bc03374f04ca9",
+    "fresh_text_matches_reviewed_extract": true
+  },
+  {
+    "ref": 11,
+    "pdf": "Sources/[18] R\u00f6ttger et al. - XSTest - A test suite for identifying exaggerated safety behaviours in large language models.pdf",
+    "sha256": "094ef8a30e2609d1b62ac53aa628a0524fc3a2f6e0eecd5441d5d76b789502a0",
+    "fresh_text_matches_reviewed_extract": true
+  },
+  {
+    "ref": 12,
+    "pdf": "Sources/[24.1] Mazeika et al. - HarmBench - A standardized evaluation framework for automated red teaming and robust refusal (PMLR v235 version of record).pdf",
+    "sha256": "6b87608143d17d5b2ae4f26f06892f41a2d2a356f83091d6f4920392e5dba56b",
+    "fresh_text_matches_reviewed_extract": true
+  },
+  {
+    "ref": 13,
+    "pdf": "Sources/[20] Huang et al. - Position - TrustLLM - Trustworthiness in large language models.pdf",
+    "sha256": "271df3ae5a8550838ba357392eec39f58617ff1952e6e0390dd802ad5784d9b5",
+    "fresh_text_matches_reviewed_extract": true
+  },
+  {
+    "ref": 14,
+    "pdf": "Sources/[21] Wang et al. - DecodingTrust - A comprehensive assessment of trustworthiness in GPT models.pdf",
+    "sha256": "0af07f4ded9e4d2c4ae1cc3ec5c765318d6e804a46211d206c1cbea9967dc8fe",
+    "fresh_text_matches_reviewed_extract": true
+  },
+  {
+    "ref": 15,
+    "pdf": "Sources/[22] Zhang et al. - SafetyBench - Evaluating the safety of large language models.pdf",
+    "sha256": "0e44a4125ba303e110f18dccf4cd705f196c1d59608f9ea2b0b45c9c63a42640",
+    "fresh_text_matches_reviewed_extract": true
+  },
+  {
+    "ref": 16,
+    "pdf": "Sources/[23] Ouyang et al. - Training language models to follow instructions with human feedback.pdf",
+    "sha256": "4ed5ef926ed5ad385d30ee4319f9b13650da29a3f015bc4e888bd669ee4670e5",
+    "fresh_text_matches_reviewed_extract": true
+  },
+  {
+    "ref": 17,
+    "pdf": "Sources/[25] Zou et al. - Universal and transferable adversarial attacks on aligned language models.pdf",
+    "sha256": "ab8745c2e3c6dfd939d5a590760bbae4682d92db010947cbb306688ad086bfd1",
+    "fresh_text_matches_reviewed_extract": true
+  },
+  {
+    "ref": 18,
+    "pdf": "Sources/[26] Perez et al. - Red teaming language models with language models.pdf",
+    "sha256": "f1f838d6488b9634a7650ecf096ad6be5fe583f377dd45253c547faa312fc0c0",
+    "fresh_text_matches_reviewed_extract": true
+  },
+  {
+    "ref": 19,
+    "pdf": "Sources/[27] Hendrycks et al. - Measuring massive multitask language understanding.pdf",
+    "sha256": "d3a7b0f8589f5365ebfd34a3876a9a8b3fde83e0adb9ed19ccf8f0034bb48fc1",
+    "fresh_text_matches_reviewed_extract": true
+  },
+  {
+    "ref": 20,
+    "pdf": "Sources/[28] Clark et al. - Think you have solved question answering Try ARC, the AI2 reasoning challenge.pdf",
+    "sha256": "b24b722c93f304df6c3b4a48ebbe429e836f3b3e80837bb613112398e59bde43",
+    "fresh_text_matches_reviewed_extract": true
+  },
+  {
+    "ref": 21,
+    "pdf": "Sources/[29] Badshah et al. - Quantifying the capabilities of LLMs across scale and precision.pdf",
+    "sha256": "d471ea851908bdfc58b790898af8c7df78e29baf0f2ab66305194af94f8ee8b7",
+    "fresh_text_matches_reviewed_extract": true
+  },
+  {
+    "ref": 22,
+    "pdf": "Sources/[30] Xiao et al. - SmoothQuant - Accurate and efficient post-training quantization for large language models.pdf",
+    "sha256": "551636e4e0bd9dda9b01186473bc46c72c56e0c190a28fe6b7ed4fa80055372e",
+    "fresh_text_matches_reviewed_extract": true
+  },
+  {
+    "ref": 23,
+    "pdf": "Sources/[31] Frantar et al. - SparseGPT - Massive language models can be accurately pruned in one-shot.pdf",
+    "sha256": "c7a410b7fee0aff4756159e1d1c455f6ad033bd8e7129b0fcacc3f7abbf434e2",
+    "fresh_text_matches_reviewed_extract": true
+  },
+  {
+    "ref": 24,
+    "pdf": "Sources/[32] Dettmers et al. - QLoRA - Efficient finetuning of quantized LLMs.pdf",
+    "sha256": "d60251227e6a42d3662bb3b9a93d86464dbff07755c1ae08014edda4608516cf",
+    "fresh_text_matches_reviewed_extract": true
+  },
+  {
+    "ref": 25,
+    "pdf": "Sources/[33] Dettmers et al. - LLM.int8() - 8-bit matrix multiplication for transformers at scale.pdf",
+    "sha256": "a7de7700cb8d0a36eb1c7926add3ec10530f53be8d81c681e7de372586d58f77",
+    "fresh_text_matches_reviewed_extract": true
+  },
+  {
+    "ref": 26,
+    "pdf": "Sources/[34] Guo et al. - On calibration of modern neural networks.pdf",
+    "sha256": "df7c93f97204f8a3c2b10f6d5bf5265baac25f00c1ae3b473a3e1dbc102dacb2",
+    "fresh_text_matches_reviewed_extract": true
+  },
+  {
+    "ref": 27,
+    "pdf": "Sources/[11] Proskurina et al. - When quantization affects confidence of large language models.pdf",
+    "sha256": "53b2752f3349a44b9c51a836dda00015fa31c1777394949fa26f223e7756d024",
+    "fresh_text_matches_reviewed_extract": true
+  },
+  {
+    "ref": 28,
+    "pdf": "Sources/[13] Marchisio et al. - How does quantization affect multilingual LLMs.pdf",
+    "sha256": "c575c34637df4fcfaf0f36687d31fc42d73b8f5bab337f941ad6e97bf837ab62",
+    "fresh_text_matches_reviewed_extract": true
+  },
+  {
+    "ref": 29,
+    "pdf": "Sources/[35] Belkhiter et al. - HarmLevelBench - Evaluating harm-level compliance and the impact of quantization on model alignment.pdf",
+    "sha256": "ccbd0d619cac12abdb586d6e80c645c255a314ad471f0a7b3b2af9ad6b5853f7",
+    "fresh_text_matches_reviewed_extract": true
+  },
+  {
+    "ref": 30,
+    "pdf": "Sources/[36] Chen et al. - Assessing safety risks and quantization-aware safety patching for quantized large language models.pdf",
+    "sha256": "fd3b4863896dc5769206ac49408072ea960b4dbc6b782036a260b877bf8f0293",
+    "fresh_text_matches_reviewed_extract": true
+  },
+  {
+    "ref": 31,
+    "pdf": "Sources/[37] Hong et al. - Decoding compressed trust - Scrutinizing the trustworthiness of efficient LLMs under compression.pdf",
+    "sha256": "da1586456199f8949da49e3a69b1f0f6a72cf3ba31baf6fdf5413462ab82930a",
+    "fresh_text_matches_reviewed_extract": true
+  },
+  {
+    "ref": 32,
+    "pdf": "Sources/[38] Shao et al. - OmniQuant - Omnidirectionally calibrated quantization for large language models.pdf",
+    "sha256": "a0afb17b6884f17a9a08229c3010f9008524f984b1dfce15ac56f93cd6cca04a",
+    "fresh_text_matches_reviewed_extract": true
+  },
+  {
+    "ref": 33,
+    "pdf": "Sources/[39] Dong et al. - Durable quantization conditioned misalignment attack on large language models.pdf",
+    "sha256": "45377a29b4c9e56dc47ef21708411c122ec094923ec9b66744ef143f83d4f7f9",
+    "fresh_text_matches_reviewed_extract": true
+  },
+  {
+    "ref": 34,
+    "pdf": "Sources/[40] Li et al. - Safety layers in aligned large language models - The key to LLM security.pdf",
+    "sha256": "c2f160e2ef336d32f984b932d38080a6a1fcf96704c58e72bb791e8356724a63",
+    "fresh_text_matches_reviewed_extract": true
+  },
+  {
+    "ref": 35,
+    "pdf": "Sources/[15] Arditi et al. - Refusal in language models is mediated by a single direction.pdf",
+    "sha256": "00b84fce7160c8cec3ad5c02dd434292ec386e4b97a5d0e53c03fa40a0854cc6",
+    "fresh_text_matches_reviewed_extract": true
+  },
+  {
+    "ref": 36,
+    "pdf": "Sources/[16] Qi et al. - Safety alignment should be made more than just a few tokens deep.pdf",
+    "sha256": "aa33eef3883547e13d7cf0b3fea52704212162a7b417c78cb18cffd85f5e58b3",
+    "fresh_text_matches_reviewed_extract": true
+  },
+  {
+    "ref": 37,
+    "pdf": "Sources/[12] Egashira et al. - Exploiting LLM quantization.pdf",
+    "sha256": "fd450776b4ed7f0ec570e92849f89c6dee1c50521d347291b3601bf9800c311d",
+    "fresh_text_matches_reviewed_extract": true
+  },
+  {
+    "ref": 38,
+    "pdf": "Sources/[41] Souly et al. - A StrongREJECT for empty jailbreaks.pdf",
+    "sha256": "600b382443b3cdab5dfacffde39c96cee7887742ff888d242cbd45cbce199cb0",
+    "fresh_text_matches_reviewed_extract": true
+  },
+  {
+    "ref": 39,
+    "pdf": "Sources/[42] Xie et al. - SORRY-Bench - Systematically evaluating large language model safety refusal.pdf",
+    "sha256": "f0f5fabf627af28c155df5436a9fe0201d43cabf2d8f18a89d7d01e2edd0fe9f",
+    "fresh_text_matches_reviewed_extract": true
+  },
+  {
+    "ref": 40,
+    "pdf": "Sources/[43] Chao et al. - JailbreakBench - An open robustness benchmark for jailbreaking large language models.pdf",
+    "sha256": "39f5de0d01eacadfaa6dfe217e14bb43f1edfe269955e7afacf1d8fec2ef64ce",
+    "fresh_text_matches_reviewed_extract": true
+  },
+  {
+    "ref": 41,
+    "pdf": "Sources/[44] Han et al. - WildGuard - Open one-stop moderation tools for safety risks, jailbreaks, and refusals of LLMs.pdf",
+    "sha256": "948b5cb6270501197f40f0013bc5c1e02e20eb366f0eb5f9da58d54a59e40ae1",
+    "fresh_text_matches_reviewed_extract": true
+  },
+  {
+    "ref": 42,
+    "pdf": "Sources/[19] Cui et al. - OR-Bench - An over-refusal benchmark for large language models.pdf",
+    "sha256": "9c7eeeb3d51fd0540d8ba413d45ad65bdda7ab004b7ac46207f00ba2c1f0ec80",
+    "fresh_text_matches_reviewed_extract": true
+  },
+  {
+    "ref": 43,
+    "pdf": "Sources/[45] Wang et al. - Do-Not-Answer - Evaluating safeguards in LLMs.pdf",
+    "sha256": "16948e7c055637c140322fc121e8dc1fd401c416c702c94e29992815192a6b4b",
+    "fresh_text_matches_reviewed_extract": true
+  },
+  {
+    "ref": 44,
+    "pdf": "Sources/[46] Kim et al. - Prometheus 2 - An open source language model specialized in evaluating other language models.pdf",
+    "sha256": "11c31730dfe0a686326437e32fa176b533519aeffb05e0f57f2b5f6d91ef6161",
+    "fresh_text_matches_reviewed_extract": true
+  },
+  {
+    "ref": 45,
+    "pdf": "Sources/[47] Zheng et al. - Judging LLM-as-a-judge with MT-Bench and Chatbot Arena.pdf",
+    "sha256": "1574982845157569b85c1214bfa9987000384d7a5e3b5fbdcc5a29afec59cb81",
+    "fresh_text_matches_reviewed_extract": true
+  },
+  {
+    "ref": 46,
+    "pdf": "Sources/[48] Wei et al. - Jailbroken - How does LLM safety training fail.pdf",
+    "sha256": "6ce44fb3d6363955ae2c34f6391f5daa4e7cb2f63201ef4a85ff618f9eba56e4",
+    "fresh_text_matches_reviewed_extract": true
+  },
+  {
+    "ref": 52,
+    "pdf": "Sources/[55] Card et al. - With little power comes great responsibility.pdf",
+    "sha256": "e85e5c7270363a0b3d6dccee3d4a3eec4a209ce8ee30246baa412ba7953f2c9f",
+    "fresh_text_matches_reviewed_extract": true
+  },
+  {
+    "ref": 53,
+    "pdf": "Sources/[56] Artstein et al. - Survey article - Inter-coder agreement for computational linguistics.pdf",
+    "sha256": "1729af43712921de3857555972c6a3376d66bcba2474f81a32cddf4f98aef058",
+    "fresh_text_matches_reviewed_extract": true
+  },
+  {
+    "ref": 55,
+    "pdf": "Sources/[58] Inan et al. - Llama Guard - LLM-based input-output safeguard for human-AI conversations.pdf",
+    "sha256": "fc5a3690f3a7771d7c429b6deb73e9e95ac4aa879fce490563c5eeb4f7ad2f33",
+    "fresh_text_matches_reviewed_extract": true
+  },
+  {
+    "ref": 57,
+    "pdf": "Sources/[60] Sainz et al. - NLP evaluation in trouble - On the need to measure LLM data contamination for each benchmark.pdf",
+    "sha256": "54ec9661a92131622dfc212302c3b244c445a101bdcf6d744a1c85515cd179b7",
+    "fresh_text_matches_reviewed_extract": true
+  }
+]

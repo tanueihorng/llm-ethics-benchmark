@@ -1,0 +1,108 @@
+{
+  "precision_rates_verified": 60,
+  "tost": [
+    {
+      "pair": "qwen_2b",
+      "benchmark": "mmlu",
+      "delta": 0.013333333333333334,
+      "ci90": [
+        -0.01115398162110859,
+        0.03782064828777526
+      ],
+      "equivalent_margin05": true
+    },
+    {
+      "pair": "qwen_2b",
+      "benchmark": "arc",
+      "delta": 0.012798634812286689,
+      "ci90": [
+        -0.0005753784463689068,
+        0.026172648070942287
+      ],
+      "equivalent_margin05": true
+    },
+    {
+      "pair": "qwen_4b",
+      "benchmark": "mmlu",
+      "delta": -0.006666666666666667,
+      "ci90": [
+        -0.028588908379088257,
+        0.015255575045754921
+      ],
+      "equivalent_margin05": true
+    },
+    {
+      "pair": "qwen_4b",
+      "benchmark": "arc",
+      "delta": -0.002559726962457338,
+      "ci90": [
+        -0.011761999473280214,
+        0.0066425455483655384
+      ],
+      "equivalent_margin05": true
+    },
+    {
+      "pair": "llama_3_2_3b",
+      "benchmark": "mmlu",
+      "delta": 0.006666666666666667,
+      "ci90": [
+        -0.015255575045754921,
+        0.028588908379088257
+      ],
+      "equivalent_margin05": true
+    },
+    {
+      "pair": "llama_3_2_3b",
+      "benchmark": "arc",
+      "delta": -0.006825938566552901,
+      "ci90": [
+        -0.017323340052192597,
+        0.0036714629190867957
+      ],
+      "equivalent_margin05": true
+    },
+    {
+      "pair": "mistral_7b",
+      "benchmark": "mmlu",
+      "delta": 0.013333333333333334,
+      "ci90": [
+        -0.008561465545406368,
+        0.035228132212073035
+      ],
+      "equivalent_margin05": true
+    },
+    {
+      "pair": "mistral_7b",
+      "benchmark": "arc",
+      "delta": 0.0008532423208191126,
+      "ci90": [
+        -0.008133184755527021,
+        0.009839669397165247
+      ],
+      "equivalent_margin05": true
+    },
+    {
+      "pair": "phi4_mini",
+      "benchmark": "mmlu",
+      "delta": -0.006666666666666667,
+      "ci90": [
+        -0.02564924567902068,
+        0.012315912345687345
+      ],
+      "equivalent_margin05": true
+    },
+    {
+      "pair": "phi4_mini",
+      "benchmark": "arc",
+      "delta": 0.0008532423208191126,
+      "ci90": [
+        -0.007683565397255802,
+        0.009390050038894027
+      ],
+      "equivalent_margin05": true
+    }
+  ],
+  "judge_status_counts": {
+    "ok": 9000
+  }
+}

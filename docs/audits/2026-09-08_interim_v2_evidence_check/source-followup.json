@@ -1,0 +1,84 @@
+{
+  "date": "2026-09-08",
+  "sources": [
+    {
+      "path": "Sources/statistical_methods/efron1985.pdf",
+      "url": "https://link.springer.com/content/pdf/10.2333/bhmk.12.17_1.pdf",
+      "sha256": "b23bdc5484531190c08a1de7f5879fd97f3e21db94bcc103e1ba22a9308131e7",
+      "references": "[47], [48]",
+      "passages": "Efron and Tibshirani (1985), pp. 16 and 23, equations 7.1\u20137.2",
+      "scope": "Resample joint observations as units; percentile interval endpoints. Application to matched model responses is the study implementation. The earlier 1993 book download is only an 11-page introductory excerpt."
+    },
+    {
+      "path": "Sources/statistical_methods/fagerland.pdf",
+      "url": "https://bmcmedresmethodol.biomedcentral.com/counter/pdf/10.1186/1471-2288-13-91.pdf",
+      "sha256": "0e57fe03c66c990290d9631da0de0202b8d0090418cb1317368142edf60e3867",
+      "references": "[49], [50]",
+      "passages": "Fagerland et al. (2013), p. 3, equations 3\u20134",
+      "scope": "Exact conditional McNemar uses discordant pairs and a binomial null with probability 0.5. Its conservatism is explicitly reported. Authors prefer other variants; citation does not imply they recommend the exact test."
+    },
+    {
+      "path": "Sources/statistical_methods/bh.pdf",
+      "url": "https://www.math.tau.ac.il/~ybenja/MyPapers/benjamini_hochberg1995.pdf",
+      "sha256": "f3f7e2352a941403e812b7b5afee6094c9a31002d725dfcc25fc60ca3c240eab",
+      "references": "[51]",
+      "passages": "Benjamini and Hochberg (1995), pp. 291\u2013293, equation 1 and Theorem 1",
+      "scope": "Original full text: FDR definition and step-up procedure; independence assumption in the theorem. Relevant pages visually read; full proof not audited."
+    },
+    {
+      "path": "Sources/statistical_methods/cohen1986.pdf",
+      "url": "https://garfield.library.upenn.edu/classics1986/A1986AXF2600001.pdf",
+      "sha256": "0cb365f192813cdcfcf5c1ce9369147527036d49ce01af6ba06725725392416c",
+      "references": "[52]",
+      "passages": "Cohen (1986), Current Contents Social & Behavioral Sciences, no. 3, p. 18",
+      "scope": "Author retrospective explains chance-corrected agreement and a worked kappa calculation. Corroborates the report definition alongside Artstein and Poesio [56]; not a copy of Cohen (1960). Audit support only, not an added bibliography entry."
+    },
+    {
+      "path": "Sources/statistical_methods/sas.pdf",
+      "url": "https://documentation.sas.com/api/docsets/statug/15.2/content/power.pdf?locale=en",
+      "sha256": "371375a491fc525d3ec14c5e47b256c946988aeaf094e7fd5ef477285f8ab152",
+      "references": "[53], [54]",
+      "passages": "SAS/STAT 15.2 User\u2019s Guide (2020), pp. 7870\u20137873; p. 7873 formula visually checked",
+      "scope": "Documents Connor normal approximation. Repository MDE uses (z_0.975 + z_0.8)*sqrt(discordance/n), simplifying alternative variance. Report now identifies approximation and unadjusted 0.05 level; does not claim exact power for BH-corrected tests."
+    },
+    {
+      "path": "Sources/statistical_methods/landis.pdf",
+      "url": "https://jjcurtin.github.io/book_iaml/pdfs/landis_1977_kappa.pdf",
+      "sha256": "009959c0b4f448462d54db6f0eb24e1a7c06c402293a37f9cd4f08eb2b7a500a",
+      "references": "[57]",
+      "passages": "Landis and Koch (1977), p. 165",
+      "scope": "Original text calls verbal category divisions arbitrary. Supports the report\u2019s caution about universal categories."
+    },
+    {
+      "path": "Sources/statistical_methods/lakens.pdf",
+      "url": "https://pure.tue.nl/ws/portalfiles/portal/80918653/lakeequi2017.pdf",
+      "sha256": "e4535da18908b09798bf558553cef02322944e06113e6a4b22402730111f5e60",
+      "references": "[59], [60]",
+      "passages": "Lakens (2017), pp. 355\u2013357 and 359\u2013360",
+      "scope": "Full-text conceptual TOST support: both one-sided tests, 90% interval at alpha .05, justification of bounds. Does not independently validate the study\u2019s binary normal approximation. Post hoc status and that approximation remain explicit in section 4.6."
+    },
+    {
+      "path": "Sources/statistical_methods/schuirmann1987.pdf",
+      "url": "https://errorstatistics.com/wp-content/uploads/2014/06/schuirmann.pdf",
+      "sha256": "0adc970703d7eca56083c2a84a9ba6bf114c126287a50a9658dd62c66fb0e8ed",
+      "references": "[59]",
+      "passages": "Original 1987 article, pp. 658\u2013661; p. 661 visually checked",
+      "scope": "Direct original-source support for interval hypotheses, both one-sided tests at alpha and equivalence to a 1\u22122alpha confidence interval inside the margins. Original assumes normal observations and t tests; report appropriately labels its binary normal approximation and post hoc analysis."
+    },
+    {
+      "path": "Sources/statistical_methods/efron1993.pdf",
+      "url": "https://www.cmat.edu.uy/~mordecki/seminario/seminario1.pdf",
+      "sha256": "5ff22bcd8a0b3f28f170176e2eba6e68cdfd9c334d667dd5a9e30ae43fb09bde",
+      "references": "[47]",
+      "passages": "Original 1993 book scan, printed pp. 47, 86\u201387, 113 and 170\u2013171; pages visually read",
+      "scope": "Complete 451-page PDF obtained. Resampling with replacement, multivariate observations and preserving pairs, and percentile endpoints verified directly. The report\u2019s matched-response bootstrap is an application of these principles. This checks relevant passages, not every page or proof in the book."
+    }
+  ],
+  "original_fulltexts_not_obtained": [
+    "McNemar (1947)",
+    "Cohen (1960)",
+    "Connor (1987)"
+  ],
+  "original_book_coverage": "Original 1993 full book obtained; relevant printed pages 47, 86\u201387, 113, 170\u2013171 visually checked.",
+  "next_access_step": "NTU OpenAthens route to JSTOR Connor record reached Microsoft institutional sign-in; user must complete login. No credentials requested in chat."
+}
