@@ -24,6 +24,47 @@ version: 1
 output_dir: docs/report_versions
 index_path: docs/REPORT_VERSIONS.md
 
+# Purpose-specific entry points; historical statuses below retain their meaning.
+# No final-report base has been selected (T71). These aliases do not select one.
+entrypoints:
+  canonical: docs/FYP_Report_2026-07-01_v5.docx
+  submitted: docs/rewritten_fyp_interim_progress.docx
+  review: docs/rewritten_fyp_interim_progress_v2.docx
+frozen_outputs:
+  - docs/rewritten_fyp_interim_progress.docx
+
+# Clean-clone builds. Each path must have exactly one owning registry entry.
+# Frozen/submitted-input derivatives require the student's local source artifact;
+# they are checked when present locally, not reconstructed as the submitted copy.
+build_profiles:
+  ci:
+    - docs/FYP_Report_2026-07-01_v5.docx
+    - docs/FYP_Report_2026-07-25_v6.docx
+    - docs/FYP_Thesis_2026-07-02_v4.docx
+    - docs/FYP_Interim_2026-07-10.docx
+    - docs/FYP_Report_2026-07-01_humanized.docx
+    - docs/FYP_Thesis_2026-07-02_humanized.docx
+    - docs/FYP_Interim_2026-07-10_humanized.docx
+    - docs/rewritten_fyp_interim_v1.docx
+    - docs/rewritten_fyp_report_v2.docx
+    - docs/rewritten_fyp_interim_v3.docx
+    - docs/rewritten_fyp_interim_v4.docx
+    - docs/rewritten_fyp_interim_v5.docx
+
+local_inputs:
+  docs/rewritten_fyp_interim_progress_humanized.docx: docs/rewritten_fyp_interim_progress.docx
+  docs/rewritten_fyp_interim_progress_lit_review_revised.docx: docs/rewritten_fyp_interim_progress.docx
+  docs/rewritten_fyp_interim_progress_v2.docx: docs/rewritten_fyp_interim_progress_lit_review_revised.docx
+  docs/rewritten_fyp_interim_progress_v3.docx: docs/rewritten_fyp_interim_progress_v2.docx
+
+# Retitle builders also emit their underlying full report. Require these outputs
+# explicitly so corresponding tests cannot silently skip a broken side effect.
+also_produces:
+  docs/rewritten_fyp_interim_v1.docx: [docs/rewritten_fyp_report_v1.docx]
+  docs/rewritten_fyp_interim_v3.docx: [docs/rewritten_fyp_report_v3.docx]
+  docs/rewritten_fyp_interim_v4.docx: [docs/rewritten_fyp_report_v4.docx]
+  docs/rewritten_fyp_interim_v5.docx: [docs/rewritten_fyp_report_v5.docx]
+
 families:
   # ---------------------------------------------------------------------
   - id: report_canonical
@@ -249,6 +290,62 @@ families:
           Same retitle-only contract as the other interim derivatives, over the
           v5 language-cleanup line (D75). Comprehensive fallback; the D73
           progress copy remains the selected T53 artifact.
+      - path: docs/rewritten_fyp_interim_progress_humanized.docx
+        label: Interim progress (humanized prose variant)
+        date: 2026-09-02
+        builder: scripts/build_rewritten_fyp_interim_progress_humanized.py
+        status: variant
+        decisions: [D72, D73]
+        note: /humanizer prose pass over the submitted progress copy. 84 exact-substring
+          rewrites thin the machine-prose markers ("therefore" 26 to 8, "rather than"
+          26 to 12, provides/supplies cycling, participle tails) and simplify ornamental
+          vocabulary at the user's request, holding the academic register. Numbers (663),
+          citation sequence (159), headings (32), table cells (245), references (57) and
+          the TOC assert unchanged at build time; renders to the same 33 pages. Does not
+          supersede the submitted copy, which stays the selected T53 artifact.
+
+      - path: docs/rewritten_fyp_interim_progress_lit_review_revised.docx
+        label: Submitted interim (literature review revised)
+        date: 2026-09-05
+        builder: scripts/rewrite_submitted_literature_review.py
+        status: comparison-draft
+        decisions: [D78]
+        note: Argument-led Chapter 2 rewrite, followed by authorised prose edits to
+          the abstract and Chapters 1, 3, 4 and 5. Preserves citations and tables;
+          submitted source untouched. Cached contents refreshed after pagination changes.
+
+      - path: docs/rewritten_fyp_interim_progress_v2.docx
+        label: Interim progress v2 (plain academic full-report revision)
+        date: 2026-09-07
+        builder: scripts/build_rewritten_fyp_interim_progress_v2.py
+        status: comparison-draft
+        decisions: [D81, D82, D83]
+        note: >-
+          Full-report prose edit from the literature-review-revised sibling.
+          Simplifies language, trims repeated explanations and clarifies methods and
+          results. Preserves numerical tables and original citation occurrences; adds four
+          verified method sources and renumbers 61 references by first use. Clarifies two
+          literature-table labels and marks technical-report preprints. Figures are
+          regenerated from verified results with cautious interpretation labels.
+          Evidence audit: docs/audits/2026-09-08_interim_v2_evidence_check/AUDIT.md.
+          Earlier versions and the selected submission copy remain unchanged.
+
+      - path: docs/rewritten_fyp_interim_progress_v3.docx
+        label: Interim progress v3 (restructured literature review)
+        date: 2026-09-26
+        builder: scripts/build_rewritten_fyp_interim_progress_v3.py
+        status: comparison-draft
+        decisions: [D92, D93]
+        note: >-
+          Rebuilds Chapter 2 of v2 fundamentals-first (new 2.1 Quantization Fundamentals
+          with Figure 2.1, merged measurement section, new Kharinaev et al. paragraph,
+          RQ-linked synthesis, new 2.7 Chapter Summary) with section bridges, linking-word
+          prose and explicit links to this study; revises Chapter 1 (motivation, problem
+          statement, joint RQ1-RQ3 framing, MMLU subset justification, contributions).
+          Adds two foundational sources (Jacob et al. 2018; Gholami et al. 2022): 63
+          references renumbered by first use. Result figures relabelled FP16 with identical
+          data. Chapters 3-5 unchanged apart from citation numbers. TOC pages from a
+          LibreOffice render; Word remains the authority.
 
   # ---------------------------------------------------------------------
   - id: humanized_report
@@ -313,6 +410,10 @@ families:
 
 # Documents that are inventoried but not part of any report-version chain.
 standalone_documents:
+  - path: docs/drafts/final_report_visuals_pack.docx
+    note: Review pack of 15 proposed final-report figures built by docs/drafts/build_visuals_pack.py from docs/drafts/visuals/; not a report version.
+  - path: docs/drafts/final_report_missing_parts_draft.docx
+    note: Review draft of the missing final-report chapters (5-7) built by docs/drafts/build_final_chapters_draft.py; not a report version and not the final-report base (T71).
   - path: docs/FYP_Agent_Harness_Architecture_Guide_2026-06-09.docx
     note: Word architecture guide for the agent harness.
   - path: docs/Codex_Meetup_Agent_Harness_Report.docx

@@ -8,8 +8,10 @@ break in a later edit and impossible to notice from the speaker's chair:
     Every slide must have a page number.
 
 Those are pinned below. The third check is the one that matters scientifically:
-the deck says "0 of 20" contrasts involving harmful compliance survive
-correction. If a future re-analysis ever produced an ASR survivor, that slide
+the deck says "0 of 5" harmful-compliance contrasts survive correction in
+the 20-contrast primary family. (Until 2026-09-24 the slide read "0 of 20 contrasts
+involving harmful compliance", which conflated the five ASR contrasts with the
+whole family; both counts are now derived from the artifact and both are pinned.) If a future re-analysis ever produced an ASR survivor, that slide
 would become a false statement delivered out loud to an examiner, and nothing
 else in the repo would catch it -- the claim locks cover the report surfaces,
 not this deck. The builder refuses to produce a deck in that state; this test
@@ -188,11 +190,15 @@ def test_headline_still_matches_the_analysis(deck) -> None:
     mc = json.loads(ANALYSIS.read_text())
     asr_survivors = [s for s in mc["bh_survivors"] if "asr" in str(s["metric"]).lower()]
     assert asr_survivors == [], (
-        "an ASR contrast now survives BH correction, so the deck's '0 of 20' slide is "
+        "an ASR contrast now survives BH correction, so the deck's '0 of 5' slide is "
         f"false: {asr_survivors}"
     )
+    n_asr = sum(1 for c in mc["contrasts"] if "asr" in str(c["metric"]).lower())
     joined = "\n".join(slide_text(s) for s in deck.slides)
-    assert f"0 of {mc['family_size']}" in joined, (
-        "the deck no longer states the survivor count as '0 of "
-        f"{mc['family_size']}' -- family size changed or the slide was reworded"
+    assert f"0 of {n_asr}" in joined, (
+        f"the deck no longer states the ASR survivor count as '0 of {n_asr}' -- "
+        "the family changed or the slide was reworded"
+    )
+    assert f"{mc['family_size']}-contrast primary family" in joined, (
+        "the deck no longer names the family size the survivor count is taken from"
     )

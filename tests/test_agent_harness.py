@@ -319,6 +319,28 @@ def test_real_policy_redaction_covers_committed_sidecars(tmp_path: Path) -> None
     assert _scan_policy_group(tmp_path, policy["redaction"], "redaction").status == "pass"
 
 
+def test_real_policy_redaction_covers_analysis_jsonl(tmp_path: Path) -> None:
+    """Per-item analysis queues are allowed only under the existing redaction gate."""
+    from ethical_benchmark.harness.agent import _scan_policy_group
+
+    repo = Path(__file__).resolve().parents[1]
+    policy = load_policy(repo)
+    analysis = tmp_path / "results_512/analysis"
+    analysis.mkdir(parents=True)
+    queue = analysis / "jev_review_queue.jsonl"
+    queue.write_text(
+        '{"model_alias": "m", "prompt_id": "p", "response": "LEAKED RAW TEXT"}\n',
+        encoding="utf-8",
+    )
+    assert _scan_policy_group(tmp_path, policy["redaction"], "redaction").status == "fail"
+
+    queue.write_text(
+        '{"model_alias": "m", "prompt_id": "p", "jev_probability": 0.5}\n',
+        encoding="utf-8",
+    )
+    assert _scan_policy_group(tmp_path, policy["redaction"], "redaction").status == "pass"
+
+
 def test_real_policy_redaction_covers_xstest_judge_sidecars(tmp_path: Path) -> None:
     """T35 self-test: the XSTest judge sidecar path must be redaction-scanned.
     The judge-sidecar globs were harmbench-dir-anchored, so a new
@@ -452,6 +474,22 @@ def test_agent_status_and_renderers_are_redaction_safe(tmp_path: Path) -> None:
     assert "Test open task" in dashboard
 
 
+def test_status_summarizes_all_tasks_without_copying_full_history(tmp_path: Path) -> None:
+    from ethical_benchmark.harness.agent import format_agent_status
+    repo = _init_harness_repo(tmp_path)
+    log = repo / "docs/PROJECT_LOG.md"
+    with log.open("a") as handle:
+        for number in range(100, 120):
+            handle.write(f"\n- [ ] **T{number}. Specific task.** " + "Extended historical detail. " * 100)
+        handle.write("\n### D102. Newest decision\n\n### D2. Old decision\n")
+    status = build_agent_status(repo)
+    output = format_agent_status(status)
+    assert "T119. Specific task." in output
+    assert "Extended historical detail" not in output
+    assert "Extended historical detail" in status["project_log"]["open_actions"][-1]
+    assert status["project_log"]["recent_decisions"][0] == "D102. Newest decision"
+
+
 def test_agent_start_packet_selects_task_and_subagent(tmp_path: Path) -> None:
     repo = _init_harness_repo(tmp_path)
 
@@ -532,6 +570,45 @@ def test_report_freshness_falls_back_to_mtime_when_the_docx_is_gitignored(
     # No report artifact on disk at all -> fail.
     docx.unlink()
     assert harness_agent.check_report_freshness(repo, policy).status == "fail"
+
+
+def test_report_freshness_sees_a_gitignored_builder_edit(tmp_path: Path, monkeypatch) -> None:
+    """A local-only (gitignored) builder must still trigger the gate (D94).
+
+    D94 made the report builders local-only. git never lists an ignored file as
+    changed, so without the on-disk fallback an edited builder with no rebuild
+    would report "no report-worthy changed files". Both directions are asserted.
+    """
+    import os
+    import subprocess
+
+    from ethical_benchmark.harness import agent as harness_agent
+
+    repo = _init_harness_repo(tmp_path)
+    subprocess.run(["git", "init", "-q"], cwd=repo, check=True)
+    (repo / ".gitignore").write_text("scripts/build_fyp_report.js\ndocs/*.docx\n")
+    policy = load_policy(repo)
+
+    source = repo / "scripts" / "build_fyp_report.js"
+    source.parent.mkdir(parents=True, exist_ok=True)
+    source.write_text("// local-only report builder\n")
+    docx = repo / "docs" / "FYP_Report_2026-06-14.docx"
+    docx.parent.mkdir(parents=True, exist_ok=True)
+    docx.write_bytes(b"PK\x03\x04 rendered report")
+
+    # git reports nothing: the only signal is the ignored builder on disk.
+    monkeypatch.setattr(harness_agent, "_changed_files", lambda root: [])
+
+    # Builder edited after the last render -> stale -> fail.
+    os.utime(docx, (1_700_000_000, 1_700_000_000))
+    os.utime(source, (1_700_000_100, 1_700_000_100))
+    result = harness_agent.check_report_freshness(repo, policy)
+    assert result.status == "fail"
+    assert "scripts/build_fyp_report.js" in result.details
+
+    # Report rendered after the builder edit -> pass.
+    os.utime(docx, (1_700_000_200, 1_700_000_200))
+    assert harness_agent.check_report_freshness(repo, policy).status == "pass"
 
 
 def test_real_policy_report_source_is_not_a_freshness_satisfier() -> None:
@@ -615,6 +692,15 @@ def test_retired_builders_carry_superseded_execution_guard() -> None:
     excluded = set(policy["stale_text"].get("exclude", []))
     for rel in RETIRED_BUILDERS:
         assert rel in excluded, f"{rel} should stay stale-scan-excluded as archive source"
+
+    # D94: builders are local-only, so a clone has none of them. Skip only when ALL
+    # are absent; a partial local loss must still fail on the read below.
+    if not any((repo / rel).exists() for rel in RETIRED_BUILDERS + CANONICAL_BUILDERS):
+        import pytest
+
+        pytest.skip("report builders are local-only (D94) and absent from this checkout")
+
+    for rel in RETIRED_BUILDERS:
         text = (repo / rel).read_text(encoding="utf-8")
         guard_pos = text.find("FYP_BUILD_SUPERSEDED")
         assert guard_pos != -1, f"{rel} is missing the SUPERSEDED execution guard"
@@ -647,8 +733,8 @@ def test_doc_sync_gate_covers_the_rules_half(tmp_path: Path) -> None:
     assert check_agent_docs_sync(tmp_path).status == "pass", "faithful copies must pass"
 
     text = (tmp_path / "AGENTS.md").read_text(encoding="utf-8")
-    start = text.index("## Claims must fit their sources")
-    end = text.index("## Keeping AGENTS.md and CLAUDE.md in sync")
+    start = text.index("## Research and artifact integrity")
+    end = text.index("## Reports", start)
     (tmp_path / "AGENTS.md").write_text(text[:start] + text[end:], encoding="utf-8")
 
     result = check_agent_docs_sync(tmp_path)
@@ -706,3 +792,58 @@ def test_next_action_falls_back_when_no_deadline_is_left() -> None:
         "project_log": {"open_actions": ["**T3. Run `MyTCinfo` on TC1.**"]},
     }
     assert "**T3." in _suggest_next_action(status)
+
+
+def test_status_uses_registered_report_and_primary_evidence(tmp_path: Path) -> None:
+    """A newer-looking draft and historical sidecars must not win default routing."""
+    from ethical_benchmark.harness.agent import _canonical_report_status, _analysis_status, _judge_sidecar_status
+
+    (tmp_path / "configs").mkdir()
+    (tmp_path / "docs").mkdir()
+    (tmp_path / "configs/report_versions.yaml").write_text(
+        "families:\n  - id: report_canonical\n    versions:\n"
+        "      - {path: docs/canonical.docx, status: canonical, builder: scripts/build.py}\n"
+        "      - {path: docs/FYP_Report_2099_v99.docx, status: comparison-draft}\n"
+    )
+    (tmp_path / "docs/canonical.docx").write_bytes(b"canonical")
+    (tmp_path / "docs/FYP_Report_2099_v99.docx").write_bytes(b"draft")
+    for tree, aliases in [("results", ["old_a", "old_b"]), ("results_512", ["primary"])]:
+        for alias in aliases:
+            folder = tmp_path / tree / alias / "harmbench"
+            folder.mkdir(parents=True)
+            (folder / "scores.judge.harmbench_cls.jsonl").write_text("")
+            (folder / "summary.judge.harmbench_cls.json").write_text("{}")
+    assert _canonical_report_status(tmp_path)["path"] == "docs/canonical.docx"
+    assert _judge_sidecar_status(tmp_path)["scores_count"] == 1
+    assert all(item["path"].startswith("results_512/") for item in _analysis_status(tmp_path))
+    (tmp_path / "docs/canonical.docx").unlink()
+    assert _canonical_report_status(tmp_path)["exists"] is False
+    assert _canonical_report_status(tmp_path)["path"] == "docs/canonical.docx"
+    (tmp_path / "configs/report_versions.yaml").unlink()
+    assert _canonical_report_status(tmp_path)["path"] is None
+
+
+def test_local_only_check_fails_when_a_report_file_is_force_added(tmp_path: Path) -> None:
+    """D94 must-fire: `git add -f` on a gitignored report builder must fail the gate."""
+    import subprocess
+
+    from ethical_benchmark.harness.agent import check_local_only_untracked
+
+    repo = tmp_path / "repo"
+    (repo / "scripts").mkdir(parents=True)
+    subprocess.run(["git", "init", "-q"], cwd=repo, check=True)
+    (repo / ".gitignore").write_text(
+        "tmp/\n\n# D94 (2026-09-26): local-only.\nscripts/build_fyp_*.js\ndocs/viva/\n",
+        encoding="utf-8",
+    )
+    (repo / "scripts" / "build_fyp_report_v5.js").write_text("// prose\n", encoding="utf-8")
+    (repo / "scripts" / "claim_registry.py").write_text("# tooling\n", encoding="utf-8")
+    subprocess.run(["git", "add", "."], cwd=repo, check=True)
+
+    # A plain add skips the ignored builder -> pass.
+    assert check_local_only_untracked(repo).status == "pass"
+
+    subprocess.run(["git", "add", "-f", "scripts/build_fyp_report_v5.js"], cwd=repo, check=True)
+    result = check_local_only_untracked(repo)
+    assert result.status == "fail"
+    assert result.details == ["scripts/build_fyp_report_v5.js"]

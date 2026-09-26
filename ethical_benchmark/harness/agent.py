@@ -186,6 +186,39 @@ def _tracked_changed_files(repo_root: Path) -> list[str]:
     return sorted(files)
 
 
+def _ignored_present_files(repo_root: Path, patterns: Iterable[str]) -> list[str]:
+    """Returns gitignored files on disk that match any of ``patterns``.
+
+    D94 made the report builders local-only. `_changed_files` asks git, which never
+    lists an ignored file, so an edited builder would silently stop triggering
+    report-freshness. Callers treat every present ignored match as a candidate and
+    let the mtime comparison decide whether it is stale.
+    """
+    candidates = sorted({
+        _repo_rel(path, repo_root)
+        for pattern in patterns
+        for path in repo_root.glob(pattern)
+        if path.is_file()
+    })
+    if not candidates:
+        return []
+    result = subprocess.run(
+        ["git", "check-ignore", "--stdin"],
+        cwd=repo_root,
+        input="\n".join(candidates) + "\n",
+        text=True,
+        capture_output=True,
+        timeout=120,
+    )
+    # Exit 1 means nothing matched. Outside a git work tree nothing can be ignored;
+    # any other failure is a real git error and must not read as "no triggers".
+    if result.returncode == 128 and "not a git repository" in result.stderr:
+        return []
+    if result.returncode > 1:
+        raise RuntimeError(f"git check-ignore failed: {result.stderr.strip()}")
+    return sorted(line.strip() for line in result.stdout.splitlines() if line.strip())
+
+
 def _match_any(path: str, patterns: Iterable[str]) -> bool:
     return any(fnmatch(path, pattern) for pattern in patterns)
 
@@ -374,8 +407,11 @@ def _scan_policy_group(repo_root: Path, group: dict[str, Any], name: str) -> Che
 
 
 def check_report_freshness(repo_root: Path, policy: dict[str, Any]) -> CheckResult:
-    changed = _changed_files(repo_root)
     report_policy = policy.get("report_worthy", {})
+    changed = sorted(
+        set(_changed_files(repo_root))
+        | set(_ignored_present_files(repo_root, report_policy.get("changed_file_patterns", [])))
+    )
     report_worthy = [
         path for path in changed
         if _match_any(path, report_policy.get("changed_file_patterns", []))
@@ -425,6 +461,58 @@ def check_report_freshness(repo_root: Path, policy: dict[str, Any]) -> CheckResu
     )
 
 
+def _local_only_rules(repo_root: Path) -> list[str]:
+    """Returns the ignore rules in the `.gitignore` block headed `# D94`."""
+    gitignore = repo_root / ".gitignore"
+    if not gitignore.exists():
+        return []
+    rules: list[str] = []
+    in_block = False
+    for line in gitignore.read_text(encoding="utf-8").splitlines():
+        stripped = line.strip()
+        if stripped.startswith("# D94"):
+            in_block = True
+            continue
+        if in_block:
+            if not stripped:
+                break
+            if not stripped.startswith("#"):
+                rules.append(stripped)
+    return rules
+
+
+def check_local_only_untracked(repo_root: Path) -> CheckResult:
+    """D94: reports and presentations are gitignored, so none may be tracked.
+
+    A plain `git add` cannot stage an ignored file, but `git add -f` can, and a
+    file tracked before its ignore rule existed stays tracked. Either way the
+    report prose would reach GitHub, so any tracked file matching the D94 block fails.
+    """
+    rules = _local_only_rules(repo_root)
+    if not rules:
+        return CheckResult("local-only-untracked", "pass", "No D94 local-only block in .gitignore.")
+    args = ["git", "ls-files", "--cached", "--ignored"]
+    for rule in rules:
+        args += ["--exclude", rule]
+    result = _run(args, repo_root)
+    if result.returncode != 0:
+        return CheckResult(
+            "local-only-untracked", "fail", "git ls-files failed.", result.stderr.splitlines()
+        )
+    tracked = [line for line in result.stdout.splitlines() if line.strip()]
+    if tracked:
+        return CheckResult(
+            "local-only-untracked",
+            "fail",
+            f"{len(tracked)} local-only report/presentation file(s) are tracked; "
+            "run `git rm --cached` on them (D94).",
+            tracked[:40],
+        )
+    return CheckResult(
+        "local-only-untracked", "pass", f"No tracked file matches the {len(rules)} D94 local-only rules."
+    )
+
+
 def check_git_diff_clean(repo_root: Path) -> CheckResult:
     result = _run(["git", "diff", "--check"], repo_root)
     if result.returncode != 0:
@@ -460,6 +548,7 @@ def run_agent_checks(
         _scan_policy_group(repo_root, policy.get("stale_text", {}), "stale-text"),
         _scan_policy_group(repo_root, policy.get("epistemic_hedge", {}), "epistemic-hedge"),
         check_report_freshness(repo_root, policy),
+        check_local_only_untracked(repo_root),
     ]
     if include_diff_check:
         results.append(check_git_diff_clean(repo_root))
@@ -493,11 +582,13 @@ def _project_log_status(repo_root: Path) -> dict[str, Any]:
     for line in text.splitlines():
         if line.startswith("- [ ] **T"):
             open_actions.append(re.sub(r"\s+", " ", line).strip())
+    decisions = re.findall(r"^### (D(\d+)\b[^\n]*)", text, re.MULTILINE)
     return {
         "path": "docs/PROJECT_LOG.md",
         "last_updated": last_updated,
         "last_updated_by": last_by,
         "open_actions": open_actions,
+        "recent_decisions": [heading for heading, _ in sorted(decisions, key=lambda item: int(item[1]), reverse=True)[:6]],
     }
 
 
@@ -514,8 +605,8 @@ def _file_info(path: Path, repo_root: Path) -> dict[str, Any]:
 
 
 def _judge_sidecar_status(repo_root: Path) -> dict[str, Any]:
-    paths = sorted(repo_root.glob("results/*/harmbench/scores.judge.harmbench_cls.jsonl"))
-    summaries = sorted(repo_root.glob("results/*/harmbench/summary.judge.harmbench_cls.json"))
+    paths = sorted(repo_root.glob("results_512/*/harmbench/scores.judge.harmbench_cls.jsonl"))
+    summaries = sorted(repo_root.glob("results_512/*/harmbench/summary.judge.harmbench_cls.json"))
     return {
         "scores_count": len(paths),
         "summary_count": len(summaries),
@@ -525,13 +616,32 @@ def _judge_sidecar_status(repo_root: Path) -> dict[str, Any]:
 
 def _analysis_status(repo_root: Path) -> list[dict[str, Any]]:
     names = [
-        "results/analysis/judge_agreement.json",
-        "results/analysis/judge_agreement.csv",
-        "results/analysis/pairwise_deltas.json",
-        "results/analysis/pair_interpretations.csv",
-        "results/analysis/quantization_analysis_summary.json",
+        "results_512/analysis/judge_agreement.json",
+        "results_512/analysis/judge_agreement.csv",
+        "results_512/analysis/multiple_comparisons.json",
+        "results_512/analysis/multiple_comparisons_judge_strict.json",
     ]
     return [_file_info(repo_root / name, repo_root) for name in names]
+
+
+def _canonical_report_status(repo_root: Path) -> dict[str, Any]:
+    """Select the registry's canonical report, never a newer-looking draft."""
+    registry = repo_root / "configs/report_versions.yaml"
+    if not registry.exists():
+        return {"path": None, "exists": False, "selection_error": "Report registry is missing"}
+    data = yaml.safe_load(registry.read_text(encoding="utf-8")) or {}
+    versions = [
+        version
+        for family in data.get("families", [])
+        if family.get("id") == "report_canonical"
+        for version in family.get("versions", [])
+        if version.get("status") == "canonical"
+    ]
+    if len(versions) != 1:
+        return {"path": None, "exists": False, "selection_error": "Expected one canonical report in registry"}
+    info = _file_info(repo_root / versions[0]["path"], repo_root)
+    info["builder"] = versions[0].get("builder")
+    return info
 
 
 def _heading(text: str, fallback: str) -> str:
@@ -650,8 +760,8 @@ def format_agent_start_packet(packet: dict[str, Any]) -> str:
         "",
         "Startup Steps",
         "1. Read AGENTS.md.",
-        "2. Read docs/PROJECT_LOG.md.",
-        "3. Run python fyp_cli.py agent-status before editing.",
+        "2. Search docs/PROJECT_LOG.md for the current task/topic and relevant superseding decisions; do not load the full history.",
+        "3. Use python fyp_cli.py agent-status when live repository state is needed.",
     ]
     if task:
         lines.append(f"4. Use task packet `{task['path']}`.")
@@ -762,13 +872,7 @@ def build_agent_status(repo_root: Path, policy: dict[str, Any] | None = None) ->
         "repo_root": str(repo_root),
         "git": _git_status(repo_root),
         "project_log": _project_log_status(repo_root),
-        "report": _file_info(
-            max(
-                repo_root.glob("docs/FYP_Report_*.docx"),
-                default=repo_root / "docs/FYP_Report_2026-07-01_v5.docx",
-            ),
-            repo_root,
-        ),
+        "report": _canonical_report_status(repo_root),
         "handoff": _file_info(repo_root / "docs/HANDOFF.md", repo_root),
         "dashboard": _file_info(repo_root / "docs/AGENT_DASHBOARD.md", repo_root),
         "immutable_manifest": _file_info(
@@ -780,6 +884,13 @@ def build_agent_status(repo_root: Path, policy: dict[str, Any] | None = None) ->
     }
     status["suggested_next_action"] = _suggest_next_action(status)
     return status
+
+
+def _action_summary(action: str) -> str:
+    """Keep status readable; the full action remains in PROJECT_LOG and JSON."""
+    heading = re.match(r"- \[ \] \*\*(.+?)\*\*", action)
+    title = heading.group(1) if heading else re.sub(r"^- \[ \] ", "", action)
+    return title if len(title) <= 220 else title[:217] + "..."
 
 
 def format_agent_status(status: dict[str, Any]) -> str:
@@ -801,11 +912,15 @@ def format_agent_status(status: dict[str, Any]) -> str:
     if status["project_log"]["open_actions"]:
         lines.append("")
         lines.append("Open Actions")
-        lines.extend(f"- {item}" for item in status["project_log"]["open_actions"][:8])
+        lines.extend(f"- {_action_summary(item)}" for item in status["project_log"]["open_actions"])
+        lines.append("Full details: docs/PROJECT_LOG.md section 2 (search by task ID).")
     if status["git"]["changed_files"]:
         lines.append("")
         lines.append("Changed Files")
         lines.extend(f"- {item}" for item in status["git"]["changed_files"][:30])
+    if status["project_log"].get("recent_decisions"):
+        lines.extend(["", "Recent Decision IDs (search PROJECT_LOG.md)"])
+        lines.extend(f"- {item}" for item in status["project_log"]["recent_decisions"])
     return "\n".join(lines)
 
 
@@ -837,7 +952,7 @@ def render_handoff(status: dict[str, Any], results: Sequence[CheckResult] | None
         "## Source Of Truth",
         "",
         "- Read `/Users/tanueihorng/fyp_quant/AGENTS.md`.",
-        "- Read `/Users/tanueihorng/fyp_quant/docs/PROJECT_LOG.md`.",
+        "- Search `docs/PROJECT_LOG.md` for the relevant task/topic and superseding decisions; do not read its full history at startup.",
         "- Run `python fyp_cli.py agent-status` for live state.",
         "- Run `make agent-check` before finishing changes.",
         "- Treat this file as a bridge, not as a replacement for `docs/PROJECT_LOG.md`.",
@@ -871,14 +986,14 @@ def render_handoff(status: dict[str, Any], results: Sequence[CheckResult] | None
         "## Risks / Things To Distrust",
         "",
         "- Stale prose can survive in docs, report appendices, and historical changelog rows.",
-        "- Do not trust old v2-headline claims over `results/analysis/judge_agreement.{json,csv}`.",
+        "- Use results_512 judge-primary evidence for current claims; use results/ only for labeled 128-token history.",
         "- Do not mutate `raw.jsonl` or `summary.json`; new scoring must use derived sidecars.",
         "- Do not print raw HarmBench prompt or response text in handoffs, diagnostics, or chat.",
         "",
         "## Next Actions",
         "",
         f"1. {status['suggested_next_action']}",
-        "2. If editing report-worthy content, edit `scripts/build_fyp_report_v5.js` and run `make report`.",
+        "2. Resolve the requested artifact/builder in configs/report_versions.yaml and regenerate that deliverable; make report builds the canonical report.",
         "3. Regenerate this handoff and the dashboard after meaningful harness or state changes.",
         "",
         "## Privacy / Artifact Guardrails",
@@ -917,7 +1032,10 @@ def render_agent_dashboard(status: dict[str, Any], results: Sequence[CheckResult
         "",
     ]
     open_actions = status["project_log"]["open_actions"]
-    lines.extend([_ascii_safe(item) for item in open_actions[:12]] if open_actions else ["- No open actions parsed."])
+    lines.extend([f"- {_ascii_safe(_action_summary(item))}" for item in open_actions] if open_actions else ["- No open actions parsed."])
+    lines.append("Full task details and superseding decisions: `docs/PROJECT_LOG.md` section 2.")
+    lines.extend(["", "## Recent Decision IDs", ""])
+    lines.extend(f"- {_ascii_safe(item)}" for item in status["project_log"].get("recent_decisions", []))
     lines.extend(["", "## Analysis Artifacts", ""])
     for artifact in status["analysis_artifacts"]:
         state = artifact.get("modified", "missing")
@@ -964,7 +1082,8 @@ def render_tc1_checklist(status: dict[str, Any]) -> str:
         "## If Re-Running Or Extending Judge Validation",
         "",
         "```bash",
-        "python scripts/prefetch_tc1.py --config configs/tc1.yaml --judge",
+        "# Prepare the cache on an approved networked local/staging machine; see runbook section 4.6.",
+        "# Transfer the cache to TC1 before submitting; do not run dataset preparation on the head node.",
         "sbatch slurm/judge_validation.sbatch",
         "squeue -u utan001",
         "seff <JOBID>",
@@ -973,8 +1092,9 @@ def render_tc1_checklist(status: dict[str, Any]) -> str:
         "## Back On Mac After SCP",
         "",
         "```bash",
-        "python scripts/judge_agreement.py",
-        "make analyze",
+        "# Select the budget/scorer and arguments for the current task; primary evidence is results_512/.",
+        "python scripts/judge_agreement.py --help",
+        "# Rebuild only the requested derived analysis; do not substitute proxy pair labels for judge ASR.",
         "make agent-check",
         "python scripts/generate_handoff.py",
         "```",

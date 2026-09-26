@@ -21,6 +21,10 @@ REPORT_TEST_MODULES = {
 
 def pytest_collection_modifyitems(items):
     for item in items:
+        # A test that needs the local-only report builders (D94) can opt into the
+        # report suite from a core module with an explicit @pytest.mark.report.
+        if item.get_closest_marker("report"):
+            continue
         item.add_marker("report" if item.path.stem in REPORT_TEST_MODULES else "core")
 
 if TYPE_CHECKING:

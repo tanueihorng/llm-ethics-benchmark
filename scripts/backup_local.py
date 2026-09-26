@@ -16,6 +16,9 @@ What is genuinely unrecoverable, measured rather than assumed:
                             BY HAND. No amount of compute brings these back.
     docs/email_*.md         Supervisor correspondence, written once.
     fyp_submission/         LaTeX sources, Overleaf bundles, submission PDFs.
+    D94 local-only files    Report and deck builders, rendered reports, decks and
+                            showcase pages. Read from the D94 block of .gitignore,
+                            so the backup follows the ignore rules automatically.
 
 Everything else in the repo is either tracked or rebuildable from a tracked
 builder, so it is not included and does not need to be.
@@ -40,6 +43,42 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
+def local_only_rules(gitignore: Path = ROOT / ".gitignore") -> tuple[list[str], list[str]]:
+    """Returns (globs, excluded dirs) for the D94 local-only report and deck files.
+
+    The globs come from the .gitignore block headed `# D94` rather than being
+    restated here, so a path added to the local-only set is backed up without a
+    second edit. Directory rules elsewhere in .gitignore that sit inside a D94
+    directory (world3d's caches and build output) were already local and
+    rebuildable before D94, so they stay out of the archive.
+    """
+    if not gitignore.exists():
+        return [], []
+    lines = [line.strip() for line in gitignore.read_text(encoding="utf-8").splitlines()]
+    start = next((i for i, line in enumerate(lines) if line.startswith("# D94")), None)
+    if start is None:
+        return [], []
+    block: list[str] = []
+    end = len(lines)
+    for index in range(start, len(lines)):
+        if not lines[index]:
+            end = index
+            break
+        if not lines[index].startswith("#"):
+            block.append(lines[index])
+    globs = [rule + "**/*" if rule.endswith("/") else rule for rule in block]
+    d94_dirs = [rule for rule in block if rule.endswith("/")]
+    excluded = [
+        rule for rule in lines[:start] + lines[end:]
+        if rule.endswith("/") and not rule.startswith("#")
+        and any(rule != d94 and rule.startswith(d94) for d94 in d94_dirs)
+    ]
+    return globs, excluded
+
+
+LOCAL_ONLY_LABEL = "local-only reports and presentations (D94)"
+LOCAL_ONLY_GLOBS, LOCAL_ONLY_EXCLUDED_DIRS = local_only_rules()
+
 # (label, glob relative to the repo root, sensitive?)
 GROUPS: list[tuple[str, str, bool]] = [
     ("supervisor correspondence", "docs/email_*.md", False),
@@ -50,6 +89,7 @@ GROUPS: list[tuple[str, str, bool]] = [
     ("raw model outputs (128)", "results/**/raw.jsonl", True),
     ("raw model outputs (512)", "results_512/**/raw.jsonl", True),
     ("raw model outputs (multi-seed)", "results_sensitivity_512/**/raw.jsonl", True),
+    *((LOCAL_ONLY_LABEL, pattern, False) for pattern in LOCAL_ONLY_GLOBS),
 ]
 
 SKIP_PARTS = {".git", "node_modules", "__pycache__", ".venv", ".DS_Store"}
@@ -64,21 +104,23 @@ def collect(include_sensitive: bool) -> tuple[list[tuple[Path, str, bool]], dict
         if sensitive and not include_sensitive:
             summary[label] = {"files": 0, "bytes": 0, "sensitive": True, "skipped": True}
             continue
-        files = 0
-        size = 0
+        # Several globs can share a label (the D94 group), so accumulate.
+        entry = summary.setdefault(label, {"files": 0, "bytes": 0, "sensitive": sensitive,
+                                           "skipped": False})
         for path in sorted(ROOT.glob(pattern)):
             if not path.is_file():
                 continue
             if SKIP_PARTS & set(path.parts):
                 continue
+            rel = path.relative_to(ROOT).as_posix()
+            if any(rel.startswith(prefix) for prefix in LOCAL_ONLY_EXCLUDED_DIRS):
+                continue
             if path in seen:
                 continue
             seen.add(path)
             picked.append((path, label, sensitive))
-            files += 1
-            size += path.stat().st_size
-        summary[label] = {"files": files, "bytes": size, "sensitive": sensitive,
-                          "skipped": False}
+            entry["files"] += 1
+            entry["bytes"] += path.stat().st_size
     return picked, summary
 
 

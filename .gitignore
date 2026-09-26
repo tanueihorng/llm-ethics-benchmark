@@ -133,3 +133,31 @@ world3d/screenshots/
 # audit scripts, and some of it carries the same third-party-copyright and
 # submission-text concerns as the Sources/ and docs/**/*.docx rules above.
 tmp/
+
+# Personal learning scaffold (learn-by-grilling) — not part of the deliverable
+learning/
+
+# D94 (2026-09-26): reports and presentations are local-only. The builders embed
+# the full report prose, so they are ignored alongside the rendered documents,
+# decks and showcase pages. This applies going forward only: commits made before
+# D94 still contain earlier versions. Never `git add -f` these paths.
+docs/**/*.docx
+docs/**/*.pptx
+docs/**/*.html
+docs/viva/
+docs/drafts/
+docs/report_versions/*.summary.md
+docs/report_versions/changes/*.summary.md
+scripts/build_fyp_*.js
+scripts/build_rewritten_fyp_*.py
+scripts/rewrite_submitted_literature_review.py
+scripts/build_agentic_report.js
+scripts/build_agent_harness_architecture_doc.py
+scripts/build_viva_deck.py
+scripts/build_viva_deck_html.py
+scripts/build_fyp_explainer_deck.js
+scripts/build_showcase_latentspace.py
+scripts/report_tools/apply_audit_fixes.py
+scripts/report_tools/pass*.py
+scripts/report_tools/build_v4_source_entailment_*.py
+world3d/

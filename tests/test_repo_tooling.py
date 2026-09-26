@@ -13,6 +13,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from report_tools.workflows import build_plan, execute_plan, load_workflows, missing_outputs, required_outputs
 
 
+@pytest.mark.report  # needs the local-only builders (D94)
 def test_registry_profile_resolves_and_includes_existing_ci_builders():
     registry = load_workflows(ROOT)
     plan = build_plan(ROOT, registry, profile="ci")
@@ -56,6 +57,7 @@ def test_missing_required_output_is_not_a_skip(tmp_path):
     assert path.relative_to(tmp_path).as_posix() not in missing_outputs(tmp_path, registry, "ci")
 
 
+@pytest.mark.report  # needs the local-only builders (D94)
 def test_missing_local_source_fails_before_any_builder_runs(tmp_path, monkeypatch):
     registry = load_workflows(ROOT)
     plan = build_plan(ROOT, registry, target="review")
@@ -66,6 +68,7 @@ def test_missing_local_source_fails_before_any_builder_runs(tmp_path, monkeypatc
         execute_plan(tmp_path, registry, plan)
 
 
+@pytest.mark.report  # needs the local-only builders (D94)
 def test_successful_process_without_output_is_rejected(tmp_path, monkeypatch):
     registry = load_workflows(ROOT)
     plan = build_plan(ROOT, registry, target="canonical")

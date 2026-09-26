@@ -72,3 +72,29 @@ def test_destination_inside_the_repo_is_refused(dest: str, monkeypatch, capsys) 
     monkeypatch.setattr(sys, "argv", ["backup_local.py", "--dest", str(REPO_ROOT / dest)])
     assert backup.main() == 2
     assert "inside the repository" in capsys.readouterr().err
+
+
+def test_local_only_report_sources_are_covered() -> None:
+    """D94 made the report and deck builders local-only; the backup is now their only copy."""
+    backup = load_backup()
+    patterns = {pattern for label, pattern, _ in backup.GROUPS if label == backup.LOCAL_ONLY_LABEL}
+    assert "scripts/build_rewritten_fyp_*.py" in patterns, "report builders dropped from the backup"
+    assert "scripts/build_fyp_*.js" in patterns, "docx-js report builders dropped from the backup"
+    assert "docs/viva/**/*" in patterns, "the viva deck dropped from the backup"
+    for label, pattern, sensitive in backup.GROUPS:
+        if label == backup.LOCAL_ONLY_LABEL:
+            assert not sensitive, f"{pattern} is report prose, not harmful-content sensitive"
+
+
+def test_local_only_rules_follow_the_gitignore_block(tmp_path: Path) -> None:
+    """Coverage is read from the D94 block, and pre-D94 cache dirs inside it stay out."""
+    backup = load_backup()
+    gitignore = tmp_path / ".gitignore"
+    gitignore.write_text(
+        "world3d/dist/\n\n# D94 (2026-09-26): local-only.\ndocs/viva/\nworld3d/\n\nother/\n",
+        encoding="utf-8",
+    )
+    assert backup.local_only_rules(gitignore) == (["docs/viva/**/*", "world3d/**/*"], ["world3d/dist/"])
+
+    gitignore.write_text("docs/viva/\n", encoding="utf-8")
+    assert backup.local_only_rules(gitignore) == ([], [])

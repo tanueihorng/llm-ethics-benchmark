@@ -45,6 +45,10 @@ allowed_derived_artifacts:
   - results_512/*/arc/summary.parser_strict.json
   - results_512/analysis/*.json
   - results_512/analysis/*.csv
+  # Redacted per-item audit/review trails (for example Jev repeatability and
+  # human-review queues). These carry IDs, labels and probabilities only and
+  # are also covered by the redaction scan below.
+  - results_512/analysis/*.jsonl
   - results_sensitivity_512/*/*/harmbench/scores.judge.*.jsonl
   - results_sensitivity_512/*/*/harmbench/summary.judge.*.json
 
@@ -145,6 +149,12 @@ epistemic_hedge:
     - scripts/build_rewritten_fyp_interim_v5.py
     - scripts/build_rewritten_fyp_interim_compact.py
     - scripts/build_rewritten_fyp_interim_progress.py
+    - scripts/build_rewritten_fyp_interim_progress_humanized.py
+    # D81 plain-academic v2 (2026-09-07). Registered as a current document in
+    # configs/report_versions.yaml, so it is scanned in its own right — the
+    # claim-fitness symmetry test fired on it the moment it shipped unscanned.
+    - scripts/build_rewritten_fyp_interim_progress_v2.py
+    - scripts/build_rewritten_fyp_interim_progress_v3.py
     # The LaTeX mirrors emit no prose of their own — every sentence is recorded
     # from the (already scanned) rewrite builder. Scanned anyway rather than
     # exempted: the comments and docstring are prose a reader will meet, and
@@ -366,6 +376,9 @@ stale_text:
     - scripts/build_rewritten_fyp_interim_v5.py
     - scripts/build_rewritten_fyp_interim_compact.py
     - scripts/build_rewritten_fyp_interim_progress.py
+    - scripts/build_rewritten_fyp_interim_progress_humanized.py
+    - scripts/build_rewritten_fyp_interim_progress_v2.py
+    - scripts/build_rewritten_fyp_interim_progress_v3.py
     - scripts/build_fyp_thesis_v4.js
     # 2026-07-15 verification round: the CURRENT submission alternates and the
     # interim builder are deliverables too, but were scanned by nothing — a retired
@@ -603,6 +616,9 @@ report_worthy:
     - scripts/build_rewritten_fyp_interim_v5.py
     - scripts/build_rewritten_fyp_interim_compact.py
     - scripts/build_rewritten_fyp_interim_progress.py
+    - scripts/build_rewritten_fyp_interim_progress_humanized.py
+    - scripts/build_rewritten_fyp_interim_progress_v2.py
+    - scripts/build_rewritten_fyp_interim_progress_v3.py
     - scripts/build_rewritten_latex.py
     # A figure is report content: regenerating one changes what the reader sees.
     - scripts/make_figures.py

@@ -3,111 +3,55 @@ name: Agent Harness
 on:
   pull_request:
   push:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   harness:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-
-      - name: Install lightweight harness dependencies
-        run: |
-          python -m pip install --upgrade pip
-          # `datasets` looks out of place in a "lightweight" job, but it is required:
-          # tests/conftest.py imports the legacy loaders in ethical_benchmark/datasets/,
-          # each of which does `from datasets import load_dataset` at module scope, so
-          # collecting ANY test needs it. Without it harness_eval.py aborts at collection
-          # (ModuleNotFoundError: datasets) — which it did on every run from 2026-07-25.
-          # It stays lightweight in the sense that matters: no torch, no transformers.
-          python -m pip install pytest pyyaml datasets
-
-      - name: Run lightweight agent checks
-        run: python scripts/agent_check.py --skip-pytest --skip-diff-check
-
-      - name: Run harness eval suite
-        run: python scripts/harness_eval.py
-
-  # Full experiment unit/integration suite (audit P2-4). The lightweight `harness`
-  # job above intentionally skips pytest for speed; this job installs the project's
-  # declared dependencies and runs the whole test suite so CI actually exercises it.
-  # The suite is CPU-only (no test imports torch/transformers at module load), so it
-  # runs on a standard GitHub runner without a GPU.
-  tests:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
           cache: pip
+      - name: Install lightweight harness dependencies
+        run: python -m pip install pytest pyyaml
+      - name: Run lightweight agent checks
+        run: python scripts/agent_check.py --skip-pytest --skip-diff-check
+      - name: Run harness eval suite
+        run: python scripts/harness_eval.py
 
-      - name: Install project dependencies
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install --upgrade pip setuptools wheel
+      - run: python scripts/check_package.py
+
+  tests:
+    runs-on: ubuntu-latest
+    # D94: report and presentation builders are local-only, so a clone cannot
+    # build or test the reports. The report suite runs locally in `make agent-check`.
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [core]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install tested analysis environment
         run: |
           python -m pip install --upgrade pip
-          # The ANALYSIS environment, not the GPU pipeline: this job runs the test
-          # suite and builds documents, and nothing here loads a model. Installing
-          # requirements.txt instead would resolve the loose floors to whatever is
-          # newest (transformers 5.x today) and exercise an environment nobody uses.
-          # This file pins the exact versions the suite actually passes on, and it
-          # already carries the dashboard extras that tests/test_dashboard_theme.py
-          # and tests/test_dashboard_data.py need.
-          # CPU-only torch FIRST. The pinned torch==2.6.0 from PyPI drags in the whole
-          # nvidia-cu12 stack (several GB) and the runner dies with
-          # "[Errno 28] No space left on device" -- which is what happened on the first
-          # attempt at this change. A GitHub runner has no GPU, and nothing in the suite
-          # loads a model, so the CPU wheel is the honest install. The pin is unchanged;
-          # only the wheel flavour differs, and the line below then sees it satisfied.
           python -m pip install torch==2.6.0 --index-url https://download.pytorch.org/whl/cpu
           python -m pip install -r requirements-analysis.txt
           python -m pip install -e .
-
-      # T59 (a): D60 untracked every generated .docx, so a clone has no documents to
-      # check and the document gates silently stop running. The builders ARE tracked
-      # and deterministic, so CI rebuilds them before pytest. One command produces
-      # both submission-line files: the interim builder imports the report builder
-      # and calls build_report() first.
-      - name: Build the submission-line documents
-        run: |
-          python scripts/claim_registry.py --write
-          python scripts/build_rewritten_fyp_interim_v1.py
-
-      # T59 (b): the seven docx-js documents (v5, v6, thesis, interim, and the three
-      # humanized alternates) need Node. Counted in a throwaway clone of HEAD rather
-      # than estimated -- bare clone 119 surface checks, 161 after the step above,
-      # 308 after this one, against 394 on the author's machine.
-      #
-      # The remaining 86 are NOT a coverage gap to close here. Every one is either
-      # gitignored correspondence (a standing privacy decision) or the local
-      # fyp_submission/ staging tree, and neither can exist on a runner. Note the
-      # LaTeX mirrors specifically cannot be rebuilt from a clone at all: they need
-      # fyp_submission/report_latex/final_thesis/Thesis.cls, an NTU-supplied class
-      # file that is gitignored, so `make rewrite-latex` fails there. That is a real
-      # single-machine dependency in the LaTeX submission line, not a CI problem.
-      #
-      # Still skipping regardless of this change: test_report_pagination.py shells out
-      # to LibreOffice, which is absent on the runner.
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          cache: npm
-
-      - name: Build the docx-js documents
-        run: |
-          npm ci
-          node scripts/build_fyp_report_v5.js
-          node scripts/build_fyp_report_v6.js
-          node scripts/build_fyp_thesis_v4.js
-          node scripts/build_fyp_interim.js
-          node scripts/build_fyp_report_humanized.js
-          node scripts/build_fyp_thesis_humanized.js
-          node scripts/build_fyp_interim_humanized.js
-
-      - name: Run full pytest suite
-        run: pytest tests/ -q
+          python -m pip check
+      - name: Run research code and tooling tests
+        if: matrix.suite == 'core'
+        run: python -m pytest tests/ -m core -q

@@ -17,7 +17,7 @@ The original nine-chapter full report, built by the successive build_fyp_report*
 | **v2** | 🗄 archived | 2026-06-26 | `scripts/build_fyp_report_v2.js` *(name-inferred)* | — | ✅ 677,454 B |
 | **v3** | 🗄 archived | 2026-06-26 | `scripts/build_fyp_report_v3.js` *(name-inferred)* | — | ✅ 677,737 B |
 | **v4 (128-token era)** | 🗄 archived | 2026-06-30 | `scripts/build_fyp_report_v4.js` *(name-inferred)* | — | ✅ 680,810 B |
-| **v5 (512-token primary re-base) — Canonical `make report` output; 512-token-primary study.** | ⭐ canonical | 2026-07-01 | `scripts/build_fyp_report_v5.js` | D41 | ✅ 1,397,730 B |
+| **v5 (512-token primary re-base) — Canonical `make report` output; 512-token-primary study.** | ⭐ canonical | 2026-07-01 | `scripts/build_fyp_report_v5.js` | D41 | ✅ 1,397,734 B |
 | **v6 (remediated comparison draft) — Live claim surface kept beside canonical v5 for comparison.** | 🔍 comparison draft | 2026-07-25 | `scripts/build_fyp_report_v6.js` | — | ✅ 1,402,732 B |
 
 **Change records:**
@@ -88,6 +88,10 @@ The interim-submission derivatives of the rewrite line. The selected T53 artifac
 | **Interim compact (progress-centred) — 36-page build; superseded for sending by the progress copy (D72).** | 🧯 fallback | 2026-08-24 | `scripts/build_rewritten_fyp_interim_compact.py` | D71, D72 | ✅ 800,058 B |
 | **Interim progress (SELECTED T53 artifact) — Uses supplied Ch1 + full v4 Ch2-4, replaces detailed scorer/discussion chapters with Ch5 Progress and Remaining Work; repaired in place 2026-08-25 (D73).** | ✅ selected | 2026-08-24 | `scripts/build_rewritten_fyp_interim_progress.py` | D72, D73 | ✅ 735,270 B |
 | **Interim v5 (retitle-only of rewrite v5) — Same retitle-only contract as the other interim derivatives, over the v5 language-cleanup line (D75). Comprehensive fallback; the D73 progress copy remains the selected T53 artifact.** | 🧯 fallback | 2026-08-25 | `scripts/build_rewritten_fyp_interim_v5.py` | D75 | ✅ 821,271 B |
+| **Interim progress (humanized prose variant) — /humanizer prose pass over the submitted progress copy. 84 exact-substring rewrites thin the machine-prose markers ("therefore" 26 to 8, "rather than" 26 to 12, provides/supplies cycling, participle tails) and simplify ornamental vocabulary at the user's request, holding the academic register. Numbers (663), citation sequence (159), headings (32), table cells (245), references (57) and the TOC assert unchanged at build time; renders to the same 33 pages. Does not supersede the submitted copy, which stays the selected T53 artifact.** | variant | 2026-09-02 | `scripts/build_rewritten_fyp_interim_progress_humanized.py` | D72, D73 | ✅ 735,120 B |
+| **Submitted interim (literature review revised) — Argument-led Chapter 2 rewrite, followed by authorised prose edits to the abstract and Chapters 1, 3, 4 and 5. Preserves citations and tables; submitted source untouched. Cached contents refreshed after pagination changes.** | 🔍 comparison draft | 2026-09-05 | `scripts/rewrite_submitted_literature_review.py` | D78 | ✅ 734,033 B |
+| **Interim progress v2 (plain academic full-report revision) — Full-report prose edit from the literature-review-revised sibling. Simplifies language, trims repeated explanations and clarifies methods and results. Preserves numerical tables and original citation occurrences; adds four verified method sources and renumbers 61 references by first use. Clarifies two literature-table labels and marks technical-report preprints. Figures are regenerated from verified results with cautious interpretation labels. Evidence audit: docs/audits/2026-09-08_interim_v2_evidence_check/AUDIT.md. Earlier versions and the selected submission copy remain unchanged.** | 🔍 comparison draft | 2026-09-07 | `scripts/build_rewritten_fyp_interim_progress_v2.py` | D81, D82, D83 | ✅ 845,617 B |
+| **Interim progress v3 (restructured literature review) — Rebuilds Chapter 2 of v2 fundamentals-first (new 2.1 Quantization Fundamentals with Figure 2.1, merged measurement section, new Kharinaev et al. paragraph, RQ-linked synthesis, new 2.7 Chapter Summary) with section bridges, linking-word prose and explicit links to this study; revises Chapter 1 (motivation, problem statement, joint RQ1-RQ3 framing, MMLU subset justification, contributions). Adds two foundational sources (Jacob et al. 2018; Gholami et al. 2022): 63 references renumbered by first use. Result figures relabelled FP16 with identical data. Chapters 3-5 unchanged apart from citation numbers. TOC pages from a LibreOffice render; Word remains the authority.** | 🔍 comparison draft | 2026-09-26 | `scripts/build_rewritten_fyp_interim_progress_v3.py` | D92, D93 | ✅ 939,967 B |
 
 > ⚠️ Chain note: Verified absence (2026-08-25): no rewritten_fyp_interim_v2.docx was ever built or logged — the interim chain jumps v1 to v3 because the v2 editorial pass was applied to the report line only (D63).
 
@@ -98,6 +102,10 @@ The interim-submission derivatives of the rewrite line. The selected T53 artifac
 - [`Interim v4 (funnel intro, comprehensive fallback)` → `Interim compact (progress-centred)`](report_versions/changes/rewrite_interim__interim_v4_funnel_intro_comprehensive_fa_to_interim_compact_progress_centred.summary.md) — +19 / −166 / ~74¶
 - [`Interim compact (progress-centred)` → `Interim progress (SELECTED T53 artifact)`](report_versions/changes/rewrite_interim__interim_compact_progress_centred_to_interim_progress_selected_t53_artifact.summary.md) — +66 / −92 / ~52¶
 - [`Interim progress (SELECTED T53 artifact)` → `Interim v5 (retitle-only of rewrite v5)`](report_versions/changes/rewrite_interim__interim_progress_selected_t53_artifact_to_interim_v5_retitle_only_of_rewrite_v5.summary.md) — +199 / −26 / ~86¶
+- [`Interim v5 (retitle-only of rewrite v5)` → `Interim progress (humanized prose variant)`](report_versions/changes/rewrite_interim__interim_v5_retitle_only_of_rewrite_v5_to_interim_progress_humanized_prose_variant.summary.md) — +40 / −213 / ~98¶
+- [`Interim progress (humanized prose variant)` → `Submitted interim (literature review revised)`](report_versions/changes/rewrite_interim__interim_progress_humanized_prose_variant_to_submitted_interim_literature_review_revi.summary.md) — +63 / −63 / ~63¶
+- [`Submitted interim (literature review revised)` → `Interim progress v2 (plain academic full-report revision)`](report_versions/changes/rewrite_interim__submitted_interim_literature_review_revi_to_interim_progress_v2_plain_academic_full_.summary.md) — +100 / −96 / ~42¶
+- [`Interim progress v2 (plain academic full-report revision)` → `Interim progress v3 (restructured literature review)`](report_versions/changes/rewrite_interim__interim_progress_v2_plain_academic_full__to_interim_progress_v3_restructured_literat.summary.md) — +51 / −51 / ~37¶
 
 ## Humanized alternate — full report  (`humanized_report`)
 
@@ -105,7 +113,7 @@ Submission-alternate re-render of canonical v5 with the humanized styling pass.
 
 | Version | Status | Date | Builder | Decisions | Artifact |
 |---|---|---|---|---|---|
-| **Base — report v5** | ⭐ canonical | 2026-07-01 | `scripts/build_fyp_report_v5.js` | D41 | ✅ 1,397,730 B |
+| **Base — report v5** | ⭐ canonical | 2026-07-01 | `scripts/build_fyp_report_v5.js` | D41 | ✅ 1,397,734 B |
 | **Humanized report alternate — Separate submission alternate (PROJECT_LOG §1 Current documents).** | 🧯 fallback | 2026-07-01 | `scripts/build_fyp_report_humanized.js` | — | ✅ 1,393,682 B |
 
 **Change records:**
@@ -142,6 +150,8 @@ Submission-alternate re-render of the 2026-07-10 interim with the humanized styl
 
 | Document | Note |
 |---|---|
+| `docs/drafts/final_report_visuals_pack.docx` | Review pack of 15 proposed final-report figures built by docs/drafts/build_visuals_pack.py from docs/drafts/visuals/; not a report version. |
+| `docs/drafts/final_report_missing_parts_draft.docx` | Review draft of the missing final-report chapters (5-7) built by docs/drafts/build_final_chapters_draft.py; not a report version and not the final-report base (T71). |
 | `docs/FYP_Agent_Harness_Architecture_Guide_2026-06-09.docx` | Word architecture guide for the agent harness. |
 | `docs/Codex_Meetup_Agent_Harness_Report.docx` | Meetup report on the repo-native agent harness. |
 | `docs/Agentic_AI_Workflow_Report_2026-06-26.docx` | Agentic workflow report deck companion. |
