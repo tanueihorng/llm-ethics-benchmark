@@ -1,0 +1,116 @@
+{
+  "axis_metrics": {
+    "overall_preference": {
+      "cohen_kappa": 0.13509889373114314,
+      "exact_agreement": 0.2833333333333333,
+      "human_counts": {
+        "A_better": 8,
+        "B_better": 9,
+        "tie": 43
+      },
+      "jev_counts": {
+        "A_better": 25,
+        "B_better": 32,
+        "tie": 3
+      },
+      "n": 60
+    },
+    "refusal_relation": {
+      "cohen_kappa": 0.6252927400468385,
+      "exact_agreement": 0.8666666666666667,
+      "human_counts": {
+        "A_more_refusing": 6,
+        "B_more_refusing": 3,
+        "same": 51
+      },
+      "jev_counts": {
+        "A_more_refusing": 9,
+        "B_more_refusing": 7,
+        "same": 44
+      },
+      "n": 60
+    },
+    "semantic_relation": {
+      "cohen_kappa": 0.7715736040609138,
+      "exact_agreement": 0.9,
+      "human_counts": {
+        "materially_different": 16,
+        "materially_same": 44
+      },
+      "jev_counts": {
+        "materially_different": 22,
+        "materially_same": 38
+      },
+      "n": 60
+    },
+    "task_success": {
+      "cohen_kappa": 0.6257796257796258,
+      "exact_agreement": 0.8,
+      "human_counts": {
+        "A_only": 5,
+        "B_only": 6,
+        "both": 44,
+        "neither": 5
+      },
+      "jev_counts": {
+        "A_only": 7,
+        "B_only": 11,
+        "both": 35,
+        "neither": 7
+      },
+      "n": 60
+    }
+  },
+  "contains_raw_text": false,
+  "derived_effect_counts": {
+    "human": {
+      "changed_without_clear_quality_direction": 3,
+      "overall_degradation": 3,
+      "overall_improvement": 1,
+      "preservation": 39,
+      "refusal_decrease": 5,
+      "refusal_increase": 4,
+      "task_success_loss": 5
+    },
+    "jev": {
+      "overall_degradation": 16,
+      "overall_improvement": 17,
+      "preservation": 3,
+      "refusal_decrease": 11,
+      "refusal_increase": 5,
+      "task_success_gain": 2,
+      "task_success_loss": 6
+    }
+  },
+  "direct_overall_inversions": {
+    "count": 3,
+    "rate": 0.05
+  },
+  "gate_checks": {
+    "direct_overall_inversion_at_most_0_10": true,
+    "overall_exact_agreement_at_least_0_70": false,
+    "overall_kappa_at_least_0_40": false,
+    "refusal_agreement_at_least_0_80": true,
+    "repeat_stability_at_least_0_80": true,
+    "semantic_agreement_at_least_0_70": true,
+    "task_success_agreement_at_least_0_70": true
+  },
+  "gate_passed": false,
+  "judge_model_id_requested": "jev-1.13.0",
+  "judge_model_ids_observed": [
+    "jev-1.13.0"
+  ],
+  "limitations": [
+    "single human annotator",
+    "enriched 60-pair pilot sample",
+    "shared prompt context",
+    "passing licenses a full run but does not establish population accuracy"
+  ],
+  "purpose": "blinded_paired_quantization_effect_validation",
+  "repeat_sample_size": 20,
+  "repeatability": {
+    "overall_choice_stability": 0.95
+  },
+  "sample_design": "12 pairs per family; 30 change-enriched and 30 stable; not a population estimate",
+  "sample_size": 60
+}

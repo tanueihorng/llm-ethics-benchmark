@@ -1,0 +1,220 @@
+{
+  "axis_metrics": {
+    "clarity": {
+      "cohen_kappa": 0.3358778625954199,
+      "exact_agreement": 0.5166666666666667,
+      "human_counts": {
+        "A": 13,
+        "B": 17,
+        "tie": 30
+      },
+      "jev_counts": {
+        "A": 23,
+        "B": 33,
+        "tie": 4
+      },
+      "n": 60
+    },
+    "completeness": {
+      "cohen_kappa": 0.37649880095923255,
+      "exact_agreement": 0.5666666666666667,
+      "human_counts": {
+        "A": 19,
+        "B": 16,
+        "tie": 25
+      },
+      "jev_counts": {
+        "A": 28,
+        "B": 26,
+        "tie": 6
+      },
+      "n": 60
+    },
+    "correctness": {
+      "cohen_kappa": 0.42283563362609794,
+      "exact_agreement": 0.6166666666666667,
+      "human_counts": {
+        "A": 19,
+        "B": 21,
+        "tie": 20
+      },
+      "jev_counts": {
+        "A": 24,
+        "B": 33,
+        "tie": 3
+      },
+      "n": 60
+    },
+    "overall_quality": {
+      "cohen_kappa": 0.43820224719101103,
+      "exact_agreement": 0.6666666666666666,
+      "human_counts": {
+        "A": 24,
+        "B": 26,
+        "tie": 10
+      },
+      "jev_counts": {
+        "A": 24,
+        "B": 33,
+        "tie": 3
+      },
+      "n": 60
+    },
+    "relevance": {
+      "cohen_kappa": 0.21612541993281076,
+      "exact_agreement": 0.4166666666666667,
+      "human_counts": {
+        "A": 14,
+        "B": 11,
+        "tie": 35
+      },
+      "jev_counts": {
+        "A": 23,
+        "B": 29,
+        "tie": 8
+      },
+      "n": 60
+    },
+    "safe_helpfulness": {
+      "cohen_kappa": 0.11392405063291135,
+      "exact_agreement": 0.3,
+      "human_counts": {
+        "A": 10,
+        "B": 9,
+        "tie": 41
+      },
+      "jev_counts": {
+        "A": 24,
+        "B": 30,
+        "tie": 6
+      },
+      "n": 60
+    },
+    "task_fulfilment": {
+      "cohen_kappa": 0.34272300469483563,
+      "exact_agreement": 0.5333333333333333,
+      "human_counts": {
+        "A": 16,
+        "B": 12,
+        "tie": 32
+      },
+      "jev_counts": {
+        "A": 21,
+        "B": 27,
+        "tie": 12
+      },
+      "n": 60
+    }
+  },
+  "condition_preferences": {
+    "clarity": {
+      "human": {
+        "fp16": 16,
+        "nf4": 14,
+        "tie": 30
+      },
+      "jev": {
+        "fp16": 32,
+        "nf4": 24,
+        "tie": 4
+      }
+    },
+    "completeness": {
+      "human": {
+        "fp16": 20,
+        "nf4": 15,
+        "tie": 25
+      },
+      "jev": {
+        "fp16": 35,
+        "nf4": 19,
+        "tie": 6
+      }
+    },
+    "correctness": {
+      "human": {
+        "fp16": 25,
+        "nf4": 15,
+        "tie": 20
+      },
+      "jev": {
+        "fp16": 38,
+        "nf4": 19,
+        "tie": 3
+      }
+    },
+    "overall_quality": {
+      "human": {
+        "fp16": 30,
+        "nf4": 20,
+        "tie": 10
+      },
+      "jev": {
+        "fp16": 34,
+        "nf4": 23,
+        "tie": 3
+      }
+    },
+    "relevance": {
+      "human": {
+        "fp16": 11,
+        "nf4": 14,
+        "tie": 35
+      },
+      "jev": {
+        "fp16": 33,
+        "nf4": 19,
+        "tie": 8
+      }
+    },
+    "safe_helpfulness": {
+      "human": {
+        "fp16": 12,
+        "nf4": 7,
+        "tie": 41
+      },
+      "jev": {
+        "fp16": 34,
+        "nf4": 20,
+        "tie": 6
+      }
+    },
+    "task_fulfilment": {
+      "human": {
+        "fp16": 14,
+        "nf4": 14,
+        "tie": 32
+      },
+      "jev": {
+        "fp16": 27,
+        "nf4": 21,
+        "tie": 12
+      }
+    }
+  },
+  "contains_raw_text": false,
+  "gate_checks": {
+    "every_component_agreement_at_least_0_55": false,
+    "overall_exact_agreement_at_least_0_70": false,
+    "overall_kappa_at_least_0_40": true,
+    "repeat_stability_at_least_0_80": true
+  },
+  "gate_passed": false,
+  "judge_model_id_requested": "jev-1.13.0",
+  "judge_model_ids_observed": [
+    "jev-1.13.0"
+  ],
+  "limitations": [
+    "single human annotator",
+    "enriched 60-pair pilot sample",
+    "shared prompt context",
+    "passing the gate would license a full run, not establish population accuracy"
+  ],
+  "purpose": "blinded_paired_response_quality_validation",
+  "repeat_sample_size": 20,
+  "repeatability": {
+    "overall_choice_stability": 0.9
+  },
+  "sample_design": "12 pairs per model family; change-enriched and stable strata; not a population estimate",
+  "sample_size": 60
+}
