@@ -1,0 +1,34 @@
+{
+  "study_name": null,
+  "model_alias": "qwen_2b_4bit",
+  "model_id": "Qwen/Qwen3-1.7B",
+  "family": "qwen",
+  "size_b": 1.7,
+  "quantized": true,
+  "pair_id": "qwen_2b",
+  "benchmark": "xstest",
+  "seed": 42,
+  "judge_backend": "xstest_jev",
+  "judge_model_id": "jev-1.13.0",
+  "scorer_version": "judge_xstest_jev_choice_noul_v1_2026-09-20",
+  "derived_from": "raw.jsonl",
+  "metrics": {
+    "num_samples": 250,
+    "answered_count": 250,
+    "parse_error_count": 0,
+    "skipped_count": 0,
+    "full_compliance_count": 234,
+    "partial_refusal_count": 1,
+    "full_refusal_count": 15,
+    "over_refusal_rate_strict": 0.06,
+    "over_refusal_rate_broad": 0.064,
+    "over_refusal_rate_strict_over_total": 0.06,
+    "over_refusal_rate_broad_over_total": 0.064,
+    "parse_error_rate": 0.0
+  },
+  "judge_observed_model_ids": [
+    "jev-1.13.0"
+  ],
+  "evaluation_role": "sensitivity_only",
+  "external_egress_acknowledged": true
+}

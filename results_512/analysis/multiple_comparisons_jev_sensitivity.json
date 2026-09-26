@@ -1,0 +1,352 @@
+{
+  "description": "Validation-informed Jev sensitivity family: replaces only the five primary HarmBench-classifier p-values with Jev p-values and retains the other 15 registered contrasts. This is not the primary family.",
+  "family_size": 20,
+  "alpha": 0.05,
+  "fdr_level_q": 0.05,
+  "n_uncorrected_significant": 5,
+  "n_bh_significant_q05": 4,
+  "bh_survivors": [
+    {
+      "pair_id": "qwen_2b",
+      "metric": "mmlu_accuracy",
+      "bh_q_value": 0.008
+    },
+    {
+      "pair_id": "llama_3_2_3b",
+      "metric": "harmbench_asr_jev_sensitivity",
+      "bh_q_value": 0.0098
+    },
+    {
+      "pair_id": "llama_3_2_3b",
+      "metric": "arc_accuracy",
+      "bh_q_value": 0.008
+    },
+    {
+      "pair_id": "phi4_mini",
+      "metric": "xstest_over_refusal",
+      "bh_q_value": 0.0098
+    }
+  ],
+  "power_analysis": {
+    "test": "McNemar exact (two-sided), normal-approx MDE/power",
+    "target_alpha": 0.05,
+    "target_power": 0.8,
+    "representative_mde_delta_asr_at_median_discordant_rate": 0.0594,
+    "median_discordant_rate": 0.09,
+    "note": "At n=200 and the observed HarmBench discordant rates, the minimum detectable ASR delta for 80% power is ~0.06; no observed NF4 ASR effect reaches this floor, so effects smaller than the floor cannot be ruled out (absence of significance is bounded by power, not proof of a zero effect).",
+    "per_pair_harmbench_asr": [
+      {
+        "pair_id": "qwen_2b",
+        "discordant_rate": 0.16,
+        "mde_delta_asr": 0.0792,
+        "post_hoc_power": 0.0
+      },
+      {
+        "pair_id": "qwen_4b",
+        "discordant_rate": 0.09,
+        "mde_delta_asr": 0.0594,
+        "post_hoc_power": 0.4701
+      },
+      {
+        "pair_id": "llama_3_2_3b",
+        "discordant_rate": 0.05,
+        "mde_delta_asr": 0.0443,
+        "post_hoc_power": 0.7188
+      },
+      {
+        "pair_id": "mistral_7b",
+        "discordant_rate": 0.19,
+        "mde_delta_asr": 0.0864,
+        "post_hoc_power": 0.0947
+      },
+      {
+        "pair_id": "phi4_mini",
+        "discordant_rate": 0.07,
+        "mde_delta_asr": 0.0524,
+        "post_hoc_power": 0.1858
+      }
+    ]
+  },
+  "contrasts": [
+    {
+      "pair_id": "qwen_2b",
+      "metric": "harmbench_asr_jev_sensitivity",
+      "n": 200,
+      "b": 18,
+      "c": 14,
+      "n_discordant": 32,
+      "delta": 0.01999999999999999,
+      "p_value": 0.5966148958541453,
+      "uncorrected_significant": false,
+      "direction": "harmful-ward",
+      "bh_q_value": 0.7458,
+      "bh_significant_q05": false
+    },
+    {
+      "pair_id": "qwen_2b",
+      "metric": "mmlu_accuracy",
+      "n": 300,
+      "b": 16,
+      "c": 43,
+      "n_discordant": 59,
+      "delta": -0.09,
+      "p_value": 0.0005843646280443461,
+      "uncorrected_significant": true,
+      "direction": "down",
+      "bh_q_value": 0.008,
+      "bh_significant_q05": true
+    },
+    {
+      "pair_id": "qwen_2b",
+      "metric": "arc_accuracy",
+      "n": 1172,
+      "b": 87,
+      "c": 98,
+      "n_discordant": 185,
+      "delta": -0.0094,
+      "p_value": 0.4623030339182505,
+      "uncorrected_significant": false,
+      "direction": "down",
+      "bh_q_value": 0.6604,
+      "bh_significant_q05": false
+    },
+    {
+      "pair_id": "qwen_2b",
+      "metric": "xstest_over_refusal",
+      "n": 250,
+      "b": 2,
+      "c": 8,
+      "n_discordant": 10,
+      "delta": -0.024,
+      "p_value": 0.109375,
+      "uncorrected_significant": false,
+      "direction": "down",
+      "bh_q_value": 0.2734,
+      "bh_significant_q05": false
+    },
+    {
+      "pair_id": "qwen_4b",
+      "metric": "harmbench_asr_jev_sensitivity",
+      "n": 200,
+      "b": 11,
+      "c": 5,
+      "n_discordant": 16,
+      "delta": 0.029999999999999985,
+      "p_value": 0.210113525390625,
+      "uncorrected_significant": false,
+      "direction": "harmful-ward",
+      "bh_q_value": 0.4307,
+      "bh_significant_q05": false
+    },
+    {
+      "pair_id": "qwen_4b",
+      "metric": "mmlu_accuracy",
+      "n": 300,
+      "b": 15,
+      "c": 16,
+      "n_discordant": 31,
+      "delta": -0.0033,
+      "p_value": 1.0,
+      "uncorrected_significant": false,
+      "direction": "down",
+      "bh_q_value": 1.0,
+      "bh_significant_q05": false
+    },
+    {
+      "pair_id": "qwen_4b",
+      "metric": "arc_accuracy",
+      "n": 1172,
+      "b": 30,
+      "c": 49,
+      "n_discordant": 79,
+      "delta": -0.0162,
+      "p_value": 0.042165443994951105,
+      "uncorrected_significant": true,
+      "direction": "down",
+      "bh_q_value": 0.1687,
+      "bh_significant_q05": false
+    },
+    {
+      "pair_id": "qwen_4b",
+      "metric": "xstest_over_refusal",
+      "n": 250,
+      "b": 1,
+      "c": 2,
+      "n_discordant": 3,
+      "delta": -0.004,
+      "p_value": 1.0,
+      "uncorrected_significant": false,
+      "direction": "down",
+      "bh_q_value": 1.0,
+      "bh_significant_q05": false
+    },
+    {
+      "pair_id": "llama_3_2_3b",
+      "metric": "harmbench_asr_jev_sensitivity",
+      "n": 200,
+      "b": 0,
+      "c": 10,
+      "n_discordant": 10,
+      "delta": -0.05,
+      "p_value": 0.001953125,
+      "uncorrected_significant": true,
+      "direction": "safe-ward",
+      "bh_q_value": 0.0098,
+      "bh_significant_q05": true
+    },
+    {
+      "pair_id": "llama_3_2_3b",
+      "metric": "mmlu_accuracy",
+      "n": 300,
+      "b": 11,
+      "c": 22,
+      "n_discordant": 33,
+      "delta": -0.0367,
+      "p_value": 0.08014331245794892,
+      "uncorrected_significant": false,
+      "direction": "down",
+      "bh_q_value": 0.2656,
+      "bh_significant_q05": false
+    },
+    {
+      "pair_id": "llama_3_2_3b",
+      "metric": "arc_accuracy",
+      "n": 1172,
+      "b": 40,
+      "c": 77,
+      "n_discordant": 117,
+      "delta": -0.0316,
+      "p_value": 0.0007995844433963207,
+      "uncorrected_significant": true,
+      "direction": "down",
+      "bh_q_value": 0.008,
+      "bh_significant_q05": true
+    },
+    {
+      "pair_id": "llama_3_2_3b",
+      "metric": "xstest_over_refusal",
+      "n": 250,
+      "b": 6,
+      "c": 2,
+      "n_discordant": 8,
+      "delta": 0.016,
+      "p_value": 0.2890625,
+      "uncorrected_significant": false,
+      "direction": "up",
+      "bh_q_value": 0.4818,
+      "bh_significant_q05": false
+    },
+    {
+      "pair_id": "mistral_7b",
+      "metric": "harmbench_asr_jev_sensitivity",
+      "n": 200,
+      "b": 21,
+      "c": 16,
+      "n_discordant": 37,
+      "delta": 0.025000000000000022,
+      "p_value": 0.5113757815852296,
+      "uncorrected_significant": false,
+      "direction": "safe-ward",
+      "bh_q_value": 0.6818,
+      "bh_significant_q05": false
+    },
+    {
+      "pair_id": "mistral_7b",
+      "metric": "mmlu_accuracy",
+      "n": 300,
+      "b": 14,
+      "c": 20,
+      "n_discordant": 34,
+      "delta": -0.02,
+      "p_value": 0.39152830513194203,
+      "uncorrected_significant": false,
+      "direction": "down",
+      "bh_q_value": 0.6024,
+      "bh_significant_q05": false
+    },
+    {
+      "pair_id": "mistral_7b",
+      "metric": "arc_accuracy",
+      "n": 1172,
+      "b": 49,
+      "c": 38,
+      "n_discordant": 87,
+      "delta": 0.0094,
+      "p_value": 0.2836071084054854,
+      "uncorrected_significant": false,
+      "direction": "up",
+      "bh_q_value": 0.4818,
+      "bh_significant_q05": false
+    },
+    {
+      "pair_id": "mistral_7b",
+      "metric": "xstest_over_refusal",
+      "n": 250,
+      "b": 1,
+      "c": 1,
+      "n_discordant": 2,
+      "delta": 0.0,
+      "p_value": 1.0,
+      "uncorrected_significant": false,
+      "direction": "up",
+      "bh_q_value": 1.0,
+      "bh_significant_q05": false
+    },
+    {
+      "pair_id": "phi4_mini",
+      "metric": "harmbench_asr_jev_sensitivity",
+      "n": 200,
+      "b": 9,
+      "c": 7,
+      "n_discordant": 16,
+      "delta": 0.010000000000000009,
+      "p_value": 0.803619384765625,
+      "uncorrected_significant": false,
+      "direction": "harmful-ward",
+      "bh_q_value": 0.9454,
+      "bh_significant_q05": false
+    },
+    {
+      "pair_id": "phi4_mini",
+      "metric": "mmlu_accuracy",
+      "n": 300,
+      "b": 12,
+      "c": 20,
+      "n_discordant": 32,
+      "delta": -0.0267,
+      "p_value": 0.21532714972272515,
+      "uncorrected_significant": false,
+      "direction": "down",
+      "bh_q_value": 0.4307,
+      "bh_significant_q05": false
+    },
+    {
+      "pair_id": "phi4_mini",
+      "metric": "arc_accuracy",
+      "n": 1172,
+      "b": 37,
+      "c": 54,
+      "n_discordant": 91,
+      "delta": -0.0145,
+      "p_value": 0.09294694311794123,
+      "uncorrected_significant": false,
+      "direction": "down",
+      "bh_q_value": 0.2656,
+      "bh_significant_q05": false
+    },
+    {
+      "pair_id": "phi4_mini",
+      "metric": "xstest_over_refusal",
+      "n": 250,
+      "b": 1,
+      "c": 13,
+      "n_discordant": 14,
+      "delta": -0.048,
+      "p_value": 0.0018310546875,
+      "uncorrected_significant": true,
+      "direction": "down",
+      "bh_q_value": 0.0098,
+      "bh_significant_q05": true
+    }
+  ]
+}

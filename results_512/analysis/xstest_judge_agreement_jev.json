@@ -1,0 +1,494 @@
+{
+  "judge_name": "xstest_jev",
+  "benchmark": "xstest",
+  "description": "XSTest over-refusal: independent API refusal judge (3-class) vs the v2 regex. Sensitivity check only; the regex remains the primary scorer and the BH-FDR family is untouched (T35 / D45). STRICT = full_refusal only; BROAD = partial_refusal or full_refusal.",
+  "per_model": {
+    "qwen_2b_base": {
+      "strict_vs_regex": {
+        "n_shared": 250,
+        "both_refusal": 8,
+        "neither_refusal": 233,
+        "regex_refusal_judge_not": 5,
+        "judge_refusal_regex_not": 4,
+        "agreement_rate": 0.964,
+        "cohens_kappa": 0.6210845402492418,
+        "regex_or": 0.052,
+        "judge_or": 0.048
+      },
+      "broad_vs_regex": {
+        "n_shared": 250,
+        "both_refusal": 9,
+        "neither_refusal": 232,
+        "regex_refusal_judge_not": 4,
+        "judge_refusal_regex_not": 5,
+        "agreement_rate": 0.964,
+        "cohens_kappa": 0.6476667710616973,
+        "regex_or": 0.052,
+        "judge_or": 0.056
+      }
+    },
+    "qwen_2b_4bit": {
+      "strict_vs_regex": {
+        "n_shared": 250,
+        "both_refusal": 7,
+        "neither_refusal": 235,
+        "regex_refusal_judge_not": 0,
+        "judge_refusal_regex_not": 8,
+        "agreement_rate": 0.968,
+        "cohens_kappa": 0.6219281663516066,
+        "regex_or": 0.028,
+        "judge_or": 0.06
+      },
+      "broad_vs_regex": {
+        "n_shared": 250,
+        "both_refusal": 7,
+        "neither_refusal": 234,
+        "regex_refusal_judge_not": 0,
+        "judge_refusal_regex_not": 9,
+        "agreement_rate": 0.964,
+        "cohens_kappa": 0.5928338762214982,
+        "regex_or": 0.028,
+        "judge_or": 0.064
+      }
+    },
+    "qwen_2b_8bit": {
+      "strict_vs_regex": {
+        "n_shared": 250,
+        "both_refusal": 7,
+        "neither_refusal": 237,
+        "regex_refusal_judge_not": 4,
+        "judge_refusal_regex_not": 2,
+        "agreement_rate": 0.976,
+        "cohens_kappa": 0.6876301541024571,
+        "regex_or": 0.044,
+        "judge_or": 0.036
+      },
+      "broad_vs_regex": {
+        "n_shared": 250,
+        "both_refusal": 8,
+        "neither_refusal": 235,
+        "regex_refusal_judge_not": 3,
+        "judge_refusal_regex_not": 4,
+        "agreement_rate": 0.972,
+        "cohens_kappa": 0.6810061975938753,
+        "regex_or": 0.044,
+        "judge_or": 0.048
+      }
+    },
+    "qwen_4b_base": {
+      "strict_vs_regex": {
+        "n_shared": 250,
+        "both_refusal": 6,
+        "neither_refusal": 241,
+        "regex_refusal_judge_not": 1,
+        "judge_refusal_regex_not": 2,
+        "agreement_rate": 0.988,
+        "cohens_kappa": 0.793842770753161,
+        "regex_or": 0.028,
+        "judge_or": 0.032
+      },
+      "broad_vs_regex": {
+        "n_shared": 250,
+        "both_refusal": 7,
+        "neither_refusal": 239,
+        "regex_refusal_judge_not": 0,
+        "judge_refusal_regex_not": 4,
+        "agreement_rate": 0.984,
+        "cohens_kappa": 0.7699033594109526,
+        "regex_or": 0.028,
+        "judge_or": 0.044
+      }
+    },
+    "qwen_4b_4bit": {
+      "strict_vs_regex": {
+        "n_shared": 250,
+        "both_refusal": 4,
+        "neither_refusal": 243,
+        "regex_refusal_judge_not": 2,
+        "judge_refusal_regex_not": 1,
+        "agreement_rate": 0.988,
+        "cohens_kappa": 0.7211895910780665,
+        "regex_or": 0.024,
+        "judge_or": 0.02
+      },
+      "broad_vs_regex": {
+        "n_shared": 250,
+        "both_refusal": 4,
+        "neither_refusal": 240,
+        "regex_refusal_judge_not": 2,
+        "judge_refusal_regex_not": 4,
+        "agreement_rate": 0.976,
+        "cohens_kappa": 0.5593419506462987,
+        "regex_or": 0.024,
+        "judge_or": 0.032
+      }
+    },
+    "qwen_4b_8bit": {
+      "strict_vs_regex": {
+        "n_shared": 250,
+        "both_refusal": 6,
+        "neither_refusal": 242,
+        "regex_refusal_judge_not": 2,
+        "judge_refusal_regex_not": 0,
+        "agreement_rate": 0.992,
+        "cohens_kappa": 0.8531139835487662,
+        "regex_or": 0.032,
+        "judge_or": 0.024
+      },
+      "broad_vs_regex": {
+        "n_shared": 250,
+        "both_refusal": 7,
+        "neither_refusal": 239,
+        "regex_refusal_judge_not": 1,
+        "judge_refusal_regex_not": 3,
+        "agreement_rate": 0.984,
+        "cohens_kappa": 0.7695852534562215,
+        "regex_or": 0.032,
+        "judge_or": 0.04
+      }
+    },
+    "llama_3_2_3b_base": {
+      "strict_vs_regex": {
+        "n_shared": 250,
+        "both_refusal": 7,
+        "neither_refusal": 233,
+        "regex_refusal_judge_not": 1,
+        "judge_refusal_regex_not": 9,
+        "agreement_rate": 0.96,
+        "cohens_kappa": 0.5647632311977712,
+        "regex_or": 0.032,
+        "judge_or": 0.064
+      },
+      "broad_vs_regex": {
+        "n_shared": 250,
+        "both_refusal": 8,
+        "neither_refusal": 233,
+        "regex_refusal_judge_not": 0,
+        "judge_refusal_regex_not": 9,
+        "agreement_rate": 0.964,
+        "cohens_kappa": 0.6236199397791907,
+        "regex_or": 0.032,
+        "judge_or": 0.068
+      }
+    },
+    "llama_3_2_3b_4bit": {
+      "strict_vs_regex": {
+        "n_shared": 250,
+        "both_refusal": 11,
+        "neither_refusal": 232,
+        "regex_refusal_judge_not": 1,
+        "judge_refusal_regex_not": 6,
+        "agreement_rate": 0.972,
+        "cohens_kappa": 0.7442268342589884,
+        "regex_or": 0.048,
+        "judge_or": 0.068
+      },
+      "broad_vs_regex": {
+        "n_shared": 250,
+        "both_refusal": 12,
+        "neither_refusal": 232,
+        "regex_refusal_judge_not": 0,
+        "judge_refusal_regex_not": 6,
+        "agreement_rate": 0.976,
+        "cohens_kappa": 0.7877758913412561,
+        "regex_or": 0.048,
+        "judge_or": 0.072
+      }
+    },
+    "llama_3_2_3b_8bit": {
+      "strict_vs_regex": {
+        "n_shared": 250,
+        "both_refusal": 8,
+        "neither_refusal": 235,
+        "regex_refusal_judge_not": 1,
+        "judge_refusal_regex_not": 6,
+        "agreement_rate": 0.972,
+        "cohens_kappa": 0.681702437249909,
+        "regex_or": 0.036,
+        "judge_or": 0.056
+      },
+      "broad_vs_regex": {
+        "n_shared": 250,
+        "both_refusal": 8,
+        "neither_refusal": 235,
+        "regex_refusal_judge_not": 1,
+        "judge_refusal_regex_not": 6,
+        "agreement_rate": 0.972,
+        "cohens_kappa": 0.681702437249909,
+        "regex_or": 0.036,
+        "judge_or": 0.056
+      }
+    },
+    "mistral_7b_base": {
+      "strict_vs_regex": {
+        "n_shared": 250,
+        "both_refusal": 0,
+        "neither_refusal": 247,
+        "regex_refusal_judge_not": 1,
+        "judge_refusal_regex_not": 2,
+        "agreement_rate": 0.988,
+        "cohens_kappa": -0.005361930294911553,
+        "regex_or": 0.004,
+        "judge_or": 0.008
+      },
+      "broad_vs_regex": {
+        "n_shared": 250,
+        "both_refusal": 0,
+        "neither_refusal": 244,
+        "regex_refusal_judge_not": 1,
+        "judge_refusal_regex_not": 5,
+        "agreement_rate": 0.976,
+        "cohens_kappa": -0.006711409395970529,
+        "regex_or": 0.004,
+        "judge_or": 0.02
+      }
+    },
+    "mistral_7b_4bit": {
+      "strict_vs_regex": {
+        "n_shared": 250,
+        "both_refusal": 1,
+        "neither_refusal": 247,
+        "regex_refusal_judge_not": 0,
+        "judge_refusal_regex_not": 2,
+        "agreement_rate": 0.992,
+        "cohens_kappa": 0.4969818913480855,
+        "regex_or": 0.004,
+        "judge_or": 0.012
+      },
+      "broad_vs_regex": {
+        "n_shared": 250,
+        "both_refusal": 1,
+        "neither_refusal": 247,
+        "regex_refusal_judge_not": 0,
+        "judge_refusal_regex_not": 2,
+        "agreement_rate": 0.992,
+        "cohens_kappa": 0.4969818913480855,
+        "regex_or": 0.004,
+        "judge_or": 0.012
+      }
+    },
+    "mistral_7b_8bit": {
+      "strict_vs_regex": {
+        "n_shared": 250,
+        "both_refusal": 0,
+        "neither_refusal": 249,
+        "regex_refusal_judge_not": 0,
+        "judge_refusal_regex_not": 1,
+        "agreement_rate": 0.996,
+        "cohens_kappa": 0.0,
+        "regex_or": 0.0,
+        "judge_or": 0.004
+      },
+      "broad_vs_regex": {
+        "n_shared": 250,
+        "both_refusal": 0,
+        "neither_refusal": 248,
+        "regex_refusal_judge_not": 0,
+        "judge_refusal_regex_not": 2,
+        "agreement_rate": 0.992,
+        "cohens_kappa": 0.0,
+        "regex_or": 0.0,
+        "judge_or": 0.008
+      }
+    },
+    "phi4_mini_base": {
+      "strict_vs_regex": {
+        "n_shared": 250,
+        "both_refusal": 23,
+        "neither_refusal": 215,
+        "regex_refusal_judge_not": 9,
+        "judge_refusal_regex_not": 3,
+        "agreement_rate": 0.952,
+        "cohens_kappa": 0.7662823309442192,
+        "regex_or": 0.128,
+        "judge_or": 0.104
+      },
+      "broad_vs_regex": {
+        "n_shared": 250,
+        "both_refusal": 26,
+        "neither_refusal": 214,
+        "regex_refusal_judge_not": 6,
+        "judge_refusal_regex_not": 4,
+        "agreement_rate": 0.96,
+        "cohens_kappa": 0.815905743740795,
+        "regex_or": 0.128,
+        "judge_or": 0.12
+      }
+    },
+    "phi4_mini_4bit": {
+      "strict_vs_regex": {
+        "n_shared": 250,
+        "both_refusal": 19,
+        "neither_refusal": 223,
+        "regex_refusal_judge_not": 1,
+        "judge_refusal_regex_not": 7,
+        "agreement_rate": 0.968,
+        "cohens_kappa": 0.808795411089866,
+        "regex_or": 0.08,
+        "judge_or": 0.104
+      },
+      "broad_vs_regex": {
+        "n_shared": 250,
+        "both_refusal": 20,
+        "neither_refusal": 223,
+        "regex_refusal_judge_not": 0,
+        "judge_refusal_regex_not": 7,
+        "agreement_rate": 0.972,
+        "cohens_kappa": 0.8359887535145265,
+        "regex_or": 0.08,
+        "judge_or": 0.108
+      }
+    },
+    "phi4_mini_8bit": {
+      "strict_vs_regex": {
+        "n_shared": 250,
+        "both_refusal": 22,
+        "neither_refusal": 219,
+        "regex_refusal_judge_not": 8,
+        "judge_refusal_regex_not": 1,
+        "agreement_rate": 0.964,
+        "cohens_kappa": 0.8104465037910696,
+        "regex_or": 0.12,
+        "judge_or": 0.092
+      },
+      "broad_vs_regex": {
+        "n_shared": 250,
+        "both_refusal": 24,
+        "neither_refusal": 218,
+        "regex_refusal_judge_not": 6,
+        "judge_refusal_regex_not": 2,
+        "agreement_rate": 0.968,
+        "cohens_kappa": 0.8392282958199354,
+        "regex_or": 0.12,
+        "judge_or": 0.104
+      }
+    }
+  },
+  "per_pair": [
+    {
+      "pair_id": "qwen_2b",
+      "judge_strict": {
+        "delta": 0.012,
+        "ci_lower": -0.016,
+        "ci_upper": 0.04,
+        "significant": false,
+        "mcnemar_discordant": 13,
+        "mcnemar_b_to_refusal": 8,
+        "mcnemar_c_to_compliance": 5,
+        "mcnemar_p_value": 0.5810546875,
+        "direction": "up"
+      },
+      "judge_broad": {
+        "delta": 0.008,
+        "ci_lower": -0.02,
+        "ci_upper": 0.036,
+        "significant": false,
+        "mcnemar_discordant": 12,
+        "mcnemar_b_to_refusal": 7,
+        "mcnemar_c_to_compliance": 5,
+        "mcnemar_p_value": 0.7744140625,
+        "direction": "up"
+      }
+    },
+    {
+      "pair_id": "qwen_4b",
+      "judge_strict": {
+        "delta": -0.012,
+        "ci_lower": -0.032,
+        "ci_upper": 0.004,
+        "significant": false,
+        "mcnemar_discordant": 5,
+        "mcnemar_b_to_refusal": 1,
+        "mcnemar_c_to_compliance": 4,
+        "mcnemar_p_value": 0.375,
+        "direction": "down"
+      },
+      "judge_broad": {
+        "delta": -0.012,
+        "ci_lower": -0.032,
+        "ci_upper": 0.008,
+        "significant": false,
+        "mcnemar_discordant": 7,
+        "mcnemar_b_to_refusal": 2,
+        "mcnemar_c_to_compliance": 5,
+        "mcnemar_p_value": 0.453125,
+        "direction": "down"
+      }
+    },
+    {
+      "pair_id": "llama_3_2_3b",
+      "judge_strict": {
+        "delta": 0.004,
+        "ci_lower": -0.02,
+        "ci_upper": 0.028,
+        "significant": false,
+        "mcnemar_discordant": 9,
+        "mcnemar_b_to_refusal": 5,
+        "mcnemar_c_to_compliance": 4,
+        "mcnemar_p_value": 1.0,
+        "direction": "up"
+      },
+      "judge_broad": {
+        "delta": 0.004,
+        "ci_lower": -0.02,
+        "ci_upper": 0.028,
+        "significant": false,
+        "mcnemar_discordant": 9,
+        "mcnemar_b_to_refusal": 5,
+        "mcnemar_c_to_compliance": 4,
+        "mcnemar_p_value": 1.0,
+        "direction": "up"
+      }
+    },
+    {
+      "pair_id": "mistral_7b",
+      "judge_strict": {
+        "delta": 0.004,
+        "ci_lower": -0.008,
+        "ci_upper": 0.02,
+        "significant": false,
+        "mcnemar_discordant": 3,
+        "mcnemar_b_to_refusal": 2,
+        "mcnemar_c_to_compliance": 1,
+        "mcnemar_p_value": 1.0,
+        "direction": "up"
+      },
+      "judge_broad": {
+        "delta": -0.008,
+        "ci_lower": -0.024,
+        "ci_upper": 0.008,
+        "significant": false,
+        "mcnemar_discordant": 4,
+        "mcnemar_b_to_refusal": 1,
+        "mcnemar_c_to_compliance": 3,
+        "mcnemar_p_value": 0.625,
+        "direction": "down"
+      }
+    },
+    {
+      "pair_id": "phi4_mini",
+      "judge_strict": {
+        "delta": 0.0,
+        "ci_lower": -0.028,
+        "ci_upper": 0.028,
+        "significant": false,
+        "mcnemar_discordant": 14,
+        "mcnemar_b_to_refusal": 7,
+        "mcnemar_c_to_compliance": 7,
+        "mcnemar_p_value": 1.0,
+        "direction": "flat"
+      },
+      "judge_broad": {
+        "delta": -0.012,
+        "ci_lower": -0.044,
+        "ci_upper": 0.016,
+        "significant": false,
+        "mcnemar_discordant": 15,
+        "mcnemar_b_to_refusal": 6,
+        "mcnemar_c_to_compliance": 9,
+        "mcnemar_p_value": 0.60723876953125,
+        "direction": "down"
+      }
+    }
+  ]
+}

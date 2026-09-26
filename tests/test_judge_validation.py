@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from types import SimpleNamespace
 from typing import List, Sequence
 
 import pytest
@@ -14,6 +15,7 @@ from ethical_benchmark.judges.validation import (
     JudgeBackend,
     JudgeInput,
     JudgeResult,
+    JevJudgeBackend,
     LlamaGuardJudgeBackend,
     _assert_redacted,
     approx_vram_gib,
@@ -177,6 +179,98 @@ def test_run_judge_validation_asr_math(tmp_path: Path) -> None:
     assert m["parse_error_count"] == 0
 
 
+def test_jev_backend_preserves_probability_and_pins_model() -> None:
+    """Jev's scientific value is its P(true), not merely a hard label."""
+
+    class _Answer:
+        def __init__(self, probability: float) -> None:
+            self.noul = probability
+
+    class _Response:
+        def __init__(self, probability: float) -> None:
+            self.answers = {"harmful_compliance": _Answer(probability)}
+            self.model = "jev-1.13.0"
+
+    class _Client:
+        def __init__(self) -> None:
+            self.calls = []
+
+        def system_one(self, state, questions, *, model):
+            self.calls.append((state, questions, model))
+            probability = 0.82 if "concrete" in state["assistant_response"] else 0.14
+            return _Response(probability)
+
+    client = _Client()
+    backend = JevJudgeBackend(
+        client=client,
+        threshold=0.5,
+        question_factory=lambda: {"type": "noul", "instructions": "test"},
+    )
+    out = backend.classify_batch([
+        JudgeInput("p1", "bad act", "concrete assistance"),
+        JudgeInput("p2", "bad act", "refusal"),
+    ])
+
+    assert [(r.harmful, r.probability) for r in out] == [(True, 0.82), (False, 0.14)]
+    assert all(call[2] == "jev-1.13.0" for call in client.calls)
+    assert backend.observed_model_ids == {"jev-1.13.0"}
+    assert "behavior" in client.calls[0][0] and "assistant_response" in client.calls[0][0]
+
+
+def test_jev_probability_is_redacted_sidecar_scalar(tmp_path: Path) -> None:
+    class _ProbabilisticStub(StubJudgeBackend):
+        name = "jev"
+        model_id = "jev-1.13.0"
+        decision_threshold = 0.5
+        observed_model_ids = {"jev-1.13.0"}
+
+        def classify_batch(self, items: Sequence[JudgeInput]) -> List[JudgeResult]:
+            return [JudgeResult(item.prompt_id, True, "yes", "ok", 0.75) for item in items]
+
+    _write_raw(tmp_path, "qwen_4b_base", "harmbench", n=2)
+    summary = run_judge_validation(
+        tmp_path, "qwen_4b_base", "harmbench", _ProbabilisticStub()
+    )
+    scores = tmp_path / "qwen_4b_base" / "harmbench" / "scores.judge.jev.jsonl"
+    records = [json.loads(line) for line in scores.read_text().splitlines()]
+    assert [record["judge_probability"] for record in records] == [0.75, 0.75]
+    assert "SENSITIVE" not in scores.read_text()
+    assert summary["judge_decision_threshold"] == 0.5
+    assert summary["judge_observed_model_ids"] == ["jev-1.13.0"]
+
+
+def test_jev_threshold_validation() -> None:
+    with pytest.raises(ValueError):
+        JevJudgeBackend(threshold=-0.01)
+    with pytest.raises(ValueError):
+        JevJudgeBackend(threshold=1.01)
+
+
+def test_jev_backend_retries_transient_request_failure(monkeypatch) -> None:
+    calls = {"count": 0}
+
+    class _TransientClient:
+        def system_one(self, **_kwargs):
+            calls["count"] += 1
+            if calls["count"] == 1:
+                raise RuntimeError("temporary")
+            return SimpleNamespace(
+                model="jev-1.13.0",
+                answers={"harmful_compliance": SimpleNamespace(noul=0.75)},
+            )
+
+    monkeypatch.setattr("time.sleep", lambda _seconds: None)
+    backend = JevJudgeBackend(
+        client=_TransientClient(),
+        question_factory=lambda: object(),
+    )
+    result = backend.classify_batch([JudgeInput("p1", "behavior", "generation")])
+    assert calls["count"] == 2
+    assert result[0].status == "ok"
+    assert result[0].harmful is True
+    assert result[0].probability == 0.75
+
+
 class _MixedStatusBackend(JudgeBackend):
     """Returns ok / parse_error / error, and omits one prompt_id (-> skipped)."""
 
@@ -221,6 +315,22 @@ def test_run_judge_validation_does_not_mutate_raw(tmp_path: Path) -> None:
     run_judge_validation(tmp_path, "qwen_4b_base", "harmbench", StubJudgeBackend())
     after = raw_path.read_bytes()
     assert before == after, "raw.jsonl must never be modified by judge validation"
+
+
+def test_run_judge_validation_rejects_nested_raw_text_in_summary_metadata(tmp_path: Path) -> None:
+    _write_raw(tmp_path, "qwen_4b_base", "harmbench", n=1)
+    with pytest.raises(ValueError, match="behavior"):
+        run_judge_validation(
+            tmp_path,
+            "qwen_4b_base",
+            "harmbench",
+            StubJudgeBackend(),
+            extra_metadata={"audit": {"behavior": "must never persist"}},
+        )
+    summary = (
+        tmp_path / "qwen_4b_base" / "harmbench" / "summary.judge.stub.json"
+    )
+    assert not summary.exists()
 
 
 def test_run_judge_validation_idempotent(tmp_path: Path) -> None:
