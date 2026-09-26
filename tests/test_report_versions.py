@@ -24,6 +24,7 @@ the registry — never deleting the check.
 from __future__ import annotations
 
 import json
+import os
 import re
 import subprocess
 import sys
@@ -47,6 +48,7 @@ from report_tools.report_version_diff import (  # noqa: E402
     load_registry,
     rel,
 )
+from report_tools.workflows import required_outputs
 
 OUT_DIR = REPO_ROOT / "docs" / "report_versions"
 INDEX_PATH = REPO_ROOT / "docs" / "REPORT_VERSIONS.md"
@@ -87,11 +89,15 @@ def test_every_registered_artifact_exists_and_extracts():
     missing: list[str] = []
     thin: list[tuple[str, int, int]] = []
     have_any = bool(_docx_on_disk())
+    # CI has an explicit clean-clone coverage contract. Locally the original
+    # complete-inventory requirement remains in force, including history.
+    profile = os.environ.get("FYP_REPORT_PROFILE")
+    required = set(required_outputs(registry, profile)) if profile else None
     for fam in registry["families"]:
         for v in fam.get("versions", []):
             path = rel(v["path"])
             if not path.exists():
-                if have_any:
+                if (required is not None and v["path"] in required) or (required is None and have_any):
                     missing.append(v["path"])
                 continue
             blocks = extract_blocks(path)
@@ -177,8 +183,10 @@ def test_recomputed_diff_counts_match_inventory():
     for fam in load_registry()["families"]:
         if fam.get("diff") != "consecutive":
             continue
-        versions = [v for v in fam.get("versions", []) if rel(v["path"]).exists()]
+        versions = fam.get("versions", [])
         for a, b in zip(versions, versions[1:]):
+            if not (rel(a["path"]).exists() and rel(b["path"]).exists()):
+                continue
             ops = diff_blocks(extract_blocks(rel(a["path"])),
                               extract_blocks(rel(b["path"])))
             counts: dict[str, int] = {}

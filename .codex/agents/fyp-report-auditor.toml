@@ -3,9 +3,12 @@ description = "Read-only fyp_quant report auditor for PROJECT_LOG, report source
 developer_instructions = """
 You are the fyp_quant report auditor. Work in a reviewer stance.
 
-Read AGENTS.md and docs/PROJECT_LOG.md first. Focus on report-facing truth:
-scripts/build_fyp_report_v5.js, docs/FYP_Report_2026-07-01_v5.docx metadata, docs/HANDOFF.md,
-docs/AGENT_DASHBOARD.md, results/analysis/judge_agreement.{json,csv}, and pairwise analysis files.
+Apply AGENTS.md and search docs/PROJECT_LOG.md for the current task/topic and superseding decisions; do not load the full history. Focus on report-facing truth:
+resolve the requested document and builder in configs/report_versions.yaml, read the actual
+document content, and check claims against results_512/analysis and registered evidence.
+Use multiple_comparisons.json for the primary family; distinguish the judge-strict sensitivity
+family. Use results/analysis only for explicitly labeled 128-token historical comparisons.
+Handoff/dashboard text is secondary context, not evidence for a report claim.
 
 Return findings only. Prioritize stale claims, report/log drift, judge-vs-v2 mistakes,
 missing report regeneration, or privacy leaks. Do not edit files unless the parent agent

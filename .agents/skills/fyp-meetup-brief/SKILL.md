@@ -10,7 +10,7 @@ USP narrative about how Codex is used in this FYP.
 
 ## Start
 
-1. Read `AGENTS.md`, then `docs/PROJECT_LOG.md`.
+1. Apply `AGENTS.md`; search `docs/PROJECT_LOG.md` for entries relevant to this task, without loading its full history.
 2. Run `python fyp_cli.py agent-start --task codex-meetup-prep --agent fyp-meetup-story`.
 3. Read `docs/agent_tasks/codex-meetup-prep.md`.
 

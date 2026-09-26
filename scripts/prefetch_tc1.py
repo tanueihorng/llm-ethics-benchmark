@@ -1,37 +1,19 @@
-"""Pre-cache datasets and model weights for TC1 offline-mode runs.
+"""Prepare datasets and model weights for TC1 offline-mode runs.
 
-Run this ONCE on the TC1 HEAD NODE (not on a compute node) after activating
-the fyp-tc1 conda environment:
+Run on an approved networked local/staging machine with the target environment,
+then transfer the prepared Hugging Face cache to TC1 without credentials.
+See docs/TC1_CLUSTER_RUNBOOK.md section 4.6 for cache transfer and offline smoke
+validation. Do not run this custom script on the TC1 head node: load_dataset can
+prepare datasets as well as download files, and package-install permission is
+not blanket authorization for that work.
 
-    module load anaconda
-    source activate fyp-tc1
-    cd /tc1home/FYP/utan001/fyp_quant/repo
-    # Paste HF token once for gated repos.
-    python - <<'PY'
-    from getpass import getpass
-    from huggingface_hub import login
-    login(token=getpass("HF token: "), add_to_git_credential=False)
-    print("HF login saved.")
-    PY
-    python scripts/prefetch_tc1.py
-
-The script reads the configured datasets and model_ids from configs/tc1.yaml,
-then triggers a download into the default Hugging Face cache
-(~/.cache/huggingface/). Once cached, all SLURM jobs will read from the local
-cache and run with HF_HUB_OFFLINE=1, HF_DATASETS_OFFLINE=1, and
-TRANSFORMERS_OFFLINE=1 set in the sbatch setup_commands.
-
-Per the TC1 user guide (page 16): installing packages and downloading files
-on the head node is the expected workflow ("conda install", "pip install"
-are explicitly demonstrated there). What is forbidden is running compute
-("executing coding and occupying high CPU and Memory usage"). This script
-performs only network I/O and minimal CPU work, so it is policy-compliant.
+The script reads configured datasets and model_ids from configs/tc1.yaml and
+populates the local Hugging Face cache. It does not change SLURM offline flags.
 
 Usage:
-    python scripts/prefetch_tc1.py                     # default config
     python scripts/prefetch_tc1.py --config configs/tc1.yaml
-    python scripts/prefetch_tc1.py --datasets-only     # skip model weights
-    python scripts/prefetch_tc1.py --models-only       # skip datasets
+    python scripts/prefetch_tc1.py --datasets-only
+    python scripts/prefetch_tc1.py --models-only
 """
 
 from __future__ import annotations

@@ -232,6 +232,11 @@ Adding INT8 shows the quantization effect is **not a smooth function of bit-widt
 
 ## Quickstart
 
+For repository maintenance, start with `make help`, `make agent-status`, and
+`make reports-list`. See [the repository guide](docs/REPO_GUIDE.md) for separate
+core, analysis, GPU, reports and dashboard installation paths. The commands below
+are the experiment workflow and may run models.
+
 ```bash
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
@@ -338,6 +343,8 @@ load a model — install the exact set this work was done on:
 
 ```bash
 pip install -r requirements-analysis.txt
+pip install -e .
+pip check
 ```
 
 To re-run the experiments on a GPU, install the pipeline set instead:
@@ -350,6 +357,12 @@ They are **not** interchangeable and cannot be combined with `-c`. `requirements
 floors transformers at 4.41 because the study's Qwen3, Mistral and Phi-4-mini models
 cannot be loaded below it; the analysis machine pins 4.32.1, which is harmless there
 precisely because it never loads a model.
+
+Installing the core package no longer installs GPU dependencies implicitly.
+`make test-core` and `make test-reports` split verification by responsibility;
+unfiltered pytest and `make agent-check` still run the full suite. `make
+package-check` verifies a wheel outside the checkout. Historical files and the
+complete project log remain available in their existing locations.
 
 ---
 

@@ -22,6 +22,8 @@
 torch==2.6.0   # tests import it; no model is ever loaded here
 transformers==4.32.1   # analysis only -- 4.32.1 CANNOT load Qwen3/Mistral/Phi; see the note above
 datasets==2.12.0   # benchmark plugins import load_dataset at module scope
+pyarrow==11.0.0   # local tested version; preserves the datasets 2.12 API contract
+fsspec==2023.4.0   # local tested filesystem backend for datasets 2.12
 huggingface_hub==0.15.1
 pydantic==2.10.5   # config schema
 numpy==1.26.4

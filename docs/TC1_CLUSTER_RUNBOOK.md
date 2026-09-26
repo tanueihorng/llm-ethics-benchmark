@@ -45,8 +45,7 @@ step in this runbook. They are not optional.
 - SSH sessions, script editing (`vi`/`nano`/`ne`), file transfers (SFTP).
 - Conda environment management: `module load anaconda`, `conda create`,
   `conda install`, `pip install`. (p.7–9)
-- Hugging Face downloads — same activity category as `pip install`. Used by
-  this study's pre-cache step (see §4.6 below).
+- File downloads remain setup activity; the guide does not establish a blanket exception for custom Python dataset preparation. See §4.6 for the current staging workflow.
 - SLURM administration: `squeue`, `scontrol`, `sacct`, `MyTCinfo`,
   `MyJobHistory`, `seff`, `TC1RunningJob`.
 
@@ -119,6 +118,9 @@ existing env that predates this, install them explicitly on the head node
 before submitting the judge job (package installs are head-node-allowed):
 ```bash
 pip install sentencepiece protobuf tiktoken
+```
+Validate imports on the local/staging machine or inside a submitted sbatch job:
+```bash
 python -c "import sentencepiece, google.protobuf, tiktoken; print('judge tokenizer deps OK')"
 ```
 Two early judge jobs (61045, 61046) failed at tokenizer construction before
@@ -132,45 +134,37 @@ code on the head node is forbidden and may result in account termination.
 All validation, including the initial smoke test, must go through `sbatch`.
 See §4.7 below for the proper smoke-validation procedure.
 
-## 4.6 Pre-cache datasets and model weights (head node, one-time)
+## 4.6 Prepare the offline cache on an approved networked machine
 
-This study runs in strict offline mode on the compute nodes (which may not have
-outbound internet). Cache everything on the head node first.
+Compute jobs use strict offline mode. Prepare datasets and model weights on an
+approved networked local/staging machine with the matching environment, then
+transfer the Hugging Face cache to the TC1 account before submitting jobs.
 
 ```bash
-# Confirm your QoS and quota assignment
-MyTCinfo
-
-# Activate the conda env
-module load anaconda
-source activate fyp-tc1
-cd /tc1home/FYP/utan001/fyp_quant/repo
-
-# One-time HF authentication (required for Llama and gated HarmBench access)
-python - <<'PY'
-from getpass import getpass
-from huggingface_hub import login
-login(token=getpass("HF token: "), add_to_git_credential=False)
-print("HF login saved.")
-PY
-
-# Pre-cache HF datasets (HarmBench, 6 MMLU subjects) + model weights
-# (Qwen 2B, Qwen 4B, Llama 3.2 3B). XSTest is bundled locally.
-# Observed 2026-05-26: ~25.5 GB total, completed in under 5 minutes.
-python scripts/prefetch_tc1.py
-# Equivalently: make prefetch CONFIG=configs/tc1.yaml
+# LOCAL/STAGING machine, not the TC1 head node:
+python scripts/prefetch_tc1.py --config configs/tc1.yaml
+# Optional judge cache, when extending/re-running judge validation:
+python scripts/prefetch_tc1.py --config configs/tc1.yaml --judge
 ```
 
-The pre-cache step is policy-compliant because it performs only HTTP file
-transfer — equivalent to the `pip install` / `conda install` activities that
-the TC1 user guide explicitly demonstrates on the head node (p.7–9). It does
-not run any user code that consumes CPU or memory.
+Authenticate using the installed Hugging Face client's supported login flow on
+that machine. Transfer cache data to the TC1 user's configured cache location
+without copying authentication tokens or credential files. Confirm the actual
+source/destination cache locations before transfer; do not assume another
+machine's absolute path. Validate cache completeness with a small offline sbatch
+job, including access to gated models under the authorized account.
 
-After this completes, every SLURM job runs with `HF_HUB_OFFLINE=1`,
-`HF_DATASETS_OFFLINE=1`, and `TRANSFORMERS_OFFLINE=1` exported (these are
-baked into the generated sbatch files via `configs/tc1.yaml`'s
-`setup_commands`). Any cache miss inside a job will then fail immediately
-with a clear error rather than hang waiting on network.
+**Correction, 2026-09-06:** earlier versions of this runbook described the custom
+prefetch script as HTTP-only and instructed running it on the head node. The
+script calls `datasets.load_dataset`, which can prepare datasets as well as
+fetch files. Package-install examples in the guide do not independently authorize
+that work. Those historical runs are not permission for a new head-node run.
+Model-file download and dataset preparation should be distinguished; use this
+staging workflow unless the operator explicitly authorizes an alternative.
+
+Preserve `HF_HUB_OFFLINE=1`, `HF_DATASETS_OFFLINE=1`, and
+`TRANSFORMERS_OFFLINE=1` in compute jobs. A cache miss should fail visibly rather
+than silently enabling network access.
 
 ## 4.7 Smoke-validate on a compute node (via sbatch, not srun)
 
@@ -178,10 +172,10 @@ Before submitting the full 6-job matrix, run one small sbatch to verify the
 offline-cache path on a real GPU:
 
 ```bash
-# On the head node, regenerate the smoke sbatch
+# On the Mac/local checkout, generate scripts and transfer them to TC1:
 make cluster-smoke CONFIG=configs/tc1.yaml
 
-# Submit it
+# Then on the TC1 head node, submit the transferred script:
 sbatch slurm/jobs_tc1_smoke/qwen_2b_base__harmbench.sbatch
 
 # Check the queue, then come back later for the output
@@ -405,7 +399,7 @@ squeue -u utan001
 seff <JOBID>
 ls results/*/*/summary.json
 
-# Analyze after all jobs complete (Mac or TC1 head node via python)
+# Analyze after all jobs complete on the Mac/local machine (not the TC1 head node)
 make analyze CONFIG=configs/tc1.yaml
 make analyze
 ```

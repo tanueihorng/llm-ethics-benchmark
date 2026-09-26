@@ -1,6 +1,6 @@
 ---
 name: fyp-todo-capture
-description: Use to capture the work just done (or in progress) into the repo's persistent, dated todo.md backlog so the next session or agent can resume and execute immediately — without re-doing research. Triggers include "add this to todo", "capture next steps", "save this so the next session can take over", "I have no time, let the next agent continue", "log what we decided". For the fyp_quant repo. This maintains a durable task queue; it is NOT the one-shot fyp-agent-handoff note, and it never replaces docs/PROJECT_LOG.md as source of truth.
+description: Capture resumable FYP work and next steps in todo.md when the user requests backlog or continuation notes.
 ---
 
 # FYP Todo Capture

@@ -11,7 +11,7 @@ artifact-policy enforcement.
 
 ## Start
 
-1. Read `AGENTS.md`, then `docs/PROJECT_LOG.md`.
+1. Apply `AGENTS.md`; search `docs/PROJECT_LOG.md` for entries relevant to this task, without loading its full history.
 2. Run `python fyp_cli.py agent-start --task harness-maintenance --agent fyp-artifact-guardian`.
 3. Read `docs/agent_tasks/harness-maintenance.md`.
 

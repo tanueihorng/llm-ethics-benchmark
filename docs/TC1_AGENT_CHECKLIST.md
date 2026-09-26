@@ -1,6 +1,6 @@
 # TC1 Agent Checklist
 
-Generated: 2026-07-02 09:37:44 UTC+8
+Generated: 2026-09-07 10:50:03 UTC+8
 
 ## Boundary
 
@@ -27,7 +27,8 @@ squeue -u utan001
 ## If Re-Running Or Extending Judge Validation
 
 ```bash
-python scripts/prefetch_tc1.py --config configs/tc1.yaml --judge
+# Prepare the cache on an approved networked local/staging machine; see runbook section 4.6.
+# Transfer the cache to TC1 before submitting; do not run dataset preparation on the head node.
 sbatch slurm/judge_validation.sbatch
 squeue -u utan001
 seff <JOBID>
@@ -36,8 +37,9 @@ seff <JOBID>
 ## Back On Mac After SCP
 
 ```bash
-python scripts/judge_agreement.py
-make analyze
+# Select the budget/scorer and arguments for the current task; primary evidence is results_512/.
+python scripts/judge_agreement.py --help
+# Rebuild only the requested derived analysis; do not substitute proxy pair labels for judge ASR.
 make agent-check
 python scripts/generate_handoff.py
 ```

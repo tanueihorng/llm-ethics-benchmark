@@ -8,24 +8,35 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "fyp-quant"
-version = "0.1.0"
 description = "A matched-pair benchmarking framework for safety–capability trade-offs in quantized small language models (fp16 / INT8 / NF4)."
 readme = "README.md"
 requires-python = ">=3.11"
 authors = [{ name = "Tan Uei Horng" }]
 keywords = ["llm", "quantization", "safety", "evaluation", "harmbench", "benchmark"]
-dynamic = ["dependencies"]
+dynamic = ["version"]
+dependencies = ["pyyaml>=6.0", "numpy>=1.26", "pydantic>=2.7", "tqdm>=4.65"]
+
+# Optional capabilities do not get installed into the analysis environment merely
+# because the project itself is installed. requirements-analysis.txt retains the
+# historically tested analysis pins; requirements.txt retains the GPU setup.
+[project.optional-dependencies]
+gpu = ["torch>=2.2", "transformers>=4.41", "datasets>=2.19", "bitsandbytes>=0.43",
+       "accelerate>=0.30", "sentencepiece>=0.2", "protobuf>=4", "tiktoken>=0.7"]
+analysis = ["pandas>=2,<3", "scipy>=1.11", "scikit-learn>=1.3", "matplotlib>=3.7"]
+reports = ["python-docx>=1.1", "PyMuPDF>=1.24", "matplotlib>=3.7"]
+dashboard = ["streamlit>=1.30,<2", "plotly>=5.18,<6", "pandas>=2,<3"]
+judge = ["openai>=1.0"]
+judge-jev = ["typesafe-sdk==0.7.0"]
+dev = ["pytest>=7.4", "pytest-cov>=5", "build>=1"]
 
 [project.urls]
 Repository = "https://github.com/tanueihorng/llm-ethics-benchmark"
 
-[tool.setuptools]
-# The importable package is `ethical_benchmark`; top-level run_*/fyp_cli scripts
-# stay as scripts (invoked via `python fyp_cli.py ...`), not installed modules.
-packages = ["ethical_benchmark"]
+[tool.setuptools.packages.find]
+include = ["ethical_benchmark", "ethical_benchmark.*"]
 
 [tool.setuptools.dynamic]
-dependencies = { file = ["requirements.txt"] }
+version = { attr = "ethical_benchmark.__version__" }
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -34,6 +45,8 @@ python_classes = ["Test*"]
 python_functions = ["test_*"]
 addopts = "-v --tb=short"
 markers = [
+    "core: research code and repository tooling checks",
+    "report: report generation, evidence, citations and presentation checks",
     "slow: marks tests as slow (deselect with '-m \"not slow\"')",
     "integration: marks tests that require network or GPU access",
 ]

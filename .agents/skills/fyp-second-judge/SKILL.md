@@ -5,15 +5,15 @@ description: Use in fyp_quant when adding, reviewing, or planning a second indep
 
 # FYP Second Judge
 
-Use this skill for T22-style robustness work. The existing HarmBench classifier
+Use this skill for an explicitly requested judge extension or robustness review. The existing HarmBench classifier
 sidecars are primary for current report claims; a second judge is an optional
 cross-check unless the project log says otherwise.
 
 ## Start
 
-1. Read `AGENTS.md`, then `docs/PROJECT_LOG.md`.
-2. Run `python fyp_cli.py agent-start --task T22 --agent fyp-judge-reviewer`.
-3. Read `docs/agent_tasks/T22-second-independent-judge.md`.
+1. Apply `AGENTS.md`; search `docs/PROJECT_LOG.md` for entries relevant to this task, without loading its full history.
+2. Resolve the current judge artifacts and relevant task from the request and log; earlier second-judge tasks may already be complete.
+3. Use the matching `docs/agent_tasks/` packet if needed; do not rerun a completed study by default.
 
 ## Scope
 

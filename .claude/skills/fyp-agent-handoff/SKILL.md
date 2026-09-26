@@ -45,7 +45,7 @@ Lead with:
 
 For `fyp_quant`, always remind the reviewer:
 
-- Read `AGENTS.md` then `docs/PROJECT_LOG.md`.
+- Apply `AGENTS.md`; search relevant task/topic entries and superseding decisions in `docs/PROJECT_LOG.md`.
 - Run `git status -sb`; do not rely on hard-coded push/ahead counts.
 - Treat `raw.jsonl` and `summary.json` as immutable TC1-original artifacts.
 - Do not print or copy raw HarmBench prompts/responses; use IDs, counts, labels, summaries, and redacted sidecars.
@@ -78,7 +78,7 @@ One sentence describing what the next agent should accomplish.
 
 ## Source Of Truth
 - Read `/Users/tanueihorng/fyp_quant/AGENTS.md`.
-- Read `/Users/tanueihorng/fyp_quant/docs/PROJECT_LOG.md`.
+- Search `/Users/tanueihorng/fyp_quant/docs/PROJECT_LOG.md` for the current task/topic; do not load its full history.
 - Run `git status -sb` for live Git state.
 
 ## Current State

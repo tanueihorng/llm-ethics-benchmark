@@ -19,7 +19,41 @@ PYTEST_ARGS ?= -q
 TASK ?=
 AGENT ?=
 
-.PHONY: backup smoke run matrix analyze prefetch report thesis interim rewrite rewrite-v2 rewrite-interim rewrite-interim-v3 rewrite-interim-v5 rewrite-interim-compact rewrite-interim-progress rewrite-latex viva report-humanized thesis-humanized interim-humanized claim-registry claim-surfaces verify-claims verify-claim-surfaces architecture-diagram diagrams cluster-generate cluster-submit cluster-dry cluster-check cluster-all cluster-smoke agent-start agent-status agent-check agent-manifest agent-handoff agent-dashboard agent-tc1-checklist harness-eval dashboard
+.DEFAULT_GOAL := help
+.PHONY: help test-core test-reports package-check reports-list reports-plan reports-ci
+REPORT_PROFILE ?= ci
+
+help:
+	@echo "Start:       make agent-status | make reports-list"
+	@echo "Checks:      make test-core | make test-reports | make agent-check | make package-check"
+	@echo "Reports:     make reports-plan [REPORT_PROFILE=ci] | make reports-ci (writes rebuildable reports)"
+	@echo "Canonical:   make report | make report-versions"
+	@echo "Research:    make smoke | make run | make matrix | make analyze (review configuration first)"
+	@echo "Apps:        make dashboard; world3d has its own npm commands"
+	@echo "TC1:         read docs/TC1_CLUSTER_RUNBOOK.md; submit jobs with direct sbatch"
+	@echo "Install/map: docs/REPO_GUIDE.md; history: docs/PROJECT_LOG.md (preserved in full)"
+
+test-core:
+	$(PYTHON) -m pytest tests/ -m core $(PYTEST_ARGS)
+
+test-reports:
+	$(PYTHON) -m pytest tests/ -m report $(PYTEST_ARGS)
+
+package-check:
+	$(PYTHON) scripts/check_package.py
+
+reports-list:
+	$(PYTHON) scripts/reports.py
+
+reports-plan:
+	$(PYTHON) scripts/reports.py --profile $(REPORT_PROFILE)
+
+reports-ci:
+	$(PYTHON) scripts/claim_registry.py --write
+	$(PYTHON) scripts/reports.py --profile ci --build
+	$(PYTHON) scripts/reports.py --profile ci --check
+
+.PHONY: backup smoke run matrix analyze prefetch report thesis interim rewrite rewrite-v2 rewrite-interim rewrite-interim-v3 rewrite-interim-v5 rewrite-interim-compact rewrite-interim-progress rewrite-interim-progress-humanized rewrite-latex viva report-humanized thesis-humanized interim-humanized claim-registry claim-surfaces verify-claims verify-claim-surfaces architecture-diagram diagrams cluster-generate cluster-submit cluster-dry cluster-check cluster-all cluster-smoke agent-start agent-status agent-check agent-manifest agent-handoff agent-dashboard agent-tc1-checklist harness-eval dashboard
 
 dashboard:
 	$(PYTHON) -m streamlit run dashboard/app.py
@@ -74,10 +108,9 @@ cluster-check:
 
 cluster-all: cluster-generate cluster-submit cluster-check
 
-# Pre-cache datasets and model weights on the TC1 HEAD node so subsequent
-# SLURM jobs can run with HF_*_OFFLINE=1. Run once after first login.
-# Per the TC1 user guide (page 16), package installs and downloads on the
-# head node are explicitly demonstrated and allowed.
+# Prepare the offline cache on an approved networked local/staging machine.
+# Transfer cache data to TC1 without credentials; do not run dataset preparation
+# on the head node. See docs/TC1_CLUSTER_RUNBOOK.md section 4.6.
 prefetch:
 	$(PYTHON) scripts/prefetch_tc1.py --config $(CONFIG)
 
@@ -178,6 +211,16 @@ rewrite-interim-compact: claim-surfaces
 # Output: docs/rewritten_fyp_interim_progress.docx
 rewrite-interim-progress: claim-surfaces
 	$(PYTHON) scripts/build_rewritten_fyp_interim_progress.py
+	@touch .local_build_state
+
+# /humanizer prose variant of the SUBMITTED progress interim. Reads
+# docs/rewritten_fyp_interim_progress.docx directly and never writes to it;
+# build_interim() above cannot be reused as the source because it no longer runs
+# against the current v4 chain. Numbers, citations, tables, headings and
+# references are asserted unchanged at build time.
+# Output: docs/rewritten_fyp_interim_progress_humanized.docx
+rewrite-interim-progress-humanized: claim-surfaces
+	$(PYTHON) scripts/build_rewritten_fyp_interim_progress_humanized.py
 	@touch .local_build_state
 
 # Report version map: regenerate docs/REPORT_VERSIONS.md, the machine inventory

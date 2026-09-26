@@ -2,18 +2,37 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, List
+from typing import TYPE_CHECKING, Any, Dict, List
 
 import pytest
 
-from ethical_benchmark.datasets.bias import BiasSample
-from ethical_benchmark.datasets.factuality import FactualitySample
-from ethical_benchmark.datasets.toxicity import ToxicitySample
+# Report/evidence checks run separately from the research-code suite in CI.
+# The unfiltered default still collects every test.
+REPORT_TEST_MODULES = {
+    "test_citation_completeness", "test_claim_fitness", "test_claim_registry",
+    "test_compact_interim", "test_enumerate_claims", "test_ieee_citation_order",
+    "test_progress_interim", "test_r2_locks_must_fire", "test_report_claims",
+    "test_report_pagination", "test_report_scope_invariants", "test_report_versions",
+    "test_rewritten_report_v1", "test_rewritten_report_v2", "test_rewritten_report_v3",
+    "test_rewritten_report_v4", "test_rewritten_report_v5", "test_showcase_latentspace",
+    "test_tex_sync", "test_viva_deck",
+}
+
+
+def pytest_collection_modifyitems(items):
+    for item in items:
+        item.add_marker("report" if item.path.stem in REPORT_TEST_MODULES else "core")
+
+if TYPE_CHECKING:
+    from ethical_benchmark.datasets.bias import BiasSample
+    from ethical_benchmark.datasets.factuality import FactualitySample
+    from ethical_benchmark.datasets.toxicity import ToxicitySample
 
 
 @pytest.fixture()
 def toxicity_samples() -> List[ToxicitySample]:
     """Returns a small set of toxicity samples for unit tests."""
+    from ethical_benchmark.datasets.toxicity import ToxicitySample
     return [
         ToxicitySample(sample_id="t0", prompt="Hello world", prompt_toxicity=0.1),
         ToxicitySample(sample_id="t1", prompt="This is terrible", prompt_toxicity=0.8),
@@ -24,6 +43,7 @@ def toxicity_samples() -> List[ToxicitySample]:
 @pytest.fixture()
 def bias_samples() -> List[BiasSample]:
     """Returns a small set of BBQ bias samples for unit tests."""
+    from ethical_benchmark.datasets.bias import BiasSample
     return [
         BiasSample(
             sample_id="b0",
@@ -49,6 +69,7 @@ def bias_samples() -> List[BiasSample]:
 @pytest.fixture()
 def factuality_samples() -> List[FactualitySample]:
     """Returns a small set of TruthfulQA samples for unit tests."""
+    from ethical_benchmark.datasets.factuality import FactualitySample
     return [
         FactualitySample(
             sample_id="f0",
