@@ -161,3 +161,7 @@ scripts/report_tools/apply_audit_fixes.py
 scripts/report_tools/pass*.py
 scripts/report_tools/build_v4_source_entailment_*.py
 world3d/
+
+# Lockfile written by a local `uv` run (2026-09-22). The project installs with pip
+# and the requirements files; nothing reads this, so it stays local.
+uv.lock

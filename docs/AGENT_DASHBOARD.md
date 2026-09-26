@@ -1,14 +1,14 @@
 # Agent Dashboard
 
-Generated: 2026-09-26 18:10:24 UTC+8
+Generated: 2026-09-26 18:12:10 UTC+8
 
 ## Live State
 
 - Git: `## main...origin/main [ahead 5]`
-- Changed files: 6
-- PROJECT_LOG: 2026-09-26 18:06 (UTC+8) by Claude Code
+- Changed files: 5
+- PROJECT_LOG: 2026-09-26 18:12 (UTC+8) by Claude Code
 - Report: 2026-09-26 18:03:37 +08 (1397734 bytes)
-- Handoff: 2026-09-26 18:10:24 +08
+- Handoff: 2026-09-26 18:12:10 +08
 - Immutable manifest: 2026-07-19 11:46:32 +08
 - Judge sidecars: 15 score files
 
@@ -24,8 +24,6 @@ Run make agent-check, review the diff, then commit or hand off the current chang
 - T71. Decide the final-report base line and regenerate the rewritten-line LaTeX mirrors accordingly (opened 2026-08-25, D75).
 - T68. Optional: acquire local copies of the seven statistical-methods classics cited by the interim progress docx, and clean the fake PDFs in `tmp/source_audit_external/`.
 - T66. Extend the `epistemic_hedge` scan with a certainty-verb pattern (from the 2026-08-22 v3 audit).
-- T53. Submit the interim report to Dr. Zhang - DUE Mon 24 Aug 2026 (CCDS deadline, Sem 1 Wk 3).
-- T1. Send the staged July follow-up to Dr. Zhang.
 - T73. The INT8 equivalence claim is undisclosed as post hoc in the SELECTED submission copy and 16 other documents (opened 2026-09-07).
 - T61. Capture the TC1 conda environment once, so "the cluster environment is fixed" becomes a record rather than an assertion (opened 2026-08-11).
 - T3. Run `MyTCinfo` on TC1.

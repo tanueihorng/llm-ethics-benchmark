@@ -13,7 +13,7 @@ Full table + task numbers in PROJECT_LOG §1. School-set; everything else in thi
 
 | Date | Milestone | Task |
 |---|---|---|
-| **Mon 24 Aug 2026** | Interim report → supervisor | **T53** ← nearest |
+| **Mon 24 Aug 2026** | Interim report → supervisor | T53 (done, confirmed 2026-09-26) |
 | **Mon 19 Oct 2026** | Final report → supervisor + examiners (**this is the graded version**) | T15 |
 | **Fri 13 Nov 2026** | Amended final + DR-NTU deposit (no changes after) | T54 |
 | **4 / 7 / 8 Dec 2026** | Oral presentation (20 min + 10 min Q&A) | T55 |
@@ -172,7 +172,7 @@ Planned by Fable 5; **execution assigned to Opus 4.8**. Durable record: PROJECT_
 
 ---
 
-## [T1] Send the July progress email to Dr. Zhang (READY — user reviews + sends)
+## [T1] Send the July progress email to Dr. Zhang (DONE — confirmed by the student 2026-09-26)
 
 **Why:** deliberate supervisor-update pacing. June update SENT 2026-06-26 21:44
 (`docs/email_drZhang_june.md`; date corrected 2026-07-25 from the message header — the
@@ -195,7 +195,7 @@ comma splices left intact. Do not re-introduce formatting on any future edit.
 
 ---
 
-## [T1b] Send the August progress email to Dr. Zhang (DRAFTED — gated on T53, the INTERIM submission)
+## [T1b] Send the August progress email to Dr. Zhang (DRAFTED — gated on T53, the INTERIM submission; T53 done 2026-09-26, T1b status unconfirmed)
 
 **Why:** the July email deliberately no longer carries the scorer-validation work, so August has its own subject and zero overlap (machine-checked, 0 shared sentences).
 

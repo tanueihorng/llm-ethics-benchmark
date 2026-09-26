@@ -14,7 +14,7 @@ assumed rather than verified, it says so.
 
 | Date | What | Task | Artifact to send |
 |---|---|---|---|
-| **Mon 24 Aug 2026** | Interim report → supervisor | T53 | see §3 |
+| **Mon 24 Aug 2026** | Interim report → supervisor | T53 (done, confirmed 2026-09-26) | see §3 |
 | **Mon 19 Oct 2026** | Final report → supervisor **and examiners**. **This is the graded version.** | T15 | `docs/rewritten_fyp_report_v1.docx` |
 | **Fri 13 Nov 2026** | Amended final + DR-NTU deposit. **No changes accepted after this.** | T54 | as above, amended |
 | **4 / 7 / 8 Dec 2026** | Oral presentation, 20 min + 10 min Q&A | T55 | `docs/viva/FYP_Viva_Deck.pptx` |
