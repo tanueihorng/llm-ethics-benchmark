@@ -1,0 +1,400 @@
+[
+  {
+    "path": ".gitignore",
+    "sha256": "0b1d39e9a3b6361507a4cade1b60d10fa23421fdf0b1124728c5c2d9eec31644",
+    "reasons": [
+      "Keep the new supporting-document builder local-only under D94."
+    ]
+  },
+  {
+    "path": "configs/report_versions.yaml",
+    "sha256": "09ec2a53376b8e500d76a29f4dbb6fa4fb614deeee387ea62de86aeb25f3813b",
+    "reasons": [
+      "Correct stale final-base and as-sent provenance metadata without editing or rebuilding any report.",
+      "Register preserved historical source for the supporting meetup Word companion."
+    ]
+  },
+  {
+    "path": "docs/AGENT_DASHBOARD.md",
+    "sha256": "b03d7edf9be965500e43cbfcc92bf317aec22aabc6a27cf039ed9b70454c5d83",
+    "reasons": [
+      "Regenerated current metadata view from its source; no report content rebuild."
+    ]
+  },
+  {
+    "path": "docs/Agentic_AI_Workflow_Report_2026-06-26.docx",
+    "sha256": "96f1e9ecaca6f412e3732ceb9145bad8690e1136bc1e622721572b5ac34ce3df",
+    "reasons": [
+      "Rebuilt from source or added preserved historical source."
+    ]
+  },
+  {
+    "path": "docs/Codex_Meetup_Agent_Harness_Report.docx",
+    "sha256": "0c8781722807922705829b50b8aa12fa4217a23676bdbb7c6d15912c53d77fc3",
+    "reasons": [
+      "Rebuilt from source or added preserved historical source."
+    ]
+  },
+  {
+    "path": "docs/Codex_Meetup_Agent_Harness_Report.html",
+    "sha256": "525f4c9a2fad31900ab27a246576e959f4361d70a4b9876f38ac2d2e8db4f9d3",
+    "reasons": [
+      "Add dated current-evidence context beside retained presentation or historical content.",
+      "Fix update-panel contrast and print behavior; update current status-page cover date and completed judge coverage.",
+      "Wrap long source paths in the current-evidence panel."
+    ]
+  },
+  {
+    "path": "docs/FYP_Agent_Harness_Architecture_Guide_2026-06-09.docx",
+    "sha256": "3a1dd4414c6b6d23e4f141865eb0f86eb3caca47e975097453359327ddb52841",
+    "reasons": [
+      "Rebuilt from source or added preserved historical source."
+    ]
+  },
+  {
+    "path": "docs/FYP_REPO_GUIDE.md",
+    "sha256": "52671aa211d566ba3795ca35c15b0eda3f8cd373220833fa38a202b4f65ac74b",
+    "reasons": [
+      "Apply 512-primary context, completed judges, current install and scratch-output execution examples."
+    ]
+  },
+  {
+    "path": "docs/HANDOFF.md",
+    "sha256": "77c2d6dcfe2faa7b2be0c2e4c52303295b788cee6e3266661d6882d86c5a35da",
+    "reasons": [
+      "Regenerated current metadata view from its source; no report content rebuild."
+    ]
+  },
+  {
+    "path": "docs/PROJECT_LOG.md",
+    "sha256": "be2bf91cc97ff1390271913dc2ebc39aad2afb941c1cf53b3827a9b9f469ed1a",
+    "reasons": [
+      "Record the scoped non-report sweep and reconcile superseded current task headings without rewriting historical outcomes.",
+      "Record the local-only ignore rule for the new companion builder."
+    ]
+  },
+  {
+    "path": "docs/QUICKSTART.md",
+    "sha256": "ebec2363b2740d8dec2748d54ed8706ab2625e626b310b894340e51583ec436c",
+    "reasons": [
+      "Fix configuration mapping schema, explicit primary budget, scratch-output examples and judge result-tree argument."
+    ]
+  },
+  {
+    "path": "docs/REPORT_VERSIONS.md",
+    "sha256": "c65005c7139f4f9a39e03ef5170841d9a907409d91b2d856114dac0d76940dc5",
+    "reasons": [
+      "Regenerated current metadata view from its source; no report content rebuild."
+    ]
+  },
+  {
+    "path": "docs/REPRODUCIBILITY.md",
+    "sha256": "4fce51f4a94978e907212f4952e89ad9d99c37b02b2914b1fe28a1e49bd767d7",
+    "reasons": [
+      "Correct private-repository status, analysis installation, primary config and retired precision-sweep exception; preserve canonical run trees."
+    ]
+  },
+  {
+    "path": "docs/THESIS_OUTLINE.md",
+    "sha256": "c1488416270e64be2d10c33390c46dbca6a2cdf7606e9e0e36c898a0588fbc8b",
+    "reasons": [
+      "Apply current D94 publication boundary to supporting outlines."
+    ]
+  },
+  {
+    "path": "docs/USER_GUIDE.md",
+    "sha256": "3a5b38d015c96d340853a1721c269d87c561648a719b43877174cebf91f6fa97",
+    "reasons": [
+      "Update local execution examples to explicit scratch outputs and editable installation; retain direct-sbatch TC1 boundary."
+    ]
+  },
+  {
+    "path": "docs/agent_harness_showcase.html",
+    "sha256": "65a316cf167cf8f8fdc500e23e33ca0001ab8cd49a34c09aa4880a2b153cccd6",
+    "reasons": [
+      "Add dated current-evidence context beside retained presentation or historical content.",
+      "Fix update-panel contrast and print behavior; update current status-page cover date and completed judge coverage.",
+      "Wrap long source paths in the current-evidence panel."
+    ]
+  },
+  {
+    "path": "docs/agentic_ai_report.html",
+    "sha256": "f3eeba7d574908dbc0effc50ee96d9fb28a14a3ddf56205804b59dd30b8eb09b",
+    "reasons": [
+      "Add dated current-evidence context beside retained presentation or historical content.",
+      "Fix update-panel contrast and print behavior; update current status-page cover date and completed judge coverage.",
+      "Wrap long source paths in the current-evidence panel."
+    ]
+  },
+  {
+    "path": "docs/archive/Codex_Meetup_Agent_Harness_Report_2026-06-14_snapshot.docx",
+    "sha256": "684a976e669d1d8bba4e53e316b5b30bf098e282806494d9e25720d837b3303a",
+    "reasons": [
+      "Rebuilt from source or added preserved historical source."
+    ]
+  },
+  {
+    "path": "docs/email_drZhang_2026-08-18_merged.md",
+    "sha256": "c1c100b44e5a780df80846339c2b8853b336cbd0c324e31d6b04190ccd0c7855",
+    "reasons": [
+      "Label retained email drafts with confirmed action status without inventing send dates or as-sent contents."
+    ]
+  },
+  {
+    "path": "docs/email_drZhang_august.md",
+    "sha256": "0737961517236b4b5cd6b6508e38cc4f80fdaf7de221ed1e7cb1341649ef113f",
+    "reasons": [
+      "Label retained email drafts with confirmed action status without inventing send dates or as-sent contents."
+    ]
+  },
+  {
+    "path": "docs/email_drZhang_july.md",
+    "sha256": "fadedfa7de679341908272192907b5890fa0d3903986dd274f83135ef5726ea3",
+    "reasons": [
+      "Label retained email drafts with confirmed action status without inventing send dates or as-sent contents."
+    ]
+  },
+  {
+    "path": "docs/fyp-report-defense-deck-2026-07.html",
+    "sha256": "acd015040420d0f22a837b7fb20722bcdd3c21b246b27759b3f52d5d30d11334",
+    "reasons": [
+      "Correct seed-range omission, completed judge status, bounded conclusion and primary-family denominator.",
+      "Add dated current-evidence context beside retained presentation or historical content.",
+      "Distinguish HarmBench ASR from the scorer-dependent over-refusal survivor.",
+      "Fix update-panel contrast and print behavior; update current status-page cover date and completed judge coverage.",
+      "Wrap long source paths in the current-evidence panel."
+    ]
+  },
+  {
+    "path": "docs/fyp_architecture.html",
+    "sha256": "95015243f8052f3144991742788f1a265e99e1c408187aee184d9ac664909272",
+    "reasons": [
+      "Add dated current-evidence context beside retained presentation or historical content.",
+      "Fix update-panel contrast and print behavior; update current status-page cover date and completed judge coverage.",
+      "Wrap long source paths in the current-evidence panel."
+    ]
+  },
+  {
+    "path": "docs/fyp_project_explainer_deck.pptx",
+    "sha256": "126430ae2bdd2107ebf1b2a1630f58c792e5b9a90e889dafa1a73d67107176a4",
+    "reasons": [
+      "Rebuilt from source or added preserved historical source."
+    ]
+  },
+  {
+    "path": "docs/fyp_showcase.html",
+    "sha256": "979a3db8b41a829cbe9d8af51f23304a760f3fee05b9ec956fa918aec6161f9c",
+    "reasons": [
+      "Update judge coverage with scoped GPT-4o kappa; date external market context and distinguish methods from bit width.",
+      "Add dated current-evidence context beside retained presentation or historical content.",
+      "Fix update-panel contrast and print behavior; update current status-page cover date and completed judge coverage.",
+      "Wrap long source paths in the current-evidence panel."
+    ]
+  },
+  {
+    "path": "docs/fyp_showcase_3d.html",
+    "sha256": "03aaad8443de77b4447eca1416eb120b383f5ceabdd1780b73b6d7411e5e9805",
+    "reasons": [
+      "Update judge coverage with scoped GPT-4o kappa; date external market context and distinguish methods from bit width.",
+      "Add dated current-evidence context beside retained presentation or historical content.",
+      "Fix update-panel contrast and print behavior; update current status-page cover date and completed judge coverage.",
+      "Wrap long source paths in the current-evidence panel."
+    ]
+  },
+  {
+    "path": "docs/fyp_showcase_bluemarble.html",
+    "sha256": "415849f8a4ad49bca41d0f8ca96939b210ff3b572722fcd73f027d6ed933a6e9",
+    "reasons": [
+      "Update judge coverage with scoped GPT-4o kappa; date external market context and distinguish methods from bit width.",
+      "Add dated current-evidence context beside retained presentation or historical content.",
+      "Fix update-panel contrast and print behavior; update current status-page cover date and completed judge coverage.",
+      "Wrap long source paths in the current-evidence panel."
+    ]
+  },
+  {
+    "path": "docs/fyp_showcase_earth.html",
+    "sha256": "1a9ff645f5bd154543a2935e0ee79ab15eab036fa6bd670f572f32fc5a73a97c",
+    "reasons": [
+      "Update judge coverage with scoped GPT-4o kappa; date external market context and distinguish methods from bit width.",
+      "Add dated current-evidence context beside retained presentation or historical content.",
+      "Fix update-panel contrast and print behavior; update current status-page cover date and completed judge coverage.",
+      "Wrap long source paths in the current-evidence panel."
+    ]
+  },
+  {
+    "path": "docs/fyp_showcase_latentspace.html",
+    "sha256": "c22810f2a49c29422fcd451a9720c041ffbdd8c767e711b12d490d56655f6939",
+    "reasons": [
+      "Correct dynamically rendered post-hoc claim and interim-only branding.",
+      "Add dated current-evidence context beside retained presentation or historical content.",
+      "Fix update-panel contrast and print behavior; update current status-page cover date and completed judge coverage.",
+      "Wrap long source paths in the current-evidence panel."
+    ]
+  },
+  {
+    "path": "docs/fyp_showcase_v2.html",
+    "sha256": "51c6072b3d6a4df55b098396e1fb8b5b39e39b8220bbed1877794c3a0baf5468",
+    "reasons": [
+      "Add dated current-evidence context beside retained presentation or historical content.",
+      "Fix update-panel contrast and print behavior; update current status-page cover date and completed judge coverage.",
+      "Wrap long source paths in the current-evidence panel."
+    ]
+  },
+  {
+    "path": "docs/fyp_showcase_world.html",
+    "sha256": "83e7c459ff50ab116d7d2971917c2d19aa01a3a462ea60e91d8b6334c372d90f",
+    "reasons": [
+      "Update judge coverage with scoped GPT-4o kappa; date external market context and distinguish methods from bit width.",
+      "Add dated current-evidence context beside retained presentation or historical content.",
+      "Fix update-panel contrast and print behavior; update current status-page cover date and completed judge coverage.",
+      "Wrap long source paths in the current-evidence panel."
+    ]
+  },
+  {
+    "path": "docs/fyp_showcase_world3d.html",
+    "sha256": "63b6d4cbc82fd542502f5ca1803d9888e56ff391ea055372eb693ca1ccaedc19",
+    "reasons": [
+      "Update judge coverage with scoped GPT-4o kappa; date external market context and distinguish methods from bit width.",
+      "Add dated current-evidence context beside retained presentation or historical content.",
+      "Fix update-panel contrast and print behavior; update current status-page cover date and completed judge coverage.",
+      "Wrap long source paths in the current-evidence panel."
+    ]
+  },
+  {
+    "path": "docs/fyp_status_2026-07.html",
+    "sha256": "61390373ed11b152c76fc44bcf4926d42ea2b5370303a84f620ae359668af6b5",
+    "reasons": [
+      "Correct retired 128-token INT8 claim, significance scope, completed judges and current submission status.",
+      "Add dated current-evidence context beside retained presentation or historical content.",
+      "Distinguish HarmBench ASR from the scorer-dependent over-refusal survivor.",
+      "Fix update-panel contrast and print behavior; update current status-page cover date and completed judge coverage.",
+      "Update status-page cover kicker and source metadata with current date and completed judges.",
+      "Wrap long source paths in the current-evidence panel."
+    ]
+  },
+  {
+    "path": "docs/fyp_status_2026-07_v2.html",
+    "sha256": "0f831628a8452c404b526afa0b408f79c8a2a069574f9ed6f3694a2dd45878fe",
+    "reasons": [
+      "Correct retired 128-token INT8 claim, significance scope, completed judges and current submission status.",
+      "Add dated current-evidence context beside retained presentation or historical content.",
+      "Distinguish HarmBench ASR from the scorer-dependent over-refusal survivor.",
+      "Fix update-panel contrast and print behavior; update current status-page cover date and completed judge coverage.",
+      "Update status-page cover kicker and source metadata with current date and completed judges.",
+      "Wrap long source paths in the current-evidence panel."
+    ]
+  },
+  {
+    "path": "docs/paper_outline.md",
+    "sha256": "61dd3fbbb2e384152c402deb80df7e42009ed922981b3f17d8f51b1873d42aaf",
+    "reasons": [
+      "Apply current D94 publication boundary to supporting outlines."
+    ]
+  },
+  {
+    "path": "docs/project_field_guide.html",
+    "sha256": "4f5b086e096a60d8d75f904409e7db0c70e9de78e4c988a7416e85938e3e279a",
+    "reasons": [
+      "Update post-hoc disclosure, all-pair seed coverage, fourth-judge status, D94 privacy and selected final line.",
+      "Replace retired open-action list and label the historical timeline.",
+      "Add dated current-evidence context beside retained presentation or historical content.",
+      "Fix update-panel contrast and print behavior; update current status-page cover date and completed judge coverage.",
+      "Wrap long source paths in the current-evidence panel."
+    ]
+  },
+  {
+    "path": "docs/report_versions/inventory.json",
+    "sha256": "59a6b29b23c3f8e81f2599fde4e473a529d363971f2d73c27cf1f12554cb8a5b",
+    "reasons": [
+      "Regenerated current metadata view from its source; no report content rebuild."
+    ]
+  },
+  {
+    "path": "docs/statistics_explainer.html",
+    "sha256": "cd3e3331d8fddc9361f2cf7377b4ee04a830c0c67464c152a66eb7cf525e4e98",
+    "reasons": [
+      "Correct five-percentage-point units and disclose timing of the INT8 equivalence analysis in teaching material.",
+      "Add dated current-evidence context beside retained presentation or historical content.",
+      "Fix update-panel contrast and print behavior; update current status-page cover date and completed judge coverage.",
+      "Wrap long source paths in the current-evidence panel."
+    ]
+  },
+  {
+    "path": "docs/statistics_summary.html",
+    "sha256": "fa06de875186f80d1d2af4eab20c27202837fcf3199f83c3fb8d84fb0f85b20f",
+    "reasons": [
+      "Correct five-percentage-point units and disclose timing of the INT8 equivalence analysis in teaching material.",
+      "Add dated current-evidence context beside retained presentation or historical content.",
+      "Fix update-panel contrast and print behavior; update current status-page cover date and completed judge coverage.",
+      "Wrap long source paths in the current-evidence panel."
+    ]
+  },
+  {
+    "path": "docs/viva/FYP_Viva_Deck.html",
+    "sha256": "f471a6c61fd7a82c770206df8092fe5ff7eae6038872209b1057b0fda4d0afbf",
+    "reasons": [
+      "Rebuilt from source or added preserved historical source."
+    ]
+  },
+  {
+    "path": "docs/viva/FYP_Viva_Deck.pptx",
+    "sha256": "ff2751bb9f1b3d64f0f491dc341c375f9f7f8156419e5442971942acb09c681a",
+    "reasons": [
+      "Rebuilt from source or added preserved historical source."
+    ]
+  },
+  {
+    "path": "docs/viva/VIVA_QA_BANK.md",
+    "sha256": "cdd9a2c14b8ead517a36585d2ed687a98e31c4f538f8023f0e27e0701d20465a",
+    "reasons": [
+      "Update viva answers with the fourth judge and failed construct validations; correct TC1 prefetch and post-hoc disclosure."
+    ]
+  },
+  {
+    "path": "scripts/build_agent_harness_architecture_doc.py",
+    "sha256": "9753cd2790f6a8a5b100d36587284c51f12568edabf229a6efc7c9a7e09d7058",
+    "reasons": [
+      "Add current privacy, selected-document and judge-status context to the non-report Word architecture guide.",
+      "Distinguish historical architecture date from the regenerated October context."
+    ]
+  },
+  {
+    "path": "scripts/build_agentic_report.js",
+    "sha256": "a706d623f38a855f53577dad90ec2f37ed44e74f973717b23c376f31f90eb2b1",
+    "reasons": [
+      "Add October context to the June workflow companion, label historical counts and correct repository privacy."
+    ]
+  },
+  {
+    "path": "scripts/build_codex_meetup_doc.py",
+    "sha256": "7a3bf549ee56170a60937e9cad78df018125d8c15d58d965d0d6b0210a5d2f4b",
+    "reasons": [
+      "Rebuilt from source or added preserved historical source."
+    ]
+  },
+  {
+    "path": "scripts/build_fyp_explainer_deck.js",
+    "sha256": "cb030c61e8d47216b3e444bca214ee4409b9874530e4ee0ec2d944a8ba8c3484",
+    "reasons": [
+      "Correct NF4 codebook cardinality in speaker notes and complete judge count; qualify Jev sensitivity conclusion.",
+      "Repair pre-existing unused slide-master content-type declarations at build time, preserving real package parts and charts.",
+      "Bound primary significance scope; distinguish nominal Llama decrease and bound the 0.0133 Qwen INT8 MMLU delta from precision_sweep.json despite rounded chart labels.",
+      "Scope the safety headline to the studied setting."
+    ]
+  },
+  {
+    "path": "scripts/build_viva_deck.py",
+    "sha256": "87f4197e36ce0ca563b6370f8307e7be114e4397a0a41882b0c1c256c175aa6e",
+    "reasons": [
+      "Qualify the MDE explanation; 80% power is not proof excluding all larger effects.",
+      "Remove an unverified claim about when reviewers discovered limitations."
+    ]
+  },
+  {
+    "path": "todo.md",
+    "sha256": "38c6b13ce460d81b029ed6397a09808b28a33f1513603acf182efaa106cd4ec5",
+    "reasons": [
+      "Replace a stale tactical send order with confirmed completion and the selected final base."
+    ]
+  }
+]

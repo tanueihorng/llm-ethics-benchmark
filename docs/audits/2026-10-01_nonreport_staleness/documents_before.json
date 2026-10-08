@@ -1,0 +1,1777 @@
+[
+  {
+    "path": "todo.md",
+    "sha256": "e8579ddf0ce84c0ea1510c2eea5e3706ee85e526417bb7289f10bcbf5155e5e2",
+    "mtime_ns": 1790417521243083820
+  },
+  {
+    "path": "README.md",
+    "sha256": "7dc2472b21a2de037cfa825279c4ff8e35f1152abeb89ce87c5f9e159046470e",
+    "mtime_ns": 1789235757256265607
+  },
+  {
+    "path": "AGENTS.md",
+    "sha256": "85c64f12cf80c0526112074682c5996cd64b27a99355b54239d23a6eb6dac211",
+    "mtime_ns": 1790446744629413613
+  },
+  {
+    "path": "CLAUDE.md",
+    "sha256": "85c64f12cf80c0526112074682c5996cd64b27a99355b54239d23a6eb6dac211",
+    "mtime_ns": 1790446744629627281
+  },
+  {
+    "path": "results_512/analysis/pair_interpretations.SUPERSEDED.md",
+    "sha256": "b0e1a2cc430779fac0d48992df8712d31a3093dea13407903550e6fa008e45fd",
+    "mtime_ns": 1783998333267281743
+  },
+  {
+    "path": "slurm/jobs_tc1_sensitivity_512/README.md",
+    "sha256": "0b07f27000e6bbbacabcb4969997456a791c6af45905d2c503957fa30d4fa5d1",
+    "mtime_ns": 1783868934030740892
+  },
+  {
+    "path": "slurm/jobs_tc1_sensitivity/README.md",
+    "sha256": "efaf24020566646dda3f8d62978b85d0d377e881cde1c839114b67e8f386b471",
+    "mtime_ns": 1781020257308820789
+  },
+  {
+    "path": "slurm/jobs_tc1_arc/README.md",
+    "sha256": "4835b9b1a82017eebd4193cdde8c378ff8b28766cb5719966f9c5378a8e6d5c5",
+    "mtime_ns": 1781433734910026612
+  },
+  {
+    "path": "learning/LATTICE.md",
+    "sha256": "8720221d9917257d65510b7cd9bda2dd36e3aac098818d6b07d0529b7aa25108",
+    "mtime_ns": 1787929467976201924
+  },
+  {
+    "path": "learning/fyp-quant/knowledge-map.md",
+    "sha256": "e5d9fbcb433f73e2ce165b27db2ce7e7693329b6caa3a017f423986f610162d3",
+    "mtime_ns": 1788271348593597120
+  },
+  {
+    "path": "learning/fyp-quant/curriculum.md",
+    "sha256": "5bc3752f7b8f09d42704cacd17e644e0841a8e5960b1fe9a94b8b8270d61fac3",
+    "mtime_ns": 1787929502688731144
+  },
+  {
+    "path": "learning/fyp-quant/CLAUDE.md",
+    "sha256": "503f8798d6695dadf6c6fb034ee9a95c8eebf78bbef8f04cfdcbc7cfc3eb49d7",
+    "mtime_ns": 1787929467979127465
+  },
+  {
+    "path": "learning/fyp-quant/sessions/2026-08-28.md",
+    "sha256": "d169106d082cd50cf997b11efc1334d8752aa49a20a6f3cbda96977899fbbe53",
+    "mtime_ns": 1787929502697330019
+  },
+  {
+    "path": ".agents/skills/fyp-harness-maintenance/SKILL.md",
+    "sha256": "9c5b63d413a3ac2f6d19d8f20da97e6d99e242856928f0d1447b756529a6aab7",
+    "mtime_ns": 1788683444967835441
+  },
+  {
+    "path": ".agents/skills/fyp-report-audit/SKILL.md",
+    "sha256": "a8029b98b6e08a227d5fadd256da6b7f223a7875b39ed9b0d7066a64bfeea664",
+    "mtime_ns": 1790446701242827335
+  },
+  {
+    "path": ".agents/skills/fyp-second-judge/SKILL.md",
+    "sha256": "942cbb28dda730bc79ced675d1ecbaf5f56a758ed9a5d6ce42931f479758f2d0",
+    "mtime_ns": 1788683444968631197
+  },
+  {
+    "path": ".agents/skills/fyp-meetup-brief/SKILL.md",
+    "sha256": "379790584ddb8400ab5c95876558ebd03748b156b8755c2f3a63bbedbb7fb6d6",
+    "mtime_ns": 1788683444969252659
+  },
+  {
+    "path": ".agents/skills/fyp-report-audit-old/SKILL.md",
+    "sha256": "e0f406d602c8f2afba81f8acb454f03fb02f46e1d55cf1008fd06b793d2c2666",
+    "mtime_ns": 1790446610312658553
+  },
+  {
+    "path": "docs/rewritten_fyp_interim_progress_lit_review_revised.docx",
+    "sha256": "38985d6cc293436f6f543a8063aa365cb0c8d3df70eb5c1e46a73de266f38a54",
+    "mtime_ns": 1788620037135602821
+  },
+  {
+    "path": "docs/fyp_showcase_earth.html",
+    "sha256": "876009214a58aba1a0d62a7b0a05d444f4c60aab35f8bc8f13a4e6a05ddddb00",
+    "mtime_ns": 1786378423441363998
+  },
+  {
+    "path": "docs/rewritten_fyp_interim_progress.docx",
+    "sha256": "cfef9af1118253a7a8e1a0f13c01ce853547bc3ee326b2f317f6922c006cfe31",
+    "mtime_ns": 1787592201125296860
+  },
+  {
+    "path": "docs/rewritten_fyp_report_v2.docx",
+    "sha256": "658ebf751f6401c9b35cba048ebad6a0994496820f83b7be69db1cb6319f7656",
+    "mtime_ns": 1787407328387624472
+  },
+  {
+    "path": "docs/fyp_showcase_bluemarble.html",
+    "sha256": "05a51e8a72dc70a9d98cc48be6ff8ad6290d1c90f13d9b02fc6e6eb9f7b355a2",
+    "mtime_ns": 1786378423443316671
+  },
+  {
+    "path": "docs/TC1_AGENT_CHECKLIST.md",
+    "sha256": "b09dbda7141f0cdb2fd641a1499b6fb066068a047d9d6eb5fb9aef4a59c90b63",
+    "mtime_ns": 1788749404042805162
+  },
+  {
+    "path": "docs/USER_GUIDE.md",
+    "sha256": "e674748d75b3ecdaae70b091164993e8ef0633c4e903d037f91cf78ac7ff204a",
+    "mtime_ns": 1783998524305322788
+  },
+  {
+    "path": "docs/fyp_showcase_v2.html",
+    "sha256": "ce64b6d73580b53ecf14038dae4a93339aa81f84315657d5f192e338ac75bdf0",
+    "mtime_ns": 1782964220128097748
+  },
+  {
+    "path": "docs/fyp_showcase_world3d.html",
+    "sha256": "687b27e59abfe8b0d0a94a3aaa20b93630686837399da2a0e60b7a2e1cdcbf03",
+    "mtime_ns": 1786378423445234011
+  },
+  {
+    "path": "docs/CODEX_MEETUP_BRIEF.md",
+    "sha256": "8d88548667450916c107b17ee37825e70124d0cf304589e4922b31de967cb64e",
+    "mtime_ns": 1780910857988460176
+  },
+  {
+    "path": "docs/rewritten_fyp_interim_v1.docx",
+    "sha256": "ae994c573d0fe3e2f3939daee12fe6ee8bfe44e659fa1f63eb6c09b6ef538c60",
+    "mtime_ns": 1787407332079680034
+  },
+  {
+    "path": "docs/fyp-report-defense-deck-2026-07.html",
+    "sha256": "d2bd3613ab6eea310b3003868a818c029ce66e98b93f088ebed4aea65148b2d5",
+    "mtime_ns": 1786378423446211306
+  },
+  {
+    "path": "docs/CCDSGPU-TC1-UG-UserGuide (1).pdf",
+    "sha256": "d597e00b931e251bfcb2058ba72656dc931dc244400cc0bc39c84d83c5182904",
+    "mtime_ns": 1770629546130727208
+  },
+  {
+    "path": "docs/XSTEST_JUDGE_PREREG.md",
+    "sha256": "585d4596255dd1dc9f9f2357f4390025c665340b6115a2bf9f3dd4f5ddb12525",
+    "mtime_ns": 1783872813743251413
+  },
+  {
+    "path": "docs/REPORT_STRUCTURE_PROPOSAL.md",
+    "sha256": "44abd98281bc2e9d96c9bea547d08dad0394b631ebb104c356e416caaebff138",
+    "mtime_ns": 1784968665285869495
+  },
+  {
+    "path": "docs/HUMAN_LABEL_PROTOCOL.md",
+    "sha256": "b2b09b9a3018a87d3cce9474168e348975c9138bb4774b68b683c99519711c22",
+    "mtime_ns": 1783715519833140429
+  },
+  {
+    "path": "docs/FYP_Interim_2026-07-10_humanized.docx",
+    "sha256": "25148cef5a6164558937619e45e37f05fcfce35779a4a46d6297cc2e10cef8a0",
+    "mtime_ns": 1786554193684878749
+  },
+  {
+    "path": "docs/TC1_CLUSTER_RUNBOOK.md",
+    "sha256": "c429e3e2fbcb1936f06666b98720492e4c80f5bc1d20f7d441ddc7dda0ba860e",
+    "mtime_ns": 1788683899925234310
+  },
+  {
+    "path": "docs/rewritten_fyp_report_v3.docx",
+    "sha256": "0c05e02b3967054388b9ca1c4dffadb7c52de6bc3471bde05a5d1be68d12c70c",
+    "mtime_ns": 1787407334512263276
+  },
+  {
+    "path": "docs/fyp_showcase_latentspace.html",
+    "sha256": "f32bbeb3e4d2dd63971bf4651cfac01d04a4498b7a21968e44589fff27165d42",
+    "mtime_ns": 1787842433494178148
+  },
+  {
+    "path": "docs/SUBMISSION_RUNBOOK.md",
+    "sha256": "abfbd99ce2050ceceaec6ebfa6fa46c70f682316c686b0ae33495ad3196521dd",
+    "mtime_ns": 1790417521243445863
+  },
+  {
+    "path": "docs/REPORT_CLAIM_AUDIT_v5.md",
+    "sha256": "c0267ee39ca44bcc5917da7a47db3c435f7cf8d69f3340ca9947b285b8ac0e37",
+    "mtime_ns": 1784450574340114684
+  },
+  {
+    "path": "docs/limitations.md",
+    "sha256": "dacde053c8de318d8870eb2c1d03ca06349763028580e4baa393a7fabc82a154",
+    "mtime_ns": 1779522152030905030
+  },
+  {
+    "path": "docs/extensibility.md",
+    "sha256": "62362c2a478f8403cf80dc18d5b0a09f88f74a2d40e6ea9fc9580d871d63fb61",
+    "mtime_ns": 1773394062570812819
+  },
+  {
+    "path": "docs/Codex_Meetup_Agent_Harness_Report.html",
+    "sha256": "182106fcae9b53851ed7fedb2b1b07c057e754d109212f347e75a88da550d003",
+    "mtime_ns": 1782964220128876209
+  },
+  {
+    "path": "docs/HARNESS_SELF_EVAL.md",
+    "sha256": "cb32f6cbaa1c072a0c2ff4ed7dd0531c761433d187c5b075b08a052805b49802",
+    "mtime_ns": 1780910857988688259
+  },
+  {
+    "path": "docs/REPO_GUIDE.md",
+    "sha256": "a437a30da17496b53bea5bf018ce18acc09f858de45b2d0f1706ed26b7b2ff5e",
+    "mtime_ns": 1790441742946269068
+  },
+  {
+    "path": "docs/fyp_architecture.html",
+    "sha256": "2d564acc479ca1565a70d78151a3f3ef4afe4544aa46544005933b9a6217427c",
+    "mtime_ns": 1782964220128421458
+  },
+  {
+    "path": "docs/rewritten_fyp_report_v4.docx",
+    "sha256": "c8ff594517d962a81ae095554e5a67df357580c32703e441d4c072f013fa0b06",
+    "mtime_ns": 1787581070296380983
+  },
+  {
+    "path": "docs/session_notes_2026-07-10.md",
+    "sha256": "b66c6a7d66a84e5851194c913f5b684d4f145757705ff39f2bed2c985336a4cb",
+    "mtime_ns": 1783617208207837898
+  },
+  {
+    "path": "docs/Agentic_AI_Workflow_Report_2026-06-26.docx",
+    "sha256": "61d832372f773de0e1b7f7e727e996a717183240412a75b5724cc90aed85fb70",
+    "mtime_ns": 1782459925654069945
+  },
+  {
+    "path": "docs/project_field_guide.html",
+    "sha256": "afe1ea1686a1022ef31fe7166da44e2fbedfe299482e09f229f46b83547ec830",
+    "mtime_ns": 1786554359741048363
+  },
+  {
+    "path": "docs/methodology.md",
+    "sha256": "53be8c0e6657d4601992f6c2edb664cb26191bc9373fb1b1e7402a5dda4f0771",
+    "mtime_ns": 1781975526606416382
+  },
+  {
+    "path": "docs/paper_outline.md",
+    "sha256": "6deb21936db3673240a83afcce31c9d3b6d79210e7d713290ca164f4a465cb8b",
+    "mtime_ns": 1782960312464323564
+  },
+  {
+    "path": "docs/QUICKSTART.md",
+    "sha256": "9984ce598cd1503256ce9818ce41f5b1ce3d8b7c225f4e607bdbb37a40a652c1",
+    "mtime_ns": 1781783299405408711
+  },
+  {
+    "path": "docs/evaluation_metrics.md",
+    "sha256": "da6905b13e5cb85029b3049a0a820aa9165782e4507a91d74a06ceb2049b20ea",
+    "mtime_ns": 1773394062564907381
+  },
+  {
+    "path": "docs/rewritten_fyp_report_v5.docx",
+    "sha256": "98856d0e247f8c5cd0173de2055670b6924f691549ba117f094ef5f49a26c6ef",
+    "mtime_ns": 1787621813691790117
+  },
+  {
+    "path": "docs/fyp_showcase_3d.html",
+    "sha256": "82082e0ee902c7208ca2b8b79300636aae837855c40f6a203d48ef2fb7611d14",
+    "mtime_ns": 1786378423440275619
+  },
+  {
+    "path": "docs/agentic_ai_report.html",
+    "sha256": "bfe4d45d356597c7dd2cb2327e8f6037c6bc85fdd7472560956c18a876c13775",
+    "mtime_ns": 1784179442737130320
+  },
+  {
+    "path": "docs/FYP_Report_2026-07-01_v5.docx",
+    "sha256": "65da3cfa95d46b99ee9c430f5bac23d2493cb441891d6319ffbc2248f32ba146",
+    "mtime_ns": 1790498661623305765
+  },
+  {
+    "path": "docs/fyp_status_2026-07.html",
+    "sha256": "803835dd7f4d879541d004feedf51c591e144cc47b28e1c46214f7e837123a85",
+    "mtime_ns": 1784179382485846688
+  },
+  {
+    "path": "docs/fyp_project_explainer_deck.pptx",
+    "sha256": "b9294debe6bfa56e6e51cc564be1b65b59d6428a91a1c3fa7665acd483e1ec65",
+    "mtime_ns": 1790184300069487495
+  },
+  {
+    "path": "docs/email_drZhang_2026-06-09.md",
+    "sha256": "800c286aa4b4535ebf4f635f8ed58f8233573c251ff30b3d86577b44f74715f7",
+    "mtime_ns": 1781020129231069023
+  },
+  {
+    "path": "docs/fyp_status_2026-07_v2.html",
+    "sha256": "7e7d8b30d258e905cecbd500fb89e5f40ac4dfadf70b04187be6501efce69614",
+    "mtime_ns": 1784179382620646528
+  },
+  {
+    "path": "docs/email_drZhang_august.md",
+    "sha256": "1a6861b511d325347bfc56b0c6ffec2ee2ad0076af36223b4e5fe6e3683e14b3",
+    "mtime_ns": 1784916850115358405
+  },
+  {
+    "path": "docs/PROJECT_METRICS.md",
+    "sha256": "6be75d3f1f0e9b2745c22ac958f94e8b679da5347fd8fedc051dc28e1a5a0bfd",
+    "mtime_ns": 1784917260741830397
+  },
+  {
+    "path": "docs/VALIDATION_INFORMED_FAMILY_NOTE.md",
+    "sha256": "02b6f1ca109c78410e93f2a21993cc1aadfa2899089b646c7c2b19609934f6e2",
+    "mtime_ns": 1784390662607514630
+  },
+  {
+    "path": "docs/rewritten_fyp_interim_v4.docx",
+    "sha256": "e25cf66f9988b0f1f25c478af74eacdf657089c2aa69729b1514e7393d6cdf08",
+    "mtime_ns": 1787510998686724362
+  },
+  {
+    "path": "docs/rewritten_fyp_interim_progress_v3.docx",
+    "sha256": "efe30fb3bf00259ac195b3344e66d3113fa51146de3e81d02c8a8a080115a795",
+    "mtime_ns": 1790415944047581867
+  },
+  {
+    "path": "docs/CCDSGPU-TC1-Cluster-FYP-Form.pdf",
+    "sha256": "a86a887f526dde7c9da843c576cc1dc771707232476ac63b16ca6d886c34d537",
+    "mtime_ns": 1770620807444736329
+  },
+  {
+    "path": "docs/FYP_Thesis_2026-07-02_humanized.docx",
+    "sha256": "a26d08051aae75cd15f03d3c44eb08ce10fbf18d730a7406e893974eb2fc827e",
+    "mtime_ns": 1786554193488814048
+  },
+  {
+    "path": "docs/statistics_explainer.html",
+    "sha256": "287c52b72d2c95c1a6fc9a3c2a08f4011017caad0483d48b73b1ff4461871c0e",
+    "mtime_ns": 1789269018950087273
+  },
+  {
+    "path": "docs/FYP_Interim_2026-07-10.docx",
+    "sha256": "d37f7c0b2266d7fe5296c057be7c5e3997fb911c2b1f0ebdbdfe8c4cef6d1ba7",
+    "mtime_ns": 1786552421972346648
+  },
+  {
+    "path": "docs/agent_harness_showcase.html",
+    "sha256": "c269c61afe89b353dcac8f6d4f310be8e03f87a9ce2c2ccb1b36f70ea0c36c0a",
+    "mtime_ns": 1782964220129805963
+  },
+  {
+    "path": "docs/fyp_style_fingerprints.html",
+    "sha256": "40b7ec7570aeeed3d6bb4c0e8c92a1d3d17a66703874870b8a21e9577e624dc6",
+    "mtime_ns": 1784372270223223710
+  },
+  {
+    "path": "docs/FYP_Agent_Harness_Architecture_Guide_2026-06-09.docx",
+    "sha256": "e5f7feb7735aa2e36e5acb63683f15f1e4f0d5b876b41fb29c5d024300bbc3f8",
+    "mtime_ns": 1780936981216738570
+  },
+  {
+    "path": "docs/fyp_showcase_world.html",
+    "sha256": "ec18fafc479075edb413ba93aafe487fd2ce851538312ed569e6a8b19ca5a3c6",
+    "mtime_ns": 1786378423444344883
+  },
+  {
+    "path": "docs/FYP_Report_2026-07-01_humanized.docx",
+    "sha256": "bccf4ebd23601379727d8348998c28d20534ae3d55b90e82fd3339c92ee51184",
+    "mtime_ns": 1786554193284422961
+  },
+  {
+    "path": "docs/FYP_REPO_GUIDE.md",
+    "sha256": "2aab4503011e54373b04c09b7a85828e6888b4ccaa2059d33640aad0221a84c4",
+    "mtime_ns": 1781975526601026327
+  },
+  {
+    "path": "docs/statistics_summary.html",
+    "sha256": "39ac866bdcf120bc8be07e593b6713755e8fd14785561901bcf9cc4a2a7a3921",
+    "mtime_ns": 1789269242934923905
+  },
+  {
+    "path": "docs/email_drZhang_2026-08-18_merged.md",
+    "sha256": "5da553289f117272d61c8832643581a0e992f5afed1de2d79106edeb6da38f40",
+    "mtime_ns": 1787069068547512671
+  },
+  {
+    "path": "docs/THESIS_OUTLINE.md",
+    "sha256": "9f715f1db52cd1fc5b7405cc7606cbfe211a9a6b5f99aee7ee18473fe721ae22",
+    "mtime_ns": 1784179556100754546
+  },
+  {
+    "path": "docs/rewritten_fyp_interim_compact.docx",
+    "sha256": "f508b7d1310ca3bb2aa18901aebed7005a69373b7572f1d18580fcf714843938",
+    "mtime_ns": 1787583149317496369
+  },
+  {
+    "path": "docs/XSTEST_GOLD_PREREG.md",
+    "sha256": "8da214fc9cac576e41eca907862db14d5f7ff7180c6e2f79e2767adfaa3c2c83",
+    "mtime_ns": 1784435407256616716
+  },
+  {
+    "path": "docs/rewritten_fyp_interim_progress_v2.docx",
+    "sha256": "584be1c998223c9c77ef78a81144c2e6a7e9f4e194f3f9428dd284f4115a3599",
+    "mtime_ns": 1790410445827946557
+  },
+  {
+    "path": "docs/PROJECT_LOG.md",
+    "sha256": "44ff470624dd1cdd7951e68cc503cb7da5bb34713ca21dcae9325ad5ffb41cbe",
+    "mtime_ns": 1790560615004070203
+  },
+  {
+    "path": "docs/REPORT_REMEDIATION_PLAN.md",
+    "sha256": "0582e44573976b3a32bea40b1e6ebfcf663f8766b3ff82a78055a9fb510b74d6",
+    "mtime_ns": 1784973422680546406
+  },
+  {
+    "path": "docs/rewritten_fyp_interim_v5.docx",
+    "sha256": "29660d3d2555fadb9ff4c98da50ecb4ed825ea285a6d4656da4906ad37cb1ada",
+    "mtime_ns": 1787621813747929547
+  },
+  {
+    "path": "docs/Codex_Meetup_Agent_Harness_Report.docx",
+    "sha256": "684a976e669d1d8bba4e53e316b5b30bf098e282806494d9e25720d837b3303a",
+    "mtime_ns": 1781526374730460880
+  },
+  {
+    "path": "docs/RESULTS_CARD.md",
+    "sha256": "2b7331e686936c1f987554d1137fb46728604eefc13d9685d97cf93a16f4951e",
+    "mtime_ns": 1784435851483253705
+  },
+  {
+    "path": "docs/FYP_WRITING_STYLE_GUIDE.md",
+    "sha256": "d9828a4586709e555e8e3e62511859985dbd022dd865b992cea4f2488d1c3bb0",
+    "mtime_ns": 1784973281031942482
+  },
+  {
+    "path": "docs/rewritten_fyp_interim_progress_humanized.docx",
+    "sha256": "f230280e3ea42a549aaba08208ebdc7e7e2261ff77f245a4132981e4de6f4aa6",
+    "mtime_ns": 1788287847783736629
+  },
+  {
+    "path": "docs/AGENTIC_WORKFLOW.md",
+    "sha256": "66f082a2dace55fdfabde725740d924e795bbded285249ab7c1cca77ded845e6",
+    "mtime_ns": 1782956217798716040
+  },
+  {
+    "path": "docs/datasets.md",
+    "sha256": "10806c85f17bfa45456e9acf746bbae8eab0f07e1446b999399833c7a38c9856",
+    "mtime_ns": 1781975526606125881
+  },
+  {
+    "path": "docs/CLAUDE_CODE_SESSION_ARCHIVE.md",
+    "sha256": "cc9fe2d8addca651507bb7ae06780cc655f5ef9e3272b45fb35d274733011bac",
+    "mtime_ns": 1786382325840171504
+  },
+  {
+    "path": "docs/email_drZhang_july.md",
+    "sha256": "5ff6c74df1c1c97e1b411e242e8d73f368e3ecc095d8173017663c19956cc7e0",
+    "mtime_ns": 1784916826353893067
+  },
+  {
+    "path": "docs/email_drZhang_june.md",
+    "sha256": "66e115bb0e20e0a65a7c65c9e1ad23df5ef9f329be630e3446909a90a124b5bc",
+    "mtime_ns": 1784916458796617905
+  },
+  {
+    "path": "docs/AGENT_DASHBOARD.md",
+    "sha256": "dbd5abd7f82c64c9a86a8c83f091b71473eb0bff47e54b5343449969f45659f1",
+    "mtime_ns": 1790532757394190515
+  },
+  {
+    "path": "docs/REPRODUCIBILITY.md",
+    "sha256": "0a831c8237bb27c852cd4ae9aba0482068921804f86472ade0097640ca8ed58f",
+    "mtime_ns": 1786338791969982162
+  },
+  {
+    "path": "docs/FYP_Thesis_2026-07-02_v4.docx",
+    "sha256": "3167e2bbca75334e8959fd3c283f8434af5a478bddb6a53345bbe1f1c502186b",
+    "mtime_ns": 1786552421658884557
+  },
+  {
+    "path": "docs/FYP_Report_2026-07-25_v6.docx",
+    "sha256": "7345d9eb3dc1cb7bf192578ced9d781fd973ab8282773f8271bf9b72b99b9c60",
+    "mtime_ns": 1786554189133989496
+  },
+  {
+    "path": "docs/fyp_showcase.html",
+    "sha256": "490c7df7eaed3767b19811ae8cb06c6d85aaee89a51eea8ce141081d4c43cd07",
+    "mtime_ns": 1786378423438833489
+  },
+  {
+    "path": "docs/rewritten_fyp_interim_v3.docx",
+    "sha256": "f88cb84044a60faea89c5f3e56d2b156f4915e85e71c03a2cd9def7b65eb24ff",
+    "mtime_ns": 1787407334569199584
+  },
+  {
+    "path": "docs/HANDOFF.md",
+    "sha256": "c88eb58bb03dbe32fc3294710a868e42bf5289aade1b7ef72006dc5ab9e3f943",
+    "mtime_ns": 1790532757161540147
+  },
+  {
+    "path": "docs/REPORT_VERSIONS.md",
+    "sha256": "645f06a864fe872f85e3d2a05210808e7a4d2023bd349ad5d6042b4460fed1a9",
+    "mtime_ns": 1790490791191255080
+  },
+  {
+    "path": "docs/rewritten_fyp_report_v1.docx",
+    "sha256": "bce4a59d95f89413f5fc90ef3104ddd9695d57848d435495562966913ba5a95c",
+    "mtime_ns": 1787407332004082539
+  },
+  {
+    "path": "docs/archive/TC1_WORK_LOG_2026-04-08.md",
+    "sha256": "c97b046b4f98ff854f84bcad7422cd00646dd58b4a4527dbb01b7d5abaa3e064",
+    "mtime_ns": 1775636144884796511
+  },
+  {
+    "path": "docs/archive/TC1_ACTIVITY_2026-04-08.md",
+    "sha256": "bde96b5c3cde376057e7bf63b7eeb6f610080537570612d266888f2711272ba1",
+    "mtime_ns": 1775633415058125857
+  },
+  {
+    "path": "docs/archive/FYP_Decision_Register_and_Compressed_Work_Plan_2026-05-13.html",
+    "sha256": "39c722cb76dec53704db315817456d04732ebd967d774a5e6c7647b511bfd1a1",
+    "mtime_ns": 1778679238758510003
+  },
+  {
+    "path": "docs/archive/FYP_Report_2026-05-23.docx",
+    "sha256": "58e1cf150b8cc3562d812496cc8503f97f42b086de0b42578f0c745af6777684",
+    "mtime_ns": 1779531207809015984
+  },
+  {
+    "path": "docs/archive/FYP_Thesis_2026-06-18.docx",
+    "sha256": "1ed9b8817e1e34913f75b95e5997b9d3bda609f7ddfa7924cc5ce49fc8ab8c64",
+    "mtime_ns": 1782982629517619206
+  },
+  {
+    "path": "docs/archive/TC1_ACTIVITY_LOG_2026-04-08.md",
+    "sha256": "d280983b5dfe2ab5c879b396684d64f82874679e2152bae364e0f03922f7765c",
+    "mtime_ns": 1775633236550631929
+  },
+  {
+    "path": "docs/archive/FYP_Report_2026-05-24.docx",
+    "sha256": "8cd89c656e257e3aee95b00797cb748fc2ac334ab9f38a46b342731ee38b283a",
+    "mtime_ns": 1779813400498684252
+  },
+  {
+    "path": "docs/archive/FYP_Thesis_2026-06-26_v3.docx",
+    "sha256": "36594ad6f54f7b5d722e5ce773be0de58a5c942d913789f2f1f53285ffa89c53",
+    "mtime_ns": 1782982629784846916
+  },
+  {
+    "path": "docs/archive/FYP_Report_2026-06-14.docx",
+    "sha256": "91516313abe3ed14600ad835cba6993beed6b3caa9021b48252c14c311b29487",
+    "mtime_ns": 1782491727524265846
+  },
+  {
+    "path": "docs/archive/fyp_status_2026-06-13.html",
+    "sha256": "0799eca9a70d40dfb377dbd3d8a3c304a0696730291a8c80fadca24455778bb0",
+    "mtime_ns": 1782481028139542118
+  },
+  {
+    "path": "docs/archive/FYP_TC1_Full_Session_Report_2026-04-08.docx",
+    "sha256": "7b05485b9872a9250a4d3a4e9694b31fa05c61c43d4fb0c810eee07ebbe64fa0",
+    "mtime_ns": 1775640726403009739
+  },
+  {
+    "path": "docs/archive/FYP_Thesis_2026-06-26_v2.docx",
+    "sha256": "06037b6d2c35b52ef49d0e2df9d74962ba2088b41ac94c5b3460a8fba21e59d6",
+    "mtime_ns": 1782982629653546535
+  },
+  {
+    "path": "docs/archive/agent-instructions-2026-09-13-pre-cleanup.md",
+    "sha256": "9c1071a4e9a0460c215ce1597e1ef461a084187691103658bfaf6cd55e0bf92c",
+    "mtime_ns": 1789235373489052295
+  },
+  {
+    "path": "docs/archive/FYP_Report_2026-06-30_v4.docx",
+    "sha256": "ed220328659cab984db8301e17bd00ccd05a5c9d1e9a81ecd58d925119db465a",
+    "mtime_ns": 1782794151811220900
+  },
+  {
+    "path": "docs/archive/FYP_Report_2026-06-26_v2.docx",
+    "sha256": "2a4d820f45f61ad9e3764afecb69f3ad7f91a45bcefc5488fe1f9460ef963559",
+    "mtime_ns": 1782460193164695802
+  },
+  {
+    "path": "docs/archive/agent-instructions-2026-09-06.md",
+    "sha256": "bba4e8373de9590625f66b15a6a8384f16d7aede5fcddac79c87e7d65ffd1173",
+    "mtime_ns": 1788683444963457037
+  },
+  {
+    "path": "docs/archive/FYP_Decisions_and_Plan_2026-05-13.docx",
+    "sha256": "49c0e54accbacf530dcf735e99b3595725a946aac3ca4a9b357319111e6be7dc",
+    "mtime_ns": 1778679351514477801
+  },
+  {
+    "path": "docs/archive/FYP_Decision_Register_and_Compressed_Work_Plan_2026-05-13.docx",
+    "sha256": "93f2bb5d4974629c8a8f05ba8c3f43d4644d35794f862436c84294c9b8df4e4b",
+    "mtime_ns": 1778679246800124328
+  },
+  {
+    "path": "docs/archive/FYP_Report_2026-06-26_v3.docx",
+    "sha256": "2fba537a0de0e3f979282f8815f02d62ca781df7e9a02e233d619e823c8ec78a",
+    "mtime_ns": 1782720890553427605
+  },
+  {
+    "path": "docs/archive/PROJECT_LOG_2026-07-10_1021_pre_live_audit.md",
+    "sha256": "73ff68a42943329ddb874db4e077e20cfe534ef600d68996dc4bb6ad7201df9e",
+    "mtime_ns": 1783617181237877688
+  },
+  {
+    "path": "docs/archive/FYP_TC1_Full_Session_Report_2026-04-08.html",
+    "sha256": "e0761b5664eaaa37a4f364f665463f0449066aa323fe8e89501b078ccb661aef",
+    "mtime_ns": 1775640417265117550
+  },
+  {
+    "path": "docs/audits/2026-09-11_audit_skills.md",
+    "sha256": "71ef76cf4b0a2f7399f1460f8b9df3fb503888225bc277e4c77f6a99003883f1",
+    "mtime_ns": 1789132183144751674
+  },
+  {
+    "path": "docs/audits/2026-07-16_code_review/FINDINGS.md",
+    "sha256": "6e2c6acbd8f7765ee31c5a4c8b84ecbf26825f80ae90a6d1bef8aebf8fa9c0f7",
+    "mtime_ns": 1784193101023599844
+  },
+  {
+    "path": "docs/audits/2026-09-22_jev_quantization_effect_pilot/RESULTS.md",
+    "sha256": "bc50ca903ef0fe8cd243bf2fb936297ffe4225f87332b2cce941c6633e8b43d3",
+    "mtime_ns": 1790083578434999718
+  },
+  {
+    "path": "docs/audits/2026-09-22_jev_quantization_effect_pilot/PROTOCOL.md",
+    "sha256": "b75b1795cc37b0b5431c0aef291a4f95716fba02742db242e7ed76ea55c61646",
+    "mtime_ns": 1790081347687146499
+  },
+  {
+    "path": "docs/audits/2026-08-25_language_pass_v5/VERIFICATION_NOTE.md",
+    "sha256": "8226a798b549ebb97f077e33bfe1a4f91fa44471ab9a73b6282d9cee2ec573e6",
+    "mtime_ns": 1787622047707075356
+  },
+  {
+    "path": "docs/audits/2026-08-25_language_pass_v5/CHANGE_LOG.md",
+    "sha256": "ab4d730a5c1c44460c1daa411e030214fcf7e5fd8080c91f5263fa70b006c8a2",
+    "mtime_ns": 1787621951883968265
+  },
+  {
+    "path": "docs/audits/2026-08-25_language_pass_v5/PROSE_REVIEW_FINDINGS.md",
+    "sha256": "8908c5d86edc60638cff876b4818dae445c3f52f8b1f75ab6ffe5ee90f3d8b9f",
+    "mtime_ns": 1787637441141234856
+  },
+  {
+    "path": "docs/audits/2026-08-25_language_pass_v5/LEFT_TECHNICAL.md",
+    "sha256": "1c8f9888b43d81917127990549dfd2f2954f4c872048d022b7a13098cd4c0252",
+    "mtime_ns": 1787621982848625741
+  },
+  {
+    "path": "docs/audits/2026-09-20_jev_xstest_validation/RESULTS.md",
+    "sha256": "848bbd1c3aceeb82dad1ed3be983cbcf2f182bd9e75b04269ecc9297f220bad5",
+    "mtime_ns": 1789873807108459067
+  },
+  {
+    "path": "docs/audits/2026-09-20_jev_xstest_validation/PROTOCOL.md",
+    "sha256": "8fe1ef48927a1d0da3bae273698c83e4743db59103069a44842d79772aa3ae46",
+    "mtime_ns": 1789872742995265530
+  },
+  {
+    "path": "docs/audits/2026-07-28_rewrite_fitness/COVERAGE.md",
+    "sha256": "a6f0356f879f0531c578b3c6971073c29b39e2d558aad643f192fedaf8681176",
+    "mtime_ns": 1785244669241604434
+  },
+  {
+    "path": "docs/audits/2026-08-25_progress_interim_audit/FINDINGS.md",
+    "sha256": "e143b6dc9b2987cf01d8e0d9f8c2b4d62251b451553d55ca25a1c983a9f79a35",
+    "mtime_ns": 1787592286656244926
+  },
+  {
+    "path": "docs/audits/2026-08-25_interim_progress_citation_check/CLAIM_ALIGNMENT.md",
+    "sha256": "8678501c4195f99c0aa6c2335725e2b13b4788122080733c8e8371798ecc3fe8",
+    "mtime_ns": 1787747128534813565
+  },
+  {
+    "path": "docs/audits/2026-08-25_interim_progress_citation_check/CITATION_CHECK.md",
+    "sha256": "fba2a13871349ba9a49edb2c5bf1bbb4cc85cf957bd89e33059b18583a7cf3c2",
+    "mtime_ns": 1787597542834011078
+  },
+  {
+    "path": "docs/audits/2026-08-25_interim_progress_citation_check/PAPER_SUMMARIES.md",
+    "sha256": "0de2de8916a8640b0c956bbff2cce810f1f144a9237ab1b3bcc3901eaf2ef0ef",
+    "mtime_ns": 1787597514975878162
+  },
+  {
+    "path": "docs/audits/2026-08-25_interim_progress_citation_check/summaries/batch_C.md",
+    "sha256": "9911bbc1a705213ed451cb76bd805c89e7006c87082ea205b539e703832bf981",
+    "mtime_ns": 1787590431189890654
+  },
+  {
+    "path": "docs/audits/2026-08-25_interim_progress_citation_check/summaries/batch_B.md",
+    "sha256": "93972e8e859e0f29240a5be5e088092acf8dca9500bf45a624f25c75dc47a87f",
+    "mtime_ns": 1787590621095037743
+  },
+  {
+    "path": "docs/audits/2026-08-25_interim_progress_citation_check/summaries/batch_E.md",
+    "sha256": "e0057326c8fec13a9c8f3b186f4897cf0f34a76228262a76e27e40402092e404",
+    "mtime_ns": 1787590102613785222
+  },
+  {
+    "path": "docs/audits/2026-08-25_interim_progress_citation_check/summaries/batch_A.md",
+    "sha256": "ca1dfa326d31dfb7315ed0d96a5c86bc104a2cedbcadd4768fd9c42457143b9f",
+    "mtime_ns": 1787590339591054341
+  },
+  {
+    "path": "docs/audits/2026-08-25_interim_progress_citation_check/summaries/batch_D.md",
+    "sha256": "0413d2ec63a69d17fde53953030921d20885edae0b248f48576b67896ff70270",
+    "mtime_ns": 1787590212561885122
+  },
+  {
+    "path": "docs/audits/2026-08-25_interim_progress_citation_check/deepreads/fullref_31.md",
+    "sha256": "ea3550bb2d1b9a1a81d60a536662f90cce5869ec5b0004f2121236f4042da8dd",
+    "mtime_ns": 1787593887144426328
+  },
+  {
+    "path": "docs/audits/2026-08-25_interim_progress_citation_check/deepreads/fullref_21.md",
+    "sha256": "92803e19cf7daceb6d841de619d1e7772168e3c7e26d7d02c62c9d8a51f464c9",
+    "mtime_ns": 1787594096180053682
+  },
+  {
+    "path": "docs/audits/2026-08-25_interim_progress_citation_check/deepreads/deepref_11.md",
+    "sha256": "758f476e3c7a25a3e628ce70f24298ffa2f40e191df4026ed0ea6ee5e34906f9",
+    "mtime_ns": 1787594063858433031
+  },
+  {
+    "path": "docs/audits/2026-08-25_interim_progress_citation_check/deepreads/deepref_10.md",
+    "sha256": "5ff5f4614ea6868ac1c9ad578eaf32a8b27726486a1cbd6b0a88bd4bd6e68ff1",
+    "mtime_ns": 1787594340067371825
+  },
+  {
+    "path": "docs/audits/2026-08-25_interim_progress_citation_check/deepreads/deepref_30.md",
+    "sha256": "84bed2a91b34416ba75e7f52fde1a8456b78a7b352751e707eadb26ad7be41ed",
+    "mtime_ns": 1787593739369920655
+  },
+  {
+    "path": "docs/audits/2026-08-25_interim_progress_citation_check/deepreads/fullref_27.md",
+    "sha256": "766dc2bfb17df369d74eff5e750f576e739bf28b36638046d07ba5c70357faff",
+    "mtime_ns": 1787597487615767649
+  },
+  {
+    "path": "docs/audits/2026-08-25_interim_progress_citation_check/deepreads/deepref_33.md",
+    "sha256": "e26c5df37265c766e2da35439981dfee57ca42506cfd20af04df2e612b5b5285",
+    "mtime_ns": 1787593861562247080
+  },
+  {
+    "path": "docs/audits/2026-08-25_interim_progress_citation_check/deepreads/deepref_12.md",
+    "sha256": "72d14a3d52f297726987f90841d33e0b0265735ff9c8558c4ec2fdd4b35952a5",
+    "mtime_ns": 1787595322785733683
+  },
+  {
+    "path": "docs/audits/2026-08-25_interim_progress_citation_check/deepreads/deepref_29.md",
+    "sha256": "fc02ce0c1581b8c854ffdc4568af863ea8ece664a7098fdbc32fe4e61b62699e",
+    "mtime_ns": 1787593943945862858
+  },
+  {
+    "path": "docs/audits/2026-08-25_interim_progress_citation_check/deepreads/fullref_8.md",
+    "sha256": "06db5a1c4efb5a2be7fbe3a9cdfb49db3d1875bcda3bdbbd18fb45138645084a",
+    "mtime_ns": 1787597508264702211
+  },
+  {
+    "path": "docs/audits/2026-08-25_interim_progress_citation_check/deepreads/fullref_28.md",
+    "sha256": "83837a3da70bcdd431866ad09beb7c4d9aa0602678d5d85966e92c03a348a1ae",
+    "mtime_ns": 1787593969454167290
+  },
+  {
+    "path": "docs/audits/2026-08-25_interim_progress_citation_check/deepreads/fullref_9.md",
+    "sha256": "9b83edfc3c2da969b14dab2f995aebd608bd0cc7f766f018cd35d6038d71cb02",
+    "mtime_ns": 1787593773792205777
+  },
+  {
+    "path": "docs/audits/2026-08-13_t51_enumeration/FINDINGS.md",
+    "sha256": "bb067d3ea4280748504def5559c720fb0e41197f754fe9e3c169abb60ea0b568",
+    "mtime_ns": 1786554752072202374
+  },
+  {
+    "path": "docs/audits/2026-07-27_rewritten_report_v1/CLAIM_SOURCE_AUDIT.md",
+    "sha256": "13d857085a814d29f2e664bce9424dd78b5f26346ebf9185ca3f17012e380e26",
+    "mtime_ns": 1785242598455873176
+  },
+  {
+    "path": "docs/audits/2026-07-11_clean_room_independent_audit/METHODS_VS_STANDARDS.md",
+    "sha256": "9cf4cda9dc42f74259c7bf8467bb2580b3526de9f42cb7d9b07538a27d10e10c",
+    "mtime_ns": 1783754745626549039
+  },
+  {
+    "path": "docs/audits/2026-07-11_clean_room_independent_audit/UNRESOLVED_OR_UNVERIFIED.md",
+    "sha256": "4dde6a5cacf1bfe10a9ac4fe5840971b71aac87e5878e0d162561bcc555e03b6",
+    "mtime_ns": 1783754746282071884
+  },
+  {
+    "path": "docs/audits/2026-07-11_clean_room_independent_audit/REPRODUCTION_MATRIX.md",
+    "sha256": "497e4f9bca6d66b1217753f79eea2d42c7944d6fe437bb5d37ee8bcb12f605af",
+    "mtime_ns": 1783755005587384072
+  },
+  {
+    "path": "docs/audits/2026-07-11_clean_room_independent_audit/CLEAN_ROOM_ATTESTATION.md",
+    "sha256": "3890460de59e258c190256ef37f8d0ddb51b1626d6c101e42d1ad675b1619097",
+    "mtime_ns": 1783754746427415435
+  },
+  {
+    "path": "docs/audits/2026-07-11_clean_room_independent_audit/EXECUTIVE_AUDIT.md",
+    "sha256": "b56d1c7c52e90c6974d0975ed3c801a5b9f3c78570065ba54c8abd8116940cfa",
+    "mtime_ns": 1783755005320199981
+  },
+  {
+    "path": "docs/audits/2026-07-11_clean_room_independent_audit/REPORT_FORMAT_AND_STYLE.md",
+    "sha256": "4b4a1f0a5f2abf0559acc0beec73015488415ead2740fab485a15e6ede47aab5",
+    "mtime_ns": 1783755005454460654
+  },
+  {
+    "path": "docs/audits/2026-08-02_prior_work_numbers/SELECTION_PREREG.md",
+    "sha256": "5ad8dda106f8a1845f6d22ce1f01f4ca29b75d414449ac19fee6a5712906a8ef",
+    "mtime_ns": 1785604972599690606
+  },
+  {
+    "path": "docs/audits/2026-08-02_prior_work_numbers/PROVENANCE.md",
+    "sha256": "489ac78cd3c3628e891bf6703eda788fc78f3d909128ad332d7f1c2d2b1afcbb",
+    "mtime_ns": 1786589300275396658
+  },
+  {
+    "path": "docs/audits/2026-07-11_fable5_full_review/METHODS_VS_STANDARDS.md",
+    "sha256": "815730458648f53ce3ae415f665e393378939c3c2c981d5670fab737ea9fe49f",
+    "mtime_ns": 1783714317249903377
+  },
+  {
+    "path": "docs/audits/2026-07-11_fable5_full_review/UNRESOLVED_OR_UNVERIFIED.md",
+    "sha256": "65f667575721f0f7cbfa2d30c7fb852ec1c335d272ebe2518c683ab406dc77a4",
+    "mtime_ns": 1783714317257325864
+  },
+  {
+    "path": "docs/audits/2026-07-11_fable5_full_review/REPRODUCTION_MATRIX.md",
+    "sha256": "56712c3605381654427c324d5b86aa68b03e721084d50e1f8253c7298495215b",
+    "mtime_ns": 1783714317255120772
+  },
+  {
+    "path": "docs/audits/2026-07-11_fable5_full_review/EXECUTIVE_AUDIT.md",
+    "sha256": "07a0fb17733b7c148ceba7b6adf8c1b53fe3121ae7988db7b2bf51d81e5fd35d",
+    "mtime_ns": 1783714518572702738
+  },
+  {
+    "path": "docs/audits/2026-07-11_fable5_full_review/REPORT_FORMAT_AND_STYLE.md",
+    "sha256": "88cf4144344e6889fab57a671334d1f36d38856176745348c2d660ee70ca3219",
+    "mtime_ns": 1783714381340968592
+  },
+  {
+    "path": "docs/audits/2026-09-08_interim_v2_evidence_check/AUDIT.md",
+    "sha256": "d27bcf4a0ddc8561179a54da91f449fb4596f5f7b4869a725d8a03987e0f2964",
+    "mtime_ns": 1788873693169389309
+  },
+  {
+    "path": "docs/audits/2026-09-08_interim_v2_evidence_check/SOURCE_FOLLOWUP.md",
+    "sha256": "a90022e584f9c4d733bcc85d8bfd4a6f67d304273ec6d9fd1d130067788a36e8",
+    "mtime_ns": 1788873693168645818
+  },
+  {
+    "path": "docs/audits/2026-09-20_jev_response_quality_pilot/RESULTS.md",
+    "sha256": "743a69362f4d61a7e4c3a7889b7b4c1daf3ccbaf9618fdf80c96b2bdf92afc63",
+    "mtime_ns": 1790078963510345523
+  },
+  {
+    "path": "docs/audits/2026-09-20_jev_response_quality_pilot/PROTOCOL.md",
+    "sha256": "f08e8d164d3d31e353f54496b45f354bd80e6f4b94c12842d86d56f13c8669f0",
+    "mtime_ns": 1789876957022559780
+  },
+  {
+    "path": "docs/audits/2026-07-20_full_sweep/phase2b_results.md",
+    "sha256": "44bf070ed4e763459fb24f0c3fabf917d59086c11c5c2dca06688930eb87722b",
+    "mtime_ns": 1784607159165343896
+  },
+  {
+    "path": "docs/audits/2026-07-20_full_sweep/phase1_must_fire.md",
+    "sha256": "20ee37b85d3b309b83b825b709394fc4a7d79fc13e44d071b9de714770558895",
+    "mtime_ns": 1784557967164358865
+  },
+  {
+    "path": "docs/audits/2026-07-20_full_sweep/phase7_results.md",
+    "sha256": "5197d2482f14e540dafe338e3565cdbed0d4f1278c1fc8d7c42d59ac53b40a00",
+    "mtime_ns": 1784637053923362524
+  },
+  {
+    "path": "docs/audits/2026-07-20_full_sweep/STATE.md",
+    "sha256": "4b01dd9902021e07f6cddddc6ff66103cf579d91e1c7e5ddc6ac395d5f4a457b",
+    "mtime_ns": 1784657889431349025
+  },
+  {
+    "path": "docs/audits/2026-07-20_full_sweep/phase8_results.md",
+    "sha256": "a109bb6cec2a3212a5c1ce5371b1b786d593d1c395cfda0d41ccc621ea3e8792",
+    "mtime_ns": 1784654702042251112
+  },
+  {
+    "path": "docs/audits/2026-07-20_full_sweep/phase5_results.md",
+    "sha256": "dbc0909be2ec50289fbebafdedf64eecf33972874018527998898ee4d9eaa340",
+    "mtime_ns": 1784634881219719625
+  },
+  {
+    "path": "docs/audits/2026-07-20_full_sweep/phase9_synthesis.md",
+    "sha256": "21c66aa5b60e5723e334740b373085a794a90fe3706fe5947db456e2829f4720",
+    "mtime_ns": 1784655076030737150
+  },
+  {
+    "path": "docs/audits/2026-07-20_full_sweep/phase1_coverage_map.md",
+    "sha256": "e78e48f1aaf096f0314f384c398ffaacceeda0f2a5c22ecbaf2d052b6aaa7daf",
+    "mtime_ns": 1784598201766866408
+  },
+  {
+    "path": "docs/audits/2026-07-20_full_sweep/BASELINE.md",
+    "sha256": "913575448f2699bf7bd312a2f96b6888b154e976255d4f7204b4c6f3b41b6b35",
+    "mtime_ns": 1784557756618609900
+  },
+  {
+    "path": "docs/audits/2026-07-20_full_sweep/phase6_results.md",
+    "sha256": "702ac5bfc87a9f33295342f9a92886bafc3b4444032461c25cf06cbbbad9e1fe",
+    "mtime_ns": 1784634622290765268
+  },
+  {
+    "path": "docs/audits/2026-07-20_full_sweep/phase3_results.md",
+    "sha256": "de5e693ea4453b484bc55913a7703ddd4b13f9f745afc65ffa0c7919cbde88d8",
+    "mtime_ns": 1784615603457206781
+  },
+  {
+    "path": "docs/audits/2026-07-20_full_sweep/FINDINGS.md",
+    "sha256": "e549b09cf2bf2dc9929db491ee0c7181693742ae5345ec59d7911b2f579bbe87",
+    "mtime_ns": 1784657873787958558
+  },
+  {
+    "path": "docs/audits/2026-07-20_full_sweep/phase4_results.md",
+    "sha256": "6db4457108a2a2412d9e9eb62b16c3716bb79417ad164021ab676e1a04b78b67",
+    "mtime_ns": 1784618991159363233
+  },
+  {
+    "path": "docs/audits/2026-07-20_full_sweep/phase2a_results.md",
+    "sha256": "04a7194df5b9d1a8dc787880895fcd44c1faa4e645aa04f6174a49f1059c2f0e",
+    "mtime_ns": 1784598828707400697
+  },
+  {
+    "path": "docs/audits/2026-09-20_jev_full_validation/RESULTS.md",
+    "sha256": "d9b6066d50a4eb798dd2e4bdda80e30385b20770ee30dc503a6d97453d363257",
+    "mtime_ns": 1789871948511298774
+  },
+  {
+    "path": "docs/audits/2026-09-20_jev_full_validation/PROTOCOL.md",
+    "sha256": "880c760dc33eee124e6a0383cecc7c590c67597317f71600a1d68efbca431b60",
+    "mtime_ns": 1789841358401969514
+  },
+  {
+    "path": "docs/audits/2026-09-20_jev_pilot/PILOT_LOG.md",
+    "sha256": "e0874d45fcaa65a8005ddcefc45f7b17b23ae029c7ab57ecb80dda8fadc70a76",
+    "mtime_ns": 1789840443073478760
+  },
+  {
+    "path": "docs/audits/2026-07-10_adversarial_academic_audit/METHODS_VS_STANDARDS.md",
+    "sha256": "19d53feaac0514d17dcca56e3630a0cff3468cb5780a6786c1de9ef88bc1a2ee",
+    "mtime_ns": 1783667683302564512
+  },
+  {
+    "path": "docs/audits/2026-07-10_adversarial_academic_audit/UNRESOLVED_OR_UNVERIFIED.md",
+    "sha256": "f1a6dfa9bc364bc292bf3d0d656038819c966c72f5f98e5f10eb4f8a483d6109",
+    "mtime_ns": 1783668035784462274
+  },
+  {
+    "path": "docs/audits/2026-07-10_adversarial_academic_audit/REPRODUCTION_MATRIX.md",
+    "sha256": "c96717ccbc2ca598ece9164bd22b0ce4973e03ff8ebaaf2619aa0b6ceb7908b6",
+    "mtime_ns": 1783667683356566764
+  },
+  {
+    "path": "docs/audits/2026-07-10_adversarial_academic_audit/EXECUTIVE_AUDIT.md",
+    "sha256": "e36c7051b37303a02228ab85f8e59a7e574257451352eb8f50ea090e65f3a86b",
+    "mtime_ns": 1783668035721978838
+  },
+  {
+    "path": "docs/audits/2026-07-10_adversarial_academic_audit/REPORT_FORMAT_AND_STYLE.md",
+    "sha256": "a9e2b7c2c1f775155dad4a0242e1173bdc1776ce3676c0c7364dad7e47fe6323",
+    "mtime_ns": 1783667683421575889
+  },
+  {
+    "path": "docs/audits/2026-07-15_fable5_full_audit/VERIFICATION.md",
+    "sha256": "4589d2bb748a67fe124ad360efdedbb1d749600201175d2e8c07e3d356c702a3",
+    "mtime_ns": 1784171134046222621
+  },
+  {
+    "path": "docs/audits/2026-07-15_fable5_full_audit/FINDINGS.md",
+    "sha256": "a7438731585bfb26e41ec75c8f7c74ac41d63e893077205046f052912511b7fe",
+    "mtime_ns": 1784109987356264191
+  },
+  {
+    "path": "docs/audits/2026-07-27_claim_sweep/completeness_critic.md",
+    "sha256": "04342a7855a0139a5346b6ffd9375e93c0727bebe929e35cca62c3e63274c46a",
+    "mtime_ns": 1785132637533492119
+  },
+  {
+    "path": "docs/audits/2026-08-24_v4_source_entailment/FINDINGS.md",
+    "sha256": "0d942011fd1d5d4a282ae3d0d1b33989fe4dcc2535acc0834c922a6ecf6ef1b6",
+    "mtime_ns": 1787511138014662150
+  },
+  {
+    "path": "docs/drafts/final_report_visuals_pack.docx",
+    "sha256": "c6edb370ca48b9958fb7fa432854f0eca3265325d767d30f241d84fa9d566a59",
+    "mtime_ns": 1790184194804792279
+  },
+  {
+    "path": "docs/drafts/final_report_missing_parts_draft.docx",
+    "sha256": "bf57407b6c763135708b4bf19da027f82c07b4fa1761f54ad6e47622d6ee944b",
+    "mtime_ns": 1790183435455028455
+  },
+  {
+    "path": "docs/agent_tasks/T35-xstest-api-judge-sensitivity.md",
+    "sha256": "0a8c97812e46405be76471c605d09c8be2d8846042f78eb5aaa16be93fb5fa04",
+    "mtime_ns": 1783801133267185861
+  },
+  {
+    "path": "docs/agent_tasks/T42-external-venue-plan.md",
+    "sha256": "be6195c099ef76f4626e2c32f61de909021792f27eaa4cf5a974e0552b4ed030",
+    "mtime_ns": 1784448875942081541
+  },
+  {
+    "path": "docs/agent_tasks/P1-submission-safety-patch.md",
+    "sha256": "d4171bce43bdb4233ca711bde390905b9965b2a999e75fae3663704642570831",
+    "mtime_ns": 1783996351951051332
+  },
+  {
+    "path": "docs/agent_tasks/T36-T39-hardening-batch.md",
+    "sha256": "842e0b70a9c9cb562c28115b43000f4ec4769798eedb183efea752447c0ff04a",
+    "mtime_ns": 1783843448909137203
+  },
+  {
+    "path": "docs/agent_tasks/T41-phaseC-audit-remediation.md",
+    "sha256": "6ad20c338321ea1ac58d92c2fb70ee3c3f23c9e5adcdfc55a8234c289bc245c4",
+    "mtime_ns": 1784434849541731644
+  },
+  {
+    "path": "docs/agent_tasks/T36-T39-phaseB-residuals.md",
+    "sha256": "e6b9bdef730a3b1ed152bba14af637473e14c8a056f6341767eb322b21be807d",
+    "mtime_ns": 1783872313602522775
+  },
+  {
+    "path": "docs/agent_tasks/2026-08-02-session-handoff.md",
+    "sha256": "4f5d0ca7121cda334f97fb9c4365058c619e7ff0b31ddc7041225374aee1aa11",
+    "mtime_ns": 1786330557395920908
+  },
+  {
+    "path": "docs/agent_tasks/2026-09-26-session-handoff.md",
+    "sha256": "90a631448cf499fce5f77f37d531963447e906ce8664384d65fea753ee82aecc",
+    "mtime_ns": 1790428298560710610
+  },
+  {
+    "path": "docs/agent_tasks/T21-strengthen-results-discussion.md",
+    "sha256": "1812fb3298efd2ace85276e02e631446f52e5610fc8cce38a37d3ac02a669ced",
+    "mtime_ns": 1782963619908642668
+  },
+  {
+    "path": "docs/agent_tasks/codex-meetup-prep.md",
+    "sha256": "1cce6205f1dc75c5fc7be58615e146a098db4b4d8c0781a0552db3d9c35e06f5",
+    "mtime_ns": 1782963619909106630
+  },
+  {
+    "path": "docs/agent_tasks/T22-second-independent-judge.md",
+    "sha256": "006945273ebea510b7d402489594ceaa51591ecaeed1cfce8d454ae59e134097",
+    "mtime_ns": 1782963619909005462
+  },
+  {
+    "path": "docs/agent_tasks/T44-full-sweep-audit-plan.md",
+    "sha256": "953d2a110eefb7b525ce3e7688ee6d8efb54f368f4715a5ac7c671b9f8f09b4f",
+    "mtime_ns": 1784556444590055946
+  },
+  {
+    "path": "docs/agent_tasks/T36-T39-phaseC-draft.md",
+    "sha256": "e3320399a79bd11cb043c3bcc54fbfdec9044483cb8a2cc627bd3970dd39f353",
+    "mtime_ns": 1783998962669907266
+  },
+  {
+    "path": "docs/agent_tasks/T47-T52-report-line-handoff.md",
+    "sha256": "869e3233f113e437cebc7c52e3d7f4a2babeac98c6019ad177883276d01c154c",
+    "mtime_ns": 1785244600087365180
+  },
+  {
+    "path": "docs/agent_tasks/harness-maintenance.md",
+    "sha256": "28aa025b4644c6385d625a432d7a14948312cc2922b1408e8d2df86c587ef908",
+    "mtime_ns": 1780910760767997404
+  },
+  {
+    "path": "docs/architecture/README.md",
+    "sha256": "ee5bfca3921b2b70503647378f48209cb8dd3e094fc1017d97ca966c75769626",
+    "mtime_ns": 1780934270396849058
+  },
+  {
+    "path": "docs/report_versions/changes/report_canonical__v5_512_token_primary_re_base_to_v6_remediated_comparison_draft.full.md",
+    "sha256": "43546bdb5fafc48e6064b6e96e51a042215fea5edc1d1d3153479b5bda7fcd1a",
+    "mtime_ns": 1790490774488833904
+  },
+  {
+    "path": "docs/report_versions/changes/rewrite_interim__interim_progress_selected_t53_artifact_to_interim_v5_retitle_only_of_rewrite_v5.summary.md",
+    "sha256": "b136753398dd7e0a4e71577d65136b6dc4684480fb9b7db628ace81628622a24",
+    "mtime_ns": 1790490782986414330
+  },
+  {
+    "path": "docs/report_versions/changes/rewrite_report__rewrite_v3_selected_plain_academic_voice_to_rewrite_v4_hw0288_funnel_introduction.full.md",
+    "sha256": "45908f5e6d29f3eaa44884ac746e966ca8d1c223587312fd1763b7039a67f1e0",
+    "mtime_ns": 1790490777428181564
+  },
+  {
+    "path": "docs/report_versions/changes/thesis_line__thesis_v3_to_thesis_v4_512_primary_mirror.summary.md",
+    "sha256": "92cb81a5c042e5f054b76c858116dc25e73d1f763a264902ad9720fda58a97ed",
+    "mtime_ns": 1790490775132362313
+  },
+  {
+    "path": "docs/report_versions/changes/rewrite_interim__interim_v4_funnel_intro_comprehensive_fa_to_interim_compact_progress_centred.full.md",
+    "sha256": "0fb8654cb9dc06d4bdb32d8accbeb5914659d4fa280042924cacefae481ae35f",
+    "mtime_ns": 1790490781148500733
+  },
+  {
+    "path": "docs/report_versions/changes/rewrite_report__rewrite_v4_hw0288_funnel_introduction_to_rewrite_v5_language_cleanup_line.summary.md",
+    "sha256": "8954bf87535cb8f3905908585f60a7b8598e05c80c65de5cffd6c854c01055ec",
+    "mtime_ns": 1790490777990746092
+  },
+  {
+    "path": "docs/report_versions/changes/humanized_interim__base_interim_master_to_humanized_interim_alternate.full.md",
+    "sha256": "3c779210ab2900e2dfa2c95bdb456555c991b86eac0dec767a6df1b9b71f9ac1",
+    "mtime_ns": 1790490791188120445
+  },
+  {
+    "path": "docs/report_versions/changes/report_canonical__draft_update_2026_05_24_to_draft_update_2026_06_14.summary.md",
+    "sha256": "28c4140ff1b5bd1be724320ebae09a2be23acbdef2c9b947242d998e898d1f44",
+    "mtime_ns": 1790490763140951894
+  },
+  {
+    "path": "docs/report_versions/changes/rewrite_interim__interim_progress_humanized_prose_variant_to_submitted_interim_literature_review_revi.summary.md",
+    "sha256": "e7f0ece3241d025616f5c9947c69558dcb16fb7e57c26da33058bdd95e21d25a",
+    "mtime_ns": 1790490784287444856
+  },
+  {
+    "path": "docs/report_versions/changes/rewrite_report__rewrite_v2_plain_academic_pass_to_rewrite_v3_selected_plain_academic_voice.full.md",
+    "sha256": "646b6a03aefaa2cc807f037f2e5605ef6a61d13aaf694a4cbabac327a13017d9",
+    "mtime_ns": 1790490776176132568
+  },
+  {
+    "path": "docs/report_versions/changes/rewrite_interim__interim_v5_retitle_only_of_rewrite_v5_to_interim_progress_humanized_prose_variant.summary.md",
+    "sha256": "cfc56f13f742d3636a069e4aa61e455f6d4c0697110510f70f25d65867025675",
+    "mtime_ns": 1790490783899472005
+  },
+  {
+    "path": "docs/report_versions/changes/report_canonical__v4_128_token_era_to_v5_512_token_primary_re_base.summary.md",
+    "sha256": "a41a26a407a2125cf7eb11726dc3a4fb32a33b1c3afefb17104abfd33d03a7c0",
+    "mtime_ns": 1790490770247245507
+  },
+  {
+    "path": "docs/report_versions/changes/rewrite_interim__interim_progress_humanized_prose_variant_to_submitted_interim_literature_review_revi.full.md",
+    "sha256": "6ee6384779db951a94fbe0d11485415f639e59beee87844eab1f1277e33434a9",
+    "mtime_ns": 1790490784287734774
+  },
+  {
+    "path": "docs/report_versions/changes/humanized_interim__base_interim_master_to_humanized_interim_alternate.summary.md",
+    "sha256": "50a16c6f93630dd2c7851bc4fcbbaa47923fb4119c516065bbf875567e90a88e",
+    "mtime_ns": 1790490791187465360
+  },
+  {
+    "path": "docs/report_versions/changes/report_canonical__v5_512_token_primary_re_base_to_v6_remediated_comparison_draft.summary.md",
+    "sha256": "f881ff2e645336893c44f58894cace979db57143f4bc680a6e499749f7b09382",
+    "mtime_ns": 1790490774487541151
+  },
+  {
+    "path": "docs/report_versions/changes/humanized_thesis__base_thesis_v4_to_humanized_thesis_alternate.summary.md",
+    "sha256": "8d4fc79718dfb6ec613ec232e55764377973f560ce95bbae7b36ac6c628cf9e0",
+    "mtime_ns": 1790490790718726462
+  },
+  {
+    "path": "docs/report_versions/changes/rewrite_interim__interim_progress_v2_plain_academic_full__to_interim_progress_v3_restructured_literat.full.md",
+    "sha256": "807e323bbb0873cbb25bdbf9978f3db6ebe92e4b6dcf7641aeb80329c3072749",
+    "mtime_ns": 1790490785895383226
+  },
+  {
+    "path": "docs/report_versions/changes/rewrite_interim__interim_v5_retitle_only_of_rewrite_v5_to_interim_progress_humanized_prose_variant.full.md",
+    "sha256": "c57dfcff9765ca352e5aec025ccca9fb0e180c9d656599cacf7d42df546ad7ae",
+    "mtime_ns": 1790490783899941798
+  },
+  {
+    "path": "docs/report_versions/changes/rewrite_interim__interim_compact_progress_centred_to_interim_progress_selected_t53_artifact.summary.md",
+    "sha256": "0c1614cec3bf8bc52d7bdbad4ac2de31e55b00ebaf212827072220e9b8934afa",
+    "mtime_ns": 1790490782126465280
+  },
+  {
+    "path": "docs/report_versions/changes/rewrite_interim__interim_progress_selected_t53_artifact_to_interim_v5_retitle_only_of_rewrite_v5.full.md",
+    "sha256": "ecf993a2c41b91ae96340823661543400a06fecd64b7acee4a95035c05e4fbb2",
+    "mtime_ns": 1790490782987722250
+  },
+  {
+    "path": "docs/report_versions/changes/rewrite_report__rewrite_v1_corpus_informed_to_rewrite_v2_plain_academic_pass.summary.md",
+    "sha256": "cc947eed9e3e5efb175abf09fc372e9525376b674078f9055a0724541ee565db",
+    "mtime_ns": 1790490775792690065
+  },
+  {
+    "path": "docs/report_versions/changes/humanized_thesis__base_thesis_v4_to_humanized_thesis_alternate.full.md",
+    "sha256": "f8c63fcacee8b177b77f786ddd331427f3a6ea34e0bb474a76f80b45df0af97f",
+    "mtime_ns": 1790490790719090963
+  },
+  {
+    "path": "docs/report_versions/changes/report_canonical__first_full_draft_2026_05_23_to_draft_update_2026_05_24.full.md",
+    "sha256": "efeb824121ecfeb66bf4af2066724e3c00bd1ae3d88db7d6dfc2d9ae8a996e56",
+    "mtime_ns": 1790490762818583959
+  },
+  {
+    "path": "docs/report_versions/changes/rewrite_interim__interim_v3_retitle_only_of_rewrite_v3_to_interim_v4_funnel_intro_comprehensive_fa.summary.md",
+    "sha256": "e77552c2c610d23bf99df9c60b779ef20c574802159d59b276e7b61c33613577",
+    "mtime_ns": 1790490779929620382
+  },
+  {
+    "path": "docs/report_versions/changes/rewrite_report__rewrite_v2_plain_academic_pass_to_rewrite_v3_selected_plain_academic_voice.summary.md",
+    "sha256": "0e1c7c64e5b919be1a106277ee23e440928de6f47bc9e38ec2e36fd0de0ce7d7",
+    "mtime_ns": 1790490776175935151
+  },
+  {
+    "path": "docs/report_versions/changes/thesis_line__thesis_v2_to_thesis_v3.summary.md",
+    "sha256": "850f65245e3e5125b42d267c73fd49b3b87d250dad7162c3146894ecd4dbfd27",
+    "mtime_ns": 1790490774687125739
+  },
+  {
+    "path": "docs/report_versions/changes/report_canonical__first_full_draft_2026_05_23_to_draft_update_2026_05_24.summary.md",
+    "sha256": "f75be0f491d0959d7109c00a4705def6598e9c5314be986f7665823d5f659fb1",
+    "mtime_ns": 1790490762818107874
+  },
+  {
+    "path": "docs/report_versions/changes/report_canonical__v3_to_v4_128_token_era.full.md",
+    "sha256": "1c474b17f214b1892cab3e6d78bd9301a2543a8816fbeb2495cfdfa6f42bbe0c",
+    "mtime_ns": 1790490766210782841
+  },
+  {
+    "path": "docs/report_versions/changes/report_canonical__v4_128_token_era_to_v5_512_token_primary_re_base.full.md",
+    "sha256": "55e77ef2cf4339058cbf524f8bd5601468e6470eefb8ea3ba816ffe8e7fbb089",
+    "mtime_ns": 1790490770249360639
+  },
+  {
+    "path": "docs/report_versions/changes/rewrite_report__rewrite_v4_hw0288_funnel_introduction_to_rewrite_v5_language_cleanup_line.full.md",
+    "sha256": "91af112ebaa0452ca75ee75840af0a111eed9f13a8e7168cf30e8cd32d27fcd0",
+    "mtime_ns": 1790490777991128593
+  },
+  {
+    "path": "docs/report_versions/changes/rewrite_interim__interim_compact_progress_centred_to_interim_progress_selected_t53_artifact.full.md",
+    "sha256": "c9c150ce621d23f58767c778cc2acc52896a8641685ec5757ea9f8af589b9b79",
+    "mtime_ns": 1790490782126889573
+  },
+  {
+    "path": "docs/report_versions/changes/report_canonical__draft_update_2026_06_14_to_v2.summary.md",
+    "sha256": "ead97ca9dfde320422577972d6a4a178ec15112821522181dfc6c4ed369e2876",
+    "mtime_ns": 1790490763548962432
+  },
+  {
+    "path": "docs/report_versions/changes/report_canonical__v2_to_v3.summary.md",
+    "sha256": "21c7c46408e247bbd5339351d587aa72579dba696c4f789deddd6e2044855f7d",
+    "mtime_ns": 1790490764880949223
+  },
+  {
+    "path": "docs/report_versions/changes/report_canonical__v3_to_v4_128_token_era.summary.md",
+    "sha256": "bcaa0f61f12852cd22f4766a43996e7c9ff9cf011ec4e490799897c0ae56bd90",
+    "mtime_ns": 1790490766210565173
+  },
+  {
+    "path": "docs/report_versions/changes/rewrite_interim__interim_v1_retitle_only_of_rewrite_v1_to_interim_v3_retitle_only_of_rewrite_v3.summary.md",
+    "sha256": "a4a038c1981ba48c2de8f69e7b8ef8021f5734e0aaae1de889c6545e71ce38b5",
+    "mtime_ns": 1790490778640319643
+  },
+  {
+    "path": "docs/report_versions/changes/thesis_line__thesis_v1_early_to_thesis_v2.full.md",
+    "sha256": "f9d0d707199c8b83225503b32cdb6f1e20a242c135fab227a8b61118294609e3",
+    "mtime_ns": 1790490774550487724
+  },
+  {
+    "path": "docs/report_versions/changes/humanized_report__base_report_v5_to_humanized_report_alternate.full.md",
+    "sha256": "75d68c7f67a8734311dbdbc67e2ee904a661da16a186f019a83958ba04a1c010",
+    "mtime_ns": 1790490789718014509
+  },
+  {
+    "path": "docs/report_versions/changes/rewrite_report__rewrite_v3_selected_plain_academic_voice_to_rewrite_v4_hw0288_funnel_introduction.summary.md",
+    "sha256": "72e6ffe148a7997f0d45ddf93f607b0ea6fea6c6511c1999b5e09bdf6643c679",
+    "mtime_ns": 1790490777427817396
+  },
+  {
+    "path": "docs/report_versions/changes/rewrite_report__rewrite_v1_corpus_informed_to_rewrite_v2_plain_academic_pass.full.md",
+    "sha256": "aab5c1cde9854b6c62c0eaf72e3a20631b87ed54f7fb4f39745beecb79af83ea",
+    "mtime_ns": 1790490775793225733
+  },
+  {
+    "path": "docs/report_versions/changes/thesis_line__thesis_v3_to_thesis_v4_512_primary_mirror.full.md",
+    "sha256": "f332cc4d11812e98cc00902ab538c1134f67e3d5b4823d359cd225e22d982287",
+    "mtime_ns": 1790490775133071732
+  },
+  {
+    "path": "docs/report_versions/changes/rewrite_interim__interim_v4_funnel_intro_comprehensive_fa_to_interim_compact_progress_centred.summary.md",
+    "sha256": "10e8a0a9bcc70241b4128d3cc4c43c91b37dedb5d9506656a184d906c3f0c780",
+    "mtime_ns": 1790490781147871731
+  },
+  {
+    "path": "docs/report_versions/changes/rewrite_interim__interim_v3_retitle_only_of_rewrite_v3_to_interim_v4_funnel_intro_comprehensive_fa.full.md",
+    "sha256": "09b1e4f5c4f0a52e0bd772b3e212540665a7ba1c80421040556b54fac1602a1d",
+    "mtime_ns": 1790490779930002717
+  },
+  {
+    "path": "docs/report_versions/changes/rewrite_interim__submitted_interim_literature_review_revi_to_interim_progress_v2_plain_academic_full_.full.md",
+    "sha256": "153c375f32c8525626e0db40e28a373c7c6177e7b3dfa3ecbf96b482ef59e27d",
+    "mtime_ns": 1790490784662911208
+  },
+  {
+    "path": "docs/report_versions/changes/rewrite_interim__submitted_interim_literature_review_revi_to_interim_progress_v2_plain_academic_full_.summary.md",
+    "sha256": "6343383bf15fd31509676c57f5a5f4f8c5e0f8b57c2c724251db52b28a84c7d3",
+    "mtime_ns": 1790490784662606499
+  },
+  {
+    "path": "docs/report_versions/changes/report_canonical__draft_update_2026_06_14_to_v2.full.md",
+    "sha256": "1cf42c8c28b3abab19e594a81cfb5252333723dd3684dbe30a86c503cc4c7fce",
+    "mtime_ns": 1790490763549395059
+  },
+  {
+    "path": "docs/report_versions/changes/report_canonical__v2_to_v3.full.md",
+    "sha256": "59f92c795fd7e10612967cfa68d724c0590eaf260ac680c02e0c8e8dfbaf4307",
+    "mtime_ns": 1790490764881493808
+  },
+  {
+    "path": "docs/report_versions/changes/rewrite_interim__interim_v1_retitle_only_of_rewrite_v1_to_interim_v3_retitle_only_of_rewrite_v3.full.md",
+    "sha256": "824e2beab823cdb74de3a035a40b856645e5f8e0484683e7f76778c96526e1cb",
+    "mtime_ns": 1790490778640919978
+  },
+  {
+    "path": "docs/report_versions/changes/rewrite_interim__interim_progress_v2_plain_academic_full__to_interim_progress_v3_restructured_literat.summary.md",
+    "sha256": "c0be5444f4f08d33cd8ce6120b8ce5a8e62b8f22fca743c637b1d6c3cc191a40",
+    "mtime_ns": 1790490785895105517
+  },
+  {
+    "path": "docs/report_versions/changes/humanized_report__base_report_v5_to_humanized_report_alternate.summary.md",
+    "sha256": "0206545e63d088b755cc00dbaf0f09ea965142b7139ce51830752e23552f4bf8",
+    "mtime_ns": 1790490789716633672
+  },
+  {
+    "path": "docs/report_versions/changes/thesis_line__thesis_v1_early_to_thesis_v2.summary.md",
+    "sha256": "88c6b1d33b97ba61873a5d21f234f0c640f1c14dfae8d7a975bdc59ee56ef28a",
+    "mtime_ns": 1790490774550192557
+  },
+  {
+    "path": "docs/report_versions/changes/report_canonical__draft_update_2026_05_24_to_draft_update_2026_06_14.full.md",
+    "sha256": "8fb125734ff8e6eda59b7a9bd106d4d87875fc4e0495d8beb584af79195dbb2f",
+    "mtime_ns": 1790490763141473062
+  },
+  {
+    "path": "docs/report_versions/changes/thesis_line__thesis_v2_to_thesis_v3.full.md",
+    "sha256": "908e32fee8f2062940a26dde8db6f536a2b6584f0581bb3827ba0d41c30fa4be",
+    "mtime_ns": 1790490774687322115
+  },
+  {
+    "path": "docs/viva/FYP_Viva_Deck.pptx",
+    "sha256": "e1d7a7abb1603933537cb508a62343e87a597e911b0834ab4c12ce4cb0a5ccf5",
+    "mtime_ns": 1790183802773431411
+  },
+  {
+    "path": "docs/viva/FYP_Viva_Deck.html",
+    "sha256": "ed13bae4d3dde7ffa5358ecf3e6544aca2be5f76dc620047654dc39465940dda",
+    "mtime_ns": 1790184193256392267
+  },
+  {
+    "path": "docs/viva/VIVA_QA_BANK.md",
+    "sha256": "d2503c9b566ca155db21e036a69e838bacee401cb5f69f5c241f7eee3277b772",
+    "mtime_ns": 1786373086427677771
+  },
+  {
+    "path": "docs/media/fyp_explainer_66s_source.html",
+    "sha256": "a4617a65ba4f6820005bd8d264d2cf3b529420c7b62f016b79cb8ba338fce41a",
+    "mtime_ns": 1790395929039212751
+  },
+  {
+    "path": "results/analysis/pair_interpretations.SUPERSEDED.md",
+    "sha256": "b0e1a2cc430779fac0d48992df8712d31a3093dea13407903550e6fa008e45fd",
+    "mtime_ns": 1783750513505120407
+  },
+  {
+    "path": "human_labels/response_quality_pilot.html",
+    "sha256": "dbb30bd286efe4e7dbafa13dee474f5d4ae2b2b0b03dbca40a6bf355ee665b78",
+    "mtime_ns": 1789877115162696955
+  },
+  {
+    "path": "human_labels/annotate.html",
+    "sha256": "dce19677b587fcf3f0f217b4f59eb45576ef9d89582f3e5a2205ce5f0295aa1a",
+    "mtime_ns": 1782972345715400754
+  },
+  {
+    "path": "human_labels/quant_effect_pilot.html",
+    "sha256": "953598edf47e814d8e029573703351dc679c25676d0bd477ddde19a837c780b7",
+    "mtime_ns": 1790080248462903516
+  },
+  {
+    "path": "human_labels/xstest_annotate.html",
+    "sha256": "d18d162b2c7baab7f35502946c101d34d392c6ec04471ca12eed6cbe1d4fb906",
+    "mtime_ns": 1784359960183597198
+  },
+  {
+    "path": "scripts/report_tools/README.md",
+    "sha256": "064571774de2e2bd8a5321ec9e2f84b3ff8ca8f5bf87c2a84004b732992399bf",
+    "mtime_ns": 1790446744629821908
+  },
+  {
+    "path": ".understand-anything/atlas.html",
+    "sha256": "41a974237e168c4afd73d37241f98ca88718887c21f8ebc27e5edbceeaffa7fc",
+    "mtime_ns": 1783389943982252660
+  },
+  {
+    "path": "Sources/[22] Zhang et al. - SafetyBench - Evaluating the safety of large language models.pdf",
+    "sha256": "0e44a4125ba303e110f18dccf4cd705f196c1d59608f9ea2b0b45c9c63a42640",
+    "mtime_ns": 1787404472788567184
+  },
+  {
+    "path": "Sources/[34] Guo et al. - On calibration of modern neural networks.pdf",
+    "sha256": "df7c93f97204f8a3c2b10f6d5bf5265baac25f00c1ae3b473a3e1dbc102dacb2",
+    "mtime_ns": 1787404497390278861
+  },
+  {
+    "path": "Sources/[26] Perez et al. - Red teaming language models with language models.pdf",
+    "sha256": "f1f838d6488b9634a7650ecf096ad6be5fe583f377dd45253c547faa312fc0c0",
+    "mtime_ns": 1787404482877964626
+  },
+  {
+    "path": "Sources/[25] Zou et al. - Universal and transferable adversarial attacks on aligned language models.pdf",
+    "sha256": "ab8745c2e3c6dfd939d5a590760bbae4682d92db010947cbb306688ad086bfd1",
+    "mtime_ns": 1787404478276711484
+  },
+  {
+    "path": "Sources/[32] Dettmers et al. - QLoRA - Efficient finetuning of quantized LLMs.pdf",
+    "sha256": "d60251227e6a42d3662bb3b9a93d86464dbff07755c1ae08014edda4608516cf",
+    "mtime_ns": 1787404492130258496
+  },
+  {
+    "path": "Sources/[30] Xiao et al. - SmoothQuant - Accurate and efficient post-training quantization for large language models.pdf",
+    "sha256": "551636e4e0bd9dda9b01186473bc46c72c56e0c190a28fe6b7ed4fa80055372e",
+    "mtime_ns": 1785055422673029038
+  },
+  {
+    "path": "Sources/[06] Frantar et al. - GPTQ - Accurate post-training quantization for generative pre-trained transformers.pdf",
+    "sha256": "35e339171cd48bbf8dda246bd018b11aa33a5cda0c4a1587cdae574208f56396",
+    "mtime_ns": 1785055401257864088
+  },
+  {
+    "path": "Sources/[10.2] Kharinaev et al. - Investigating the impact of quantization methods on the safety and reliability of large language models (arXiv v2).pdf",
+    "sha256": "62f31e67327f51a4950a4238e25d4f48ac5f1fe2a95faabf466f6a868982a78b",
+    "mtime_ns": 1787404451637272967
+  },
+  {
+    "path": "Sources/[16] Qi et al. - Safety alignment should be made more than just a few tokens deep.pdf",
+    "sha256": "aa33eef3883547e13d7cf0b3fea52704212162a7b417c78cb18cffd85f5e58b3",
+    "mtime_ns": 1785055462796688226
+  },
+  {
+    "path": "Sources/[44] Han et al. - WildGuard - Open one-stop moderation tools for safety risks, jailbreaks, and refusals of LLMs.pdf",
+    "sha256": "948b5cb6270501197f40f0013bc5c1e02e20eb366f0eb5f9da58d54a59e40ae1",
+    "mtime_ns": 1785055509223358647
+  },
+  {
+    "path": "Sources/[62] Krumdick et al. - No free labels - Limitations of LLM-as-a-judge without human grounding.pdf",
+    "sha256": "936d54c0db94a565ccdc8dd61868fbf0d2d8c2ed97efe215c9618be9915f5b46",
+    "mtime_ns": 1787405596559569564
+  },
+  {
+    "path": "Sources/[21] Wang et al. - DecodingTrust - A comprehensive assessment of trustworthiness in GPT models.pdf",
+    "sha256": "0af07f4ded9e4d2c4ae1cc3ec5c765318d6e804a46211d206c1cbea9967dc8fe",
+    "mtime_ns": 1787404467702361751
+  },
+  {
+    "path": "Sources/[55] Card et al. - With little power comes great responsibility.pdf",
+    "sha256": "e85e5c7270363a0b3d6dccee3d4a3eec4a209ce8ee30246baa412ba7953f2c9f",
+    "mtime_ns": 1785061698049014788
+  },
+  {
+    "path": "Sources/[03] Abouelenin et al. - Phi-4-Mini technical report - Compact yet powerful multimodal language models via Mixture-of-LoRAs.pdf",
+    "sha256": "51edb849958011b97b5aad904deebd9a4ea31d3c5839741d5e52810eaa9b3bcc",
+    "mtime_ns": 1787405570493360302
+  },
+  {
+    "path": "Sources/[G1] Gholami et al. - A survey of quantization methods for efficient neural network inference.pdf",
+    "sha256": "732ed7a6a646d4dcf2928ab1681578a2e35f5995c918f66f84a85d2f1128176d",
+    "mtime_ns": 1790415486126633289
+  },
+  {
+    "path": "Sources/[60] Sainz et al. - NLP evaluation in trouble - On the need to measure LLM data contamination for each benchmark.pdf",
+    "sha256": "54ec9661a92131622dfc212302c3b244c445a101bdcf6d744a1c85515cd179b7",
+    "mtime_ns": 1785061702366761592
+  },
+  {
+    "path": "Sources/[51] Jiang et al. - Mistral 7B.pdf",
+    "sha256": "dfbac4e7035344b305c947481f2e7e8a02f7a24a563917eb6e47f6591d14c5ae",
+    "mtime_ns": 1787405584428968135
+  },
+  {
+    "path": "Sources/[29] Badshah et al. - Quantifying the capabilities of LLMs across scale and precision.pdf",
+    "sha256": "d471ea851908bdfc58b790898af8c7df78e29baf0f2ab66305194af94f8ee8b7",
+    "mtime_ns": 1785061703639949475
+  },
+  {
+    "path": "Sources/[17.2] Qi et al. - Fine-tuning aligned language models compromises safety, even when users do not intend to! (arXiv v1).pdf",
+    "sha256": "252e77d3e7b7f340c5eedabcb4c946f05c3218d14b7638fa22b01569f8bda3d4",
+    "mtime_ns": 1787405581415718253
+  },
+  {
+    "path": "Sources/[28] Clark et al. - Think you have solved question answering Try ARC, the AI2 reasoning challenge.pdf",
+    "sha256": "b24b722c93f304df6c3b4a48ebbe429e836f3b3e80837bb613112398e59bde43",
+    "mtime_ns": 1787404486690497492
+  },
+  {
+    "path": "Sources/[10.1] Kharinaev et al. - Investigating the impact of quantization methods on the safety and reliability of large language models (IEEE Access version of record).pdf",
+    "sha256": "65815bd38cd36426c46937779627b89018a868560c293c76e66bc03374f04ca9",
+    "mtime_ns": 1787404800947744531
+  },
+  {
+    "path": "Sources/[24.2] Mazeika et al. - HarmBench - A standardized evaluation framework for automated red teaming and robust refusal (author camera-ready).pdf",
+    "sha256": "c4c957a9b337783cf39502bb0e4c850b511c21f1498b75d3c339d438c50cd53b",
+    "mtime_ns": 1785061702703915391
+  },
+  {
+    "path": "Sources/[23] Ouyang et al. - Training language models to follow instructions with human feedback.pdf",
+    "sha256": "4ed5ef926ed5ad385d30ee4319f9b13650da29a3f015bc4e888bd669ee4670e5",
+    "mtime_ns": 1787404476399642158
+  },
+  {
+    "path": "Sources/[39] Dong et al. - Durable quantization conditioned misalignment attack on large language models.pdf",
+    "sha256": "45377a29b4c9e56dc47ef21708411c122ec094923ec9b66744ef143f83d4f7f9",
+    "mtime_ns": 1785055453737429343
+  },
+  {
+    "path": "Sources/[14] Bai et al. - Training a helpful and harmless assistant with reinforcement learning from human feedback.pdf",
+    "sha256": "26e390d4f76938d2e2591225603637c643cc108e94afb756c65f5d2e0fc9037b",
+    "mtime_ns": 1787405574498283752
+  },
+  {
+    "path": "Sources/[24.1] Mazeika et al. - HarmBench - A standardized evaluation framework for automated red teaming and robust refusal (PMLR v235 version of record).pdf",
+    "sha256": "6b87608143d17d5b2ae4f26f06892f41a2d2a356f83091d6f4920392e5dba56b",
+    "mtime_ns": 1787406426572879693
+  },
+  {
+    "path": "Sources/[48] Wei et al. - Jailbroken - How does LLM safety training fail.pdf",
+    "sha256": "6ce44fb3d6363955ae2c34f6391f5daa4e7cb2f63201ef4a85ff618f9eba56e4",
+    "mtime_ns": 1787404506014682261
+  },
+  {
+    "path": "Sources/[33] Dettmers et al. - LLM.int8() - 8-bit matrix multiplication for transformers at scale.pdf",
+    "sha256": "a7de7700cb8d0a36eb1c7926add3ec10530f53be8d81c681e7de372586d58f77",
+    "mtime_ns": 1787404495493877199
+  },
+  {
+    "path": "Sources/[02] Grattafiori et al. - The Llama 3 herd of models.pdf",
+    "sha256": "481f1599468f95a07d05e97fafe55bbe786dc1624c6f881bcb4c7d14c933d083",
+    "mtime_ns": 1787405564082869949
+  },
+  {
+    "path": "Sources/[09] Li et al. - Evaluating quantized large language models.pdf",
+    "sha256": "b23da5a1f66af7b35b36432ed75aade61face98d2f23ad5f87aa4abea4960b01",
+    "mtime_ns": 1787404449897832027
+  },
+  {
+    "path": "Sources/[46] Kim et al. - Prometheus 2 - An open source language model specialized in evaluating other language models.pdf",
+    "sha256": "11c31730dfe0a686326437e32fa176b533519aeffb05e0f57f2b5f6d91ef6161",
+    "mtime_ns": 1785055521944208437
+  },
+  {
+    "path": "Sources/[43] Chao et al. - JailbreakBench - An open robustness benchmark for jailbreaking large language models.pdf",
+    "sha256": "39f5de0d01eacadfaa6dfe217e14bb43f1edfe269955e7afacf1d8fec2ef64ce",
+    "mtime_ns": 1785055492224534113
+  },
+  {
+    "path": "Sources/[45] Wang et al. - Do-Not-Answer - Evaluating safeguards in LLMs.pdf",
+    "sha256": "16948e7c055637c140322fc121e8dc1fd401c416c702c94e29992815192a6b4b",
+    "mtime_ns": 1785055512550386626
+  },
+  {
+    "path": "Sources/[19] Cui et al. - OR-Bench - An over-refusal benchmark for large language models.pdf",
+    "sha256": "9c7eeeb3d51fd0540d8ba413d45ad65bdda7ab004b7ac46207f00ba2c1f0ec80",
+    "mtime_ns": 1785055509588613327
+  },
+  {
+    "path": "Sources/[41] Souly et al. - A StrongREJECT for empty jailbreaks.pdf",
+    "sha256": "600b382443b3cdab5dfacffde39c96cee7887742ff888d242cbd45cbce199cb0",
+    "mtime_ns": 1785055482874720427
+  },
+  {
+    "path": "Sources/README.md",
+    "sha256": "0472fcf1cddffeef18aa82379c6de3ee15aba148c894ed660a5105b9ec72667e",
+    "mtime_ns": 1790416023964925882
+  },
+  {
+    "path": "Sources/[01] Yang et al. - Qwen3 technical report.pdf",
+    "sha256": "84a5e2b1fa04bb774bf12ae606d1e6d9dd2147ed2ebe78a4cfeb91ba380ffdd5",
+    "mtime_ns": 1787405561925931361
+  },
+  {
+    "path": "Sources/[61] Gu et al. - A survey on LLM-as-a-judge.pdf",
+    "sha256": "b9aa718f833b295d3790820d9d2f844c8445dfd3bec7bf3bd5136d1faaef1c0b",
+    "mtime_ns": 1787405593353140703
+  },
+  {
+    "path": "Sources/[31] Frantar et al. - SparseGPT - Massive language models can be accurately pruned in one-shot.pdf",
+    "sha256": "c7a410b7fee0aff4756159e1d1c455f6ad033bd8e7129b0fcacc3f7abbf434e2",
+    "mtime_ns": 1787404488632458740
+  },
+  {
+    "path": "Sources/[17.1] Qi et al. - Fine-tuning aligned language models compromises safety, even when users do not intend to! (ICLR 2024 camera-ready).pdf",
+    "sha256": "ac7305aacd70eb44d64616783b3aad203b73f0c34869cf6f4c893f32d2da599f",
+    "mtime_ns": 1787406008550853200
+  },
+  {
+    "path": "Sources/[27] Hendrycks et al. - Measuring massive multitask language understanding.pdf",
+    "sha256": "d3a7b0f8589f5365ebfd34a3876a9a8b3fde83e0adb9ed19ccf8f0034bb48fc1",
+    "mtime_ns": 1787404485029792184
+  },
+  {
+    "path": "Sources/[35] Belkhiter et al. - HarmLevelBench - Evaluating harm-level compliance and the impact of quantization on model alignment.pdf",
+    "sha256": "ccbd0d619cac12abdb586d6e80c645c255a314ad471f0a7b3b2af9ad6b5853f7",
+    "mtime_ns": 1787404500208434976
+  },
+  {
+    "path": "Sources/[15] Arditi et al. - Refusal in language models is mediated by a single direction.pdf",
+    "sha256": "00b84fce7160c8cec3ad5c02dd434292ec386e4b97a5d0e53c03fa40a0854cc6",
+    "mtime_ns": 1787405577854514510
+  },
+  {
+    "path": "Sources/[20] Huang et al. - Position - TrustLLM - Trustworthiness in large language models.pdf",
+    "sha256": "271df3ae5a8550838ba357392eec39f58617ff1952e6e0390dd802ad5784d9b5",
+    "mtime_ns": 1787404460617855064
+  },
+  {
+    "path": "Sources/[12] Egashira et al. - Exploiting LLM quantization.pdf",
+    "sha256": "fd450776b4ed7f0ec570e92849f89c6dee1c50521d347291b3601bf9800c311d",
+    "mtime_ns": 1787404458422407586
+  },
+  {
+    "path": "Sources/[13] Marchisio et al. - How does quantization affect multilingual LLMs.pdf",
+    "sha256": "c575c34637df4fcfaf0f36687d31fc42d73b8f5bab337f941ad6e97bf837ab62",
+    "mtime_ns": 1785061700904890234
+  },
+  {
+    "path": "Sources/[47] Zheng et al. - Judging LLM-as-a-judge with MT-Bench and Chatbot Arena.pdf",
+    "sha256": "1574982845157569b85c1214bfa9987000384d7a5e3b5fbdcc5a29afec59cb81",
+    "mtime_ns": 1785055519281870634
+  },
+  {
+    "path": "Sources/[36] Chen et al. - Assessing safety risks and quantization-aware safety patching for quantized large language models.pdf",
+    "sha256": "fd3b4863896dc5769206ac49408072ea960b4dbc6b782036a260b877bf8f0293",
+    "mtime_ns": 1787404502821257740
+  },
+  {
+    "path": "Sources/[37] Hong et al. - Decoding compressed trust - Scrutinizing the trustworthiness of efficient LLMs under compression.pdf",
+    "sha256": "da1586456199f8949da49e3a69b1f0f6a72cf3ba31baf6fdf5413462ab82930a",
+    "mtime_ns": 1785061698925101689
+  },
+  {
+    "path": "Sources/[08] Jin et al. - A comprehensive evaluation of quantization strategies for large language models.pdf",
+    "sha256": "fdf89c38a93fd00054c3b9dd8caa3ad74777a09f90a1ad6e2953d9ce37380ac0",
+    "mtime_ns": 1787404447469275487
+  },
+  {
+    "path": "Sources/[18] R\u00f6ttger et al. - XSTest - A test suite for identifying exaggerated safety behaviours in large language models.pdf",
+    "sha256": "094ef8a30e2609d1b62ac53aa628a0524fc3a2f6e0eecd5441d5d76b789502a0",
+    "mtime_ns": 1785062209557469648
+  },
+  {
+    "path": "Sources/[38] Shao et al. - OmniQuant - Omnidirectionally calibrated quantization for large language models.pdf",
+    "sha256": "a0afb17b6884f17a9a08229c3010f9008524f984b1dfce15ac56f93cd6cca04a",
+    "mtime_ns": 1785055437915324532
+  },
+  {
+    "path": "Sources/[11] Proskurina et al. - When quantization affects confidence of large language models.pdf",
+    "sha256": "53b2752f3349a44b9c51a836dda00015fa31c1777394949fa26f223e7756d024",
+    "mtime_ns": 1787404455184385977
+  },
+  {
+    "path": "Sources/[J1] Jacob et al. - Quantization and training of neural networks for efficient integer-arithmetic-only inference.pdf",
+    "sha256": "049f08b194f03bb401e96c841708da3b71ae0924261224bc34444ebdc41ff675",
+    "mtime_ns": 1790415485987067941
+  },
+  {
+    "path": "Sources/[04] Gemma Team - Gemma 2 - Improving open language models at a practical size.pdf",
+    "sha256": "e81333353e58a01cbca0b6d5aec28caa5a7c6d26b52d227844bcce1bd87dc557",
+    "mtime_ns": 1787405572175551232
+  },
+  {
+    "path": "Sources/[42] Xie et al. - SORRY-Bench - Systematically evaluating large language model safety refusal.pdf",
+    "sha256": "f0f5fabf627af28c155df5436a9fe0201d43cabf2d8f18a89d7d01e2edd0fe9f",
+    "mtime_ns": 1785055501315919668
+  },
+  {
+    "path": "Sources/[40] Li et al. - Safety layers in aligned large language models - The key to LLM security.pdf",
+    "sha256": "c2f160e2ef336d32f984b932d38080a6a1fcf96704c58e72bb791e8356724a63",
+    "mtime_ns": 1785055472910320242
+  },
+  {
+    "path": "Sources/[58] Inan et al. - Llama Guard - LLM-based input-output safeguard for human-AI conversations.pdf",
+    "sha256": "fc5a3690f3a7771d7c429b6deb73e9e95ac4aa879fce490563c5eeb4f7ad2f33",
+    "mtime_ns": 1787405589355627565
+  },
+  {
+    "path": "Sources/[56] Artstein et al. - Survey article - Inter-coder agreement for computational linguistics.pdf",
+    "sha256": "1729af43712921de3857555972c6a3376d66bcba2474f81a32cddf4f98aef058",
+    "mtime_ns": 1787405587723732947
+  },
+  {
+    "path": "Sources/[07] Dettmers et al. - The case for 4-bit precision - k-bit inference scaling laws.pdf",
+    "sha256": "5800b6dabd730a17aa309da46ba0b322bdc00c359a0eb7d3f4241810f515a089",
+    "mtime_ns": 1785061698413334746
+  },
+  {
+    "path": "Sources/[05] Lin et al. - AWQ - Activation-aware weight quantization for on-device LLM compression and acceleration.pdf",
+    "sha256": "cd7b88325267627b7159dfc32d3ee3fc5430718bd722afee6da25e14ff7525d6",
+    "mtime_ns": 1785055422014238460
+  },
+  {
+    "path": "Sources/statistical_methods/bh.pdf",
+    "sha256": "f3f7e2352a941403e812b7b5afee6094c9a31002d725dfcc25fc60ca3c240eab",
+    "mtime_ns": 1788844834133102298
+  },
+  {
+    "path": "Sources/statistical_methods/fagerland.pdf",
+    "sha256": "0e57fe03c66c990290d9631da0de0202b8d0090418cb1317368142edf60e3867",
+    "mtime_ns": 1788845113516017878
+  },
+  {
+    "path": "Sources/statistical_methods/landis.pdf",
+    "sha256": "009959c0b4f448462d54db6f0eb24e1a7c06c402293a37f9cd4f08eb2b7a500a",
+    "mtime_ns": 1788844828677992836
+  },
+  {
+    "path": "Sources/statistical_methods/sas.pdf",
+    "sha256": "371375a491fc525d3ec14c5e47b256c946988aeaf094e7fd5ef477285f8ab152",
+    "mtime_ns": 1788845117992110384
+  },
+  {
+    "path": "Sources/statistical_methods/cohen1986.pdf",
+    "sha256": "0cb365f192813cdcfcf5c1ce9369147527036d49ce01af6ba06725725392416c",
+    "mtime_ns": 1788845108016310608
+  },
+  {
+    "path": "Sources/statistical_methods/efron1993.pdf",
+    "sha256": "5ff22bcd8a0b3f28f170176e2eba6e68cdfd9c334d667dd5a9e30ae43fb09bde",
+    "mtime_ns": 1788873492635552439
+  },
+  {
+    "path": "Sources/statistical_methods/efron1985.pdf",
+    "sha256": "b23bdc5484531190c08a1de7f5879fd97f3e21db94bcc103e1ba22a9308131e7",
+    "mtime_ns": 1788845114865868078
+  },
+  {
+    "path": "Sources/statistical_methods/schuirmann1987.pdf",
+    "sha256": "0adc970703d7eca56083c2a84a9ba6bf114c126287a50a9658dd62c66fb0e8ed",
+    "mtime_ns": 1788873473131863103
+  },
+  {
+    "path": "Sources/statistical_methods/lakens.pdf",
+    "sha256": "e4535da18908b09798bf558553cef02322944e06113e6a4b22402730111f5e60",
+    "mtime_ns": 1788845188261294598
+  },
+  {
+    "path": "world3d/index.html",
+    "sha256": "595ac42bbca51660d4722910292a8b1191257d78ee7744f59ef23b7e997eeec1",
+    "mtime_ns": 1787658381644676098
+  },
+  {
+    "path": "world3d/README.md",
+    "sha256": "cb1e9ca44ab15e34c77e4de83720362fd1d05d70b8f1eaf00509603016e5bd2a",
+    "mtime_ns": 1787666051803304506
+  }
+]

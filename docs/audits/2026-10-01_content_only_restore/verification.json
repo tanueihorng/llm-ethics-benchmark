@@ -1,0 +1,347 @@
+{
+  "passed": 52,
+  "total": 52,
+  "checks": [
+    {
+      "name": "original design: docs/Agentic_AI_Workflow_Report_2026-06-26.docx",
+      "passed": true,
+      "evidence": {
+        "changed_design_parts": [],
+        "coverage": "All HTML styles/element attributes; all Word/PPTX part inventories, formatting XML, relationships and embedded media; text values excluded. Embedded chart workbooks compare every part; only their creation/modification timestamps are normalized."
+      }
+    },
+    {
+      "name": "original design: docs/Codex_Meetup_Agent_Harness_Report.docx",
+      "passed": true,
+      "evidence": {
+        "changed_design_parts": [],
+        "coverage": "All HTML styles/element attributes; all Word/PPTX part inventories, formatting XML, relationships and embedded media; text values excluded. Embedded chart workbooks compare every part; only their creation/modification timestamps are normalized."
+      }
+    },
+    {
+      "name": "original design: docs/Codex_Meetup_Agent_Harness_Report.html",
+      "passed": true,
+      "evidence": {
+        "changed_design_parts": [],
+        "coverage": "All HTML styles/element attributes; all Word/PPTX part inventories, formatting XML, relationships and embedded media; text values excluded. Embedded chart workbooks compare every part; only their creation/modification timestamps are normalized."
+      }
+    },
+    {
+      "name": "no added overlay: docs/Codex_Meetup_Agent_Harness_Report.html",
+      "passed": true,
+      "evidence": "Added details element and its stylesheet absent."
+    },
+    {
+      "name": "original design: docs/FYP_Agent_Harness_Architecture_Guide_2026-06-09.docx",
+      "passed": true,
+      "evidence": {
+        "changed_design_parts": [],
+        "coverage": "All HTML styles/element attributes; all Word/PPTX part inventories, formatting XML, relationships and embedded media; text values excluded. Embedded chart workbooks compare every part; only their creation/modification timestamps are normalized."
+      }
+    },
+    {
+      "name": "original design: docs/agent_harness_showcase.html",
+      "passed": true,
+      "evidence": {
+        "changed_design_parts": [],
+        "coverage": "All HTML styles/element attributes; all Word/PPTX part inventories, formatting XML, relationships and embedded media; text values excluded. Embedded chart workbooks compare every part; only their creation/modification timestamps are normalized."
+      }
+    },
+    {
+      "name": "no added overlay: docs/agent_harness_showcase.html",
+      "passed": true,
+      "evidence": "Added details element and its stylesheet absent."
+    },
+    {
+      "name": "original design: docs/agentic_ai_report.html",
+      "passed": true,
+      "evidence": {
+        "changed_design_parts": [],
+        "coverage": "All HTML styles/element attributes; all Word/PPTX part inventories, formatting XML, relationships and embedded media; text values excluded. Embedded chart workbooks compare every part; only their creation/modification timestamps are normalized."
+      }
+    },
+    {
+      "name": "no added overlay: docs/agentic_ai_report.html",
+      "passed": true,
+      "evidence": "Added details element and its stylesheet absent."
+    },
+    {
+      "name": "original design: docs/fyp-report-defense-deck-2026-07.html",
+      "passed": true,
+      "evidence": {
+        "changed_design_parts": [],
+        "coverage": "All HTML styles/element attributes; all Word/PPTX part inventories, formatting XML, relationships and embedded media; text values excluded. Embedded chart workbooks compare every part; only their creation/modification timestamps are normalized."
+      }
+    },
+    {
+      "name": "no added overlay: docs/fyp-report-defense-deck-2026-07.html",
+      "passed": true,
+      "evidence": "Added details element and its stylesheet absent."
+    },
+    {
+      "name": "original design: docs/fyp_architecture.html",
+      "passed": true,
+      "evidence": {
+        "changed_design_parts": [],
+        "coverage": "All HTML styles/element attributes; all Word/PPTX part inventories, formatting XML, relationships and embedded media; text values excluded. Embedded chart workbooks compare every part; only their creation/modification timestamps are normalized."
+      }
+    },
+    {
+      "name": "no added overlay: docs/fyp_architecture.html",
+      "passed": true,
+      "evidence": "Added details element and its stylesheet absent."
+    },
+    {
+      "name": "original design: docs/fyp_project_explainer_deck.pptx",
+      "passed": true,
+      "evidence": {
+        "changed_design_parts": [],
+        "coverage": "All HTML styles/element attributes; all Word/PPTX part inventories, formatting XML, relationships and embedded media; text values excluded. Embedded chart workbooks compare every part; only their creation/modification timestamps are normalized."
+      }
+    },
+    {
+      "name": "original design: docs/fyp_showcase.html",
+      "passed": true,
+      "evidence": {
+        "changed_design_parts": [],
+        "coverage": "All HTML styles/element attributes; all Word/PPTX part inventories, formatting XML, relationships and embedded media; text values excluded. Embedded chart workbooks compare every part; only their creation/modification timestamps are normalized."
+      }
+    },
+    {
+      "name": "no added overlay: docs/fyp_showcase.html",
+      "passed": true,
+      "evidence": "Added details element and its stylesheet absent."
+    },
+    {
+      "name": "original design: docs/fyp_showcase_3d.html",
+      "passed": true,
+      "evidence": {
+        "changed_design_parts": [],
+        "coverage": "All HTML styles/element attributes; all Word/PPTX part inventories, formatting XML, relationships and embedded media; text values excluded. Embedded chart workbooks compare every part; only their creation/modification timestamps are normalized."
+      }
+    },
+    {
+      "name": "no added overlay: docs/fyp_showcase_3d.html",
+      "passed": true,
+      "evidence": "Added details element and its stylesheet absent."
+    },
+    {
+      "name": "original design: docs/fyp_showcase_bluemarble.html",
+      "passed": true,
+      "evidence": {
+        "changed_design_parts": [],
+        "coverage": "All HTML styles/element attributes; all Word/PPTX part inventories, formatting XML, relationships and embedded media; text values excluded. Embedded chart workbooks compare every part; only their creation/modification timestamps are normalized."
+      }
+    },
+    {
+      "name": "no added overlay: docs/fyp_showcase_bluemarble.html",
+      "passed": true,
+      "evidence": "Added details element and its stylesheet absent."
+    },
+    {
+      "name": "original design: docs/fyp_showcase_earth.html",
+      "passed": true,
+      "evidence": {
+        "changed_design_parts": [],
+        "coverage": "All HTML styles/element attributes; all Word/PPTX part inventories, formatting XML, relationships and embedded media; text values excluded. Embedded chart workbooks compare every part; only their creation/modification timestamps are normalized."
+      }
+    },
+    {
+      "name": "no added overlay: docs/fyp_showcase_earth.html",
+      "passed": true,
+      "evidence": "Added details element and its stylesheet absent."
+    },
+    {
+      "name": "original design: docs/fyp_showcase_latentspace.html",
+      "passed": true,
+      "evidence": {
+        "changed_design_parts": [],
+        "coverage": "All HTML styles/element attributes; all Word/PPTX part inventories, formatting XML, relationships and embedded media; text values excluded. Embedded chart workbooks compare every part; only their creation/modification timestamps are normalized."
+      }
+    },
+    {
+      "name": "no added overlay: docs/fyp_showcase_latentspace.html",
+      "passed": true,
+      "evidence": "Added details element and its stylesheet absent."
+    },
+    {
+      "name": "original design: docs/fyp_showcase_v2.html",
+      "passed": true,
+      "evidence": {
+        "changed_design_parts": [],
+        "coverage": "All HTML styles/element attributes; all Word/PPTX part inventories, formatting XML, relationships and embedded media; text values excluded. Embedded chart workbooks compare every part; only their creation/modification timestamps are normalized."
+      }
+    },
+    {
+      "name": "no added overlay: docs/fyp_showcase_v2.html",
+      "passed": true,
+      "evidence": "Added details element and its stylesheet absent."
+    },
+    {
+      "name": "original design: docs/fyp_showcase_world.html",
+      "passed": true,
+      "evidence": {
+        "changed_design_parts": [],
+        "coverage": "All HTML styles/element attributes; all Word/PPTX part inventories, formatting XML, relationships and embedded media; text values excluded. Embedded chart workbooks compare every part; only their creation/modification timestamps are normalized."
+      }
+    },
+    {
+      "name": "no added overlay: docs/fyp_showcase_world.html",
+      "passed": true,
+      "evidence": "Added details element and its stylesheet absent."
+    },
+    {
+      "name": "original design: docs/fyp_showcase_world3d.html",
+      "passed": true,
+      "evidence": {
+        "changed_design_parts": [],
+        "coverage": "All HTML styles/element attributes; all Word/PPTX part inventories, formatting XML, relationships and embedded media; text values excluded. Embedded chart workbooks compare every part; only their creation/modification timestamps are normalized."
+      }
+    },
+    {
+      "name": "no added overlay: docs/fyp_showcase_world3d.html",
+      "passed": true,
+      "evidence": "Added details element and its stylesheet absent."
+    },
+    {
+      "name": "original design: docs/fyp_status_2026-07.html",
+      "passed": true,
+      "evidence": {
+        "changed_design_parts": [],
+        "coverage": "All HTML styles/element attributes; all Word/PPTX part inventories, formatting XML, relationships and embedded media; text values excluded. Embedded chart workbooks compare every part; only their creation/modification timestamps are normalized."
+      }
+    },
+    {
+      "name": "no added overlay: docs/fyp_status_2026-07.html",
+      "passed": true,
+      "evidence": "Added details element and its stylesheet absent."
+    },
+    {
+      "name": "original design: docs/fyp_status_2026-07_v2.html",
+      "passed": true,
+      "evidence": {
+        "changed_design_parts": [],
+        "coverage": "All HTML styles/element attributes; all Word/PPTX part inventories, formatting XML, relationships and embedded media; text values excluded. Embedded chart workbooks compare every part; only their creation/modification timestamps are normalized."
+      }
+    },
+    {
+      "name": "no added overlay: docs/fyp_status_2026-07_v2.html",
+      "passed": true,
+      "evidence": "Added details element and its stylesheet absent."
+    },
+    {
+      "name": "original design: docs/project_field_guide.html",
+      "passed": true,
+      "evidence": {
+        "changed_design_parts": [],
+        "coverage": "All HTML styles/element attributes; all Word/PPTX part inventories, formatting XML, relationships and embedded media; text values excluded. Embedded chart workbooks compare every part; only their creation/modification timestamps are normalized."
+      }
+    },
+    {
+      "name": "no added overlay: docs/project_field_guide.html",
+      "passed": true,
+      "evidence": "Added details element and its stylesheet absent."
+    },
+    {
+      "name": "original design: docs/statistics_explainer.html",
+      "passed": true,
+      "evidence": {
+        "changed_design_parts": [],
+        "coverage": "All HTML styles/element attributes; all Word/PPTX part inventories, formatting XML, relationships and embedded media; text values excluded. Embedded chart workbooks compare every part; only their creation/modification timestamps are normalized."
+      }
+    },
+    {
+      "name": "no added overlay: docs/statistics_explainer.html",
+      "passed": true,
+      "evidence": "Added details element and its stylesheet absent."
+    },
+    {
+      "name": "original design: docs/statistics_summary.html",
+      "passed": true,
+      "evidence": {
+        "changed_design_parts": [],
+        "coverage": "All HTML styles/element attributes; all Word/PPTX part inventories, formatting XML, relationships and embedded media; text values excluded. Embedded chart workbooks compare every part; only their creation/modification timestamps are normalized."
+      }
+    },
+    {
+      "name": "no added overlay: docs/statistics_summary.html",
+      "passed": true,
+      "evidence": "Added details element and its stylesheet absent."
+    },
+    {
+      "name": "original design: docs/viva/FYP_Viva_Deck.html",
+      "passed": true,
+      "evidence": {
+        "changed_design_parts": [],
+        "coverage": "All HTML styles/element attributes; all Word/PPTX part inventories, formatting XML, relationships and embedded media; text values excluded. Embedded chart workbooks compare every part; only their creation/modification timestamps are normalized."
+      }
+    },
+    {
+      "name": "no added overlay: docs/viva/FYP_Viva_Deck.html",
+      "passed": true,
+      "evidence": "Added details element and its stylesheet absent."
+    },
+    {
+      "name": "original design: docs/viva/FYP_Viva_Deck.pptx",
+      "passed": true,
+      "evidence": {
+        "changed_design_parts": [],
+        "coverage": "All HTML styles/element attributes; all Word/PPTX part inventories, formatting XML, relationships and embedded media; text values excluded. Embedded chart workbooks compare every part; only their creation/modification timestamps are normalized."
+      }
+    },
+    {
+      "name": "protected submission folders",
+      "passed": true,
+      "evidence": {
+        "files": 221,
+        "coverage": "SHA-256, mtime_ns, size, additions and deletions"
+      }
+    },
+    {
+      "name": "excluded research reports preserved",
+      "passed": true,
+      "evidence": {
+        "files": 107,
+        "changed": []
+      }
+    },
+    {
+      "name": "content retained: post-hoc timing",
+      "passed": true,
+      "evidence": "Existing list item; presence and omission."
+    },
+    {
+      "name": "content retained: retired INT8 increase",
+      "passed": true,
+      "evidence": "Existing status-deck text."
+    },
+    {
+      "name": "content retained: completed judges",
+      "passed": true,
+      "evidence": "Existing judge card; presence and omission."
+    },
+    {
+      "name": "existing Word text updated: docs/Agentic_AI_Workflow_Report_2026-06-26.docx",
+      "passed": true,
+      "evidence": "Current privacy/date and historical framing within existing paragraphs or footer."
+    },
+    {
+      "name": "existing Word text updated: docs/Codex_Meetup_Agent_Harness_Report.docx",
+      "passed": true,
+      "evidence": "Current privacy/date and historical framing within existing paragraphs or footer."
+    },
+    {
+      "name": "existing Word text updated: docs/FYP_Agent_Harness_Architecture_Guide_2026-06-09.docx",
+      "passed": true,
+      "evidence": "Current privacy/date and historical framing within existing paragraphs or footer."
+    },
+    {
+      "name": "HTML JavaScript syntax",
+      "passed": true,
+      "evidence": {
+        "script_blocks": 25,
+        "failures": []
+      }
+    }
+  ]
+}

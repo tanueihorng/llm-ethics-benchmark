@@ -1,9 +1,32 @@
 {
- "generated": "2026-09-26 17:47:27",
+ "generated": "2026-10-01 13:23:56",
  "generator": "scripts/report_tools/report_version_diff.py",
  "registry": "configs/report_versions.yaml",
- "note": "Rendered docx are gitignored local artifacts (D60); builders are tracked.",
+ "note": "Reports and prose builders are local-only (D94); metadata inventories docs/ and submission/.",
  "documents": [
+  {
+   "path": "submission/final_report.docx",
+   "family": "final_submission",
+   "label": "Final report",
+   "status": "selected",
+   "builder": "submission/build/build_final_report.py",
+   "date": "2026-09-26",
+   "decisions": [
+    "D95"
+   ],
+   "alias": "",
+   "note": "Local-only. Requires preserved interim progress v3, the final-chapter draft and interim progress v2 for citation identity mapping. Citations reconciled by bibliography identity; seven chapters and 63 references. Jev integration (T75) and final submission review remain pending.",
+   "exists": true,
+   "size_bytes": 891360,
+   "mtime": "2026-09-27 17:06:06",
+   "sha256_12": "f4fe89134144",
+   "structure": {
+    "blocks": 423,
+    "headings_h1": 8,
+    "first_chapter": "",
+    "words": 16704
+   }
+  },
   {
    "path": "docs/archive/FYP_Report_2026-05-23.docx",
    "family": "report_canonical",
@@ -150,8 +173,8 @@
    "note": "Canonical `make report` output; 512-token-primary study.",
    "exists": true,
    "size_bytes": 1397734,
-   "mtime": "2026-09-13 11:14:03",
-   "sha256_12": "98de7cfcfd3e",
+   "mtime": "2026-09-27 16:44:21",
+   "sha256_12": "65da3cfa95d4",
    "structure": {
     "blocks": 763,
     "headings_h1": 24,
@@ -401,7 +424,7 @@
     "D75"
    ],
    "alias": "",
-   "note": "Language-cleanup rewrite of the verified v4 line (T70 closed by its creating session): 137 exact-substring corrections replacing compressed statistical shorthand with conventional academic English. Numbers, citation markers, research questions, headings, tables and figures are asserted equal to v4 at build time; see docs/audits/2026-08-25_language_pass_v5/. Not selected for T53 (progress copy remains the sent artifact); candidate base for the T15 final report.",
+   "note": "Language-cleanup rewrite of the verified v4 line (T70 closed by its creating session): 137 exact-substring corrections replacing compressed statistical shorthand with conventional academic English. Numbers, citation markers, research questions, headings, tables and figures are asserted equal to v4 at build time; see docs/audits/2026-08-25_language_pass_v5/. Not selected for T53 (progress copy was selected at that time; the exact sent copy is unrecorded). Historical candidate base, superseded by the D95 selection of submission/final_report.docx on 2026-09-26.",
    "exists": true,
    "size_bytes": 820335,
    "mtime": "2026-08-25 09:36:53",
@@ -664,8 +687,8 @@
    "note": "",
    "exists": true,
    "size_bytes": 1397734,
-   "mtime": "2026-09-13 11:14:03",
-   "sha256_12": "98de7cfcfd3e",
+   "mtime": "2026-09-27 16:44:21",
+   "sha256_12": "65da3cfa95d4",
    "structure": {
     "blocks": 763,
     "headings_h1": 24,
@@ -781,6 +804,21 @@
    }
   },
   {
+   "path": "submission/archive/final_report_e54c8e90_before_audit_fixes.docx",
+   "family": "(standalone)",
+   "label": "",
+   "status": "",
+   "builder": "",
+   "date": "",
+   "decisions": [],
+   "alias": "",
+   "note": "Local-only preserved copy of submission/final_report.docx (SHA-256 e54c8e90…) as the student last saved it in Word, taken before the 2026-09-27 audit fixes were rebuilt through the builder; keeps the student's \"Submitted in Fulfilment\" cover wording. Not a report version.",
+   "exists": true,
+   "size_bytes": 967626,
+   "mtime": "2026-09-27 00:04:10",
+   "sha256_12": "e54c8e90d502"
+  },
+  {
    "path": "docs/drafts/final_report_visuals_pack.docx",
    "family": "(standalone)",
    "label": "",
@@ -804,7 +842,7 @@
    "date": "",
    "decisions": [],
    "alias": "",
-   "note": "Review draft of the missing final-report chapters (5-7) built by docs/drafts/build_final_chapters_draft.py; not a report version and not the final-report base (T71).",
+   "note": "Review draft of the missing final-report chapters (5-7) built by docs/drafts/build_final_chapters_draft.py; not a standalone report version. D95 incorporated its final chapters into the selected submission/final_report.docx; source preserved.",
    "exists": true,
    "size_bytes": 48379,
    "mtime": "2026-09-24 01:10:35",
@@ -821,9 +859,9 @@
    "alias": "",
    "note": "Word architecture guide for the agent harness.",
    "exists": true,
-   "size_bytes": 1052231,
-   "mtime": "2026-06-09 00:43:01",
-   "sha256_12": "e5f7feb7735a"
+   "size_bytes": 1052297,
+   "mtime": "2026-10-01 13:15:16",
+   "sha256_12": "3a1dd4414c6b"
   },
   {
    "path": "docs/Codex_Meetup_Agent_Harness_Report.docx",
@@ -834,7 +872,22 @@
    "date": "",
    "decisions": [],
    "alias": "",
-   "note": "Meetup report on the repo-native agent harness.",
+   "note": "Meetup companion with October 2026 context preceding the labelled June historical narrative; built by scripts/build_codex_meetup_doc.py.",
+   "exists": true,
+   "size_bytes": 1190542,
+   "mtime": "2026-10-01 13:14:47",
+   "sha256_12": "0c8781722807"
+  },
+  {
+   "path": "docs/archive/Codex_Meetup_Agent_Harness_Report_2026-06-14_snapshot.docx",
+   "family": "(standalone)",
+   "label": "",
+   "status": "",
+   "builder": "",
+   "date": "",
+   "decisions": [],
+   "alias": "",
+   "note": "Byte-preserved June meetup companion, used as the historical source by scripts/build_codex_meetup_doc.py; not a research report version.",
    "exists": true,
    "size_bytes": 1190450,
    "mtime": "2026-06-15 20:26:14",
@@ -851,9 +904,9 @@
    "alias": "",
    "note": "Agentic workflow report deck companion.",
    "exists": true,
-   "size_bytes": 377123,
-   "mtime": "2026-06-26 15:45:25",
-   "sha256_12": "61d832372f77"
+   "size_bytes": 377304,
+   "mtime": "2026-10-01 13:18:30",
+   "sha256_12": "96f1e9ecaca6"
   },
   {
    "path": "docs/archive/FYP_TC1_Full_Session_Report_2026-04-08.docx",

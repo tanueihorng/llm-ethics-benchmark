@@ -1,0 +1,10 @@
+[PASS] agent-doc-sync: AGENTS.md and CLAUDE.md shared body is synchronized.
+[PASS] project-log-update: PROJECT_LOG.md is part of the current change.
+[PASS] immutable-artifacts: Immutable artifact manifest matches 340 files.
+[PASS] redaction: redaction scan clean across 663 files.
+[PASS] stale-text: stale-text scan clean across 176 files.
+[PASS] epistemic-hedge: epistemic-hedge scan clean across 31 files.
+[PASS] report-freshness: Report-worthy files changed and the report artifact on disk is newer than them.
+  - docs/FYP_Report_2026-07-01_v5.docx
+[PASS] local-only-untracked: No tracked file matches the 22 D94 local-only rules.
+[PASS] git-diff-check: git diff --check is clean.

@@ -1,14 +1,14 @@
 # Agent Dashboard
 
-Generated: 2026-09-26 18:12:10 UTC+8
+Generated: 2026-10-01 13:27:08 UTC+8
 
 ## Live State
 
-- Git: `## main...origin/main [ahead 5]`
-- Changed files: 5
-- PROJECT_LOG: 2026-09-26 18:12 (UTC+8) by Claude Code
-- Report: 2026-09-26 18:03:37 +08 (1397734 bytes)
-- Handoff: 2026-09-26 18:12:10 +08
+- Git: `## main...origin/main [ahead 1]`
+- Changed files: 64
+- PROJECT_LOG: 2026-10-01 13:27 (UTC+8) by Codex
+- Report: 2026-09-27 16:44:21 +08 (1397734 bytes)
+- Handoff: 2026-10-01 13:27:07 +08
 - Immutable manifest: 2026-07-19 11:46:32 +08
 - Judge sidecars: 15 score files
 
@@ -18,13 +18,17 @@ Run make agent-check, review the diff, then commit or hand off the current chang
 
 ## Open Actions
 
+- T80 tables/figures follow-up - 2026-09-28 09:56, supplied Downloads copy (`d88b2f66…`).
+- T80. Resolve selected final-report audit findings before submission (opened 2026-09-27).
+- T80 progress - 2026-09-27 14:31 (student-directed fixes, fresh audit 2026-09-27 02:44, IDs A01-A15).
+- T81. Tighten the T73 post-hoc gate to paragraph scope (opened 2026-09-27, D96).
 - T79. Set up a standing off-machine backup for the local-only report and presentation sources (opened 2026-09-26, D94).
 - T74. Validate Jev for report auditing on a separately verified audit set (opened 2026-09-20, D86).
-- T75. Fold the validated Jev studies into the selected final-report line after T71 chooses the base (opened 2026-09-20, D86/D87).
-- T71. Decide the final-report base line and regenerate the rewritten-line LaTeX mirrors accordingly (opened 2026-08-25, D75).
+- T75. Fold the validated Jev studies into the selected final-report line (base chosen in D95; opened 2026-09-20, D86/D87).
+- T71. Migrate the rewritten-line LaTeX mirrors to the selected final-report base (base-choice portion complete; opened 2026-08-25, D75).
 - T68. Optional: acquire local copies of the seven statistical-methods classics cited by the interim progress docx, and clean the fake PDFs in `tmp/source_audit_external/`.
 - T66. Extend the `epistemic_hedge` scan with a certainty-verb pattern (from the 2026-08-22 v3 audit).
-- T73. The INT8 equivalence claim is undisclosed as post hoc in the SELECTED submission copy and 16 other documents (opened 2026-09-07).
+- T73. Reconcile post-hoc equivalence disclosure across the historical report inventory (opened 2026-09-07; counts below are the September snapshot).
 - T61. Capture the TC1 conda environment once, so "the cluster environment is fixed" becomes a record rather than an assertion (opened 2026-08-11).
 - T3. Run `MyTCinfo` on TC1.
 - T15. Submit the final report - DUE Mon 19 Oct 2026 (CCDS deadline, Sem 1 Wk 10).
@@ -41,12 +45,12 @@ Full task details and superseding decisions: `docs/PROJECT_LOG.md` section 2.
 
 ## Recent Decision IDs
 
-- D94. 2026-09-26 - Keep reports and presentations local-only, going forward
-- D93. 2026-09-26 - Fold the Chapter 1 revision and two foundational quantization sources into interim v3
-- D92. 2026-09-26 - Restructure the interim literature review fundamentals-first as a separate v3 copy
-- D91. 2026-09-22 - Combined Jev quantization-effect judge fails; atomic subconstructs remain candidates
-- D90. 2026-09-22 - Validate quantization effects with atomic paired Choices
-- D89. 2026-09-22 - Do not expand the failed Jev response-quality rubric
+- D102. 2026-10-01 - Staleness updates preserve the existing design
+- D101. 2026-09-27 - Heading numbers are native Word list numbering; citations stay typed
+- D100. 2026-09-27 - The final report's navigation and numbering are native Word fields
+- D99. 2026-09-27 - Keep both report-audit skills: the staged version and the original as `-old`
+- D98. 2026-09-27 - Restore the original report-audit skill text
+- D97. 2026-09-27 - Every audit is a fresh, independent audit
 
 ## Analysis Artifacts
 

@@ -20,7 +20,7 @@ TASK ?=
 AGENT ?=
 
 .DEFAULT_GOAL := help
-.PHONY: help test-core test-reports package-check reports-list reports-plan reports-ci
+.PHONY: help test-core test-reports package-check reports-list reports-plan reports-ci report-audit
 REPORT_PROFILE ?= ci
 
 help:
@@ -28,6 +28,7 @@ help:
 	@echo "Checks:      make test-core | make test-reports | make agent-check | make package-check"
 	@echo "Reports:     make reports-plan [REPORT_PROFILE=ci] | make reports-ci (writes rebuildable reports)"
 	@echo "Canonical:   make report | make report-versions"
+	@echo "Audit:       make report-audit [AUDIT_TARGET=final|canonical|submitted|review|<registered path>]"
 	@echo "Research:    make smoke | make run | make matrix | make analyze (review configuration first)"
 	@echo "Apps:        make dashboard; world3d has its own npm commands"
 	@echo "TC1:         read docs/TC1_CLUSTER_RUNBOOK.md; submit jobs with direct sbatch"
@@ -47,6 +48,13 @@ reports-list:
 
 reports-plan:
 	$(PYTHON) scripts/reports.py --profile $(REPORT_PROFILE)
+
+# Mechanical first pass of a report audit for any registered DOCX, resolved by
+# purpose alias or registered path (never by version). Writes
+# tmp/report_audit/<stem>/AUDIT.md + findings.json; exits 1 on any fail finding.
+AUDIT_TARGET ?= final
+report-audit:
+	$(PYTHON) scripts/report_tools/audit_report.py --target $(AUDIT_TARGET)
 
 reports-ci:
 	$(PYTHON) scripts/claim_registry.py --write

@@ -59,7 +59,7 @@
 
 **7. Limitations** — n = 200 CIs; *uncorrected multiple comparisons* (the Qwen p = 0.027 is nominal); single greedy decode (multi-seed arm tempers it); classifier-as-reference without human labels; small/non-monotonic INT8 effect (~8–9 prompts). *(Be explicit — reviewers reward calibrated claims over strong ones.)*
 
-**8. Conclusion + Reproducibility statement** — restate contributions; point to the public repo, the artifact, and the reproducibility kit.
+**8. Conclusion + Reproducibility statement** — restate contributions; point to the private code repository and the permitted reproducibility materials (reports and presentations remain local-only under D94), the artifact, and the reproducibility kit.
 
 ## How your three contributions map to the paper
 

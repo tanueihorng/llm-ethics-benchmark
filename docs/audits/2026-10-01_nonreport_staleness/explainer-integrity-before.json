@@ -1,0 +1,91 @@
+{
+  "chart_count": 3,
+  "claim_boundary": "Structural package checks only; no slide text, notes, formulas, chart values, or native PowerPoint execution were inspected.",
+  "finding_count": 20,
+  "findings": [
+    {
+      "code": "content_type_target_missing",
+      "part": "ppt/slideMasters/slideMaster2.xml"
+    },
+    {
+      "code": "content_type_target_missing",
+      "part": "ppt/slideMasters/slideMaster3.xml"
+    },
+    {
+      "code": "content_type_target_missing",
+      "part": "ppt/slideMasters/slideMaster4.xml"
+    },
+    {
+      "code": "content_type_target_missing",
+      "part": "ppt/slideMasters/slideMaster5.xml"
+    },
+    {
+      "code": "content_type_target_missing",
+      "part": "ppt/slideMasters/slideMaster6.xml"
+    },
+    {
+      "code": "content_type_target_missing",
+      "part": "ppt/slideMasters/slideMaster7.xml"
+    },
+    {
+      "code": "content_type_target_missing",
+      "part": "ppt/slideMasters/slideMaster8.xml"
+    },
+    {
+      "code": "content_type_target_missing",
+      "part": "ppt/slideMasters/slideMaster9.xml"
+    },
+    {
+      "code": "content_type_target_missing",
+      "part": "ppt/slideMasters/slideMaster10.xml"
+    },
+    {
+      "code": "content_type_target_missing",
+      "part": "ppt/slideMasters/slideMaster11.xml"
+    },
+    {
+      "code": "content_type_target_missing",
+      "part": "ppt/slideMasters/slideMaster12.xml"
+    },
+    {
+      "code": "content_type_target_missing",
+      "part": "ppt/slideMasters/slideMaster13.xml"
+    },
+    {
+      "code": "content_type_target_missing",
+      "part": "ppt/slideMasters/slideMaster14.xml"
+    },
+    {
+      "code": "content_type_target_missing",
+      "part": "ppt/slideMasters/slideMaster15.xml"
+    },
+    {
+      "code": "content_type_target_missing",
+      "part": "ppt/slideMasters/slideMaster16.xml"
+    },
+    {
+      "code": "content_type_target_missing",
+      "part": "ppt/slideMasters/slideMaster17.xml"
+    },
+    {
+      "code": "content_type_target_missing",
+      "part": "ppt/slideMasters/slideMaster18.xml"
+    },
+    {
+      "code": "content_type_target_missing",
+      "part": "ppt/slideMasters/slideMaster19.xml"
+    },
+    {
+      "code": "content_type_target_missing",
+      "part": "ppt/slideMasters/slideMaster20.xml"
+    },
+    {
+      "code": "content_type_target_missing",
+      "part": "ppt/slideMasters/slideMaster21.xml"
+    }
+  ],
+  "notes_parts_skipped": 21,
+  "relationship_part_count": 50,
+  "slide_count": 21,
+  "status": "fail"
+}

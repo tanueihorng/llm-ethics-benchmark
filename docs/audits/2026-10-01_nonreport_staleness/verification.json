@@ -1,0 +1,361 @@
+{
+  "checks": [
+    {
+      "name": "both submission trees: identities and timestamps",
+      "passed": true,
+      "evidence": "221 independently inventoried files; SHA-256, mtime_ns, size, additions/deletions"
+    },
+    {
+      "name": "excluded reports and research PDFs preserved",
+      "passed": true,
+      "evidence": {
+        "files": 107,
+        "changed": []
+      }
+    },
+    {
+      "name": "current note primary family numbers",
+      "passed": true,
+      "evidence": {
+        "source": "multiple_comparisons.json",
+        "independent_BH_survivors": [
+          [
+            "qwen_2b",
+            "mmlu_accuracy"
+          ],
+          [
+            "llama_3_2_3b",
+            "arc_accuracy"
+          ],
+          [
+            "phi4_mini",
+            "xstest_over_refusal"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "post-hoc timing and equivalence denominator",
+      "passed": true,
+      "evidence": "capability_equivalence.json: contrast list, margin_primary, margin_declaration"
+    },
+    {
+      "name": "failed pilot retained: response_quality_jev_validation.json",
+      "passed": true,
+      "evidence": "gate_passed=false in current primary artifact"
+    },
+    {
+      "name": "failed pilot retained: quant_effect_jev_validation.json",
+      "passed": true,
+      "evidence": "gate_passed=false in current primary artifact"
+    },
+    {
+      "name": "original HTML design: Codex_Meetup_Agent_Harness_Report.html",
+      "passed": true,
+      "evidence": "Original stylesheet and element attributes match; added overlay absent; current claims stay in existing text."
+    },
+    {
+      "name": "original HTML design: agent_harness_showcase.html",
+      "passed": true,
+      "evidence": "Original stylesheet and element attributes match; added overlay absent; current claims stay in existing text."
+    },
+    {
+      "name": "original HTML design: agentic_ai_report.html",
+      "passed": true,
+      "evidence": "Original stylesheet and element attributes match; added overlay absent; current claims stay in existing text."
+    },
+    {
+      "name": "original HTML design: fyp-report-defense-deck-2026-07.html",
+      "passed": true,
+      "evidence": "Original stylesheet and element attributes match; added overlay absent; current claims stay in existing text."
+    },
+    {
+      "name": "original HTML design: fyp_architecture.html",
+      "passed": true,
+      "evidence": "Original stylesheet and element attributes match; added overlay absent; current claims stay in existing text."
+    },
+    {
+      "name": "original HTML design: fyp_showcase.html",
+      "passed": true,
+      "evidence": "Original stylesheet and element attributes match; added overlay absent; current claims stay in existing text."
+    },
+    {
+      "name": "original HTML design: fyp_showcase_3d.html",
+      "passed": true,
+      "evidence": "Original stylesheet and element attributes match; added overlay absent; current claims stay in existing text."
+    },
+    {
+      "name": "original HTML design: fyp_showcase_bluemarble.html",
+      "passed": true,
+      "evidence": "Original stylesheet and element attributes match; added overlay absent; current claims stay in existing text."
+    },
+    {
+      "name": "original HTML design: fyp_showcase_earth.html",
+      "passed": true,
+      "evidence": "Original stylesheet and element attributes match; added overlay absent; current claims stay in existing text."
+    },
+    {
+      "name": "original HTML design: fyp_showcase_latentspace.html",
+      "passed": true,
+      "evidence": "Original stylesheet and element attributes match; added overlay absent; current claims stay in existing text."
+    },
+    {
+      "name": "original HTML design: fyp_showcase_v2.html",
+      "passed": true,
+      "evidence": "Original stylesheet and element attributes match; added overlay absent; current claims stay in existing text."
+    },
+    {
+      "name": "original HTML design: fyp_showcase_world.html",
+      "passed": true,
+      "evidence": "Original stylesheet and element attributes match; added overlay absent; current claims stay in existing text."
+    },
+    {
+      "name": "original HTML design: fyp_showcase_world3d.html",
+      "passed": true,
+      "evidence": "Original stylesheet and element attributes match; added overlay absent; current claims stay in existing text."
+    },
+    {
+      "name": "original HTML design: fyp_status_2026-07.html",
+      "passed": true,
+      "evidence": "Original stylesheet and element attributes match; added overlay absent; current claims stay in existing text."
+    },
+    {
+      "name": "original HTML design: fyp_status_2026-07_v2.html",
+      "passed": true,
+      "evidence": "Original stylesheet and element attributes match; added overlay absent; current claims stay in existing text."
+    },
+    {
+      "name": "original HTML design: project_field_guide.html",
+      "passed": true,
+      "evidence": "Original stylesheet and element attributes match; added overlay absent; current claims stay in existing text."
+    },
+    {
+      "name": "original HTML design: statistics_explainer.html",
+      "passed": true,
+      "evidence": "Original stylesheet and element attributes match; added overlay absent; current claims stay in existing text."
+    },
+    {
+      "name": "original HTML design: statistics_summary.html",
+      "passed": true,
+      "evidence": "Original stylesheet and element attributes match; added overlay absent; current claims stay in existing text."
+    },
+    {
+      "name": "standalone HTML JavaScript parses",
+      "passed": true,
+      "evidence": {
+        "html_files": 19,
+        "script_blocks": 25,
+        "failures": []
+      }
+    },
+    {
+      "name": "slide inventory: docs/fyp_project_explainer_deck.pptx",
+      "passed": true,
+      "evidence": "21 slide parts, counted independently of extraction"
+    },
+    {
+      "name": "explainer significance presence and omission",
+      "passed": true,
+      "evidence": "produced slide XML: nominal result retained; blanket-null wording absent"
+    },
+    {
+      "name": "NF4 codebook notes corrected",
+      "passed": true,
+      "evidence": "notes XML, presence and omission; QLoRA / official bitsandbytes NF4 map"
+    },
+    {
+      "name": "slide inventory: docs/viva/FYP_Viva_Deck.pptx",
+      "passed": true,
+      "evidence": "17 slide parts, counted independently of extraction"
+    },
+    {
+      "name": "bounded MDE on produced viva slide",
+      "passed": true,
+      "evidence": "produced slide XML, presence and omission"
+    },
+    {
+      "name": "current Word guide context regenerated",
+      "passed": true,
+      "evidence": "produced word/document.xml"
+    },
+    {
+      "name": "dated companion: docs/Agentic_AI_Workflow_Report_2026-06-26.docx",
+      "passed": true,
+      "evidence": "produced DOCX: existing paragraphs carry dated current context, historical framing, post-hoc disclosure and repository policy"
+    },
+    {
+      "name": "dated companion: docs/Codex_Meetup_Agent_Harness_Report.docx",
+      "passed": true,
+      "evidence": "produced DOCX: existing paragraphs carry dated current context, historical framing, post-hoc disclosure and repository policy"
+    },
+    {
+      "name": "meetup historical source byte preservation",
+      "passed": true,
+      "evidence": "archived source matches original hash from independent baseline inventory"
+    },
+    {
+      "name": "meetup original diagrams preserved",
+      "passed": true,
+      "evidence": "9 original embedded diagram parts compared byte-for-byte"
+    }
+  ],
+  "syntax": [
+    {
+      "file": "docs/agent_harness_showcase.html",
+      "script": 0,
+      "passed": true,
+      "diagnostic": ""
+    },
+    {
+      "file": "docs/agent_harness_showcase.html",
+      "script": 1,
+      "passed": true,
+      "diagnostic": ""
+    },
+    {
+      "file": "docs/agentic_ai_report.html",
+      "script": 0,
+      "passed": true,
+      "diagnostic": ""
+    },
+    {
+      "file": "docs/agentic_ai_report.html",
+      "script": 1,
+      "passed": true,
+      "diagnostic": ""
+    },
+    {
+      "file": "docs/fyp-report-defense-deck-2026-07.html",
+      "script": 0,
+      "passed": true,
+      "diagnostic": ""
+    },
+    {
+      "file": "docs/fyp_architecture.html",
+      "script": 0,
+      "passed": true,
+      "diagnostic": ""
+    },
+    {
+      "file": "docs/fyp_architecture.html",
+      "script": 1,
+      "passed": true,
+      "diagnostic": ""
+    },
+    {
+      "file": "docs/fyp_showcase.html",
+      "script": 0,
+      "passed": true,
+      "diagnostic": ""
+    },
+    {
+      "file": "docs/fyp_showcase.html",
+      "script": 1,
+      "passed": true,
+      "diagnostic": ""
+    },
+    {
+      "file": "docs/fyp_showcase_3d.html",
+      "script": 0,
+      "passed": true,
+      "diagnostic": ""
+    },
+    {
+      "file": "docs/fyp_showcase_3d.html",
+      "script": 1,
+      "passed": true,
+      "diagnostic": ""
+    },
+    {
+      "file": "docs/fyp_showcase_bluemarble.html",
+      "script": 0,
+      "passed": true,
+      "diagnostic": ""
+    },
+    {
+      "file": "docs/fyp_showcase_earth.html",
+      "script": 0,
+      "passed": true,
+      "diagnostic": ""
+    },
+    {
+      "file": "docs/fyp_showcase_latentspace.html",
+      "script": 0,
+      "passed": true,
+      "diagnostic": ""
+    },
+    {
+      "file": "docs/fyp_showcase_latentspace.html",
+      "script": 1,
+      "passed": true,
+      "diagnostic": ""
+    },
+    {
+      "file": "docs/fyp_showcase_v2.html",
+      "script": 0,
+      "passed": true,
+      "diagnostic": ""
+    },
+    {
+      "file": "docs/fyp_showcase_v2.html",
+      "script": 1,
+      "passed": true,
+      "diagnostic": ""
+    },
+    {
+      "file": "docs/fyp_showcase_world.html",
+      "script": 0,
+      "passed": true,
+      "diagnostic": ""
+    },
+    {
+      "file": "docs/fyp_showcase_world3d.html",
+      "script": 0,
+      "passed": true,
+      "diagnostic": ""
+    },
+    {
+      "file": "docs/fyp_status_2026-07.html",
+      "script": 0,
+      "passed": true,
+      "diagnostic": ""
+    },
+    {
+      "file": "docs/fyp_status_2026-07.html",
+      "script": 1,
+      "passed": true,
+      "diagnostic": ""
+    },
+    {
+      "file": "docs/fyp_status_2026-07_v2.html",
+      "script": 0,
+      "passed": true,
+      "diagnostic": ""
+    },
+    {
+      "file": "docs/fyp_style_fingerprints.html",
+      "script": 0,
+      "passed": true,
+      "diagnostic": ""
+    },
+    {
+      "file": "docs/statistics_explainer.html",
+      "script": 0,
+      "passed": true,
+      "diagnostic": ""
+    },
+    {
+      "file": "docs/statistics_summary.html",
+      "script": 0,
+      "passed": true,
+      "diagnostic": ""
+    }
+  ],
+  "coverage_counts": {
+    "updated": 39,
+    "reviewed, no stale target found": 63,
+    "tool reference": 6,
+    "excluded report or reference": 95,
+    "preserved historical": 152
+  }
+}

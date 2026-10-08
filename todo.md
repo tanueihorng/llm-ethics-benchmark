@@ -18,7 +18,7 @@ Full table + task numbers in PROJECT_LOG §1. School-set; everything else in thi
 | **Fri 13 Nov 2026** | Amended final + DR-NTU deposit (no changes after) | T54 |
 | **4 / 7 / 8 Dec 2026** | Oral presentation (20 min + 10 min Q&A) | T55 |
 
-T53 is a *send* action — `docs/FYP_Interim_2026-07-10.docx` already exists and is current. T1 (July email) goes before it or with it; T1b (August email) is gated behind it.
+T53 (interim submission) and T1 (July email) are complete, confirmed by the student on 26 September 2026; exact send dates and copies are unrecorded. T1b status remains unconfirmed. The selected final working base is `submission/final_report.docx` (D95); T71 now concerns only LaTeX migration.
 
 ---
 

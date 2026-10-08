@@ -557,25 +557,27 @@ def test_unscoped_two_still_fails_and_hedge_fails_in_scope() -> None:
 _W_NS = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
 
 
-def _make_docx(path: Path, paragraphs: list[str], rows: list[list[str]] | None = None) -> None:
+def _make_docx(path: Path, paragraphs: list[str], rows: list[list[str]] | None = None,
+               header_rows: int = 0) -> None:
     import zipfile
     from xml.sax.saxutils import escape
 
     body = "".join(f"<w:p><w:r><w:t>{escape(p)}</w:t></w:r></w:p>" for p in paragraphs)
     if rows:
         body += "<w:tbl>" + "".join(
-            "<w:tr>" + "".join(
+            "<w:tr>" + ("<w:trPr><w:tblHeader/></w:trPr>" if index < header_rows else "") + "".join(
                 f"<w:tc><w:p><w:r><w:t>{escape(cell)}</w:t></w:r></w:p></w:tc>" for cell in row
-            ) + "</w:tr>" for row in rows
+            ) + "</w:tr>" for index, row in enumerate(rows)
         ) + "</w:tbl>"
     xml = f'<?xml version="1.0"?><w:document xmlns:w="{_W_NS}"><w:body>{body}</w:body></w:document>'
     with zipfile.ZipFile(path, "w") as archive:
         archive.writestr("word/document.xml", xml)
 
 
-def _docx_failures(tmp_path: Path, paragraphs: list[str], rows=None, waived=None) -> list[str]:
+def _docx_failures(tmp_path: Path, paragraphs: list[str], rows=None, waived=None,
+                   header_rows: int = 0) -> list[str]:
     registry = build_registry(ROOT)
-    _make_docx(tmp_path / "doc.docx", paragraphs, rows)
+    _make_docx(tmp_path / "doc.docx", paragraphs, rows, header_rows)
     surface = {"path": "doc.docx", "profiles": ["docx_primary"]}
     if waived is not None:
         surface["waived_claims"] = waived
@@ -652,6 +654,94 @@ def test_latex_fixture_rows_and_comments(tmp_path: Path) -> None:
     (tmp_path / "doc.tex").write_text(tex, encoding="utf-8")
     failures = [name for name, ok, _ in validate_surface(surface, registry, tmp_path) if not ok]
     assert failures == []
+
+
+# --- Column-header binding (2026-09-27) --------------------------------------
+# Reports put the scorer or token budget in a Word header row (w:tblHeader),
+# not in each data row. The final report's Table 5.2 ("Classifier | Keyword
+# rule") and Table 5.3 ("128 tokens | 512 tokens") failed as false positives
+# until header labels were bound to their own column's cells.
+
+_NO_KAPPA = [u for u in GOOD_UNITS if "0.59" not in u]
+_NO_RETIRED = [u for u in GOOD_UNITS if "+0.055" not in u]
+
+
+def test_header_row_binds_kappa_to_its_own_column(tmp_path: Path) -> None:
+    rows = [["Measure", "Classifier", "Keyword rule"], ["Cohen's kappa", "0.59", "0.11"]]
+    assert _docx_failures(tmp_path, _NO_KAPPA, rows, header_rows=1) == []
+
+
+def test_unmarked_first_row_is_data_not_a_header(tmp_path: Path) -> None:
+    rows = [["Measure", "Classifier", "Keyword rule"], ["Cohen's kappa", "0.59", "0.11"]]
+    assert "docx_primary.human-validation-kappa" in _docx_failures(tmp_path, _NO_KAPPA, rows)
+
+
+def test_header_bound_kappa_swap_fails(tmp_path: Path) -> None:
+    rows = [["Measure", "Keyword rule", "Classifier"], ["Cohen's kappa", "0.59", "0.11"]]
+    failures = _docx_failures(tmp_path, _NO_KAPPA, rows, header_rows=1)
+    assert "docx_primary.contradiction:kappa-ownership" in failures
+
+
+def test_keyword_rule_prose_swap_fails() -> None:
+    status = _claim_status(GOOD_UNITS + ["The keyword rule reached κ 0.59 against human labels."])
+    assert status["contradiction:kappa-ownership"] is False
+
+
+def test_header_row_scopes_a_retired_value(tmp_path: Path) -> None:
+    rows = [["Pair", "128 tokens", "512 tokens"], ["Qwen3-1.7B", "+0.055 (p = 0.027)", "0.000 (p = 1.000)"]]
+    assert _docx_failures(tmp_path, _NO_RETIRED, rows, header_rows=1) == []
+    # Without the header marker the row carries no 128-token context.
+    assert "docx_primary.retired-scope:+0.055" in _docx_failures(tmp_path, _NO_RETIRED, rows)
+
+
+def test_header_binding_needs_matching_cell_counts(tmp_path: Path) -> None:
+    rows = [["Pair", "Budget"], ["Qwen3-1.7B", "+0.055", "0.000"]]
+    assert "docx_primary.retired-scope:+0.055" in _docx_failures(tmp_path, _NO_RETIRED, rows, header_rows=1)
+
+
+
+def test_field_codes_are_not_claim_text(tmp_path: Path) -> None:
+    """A native Word cross-reference stores its code in w:instrText; only the cached
+    result (w:t) is visible, so only it may be read as prose."""
+    import zipfile
+    from verify_claim_surfaces import _docx_units
+
+    fld = ('<w:r><w:t xml:space="preserve">Not corrected for the 25 tests in Table </w:t></w:r>'
+           '<w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText> REF _RefTbl5_4 \\h </w:instrText></w:r>'
+           '<w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>5.4</w:t></w:r><w:r><w:fldChar w:fldCharType="end"/></w:r>')
+    xml = f'<?xml version="1.0"?><w:document xmlns:w="{_W_NS}"><w:body><w:p>{fld}</w:p></w:body></w:document>'
+    with zipfile.ZipFile(tmp_path / "f.docx", "w") as archive:
+        archive.writestr("word/document.xml", xml)
+    assert _docx_units(tmp_path / "f.docx") == ["Not corrected for the 25 tests in Table 5.4"]
+
+
+# --- Volatile allow entries -------------------------------------------------
+
+
+def _volatile_results(tmp_path: Path, text: str, allow: dict[str, str]) -> list[tuple[str, bool]]:
+    registry = build_registry(ROOT)
+    (tmp_path / "doc.md").write_text(text, encoding="utf-8")
+    surface = {"path": "doc.md", "profiles": ["volatile_free"], "volatile_allow": allow}
+    return [(name, ok) for name, ok, _ in validate_surface(surface, registry, tmp_path)]
+
+
+def test_volatile_allow_excuses_only_its_phrase(tmp_path: Path) -> None:
+    allow = {"25 tests in Table 5.4": "statistical tests in the report's table"}
+    assert _volatile_results(tmp_path, "Not corrected for the 25 tests in Table 5.4.", allow) == [
+        ("volatile_free", True)]
+    # The same line with a live suite count still fires.
+    assert ("volatile_free", False) in _volatile_results(
+        tmp_path, "Not corrected for the 25 tests in Table 5.4; 807 tests pass.", allow)
+
+
+def test_volatile_allow_entries_must_be_justified_and_current(tmp_path: Path) -> None:
+    text = "Not corrected for the 25 tests in Table 5.4."
+    assert ("volatile_free.allow:25 tests in Table 5.4", False) in _volatile_results(
+        tmp_path, text, {"25 tests in Table 5.4": " "})
+    assert ("volatile_free.allow:31 tests in Table 9.9", False) in _volatile_results(
+        tmp_path, text, {"31 tests in Table 9.9": "stale phrase"})
+    assert ("volatile_free.allow:Table 5.4", False) in _volatile_results(
+        tmp_path, text, {"Table 5.4": "not a volatile phrase"})
 
 
 # --- Waiver semantics -------------------------------------------------------

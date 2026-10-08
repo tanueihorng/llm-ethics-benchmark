@@ -1,5 +1,14 @@
 # report_tools — gated editors for the FYP report builders
 
+## Version-agnostic audit pass (`audit_report.py`)
+`make report-audit AUDIT_TARGET=<alias|registered path>` resolves the target from
+`configs/report_versions.yaml` and audits the rendered DOCX: coverage reconciled
+against every text node, citations both ways, cross-references, floats, contents,
+front matter, RQ tracing, headline numbers, residue, the omission rules in
+`configs/report_audit_rules.yaml`, and the target's claim locks. Output stays in
+gitignored `tmp/report_audit/<stem>/`. It is Stage 1 of `.agents/skills/fyp-report-audit/SKILL.md`, not a complete
+audit; the original skill (`fyp-report-audit-old`) does not use it. Tests: `tests/test_report_audit.py`.
+
 Rescued from a session scratchpad on 2026-07-27 (they would otherwise have been
 lost). These are the tools that made the T47-T51 report work safe.
 

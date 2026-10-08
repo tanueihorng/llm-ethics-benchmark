@@ -1,0 +1,13 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.11.5, pytest-7.4.0, pluggy-1.6.0
+rootdir: /Users/tanueihorng/fyp_quant
+configfile: pyproject.toml
+plugins: cov-7.1.0, anyio-4.15.1
+collected 64 items
+
+tests/test_viva_deck.py ........                                         [ 12%]
+tests/test_report_versions.py ........                                   [ 25%]
+tests/test_claim_fitness.py ............................................ [ 93%]
+....                                                                     [100%]
+
+============================== 64 passed in 7.58s ==============================

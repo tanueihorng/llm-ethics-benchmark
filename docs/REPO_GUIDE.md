@@ -51,6 +51,7 @@ needs Word/LibreOffice; Word remains the submission authority.
 | `make reports-ci` | Build and require the declared clean-clone report outputs |
 | `make report` | Rebuild the canonical DOCX |
 | `make report-versions` | Regenerate local version inventory/change records |
+| `make report-audit [AUDIT_TARGET=final]` | Mechanical audit pass for any registered report (local `tmp/report_audit/`) |
 
 Reports and presentations are local-only (D94): the report and deck builders,
 rendered documents, `docs/**/*.html` pages, `docs/viva/`, `docs/drafts/` and
@@ -72,7 +73,7 @@ resolution is checked separately by CI's installation and `pip check`.
 ## Report purposes and sources
 
 `configs/report_versions.yaml` is the report map. Its `entrypoints` identify
-canonical, submitted and review copies; `build_profiles` select reproducible
+canonical, submitted, review and final copies; `build_profiles` select reproducible
 build commands from the same version records. `python scripts/reports.py
 --target review` previews the review command; adding `--build` executes it.
 The dispatcher rejects the frozen submitted target. Existing legacy commands
@@ -81,9 +82,9 @@ directly.
 
 The v3/v4 historical `selected` labels record voice/base choices, not two
 current submission targets. The `submitted` alias identifies the selected
-progress copy; `review` identifies the newer comparison copy. T71 still requires
-the student's final-report base decision. No comparison draft is promoted by
-this cleanup.
+progress copy; `review` identifies the newer comparison copy; `final` identifies
+the student-selected final report (D95/D96). T71 remains open only for the LaTeX
+mirror migration. No comparison draft is promoted by these aliases.
 
 Shared orchestration lives in `scripts/report_tools/workflows.py`. Existing
 prose builders and their text/citation invariance checks remain intact. Refactor

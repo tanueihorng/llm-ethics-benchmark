@@ -55,10 +55,36 @@ INDEX_PATH = REPO_ROOT / "docs" / "REPORT_VERSIONS.md"
 
 
 def _docx_on_disk() -> list[Path]:
-    docs = REPO_ROOT / "docs"
-    if not docs.exists():
-        return []
-    return [p for p in sorted(docs.rglob("*.docx")) if not TRANSIENT_RE.match(p.name)]
+    return [p for directory in ("docs", "submission")
+            for p in sorted((REPO_ROOT / directory).rglob("*.docx"))
+            if not TRANSIENT_RE.match(p.name)]
+
+
+def test_submission_inventory_detects_present_missing_and_unregistered(tmp_path, monkeypatch):
+    from docx import Document
+    from report_tools import report_version_diff as inventory
+
+    monkeypatch.setattr(inventory, "ROOT", tmp_path)
+    folder = tmp_path / "submission"
+    folder.mkdir()
+    final = folder / "final_report.docx"
+    document = Document()
+    document.add_heading("Chapter 1: Introduction", level=1)
+    document.save(final)
+    registry = {"families": [], "standalone_documents": [{"path": "submission/final_report.docx"}]}
+    problems = []
+    inventory.build_inventory(registry, problems)
+    assert not problems
+
+    document.save(folder / "unregistered.docx")
+    problems = []
+    inventory.build_inventory(registry, problems)
+    assert problems == ["UNREGISTERED docx on disk: submission/unregistered.docx"]
+
+    final.unlink()
+    problems = []
+    inventory.build_inventory(registry, problems)
+    assert "REGISTERED but not found on disk: submission/final_report.docx" in problems
 
 
 def test_registry_parses_and_families_are_unique():

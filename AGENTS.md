@@ -24,6 +24,7 @@ Repository instructions for fyp_quant. Keep `AGENTS.md` and `CLAUDE.md` identica
 - Do not invent facts, numbers, commands, paths or citations. Separate session-verified evidence, historical records and inference.
 - Read the primary report artifact before describing its contents. Trace claims inward to supporting sources; resolve citation identity/title/author and label preprints. Named methods require bibliography entries in the same edit (D54/D56/D61).
 - Pair presence checks with omission checks, or disclose missing coverage. Derive coverage denominators independently of the extractor under audit. Recheck delegated findings against primary artifacts; make verification reproducible.
+- Every audit is a fresh, independent audit of the current artifact. Prior audits, log summaries of their findings and earlier worklists are unverified leads: open them only after completing your own checks, then reconcile. An unchanged hash exempts nothing, and each reported finding needs evidence gathered in this audit.
 - When results, primary configuration or significance claims change, search for the retired claim across README, results card, log, builders, decks, dashboard and figures (D42). Correct current views, label historical snapshots, and self-test affected stale-text checks.
 
 ## Reports
@@ -43,7 +44,7 @@ Head-node setup permits only documented package installation, file transfer and 
 ## Task routing
 
 - Harness: `.agents/skills/fyp-harness-maintenance/`
-- Report/evidence audit: `.agents/skills/fyp-report-audit/`
+- Report/evidence audit: `.agents/skills/fyp-report-audit/`; the original version is kept as `.agents/skills/fyp-report-audit-old/` for use when requested by name
 - Judge extensions: `.agents/skills/fyp-second-judge/`
 - Meetup story: `.agents/skills/fyp-meetup-brief/`
 - Task packets: relevant entries under `docs/agent_tasks/`

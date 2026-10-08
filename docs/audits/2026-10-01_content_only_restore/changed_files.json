@@ -1,0 +1,126 @@
+[
+  {
+    "path": "docs/AGENT_DASHBOARD.md",
+    "sha256": "b03d7edf9be965500e43cbfcc92bf317aec22aabc6a27cf039ed9b70454c5d83"
+  },
+  {
+    "path": "docs/Agentic_AI_Workflow_Report_2026-06-26.docx",
+    "sha256": "96f1e9ecaca6f412e3732ceb9145bad8690e1136bc1e622721572b5ac34ce3df"
+  },
+  {
+    "path": "docs/Codex_Meetup_Agent_Harness_Report.docx",
+    "sha256": "0c8781722807922705829b50b8aa12fa4217a23676bdbb7c6d15912c53d77fc3"
+  },
+  {
+    "path": "docs/Codex_Meetup_Agent_Harness_Report.html",
+    "sha256": "525f4c9a2fad31900ab27a246576e959f4361d70a4b9876f38ac2d2e8db4f9d3"
+  },
+  {
+    "path": "docs/FYP_Agent_Harness_Architecture_Guide_2026-06-09.docx",
+    "sha256": "3a1dd4414c6b6d23e4f141865eb0f86eb3caca47e975097453359327ddb52841"
+  },
+  {
+    "path": "docs/HANDOFF.md",
+    "sha256": "77c2d6dcfe2faa7b2be0c2e4c52303295b788cee6e3266661d6882d86c5a35da"
+  },
+  {
+    "path": "docs/PROJECT_LOG.md",
+    "sha256": "be2bf91cc97ff1390271913dc2ebc39aad2afb941c1cf53b3827a9b9f469ed1a"
+  },
+  {
+    "path": "docs/REPORT_VERSIONS.md",
+    "sha256": "c65005c7139f4f9a39e03ef5170841d9a907409d91b2d856114dac0d76940dc5"
+  },
+  {
+    "path": "docs/agent_harness_showcase.html",
+    "sha256": "65a316cf167cf8f8fdc500e23e33ca0001ab8cd49a34c09aa4880a2b153cccd6"
+  },
+  {
+    "path": "docs/agentic_ai_report.html",
+    "sha256": "f3eeba7d574908dbc0effc50ee96d9fb28a14a3ddf56205804b59dd30b8eb09b"
+  },
+  {
+    "path": "docs/audits/2026-10-01_nonreport_staleness/README.md",
+    "sha256": "ea9b5a6c92d020cad5969ede7a50371e6ff2cfb898c3c4ade42fd2e25fa83c3c"
+  },
+  {
+    "path": "docs/audits/2026-10-01_nonreport_staleness/verify.py",
+    "sha256": "83e999ced1bd7e9a915015b70d761a1351ac3f2a52ade64200a788253ce0fe9e"
+  },
+  {
+    "path": "docs/fyp-report-defense-deck-2026-07.html",
+    "sha256": "acd015040420d0f22a837b7fb20722bcdd3c21b246b27759b3f52d5d30d11334"
+  },
+  {
+    "path": "docs/fyp_architecture.html",
+    "sha256": "95015243f8052f3144991742788f1a265e99e1c408187aee184d9ac664909272"
+  },
+  {
+    "path": "docs/fyp_showcase.html",
+    "sha256": "979a3db8b41a829cbe9d8af51f23304a760f3fee05b9ec956fa918aec6161f9c"
+  },
+  {
+    "path": "docs/fyp_showcase_3d.html",
+    "sha256": "03aaad8443de77b4447eca1416eb120b383f5ceabdd1780b73b6d7411e5e9805"
+  },
+  {
+    "path": "docs/fyp_showcase_bluemarble.html",
+    "sha256": "415849f8a4ad49bca41d0f8ca96939b210ff3b572722fcd73f027d6ed933a6e9"
+  },
+  {
+    "path": "docs/fyp_showcase_earth.html",
+    "sha256": "1a9ff645f5bd154543a2935e0ee79ab15eab036fa6bd670f572f32fc5a73a97c"
+  },
+  {
+    "path": "docs/fyp_showcase_latentspace.html",
+    "sha256": "c22810f2a49c29422fcd451a9720c041ffbdd8c767e711b12d490d56655f6939"
+  },
+  {
+    "path": "docs/fyp_showcase_v2.html",
+    "sha256": "51c6072b3d6a4df55b098396e1fb8b5b39e39b8220bbed1877794c3a0baf5468"
+  },
+  {
+    "path": "docs/fyp_showcase_world.html",
+    "sha256": "83e7c459ff50ab116d7d2971917c2d19aa01a3a462ea60e91d8b6334c372d90f"
+  },
+  {
+    "path": "docs/fyp_showcase_world3d.html",
+    "sha256": "63b6d4cbc82fd542502f5ca1803d9888e56ff391ea055372eb693ca1ccaedc19"
+  },
+  {
+    "path": "docs/fyp_status_2026-07.html",
+    "sha256": "61390373ed11b152c76fc44bcf4926d42ea2b5370303a84f620ae359668af6b5"
+  },
+  {
+    "path": "docs/fyp_status_2026-07_v2.html",
+    "sha256": "0f831628a8452c404b526afa0b408f79c8a2a069574f9ed6f3694a2dd45878fe"
+  },
+  {
+    "path": "docs/project_field_guide.html",
+    "sha256": "4f5b086e096a60d8d75f904409e7db0c70e9de78e4c988a7416e85938e3e279a"
+  },
+  {
+    "path": "docs/report_versions/inventory.json",
+    "sha256": "59a6b29b23c3f8e81f2599fde4e473a529d363971f2d73c27cf1f12554cb8a5b"
+  },
+  {
+    "path": "docs/statistics_explainer.html",
+    "sha256": "cd3e3331d8fddc9361f2cf7377b4ee04a830c0c67464c152a66eb7cf525e4e98"
+  },
+  {
+    "path": "docs/statistics_summary.html",
+    "sha256": "fa06de875186f80d1d2af4eab20c27202837fcf3199f83c3fb8d84fb0f85b20f"
+  },
+  {
+    "path": "scripts/build_agent_harness_architecture_doc.py",
+    "sha256": "9753cd2790f6a8a5b100d36587284c51f12568edabf229a6efc7c9a7e09d7058"
+  },
+  {
+    "path": "scripts/build_agentic_report.js",
+    "sha256": "a706d623f38a855f53577dad90ec2f37ed44e74f973717b23c376f31f90eb2b1"
+  },
+  {
+    "path": "scripts/build_codex_meetup_doc.py",
+    "sha256": "7a3bf549ee56170a60937e9cad78df018125d8c15d58d965d0d6b0210a5d2f4b"
+  }
+]

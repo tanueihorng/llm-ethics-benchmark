@@ -39,7 +39,6 @@ def main() -> int:
                 state = "present" if (ROOT / path).exists() else "absent locally"
                 frozen = "; frozen" if path in registry.get("frozen_outputs", []) else ""
                 print(f"{name}: {path} ({state}{frozen})")
-            print("final: pending student selection (T71)")
             print("Build profiles: " + ", ".join(registry["build_profiles"]))
             print("CI covers rebuildable reports; frozen-input variants and historical archives remain local checks.")
         return 0

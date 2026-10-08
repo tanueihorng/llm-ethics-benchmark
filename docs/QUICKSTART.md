@@ -17,12 +17,14 @@ HarmBench classifier as primary, a second judge as cross-check). It is built to 
 *reused*: add a model in YAML, add a benchmark via a 4-method plugin contract, and
 the loader, runner, SLURM generation, and analysis pick it up.
 
+The completed primary study is `results_512/` with `configs/tc1_512.yaml`; `results/` is the retained 128-token comparison. Examples below run a new study into `results_scratch/`. Run locally or in an approved `sbatch` job, and preserve both evidence trees. Installation profiles are documented in `docs/REPO_GUIDE.md`.
+
 ## Install
 
 ```bash
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-pip install -e .          # editable install (uses the new pyproject.toml)
+pip install -e .          # editable install (uses pyproject.toml)
 pytest -q                 # optional: confirm the install (expect all green)
 ```
 
@@ -33,15 +35,16 @@ pytest -q                 # optional: confirm the install (expect all green)
 ```yaml
 benchmarks:
   harmbench: { dataset_name: walledai/HarmBench, split: train, max_samples: 200 }
+decoding: { max_new_tokens: 512, temperature: 0.0, seed: 42 }
 models:
-  - alias: my_model_base                # fp16 baseline
+  my_model_base:                # fp16 baseline
     model_id: org/my-model
     family: myfamily
     size_b: 3.0
     quantized: false
     pair_id: my_model
     benchmarks: [harmbench, xstest, mmlu, arc]
-  - alias: my_model_4bit                # NF4 4-bit member of the SAME weights
+  my_model_4bit:                # NF4 4-bit member of the SAME weights
     model_id: org/my-model
     quantized: true                     # quant_method defaults to nf4
     pair_id: my_model
@@ -49,26 +52,24 @@ models:
 ```
 
 For an **INT8 precision point**, add a member with `quant_method: int8` in a
-*separate* config (`configs/tc1_int8.yaml` is the template) so it does not enter
+*separate* config (`configs/tc1_int8_512.yaml` is the 512-token template) so it does not enter
 the base-vs-4bit pairwise pipeline — see "Add a precision" below.
 
 **2. Run** the matched pair across all its benchmarks:
 
 ```bash
-python run_quant_matrix.py --config configs/default.yaml --output_dir results
-# or: make matrix DEVICE=cuda
+python run_quant_matrix.py --config configs/default.yaml --output_dir results_scratch
 ```
 
 **3. Analyse** — pairwise deltas + capability-anchored interpretation labels:
 
 ```bash
 python compare_quant_pairs.py --config configs/default.yaml \
-  --results_dir results --output_dir results/analysis
-# or: make analyze
+  --results_dir results_scratch --output_dir results_scratch/analysis
 ```
 
-Outputs land in `results/<alias>/<benchmark>/` (per-prompt `raw.jsonl` +
-`summary.json`) and `results/analysis/` (`pairwise_deltas.{json,csv}`,
+Outputs land in `results_scratch/<alias>/<benchmark>/` (per-prompt `raw.jsonl` +
+`summary.json`) and `results_scratch/analysis/` (`pairwise_deltas.{json,csv}`,
 `pair_interpretations.csv`). HarmBench Attack Success Rate from `summary.json` is
 the *secondary* regex proxy; the **primary** classifier ASR comes from the judge
 step (next).
@@ -79,9 +80,9 @@ The refusal regex over-counts ASR. For the primary metric, re-score the saved
 generations with the official HarmBench classifier (GPU; or any HF classifier):
 
 ```bash
-python scripts/run_judge_validation.py --results-dir results \
+python scripts/run_judge_validation.py --results-dir results_scratch \
   --models my_model_base my_model_4bit --backend harmbench_cls --precision fp16
-python scripts/judge_agreement.py --models my_model_base my_model_4bit --out-suffix _mine
+python scripts/judge_agreement.py --results-dir results_scratch --models my_model_base my_model_4bit --out-suffix _mine
 ```
 
 Optionally cross-check with a second judge (`--backend api_judge`, needs

@@ -162,7 +162,11 @@ scripts/report_tools/pass*.py
 scripts/report_tools/build_v4_source_entailment_*.py
 world3d/
 docs/media/
+submission/
 
 # Lockfile written by a local `uv` run (2026-09-22). The project installs with pip
 # and the requirements files; nothing reads this, so it stays local.
 uv.lock
+
+# Meetup companion builder is local-only with the presentation sources (D94).
+/scripts/build_codex_meetup_doc.py

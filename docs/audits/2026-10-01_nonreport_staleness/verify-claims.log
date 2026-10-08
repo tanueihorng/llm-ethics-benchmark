@@ -1,0 +1,830 @@
+python scripts/claim_registry.py --check
+ok  claim registry: fresh (c9ba43dbb5f4)
+python scripts/verify_report_claims.py
+ok    bh: exactly 3 survivors, none ASR                                                                       n=3, metrics=['mmlu_accuracy', 'arc_accuracy', 'xstest_over_refusal']
+ok    bh: survivor identities and deltas                                                                      [('qwen_2b', -0.09), ('llama_3_2_3b', -0.0316), ('phi4_mini', -0.048)]
+ok    bh: survivor q-values 0.008/0.008/0.012                                                                 [0.008, 0.008, 0.0122]
+ok    power: MDE ~0.06 at median discordant 0.09                                                              mde=0.0594
+ok    qwen_2b @512: 0.255->0.255, 0.000 [−0.055,+0.055], p=1.000                                              0.255->0.255 d=0.0 ci=[-0.055, 0.055] p=1.0
+ok    qwen_2b @512: symmetric 16/16 flips                                                                     n01=16 n10=16
+ok    llama @512: 0.100->0.060, −0.040 [−0.075,−0.010], p=0.021                                               0.1->0.06 d=-0.04 ci=[-0.075, -0.01] p=0.0215
+ok    mistral @512: 0.585->0.565, −0.020 [−0.080,+0.040], p=0.627                                             0.585->0.565 d=-0.02 ci=[-0.08, 0.04] p=0.6271
+ok    phi @512: 0.070->0.090, +0.020 [−0.015,+0.055], p=0.424                                                 0.07->0.09 d=0.02 ci=[-0.015, 0.055] p=0.424
+ok    phi label @512 = alignment_degradation (directional), boundary-deterministic                            phi judge_label=alignment_degradation, evidence=directional
+ok    qwen_4b @512: 0.115->0.155, +0.040 [0.000,+0.080]                                                       0.115->0.155 d=0.04 ci=[0.0, 0.08] p=0.0963
+ok    qwen baseline scaling: XSTest 0.052->0.028; MMLU 0.643->0.747                                           baseline levels match pairwise_deltas.json
+ok    outer surfaces: Llama/Mistral headline CIs match artifact                                               README and RESULTS_CARD carry the current artifact CIs
+ok    outer surfaces: judge-vs-proxy κ family ranges == judge_agreement                                       Mistral ≈ 0.25–0.29; Qwen ≈ 0.36–0.59; Phi ≈ 0.67–0.77; Llama ≈ 0.71–0.84 (both surfaces; per-model mistral 0.29/0.25)
+ok    defense deck: cross-judge κ range scoped to its ten aliases                                             judge_pairwise_agreement covers 10 aliases; deck scopes the range to them
+ok    defense deck: qwen_4b BH q = .241                                                                       artifact q=0.2406
+ok    128-era qwen_2b: +0.055, McNemar p=0.027, sig                                                           d=0.055 p=0.0266 sig=True
+ok    gpt-4o deltas: qwen_2b +0.005, llama −0.035                                                             qwen=0.0050000000000000044 llama=-0.034999999999999996
+ok    cross-judge kappa range 0.68–0.95 @512                                                                  min=0.678 max=0.954
+ok    cross-judge kappa 0.60–0.95 across both budgets                                                         128 min=0.599
+ok    mistral cross-judge 0.83/0.78 @512                                                                      0.827/0.777
+ok    phi cross-judge 0.68/0.83 @512 (0.79/0.95 scoped to 128)                                                512=0.678/0.826 128=0.790/0.950
+ok    judge-vs-proxy kappa per model (all 10)                                                                 {'qwen_2b_base': 0.36, 'qwen_2b_4bit': 0.41, 'qwen_4b_base': 0.493, 'qwen_4b_4bit': 0.59, 'llama_3_2_3b_base': 0.709, 'llama_3_2_3b_4bit': 0.836, 'mistral_7b_base': 0.29, 'mistral_7b_4bit': 0.254, 'phi4_mini_base': 0.665, 'phi4_mini_4bit': 0.769}
+ok    mistral 512 kappa in prose: 0.29/0.25 (128-era 0.19/0.11 scoped)                                        512=0.290/0.254 128=0.186/0.106
+ok    no unscoped retired-128-era kappa left (0.19-at-baseline / 0.60-0.63 / as-low-as-0.11)                  every retired-kappa mention is 128-scoped on its line
+ok    v2 proxy range 0.25–0.84; Qwen+Mistral 0.25–0.59; Llama+Phi 0.67–0.84                                   ranges recomputed from judge_agreement.json
+ok    mistral v2 proxy 0.830 -> 0.890 (prose == table == artifact)                                            0.83/0.89
+ok    qwen judge-vs-proxy over-count examples (0.255 vs 0.595; 0.115 vs 0.235)                                judge/v2 per alias match
+ok    truncation: 60.3% (1206/2000), 30.5% natural, 9.2% mismatch (184)                                       {'truncated': 1206, 'natural_stop': 610, 'mismatch': 184, 'n': 2000}
+ok    per-family truncation: mistral 93.5–98.0, phi 73.5–78.5, qwen 54.5–70.0, llama 3.0–4.0                  family ranges recomputed
+ok    median lengths 1,675 vs 567 chars; ceiling proxy 62%                                                    567->1675 ceiling%=62.0
+ok    mistral absolute ASR budget effect 0.585 vs 0.385                                                       512=0.585 128=0.385
+ok    multiseed qwen_2b: mean +0.013 [0.000,+0.035], 5 seeds, all non-negative, greedy in range               {'n_seeds': 5, 'mean': 0.013000000000000001, 'sd': 0.014832396974191319, 'min': 0.0, 'max': 0.034999999999999976, 'sign_consistent': True, 'per_seed': [{'n_matched': 200, 'b': 15, 'c': 15, 'p_value': 1.0, 'significant_p05': False, 'seed': 'seed1', 'delta': 0.0}, {'n_matched': 200, 'b': 15, 'c': 17, 'p_value': 0.860050065908581, 'significant_p05': False, 'seed': 'seed2', 'delta': 0.010000000000000009}, {'n_matched': 200, 'b': 14, 'c': 18, 'p_value': 0.5966148958541453, 'significant_p05': False, 'seed': 'seed3', 'delta': 0.020000000000000018}, {'n_matched': 200, 'b': 17, 'c': 17, 'p_value': 1.0, 'significant_p05': False, 'seed': 'seed4', 'delta': 0.0}, {'n_matched': 200, 'b': 16, 'c': 23, 'p_value': 0.3367836351899314, 'significant_p05': False, 'seed': 'seed5', 'delta': 0.034999999999999976}], 'n_seeds_significant_p05': 0}
+ok    multiseed qwen_4b mean +0.029; llama mean −0.024, no positive seed, greedy in range                     llama={'n_seeds': 5, 'mean': -0.024, 'sd': 0.012942179105544785, 'min': -0.039999999999999994, 'max': -0.009999999999999995, 'sign_consistent': True, 'per_seed': [{'n_matched': 200, 'b': 10, 'c': 6, 'p_value': 0.454498291015625, 'significant_p05': False, 'seed': 'seed1', 'delta': -0.020000000000000004}, {'n_matched': 200, 'b': 4, 'c': 2, 'p_value': 0.6875, 'significant_p05': False, 'seed': 'seed2', 'delta': -0.009999999999999995}, {'n_matched': 200, 'b': 6, 'c': 3, 'p_value': 0.5078125, 'significant_p05': False, 'seed': 'seed3', 'delta': -0.015}, {'n_matched': 200, 'b': 8, 'c': 1, 'p_value': 0.0390625, 'significant_p05': True, 'seed': 'seed4', 'delta': -0.035}, {'n_matched': 200, 'b': 9, 'c': 1, 'p_value': 0.021484375, 'significant_p05': True, 'seed': 'seed5', 'delta': -0.039999999999999994}], 'n_seeds_significant_p05': 2}
+ok    multiseed per-seed: delta list + 0/5, 1/5, 2/5 significance counts                                      q2=[0.0, 0.01, 0.02, 0.0, 0.035] sig 0/5; q4 sig 1/5; llama sig 2/5 (all decreases: True)
+ok    xstest qwen_2b: over-refusal non-significant (CI includes 0, McNemar p=0.109)                           bootstrap sig=False delta=-0.023999999999999997; McNemar p=0.1094 discordant=10
+ok    strict-parser bracket: ARC −0.343 / MMLU −0.293, ARC 52.3% fallback, not 'immune'                       ARC strict -0.343 [-0.375,-0.311]; MMLU strict -0.293; ARC 4bit fallback 0.523 vs base 0.025; retired 'immune' phrasing absent
+ok    llama baseline XSTest over-refusal 0.032 (v2 scorer of record, not retired 0.036)                       llama base xstest v2 OR=0.032
+ok    appendix A: reproduced config matches configs/tc1_512.yaml                                              appendix matches tc1_512.yaml on max_new_tokens, log_dir, temperature, seed
+ok    human validation: κ 0.59/0.11 + confusion counts (37/46/132; 18-9/101-6) == artifact                    clf κ=0.591 flags 46 (over 18/miss 9); regex κ=0.110 flags 132 (over 101/miss 6); human 37
+ok    INT8 llama @512: clf +0.005 p=1.000; gpt-4o +0.010 p=0.688                                              d=0.005 p_cls=1.0 p_api=0.6875
+ok    INT8 llama @128: +0.040 both-judge (clf p=0.021, api p=0.008)                                           d=0.04 p_cls=0.021484375 p_api=0.0078125
+ok    sweep: XSTest over-refusal column == pairwise_deltas (v2, no drift)                                     all 5 pairs agree
+ok    qwen_2b MMLU 0.643->0.553 (−0.090, sig)                                                                 0.6433333333333333->0.5533333333333333 d=-0.0900 sig=True
+ok    llama MMLU 0.610->0.573 (−0.037, n.s.)                                                                  0.61->0.5733333333333334 d=-0.0367 sig=False
+ok    llama ARC −0.032 (sig)                                                                                  0.7295221843003413->0.6979522184300341 d=-0.0316 sig=True
+ok    mistral MMLU −0.020 n.s.; ARC +0.009 n.s.                                                               mmlu=-0.0200 arc=0.0094
+ok    phi MMLU −2.7pp n.s.; ARC −1.5pp n.s.                                                                   mmlu=-0.0267 arc=-0.0145
+ok    phi over-refusal −0.048 [−0.076,−0.020] (sig, a decrease)                                               ci=[-0.076,-0.02]
+ok    Table 6.1 v2-proxy CI cells (qwen_2b/qwen_4b/mistral)                                                   v2 deltas + CIs match pairwise_deltas.json
+ok    qwen_4b ARC −1.6pp sig; OR 0.028->0.024 (−0.004, n.s.)                                                  arc=-0.0162
+ok    llama OR 0.032->0.048 (+0.016, n.s.)                                                                    0.032->0.048 d=0.0160 sig=False
+ok    baseline MMLU anchors 0.643 / 0.747 / 0.610                                                             qwen_2b/qwen_4b/llama baseline MMLU
+ok    Result 6: Phi judge ΔOR +0.016 strict (up) / −0.004 broad, both n.s. — regex −0.048 not reproduced      strict Δ=0.016 p=0.5966; broad Δ=-0.004 p=1.0000
+ok    Result 6: κ −0.01..0.50 across 10 NF4 aliases; judge OR ~0.171 vs regex ~0.044                          κ [-0.008,0.501], mean judge OR 0.171 vs regex 0.044
+ok    Result 6: 3,750 XSTest judge calls, zero parse failures                                                 3750 scored, 0 parse errors
+ok    Result 6 / Table 6.4: five per-pair judge ΔORs + regex column == artifacts, none judge-sig              all five Table 6.4 rows (judge strict/broad + regex column) match artifacts
+ok    T36: Outcome J recomputed via prereg precedence; strict κ 0.485/−0.006, broad 0.662/0.054; recall 2/63  recomputed outcome J; strict κ judge 0.4848 vs regex -0.0063
+ok    T41: T36 deviation disclosed + bounded (≤14/200, gap +0.51); per-item sidecar recomputes aggregate      deviation displaced ≤14/200, intersection gap +0.511; per-item sidecar recomputes κ -0.0063/0.4848
+ok    D51: validation-informed parallel family — 2 survivors (both capability), composition verified          2 survivors (both capability); 15 shared + 5 judge-strict p-values verified
+ok    T37: LlamaGuard κ 0.36–0.92, all per-pair ΔASR n.s., 15 revision-pinned sidecars                        κ 0.3615–0.9178 over 10 aliases; all 5 pair ΔASR n.s. (largest qwen_2b -0.050, p 0.076); 15 sidecars revision-pinned, 0 parse errors
+ok    T39: 5-pair multiseed — mistral/phi values, greedy-outside disclosures, old pairs intact                5 pairs; mistral mean +0.012 [-0.005,+0.045] 0/5, greedy outside-below; phi mean -0.012 [-0.055,+0.015] 1/5 (sig seed a decrease), greedy outside-above; old 3 greedy-in-range; 4 sig seeds = 1 inc vs 3 dec
+ok    sample sizes: 200/250/300/1172                                                                          {'harmbench': 200, 'xstest': 250, 'mmlu': 300, 'arc': 1172}
+ok    512 judge volume: 15 aliases x 200 = 3,000 classifications                                              15 aliases, 3000 classifications
+ok    XSTest v2: 450 prompts, 250 benign evaluated                                                            450 rows, 250 benign
+ok    IEEE citations: every ref cited, numbered strictly by first use                                         32 refs, all cited, first-use order strict
+ok    thesis: Table 6.2 judge rows == headline artifact                                                       all five CI cells match headline_512_vs_128.json
+ok    thesis: Table 6.2 capability cells == pairwise_deltas                                                   capability cells match
+ok    thesis: kappa family table == judge_agreement                                                           family ranges match
+ok    thesis: judge-only/regex-only counts == judge_agreement                                                 28 judge-only / 325 regex-only
+ok    thesis: sweep table rows == precision_sweep                                                             all 15 sweep cells match precision_sweep.json
+ok    thesis: truncation + budget artefact block                                                              prefix stats match genlen_robustness.json
+ok    thesis: BH survivors + none-ASR                                                                         3 survivors, none ASR
+ok    thesis: INT8 vanish @512 under both judges                                                              INT8 llama values match
+ok    thesis: multiseed + OR claims                                                                           multiseed + OR values match
+ok    thesis: Result 6 XSTest judge — Phi ΔOR +0.016/−0.004 n.s., scorer-dependent                            strict 0.016 / broad -0.004
+ok    thesis: threat model + budget scoping present                                                           text pinned
+ok    thesis: IEEE citations — every ref cited, strict first-use order                                        26 refs, all cited, first-use order strict
+ok    thesis: no unscoped 128-era content                                                                     every +0.055 line 128-scoped; no retired kappa/counts/immune-ARC
+ok    thesis: strict-parser bracket ARC −0.343 / MMLU −0.293 (not 'immune')                                   thesis ARC/MMLU strict bracket bound to parser_strict_sensitivity.json
+ok    interim: headline ΔASR + capability + κ + counts + budget + INT8 == artifacts                           interim headline/capability/κ/counts/budget/INT8 all match the committed artifacts
+ok    interim: judge-only/regex-only counts == judge_agreement                                                28 judge-only / 325 regex-only; final publication metadata present
+ok    interim: labelled an Interim Report + no unscoped 128-era content                                       interim scoped correctly (Interim Report; no retired counts/128-era leakage)
+ok    current alternate (report): corrected aliases, counts, and Kharinaev metadata                           report alternate carries the corrected wording and no retired claim
+ok    current alternate (thesis): corrected aliases, counts, and Kharinaev metadata                           thesis alternate carries the corrected wording and no retired claim
+ok    current alternate (interim): corrected aliases, counts, and Kharinaev metadata                          interim alternate carries the corrected wording and no retired claim
+ok    §6.14 margin shifts + dz range match refusal_margin.json (FS-2)                                         Wilcoxon p<0.001 ×4, means +1.2/+4.0/−1.1/−0.3, dz range −0.74..+1.7
+ok    §6.14 pooled flips + AUCs match refusal_margin.json (FS-2)                                              92 = 50 + 42; pooled AUC 0.76; within-pair 0.61/0.54
+ok    §6.15 INT8 capability verdict bounded by artifact deltas (FS-3/FS-8)                                    max |INT8 capability delta| rounds to 1.3 pp across all five pairs
+ok    §6.15 Llama INT8 512 non-replication cells match precision_sweep.json (FS-3)                            llama INT8 deltas/p-values match artifact
+ok    interim surface: BH survivor set + RQ1 null match multiple_comparisons.json (FS-4)                      3 BH survivors, none on the safety axis
+ok    thesis surface: LlamaGuard κ range + XSTest gold κs match artifacts (FS-5)                              LlamaGuard κ 0.36–0.92; gold κ 0.485/−0.006 strict, 0.662/0.054 broad
+ok    headline-number instance counts stable on report surface (FS-6 canary)                                  −0.090 ×26, −0.048 ×40 incl. registry (update counts deliberately on any real edit)
+------------------------------------------------------------
+93 checks: 93 pass, 0 fail, 0 skipped
+python scripts/verify_claim_surfaces.py
+ok    registry:fresh                                                                                  fresh (c9ba43dbb5f4)
+ok    surfaces:coverage                                                                               138 registered
+ok    surfaces:generated-blocks                                                                       all generated blocks current
+ok    agents:volatile_free                                                                            no volatile counts/Git state
+ok    claude:volatile_free                                                                            no volatile counts/Git state
+ok    readme:markdown_primary                                                                         five per-pair ASR rows match registry
+ok    readme:volatile_free                                                                            no volatile counts/Git state
+ok    project_log:project_log_current                                                                 current-state prose has no volatile counts/Git state
+ok    results_card:markdown_primary                                                                   five per-pair ASR rows match registry
+ok    results_card:volatile_free                                                                      no volatile counts/Git state
+ok    agentic_workflow:registered                                                                     classified as current-reference
+ok    agent_dashboard:registered                                                                      classified as generated-live
+ok    codex_meetup_brief:registered                                                                   classified as current-reference
+ok    fyp_repo_guide:registered                                                                       classified as current-reference
+ok    repo_workflow_guide:volatile_free                                                               no volatile counts/Git state
+ok    handoff:registered                                                                              classified as generated-live
+ok    harness_self_eval:registered                                                                    classified as current-reference
+ok    fyp_writing_style_guide:registered                                                              classified as current-reference
+ok    human_label_protocol:registered                                                                 classified as current-reference
+ok    project_metrics:registered                                                                      classified as current-reference
+ok    quickstart:registered                                                                           classified as current-reference
+ok    report_claim_audit:registered                                                                   classified as audit-snapshot
+ok    rewritten_report_v1_claim_source_audit:registered                                               classified as audit-snapshot
+ok    language_pass_v5_change_log:registered                                                          classified as audit-snapshot
+ok    language_pass_v5_left_technical:registered                                                      classified as audit-snapshot
+ok    language_pass_v5_verification_note:registered                                                   classified as audit-snapshot
+ok    language_pass_v5_prose_review_findings:registered                                               classified as audit-snapshot
+ok    report_remediation_plan:registered                                                              classified as current-reference
+ok    report_structure_proposal:registered                                                            classified as current-reference
+ok    reproducibility:volatile_free                                                                   no volatile counts/Git state
+ok    submission_runbook:volatile_free                                                                no volatile counts/Git state
+ok    viva_qa_bank:volatile_free                                                                      no volatile counts/Git state
+ok    tc1_agent_checklist:registered                                                                  classified as generated-live
+ok    report_version_map:registered                                                                   classified as generated-live
+ok    tc1_cluster_runbook:registered                                                                  classified as current-reference
+ok    thesis_outline:volatile_free                                                                    no volatile counts/Git state
+ok    user_guide:registered                                                                           classified as current-reference
+ok    xstest_gold_prereg:registered                                                                   classified as preregistration
+ok    xstest_judge_prereg:registered                                                                  classified as preregistration
+ok    vi_family_note:registered                                                                       classified as preregistration
+ok    datasets_doc:registered                                                                         classified as current-reference
+ok    claude_code_session_archive:registered                                                          classified as snapshot
+ok    june_email_early:registered                                                                     classified as snapshot
+ok    july_email:volatile_free                                                                        no volatile counts/Git state
+ok    august_email:volatile_free                                                                      no volatile counts/Git state
+ok    merged_email:volatile_free                                                                      no volatile counts/Git state
+ok    june_email:registered                                                                           classified as snapshot
+ok    evaluation_metrics_doc:registered                                                               classified as current-reference
+ok    extensibility_doc:registered                                                                    classified as current-reference
+ok    limitations_doc:registered                                                                      classified as current-reference
+ok    methodology_doc:registered                                                                      classified as current-reference
+ok    paper_outline:registered                                                                        classified as current-reference
+ok    session_notes:registered                                                                        classified as snapshot
+ok    report_builder:registry_consumer                                                                imports and consumes registry
+ok    report_builder:volatile_free                                                                    no volatile counts/Git state
+ok    report_builder_v6:registry_consumer                                                             imports and consumes registry
+ok    report_builder_v6:volatile_free                                                                 no volatile counts/Git state
+ok    rewritten_report_v1_builder:registry_consumer_python                                            imports and consumes registry
+ok    rewritten_report_v1_builder:volatile_free                                                       no volatile counts/Git state
+ok    rewritten_report_v2_builder:volatile_free                                                       no volatile counts/Git state
+ok    rewritten_report_v3_builder:volatile_free                                                       no volatile counts/Git state
+ok    rewritten_report_v4_builder:volatile_free                                                       no volatile counts/Git state
+ok    rewritten_report_v5_builder:volatile_free                                                       no volatile counts/Git state
+ok    rewritten_interim_v1_builder:volatile_free                                                      no volatile counts/Git state
+ok    rewritten_interim_v3_builder:volatile_free                                                      no volatile counts/Git state
+ok    rewritten_interim_v4_builder:volatile_free                                                      no volatile counts/Git state
+ok    rewritten_interim_v5_builder:volatile_free                                                      no volatile counts/Git state
+ok    rewritten_interim_compact_builder:volatile_free                                                 no volatile counts/Git state
+ok    rewritten_interim_progress_builder:volatile_free                                                no volatile counts/Git state
+ok    rewritten_interim_progress_humanized_builder:volatile_free                                      no volatile counts/Git state
+ok    rewritten_latex_builder:volatile_free                                                           no volatile counts/Git state
+ok    report_humanized_builder:registry_consumer                                                      imports and consumes registry
+ok    report_humanized_builder:volatile_free                                                          no volatile counts/Git state
+ok    thesis_builder:registry_consumer                                                                imports and consumes registry
+ok    thesis_builder:volatile_free                                                                    no volatile counts/Git state
+ok    thesis_humanized_builder:registry_consumer                                                      imports and consumes registry
+ok    thesis_humanized_builder:volatile_free                                                          no volatile counts/Git state
+ok    interim_builder:registry_consumer                                                               imports and consumes registry
+ok    interim_builder:volatile_free                                                                   no volatile counts/Git state
+ok    interim_humanized_builder:registry_consumer                                                     imports and consumes registry
+ok    interim_humanized_builder:volatile_free                                                         no volatile counts/Git state
+ok    report_docx:docx_primary.survivor:qwen_2b:mmlu_accuracy                                         -0.090 bound to Qwen3-1.7B + MMLU
+ok    report_docx:docx_primary.contradiction:survivor-identity:qwen_2b                                -0.090 never attributed to another pair
+ok    report_docx:docx_primary.survivor:llama_3_2_3b:arc_accuracy                                     -0.032 bound to Llama-3.2-3B + ARC
+ok    report_docx:docx_primary.contradiction:survivor-identity:llama_3_2_3b                           -0.032 never attributed to another pair
+ok    report_docx:docx_primary.survivor:phi4_mini:xstest_over_refusal                                 -0.048 bound to Phi-4-mini + over-refusal
+ok    report_docx:docx_primary.contradiction:survivor-identity:phi4_mini                              -0.048 never attributed to another pair
+ok    report_docx:docx_primary.survivor-count                                                         exact survivor count asserted with BH-FDR context
+ok    report_docx:docx_primary.vi-survivor-count                                                      validation-informed count (two) asserted in scope
+ok    report_docx:docx_primary.contradiction:survivor-count                                           no hedged/wrong survivor count
+ok    report_docx:docx_primary.no-asr-survivor                                                        ASR non-survival stated
+ok    report_docx:docx_primary.contradiction:asr-survival                                             no un-negated ASR-survival sentence
+ok    report_docx:docx_primary.asr-direction:llama_3_2_3b                                             significant ΔASR -0.040 bound to Llama-3.2-3B with correct direction
+ok    report_docx:docx_primary.contradiction:asr-direction:llama_3_2_3b                               no contradictory significance/direction sentence
+ok    report_docx:docx_primary.or-survivor-caveat                                                     -0.048 carries the independent-judge caveat
+ok    report_docx:docx_primary.contradiction:or-survivor-caveat                                       no replication claim for the over-refusal survivor
+ok    report_docx:docx_primary.primary-budget                                                         512-token budget stated as primary/reference
+ok    report_docx:docx_primary.contradiction:primary-budget                                           no rival budget claimed as primary
+ok    report_docx:docx_primary.human-validation-kappa                                                 classifier κ 0.59 vs regex κ 0.11 present
+ok    report_docx:docx_primary.contradiction:kappa-ownership                                          no κ value attributed to the wrong scorer
+ok    report_docx:docx_primary.retired-scope:+0.055                                                   every live '+0.055' is 128-scoped (CI bounds exempt)
+ok    report_docx:volatile_free                                                                       no volatile counts/Git state
+ok    report_docx:fresh_from_source                                                                   not older than source
+ok    report_humanized_docx:docx_primary.survivor:qwen_2b:mmlu_accuracy                               -0.090 bound to Qwen3-1.7B + MMLU
+ok    report_humanized_docx:docx_primary.contradiction:survivor-identity:qwen_2b                      -0.090 never attributed to another pair
+ok    report_humanized_docx:docx_primary.survivor:llama_3_2_3b:arc_accuracy                           -0.032 bound to Llama-3.2-3B + ARC
+ok    report_humanized_docx:docx_primary.contradiction:survivor-identity:llama_3_2_3b                 -0.032 never attributed to another pair
+ok    report_humanized_docx:docx_primary.survivor:phi4_mini:xstest_over_refusal                       -0.048 bound to Phi-4-mini + over-refusal
+ok    report_humanized_docx:docx_primary.contradiction:survivor-identity:phi4_mini                    -0.048 never attributed to another pair
+ok    report_humanized_docx:docx_primary.survivor-count                                               exact survivor count asserted with BH-FDR context
+ok    report_humanized_docx:docx_primary.vi-survivor-count                                            validation-informed count (two) asserted in scope
+ok    report_humanized_docx:docx_primary.contradiction:survivor-count                                 no hedged/wrong survivor count
+ok    report_humanized_docx:docx_primary.no-asr-survivor                                              ASR non-survival stated
+ok    report_humanized_docx:docx_primary.contradiction:asr-survival                                   no un-negated ASR-survival sentence
+ok    report_humanized_docx:docx_primary.asr-direction:llama_3_2_3b                                   significant ΔASR -0.040 bound to Llama-3.2-3B with correct direction
+ok    report_humanized_docx:docx_primary.contradiction:asr-direction:llama_3_2_3b                     no contradictory significance/direction sentence
+ok    report_humanized_docx:docx_primary.or-survivor-caveat                                           -0.048 carries the independent-judge caveat
+ok    report_humanized_docx:docx_primary.contradiction:or-survivor-caveat                             no replication claim for the over-refusal survivor
+ok    report_humanized_docx:docx_primary.primary-budget                                               512-token budget stated as primary/reference
+ok    report_humanized_docx:docx_primary.contradiction:primary-budget                                 no rival budget claimed as primary
+ok    report_humanized_docx:docx_primary.human-validation-kappa                                       classifier κ 0.59 vs regex κ 0.11 present
+ok    report_humanized_docx:docx_primary.contradiction:kappa-ownership                                no κ value attributed to the wrong scorer
+ok    report_humanized_docx:docx_primary.retired-scope:+0.055                                         every live '+0.055' is 128-scoped (CI bounds exempt)
+ok    report_humanized_docx:volatile_free                                                             no volatile counts/Git state
+ok    report_humanized_docx:fresh_from_source                                                         not older than source
+ok    thesis_docx:docx_primary.survivor:qwen_2b:mmlu_accuracy                                         -0.090 bound to Qwen3-1.7B + MMLU
+ok    thesis_docx:docx_primary.contradiction:survivor-identity:qwen_2b                                -0.090 never attributed to another pair
+ok    thesis_docx:docx_primary.survivor:llama_3_2_3b:arc_accuracy                                     -0.032 bound to Llama-3.2-3B + ARC
+ok    thesis_docx:docx_primary.contradiction:survivor-identity:llama_3_2_3b                           -0.032 never attributed to another pair
+ok    thesis_docx:docx_primary.survivor:phi4_mini:xstest_over_refusal                                 -0.048 bound to Phi-4-mini + over-refusal
+ok    thesis_docx:docx_primary.contradiction:survivor-identity:phi4_mini                              -0.048 never attributed to another pair
+ok    thesis_docx:docx_primary.survivor-count                                                         exact survivor count asserted with BH-FDR context
+ok    thesis_docx:docx_primary.vi-survivor-count                                                      validation-informed count (two) asserted in scope
+ok    thesis_docx:docx_primary.contradiction:survivor-count                                           no hedged/wrong survivor count
+ok    thesis_docx:docx_primary.no-asr-survivor                                                        ASR non-survival stated
+ok    thesis_docx:docx_primary.contradiction:asr-survival                                             no un-negated ASR-survival sentence
+ok    thesis_docx:docx_primary.asr-direction:llama_3_2_3b                                             significant ΔASR -0.040 bound to Llama-3.2-3B with correct direction
+ok    thesis_docx:docx_primary.contradiction:asr-direction:llama_3_2_3b                               no contradictory significance/direction sentence
+ok    thesis_docx:docx_primary.or-survivor-caveat                                                     -0.048 carries the independent-judge caveat
+ok    thesis_docx:docx_primary.contradiction:or-survivor-caveat                                       no replication claim for the over-refusal survivor
+ok    thesis_docx:docx_primary.primary-budget                                                         512-token budget stated as primary/reference
+ok    thesis_docx:docx_primary.contradiction:primary-budget                                           no rival budget claimed as primary
+ok    thesis_docx:docx_primary.human-validation-kappa                                                 classifier κ 0.59 vs regex κ 0.11 present
+ok    thesis_docx:docx_primary.contradiction:kappa-ownership                                          no κ value attributed to the wrong scorer
+ok    thesis_docx:docx_primary.retired-scope:+0.055                                                   every live '+0.055' is 128-scoped (CI bounds exempt)
+ok    thesis_docx:volatile_free                                                                       no volatile counts/Git state
+ok    thesis_docx:fresh_from_source                                                                   not older than source
+ok    thesis_humanized_docx:docx_primary.survivor:qwen_2b:mmlu_accuracy                               -0.090 bound to Qwen3-1.7B + MMLU
+ok    thesis_humanized_docx:docx_primary.contradiction:survivor-identity:qwen_2b                      -0.090 never attributed to another pair
+ok    thesis_humanized_docx:docx_primary.survivor:llama_3_2_3b:arc_accuracy                           -0.032 bound to Llama-3.2-3B + ARC
+ok    thesis_humanized_docx:docx_primary.contradiction:survivor-identity:llama_3_2_3b                 -0.032 never attributed to another pair
+ok    thesis_humanized_docx:docx_primary.survivor:phi4_mini:xstest_over_refusal                       -0.048 bound to Phi-4-mini + over-refusal
+ok    thesis_humanized_docx:docx_primary.contradiction:survivor-identity:phi4_mini                    -0.048 never attributed to another pair
+ok    thesis_humanized_docx:docx_primary.survivor-count                                               exact survivor count asserted with BH-FDR context
+ok    thesis_humanized_docx:docx_primary.vi-survivor-count                                            validation-informed count (two) asserted in scope
+ok    thesis_humanized_docx:docx_primary.contradiction:survivor-count                                 no hedged/wrong survivor count
+ok    thesis_humanized_docx:docx_primary.no-asr-survivor                                              ASR non-survival stated
+ok    thesis_humanized_docx:docx_primary.contradiction:asr-survival                                   no un-negated ASR-survival sentence
+ok    thesis_humanized_docx:docx_primary.asr-direction:llama_3_2_3b                                   significant ΔASR -0.040 bound to Llama-3.2-3B with correct direction
+ok    thesis_humanized_docx:docx_primary.contradiction:asr-direction:llama_3_2_3b                     no contradictory significance/direction sentence
+ok    thesis_humanized_docx:docx_primary.or-survivor-caveat                                           -0.048 carries the independent-judge caveat
+ok    thesis_humanized_docx:docx_primary.contradiction:or-survivor-caveat                             no replication claim for the over-refusal survivor
+ok    thesis_humanized_docx:docx_primary.primary-budget                                               512-token budget stated as primary/reference
+ok    thesis_humanized_docx:docx_primary.contradiction:primary-budget                                 no rival budget claimed as primary
+ok    thesis_humanized_docx:docx_primary.human-validation-kappa                                       classifier κ 0.59 vs regex κ 0.11 present
+ok    thesis_humanized_docx:docx_primary.contradiction:kappa-ownership                                no κ value attributed to the wrong scorer
+ok    thesis_humanized_docx:docx_primary.retired-scope:+0.055                                         every live '+0.055' is 128-scoped (CI bounds exempt)
+ok    thesis_humanized_docx:volatile_free                                                             no volatile counts/Git state
+ok    thesis_humanized_docx:fresh_from_source                                                         not older than source
+ok    interim_docx:docx_primary.survivor:qwen_2b:mmlu_accuracy                                        -0.090 bound to Qwen3-1.7B + MMLU
+ok    interim_docx:docx_primary.contradiction:survivor-identity:qwen_2b                               -0.090 never attributed to another pair
+ok    interim_docx:docx_primary.survivor:llama_3_2_3b:arc_accuracy                                    -0.032 bound to Llama-3.2-3B + ARC
+ok    interim_docx:docx_primary.contradiction:survivor-identity:llama_3_2_3b                          -0.032 never attributed to another pair
+ok    interim_docx:docx_primary.survivor:phi4_mini:xstest_over_refusal                                -0.048 bound to Phi-4-mini + over-refusal
+ok    interim_docx:docx_primary.contradiction:survivor-identity:phi4_mini                             -0.048 never attributed to another pair
+ok    interim_docx:docx_primary.survivor-count                                                        exact survivor count asserted with BH-FDR context
+ok    interim_docx:docx_primary.vi-survivor-count                                                     validation-informed count (two) asserted in scope
+ok    interim_docx:docx_primary.contradiction:survivor-count                                          no hedged/wrong survivor count
+ok    interim_docx:docx_primary.no-asr-survivor                                                       ASR non-survival stated
+ok    interim_docx:docx_primary.contradiction:asr-survival                                            no un-negated ASR-survival sentence
+ok    interim_docx:docx_primary.asr-direction:llama_3_2_3b                                            significant ΔASR -0.040 bound to Llama-3.2-3B with correct direction
+ok    interim_docx:docx_primary.contradiction:asr-direction:llama_3_2_3b                              no contradictory significance/direction sentence
+ok    interim_docx:docx_primary.or-survivor-caveat                                                    -0.048 carries the independent-judge caveat
+ok    interim_docx:docx_primary.contradiction:or-survivor-caveat                                      no replication claim for the over-refusal survivor
+ok    interim_docx:docx_primary.primary-budget                                                        512-token budget stated as primary/reference
+ok    interim_docx:docx_primary.contradiction:primary-budget                                          no rival budget claimed as primary
+ok    interim_docx:docx_primary.human-validation-kappa                                                classifier κ 0.59 vs regex κ 0.11 present
+ok    interim_docx:docx_primary.contradiction:kappa-ownership                                         no κ value attributed to the wrong scorer
+ok    interim_docx:docx_primary.retired-scope:+0.055                                                  every live '+0.055' is 128-scoped (CI bounds exempt)
+ok    interim_docx:volatile_free                                                                      no volatile counts/Git state
+ok    interim_docx:fresh_from_source                                                                  not older than source
+ok    interim_humanized_docx:docx_primary.survivor:qwen_2b:mmlu_accuracy                              -0.090 bound to Qwen3-1.7B + MMLU
+ok    interim_humanized_docx:docx_primary.contradiction:survivor-identity:qwen_2b                     -0.090 never attributed to another pair
+ok    interim_humanized_docx:docx_primary.survivor:llama_3_2_3b:arc_accuracy                          -0.032 bound to Llama-3.2-3B + ARC
+ok    interim_humanized_docx:docx_primary.contradiction:survivor-identity:llama_3_2_3b                -0.032 never attributed to another pair
+ok    interim_humanized_docx:docx_primary.survivor:phi4_mini:xstest_over_refusal                      -0.048 bound to Phi-4-mini + over-refusal
+ok    interim_humanized_docx:docx_primary.contradiction:survivor-identity:phi4_mini                   -0.048 never attributed to another pair
+ok    interim_humanized_docx:docx_primary.survivor-count                                              exact survivor count asserted with BH-FDR context
+ok    interim_humanized_docx:docx_primary.vi-survivor-count                                           validation-informed count (two) asserted in scope
+ok    interim_humanized_docx:docx_primary.contradiction:survivor-count                                no hedged/wrong survivor count
+ok    interim_humanized_docx:docx_primary.no-asr-survivor                                             ASR non-survival stated
+ok    interim_humanized_docx:docx_primary.contradiction:asr-survival                                  no un-negated ASR-survival sentence
+ok    interim_humanized_docx:docx_primary.asr-direction:llama_3_2_3b                                  significant ΔASR -0.040 bound to Llama-3.2-3B with correct direction
+ok    interim_humanized_docx:docx_primary.contradiction:asr-direction:llama_3_2_3b                    no contradictory significance/direction sentence
+ok    interim_humanized_docx:docx_primary.or-survivor-caveat                                          -0.048 carries the independent-judge caveat
+ok    interim_humanized_docx:docx_primary.contradiction:or-survivor-caveat                            no replication claim for the over-refusal survivor
+ok    interim_humanized_docx:docx_primary.primary-budget                                              512-token budget stated as primary/reference
+ok    interim_humanized_docx:docx_primary.contradiction:primary-budget                                no rival budget claimed as primary
+ok    interim_humanized_docx:docx_primary.human-validation-kappa                                      classifier κ 0.59 vs regex κ 0.11 present
+ok    interim_humanized_docx:docx_primary.contradiction:kappa-ownership                               no κ value attributed to the wrong scorer
+ok    interim_humanized_docx:docx_primary.retired-scope:+0.055                                        every live '+0.055' is 128-scoped (CI bounds exempt)
+ok    interim_humanized_docx:volatile_free                                                            no volatile counts/Git state
+ok    interim_humanized_docx:fresh_from_source                                                        not older than source
+ok    rewritten_report_v1:docx_primary.survivor:qwen_2b:mmlu_accuracy                                 -0.090 bound to Qwen3-1.7B + MMLU
+ok    rewritten_report_v1:docx_primary.contradiction:survivor-identity:qwen_2b                        -0.090 never attributed to another pair
+ok    rewritten_report_v1:docx_primary.survivor:llama_3_2_3b:arc_accuracy                             -0.032 bound to Llama-3.2-3B + ARC
+ok    rewritten_report_v1:docx_primary.contradiction:survivor-identity:llama_3_2_3b                   -0.032 never attributed to another pair
+ok    rewritten_report_v1:docx_primary.survivor:phi4_mini:xstest_over_refusal                         -0.048 bound to Phi-4-mini + over-refusal
+ok    rewritten_report_v1:docx_primary.contradiction:survivor-identity:phi4_mini                      -0.048 never attributed to another pair
+ok    rewritten_report_v1:docx_primary.survivor-count                                                 exact survivor count asserted with BH-FDR context
+ok    rewritten_report_v1:docx_primary.vi-survivor-count                                              validation-informed count (two) asserted in scope
+ok    rewritten_report_v1:docx_primary.contradiction:survivor-count                                   no hedged/wrong survivor count
+ok    rewritten_report_v1:docx_primary.no-asr-survivor                                                ASR non-survival stated
+ok    rewritten_report_v1:docx_primary.contradiction:asr-survival                                     no un-negated ASR-survival sentence
+ok    rewritten_report_v1:docx_primary.asr-direction:llama_3_2_3b                                     significant ΔASR -0.040 bound to Llama-3.2-3B with correct direction
+ok    rewritten_report_v1:docx_primary.contradiction:asr-direction:llama_3_2_3b                       no contradictory significance/direction sentence
+ok    rewritten_report_v1:docx_primary.or-survivor-caveat                                             -0.048 carries the independent-judge caveat
+ok    rewritten_report_v1:docx_primary.contradiction:or-survivor-caveat                               no replication claim for the over-refusal survivor
+ok    rewritten_report_v1:docx_primary.primary-budget                                                 512-token budget stated as primary/reference
+ok    rewritten_report_v1:docx_primary.contradiction:primary-budget                                   no rival budget claimed as primary
+ok    rewritten_report_v1:docx_primary.human-validation-kappa                                         classifier κ 0.59 vs regex κ 0.11 present
+ok    rewritten_report_v1:docx_primary.contradiction:kappa-ownership                                  no κ value attributed to the wrong scorer
+ok    rewritten_report_v1:docx_primary.retired-scope:+0.055                                           every live '+0.055' is 128-scoped (CI bounds exempt)
+ok    rewritten_report_v1:volatile_free                                                               no volatile counts/Git state
+ok    rewritten_report_v1:fresh_from_source                                                           not older than source
+ok    rewritten_report_v2:docx_primary.survivor:qwen_2b:mmlu_accuracy                                 -0.090 bound to Qwen3-1.7B + MMLU
+ok    rewritten_report_v2:docx_primary.contradiction:survivor-identity:qwen_2b                        -0.090 never attributed to another pair
+ok    rewritten_report_v2:docx_primary.survivor:llama_3_2_3b:arc_accuracy                             -0.032 bound to Llama-3.2-3B + ARC
+ok    rewritten_report_v2:docx_primary.contradiction:survivor-identity:llama_3_2_3b                   -0.032 never attributed to another pair
+ok    rewritten_report_v2:docx_primary.survivor:phi4_mini:xstest_over_refusal                         -0.048 bound to Phi-4-mini + over-refusal
+ok    rewritten_report_v2:docx_primary.contradiction:survivor-identity:phi4_mini                      -0.048 never attributed to another pair
+ok    rewritten_report_v2:docx_primary.survivor-count                                                 exact survivor count asserted with BH-FDR context
+ok    rewritten_report_v2:docx_primary.vi-survivor-count                                              validation-informed count (two) asserted in scope
+ok    rewritten_report_v2:docx_primary.contradiction:survivor-count                                   no hedged/wrong survivor count
+ok    rewritten_report_v2:docx_primary.no-asr-survivor                                                ASR non-survival stated
+ok    rewritten_report_v2:docx_primary.contradiction:asr-survival                                     no un-negated ASR-survival sentence
+ok    rewritten_report_v2:docx_primary.asr-direction:llama_3_2_3b                                     significant ΔASR -0.040 bound to Llama-3.2-3B with correct direction
+ok    rewritten_report_v2:docx_primary.contradiction:asr-direction:llama_3_2_3b                       no contradictory significance/direction sentence
+ok    rewritten_report_v2:docx_primary.or-survivor-caveat                                             -0.048 carries the independent-judge caveat
+ok    rewritten_report_v2:docx_primary.contradiction:or-survivor-caveat                               no replication claim for the over-refusal survivor
+ok    rewritten_report_v2:docx_primary.primary-budget                                                 512-token budget stated as primary/reference
+ok    rewritten_report_v2:docx_primary.contradiction:primary-budget                                   no rival budget claimed as primary
+ok    rewritten_report_v2:docx_primary.human-validation-kappa                                         classifier κ 0.59 vs regex κ 0.11 present
+ok    rewritten_report_v2:docx_primary.contradiction:kappa-ownership                                  no κ value attributed to the wrong scorer
+ok    rewritten_report_v2:docx_primary.retired-scope:+0.055                                           every live '+0.055' is 128-scoped (CI bounds exempt)
+ok    rewritten_report_v2:volatile_free                                                               no volatile counts/Git state
+ok    rewritten_report_v2:fresh_from_source                                                           not older than source
+ok    rewritten_report_v3:docx_primary.survivor:qwen_2b:mmlu_accuracy                                 -0.090 bound to Qwen3-1.7B + MMLU
+ok    rewritten_report_v3:docx_primary.contradiction:survivor-identity:qwen_2b                        -0.090 never attributed to another pair
+ok    rewritten_report_v3:docx_primary.survivor:llama_3_2_3b:arc_accuracy                             -0.032 bound to Llama-3.2-3B + ARC
+ok    rewritten_report_v3:docx_primary.contradiction:survivor-identity:llama_3_2_3b                   -0.032 never attributed to another pair
+ok    rewritten_report_v3:docx_primary.survivor:phi4_mini:xstest_over_refusal                         -0.048 bound to Phi-4-mini + over-refusal
+ok    rewritten_report_v3:docx_primary.contradiction:survivor-identity:phi4_mini                      -0.048 never attributed to another pair
+ok    rewritten_report_v3:docx_primary.survivor-count                                                 exact survivor count asserted with BH-FDR context
+ok    rewritten_report_v3:docx_primary.vi-survivor-count                                              validation-informed count (two) asserted in scope
+ok    rewritten_report_v3:docx_primary.contradiction:survivor-count                                   no hedged/wrong survivor count
+ok    rewritten_report_v3:docx_primary.no-asr-survivor                                                ASR non-survival stated
+ok    rewritten_report_v3:docx_primary.contradiction:asr-survival                                     no un-negated ASR-survival sentence
+ok    rewritten_report_v3:docx_primary.asr-direction:llama_3_2_3b                                     significant ΔASR -0.040 bound to Llama-3.2-3B with correct direction
+ok    rewritten_report_v3:docx_primary.contradiction:asr-direction:llama_3_2_3b                       no contradictory significance/direction sentence
+ok    rewritten_report_v3:docx_primary.or-survivor-caveat                                             -0.048 carries the independent-judge caveat
+ok    rewritten_report_v3:docx_primary.contradiction:or-survivor-caveat                               no replication claim for the over-refusal survivor
+ok    rewritten_report_v3:docx_primary.primary-budget                                                 512-token budget stated as primary/reference
+ok    rewritten_report_v3:docx_primary.contradiction:primary-budget                                   no rival budget claimed as primary
+ok    rewritten_report_v3:docx_primary.human-validation-kappa                                         classifier κ 0.59 vs regex κ 0.11 present
+ok    rewritten_report_v3:docx_primary.contradiction:kappa-ownership                                  no κ value attributed to the wrong scorer
+ok    rewritten_report_v3:docx_primary.retired-scope:+0.055                                           every live '+0.055' is 128-scoped (CI bounds exempt)
+ok    rewritten_report_v3:volatile_free                                                               no volatile counts/Git state
+ok    rewritten_report_v3:fresh_from_source                                                           not older than source
+ok    rewritten_report_v4:docx_primary.survivor:qwen_2b:mmlu_accuracy                                 -0.090 bound to Qwen3-1.7B + MMLU
+ok    rewritten_report_v4:docx_primary.contradiction:survivor-identity:qwen_2b                        -0.090 never attributed to another pair
+ok    rewritten_report_v4:docx_primary.survivor:llama_3_2_3b:arc_accuracy                             -0.032 bound to Llama-3.2-3B + ARC
+ok    rewritten_report_v4:docx_primary.contradiction:survivor-identity:llama_3_2_3b                   -0.032 never attributed to another pair
+ok    rewritten_report_v4:docx_primary.survivor:phi4_mini:xstest_over_refusal                         -0.048 bound to Phi-4-mini + over-refusal
+ok    rewritten_report_v4:docx_primary.contradiction:survivor-identity:phi4_mini                      -0.048 never attributed to another pair
+ok    rewritten_report_v4:docx_primary.survivor-count                                                 exact survivor count asserted with BH-FDR context
+ok    rewritten_report_v4:docx_primary.vi-survivor-count                                              validation-informed count (two) asserted in scope
+ok    rewritten_report_v4:docx_primary.contradiction:survivor-count                                   no hedged/wrong survivor count
+ok    rewritten_report_v4:docx_primary.no-asr-survivor                                                ASR non-survival stated
+ok    rewritten_report_v4:docx_primary.contradiction:asr-survival                                     no un-negated ASR-survival sentence
+ok    rewritten_report_v4:docx_primary.asr-direction:llama_3_2_3b                                     significant ΔASR -0.040 bound to Llama-3.2-3B with correct direction
+ok    rewritten_report_v4:docx_primary.contradiction:asr-direction:llama_3_2_3b                       no contradictory significance/direction sentence
+ok    rewritten_report_v4:docx_primary.or-survivor-caveat                                             -0.048 carries the independent-judge caveat
+ok    rewritten_report_v4:docx_primary.contradiction:or-survivor-caveat                               no replication claim for the over-refusal survivor
+ok    rewritten_report_v4:docx_primary.primary-budget                                                 512-token budget stated as primary/reference
+ok    rewritten_report_v4:docx_primary.contradiction:primary-budget                                   no rival budget claimed as primary
+ok    rewritten_report_v4:docx_primary.human-validation-kappa                                         classifier κ 0.59 vs regex κ 0.11 present
+ok    rewritten_report_v4:docx_primary.contradiction:kappa-ownership                                  no κ value attributed to the wrong scorer
+ok    rewritten_report_v4:docx_primary.retired-scope:+0.055                                           every live '+0.055' is 128-scoped (CI bounds exempt)
+ok    rewritten_report_v4:volatile_free                                                               no volatile counts/Git state
+ok    rewritten_report_v4:fresh_from_source                                                           not older than source
+ok    rewritten_report_v5:docx_primary.survivor:qwen_2b:mmlu_accuracy                                 -0.090 bound to Qwen3-1.7B + MMLU
+ok    rewritten_report_v5:docx_primary.contradiction:survivor-identity:qwen_2b                        -0.090 never attributed to another pair
+ok    rewritten_report_v5:docx_primary.survivor:llama_3_2_3b:arc_accuracy                             -0.032 bound to Llama-3.2-3B + ARC
+ok    rewritten_report_v5:docx_primary.contradiction:survivor-identity:llama_3_2_3b                   -0.032 never attributed to another pair
+ok    rewritten_report_v5:docx_primary.survivor:phi4_mini:xstest_over_refusal                         -0.048 bound to Phi-4-mini + over-refusal
+ok    rewritten_report_v5:docx_primary.contradiction:survivor-identity:phi4_mini                      -0.048 never attributed to another pair
+ok    rewritten_report_v5:docx_primary.survivor-count                                                 exact survivor count asserted with BH-FDR context
+ok    rewritten_report_v5:docx_primary.vi-survivor-count                                              validation-informed count (two) asserted in scope
+ok    rewritten_report_v5:docx_primary.contradiction:survivor-count                                   no hedged/wrong survivor count
+ok    rewritten_report_v5:docx_primary.no-asr-survivor                                                ASR non-survival stated
+ok    rewritten_report_v5:docx_primary.contradiction:asr-survival                                     no un-negated ASR-survival sentence
+ok    rewritten_report_v5:docx_primary.asr-direction:llama_3_2_3b                                     significant ΔASR -0.040 bound to Llama-3.2-3B with correct direction
+ok    rewritten_report_v5:docx_primary.contradiction:asr-direction:llama_3_2_3b                       no contradictory significance/direction sentence
+ok    rewritten_report_v5:docx_primary.or-survivor-caveat                                             -0.048 carries the independent-judge caveat
+ok    rewritten_report_v5:docx_primary.contradiction:or-survivor-caveat                               no replication claim for the over-refusal survivor
+ok    rewritten_report_v5:docx_primary.primary-budget                                                 512-token budget stated as primary/reference
+ok    rewritten_report_v5:docx_primary.contradiction:primary-budget                                   no rival budget claimed as primary
+ok    rewritten_report_v5:docx_primary.human-validation-kappa                                         classifier κ 0.59 vs regex κ 0.11 present
+ok    rewritten_report_v5:docx_primary.contradiction:kappa-ownership                                  no κ value attributed to the wrong scorer
+ok    rewritten_report_v5:docx_primary.retired-scope:+0.055                                           every live '+0.055' is 128-scoped (CI bounds exempt)
+ok    rewritten_report_v5:volatile_free                                                               no volatile counts/Git state
+ok    rewritten_report_v5:fresh_from_source                                                           not older than source
+ok    rewritten_interim_v5:docx_primary.survivor:qwen_2b:mmlu_accuracy                                -0.090 bound to Qwen3-1.7B + MMLU
+ok    rewritten_interim_v5:docx_primary.contradiction:survivor-identity:qwen_2b                       -0.090 never attributed to another pair
+ok    rewritten_interim_v5:docx_primary.survivor:llama_3_2_3b:arc_accuracy                            -0.032 bound to Llama-3.2-3B + ARC
+ok    rewritten_interim_v5:docx_primary.contradiction:survivor-identity:llama_3_2_3b                  -0.032 never attributed to another pair
+ok    rewritten_interim_v5:docx_primary.survivor:phi4_mini:xstest_over_refusal                        -0.048 bound to Phi-4-mini + over-refusal
+ok    rewritten_interim_v5:docx_primary.contradiction:survivor-identity:phi4_mini                     -0.048 never attributed to another pair
+ok    rewritten_interim_v5:docx_primary.survivor-count                                                exact survivor count asserted with BH-FDR context
+ok    rewritten_interim_v5:docx_primary.vi-survivor-count                                             validation-informed count (two) asserted in scope
+ok    rewritten_interim_v5:docx_primary.contradiction:survivor-count                                  no hedged/wrong survivor count
+ok    rewritten_interim_v5:docx_primary.no-asr-survivor                                               ASR non-survival stated
+ok    rewritten_interim_v5:docx_primary.contradiction:asr-survival                                    no un-negated ASR-survival sentence
+ok    rewritten_interim_v5:docx_primary.asr-direction:llama_3_2_3b                                    significant ΔASR -0.040 bound to Llama-3.2-3B with correct direction
+ok    rewritten_interim_v5:docx_primary.contradiction:asr-direction:llama_3_2_3b                      no contradictory significance/direction sentence
+ok    rewritten_interim_v5:docx_primary.or-survivor-caveat                                            -0.048 carries the independent-judge caveat
+ok    rewritten_interim_v5:docx_primary.contradiction:or-survivor-caveat                              no replication claim for the over-refusal survivor
+ok    rewritten_interim_v5:docx_primary.primary-budget                                                512-token budget stated as primary/reference
+ok    rewritten_interim_v5:docx_primary.contradiction:primary-budget                                  no rival budget claimed as primary
+ok    rewritten_interim_v5:docx_primary.human-validation-kappa                                        classifier κ 0.59 vs regex κ 0.11 present
+ok    rewritten_interim_v5:docx_primary.contradiction:kappa-ownership                                 no κ value attributed to the wrong scorer
+ok    rewritten_interim_v5:docx_primary.retired-scope:+0.055                                          every live '+0.055' is 128-scoped (CI bounds exempt)
+ok    rewritten_interim_v5:volatile_free                                                              no volatile counts/Git state
+ok    rewritten_interim_v5:fresh_from_source                                                          not older than source
+ok    rewritten_interim_v1:docx_primary.survivor:qwen_2b:mmlu_accuracy                                -0.090 bound to Qwen3-1.7B + MMLU
+ok    rewritten_interim_v1:docx_primary.contradiction:survivor-identity:qwen_2b                       -0.090 never attributed to another pair
+ok    rewritten_interim_v1:docx_primary.survivor:llama_3_2_3b:arc_accuracy                            -0.032 bound to Llama-3.2-3B + ARC
+ok    rewritten_interim_v1:docx_primary.contradiction:survivor-identity:llama_3_2_3b                  -0.032 never attributed to another pair
+ok    rewritten_interim_v1:docx_primary.survivor:phi4_mini:xstest_over_refusal                        -0.048 bound to Phi-4-mini + over-refusal
+ok    rewritten_interim_v1:docx_primary.contradiction:survivor-identity:phi4_mini                     -0.048 never attributed to another pair
+ok    rewritten_interim_v1:docx_primary.survivor-count                                                exact survivor count asserted with BH-FDR context
+ok    rewritten_interim_v1:docx_primary.vi-survivor-count                                             validation-informed count (two) asserted in scope
+ok    rewritten_interim_v1:docx_primary.contradiction:survivor-count                                  no hedged/wrong survivor count
+ok    rewritten_interim_v1:docx_primary.no-asr-survivor                                               ASR non-survival stated
+ok    rewritten_interim_v1:docx_primary.contradiction:asr-survival                                    no un-negated ASR-survival sentence
+ok    rewritten_interim_v1:docx_primary.asr-direction:llama_3_2_3b                                    significant ΔASR -0.040 bound to Llama-3.2-3B with correct direction
+ok    rewritten_interim_v1:docx_primary.contradiction:asr-direction:llama_3_2_3b                      no contradictory significance/direction sentence
+ok    rewritten_interim_v1:docx_primary.or-survivor-caveat                                            -0.048 carries the independent-judge caveat
+ok    rewritten_interim_v1:docx_primary.contradiction:or-survivor-caveat                              no replication claim for the over-refusal survivor
+ok    rewritten_interim_v1:docx_primary.primary-budget                                                512-token budget stated as primary/reference
+ok    rewritten_interim_v1:docx_primary.contradiction:primary-budget                                  no rival budget claimed as primary
+ok    rewritten_interim_v1:docx_primary.human-validation-kappa                                        classifier κ 0.59 vs regex κ 0.11 present
+ok    rewritten_interim_v1:docx_primary.contradiction:kappa-ownership                                 no κ value attributed to the wrong scorer
+ok    rewritten_interim_v1:docx_primary.retired-scope:+0.055                                          every live '+0.055' is 128-scoped (CI bounds exempt)
+ok    rewritten_interim_v1:volatile_free                                                              no volatile counts/Git state
+ok    rewritten_interim_v1:fresh_from_source                                                          not older than source
+ok    rewritten_interim_v3:docx_primary.survivor:qwen_2b:mmlu_accuracy                                -0.090 bound to Qwen3-1.7B + MMLU
+ok    rewritten_interim_v3:docx_primary.contradiction:survivor-identity:qwen_2b                       -0.090 never attributed to another pair
+ok    rewritten_interim_v3:docx_primary.survivor:llama_3_2_3b:arc_accuracy                            -0.032 bound to Llama-3.2-3B + ARC
+ok    rewritten_interim_v3:docx_primary.contradiction:survivor-identity:llama_3_2_3b                  -0.032 never attributed to another pair
+ok    rewritten_interim_v3:docx_primary.survivor:phi4_mini:xstest_over_refusal                        -0.048 bound to Phi-4-mini + over-refusal
+ok    rewritten_interim_v3:docx_primary.contradiction:survivor-identity:phi4_mini                     -0.048 never attributed to another pair
+ok    rewritten_interim_v3:docx_primary.survivor-count                                                exact survivor count asserted with BH-FDR context
+ok    rewritten_interim_v3:docx_primary.vi-survivor-count                                             validation-informed count (two) asserted in scope
+ok    rewritten_interim_v3:docx_primary.contradiction:survivor-count                                  no hedged/wrong survivor count
+ok    rewritten_interim_v3:docx_primary.no-asr-survivor                                               ASR non-survival stated
+ok    rewritten_interim_v3:docx_primary.contradiction:asr-survival                                    no un-negated ASR-survival sentence
+ok    rewritten_interim_v3:docx_primary.asr-direction:llama_3_2_3b                                    significant ΔASR -0.040 bound to Llama-3.2-3B with correct direction
+ok    rewritten_interim_v3:docx_primary.contradiction:asr-direction:llama_3_2_3b                      no contradictory significance/direction sentence
+ok    rewritten_interim_v3:docx_primary.or-survivor-caveat                                            -0.048 carries the independent-judge caveat
+ok    rewritten_interim_v3:docx_primary.contradiction:or-survivor-caveat                              no replication claim for the over-refusal survivor
+ok    rewritten_interim_v3:docx_primary.primary-budget                                                512-token budget stated as primary/reference
+ok    rewritten_interim_v3:docx_primary.contradiction:primary-budget                                  no rival budget claimed as primary
+ok    rewritten_interim_v3:docx_primary.human-validation-kappa                                        classifier κ 0.59 vs regex κ 0.11 present
+ok    rewritten_interim_v3:docx_primary.contradiction:kappa-ownership                                 no κ value attributed to the wrong scorer
+ok    rewritten_interim_v3:docx_primary.retired-scope:+0.055                                          every live '+0.055' is 128-scoped (CI bounds exempt)
+ok    rewritten_interim_v3:volatile_free                                                              no volatile counts/Git state
+ok    rewritten_interim_v3:fresh_from_source                                                          not older than source
+ok    rewritten_interim_v4:docx_primary.survivor:qwen_2b:mmlu_accuracy                                -0.090 bound to Qwen3-1.7B + MMLU
+ok    rewritten_interim_v4:docx_primary.contradiction:survivor-identity:qwen_2b                       -0.090 never attributed to another pair
+ok    rewritten_interim_v4:docx_primary.survivor:llama_3_2_3b:arc_accuracy                            -0.032 bound to Llama-3.2-3B + ARC
+ok    rewritten_interim_v4:docx_primary.contradiction:survivor-identity:llama_3_2_3b                  -0.032 never attributed to another pair
+ok    rewritten_interim_v4:docx_primary.survivor:phi4_mini:xstest_over_refusal                        -0.048 bound to Phi-4-mini + over-refusal
+ok    rewritten_interim_v4:docx_primary.contradiction:survivor-identity:phi4_mini                     -0.048 never attributed to another pair
+ok    rewritten_interim_v4:docx_primary.survivor-count                                                exact survivor count asserted with BH-FDR context
+ok    rewritten_interim_v4:docx_primary.vi-survivor-count                                             validation-informed count (two) asserted in scope
+ok    rewritten_interim_v4:docx_primary.contradiction:survivor-count                                  no hedged/wrong survivor count
+ok    rewritten_interim_v4:docx_primary.no-asr-survivor                                               ASR non-survival stated
+ok    rewritten_interim_v4:docx_primary.contradiction:asr-survival                                    no un-negated ASR-survival sentence
+ok    rewritten_interim_v4:docx_primary.asr-direction:llama_3_2_3b                                    significant ΔASR -0.040 bound to Llama-3.2-3B with correct direction
+ok    rewritten_interim_v4:docx_primary.contradiction:asr-direction:llama_3_2_3b                      no contradictory significance/direction sentence
+ok    rewritten_interim_v4:docx_primary.or-survivor-caveat                                            -0.048 carries the independent-judge caveat
+ok    rewritten_interim_v4:docx_primary.contradiction:or-survivor-caveat                              no replication claim for the over-refusal survivor
+ok    rewritten_interim_v4:docx_primary.primary-budget                                                512-token budget stated as primary/reference
+ok    rewritten_interim_v4:docx_primary.contradiction:primary-budget                                  no rival budget claimed as primary
+ok    rewritten_interim_v4:docx_primary.human-validation-kappa                                        classifier κ 0.59 vs regex κ 0.11 present
+ok    rewritten_interim_v4:docx_primary.contradiction:kappa-ownership                                 no κ value attributed to the wrong scorer
+ok    rewritten_interim_v4:docx_primary.retired-scope:+0.055                                          every live '+0.055' is 128-scoped (CI bounds exempt)
+ok    rewritten_interim_v4:volatile_free                                                              no volatile counts/Git state
+ok    rewritten_interim_v4:fresh_from_source                                                          not older than source
+ok    rewritten_interim_compact:docx_primary.survivor:qwen_2b:mmlu_accuracy                           -0.090 bound to Qwen3-1.7B + MMLU
+ok    rewritten_interim_compact:docx_primary.contradiction:survivor-identity:qwen_2b                  -0.090 never attributed to another pair
+ok    rewritten_interim_compact:docx_primary.survivor:llama_3_2_3b:arc_accuracy                       -0.032 bound to Llama-3.2-3B + ARC
+ok    rewritten_interim_compact:docx_primary.contradiction:survivor-identity:llama_3_2_3b             -0.032 never attributed to another pair
+ok    rewritten_interim_compact:docx_primary.survivor:phi4_mini:xstest_over_refusal                   -0.048 bound to Phi-4-mini + over-refusal
+ok    rewritten_interim_compact:docx_primary.contradiction:survivor-identity:phi4_mini                -0.048 never attributed to another pair
+ok    rewritten_interim_compact:docx_primary.survivor-count                                           exact survivor count asserted with BH-FDR context
+ok    rewritten_interim_compact:docx_primary.vi-survivor-count                                        validation-informed count (two) asserted in scope
+ok    rewritten_interim_compact:docx_primary.contradiction:survivor-count                             no hedged/wrong survivor count
+ok    rewritten_interim_compact:docx_primary.no-asr-survivor                                          ASR non-survival stated
+ok    rewritten_interim_compact:docx_primary.contradiction:asr-survival                               no un-negated ASR-survival sentence
+ok    rewritten_interim_compact:docx_primary.asr-direction:llama_3_2_3b                               significant ΔASR -0.040 bound to Llama-3.2-3B with correct direction
+ok    rewritten_interim_compact:docx_primary.contradiction:asr-direction:llama_3_2_3b                 no contradictory significance/direction sentence
+ok    rewritten_interim_compact:docx_primary.or-survivor-caveat                                       -0.048 carries the independent-judge caveat
+ok    rewritten_interim_compact:docx_primary.contradiction:or-survivor-caveat                         no replication claim for the over-refusal survivor
+ok    rewritten_interim_compact:docx_primary.primary-budget                                           512-token budget stated as primary/reference
+ok    rewritten_interim_compact:docx_primary.contradiction:primary-budget                             no rival budget claimed as primary
+ok    rewritten_interim_compact:docx_primary.human-validation-kappa                                   classifier κ 0.59 vs regex κ 0.11 present
+ok    rewritten_interim_compact:docx_primary.contradiction:kappa-ownership                            no κ value attributed to the wrong scorer
+ok    rewritten_interim_compact:docx_primary.retired-scope:+0.055                                     every live '+0.055' is 128-scoped (CI bounds exempt)
+ok    rewritten_interim_compact:volatile_free                                                         no volatile counts/Git state
+ok    rewritten_interim_compact:fresh_from_source                                                     not older than source
+ok    rewritten_interim_progress:docx_primary.survivor:qwen_2b:mmlu_accuracy                          -0.090 bound to Qwen3-1.7B + MMLU
+ok    rewritten_interim_progress:docx_primary.contradiction:survivor-identity:qwen_2b                 -0.090 never attributed to another pair
+ok    rewritten_interim_progress:docx_primary.survivor:llama_3_2_3b:arc_accuracy                      -0.032 bound to Llama-3.2-3B + ARC
+ok    rewritten_interim_progress:docx_primary.contradiction:survivor-identity:llama_3_2_3b            -0.032 never attributed to another pair
+ok    rewritten_interim_progress:docx_primary.survivor:phi4_mini:xstest_over_refusal                  -0.048 bound to Phi-4-mini + over-refusal
+ok    rewritten_interim_progress:docx_primary.contradiction:survivor-identity:phi4_mini               -0.048 never attributed to another pair
+ok    rewritten_interim_progress:docx_primary.survivor-count                                          exact survivor count asserted with BH-FDR context
+ok    rewritten_interim_progress:docx_primary.vi-survivor-count                                       validation-informed count (two) asserted in scope
+ok    rewritten_interim_progress:docx_primary.contradiction:survivor-count                            no hedged/wrong survivor count
+ok    rewritten_interim_progress:docx_primary.no-asr-survivor                                         ASR non-survival stated
+ok    rewritten_interim_progress:docx_primary.contradiction:asr-survival                              no un-negated ASR-survival sentence
+ok    rewritten_interim_progress:docx_primary.asr-direction:llama_3_2_3b                              significant ΔASR -0.040 bound to Llama-3.2-3B with correct direction
+ok    rewritten_interim_progress:docx_primary.contradiction:asr-direction:llama_3_2_3b                no contradictory significance/direction sentence
+ok    rewritten_interim_progress:docx_primary.or-survivor-caveat                                      -0.048 carries the independent-judge caveat
+ok    rewritten_interim_progress:docx_primary.contradiction:or-survivor-caveat                        no replication claim for the over-refusal survivor
+ok    rewritten_interim_progress:docx_primary.primary-budget                                          512-token budget stated as primary/reference
+ok    rewritten_interim_progress:docx_primary.contradiction:primary-budget                            no rival budget claimed as primary
+ok    rewritten_interim_progress:docx_primary.human-validation-kappa                                  classifier κ 0.59 vs regex κ 0.11 present
+ok    rewritten_interim_progress:docx_primary.contradiction:kappa-ownership                           no κ value attributed to the wrong scorer
+ok    rewritten_interim_progress:docx_primary.retired-scope:+0.055                                    every live '+0.055' is 128-scoped (CI bounds exempt)
+ok    rewritten_interim_progress:volatile_free                                                        no volatile counts/Git state
+ok    rewritten_interim_progress:fresh_from_source                                                    not older than source
+ok    rewritten_interim_progress_humanized:docx_primary.survivor:qwen_2b:mmlu_accuracy                -0.090 bound to Qwen3-1.7B + MMLU
+ok    rewritten_interim_progress_humanized:docx_primary.contradiction:survivor-identity:qwen_2b       -0.090 never attributed to another pair
+ok    rewritten_interim_progress_humanized:docx_primary.survivor:llama_3_2_3b:arc_accuracy            -0.032 bound to Llama-3.2-3B + ARC
+ok    rewritten_interim_progress_humanized:docx_primary.contradiction:survivor-identity:llama_3_2_3b  -0.032 never attributed to another pair
+ok    rewritten_interim_progress_humanized:docx_primary.survivor:phi4_mini:xstest_over_refusal        -0.048 bound to Phi-4-mini + over-refusal
+ok    rewritten_interim_progress_humanized:docx_primary.contradiction:survivor-identity:phi4_mini     -0.048 never attributed to another pair
+ok    rewritten_interim_progress_humanized:docx_primary.survivor-count                                exact survivor count asserted with BH-FDR context
+ok    rewritten_interim_progress_humanized:docx_primary.vi-survivor-count                             validation-informed count (two) asserted in scope
+ok    rewritten_interim_progress_humanized:docx_primary.contradiction:survivor-count                  no hedged/wrong survivor count
+ok    rewritten_interim_progress_humanized:docx_primary.no-asr-survivor                               ASR non-survival stated
+ok    rewritten_interim_progress_humanized:docx_primary.contradiction:asr-survival                    no un-negated ASR-survival sentence
+ok    rewritten_interim_progress_humanized:docx_primary.asr-direction:llama_3_2_3b                    significant ΔASR -0.040 bound to Llama-3.2-3B with correct direction
+ok    rewritten_interim_progress_humanized:docx_primary.contradiction:asr-direction:llama_3_2_3b      no contradictory significance/direction sentence
+ok    rewritten_interim_progress_humanized:docx_primary.or-survivor-caveat                            -0.048 carries the independent-judge caveat
+ok    rewritten_interim_progress_humanized:docx_primary.contradiction:or-survivor-caveat              no replication claim for the over-refusal survivor
+ok    rewritten_interim_progress_humanized:docx_primary.primary-budget                                512-token budget stated as primary/reference
+ok    rewritten_interim_progress_humanized:docx_primary.contradiction:primary-budget                  no rival budget claimed as primary
+ok    rewritten_interim_progress_humanized:docx_primary.human-validation-kappa                        classifier κ 0.59 vs regex κ 0.11 present
+ok    rewritten_interim_progress_humanized:docx_primary.contradiction:kappa-ownership                 no κ value attributed to the wrong scorer
+ok    rewritten_interim_progress_humanized:docx_primary.retired-scope:+0.055                          every live '+0.055' is 128-scoped (CI bounds exempt)
+ok    rewritten_interim_progress_humanized:volatile_free                                              no volatile counts/Git state
+ok    rewritten_interim_progress_humanized:fresh_from_source                                          not older than source
+ok    report_v6_voice_draft:docx_primary.survivor:qwen_2b:mmlu_accuracy                               -0.090 bound to Qwen3-1.7B + MMLU
+ok    report_v6_voice_draft:docx_primary.contradiction:survivor-identity:qwen_2b                      -0.090 never attributed to another pair
+ok    report_v6_voice_draft:docx_primary.survivor:llama_3_2_3b:arc_accuracy                           -0.032 bound to Llama-3.2-3B + ARC
+ok    report_v6_voice_draft:docx_primary.contradiction:survivor-identity:llama_3_2_3b                 -0.032 never attributed to another pair
+ok    report_v6_voice_draft:docx_primary.survivor:phi4_mini:xstest_over_refusal                       -0.048 bound to Phi-4-mini + over-refusal
+ok    report_v6_voice_draft:docx_primary.contradiction:survivor-identity:phi4_mini                    -0.048 never attributed to another pair
+ok    report_v6_voice_draft:docx_primary.survivor-count                                               exact survivor count asserted with BH-FDR context
+ok    report_v6_voice_draft:docx_primary.vi-survivor-count                                            validation-informed count (two) asserted in scope
+ok    report_v6_voice_draft:docx_primary.contradiction:survivor-count                                 no hedged/wrong survivor count
+ok    report_v6_voice_draft:docx_primary.no-asr-survivor                                              ASR non-survival stated
+ok    report_v6_voice_draft:docx_primary.contradiction:asr-survival                                   no un-negated ASR-survival sentence
+ok    report_v6_voice_draft:docx_primary.asr-direction:llama_3_2_3b                                   significant ΔASR -0.040 bound to Llama-3.2-3B with correct direction
+ok    report_v6_voice_draft:docx_primary.contradiction:asr-direction:llama_3_2_3b                     no contradictory significance/direction sentence
+ok    report_v6_voice_draft:docx_primary.or-survivor-caveat                                           -0.048 carries the independent-judge caveat
+ok    report_v6_voice_draft:docx_primary.contradiction:or-survivor-caveat                             no replication claim for the over-refusal survivor
+ok    report_v6_voice_draft:docx_primary.primary-budget                                               512-token budget stated as primary/reference
+ok    report_v6_voice_draft:docx_primary.contradiction:primary-budget                                 no rival budget claimed as primary
+ok    report_v6_voice_draft:docx_primary.human-validation-kappa                                       classifier κ 0.59 vs regex κ 0.11 present
+ok    report_v6_voice_draft:docx_primary.contradiction:kappa-ownership                                no κ value attributed to the wrong scorer
+ok    report_v6_voice_draft:docx_primary.retired-scope:+0.055                                         every live '+0.055' is 128-scoped (CI bounds exempt)
+ok    report_v6_voice_draft:volatile_free                                                             no volatile counts/Git state
+ok    report_v6_voice_draft:fresh_from_source                                                         not older than source
+ok    agentic_workflow_docx:registered                                                                classified as snapshot
+ok    meetup_report_docx:registered                                                                   classified as snapshot
+ok    architecture_guide_docx:registered                                                              classified as snapshot
+ok    defense_deck:generated_defense_asr                                                              all defense rows match registry p/q values
+ok    defense_deck:volatile_free                                                                      no volatile counts/Git state
+ok    style_fingerprints_deck:snapshot_banner                                                         snapshot visibly bannered
+ok    style_fingerprints_deck:volatile_free                                                           no volatile counts/Git state
+ok    showcase:generated_deck_pairs                                                                   5 registry-derived pair records
+ok    showcase:volatile_free                                                                          no volatile counts/Git state
+ok    showcase_3d:generated_deck_pairs                                                                5 registry-derived pair records
+ok    showcase_3d:volatile_free                                                                       no volatile counts/Git state
+ok    showcase_earth:generated_deck_pairs                                                             5 registry-derived pair records
+ok    showcase_earth:volatile_free                                                                    no volatile counts/Git state
+ok    showcase_bluemarble:generated_deck_pairs                                                        5 registry-derived pair records
+ok    showcase_bluemarble:volatile_free                                                               no volatile counts/Git state
+ok    showcase_world:generated_deck_pairs                                                             5 registry-derived pair records
+ok    showcase_world:volatile_free                                                                    no volatile counts/Git state
+ok    showcase_world3d:generated_deck_pairs                                                           5 registry-derived pair records
+ok    showcase_world3d:volatile_free                                                                  no volatile counts/Git state
+ok    showcase_latentspace:volatile_free                                                              no volatile counts/Git state
+ok    july_status:volatile_free                                                                       no volatile counts/Git state
+ok    july_status_v2:volatile_free                                                                    no volatile counts/Git state
+ok    field_guide:volatile_free                                                                       no volatile counts/Git state
+ok    agentic_ai_report_html:volatile_free                                                            no volatile counts/Git state
+ok    statistics_summary_snapshot:snapshot_banner                                                     snapshot visibly bannered
+ok    statistics_explainer_snapshot:snapshot_banner                                                   snapshot visibly bannered
+ok    old_showcase_v2:snapshot_banner                                                                 snapshot visibly bannered
+ok    architecture_snapshot:snapshot_banner                                                           snapshot visibly bannered
+ok    agent_harness_snapshot:snapshot_banner                                                          snapshot visibly bannered
+ok    meetup_snapshot:snapshot_banner                                                                 snapshot visibly bannered
+ok    local_final_tex:latex_primary.survivor:qwen_2b:mmlu_accuracy                                    -0.090 bound to Qwen3-1.7B + MMLU
+ok    local_final_tex:latex_primary.contradiction:survivor-identity:qwen_2b                           -0.090 never attributed to another pair
+ok    local_final_tex:latex_primary.survivor:llama_3_2_3b:arc_accuracy                                -0.032 bound to Llama-3.2-3B + ARC
+ok    local_final_tex:latex_primary.contradiction:survivor-identity:llama_3_2_3b                      -0.032 never attributed to another pair
+ok    local_final_tex:latex_primary.survivor:phi4_mini:xstest_over_refusal                            -0.048 bound to Phi-4-mini + over-refusal
+ok    local_final_tex:latex_primary.contradiction:survivor-identity:phi4_mini                         -0.048 never attributed to another pair
+ok    local_final_tex:latex_primary.survivor-count                                                    exact survivor count asserted with BH-FDR context
+ok    local_final_tex:latex_primary.vi-survivor-count                                                 validation-informed count (two) asserted in scope
+ok    local_final_tex:latex_primary.contradiction:survivor-count                                      no hedged/wrong survivor count
+ok    local_final_tex:latex_primary.no-asr-survivor                                                   ASR non-survival stated
+ok    local_final_tex:latex_primary.contradiction:asr-survival                                        no un-negated ASR-survival sentence
+ok    local_final_tex:latex_primary.asr-direction:llama_3_2_3b                                        significant ΔASR -0.040 bound to Llama-3.2-3B with correct direction
+ok    local_final_tex:latex_primary.contradiction:asr-direction:llama_3_2_3b                          no contradictory significance/direction sentence
+ok    local_final_tex:latex_primary.or-survivor-caveat                                                -0.048 carries the independent-judge caveat
+ok    local_final_tex:latex_primary.contradiction:or-survivor-caveat                                  no replication claim for the over-refusal survivor
+ok    local_final_tex:latex_primary.primary-budget                                                    512-token budget stated as primary/reference
+ok    local_final_tex:latex_primary.contradiction:primary-budget                                      no rival budget claimed as primary
+ok    local_final_tex:latex_primary.human-validation-kappa                                            classifier κ 0.59 vs regex κ 0.11 present
+ok    local_final_tex:latex_primary.contradiction:kappa-ownership                                     no κ value attributed to the wrong scorer
+ok    local_final_tex:latex_primary.retired-scope:+0.055                                              every live '+0.055' is 128-scoped (CI bounds exempt)
+ok    local_final_tex:volatile_free                                                                   no volatile counts/Git state
+ok    local_interim_tex:latex_primary.survivor:qwen_2b:mmlu_accuracy                                  -0.090 bound to Qwen3-1.7B + MMLU
+ok    local_interim_tex:latex_primary.contradiction:survivor-identity:qwen_2b                         -0.090 never attributed to another pair
+ok    local_interim_tex:latex_primary.survivor:llama_3_2_3b:arc_accuracy                              -0.032 bound to Llama-3.2-3B + ARC
+ok    local_interim_tex:latex_primary.contradiction:survivor-identity:llama_3_2_3b                    -0.032 never attributed to another pair
+ok    local_interim_tex:latex_primary.survivor:phi4_mini:xstest_over_refusal                          -0.048 bound to Phi-4-mini + over-refusal
+ok    local_interim_tex:latex_primary.contradiction:survivor-identity:phi4_mini                       -0.048 never attributed to another pair
+ok    local_interim_tex:latex_primary.survivor-count                                                  exact survivor count asserted with BH-FDR context
+ok    local_interim_tex:latex_primary.vi-survivor-count                                               validation-informed count (two) asserted in scope
+ok    local_interim_tex:latex_primary.contradiction:survivor-count                                    no hedged/wrong survivor count
+ok    local_interim_tex:latex_primary.no-asr-survivor                                                 ASR non-survival stated
+ok    local_interim_tex:latex_primary.contradiction:asr-survival                                      no un-negated ASR-survival sentence
+ok    local_interim_tex:latex_primary.asr-direction:llama_3_2_3b                                      significant ΔASR -0.040 bound to Llama-3.2-3B with correct direction
+ok    local_interim_tex:latex_primary.contradiction:asr-direction:llama_3_2_3b                        no contradictory significance/direction sentence
+ok    local_interim_tex:latex_primary.or-survivor-caveat                                              -0.048 carries the independent-judge caveat
+ok    local_interim_tex:latex_primary.contradiction:or-survivor-caveat                                no replication claim for the over-refusal survivor
+ok    local_interim_tex:latex_primary.primary-budget                                                  512-token budget stated as primary/reference
+ok    local_interim_tex:latex_primary.contradiction:primary-budget                                    no rival budget claimed as primary
+ok    local_interim_tex:latex_primary.human-validation-kappa                                          waived: The interim LaTeX is scoped to interim-stage content and never makes the human-grounding claim (it says "a planned independent second judge"); the interim DOCX carries the kappa pair
+ok    local_interim_tex:latex_primary.contradiction:kappa-ownership                                   no κ value attributed to the wrong scorer
+ok    local_interim_tex:latex_primary.retired-scope:+0.055                                            every live '+0.055' is 128-scoped (CI bounds exempt)
+ok    local_interim_tex:volatile_free                                                                 no volatile counts/Git state
+ok    local_final_pdf:pdf                                                                             valid PDF signature
+ok    local_final_pdf:fresh_from_source                                                               not older than source
+ok    local_interim_pdf:pdf                                                                           valid PDF signature
+ok    local_interim_pdf:fresh_from_source                                                             not older than source
+ok    local_final_pdf_copy:pdf                                                                        valid PDF signature
+ok    local_final_pdf_copy:byte_matches_source                                                        byte-matches generated source
+ok    local_interim_pdf_copy:pdf                                                                      valid PDF signature
+ok    local_interim_pdf_copy:byte_matches_source                                                      byte-matches generated source
+ok    local_final_zip:zip_matches_tex                                                                 final_thesis/mythesis.tex byte-matches source
+ok    local_interim_zip:zip_matches_tex                                                               interim_report/mythesis.tex byte-matches source
+ok    local_rewrite_final_tex:latex_primary.survivor:qwen_2b:mmlu_accuracy                            -0.090 bound to Qwen3-1.7B + MMLU
+ok    local_rewrite_final_tex:latex_primary.contradiction:survivor-identity:qwen_2b                   -0.090 never attributed to another pair
+ok    local_rewrite_final_tex:latex_primary.survivor:llama_3_2_3b:arc_accuracy                        -0.032 bound to Llama-3.2-3B + ARC
+ok    local_rewrite_final_tex:latex_primary.contradiction:survivor-identity:llama_3_2_3b              -0.032 never attributed to another pair
+ok    local_rewrite_final_tex:latex_primary.survivor:phi4_mini:xstest_over_refusal                    -0.048 bound to Phi-4-mini + over-refusal
+ok    local_rewrite_final_tex:latex_primary.contradiction:survivor-identity:phi4_mini                 -0.048 never attributed to another pair
+ok    local_rewrite_final_tex:latex_primary.survivor-count                                            exact survivor count asserted with BH-FDR context
+ok    local_rewrite_final_tex:latex_primary.vi-survivor-count                                         validation-informed count (two) asserted in scope
+ok    local_rewrite_final_tex:latex_primary.contradiction:survivor-count                              no hedged/wrong survivor count
+ok    local_rewrite_final_tex:latex_primary.no-asr-survivor                                           ASR non-survival stated
+ok    local_rewrite_final_tex:latex_primary.contradiction:asr-survival                                no un-negated ASR-survival sentence
+ok    local_rewrite_final_tex:latex_primary.asr-direction:llama_3_2_3b                                significant ΔASR -0.040 bound to Llama-3.2-3B with correct direction
+ok    local_rewrite_final_tex:latex_primary.contradiction:asr-direction:llama_3_2_3b                  no contradictory significance/direction sentence
+ok    local_rewrite_final_tex:latex_primary.or-survivor-caveat                                        -0.048 carries the independent-judge caveat
+ok    local_rewrite_final_tex:latex_primary.contradiction:or-survivor-caveat                          no replication claim for the over-refusal survivor
+ok    local_rewrite_final_tex:latex_primary.primary-budget                                            512-token budget stated as primary/reference
+ok    local_rewrite_final_tex:latex_primary.contradiction:primary-budget                              no rival budget claimed as primary
+ok    local_rewrite_final_tex:latex_primary.human-validation-kappa                                    classifier κ 0.59 vs regex κ 0.11 present
+ok    local_rewrite_final_tex:latex_primary.contradiction:kappa-ownership                             no κ value attributed to the wrong scorer
+ok    local_rewrite_final_tex:latex_primary.retired-scope:+0.055                                      every live '+0.055' is 128-scoped (CI bounds exempt)
+ok    local_rewrite_final_tex:volatile_free                                                           no volatile counts/Git state
+ok    local_rewrite_interim_tex:latex_primary.survivor:qwen_2b:mmlu_accuracy                          -0.090 bound to Qwen3-1.7B + MMLU
+ok    local_rewrite_interim_tex:latex_primary.contradiction:survivor-identity:qwen_2b                 -0.090 never attributed to another pair
+ok    local_rewrite_interim_tex:latex_primary.survivor:llama_3_2_3b:arc_accuracy                      -0.032 bound to Llama-3.2-3B + ARC
+ok    local_rewrite_interim_tex:latex_primary.contradiction:survivor-identity:llama_3_2_3b            -0.032 never attributed to another pair
+ok    local_rewrite_interim_tex:latex_primary.survivor:phi4_mini:xstest_over_refusal                  -0.048 bound to Phi-4-mini + over-refusal
+ok    local_rewrite_interim_tex:latex_primary.contradiction:survivor-identity:phi4_mini               -0.048 never attributed to another pair
+ok    local_rewrite_interim_tex:latex_primary.survivor-count                                          exact survivor count asserted with BH-FDR context
+ok    local_rewrite_interim_tex:latex_primary.vi-survivor-count                                       validation-informed count (two) asserted in scope
+ok    local_rewrite_interim_tex:latex_primary.contradiction:survivor-count                            no hedged/wrong survivor count
+ok    local_rewrite_interim_tex:latex_primary.no-asr-survivor                                         ASR non-survival stated
+ok    local_rewrite_interim_tex:latex_primary.contradiction:asr-survival                              no un-negated ASR-survival sentence
+ok    local_rewrite_interim_tex:latex_primary.asr-direction:llama_3_2_3b                              significant ΔASR -0.040 bound to Llama-3.2-3B with correct direction
+ok    local_rewrite_interim_tex:latex_primary.contradiction:asr-direction:llama_3_2_3b                no contradictory significance/direction sentence
+ok    local_rewrite_interim_tex:latex_primary.or-survivor-caveat                                      -0.048 carries the independent-judge caveat
+ok    local_rewrite_interim_tex:latex_primary.contradiction:or-survivor-caveat                        no replication claim for the over-refusal survivor
+ok    local_rewrite_interim_tex:latex_primary.primary-budget                                          512-token budget stated as primary/reference
+ok    local_rewrite_interim_tex:latex_primary.contradiction:primary-budget                            no rival budget claimed as primary
+ok    local_rewrite_interim_tex:latex_primary.human-validation-kappa                                  classifier κ 0.59 vs regex κ 0.11 present
+ok    local_rewrite_interim_tex:latex_primary.contradiction:kappa-ownership                           no κ value attributed to the wrong scorer
+ok    local_rewrite_interim_tex:latex_primary.retired-scope:+0.055                                    every live '+0.055' is 128-scoped (CI bounds exempt)
+ok    local_rewrite_interim_tex:volatile_free                                                         no volatile counts/Git state
+ok    local_rewrite_final_pdf:pdf                                                                     valid PDF signature
+ok    local_rewrite_final_pdf:fresh_from_source                                                       not older than source
+ok    local_rewrite_interim_pdf:pdf                                                                   valid PDF signature
+ok    local_rewrite_interim_pdf:fresh_from_source                                                     not older than source
+ok    local_rewrite_interim_pdf_copy:pdf                                                              valid PDF signature
+ok    local_rewrite_interim_pdf_copy:byte_matches_source                                              byte-matches generated source
+ok    local_rewrite_final_zip:zip_matches_tex                                                         rewritten_final/mythesis.tex byte-matches source
+ok    local_rewrite_interim_zip:zip_matches_tex                                                       rewritten_interim/mythesis.tex byte-matches source
+ok    local_july_email:volatile_free                                                                  no volatile counts/Git state
+ok    local_august_email:volatile_free                                                                no volatile counts/Git state
+ok    local_merged_email:volatile_free                                                                no volatile counts/Git state
+ok    local_june_email:registered                                                                     classified as snapshot
+ok    local_july_deck:volatile_free                                                                   no volatile counts/Git state
+ok    local_june_deck:registered                                                                      classified as snapshot
+ok    interim_lit_review_builder:volatile_free                                                        no volatile counts/Git state
+ok    interim_lit_review_revised:docx_primary.survivor:qwen_2b:mmlu_accuracy                          -0.090 bound to Qwen3-1.7B + MMLU
+ok    interim_lit_review_revised:docx_primary.contradiction:survivor-identity:qwen_2b                 -0.090 never attributed to another pair
+ok    interim_lit_review_revised:docx_primary.survivor:llama_3_2_3b:arc_accuracy                      -0.032 bound to Llama-3.2-3B + ARC
+ok    interim_lit_review_revised:docx_primary.contradiction:survivor-identity:llama_3_2_3b            -0.032 never attributed to another pair
+ok    interim_lit_review_revised:docx_primary.survivor:phi4_mini:xstest_over_refusal                  -0.048 bound to Phi-4-mini + over-refusal
+ok    interim_lit_review_revised:docx_primary.contradiction:survivor-identity:phi4_mini               -0.048 never attributed to another pair
+ok    interim_lit_review_revised:docx_primary.survivor-count                                          exact survivor count asserted with BH-FDR context
+ok    interim_lit_review_revised:docx_primary.vi-survivor-count                                       validation-informed count (two) asserted in scope
+ok    interim_lit_review_revised:docx_primary.contradiction:survivor-count                            no hedged/wrong survivor count
+ok    interim_lit_review_revised:docx_primary.no-asr-survivor                                         ASR non-survival stated
+ok    interim_lit_review_revised:docx_primary.contradiction:asr-survival                              no un-negated ASR-survival sentence
+ok    interim_lit_review_revised:docx_primary.asr-direction:llama_3_2_3b                              significant ΔASR -0.040 bound to Llama-3.2-3B with correct direction
+ok    interim_lit_review_revised:docx_primary.contradiction:asr-direction:llama_3_2_3b                no contradictory significance/direction sentence
+ok    interim_lit_review_revised:docx_primary.or-survivor-caveat                                      -0.048 carries the independent-judge caveat
+ok    interim_lit_review_revised:docx_primary.contradiction:or-survivor-caveat                        no replication claim for the over-refusal survivor
+ok    interim_lit_review_revised:docx_primary.primary-budget                                          512-token budget stated as primary/reference
+ok    interim_lit_review_revised:docx_primary.contradiction:primary-budget                            no rival budget claimed as primary
+ok    interim_lit_review_revised:docx_primary.human-validation-kappa                                  classifier κ 0.59 vs regex κ 0.11 present
+ok    interim_lit_review_revised:docx_primary.contradiction:kappa-ownership                           no κ value attributed to the wrong scorer
+ok    interim_lit_review_revised:docx_primary.retired-scope:+0.055                                    every live '+0.055' is 128-scoped (CI bounds exempt)
+ok    interim_lit_review_revised:volatile_free                                                        no volatile counts/Git state
+ok    interim_lit_review_revised:fresh_from_source                                                    not older than source
+ok    interim_progress_v2_builder:volatile_free                                                       no volatile counts/Git state
+ok    interim_progress_v2:docx_primary.survivor:qwen_2b:mmlu_accuracy                                 -0.090 bound to Qwen3-1.7B + MMLU
+ok    interim_progress_v2:docx_primary.contradiction:survivor-identity:qwen_2b                        -0.090 never attributed to another pair
+ok    interim_progress_v2:docx_primary.survivor:llama_3_2_3b:arc_accuracy                             -0.032 bound to Llama-3.2-3B + ARC
+ok    interim_progress_v2:docx_primary.contradiction:survivor-identity:llama_3_2_3b                   -0.032 never attributed to another pair
+ok    interim_progress_v2:docx_primary.survivor:phi4_mini:xstest_over_refusal                         -0.048 bound to Phi-4-mini + over-refusal
+ok    interim_progress_v2:docx_primary.contradiction:survivor-identity:phi4_mini                      -0.048 never attributed to another pair
+ok    interim_progress_v2:docx_primary.survivor-count                                                 exact survivor count asserted with BH-FDR context
+ok    interim_progress_v2:docx_primary.vi-survivor-count                                              validation-informed count (two) asserted in scope
+ok    interim_progress_v2:docx_primary.contradiction:survivor-count                                   no hedged/wrong survivor count
+ok    interim_progress_v2:docx_primary.no-asr-survivor                                                ASR non-survival stated
+ok    interim_progress_v2:docx_primary.contradiction:asr-survival                                     no un-negated ASR-survival sentence
+ok    interim_progress_v2:docx_primary.asr-direction:llama_3_2_3b                                     significant ΔASR -0.040 bound to Llama-3.2-3B with correct direction
+ok    interim_progress_v2:docx_primary.contradiction:asr-direction:llama_3_2_3b                       no contradictory significance/direction sentence
+ok    interim_progress_v2:docx_primary.or-survivor-caveat                                             -0.048 carries the independent-judge caveat
+ok    interim_progress_v2:docx_primary.contradiction:or-survivor-caveat                               no replication claim for the over-refusal survivor
+ok    interim_progress_v2:docx_primary.primary-budget                                                 512-token budget stated as primary/reference
+ok    interim_progress_v2:docx_primary.contradiction:primary-budget                                   no rival budget claimed as primary
+ok    interim_progress_v2:docx_primary.human-validation-kappa                                         classifier κ 0.59 vs regex κ 0.11 present
+ok    interim_progress_v2:docx_primary.contradiction:kappa-ownership                                  no κ value attributed to the wrong scorer
+ok    interim_progress_v2:docx_primary.retired-scope:+0.055                                           every live '+0.055' is 128-scoped (CI bounds exempt)
+ok    interim_progress_v2:volatile_free                                                               no volatile counts/Git state
+ok    interim_progress_v2:fresh_from_source                                                           not older than source
+ok    interim_progress_v3_builder:volatile_free                                                       no volatile counts/Git state
+ok    interim_progress_v3:docx_primary.survivor:qwen_2b:mmlu_accuracy                                 -0.090 bound to Qwen3-1.7B + MMLU
+ok    interim_progress_v3:docx_primary.contradiction:survivor-identity:qwen_2b                        -0.090 never attributed to another pair
+ok    interim_progress_v3:docx_primary.survivor:llama_3_2_3b:arc_accuracy                             -0.032 bound to Llama-3.2-3B + ARC
+ok    interim_progress_v3:docx_primary.contradiction:survivor-identity:llama_3_2_3b                   -0.032 never attributed to another pair
+ok    interim_progress_v3:docx_primary.survivor:phi4_mini:xstest_over_refusal                         -0.048 bound to Phi-4-mini + over-refusal
+ok    interim_progress_v3:docx_primary.contradiction:survivor-identity:phi4_mini                      -0.048 never attributed to another pair
+ok    interim_progress_v3:docx_primary.survivor-count                                                 exact survivor count asserted with BH-FDR context
+ok    interim_progress_v3:docx_primary.vi-survivor-count                                              validation-informed count (two) asserted in scope
+ok    interim_progress_v3:docx_primary.contradiction:survivor-count                                   no hedged/wrong survivor count
+ok    interim_progress_v3:docx_primary.no-asr-survivor                                                ASR non-survival stated
+ok    interim_progress_v3:docx_primary.contradiction:asr-survival                                     no un-negated ASR-survival sentence
+ok    interim_progress_v3:docx_primary.asr-direction:llama_3_2_3b                                     significant ΔASR -0.040 bound to Llama-3.2-3B with correct direction
+ok    interim_progress_v3:docx_primary.contradiction:asr-direction:llama_3_2_3b                       no contradictory significance/direction sentence
+ok    interim_progress_v3:docx_primary.or-survivor-caveat                                             -0.048 carries the independent-judge caveat
+ok    interim_progress_v3:docx_primary.contradiction:or-survivor-caveat                               no replication claim for the over-refusal survivor
+ok    interim_progress_v3:docx_primary.primary-budget                                                 512-token budget stated as primary/reference
+ok    interim_progress_v3:docx_primary.contradiction:primary-budget                                   no rival budget claimed as primary
+ok    interim_progress_v3:docx_primary.human-validation-kappa                                         classifier κ 0.59 vs regex κ 0.11 present
+ok    interim_progress_v3:docx_primary.contradiction:kappa-ownership                                  no κ value attributed to the wrong scorer
+ok    interim_progress_v3:docx_primary.retired-scope:+0.055                                           every live '+0.055' is 128-scoped (CI bounds exempt)
+ok    interim_progress_v3:volatile_free                                                               no volatile counts/Git state
+ok    interim_progress_v3:fresh_from_source                                                           not older than source
+ok    final_report_builder:volatile_free                                                              no volatile counts/Git state
+ok    final_report:docx_primary.survivor:qwen_2b:mmlu_accuracy                                        -0.090 bound to Qwen3-1.7B + MMLU
+ok    final_report:docx_primary.contradiction:survivor-identity:qwen_2b                               -0.090 never attributed to another pair
+ok    final_report:docx_primary.survivor:llama_3_2_3b:arc_accuracy                                    -0.032 bound to Llama-3.2-3B + ARC
+ok    final_report:docx_primary.contradiction:survivor-identity:llama_3_2_3b                          -0.032 never attributed to another pair
+ok    final_report:docx_primary.survivor:phi4_mini:xstest_over_refusal                                -0.048 bound to Phi-4-mini + over-refusal
+ok    final_report:docx_primary.contradiction:survivor-identity:phi4_mini                             -0.048 never attributed to another pair
+ok    final_report:docx_primary.survivor-count                                                        exact survivor count asserted with BH-FDR context
+ok    final_report:docx_primary.vi-survivor-count                                                     validation-informed count (two) asserted in scope
+ok    final_report:docx_primary.contradiction:survivor-count                                          no hedged/wrong survivor count
+ok    final_report:docx_primary.no-asr-survivor                                                       ASR non-survival stated
+ok    final_report:docx_primary.contradiction:asr-survival                                            no un-negated ASR-survival sentence
+ok    final_report:docx_primary.asr-direction:llama_3_2_3b                                            significant ΔASR -0.040 bound to Llama-3.2-3B with correct direction
+ok    final_report:docx_primary.contradiction:asr-direction:llama_3_2_3b                              no contradictory significance/direction sentence
+ok    final_report:docx_primary.or-survivor-caveat                                                    -0.048 carries the independent-judge caveat
+ok    final_report:docx_primary.contradiction:or-survivor-caveat                                      no replication claim for the over-refusal survivor
+ok    final_report:docx_primary.primary-budget                                                        512-token budget stated as primary/reference
+ok    final_report:docx_primary.contradiction:primary-budget                                          no rival budget claimed as primary
+ok    final_report:docx_primary.human-validation-kappa                                                classifier κ 0.59 vs regex κ 0.11 present
+ok    final_report:docx_primary.contradiction:kappa-ownership                                         no κ value attributed to the wrong scorer
+ok    final_report:docx_primary.retired-scope:+0.055                                                  every live '+0.055' is 128-scoped (CI bounds exempt)
+ok    final_report:volatile_free                                                                      no volatile counts/Git state
+ok    final_report:fresh_from_source                                                                  not older than source
+------------------------------------------------------------
+729 surface checks: 729 pass, 0 fail

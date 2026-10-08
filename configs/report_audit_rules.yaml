@@ -1,0 +1,147 @@
+# Project-specific omission rules for `scripts/report_tools/audit_report.py`.
+#
+# Version-agnostic by construction: every rule is keyed on what a report SAYS,
+# not on which report it is. A rule pairs a trigger (the claim is present) with
+# a required qualifier (its disclosure is present). A trigger without its
+# qualifier is an omission, which no value check can catch (T73 shape).
+#
+# Fields
+#   trigger   regex; evaluated per body unit (paragraph or table row), headings excluded
+#   also      optional regex that must match the same unit for it to trigger
+#   strip     optional regex removed before the trigger is tested (e.g. CI brackets,
+#             mirroring the claim gate's exemption for interval bounds)
+#
+# Sentence windows use (?:[^.]|\.\d) rather than [^.] so a decimal ("0.048")
+# does not end the sentence early.
+#   require   regex for the qualifier; null means every triggering unit is listed
+#             for manual review (wording rules that need judgement)
+#   scope     unit | document — where the qualifier must appear
+#   severity  fail | review
+#   absent    optional message emitted (info) when nothing triggers
+#   source    the decision, task or artifact that established the requirement
+#
+# Patterns are case-insensitive. Never loosen a pattern to clear a finding:
+# correct the report, or record why the finding does not apply (AGENTS.md).
+version: 1
+rules:
+  - id: int8-equivalence-post-hoc
+    source: T73; results_512/analysis/capability_equivalence.json
+    trigger: 'INT8(?:[^.]|\.\d)*\bequivalen|equivalen(?:[^.]|\.\d)*\bINT8'
+    # Unit scope on purpose: a document-wide "post hoc" is satisfied by unrelated
+    # prose ("all post-hoc scoring writes derived sidecars"), which is how the
+    # thesis v4 abstract's undisclosed claim passed a document-level search.
+    require: 'post[-\s]hoc|added (?:after|later)|after the INT8 results were known'
+    scope: unit
+    severity: fail
+    message: INT8 capability equivalence is claimed without the post-hoc disclosure in the same paragraph.
+
+  - id: harmbench-direct-request-scope
+    source: D43
+    trigger: '\bHarmBench\b'
+    require: 'direct[-\s]?request|without (?:an? )?(?:optimi[sz]ed )?(?:jailbreak|attack)'
+    scope: document
+    severity: fail
+    message: HarmBench safety claims appear without the direct-request threat-model scope.
+
+  - id: retired-128-token-headline
+    source: D41; RETIRED_SCOPED_TOKENS in scripts/verify_claim_surfaces.py
+    trigger: '\+0\.055\b'
+    strip: '\[[^\][]{0,80}\]'
+    require: '\b128\b'
+    scope: unit
+    severity: fail
+    message: The 128-token Qwen3-1.7B +0.055 appears without its 128-token scope.
+
+  - id: phi-over-refusal-scorer-artefact
+    source: T36; D51
+    trigger: 'Phi(?:[^.]|\.\d){0,200}(?:0\.048|4\.8 percentage)|(?:0\.048|4\.8 percentage)(?:[^.]|\.\d){0,200}Phi'
+    also: 'refus'
+    # The caveat must sit in a sentence about Phi: "an artefact of scoring" in the
+    # problem statement is not a disclosure about this result.
+    require: 'Phi(?:[^.]|\.\d){0,300}(?:artefact|artifact|not reproduce|not replicate)|(?:artefact|artifact|not reproduce|not replicate)(?:[^.]|\.\d){0,200}Phi'
+    scope: document
+    severity: fail
+    message: The Phi-4-mini over-refusal decrease appears without its keyword-rule measurement caveat.
+
+  - id: phi-artefact-stated-as-cause
+    source: T80 F3; results_512/analysis/xstest_human_validation.json (no Phi-specific estimate)
+    trigger: '(?:artefact|artifact) of the (?:keyword|regex)'
+    require: null
+    severity: review
+    message: The Phi-4-mini decrease is attributed to the keyword rule; the evidence shows scorer dependence, so confirm the cause is worded as plausible or unresolved.
+
+  - id: truncation-three-way-classification
+    source: results_512/analysis/genlen_robustness.json prefix_truncation_128 (1,206 truncated / 610 natural stop / 184 mismatch); T80 F2
+    trigger: '1,206|60\.3\s?%'
+    also: 'truncat|cut off'
+    # Unit scope: document-wide "mismatch" was satisfied by unrelated prose
+    # ("mismatched generalization" in a literature review).
+    require: '\b184\b|unclassified|at least (?:60\.3|1,206)'
+    scope: unit
+    severity: fail
+    message: The 128-token truncation count is given without the 184 unclassified comparisons, so it reads as a complete classification.
+
+  - id: judge-strict-family-labelled
+    source: D51; results_512/analysis/multiple_comparisons_judge_strict.json
+    trigger: 'judge[-\s]strict|strict over-refusal'
+    also: 'famil|comparison|surviv|significan|correction|\bBH\b'
+    require: 'validation[-\s]informed|added after|post[-\s]hoc|reported separately|sensitivity|parallel'
+    scope: unit
+    # review, not fail: a per-contrast judge-strict value is a scorer result; only a
+    # family-level significance claim needs the validation-informed label.
+    severity: review
+    message: Judge-strict results appear without a validation-informed / separate label; confirm no family-level claim is unlabelled.
+
+  - id: single-annotator-disclosed
+    source: T30; T30b
+    trigger: 'human[-\s]label|annotat'
+    require: 'one annotator|single annotator|labelled by one|labeled by one|by one person|second annotator'
+    scope: document
+    severity: fail
+    message: Human-label validation is used without disclosing the single-annotator limitation.
+
+  - id: detectable-effect-approximate
+    source: D95; submission/verification/harmbench_mde.json
+    trigger: 'detectable effect|minimum detectable|\bMDEs?\b'
+    require: '(?:detectable|MDE)(?:[^.]|\.\d){0,200}(?:approximat|post[-\s]hoc|unadjusted)|(?:approximat|post[-\s]hoc|unadjusted)(?:[^.]|\.\d){0,200}(?:detectable|MDE)'
+    scope: document
+    severity: fail
+    message: A detectable-effect figure appears without its approximate / post-hoc qualification.
+
+  - id: gpt4o-version-unpinned
+    source: T22; PROJECT_LOG limitations
+    trigger: 'gpt-4o'
+    require: '(?:version|snapshot)(?:[^.]|\.\d){0,80}(?:not recorded|unrecorded|not pinned)'
+    scope: document
+    severity: review
+    message: GPT-4o judge results appear; confirm the unrecorded model snapshot is disclosed.
+
+  - id: jev-judge-integration
+    source: T75; D86; D87
+    trigger: '\bJev\b'
+    require: 'separate|own (?:named )?(?:multiple[-\s]comparison )?family|sensitivity|secondary'
+    scope: unit
+    severity: fail
+    message: Jev results appear without being labelled as a separate family / non-primary judge.
+    absent: Jev studies are not in this document; T75 decides whether they belong in this version.
+
+  - id: regex-rate-labelled-secondary
+    source: AGENTS.md; D16
+    trigger: '(?:regex|keyword rule)(?:[^.]|\.\d){0,80}(?:\bASR\b|harmful[-\s]compliance rate)'
+    require: null
+    severity: review
+    message: A regex/keyword HarmBench rate appears; confirm it is presented as secondary, never as judge-primary ASR.
+
+  - id: nonsignificance-as-equivalence
+    source: AGENTS.md (nonsignificance does not establish equivalence)
+    trigger: '\bno (?:effect|impact|difference)\b|\bdoes not (?:affect|change|degrade|harm|reduce)\b|\bhas no (?:effect|impact)\b|\b(?:is|are) safe to (?:deploy|use)\b|\bprov(?:e|es|ed) that\b|\bguarantee'
+    require: null
+    severity: review
+    message: Wording may turn non-significance into equivalence or proof; check the claim keeps its evidential strength.
+
+  - id: causal-language
+    source: AGENTS.md (association does not establish cause); D95 truncation note
+    trigger: '\b(?:NF4|INT8|quantiz\w*|truncat\w*)\b(?:[^.]|\.\d){0,80}\b(?:causes?|caused|leads? to|drives?)\b|\b(?:caused by|due to|because of)\b(?:[^.]|\.\d){0,40}\b(?:NF4|INT8|quantiz\w*|truncat\w*)'
+    require: null
+    severity: review
+    message: Causal wording about quantization or truncation; confirm the design supports it or soften it.

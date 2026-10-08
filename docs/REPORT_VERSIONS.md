@@ -5,6 +5,14 @@
 
 Every FYP report/thesis/interim version ever built is listed below, grouped into lineages. Each consecutive pair in a lineage has a change record under [`docs/report_versions/changes/`](report_versions/changes/) stating what was added, **removed**, or edited down to individual chapters, sections and paragraphs.
 
+## Final report (merged interim v3 and final chapters)  (`final_submission`)
+
+Student-selected final-report working document. Preserves interim v3 Chapters 1–4 and incorporates the reviewed final Chapters 5–7.
+
+| Version | Status | Date | Builder | Decisions | Artifact |
+|---|---|---|---|---|---|
+| **Final report — Local-only. Requires preserved interim progress v3, the final-chapter draft and interim progress v2 for citation identity mapping. Citations reconciled by bibliography identity; seven chapters and 63 references. Jev integration (T75) and final submission review remain pending.** | ✅ selected | 2026-09-26 | `submission/build/build_final_report.py` | D95 | ✅ 891,360 B |
+
 ## Full FYP report (docx-js line)  (`report_canonical`)
 
 The original nine-chapter full report, built by the successive build_fyp_report*.js docx-js builders. v5 is the canonical build path (D41); v6 is the remediated comparison draft; earlier versions are archived history.
@@ -65,7 +73,7 @@ The corpus-informed then plain-academic rewrite of the full report, built by Pyt
 | **Rewrite v2 (plain-academic pass) — Dominated by v3 (430/480 shared paragraphs); kept for comparison.** | 🔍 comparison draft | 2026-08-21 | `scripts/build_rewritten_fyp_report_v2.py` | D63, D65 | ✅ 819,149 B |
 | **Rewrite v3 (selected plain-academic voice) — The user-selected prose register for the submission line.** | ✅ selected | 2026-08-21 | `scripts/build_rewritten_fyp_report_v3.py` | D64, D65 | ✅ 819,891 B |
 | **Rewrite v4 (HW0288 funnel introduction) — v3 plus the author's funnel Chapter 1 and completed remediation.** | ✅ selected | 2026-08-22 | `scripts/build_rewritten_fyp_report_v4.py` | D66, D67, D68, D69 | ✅ 904,524 B |
-| **Rewrite v5 (language-cleanup line) — Language-cleanup rewrite of the verified v4 line (T70 closed by its creating session): 137 exact-substring corrections replacing compressed statistical shorthand with conventional academic English. Numbers, citation markers, research questions, headings, tables and figures are asserted equal to v4 at build time; see docs/audits/2026-08-25_language_pass_v5/. Not selected for T53 (progress copy remains the sent artifact); candidate base for the T15 final report.** | 📎 reference | 2026-08-25 | `scripts/build_rewritten_fyp_report_v5.py` | D75 | ✅ 820,335 B |
+| **Rewrite v5 (language-cleanup line) — Language-cleanup rewrite of the verified v4 line (T70 closed by its creating session): 137 exact-substring corrections replacing compressed statistical shorthand with conventional academic English. Numbers, citation markers, research questions, headings, tables and figures are asserted equal to v4 at build time; see docs/audits/2026-08-25_language_pass_v5/. Not selected for T53 (progress copy was selected at that time; the exact sent copy is unrecorded). Historical candidate base, superseded by the D95 selection of submission/final_report.docx on 2026-09-26.** | 📎 reference | 2026-08-25 | `scripts/build_rewritten_fyp_report_v5.py` | D75 | ✅ 820,335 B |
 
 > ⚠️ Chain note: No v0 exists: this line starts at rewritten_fyp_report_v1.docx (T52/D57).
 
@@ -78,7 +86,7 @@ The corpus-informed then plain-academic rewrite of the full report, built by Pyt
 
 ## Rewritten interim report (submission line)  (`rewrite_interim`)
 
-The interim-submission derivatives of the rewrite line. The selected T53 artifact is docs/rewritten_fyp_interim_progress.docx (D72/D73); the others remain as dated fallbacks.
+The interim-submission derivatives of the rewrite line. D72/D73 selected docs/rewritten_fyp_interim_progress.docx at that time; T53 was confirmed complete on 2026-09-26, but the exact sent copy and send date are unrecorded. Historical selections and dated fallbacks are retained.
 
 | Version | Status | Date | Builder | Decisions | Artifact |
 |---|---|---|---|---|---|
@@ -150,10 +158,12 @@ Submission-alternate re-render of the 2026-07-10 interim with the humanized styl
 
 | Document | Note |
 |---|---|
+| `submission/archive/final_report_e54c8e90_before_audit_fixes.docx` | Local-only preserved copy of submission/final_report.docx (SHA-256 e54c8e90…) as the student last saved it in Word, taken before the 2026-09-27 audit fixes were rebuilt through the builder; keeps the student's "Submitted in Fulfilment" cover wording. Not a report version. |
 | `docs/drafts/final_report_visuals_pack.docx` | Review pack of 15 proposed final-report figures built by docs/drafts/build_visuals_pack.py from docs/drafts/visuals/; not a report version. |
-| `docs/drafts/final_report_missing_parts_draft.docx` | Review draft of the missing final-report chapters (5-7) built by docs/drafts/build_final_chapters_draft.py; not a report version and not the final-report base (T71). |
+| `docs/drafts/final_report_missing_parts_draft.docx` | Review draft of the missing final-report chapters (5-7) built by docs/drafts/build_final_chapters_draft.py; not a standalone report version. D95 incorporated its final chapters into the selected submission/final_report.docx; source preserved. |
 | `docs/FYP_Agent_Harness_Architecture_Guide_2026-06-09.docx` | Word architecture guide for the agent harness. |
-| `docs/Codex_Meetup_Agent_Harness_Report.docx` | Meetup report on the repo-native agent harness. |
+| `docs/Codex_Meetup_Agent_Harness_Report.docx` | Meetup companion with October 2026 context preceding the labelled June historical narrative; built by scripts/build_codex_meetup_doc.py. |
+| `docs/archive/Codex_Meetup_Agent_Harness_Report_2026-06-14_snapshot.docx` | Byte-preserved June meetup companion, used as the historical source by scripts/build_codex_meetup_doc.py; not a research report version. |
 | `docs/Agentic_AI_Workflow_Report_2026-06-26.docx` | Agentic workflow report deck companion. |
 | `docs/archive/FYP_TC1_Full_Session_Report_2026-04-08.docx` | Archived TC1 session record. |
 | `docs/archive/FYP_Decision_Register_and_Compressed_Work_Plan_2026-05-13.docx` | Archived early decision register. |

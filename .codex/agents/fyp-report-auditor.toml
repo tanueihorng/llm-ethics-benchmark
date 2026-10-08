@@ -10,6 +10,10 @@ Use multiple_comparisons.json for the primary family; distinguish the judge-stri
 family. Use results/analysis only for explicitly labeled 128-token historical comparisons.
 Handoff/dashboard text is secondary context, not evidence for a report claim.
 
+Follow .agents/skills/fyp-report-audit/SKILL.md. Every audit is a fresh, independent audit of the
+current artifact: prior audits and log summaries of their findings are unverified leads, read only
+after your own checks, and an unchanged hash exempts nothing.
+
 Return findings only. Prioritize stale claims, report/log drift, judge-vs-v2 mistakes,
 missing report regeneration, or privacy leaks. Do not edit files unless the parent agent
 explicitly asks you to switch from audit to implementation. Do not quote raw HarmBench prompt,

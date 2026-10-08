@@ -15,7 +15,7 @@
 |---|---|---|
 | Models & algorithms described | `docs/methodology.md`, report Ch3–4 | ✅ |
 | Datasets used (sources, splits, sample counts) | `docs/datasets.md`; per-run `summary.json` records dataset/split/`max_samples` | ✅ |
-| Code released with dependency specs | public repo; `requirements.txt` (minimum-version floors) + `pyproject.toml` | ✅ |
+| Code released with dependency specs | private repository; `requirements.txt` (minimum-version floors) + `pyproject.toml`; local-only documents are excluded (D94) | ✅ |
 | All reported results + full experimental setup | `results_512/analysis/*.json` (the primary 512-token study), redacted judge sidecars, report Ch6; `results/analysis/*` retained as the 128-token generation-length comparison | ✅ |
 | Hyper-parameters / decoding controls | `generation_config` in every `summary.json` (greedy, `temperature=0.0`, seed 42, `max_new_tokens=512` primary — `128` in the retained comparison tree) | ✅ |
 | Evaluation-measure definitions | `docs/evaluation_metrics.md`; ASR / over-refusal / accuracy defined | ✅ |
@@ -72,9 +72,10 @@ those artifacts are immutable.
 ## 4. One-command reproduction
 
 ```bash
-# 1. Environment
+# 1. Local analysis environment (see docs/REPO_GUIDE.md for GPU/report extras)
 python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt && pip install -e .
+pip install -r requirements-analysis.txt
+pip install -e .
 
 # 2. Verify the framework (no GPU needed)
 pytest -q                                   # expect all green
@@ -83,23 +84,23 @@ make agent-check                            # docs/artifact/redaction gates + te
 # 3. Re-derive the committed analysis from the (redacted) sidecars (no GPU).
 # NOTE: judge_agreement.py and precision_sweep_analysis.py default to the 128-token
 # tree (results/); pass --results-dir results_512 so they read the primary tree.
-python compare_quant_pairs.py --config configs/default.yaml \
+python compare_quant_pairs.py --config configs/tc1_512.yaml \
   --results_dir results_512 --output_dir results_512/analysis
 python scripts/judge_agreement.py --results-dir results_512           # judge-vs-regex agreement (κ)
 python scripts/precision_sweep_analysis.py --results-dir results_512  # fp16 → INT8 → NF4 sweep
 
 # 4. Re-run experiments from scratch (GPU; see docs/TC1_CLUSTER_RUNBOOK.md)
-make matrix DEVICE=cuda
+# Copy the primary configuration and choose a new output tree; preserve results*/.
+# On TC1, generate locally and submit the approved scripts with direct sbatch.
+# See docs/TC1_CLUSTER_RUNBOOK.md; do not run the canonical matrix in place.
 ```
 
 Re-running step 3 reproduces the pairwise deltas and the judge-agreement analysis
 (`pairwise_deltas.*`, `judge_agreement.*`) byte-for-byte from the committed sidecars,
 and the ASR and capability columns of the precision sweep — the cells that carry the
-reported claims. One known exception: the committed `precision_sweep.json` predates the
-analyzer's switch to preferring the `summary.v2.json` refusal sidecars, so re-running
-`precision_sweep_analysis.py` updates only its (uncited, unlocked) regex-derived
-over-refusal column to the current v2 values; regenerating that artifact cleanly is
-tracked as a separate follow-up. Step 4 regenerates the raw generations and requires the
+reported claims. The precision-sweep over-refusal column already agrees with the prespecified v2
+analysis (`make verify-claims` checks all five pairs). Re-derive into a new scratch
+output directory when comparing reproduction output, preserving committed evidence. Step 4 regenerates the raw generations and requires the
 gated model weights (HF licence + login).
 
 ## 5. Privacy / data-release note

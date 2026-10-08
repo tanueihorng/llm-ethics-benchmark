@@ -55,6 +55,10 @@ discovery:
   - fyp_submission/report_latex/rewritten_interim/mythesis.tex
   - fyp_submission/report_latex/rewritten_interim/mythesis.pdf
   - fyp_submission/report_latex/rewritten_interim_overleaf.zip
+  # D95 final-report line (local-only under D94): the selected deliverable and
+  # its builder live outside docs/, so they need their own discovery globs.
+  - submission/*.docx
+  - submission/build/*.py
 
 surfaces:
   - {id: agents, path: AGENTS.md, lifecycle: current, profiles: [volatile_free]}
@@ -317,3 +321,21 @@ surfaces:
   - {id: interim_progress_v2, path: docs/rewritten_fyp_interim_progress_v2.docx, availability: gitignored_optional, lifecycle: generated, source: scripts/build_rewritten_fyp_interim_progress_v2.py, profiles: [docx_primary, volatile_free, fresh_from_source]}
   - {id: interim_progress_v3_builder, path: scripts/build_rewritten_fyp_interim_progress_v3.py, availability: gitignored_optional, lifecycle: current, profiles: [volatile_free]}
   - {id: interim_progress_v3, path: docs/rewritten_fyp_interim_progress_v3.docx, availability: gitignored_optional, lifecycle: generated, source: scripts/build_rewritten_fyp_interim_progress_v3.py, profiles: [docx_primary, volatile_free, fresh_from_source]}
+
+  # D95: the student-selected final report (T15, graded 19 Oct). Until this entry
+  # existed a green `make verify-claims` said nothing about the document being
+  # submitted. Full docx_primary lock set; no claim waivers. The one volatile
+  # allow entry is a count of statistical tests in the report's own Table 5.4
+  # (per-seed McNemar tests), not a test-suite count.
+  - {id: final_report_builder, path: submission/build/build_final_report.py, availability: gitignored_optional, lifecycle: current, profiles: [volatile_free]}
+  - id: final_report
+    path: submission/final_report.docx
+    availability: gitignored_optional
+    lifecycle: generated
+    source: submission/build/build_final_report.py
+    profiles: [docx_primary, volatile_free, fresh_from_source]
+    volatile_allow:
+      "25 tests in Table 5.4": >-
+        Counts the 25 uncorrected per-seed statistical tests reported in the
+        document's own Table 5.4 (five pairs x five seeds), not an automated
+        test-suite count.

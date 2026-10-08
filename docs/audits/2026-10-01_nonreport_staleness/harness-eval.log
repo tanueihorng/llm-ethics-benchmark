@@ -1,0 +1,10 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.11.5, pytest-7.4.0, pluggy-1.6.0
+rootdir: /Users/tanueihorng/fyp_quant
+configfile: pyproject.toml
+plugins: cov-7.1.0, anyio-4.15.1
+collected 30 items
+
+tests/test_agent_harness.py ..............................               [100%]
+
+============================== 30 passed in 2.46s ==============================

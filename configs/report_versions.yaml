@@ -25,11 +25,15 @@ output_dir: docs/report_versions
 index_path: docs/REPORT_VERSIONS.md
 
 # Purpose-specific entry points; historical statuses below retain their meaning.
-# No final-report base has been selected (T71). These aliases do not select one.
+# D95 selects submission/final_report.docx for ongoing final-report editing;
+# `final` names that student selection so tools resolve the deliverable by
+# purpose, not by version (D96). The canonical build alias remains unchanged;
+# LaTeX mirror migration is pending.
 entrypoints:
   canonical: docs/FYP_Report_2026-07-01_v5.docx
   submitted: docs/rewritten_fyp_interim_progress.docx
   review: docs/rewritten_fyp_interim_progress_v2.docx
+  final: submission/final_report.docx
 frozen_outputs:
   - docs/rewritten_fyp_interim_progress.docx
 
@@ -52,6 +56,7 @@ build_profiles:
     - docs/rewritten_fyp_interim_v5.docx
 
 local_inputs:
+  submission/final_report.docx: docs/rewritten_fyp_interim_progress_v3.docx
   docs/rewritten_fyp_interim_progress_humanized.docx: docs/rewritten_fyp_interim_progress.docx
   docs/rewritten_fyp_interim_progress_lit_review_revised.docx: docs/rewritten_fyp_interim_progress.docx
   docs/rewritten_fyp_interim_progress_v2.docx: docs/rewritten_fyp_interim_progress_lit_review_revised.docx
@@ -66,6 +71,25 @@ also_produces:
   docs/rewritten_fyp_interim_v5.docx: [docs/rewritten_fyp_report_v5.docx]
 
 families:
+  - id: final_submission
+    label: Final report (merged interim v3 and final chapters)
+    description: >-
+      Student-selected final-report working document. Preserves interim v3
+      Chapters 1–4 and incorporates the reviewed final Chapters 5–7.
+    diff: none
+    versions:
+      - path: submission/final_report.docx
+        label: Final report
+        date: 2026-09-26
+        builder: submission/build/build_final_report.py
+        status: selected
+        decisions: [D95]
+        note: >-
+          Local-only. Requires preserved interim progress v3, the final-chapter
+          draft and interim progress v2 for citation identity mapping. Citations
+          reconciled by bibliography identity; seven chapters and 63 references.
+          Jev integration (T75) and final submission review remain pending.
+
   # ---------------------------------------------------------------------
   - id: report_canonical
     label: Full FYP report (docx-js line)
@@ -228,16 +252,18 @@ families:
           Numbers, citation markers, research questions, headings, tables and
           figures are asserted equal to v4 at build time; see
           docs/audits/2026-08-25_language_pass_v5/. Not selected for T53
-          (progress copy remains the sent artifact); candidate base for the
-          T15 final report.
+          (progress copy was selected at that time; the exact sent copy is
+          unrecorded). Historical candidate base, superseded by the D95
+          selection of submission/final_report.docx on 2026-09-26.
 
   # ---------------------------------------------------------------------
   - id: rewrite_interim
     label: Rewritten interim report (submission line)
     description: >
-      The interim-submission derivatives of the rewrite line. The selected
-      T53 artifact is docs/rewritten_fyp_interim_progress.docx (D72/D73);
-      the others remain as dated fallbacks.
+      The interim-submission derivatives of the rewrite line. D72/D73 selected
+      docs/rewritten_fyp_interim_progress.docx at that time; T53 was confirmed
+      complete on 2026-09-26, but the exact sent copy and send date are
+      unrecorded. Historical selections and dated fallbacks are retained.
     diff: consecutive
     chain_notes:
       - "Verified absence (2026-08-25): no rewritten_fyp_interim_v2.docx was ever
@@ -410,14 +436,18 @@ families:
 
 # Documents that are inventoried but not part of any report-version chain.
 standalone_documents:
+  - path: submission/archive/final_report_e54c8e90_before_audit_fixes.docx
+    note: Local-only preserved copy of submission/final_report.docx (SHA-256 e54c8e90…) as the student last saved it in Word, taken before the 2026-09-27 audit fixes were rebuilt through the builder; keeps the student's "Submitted in Fulfilment" cover wording. Not a report version.
   - path: docs/drafts/final_report_visuals_pack.docx
     note: Review pack of 15 proposed final-report figures built by docs/drafts/build_visuals_pack.py from docs/drafts/visuals/; not a report version.
   - path: docs/drafts/final_report_missing_parts_draft.docx
-    note: Review draft of the missing final-report chapters (5-7) built by docs/drafts/build_final_chapters_draft.py; not a report version and not the final-report base (T71).
+    note: Review draft of the missing final-report chapters (5-7) built by docs/drafts/build_final_chapters_draft.py; not a standalone report version. D95 incorporated its final chapters into the selected submission/final_report.docx; source preserved.
   - path: docs/FYP_Agent_Harness_Architecture_Guide_2026-06-09.docx
     note: Word architecture guide for the agent harness.
   - path: docs/Codex_Meetup_Agent_Harness_Report.docx
-    note: Meetup report on the repo-native agent harness.
+    note: Meetup companion with October 2026 context preceding the labelled June historical narrative; built by scripts/build_codex_meetup_doc.py.
+  - path: docs/archive/Codex_Meetup_Agent_Harness_Report_2026-06-14_snapshot.docx
+    note: Byte-preserved June meetup companion, used as the historical source by scripts/build_codex_meetup_doc.py; not a research report version.
   - path: docs/Agentic_AI_Workflow_Report_2026-06-26.docx
     note: Agentic workflow report deck companion.
   - path: docs/archive/FYP_TC1_Full_Session_Report_2026-04-08.docx

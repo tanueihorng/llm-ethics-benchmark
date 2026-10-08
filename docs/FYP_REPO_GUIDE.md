@@ -1,6 +1,8 @@
 # FYP Repository Guide
 ## Safety-Capability Trade-offs in Quantized Small Language Models (fp16 → INT8 → NF4)
 
+> Current context (1 October 2026): `results_512/` and `configs/tc1_512.yaml` define the primary study; `results/` is the preserved 128-token comparison. Operational examples below create a new study in `results_scratch/`. Current installation and command profiles are in `docs/REPO_GUIDE.md`; run locally or via direct `sbatch` on TC1. HarmBench cross-checks with GPT-4o, LlamaGuard and Jev are complete, while the official classifier remains primary. Reports and presentations are local-only under D94.
+
 ## 1. Purpose of This Guide
 This document is a full operational manual for using this repository in a Final Year Project workflow. It is written in report style and is intended to support:
 
@@ -25,7 +27,7 @@ The repository operationalizes a controlled quantization study where each baseli
 - Mistral-7B-Instruct-v0.3 baseline vs 4-bit (`mistral_7b`),
 - Phi-4-mini-instruct baseline vs 4-bit (`phi4_mini`).
 
-In addition to the main fp16-vs-NF4 study, a separate **INT8 precision point** (bitsandbytes LLM.int8 — a distinct method, not lower-bit NF4) is run for all five pairs via `configs/tc1_int8.yaml` + `scripts/precision_sweep_analysis.py`, so each pair spans fp16 → INT8 → NF4.
+In addition to the main fp16-vs-NF4 study, a separate **INT8 precision point** (bitsandbytes LLM.int8 — a distinct method, not lower-bit NF4) is run for all five pairs via `configs/tc1_int8_512.yaml` + `scripts/precision_sweep_analysis.py`, so each pair spans fp16 → INT8 → NF4.
 
 The study does **not** design quantization algorithms. It evaluates fixed model checkpoints under controlled full-precision vs BitsAndBytes (NF4 and INT8) loading conditions.
 
@@ -60,13 +62,14 @@ The study does **not** design quantization algorithms. It evaluates fixed model 
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
+pip install -e .
 ```
 
 Optional shortcut layer:
 ```bash
 make smoke
-make matrix DEVICE=cuda
-make analyze
+python run_quant_matrix.py --config configs/default.yaml --device cuda --output_dir results_scratch
+python compare_quant_pairs.py --config configs/default.yaml --results_dir results_scratch --output_dir results_scratch/analysis
 ```
 
 ## 4.2 Minimum software requirements
@@ -120,19 +123,19 @@ python run_quant_benchmark.py \
   --model qwen_2b_base \
   --benchmark harmbench \
   --max_samples 20 \
-  --output_dir results
+  --output_dir results_scratch
 ```
 
 Expected artifacts:
-- `results/qwen_2b_base/harmbench/raw.jsonl`
-- `results/qwen_2b_base/harmbench/summary.json`
-- `results/summary/harmbench_runs.csv`
+- `results_scratch/qwen_2b_base/harmbench/raw.jsonl`
+- `results_scratch/qwen_2b_base/harmbench/summary.json`
+- `results_scratch/summary/harmbench_runs.csv`
 
 ## 6.2 Stage B: full matrix execution
 ```bash
 python run_quant_matrix.py \
   --config configs/default.yaml \
-  --output_dir results
+  --output_dir results_scratch
 ```
 
 Optional filters:
@@ -143,8 +146,8 @@ Optional filters:
 ```bash
 python compare_quant_pairs.py \
   --config configs/default.yaml \
-  --results_dir results \
-  --output_dir results/analysis
+  --results_dir results_scratch \
+  --output_dir results_scratch/analysis
 ```
 
 Outputs include:
@@ -215,7 +218,7 @@ This interpretation is rule-based and explicitly tied to measured deltas from Ha
 ```bash
 python generate_slurm_jobs.py \
   --config configs/default.yaml \
-  --results_dir results \
+  --results_dir results_scratch \
   --jobs_dir slurm/jobs
 ```
 
@@ -233,7 +236,7 @@ python submit_slurm_jobs.py --jobs_dir slurm/jobs --dry_run
 ```bash
 python check_slurm_runs.py \
   --config configs/default.yaml \
-  --results_dir results \
+  --results_dir results_scratch \
   --jobs_dir slurm/jobs
 ```
 
@@ -241,7 +244,7 @@ To skip queue probing (`squeue`):
 ```bash
 python check_slurm_runs.py \
   --config configs/default.yaml \
-  --results_dir results \
+  --results_dir results_scratch \
   --jobs_dir slurm/jobs \
   --skip_squeue
 ```
@@ -293,8 +296,8 @@ Recommended appendix exports:
 - `configs/default.yaml`
 - one representative `raw.jsonl` excerpt per benchmark
 - full `summary.json` files for each run
-- `results/analysis/pairwise_deltas.csv`
-- `results/analysis/pair_interpretations.csv`
+- `results_scratch/analysis/pairwise_deltas.csv`
+- `results_scratch/analysis/pair_interpretations.csv`
 - `slurm/jobs/manifest.json`
 
 ## 15. Mapping to Dissertation Chapters

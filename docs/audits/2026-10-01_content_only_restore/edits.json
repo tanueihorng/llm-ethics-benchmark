@@ -1,0 +1,164 @@
+[
+  {
+    "path": "docs/Codex_Meetup_Agent_Harness_Report.html",
+    "reason": "Remove added overlay and CSS; retain original stylesheet and inline content corrections.",
+    "before_sha256": "81b5c35ebd30d535c0f3b75ec25e3519e072050cfca74de7f84752f933b2a2d3",
+    "after_sha256": "182106fcae9b53851ed7fedb2b1b07c057e754d109212f347e75a88da550d003"
+  },
+  {
+    "path": "docs/agent_harness_showcase.html",
+    "reason": "Remove added overlay and CSS; retain original stylesheet and inline content corrections.",
+    "before_sha256": "52d664f09d3c4e6f063f595f22202104b309592a40090538c5d6b6b8e1946d23",
+    "after_sha256": "c269c61afe89b353dcac8f6d4f310be8e03f87a9ce2c2ccb1b36f70ea0c36c0a"
+  },
+  {
+    "path": "docs/agentic_ai_report.html",
+    "reason": "Remove added overlay and CSS; retain original stylesheet and inline content corrections.",
+    "before_sha256": "5c48df27e12e269f0cf063524d8db906c3bdc031bb49127ec99cd8a2d1daedbb",
+    "after_sha256": "bfe4d45d356597c7dd2cb2327e8f6037c6bc85fdd7472560956c18a876c13775"
+  },
+  {
+    "path": "docs/fyp-report-defense-deck-2026-07.html",
+    "reason": "Remove added overlay and CSS; retain original stylesheet and inline content corrections.",
+    "before_sha256": "3a143c5da52691c9a78d8185afd5dfe68b648508e0c40d739307912a765f9f78",
+    "after_sha256": "acd015040420d0f22a837b7fb20722bcdd3c21b246b27759b3f52d5d30d11334"
+  },
+  {
+    "path": "docs/fyp_architecture.html",
+    "reason": "Remove added overlay and CSS; retain original stylesheet and inline content corrections.",
+    "before_sha256": "2637d52e2812c07f93e2aaf44c557978a77025e2b498813429483b29871a0ce6",
+    "after_sha256": "2d564acc479ca1565a70d78151a3f3ef4afe4544aa46544005933b9a6217427c"
+  },
+  {
+    "path": "docs/fyp_showcase.html",
+    "reason": "Remove added overlay and CSS; retain original stylesheet and inline content corrections.",
+    "before_sha256": "927e3357232cdcad4d62ae3bd5a6e1f53c02aeaff5f73051656b1bb2abea64ef",
+    "after_sha256": "979a3db8b41a829cbe9d8af51f23304a760f3fee05b9ec956fa918aec6161f9c"
+  },
+  {
+    "path": "docs/fyp_showcase_3d.html",
+    "reason": "Remove added overlay and CSS; retain original stylesheet and inline content corrections.",
+    "before_sha256": "6413a3cf9e9ec639d917c5d28e061376d08b6caff678be441cc08af99c6c5b3e",
+    "after_sha256": "03aaad8443de77b4447eca1416eb120b383f5ceabdd1780b73b6d7411e5e9805"
+  },
+  {
+    "path": "docs/fyp_showcase_bluemarble.html",
+    "reason": "Remove added overlay and CSS; retain original stylesheet and inline content corrections.",
+    "before_sha256": "9a81cc5c0f66de3776aa6b6b50e07004ffa136960c3485a034cbaaec7f1a3332",
+    "after_sha256": "415849f8a4ad49bca41d0f8ca96939b210ff3b572722fcd73f027d6ed933a6e9"
+  },
+  {
+    "path": "docs/fyp_showcase_earth.html",
+    "reason": "Remove added overlay and CSS; retain original stylesheet and inline content corrections.",
+    "before_sha256": "99e174ba428b0065d073aa684b70eb928c5a10fbc0d909cdf7047c2d016e5c38",
+    "after_sha256": "1a9ff645f5bd154543a2935e0ee79ab15eab036fa6bd670f572f32fc5a73a97c"
+  },
+  {
+    "path": "docs/fyp_showcase_latentspace.html",
+    "reason": "Remove added overlay and CSS; retain original stylesheet and inline content corrections.",
+    "before_sha256": "b8038a6374c715e9328d7dca0e3e9ef5e77d8b241b74affb8161099196ef0f87",
+    "after_sha256": "c22810f2a49c29422fcd451a9720c041ffbdd8c767e711b12d490d56655f6939"
+  },
+  {
+    "path": "docs/fyp_showcase_v2.html",
+    "reason": "Remove added overlay and CSS; retain original stylesheet and inline content corrections.",
+    "before_sha256": "6565314c2d20ec2a22e1edfa2b31b42b4a62d0a80b5fe9a829779ca8fec846dc",
+    "after_sha256": "ce64b6d73580b53ecf14038dae4a93339aa81f84315657d5f192e338ac75bdf0"
+  },
+  {
+    "path": "docs/fyp_showcase_world.html",
+    "reason": "Remove added overlay and CSS; retain original stylesheet and inline content corrections.",
+    "before_sha256": "979bd4406c7a513f42a8919f954f8f9fa6a51e749b7774e8e8bb44e0e703f331",
+    "after_sha256": "83e7c459ff50ab116d7d2971917c2d19aa01a3a462ea60e91d8b6334c372d90f"
+  },
+  {
+    "path": "docs/fyp_showcase_world3d.html",
+    "reason": "Remove added overlay and CSS; retain original stylesheet and inline content corrections.",
+    "before_sha256": "0a7aa10070d33c15a9cbb21d31d743a213f959838f61826984eaced1cfc7084b",
+    "after_sha256": "63b6d4cbc82fd542502f5ca1803d9888e56ff391ea055372eb693ca1ccaedc19"
+  },
+  {
+    "path": "docs/fyp_status_2026-07.html",
+    "reason": "Remove added overlay and CSS; retain original stylesheet and inline content corrections.",
+    "before_sha256": "9954efad36a89714fa6597fba73e1ef9eeea18d694f6d84c8655eca127e124d6",
+    "after_sha256": "61390373ed11b152c76fc44bcf4926d42ea2b5370303a84f620ae359668af6b5"
+  },
+  {
+    "path": "docs/fyp_status_2026-07_v2.html",
+    "reason": "Remove added overlay and CSS; retain original stylesheet and inline content corrections.",
+    "before_sha256": "3c89b08d38bced52ee05c93f32a93b8500bee662fc90e42ecbbf91c00096037f",
+    "after_sha256": "0f831628a8452c404b526afa0b408f79c8a2a069574f9ed6f3694a2dd45878fe"
+  },
+  {
+    "path": "docs/project_field_guide.html",
+    "reason": "Remove added overlay and CSS; retain original stylesheet and inline content corrections.",
+    "before_sha256": "752b96f39cbe636ad7737fc22eb00090da588c74d643e7713fc8e20755b2cb66",
+    "after_sha256": "96ae4f4439479e26f2d5f285dff4607bc6c6857e23fea81c8eef76021c447626"
+  },
+  {
+    "path": "docs/statistics_explainer.html",
+    "reason": "Remove added overlay and CSS; retain original stylesheet and inline content corrections.",
+    "before_sha256": "9828fcbfef4d169ed7fe1b5e63448d172aa4c44dfdc5056710ee9330cd1c1bf4",
+    "after_sha256": "cd3e3331d8fddc9361f2cf7377b4ee04a830c0c67464c152a66eb7cf525e4e98"
+  },
+  {
+    "path": "docs/statistics_summary.html",
+    "reason": "Remove added overlay and CSS; retain original stylesheet and inline content corrections.",
+    "before_sha256": "9a552ab64d67d6056dc55cafd5220aa6b2cc6fdac7cbd09669eda4e41b72e7dd",
+    "after_sha256": "fa06de875186f80d1d2af4eab20c27202837fcf3199f83c3fb8d84fb0f85b20f"
+  },
+  {
+    "path": "docs/Codex_Meetup_Agent_Harness_Report.html",
+    "reason": "Update wording in the existing snapshot banner without adding design elements.",
+    "before_sha256": "182106fcae9b53851ed7fedb2b1b07c057e754d109212f347e75a88da550d003",
+    "after_sha256": "525f4c9a2fad31900ab27a246576e959f4361d70a4b9876f38ac2d2e8db4f9d3"
+  },
+  {
+    "path": "docs/agent_harness_showcase.html",
+    "reason": "Update wording in the existing snapshot banner without adding design elements.",
+    "before_sha256": "c269c61afe89b353dcac8f6d4f310be8e03f87a9ce2c2ccb1b36f70ea0c36c0a",
+    "after_sha256": "65a316cf167cf8f8fdc500e23e33ca0001ab8cd49a34c09aa4880a2b153cccd6"
+  },
+  {
+    "path": "docs/agentic_ai_report.html",
+    "reason": "Update wording in the existing snapshot banner without adding design elements.",
+    "before_sha256": "bfe4d45d356597c7dd2cb2327e8f6037c6bc85fdd7472560956c18a876c13775",
+    "after_sha256": "f3eeba7d574908dbc0effc50ee96d9fb28a14a3ddf56205804b59dd30b8eb09b"
+  },
+  {
+    "path": "docs/fyp_architecture.html",
+    "reason": "Update wording in the existing snapshot banner without adding design elements.",
+    "before_sha256": "2d564acc479ca1565a70d78151a3f3ef4afe4544aa46544005933b9a6217427c",
+    "after_sha256": "95015243f8052f3144991742788f1a265e99e1c408187aee184d9ac664909272"
+  },
+  {
+    "path": "docs/fyp_showcase_v2.html",
+    "reason": "Update wording in the existing snapshot banner without adding design elements.",
+    "before_sha256": "ce64b6d73580b53ecf14038dae4a93339aa81f84315657d5f192e338ac75bdf0",
+    "after_sha256": "51c6072b3d6a4df55b098396e1fb8b5b39e39b8220bbed1877794c3a0baf5468"
+  },
+  {
+    "path": "scripts/build_agent_harness_architecture_doc.py",
+    "reason": "Restore original guide callout inventory; update the existing introductory text and footer only.",
+    "before_sha256": "d3397049b235f7f75d203ff0e9c59754ae5084d475092a37670fdeee55d13380",
+    "after_sha256": "9753cd2790f6a8a5b100d36587284c51f12568edabf229a6efc7c9a7e09d7058"
+  },
+  {
+    "path": "scripts/build_agentic_report.js",
+    "reason": "Restore original workflow section/page inventory; update the existing cover note and executive-summary paragraph.",
+    "before_sha256": "4e171e61ed89903ecc49c7f9b496a3a51ca16fd85182afe80399823e8690d1b9",
+    "after_sha256": "1046ca9c50bded74a02559905105dc380d632012305ae4b2f357d1ade0611dfb"
+  },
+  {
+    "path": "docs/project_field_guide.html",
+    "reason": "Retain original inline emphasis/tag inventory while correcting task status.",
+    "before_sha256": "96ae4f4439479e26f2d5f285dff4607bc6c6857e23fea81c8eef76021c447626",
+    "after_sha256": "4f5b086e096a60d8d75f904409e7db0c70e9de78e4c988a7416e85938e3e279a"
+  },
+  {
+    "path": "scripts/build_agentic_report.js",
+    "reason": "Retain the primary-family and post-hoc disclosures inside the existing executive-summary paragraph.",
+    "before_sha256": "1046ca9c50bded74a02559905105dc380d632012305ae4b2f357d1ade0611dfb",
+    "after_sha256": "a706d623f38a855f53577dad90ec2f37ed44e74f973717b23c376f31f90eb2b1"
+  }
+]

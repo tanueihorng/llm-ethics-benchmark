@@ -847,3 +847,40 @@ def test_local_only_check_fails_when_a_report_file_is_force_added(tmp_path: Path
     result = check_local_only_untracked(repo)
     assert result.status == "fail"
     assert result.details == ["scripts/build_fyp_report_v5.js"]
+
+
+def test_skills_mirrored_for_claude_match_their_codex_source() -> None:
+    """A skill present in both .agents/skills (Codex) and .claude/skills (Claude
+    Code) is one skill with two discovery paths: the copies must not drift.
+    Derived from the directories, so a newly mirrored skill is covered."""
+    root = Path(__file__).resolve().parents[1]
+    codex, claude = root / ".agents/skills", root / ".claude/skills"
+    mirrored = sorted({p.name for p in codex.iterdir() if p.is_dir()} & {p.name for p in claude.iterdir() if p.is_dir()})
+    assert "fyp-report-audit" in mirrored
+    for name in mirrored:
+        source = {p.relative_to(codex / name) for p in (codex / name).rglob("*") if p.is_file()}
+        mirror = {p.relative_to(claude / name) for p in (claude / name).rglob("*") if p.is_file()}
+        assert source == mirror, f"{name}: file sets differ"
+        for rel in source:
+            assert (codex / name / rel).read_bytes() == (claude / name / rel).read_bytes(), f"{name}/{rel} drifted"
+
+
+def test_global_codex_skill_copies_match_the_repo_source() -> None:
+    """Copies of repo skills under ~/.codex/skills (the student's convention since
+    2026-07-10) went stale unnoticed when a repo skill changed. Machine-local:
+    only copies that exist are checked, and only the files the repo source has
+    (a global-only agents/openai.yaml is Codex interface metadata)."""
+    import os
+
+    root = Path(__file__).resolve().parents[1]
+    home = Path(os.environ.get("CODEX_HOME", Path.home() / ".codex")) / "skills"
+    sources = {p.name: p for base in (root / ".agents/skills", root / ".claude/skills")
+               for p in base.iterdir() if p.is_dir()}
+    stale = [
+        f"{name}/{path.relative_to(source)}"
+        for name, source in sorted(sources.items()) if (home / name).is_dir()
+        for path in source.rglob("*") if path.is_file()
+        if not (home / name / path.relative_to(source)).is_file()
+        or (home / name / path.relative_to(source)).read_bytes() != path.read_bytes()
+    ]
+    assert not stale, f"global Codex skill copies are stale; re-copy from the repo: {stale}"

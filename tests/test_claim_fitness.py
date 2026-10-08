@@ -456,6 +456,8 @@ POSTHOC_DISCLOSURE = re.compile(r"post[-\s]hoc", re.IGNORECASE)
 POSTHOC_DISCLOSURE_REQUIRED = (
     "docs/FYP_Report_2026-07-25_v6.docx",
     "docs/rewritten_fyp_interim_progress_v2.docx",
+    # D95 final report (graded T15 line); carries the disclosure in Section 4.6.
+    "submission/final_report.docx",
 )
 
 # DELIBERATELY EXCLUDED, recorded rather than left implicit (D54 symmetry).
@@ -483,6 +485,10 @@ POSTHOC_DISCLOSURE_UNREMEDIATED = {
     "docs/rewritten_fyp_interim_progress.docx": "SELECTED T53 artifact — open finding, see PROJECT_LOG",
     "docs/rewritten_fyp_interim_progress_humanized.docx": "prose variant of the selected copy",
     "docs/rewritten_fyp_interim_progress_lit_review_revised.docx": "comparison draft; immutable source of v2",
+    # Found 2026-09-27 when this scan was widened to registry documents.
+    "docs/drafts/final_report_missing_parts_draft.docx": (
+        "preserved D95 merge input; the merged submission/final_report.docx carries the disclosure"
+    ),
 }
 
 
@@ -520,9 +526,20 @@ def test_every_document_making_the_claim_is_classified() -> None:
     This is the T56 shape — the earlier gates enumerated a fixed list, so each
     new surface shipped unscanned by default.
     """
+    import yaml
+
+    # docs/*.docx alone missed the D95 final report, which lives in submission/.
+    # Derive the rest from the report registry so a newly registered deliverable
+    # anywhere in the tree is scanned by default.
+    registry = yaml.safe_load((REPO_ROOT / "configs/report_versions.yaml").read_text())
+    candidates = {f"docs/{path.name}" for path in (REPO_ROOT / "docs").glob("*.docx")}
+    candidates.update(version["path"] for family in registry["families"] for version in family["versions"])
+    candidates.update(doc["path"] for doc in registry.get("standalone_documents", []))
     unclassified = []
-    for path in sorted((REPO_ROOT / "docs").glob("*.docx")):
-        rel = f"docs/{path.name}"
+    for rel in sorted(candidates):
+        path = REPO_ROOT / rel
+        if not path.is_file() or path.parent.name == "archive":
+            continue
         if rel in POSTHOC_DISCLOSURE_REQUIRED or rel in POSTHOC_DISCLOSURE_UNREMEDIATED:
             continue
         try:

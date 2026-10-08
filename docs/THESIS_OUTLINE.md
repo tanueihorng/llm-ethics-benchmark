@@ -30,7 +30,7 @@
 5. **Threats to validity as a first-class section** (internal / external /
    construct / statistical-conclusion validity), not an afterthought.
 6. **Reproducibility statement + artefact** — map to the Pineau checklist; point
-   to the public repo and `docs/REPRODUCIBILITY.md`.
+   to the private code repository and the permitted reproducibility materials (reports and presentations remain local-only under D94) and `docs/REPRODUCIBILITY.md`.
 
 ## Chapter blueprint (maps to the existing report)
 

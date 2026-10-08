@@ -83,7 +83,11 @@ def unregistered_surfaces(manifest: dict[str, Any], root: Path = ROOT) -> set[st
     return discover_paths(manifest, root) - registered
 
 
-def find_volatile_claims(text: str) -> list[str]:
+def find_volatile_claims(text: str, allow: tuple[str, ...] = ()) -> list[str]:
+    """Volatile counts/Git state per line. `allow` holds exact phrases a
+    surface's manifest entry excuses with a rationale (e.g. a count of
+    statistical tests in a report table); only the phrase itself is removed
+    from the probe, so any other volatile claim on the same line still fires."""
     hits: list[str] = []
     for line_number, line in enumerate(text.splitlines(), 1):
         # Dated revision logs and audit transcripts are immutable history, not
@@ -91,11 +95,21 @@ def find_volatile_claims(text: str) -> list[str]:
         if re.match(r'^[\s>|*\[\"()\-]*20\d{2}-\d{2}-\d{2}\b', line):
             continue
         probe = re.sub(r"[*`_]", "", line)
+        for phrase in allow:
+            probe = probe.replace(phrase, " ")
         for pattern in VOLATILE_PATTERNS:
             if pattern.search(probe):
                 hits.append(f"line {line_number}: {line.strip()[:140]}")
                 break
     return hits
+
+
+def _rendered(element: ElementTree.Element) -> str:
+    """Visible text only: w:t. Field codes (w:instrText, e.g. "REF _Ref… \\h" behind a
+    native cross-reference) and tracked deletions (w:delText) are not rendered and must
+    never be read as claim prose."""
+    return "".join(t.text or "" for t in element.iter(
+        "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}t"))
 
 
 def _docx_text(path: Path) -> str:
@@ -105,14 +119,29 @@ def _docx_text(path: Path) -> str:
     namespace = {"w": "http://schemas.openxmlformats.org/wordprocessingml/2006/main"}
     paragraphs = []
     for paragraph in root.findall(".//w:p", namespace):
-        paragraphs.append("".join(paragraph.itertext()))
+        paragraphs.append(_rendered(paragraph))
     return "\n".join(paragraphs)
+
+
+def _is_header_row(row: ElementTree.Element, namespace: dict[str, str]) -> bool:
+    marker = row.find("w:trPr/w:tblHeader", namespace)
+    if marker is None:
+        return False
+    value = marker.get(f"{{{namespace['w']}}}val", "true").lower()
+    return value not in {"0", "false", "off"}
 
 
 def _docx_units(path: Path) -> list[str]:
     """Rendered claim units in body order: paragraphs, plus each table row
     joined into one unit so a value stays bound to its row's model/metric
-    cells (Word stores every cell as a separate paragraph)."""
+    cells (Word stores every cell as a separate paragraph).
+
+    Rows Word marks as repeating headers (w:tblHeader) label their columns:
+    each data cell is emitted as "header: value" when the header and data
+    rows have the same cell count, so a value is bound to its OWN column
+    label ("128 tokens: +0.055", "Classifier: 0.59") and never to a
+    neighbouring column's. Unmarked first rows are data, not labels, and
+    rows whose cell count differs (merged cells) stay unlabelled."""
     with zipfile.ZipFile(path) as archive:
         xml = archive.read("word/document.xml")
     root = ElementTree.fromstring(xml)
@@ -122,12 +151,23 @@ def _docx_units(path: Path) -> list[str]:
     for child in body:
         tag = child.tag.rsplit("}", 1)[1]
         if tag == "p":
-            text = "".join(child.itertext()).strip()
+            text = _rendered(child).strip()
             if text:
                 units.append(text)
         elif tag == "tbl":
+            header: list[str] | None = None
             for row in child.findall(".//w:tr", namespace):
-                cells = ["".join(cell.itertext()).strip() for cell in row.findall("w:tc", namespace)]
+                cells = [_rendered(cell).strip() for cell in row.findall("w:tc", namespace)]
+                if _is_header_row(row, namespace):
+                    units.append(" | ".join(cells))
+                    if header is None:
+                        header = cells
+                    elif len(header) == len(cells):
+                        header = [" ".join(part for part in pair if part) for pair in zip(header, cells)]
+                    continue
+                if header and len(header) == len(cells):
+                    cells = [f"{label}: {value}" if label and value and label != value else value
+                             for label, value in zip(header, cells)]
                 units.append(" | ".join(cells))
     return units
 
@@ -683,7 +723,9 @@ def _validate_primary_claims(
     validation = claims["validation"]
     cls_k = f"{validation['classifier_human_kappa']:.2f}"
     rgx_k = f"{validation['regex_human_kappa']:.2f}"
-    hit = _binding_unit(live, (cls_k,), (rgx_k,), ("regex", "human"))
+    # Reports name the regex scorer either "regex" or "keyword rule"; both
+    # spellings own the value, and both feed the ownership-swap rules below.
+    hit = _binding_unit(live, (cls_k,), (rgx_k,), ("regex", "human", "keyword rule", "keyword-rule"))
     results.append(("human-validation-kappa", hit is not None,
                     f"classifier κ {cls_k} vs regex κ {rgx_k} present" if hit
                     else f"human-validation κ pair {cls_k}/{rgx_k} not bound in any unit"))
@@ -694,9 +736,9 @@ def _validate_primary_claims(
     # first ("0.59 versus the regex's 0.11", "0.59 compared with the regex",
     # "(κ 0.59) than the regex") and so do not match.
     swap_res = (
-        re.compile(rf"regex[^,;.0-9]{{0,25}}{re.escape(cls_k)}(?!\d)", re.IGNORECASE),
+        re.compile(rf"(regex|keyword[- ]rule)[^,;.0-9]{{0,25}}{re.escape(cls_k)}(?!\d)", re.IGNORECASE),
         re.compile(rf"(classifier|judge)s?\b[^,;.0-9]{{0,25}}{re.escape(rgx_k)}(?!\d)", re.IGNORECASE),
-        re.compile(rf"{re.escape(cls_k)}(?!\d)\s*(\((κ|kappa)\))?\s*\b(for|of|by|from|with)\b\s*(the\s+)?regex", re.IGNORECASE),
+        re.compile(rf"{re.escape(cls_k)}(?!\d)\s*(\((κ|kappa)\))?\s*\b(for|of|by|from|with)\b\s*(the\s+)?(regex|keyword[- ]rule)", re.IGNORECASE),
         re.compile(rf"{re.escape(rgx_k)}(?!\d)\s*(\((κ|kappa)\))?\s*\b(for|of|by|from|with)\b\s*(the\s+)?(classifier|judge)", re.IGNORECASE),
     )
     offender = next((s for s in sentences if any(p.search(s) for p in swap_res)), None)
@@ -832,7 +874,18 @@ def validate_surface(
             live_text = text
             if path.suffix == ".docx" and "Appendix G: Document Revision History" in live_text:
                 live_text = live_text.split("Appendix G: Document Revision History", 1)[0]
-            hits = find_volatile_claims(live_text)
+            allowed = dict(surface.get("volatile_allow", {}))
+            for phrase, rationale in allowed.items():
+                # An allow entry is an exact phrase with a stated reason. It must
+                # still be needed: present in the document AND itself matched by
+                # a volatile pattern; otherwise it is stale and must be removed.
+                if not str(rationale).strip():
+                    results.append((f"{profile}.allow:{phrase}", False, "allow entry has no rationale"))
+                elif phrase not in live_text:
+                    results.append((f"{profile}.allow:{phrase}", False, "allow entry is stale: phrase no longer present"))
+                elif not find_volatile_claims(phrase):
+                    results.append((f"{profile}.allow:{phrase}", False, "allow entry is unnecessary: phrase is not volatile"))
+            hits = find_volatile_claims(live_text, tuple(allowed))
             results.append((profile, not hits, "no volatile counts/Git state" if not hits else hits[0]))
         elif profile == "markdown_primary":
             ok, detail = _validate_markdown(text, registry)

@@ -1,0 +1,837 @@
+[
+  {
+    "path": "docs/fyp_status_2026-07.html",
+    "reason": "Correct retired 128-token INT8 claim, significance scope, completed judges and current submission status.",
+    "before_sha256": "803835dd7f4d879541d004feedf51c591e144cc47b28e1c46214f7e837123a85",
+    "after_sha256": "889944d607d5842953e38e7f29a997c951a01f3e22947f6d9f381f6ba02d9902"
+  },
+  {
+    "path": "docs/fyp_status_2026-07_v2.html",
+    "reason": "Correct retired 128-token INT8 claim, significance scope, completed judges and current submission status.",
+    "before_sha256": "7e7d8b30d258e905cecbd500fb89e5f40ac4dfadf70b04187be6501efce69614",
+    "after_sha256": "983858e2ceb1ab472b407e411d8b4a44534b24df33413f8b562d02215cb06859"
+  },
+  {
+    "path": "docs/fyp-report-defense-deck-2026-07.html",
+    "reason": "Correct seed-range omission, completed judge status, bounded conclusion and primary-family denominator.",
+    "before_sha256": "d2bd3613ab6eea310b3003868a818c029ce66e98b93f088ebed4aea65148b2d5",
+    "after_sha256": "0554e7af9462d5d93ab58a6093f9da246f6ca8eb676880758b7c61be42426621"
+  },
+  {
+    "path": "docs/project_field_guide.html",
+    "reason": "Update post-hoc disclosure, all-pair seed coverage, fourth-judge status, D94 privacy and selected final line.",
+    "before_sha256": "afe1ea1686a1022ef31fe7166da44e2fbedfe299482e09f229f46b83547ec830",
+    "after_sha256": "b7e08e45206775e97d5fe9cf84193f1fc53f632603c8d08dda41598424119942"
+  },
+  {
+    "path": "docs/project_field_guide.html",
+    "reason": "Replace retired open-action list and label the historical timeline.",
+    "before_sha256": "b7e08e45206775e97d5fe9cf84193f1fc53f632603c8d08dda41598424119942",
+    "after_sha256": "96ae4f4439479e26f2d5f285dff4607bc6c6857e23fea81c8eef76021c447626"
+  },
+  {
+    "path": "docs/statistics_summary.html",
+    "reason": "Correct five-percentage-point units and disclose timing of the INT8 equivalence analysis in teaching material.",
+    "before_sha256": "39ac866bdcf120bc8be07e593b6713755e8fd14785561901bcf9cc4a2a7a3921",
+    "after_sha256": "fa06de875186f80d1d2af4eab20c27202837fcf3199f83c3fb8d84fb0f85b20f"
+  },
+  {
+    "path": "docs/statistics_explainer.html",
+    "reason": "Correct five-percentage-point units and disclose timing of the INT8 equivalence analysis in teaching material.",
+    "before_sha256": "287c52b72d2c95c1a6fc9a3c2a08f4011017caad0483d48b73b1ff4461871c0e",
+    "after_sha256": "cd3e3331d8fddc9361f2cf7377b4ee04a830c0c67464c152a66eb7cf525e4e98"
+  },
+  {
+    "path": "docs/fyp_showcase_latentspace.html",
+    "reason": "Correct dynamically rendered post-hoc claim and interim-only branding.",
+    "before_sha256": "f32bbeb3e4d2dd63971bf4651cfac01d04a4498b7a21968e44589fff27165d42",
+    "after_sha256": "c22810f2a49c29422fcd451a9720c041ffbdd8c767e711b12d490d56655f6939"
+  },
+  {
+    "path": "docs/fyp_showcase.html",
+    "reason": "Update judge coverage with scoped GPT-4o kappa; date external market context and distinguish methods from bit width.",
+    "before_sha256": "490c7df7eaed3767b19811ae8cb06c6d85aaee89a51eea8ce141081d4c43cd07",
+    "after_sha256": "979a3db8b41a829cbe9d8af51f23304a760f3fee05b9ec956fa918aec6161f9c"
+  },
+  {
+    "path": "docs/fyp_showcase_3d.html",
+    "reason": "Update judge coverage with scoped GPT-4o kappa; date external market context and distinguish methods from bit width.",
+    "before_sha256": "82082e0ee902c7208ca2b8b79300636aae837855c40f6a203d48ef2fb7611d14",
+    "after_sha256": "03aaad8443de77b4447eca1416eb120b383f5ceabdd1780b73b6d7411e5e9805"
+  },
+  {
+    "path": "docs/fyp_showcase_earth.html",
+    "reason": "Update judge coverage with scoped GPT-4o kappa; date external market context and distinguish methods from bit width.",
+    "before_sha256": "876009214a58aba1a0d62a7b0a05d444f4c60aab35f8bc8f13a4e6a05ddddb00",
+    "after_sha256": "1a9ff645f5bd154543a2935e0ee79ab15eab036fa6bd670f572f32fc5a73a97c"
+  },
+  {
+    "path": "docs/fyp_showcase_bluemarble.html",
+    "reason": "Update judge coverage with scoped GPT-4o kappa; date external market context and distinguish methods from bit width.",
+    "before_sha256": "05a51e8a72dc70a9d98cc48be6ff8ad6290d1c90f13d9b02fc6e6eb9f7b355a2",
+    "after_sha256": "415849f8a4ad49bca41d0f8ca96939b210ff3b572722fcd73f027d6ed933a6e9"
+  },
+  {
+    "path": "docs/fyp_showcase_world.html",
+    "reason": "Update judge coverage with scoped GPT-4o kappa; date external market context and distinguish methods from bit width.",
+    "before_sha256": "ec18fafc479075edb413ba93aafe487fd2ce851538312ed569e6a8b19ca5a3c6",
+    "after_sha256": "83e7c459ff50ab116d7d2971917c2d19aa01a3a462ea60e91d8b6334c372d90f"
+  },
+  {
+    "path": "docs/fyp_showcase_world3d.html",
+    "reason": "Update judge coverage with scoped GPT-4o kappa; date external market context and distinguish methods from bit width.",
+    "before_sha256": "687b27e59abfe8b0d0a94a3aaa20b93630686837399da2a0e60b7a2e1cdcbf03",
+    "after_sha256": "63b6d4cbc82fd542502f5ca1803d9888e56ff391ea055372eb693ca1ccaedc19"
+  },
+  {
+    "path": "docs/fyp_showcase_earth.html",
+    "reason": "Add dated current-evidence context beside retained presentation or historical content.",
+    "before_sha256": "1a9ff645f5bd154543a2935e0ee79ab15eab036fa6bd670f572f32fc5a73a97c",
+    "after_sha256": "6fc1bdcbde7d62437c65aa9ffaf0d9981d502d91007a5bb82ba46f91b96d3c90"
+  },
+  {
+    "path": "docs/fyp_showcase_bluemarble.html",
+    "reason": "Add dated current-evidence context beside retained presentation or historical content.",
+    "before_sha256": "415849f8a4ad49bca41d0f8ca96939b210ff3b572722fcd73f027d6ed933a6e9",
+    "after_sha256": "841e7b58c802d0df23c493e68c5262d79caa10cb5aea3dfe810a0586fd71e41a"
+  },
+  {
+    "path": "docs/fyp_showcase_v2.html",
+    "reason": "Add dated current-evidence context beside retained presentation or historical content.",
+    "before_sha256": "ce64b6d73580b53ecf14038dae4a93339aa81f84315657d5f192e338ac75bdf0",
+    "after_sha256": "68adeb9ce2285e549ee25ed4f916ce99e09366c031b6d94690ff78947f785b0d"
+  },
+  {
+    "path": "docs/fyp_showcase_world3d.html",
+    "reason": "Add dated current-evidence context beside retained presentation or historical content.",
+    "before_sha256": "63b6d4cbc82fd542502f5ca1803d9888e56ff391ea055372eb693ca1ccaedc19",
+    "after_sha256": "e8a5fcaa518b1adba98de6f265b5377d9569dbc830a07e3ee62b4457b2b14345"
+  },
+  {
+    "path": "docs/fyp-report-defense-deck-2026-07.html",
+    "reason": "Add dated current-evidence context beside retained presentation or historical content.",
+    "before_sha256": "0554e7af9462d5d93ab58a6093f9da246f6ca8eb676880758b7c61be42426621",
+    "after_sha256": "a848fd8a5af6530af7de3d3c9dafeece639bd27d7c3e8ca1b41d5e5f42e78e2f"
+  },
+  {
+    "path": "docs/fyp_showcase_latentspace.html",
+    "reason": "Add dated current-evidence context beside retained presentation or historical content.",
+    "before_sha256": "c22810f2a49c29422fcd451a9720c041ffbdd8c767e711b12d490d56655f6939",
+    "after_sha256": "c8b9ce2171abf8e9e86107e4f965d047d8134fc67d1dada71fbf5f6f584d575e"
+  },
+  {
+    "path": "docs/Codex_Meetup_Agent_Harness_Report.html",
+    "reason": "Add dated current-evidence context beside retained presentation or historical content.",
+    "before_sha256": "182106fcae9b53851ed7fedb2b1b07c057e754d109212f347e75a88da550d003",
+    "after_sha256": "8ee67ea4ba022729fecb973256c07f851925b49048aca70983101fbe07ec919c"
+  },
+  {
+    "path": "docs/fyp_architecture.html",
+    "reason": "Add dated current-evidence context beside retained presentation or historical content.",
+    "before_sha256": "2d564acc479ca1565a70d78151a3f3ef4afe4544aa46544005933b9a6217427c",
+    "after_sha256": "cc33bf822f9b6f6a7c389a03b1d9bc8ddf6baa4e0321f207054c7cd33b0b0849"
+  },
+  {
+    "path": "docs/project_field_guide.html",
+    "reason": "Add dated current-evidence context beside retained presentation or historical content.",
+    "before_sha256": "96ae4f4439479e26f2d5f285dff4607bc6c6857e23fea81c8eef76021c447626",
+    "after_sha256": "c51149274961b47ef043f99476942573ffba36eb3a83c05ad6dc2cb31bf50e59"
+  },
+  {
+    "path": "docs/fyp_showcase_3d.html",
+    "reason": "Add dated current-evidence context beside retained presentation or historical content.",
+    "before_sha256": "03aaad8443de77b4447eca1416eb120b383f5ceabdd1780b73b6d7411e5e9805",
+    "after_sha256": "9a7fa82e7714ba670c510a3c1360d9ea45e78c21e4d8e69619876c245aaedb33"
+  },
+  {
+    "path": "docs/agentic_ai_report.html",
+    "reason": "Add dated current-evidence context beside retained presentation or historical content.",
+    "before_sha256": "bfe4d45d356597c7dd2cb2327e8f6037c6bc85fdd7472560956c18a876c13775",
+    "after_sha256": "018c3b5a51c3cedbb42f0e6be6919872a1374542fb5b0efe185ab91a80113432"
+  },
+  {
+    "path": "docs/fyp_status_2026-07.html",
+    "reason": "Add dated current-evidence context beside retained presentation or historical content.",
+    "before_sha256": "889944d607d5842953e38e7f29a997c951a01f3e22947f6d9f381f6ba02d9902",
+    "after_sha256": "f05246e070d2a4fb589c4790d30b59bc84c9da510c0f103700d9fe0f2a71734a"
+  },
+  {
+    "path": "docs/fyp_status_2026-07_v2.html",
+    "reason": "Add dated current-evidence context beside retained presentation or historical content.",
+    "before_sha256": "983858e2ceb1ab472b407e411d8b4a44534b24df33413f8b562d02215cb06859",
+    "after_sha256": "0c9ad5eb2b359564412634fb1ef5ec4b5b34b44d1429b22db49af053f0335720"
+  },
+  {
+    "path": "docs/statistics_explainer.html",
+    "reason": "Add dated current-evidence context beside retained presentation or historical content.",
+    "before_sha256": "cd3e3331d8fddc9361f2cf7377b4ee04a830c0c67464c152a66eb7cf525e4e98",
+    "after_sha256": "0582785d46f7444a7ef6e1627735d3b6587d6dfb0ca98d8641fd787ef72e024b"
+  },
+  {
+    "path": "docs/agent_harness_showcase.html",
+    "reason": "Add dated current-evidence context beside retained presentation or historical content.",
+    "before_sha256": "c269c61afe89b353dcac8f6d4f310be8e03f87a9ce2c2ccb1b36f70ea0c36c0a",
+    "after_sha256": "a49b090cd761d92111c70a64204969ed8a2466408132706c91bcd0e5718010a3"
+  },
+  {
+    "path": "docs/fyp_showcase_world.html",
+    "reason": "Add dated current-evidence context beside retained presentation or historical content.",
+    "before_sha256": "83e7c459ff50ab116d7d2971917c2d19aa01a3a462ea60e91d8b6334c372d90f",
+    "after_sha256": "2d990866f3d4e538b2d999fb75689556813529a6b3eed259356bf44b09b22306"
+  },
+  {
+    "path": "docs/statistics_summary.html",
+    "reason": "Add dated current-evidence context beside retained presentation or historical content.",
+    "before_sha256": "fa06de875186f80d1d2af4eab20c27202837fcf3199f83c3fb8d84fb0f85b20f",
+    "after_sha256": "03bf22007b21127d213e4d677b76ca4cec30adfbf815866e586011d3323ad3ec"
+  },
+  {
+    "path": "docs/fyp_showcase.html",
+    "reason": "Add dated current-evidence context beside retained presentation or historical content.",
+    "before_sha256": "979a3db8b41a829cbe9d8af51f23304a760f3fee05b9ec956fa918aec6161f9c",
+    "after_sha256": "e04bf127caa2bcc1a6efd8cc0730b67eedc70bd42e032fb989076431283ce6d0"
+  },
+  {
+    "path": "scripts/build_fyp_explainer_deck.js",
+    "reason": "Correct NF4 codebook cardinality in speaker notes and complete judge count; qualify Jev sensitivity conclusion.",
+    "before_sha256": "bb76fd7b8f56951414599ae7639418769f407a2dc415557696d9c596f2d3928f",
+    "after_sha256": "d484464fdb46972bb1261ccdd21728228c333c5c2463505f5cde9a9f13330589"
+  },
+  {
+    "path": "scripts/build_viva_deck.py",
+    "reason": "Qualify the MDE explanation; 80% power is not proof excluding all larger effects.",
+    "before_sha256": "15218488ea838885ce23e5fc478a190748dcb1362f099c8b0d156ffdb7f5dfa3",
+    "after_sha256": "4efc90b90dfc2d87fb8f870d18fb36d2cd3173c87b70848a50bc74ab35e8dbe7"
+  },
+  {
+    "path": "scripts/build_agent_harness_architecture_doc.py",
+    "reason": "Add current privacy, selected-document and judge-status context to the non-report Word architecture guide.",
+    "before_sha256": "0d972062288358f1914d5477a7dbe52f6c85a727fe0eb721cceac48afa8a66ca",
+    "after_sha256": "1295b75d4923e13dfa21ccab837b834b7a497a9d5e75664e42abe3f7cbb6f118"
+  },
+  {
+    "path": "docs/REPRODUCIBILITY.md",
+    "reason": "Correct private-repository status, analysis installation, primary config and retired precision-sweep exception; preserve canonical run trees.",
+    "before_sha256": "0a831c8237bb27c852cd4ae9aba0482068921804f86472ade0097640ca8ed58f",
+    "after_sha256": "4fce51f4a94978e907212f4952e89ad9d99c37b02b2914b1fe28a1e49bd767d7"
+  },
+  {
+    "path": "docs/paper_outline.md",
+    "reason": "Apply current D94 publication boundary to supporting outlines.",
+    "before_sha256": "6deb21936db3673240a83afcce31c9d3b6d79210e7d713290ca164f4a465cb8b",
+    "after_sha256": "61dd3fbbb2e384152c402deb80df7e42009ed922981b3f17d8f51b1873d42aaf"
+  },
+  {
+    "path": "docs/THESIS_OUTLINE.md",
+    "reason": "Apply current D94 publication boundary to supporting outlines.",
+    "before_sha256": "9f715f1db52cd1fc5b7405cc7606cbfe211a9a6b5f99aee7ee18473fe721ae22",
+    "after_sha256": "c1488416270e64be2d10c33390c46dbca6a2cdf7606e9e0e36c898a0588fbc8b"
+  },
+  {
+    "path": "docs/email_drZhang_july.md",
+    "reason": "Label retained email drafts with confirmed action status without inventing send dates or as-sent contents.",
+    "before_sha256": "5ff6c74df1c1c97e1b411e242e8d73f368e3ecc095d8173017663c19956cc7e0",
+    "after_sha256": "fadedfa7de679341908272192907b5890fa0d3903986dd274f83135ef5726ea3"
+  },
+  {
+    "path": "docs/email_drZhang_2026-08-18_merged.md",
+    "reason": "Label retained email drafts with confirmed action status without inventing send dates or as-sent contents.",
+    "before_sha256": "5da553289f117272d61c8832643581a0e992f5afed1de2d79106edeb6da38f40",
+    "after_sha256": "c1c100b44e5a780df80846339c2b8853b336cbd0c324e31d6b04190ccd0c7855"
+  },
+  {
+    "path": "docs/email_drZhang_august.md",
+    "reason": "Label retained email drafts with confirmed action status without inventing send dates or as-sent contents.",
+    "before_sha256": "1a6861b511d325347bfc56b0c6ffec2ee2ad0076af36223b4e5fe6e3683e14b3",
+    "after_sha256": "0737961517236b4b5cd6b6508e38cc4f80fdaf7de221ed1e7cb1341649ef113f"
+  },
+  {
+    "path": "todo.md",
+    "reason": "Replace a stale tactical send order with confirmed completion and the selected final base.",
+    "before_sha256": "e8579ddf0ce84c0ea1510c2eea5e3706ee85e526417bb7289f10bcbf5155e5e2",
+    "after_sha256": "38c6b13ce460d81b029ed6397a09808b28a33f1513603acf182efaa106cd4ec5"
+  },
+  {
+    "path": "docs/fyp-report-defense-deck-2026-07.html",
+    "reason": "Distinguish HarmBench ASR from the scorer-dependent over-refusal survivor.",
+    "before_sha256": "a848fd8a5af6530af7de3d3c9dafeece639bd27d7c3e8ca1b41d5e5f42e78e2f",
+    "after_sha256": "d670d5360ddc0b2581f606ba0edf635de486a05f3039832e954668d646f1fde4"
+  },
+  {
+    "path": "docs/fyp_status_2026-07.html",
+    "reason": "Distinguish HarmBench ASR from the scorer-dependent over-refusal survivor.",
+    "before_sha256": "f05246e070d2a4fb589c4790d30b59bc84c9da510c0f103700d9fe0f2a71734a",
+    "after_sha256": "1b6495eecaa381d5dddd6f2524b0481efcbc122872aa4322f4edc9b6ad402403"
+  },
+  {
+    "path": "docs/fyp_status_2026-07_v2.html",
+    "reason": "Distinguish HarmBench ASR from the scorer-dependent over-refusal survivor.",
+    "before_sha256": "0c9ad5eb2b359564412634fb1ef5ec4b5b34b44d1429b22db49af053f0335720",
+    "after_sha256": "9b8a83ee71d940b47086f5516d5c5f2a4a5d373a36c46a6f250feaa3e89f9b31"
+  },
+  {
+    "path": "docs/QUICKSTART.md",
+    "reason": "Fix configuration mapping schema, explicit primary budget, scratch-output examples and judge result-tree argument.",
+    "before_sha256": "9984ce598cd1503256ce9818ce41f5b1ce3d8b7c225f4e607bdbb37a40a652c1",
+    "after_sha256": "ebec2363b2740d8dec2748d54ed8706ab2625e626b310b894340e51583ec436c"
+  },
+  {
+    "path": "docs/USER_GUIDE.md",
+    "reason": "Update local execution examples to explicit scratch outputs and editable installation; retain direct-sbatch TC1 boundary.",
+    "before_sha256": "e674748d75b3ecdaae70b091164993e8ef0633c4e903d037f91cf78ac7ff204a",
+    "after_sha256": "3a5b38d015c96d340853a1721c269d87c561648a719b43877174cebf91f6fa97"
+  },
+  {
+    "path": "docs/FYP_REPO_GUIDE.md",
+    "reason": "Apply 512-primary context, completed judges, current install and scratch-output execution examples.",
+    "before_sha256": "2aab4503011e54373b04c09b7a85828e6888b4ccaa2059d33640aad0221a84c4",
+    "after_sha256": "52671aa211d566ba3795ca35c15b0eda3f8cd373220833fa38a202b4f65ac74b"
+  },
+  {
+    "path": "docs/viva/VIVA_QA_BANK.md",
+    "reason": "Update viva answers with the fourth judge and failed construct validations; correct TC1 prefetch and post-hoc disclosure.",
+    "before_sha256": "d2503c9b566ca155db21e036a69e838bacee401cb5f69f5c241f7eee3277b772",
+    "after_sha256": "cdd9a2c14b8ead517a36585d2ed687a98e31c4f538f8023f0e27e0701d20465a"
+  },
+  {
+    "path": "configs/report_versions.yaml",
+    "reason": "Correct stale final-base and as-sent provenance metadata without editing or rebuilding any report.",
+    "before_sha256": "9ab6c1d100c159235c3ce7627f1a7c2e53ed0f1df1546531f3bfd57c9ae7b09f",
+    "after_sha256": "35761a9484baec7cbb204cdfd289caac3a9f70b832300c71a2b7eafa80f70db0"
+  },
+  {
+    "path": "docs/fyp_showcase_earth.html",
+    "reason": "Fix update-panel contrast and print behavior; update current status-page cover date and completed judge coverage.",
+    "before_sha256": "6fc1bdcbde7d62437c65aa9ffaf0d9981d502d91007a5bb82ba46f91b96d3c90",
+    "after_sha256": "98c496e00261f4e829dc6e62ef6779c35a44352b6799c61c9fb2415fd6f453a3"
+  },
+  {
+    "path": "docs/fyp_showcase_bluemarble.html",
+    "reason": "Fix update-panel contrast and print behavior; update current status-page cover date and completed judge coverage.",
+    "before_sha256": "841e7b58c802d0df23c493e68c5262d79caa10cb5aea3dfe810a0586fd71e41a",
+    "after_sha256": "6da38e8c08daa24365011629bd6fbca321b0a4977791c57aa646aa0303477768"
+  },
+  {
+    "path": "docs/fyp_showcase_v2.html",
+    "reason": "Fix update-panel contrast and print behavior; update current status-page cover date and completed judge coverage.",
+    "before_sha256": "68adeb9ce2285e549ee25ed4f916ce99e09366c031b6d94690ff78947f785b0d",
+    "after_sha256": "f1f940bf8b6a4a6753698104029c79511316f8637050f483affe2d9fa2876493"
+  },
+  {
+    "path": "docs/fyp_showcase_world3d.html",
+    "reason": "Fix update-panel contrast and print behavior; update current status-page cover date and completed judge coverage.",
+    "before_sha256": "e8a5fcaa518b1adba98de6f265b5377d9569dbc830a07e3ee62b4457b2b14345",
+    "after_sha256": "2c171ea4d4cd353bb4a391ce9bab61351311ff9c76844764049ccabc682b1e6a"
+  },
+  {
+    "path": "docs/fyp-report-defense-deck-2026-07.html",
+    "reason": "Fix update-panel contrast and print behavior; update current status-page cover date and completed judge coverage.",
+    "before_sha256": "d670d5360ddc0b2581f606ba0edf635de486a05f3039832e954668d646f1fde4",
+    "after_sha256": "3612557e5a9707e3b003b5cf6a37ca39f50acfeea0094a01b64db5538ee30387"
+  },
+  {
+    "path": "docs/fyp_showcase_latentspace.html",
+    "reason": "Fix update-panel contrast and print behavior; update current status-page cover date and completed judge coverage.",
+    "before_sha256": "c8b9ce2171abf8e9e86107e4f965d047d8134fc67d1dada71fbf5f6f584d575e",
+    "after_sha256": "b767dc77ec0a88b67716acfb42f50b4c631439f0992f734577975ccd15901f49"
+  },
+  {
+    "path": "docs/Codex_Meetup_Agent_Harness_Report.html",
+    "reason": "Fix update-panel contrast and print behavior; update current status-page cover date and completed judge coverage.",
+    "before_sha256": "8ee67ea4ba022729fecb973256c07f851925b49048aca70983101fbe07ec919c",
+    "after_sha256": "e7a54a1d5d19feb8fed608f6d63fa311d4c9f251154c3135b8cad5138326c0cc"
+  },
+  {
+    "path": "docs/fyp_architecture.html",
+    "reason": "Fix update-panel contrast and print behavior; update current status-page cover date and completed judge coverage.",
+    "before_sha256": "cc33bf822f9b6f6a7c389a03b1d9bc8ddf6baa4e0321f207054c7cd33b0b0849",
+    "after_sha256": "71ec45ba3e7d576e5b0b03bce650460b02b528f9070c7b8eab8aed6c0c6ff035"
+  },
+  {
+    "path": "docs/project_field_guide.html",
+    "reason": "Fix update-panel contrast and print behavior; update current status-page cover date and completed judge coverage.",
+    "before_sha256": "c51149274961b47ef043f99476942573ffba36eb3a83c05ad6dc2cb31bf50e59",
+    "after_sha256": "f0b2b2de0f2538744df5e6b61480c8eafa5169e732b424bd8e4590fc5222cd50"
+  },
+  {
+    "path": "docs/fyp_showcase_3d.html",
+    "reason": "Fix update-panel contrast and print behavior; update current status-page cover date and completed judge coverage.",
+    "before_sha256": "9a7fa82e7714ba670c510a3c1360d9ea45e78c21e4d8e69619876c245aaedb33",
+    "after_sha256": "4f7f7e4cd3a5cc8b61c8c4c3040f691e1b08a4824bfe47bfc90452075eb13ca2"
+  },
+  {
+    "path": "docs/agentic_ai_report.html",
+    "reason": "Fix update-panel contrast and print behavior; update current status-page cover date and completed judge coverage.",
+    "before_sha256": "018c3b5a51c3cedbb42f0e6be6919872a1374542fb5b0efe185ab91a80113432",
+    "after_sha256": "12c76f9e08cb25b394f0dd860f6b0b1db7cfc02de5558b2334c642a7a27670c1"
+  },
+  {
+    "path": "docs/fyp_status_2026-07.html",
+    "reason": "Fix update-panel contrast and print behavior; update current status-page cover date and completed judge coverage.",
+    "before_sha256": "1b6495eecaa381d5dddd6f2524b0481efcbc122872aa4322f4edc9b6ad402403",
+    "after_sha256": "f3f22464283b28e9fb91ba3dbec8e42343e436a124be3688425ebbf6233b54f5"
+  },
+  {
+    "path": "docs/fyp_status_2026-07_v2.html",
+    "reason": "Fix update-panel contrast and print behavior; update current status-page cover date and completed judge coverage.",
+    "before_sha256": "9b8a83ee71d940b47086f5516d5c5f2a4a5d373a36c46a6f250feaa3e89f9b31",
+    "after_sha256": "0ff56110ddcfca8b060e3a2acddf21c1a4d8d99700f54e0c09cccd146e3ca5f2"
+  },
+  {
+    "path": "docs/statistics_explainer.html",
+    "reason": "Fix update-panel contrast and print behavior; update current status-page cover date and completed judge coverage.",
+    "before_sha256": "0582785d46f7444a7ef6e1627735d3b6587d6dfb0ca98d8641fd787ef72e024b",
+    "after_sha256": "8f69989e4c567ea57da536b8d06aae412a55437e2b710656487b1a4244de204c"
+  },
+  {
+    "path": "docs/agent_harness_showcase.html",
+    "reason": "Fix update-panel contrast and print behavior; update current status-page cover date and completed judge coverage.",
+    "before_sha256": "a49b090cd761d92111c70a64204969ed8a2466408132706c91bcd0e5718010a3",
+    "after_sha256": "fc2197ed6009bcf51fe3dd7316ae4e72996a71e35a157d2c93612a2906e9bf07"
+  },
+  {
+    "path": "docs/fyp_showcase_world.html",
+    "reason": "Fix update-panel contrast and print behavior; update current status-page cover date and completed judge coverage.",
+    "before_sha256": "2d990866f3d4e538b2d999fb75689556813529a6b3eed259356bf44b09b22306",
+    "after_sha256": "3d62c2b9835fa27578b22cc4c33e0c9585c74f206f35ee2e16323d91b5b096c9"
+  },
+  {
+    "path": "docs/statistics_summary.html",
+    "reason": "Fix update-panel contrast and print behavior; update current status-page cover date and completed judge coverage.",
+    "before_sha256": "03bf22007b21127d213e4d677b76ca4cec30adfbf815866e586011d3323ad3ec",
+    "after_sha256": "f82a84942e00073b67aee4e4c7c117dcbc7f6f07ede7e632260d67f028024bd2"
+  },
+  {
+    "path": "docs/fyp_showcase.html",
+    "reason": "Fix update-panel contrast and print behavior; update current status-page cover date and completed judge coverage.",
+    "before_sha256": "e04bf127caa2bcc1a6efd8cc0730b67eedc70bd42e032fb989076431283ce6d0",
+    "after_sha256": "3253a98a1cb5a0ec5e904d1d5cefc3230651a9c8462768bef3fcf887dee612d1"
+  },
+  {
+    "path": "docs/fyp_status_2026-07.html",
+    "reason": "Update status-page cover kicker and source metadata with current date and completed judges.",
+    "before_sha256": "f3f22464283b28e9fb91ba3dbec8e42343e436a124be3688425ebbf6233b54f5",
+    "after_sha256": "78e4da1cc5fc2974d798f6e7efad4c8e723a0bf0b8b54d51ce6fb0c2af144388"
+  },
+  {
+    "path": "docs/fyp_status_2026-07_v2.html",
+    "reason": "Update status-page cover kicker and source metadata with current date and completed judges.",
+    "before_sha256": "0ff56110ddcfca8b060e3a2acddf21c1a4d8d99700f54e0c09cccd146e3ca5f2",
+    "after_sha256": "c107ab636028151e2e6165de91ffdde6419fea52b187114aa561182cee95bf54"
+  },
+  {
+    "path": "scripts/build_fyp_explainer_deck.js",
+    "reason": "Repair pre-existing unused slide-master content-type declarations at build time, preserving real package parts and charts.",
+    "before_sha256": "d484464fdb46972bb1261ccdd21728228c333c5c2463505f5cde9a9f13330589",
+    "after_sha256": "07604989eef940327533885ce6ab1aec5f9f39e20d30b88467b5b091e12bb092"
+  },
+  {
+    "path": "scripts/build_fyp_explainer_deck.js",
+    "reason": "Bound primary significance scope; distinguish nominal Llama decrease and bound the 0.0133 Qwen INT8 MMLU delta from precision_sweep.json despite rounded chart labels.",
+    "before_sha256": "07604989eef940327533885ce6ab1aec5f9f39e20d30b88467b5b091e12bb092",
+    "after_sha256": "989e4e02afabc12b0ffd55db7bafa4ec5667dbb9f51a7d5be3547cfb26acfd1b"
+  },
+  {
+    "path": "docs/fyp_showcase_earth.html",
+    "reason": "Wrap long source paths in the current-evidence panel.",
+    "before_sha256": "98c496e00261f4e829dc6e62ef6779c35a44352b6799c61c9fb2415fd6f453a3",
+    "after_sha256": "99e174ba428b0065d073aa684b70eb928c5a10fbc0d909cdf7047c2d016e5c38"
+  },
+  {
+    "path": "docs/fyp_showcase_bluemarble.html",
+    "reason": "Wrap long source paths in the current-evidence panel.",
+    "before_sha256": "6da38e8c08daa24365011629bd6fbca321b0a4977791c57aa646aa0303477768",
+    "after_sha256": "9a81cc5c0f66de3776aa6b6b50e07004ffa136960c3485a034cbaaec7f1a3332"
+  },
+  {
+    "path": "docs/fyp_showcase_v2.html",
+    "reason": "Wrap long source paths in the current-evidence panel.",
+    "before_sha256": "f1f940bf8b6a4a6753698104029c79511316f8637050f483affe2d9fa2876493",
+    "after_sha256": "6565314c2d20ec2a22e1edfa2b31b42b4a62d0a80b5fe9a829779ca8fec846dc"
+  },
+  {
+    "path": "docs/fyp_showcase_world3d.html",
+    "reason": "Wrap long source paths in the current-evidence panel.",
+    "before_sha256": "2c171ea4d4cd353bb4a391ce9bab61351311ff9c76844764049ccabc682b1e6a",
+    "after_sha256": "0a7aa10070d33c15a9cbb21d31d743a213f959838f61826984eaced1cfc7084b"
+  },
+  {
+    "path": "docs/fyp-report-defense-deck-2026-07.html",
+    "reason": "Wrap long source paths in the current-evidence panel.",
+    "before_sha256": "3612557e5a9707e3b003b5cf6a37ca39f50acfeea0094a01b64db5538ee30387",
+    "after_sha256": "3a143c5da52691c9a78d8185afd5dfe68b648508e0c40d739307912a765f9f78"
+  },
+  {
+    "path": "docs/fyp_showcase_latentspace.html",
+    "reason": "Wrap long source paths in the current-evidence panel.",
+    "before_sha256": "b767dc77ec0a88b67716acfb42f50b4c631439f0992f734577975ccd15901f49",
+    "after_sha256": "b8038a6374c715e9328d7dca0e3e9ef5e77d8b241b74affb8161099196ef0f87"
+  },
+  {
+    "path": "docs/Codex_Meetup_Agent_Harness_Report.html",
+    "reason": "Wrap long source paths in the current-evidence panel.",
+    "before_sha256": "e7a54a1d5d19feb8fed608f6d63fa311d4c9f251154c3135b8cad5138326c0cc",
+    "after_sha256": "81b5c35ebd30d535c0f3b75ec25e3519e072050cfca74de7f84752f933b2a2d3"
+  },
+  {
+    "path": "docs/fyp_architecture.html",
+    "reason": "Wrap long source paths in the current-evidence panel.",
+    "before_sha256": "71ec45ba3e7d576e5b0b03bce650460b02b528f9070c7b8eab8aed6c0c6ff035",
+    "after_sha256": "2637d52e2812c07f93e2aaf44c557978a77025e2b498813429483b29871a0ce6"
+  },
+  {
+    "path": "docs/project_field_guide.html",
+    "reason": "Wrap long source paths in the current-evidence panel.",
+    "before_sha256": "f0b2b2de0f2538744df5e6b61480c8eafa5169e732b424bd8e4590fc5222cd50",
+    "after_sha256": "752b96f39cbe636ad7737fc22eb00090da588c74d643e7713fc8e20755b2cb66"
+  },
+  {
+    "path": "docs/fyp_showcase_3d.html",
+    "reason": "Wrap long source paths in the current-evidence panel.",
+    "before_sha256": "4f7f7e4cd3a5cc8b61c8c4c3040f691e1b08a4824bfe47bfc90452075eb13ca2",
+    "after_sha256": "6413a3cf9e9ec639d917c5d28e061376d08b6caff678be441cc08af99c6c5b3e"
+  },
+  {
+    "path": "docs/agentic_ai_report.html",
+    "reason": "Wrap long source paths in the current-evidence panel.",
+    "before_sha256": "12c76f9e08cb25b394f0dd860f6b0b1db7cfc02de5558b2334c642a7a27670c1",
+    "after_sha256": "5c48df27e12e269f0cf063524d8db906c3bdc031bb49127ec99cd8a2d1daedbb"
+  },
+  {
+    "path": "docs/fyp_status_2026-07.html",
+    "reason": "Wrap long source paths in the current-evidence panel.",
+    "before_sha256": "78e4da1cc5fc2974d798f6e7efad4c8e723a0bf0b8b54d51ce6fb0c2af144388",
+    "after_sha256": "9954efad36a89714fa6597fba73e1ef9eeea18d694f6d84c8655eca127e124d6"
+  },
+  {
+    "path": "docs/fyp_status_2026-07_v2.html",
+    "reason": "Wrap long source paths in the current-evidence panel.",
+    "before_sha256": "c107ab636028151e2e6165de91ffdde6419fea52b187114aa561182cee95bf54",
+    "after_sha256": "3c89b08d38bced52ee05c93f32a93b8500bee662fc90e42ecbbf91c00096037f"
+  },
+  {
+    "path": "docs/statistics_explainer.html",
+    "reason": "Wrap long source paths in the current-evidence panel.",
+    "before_sha256": "8f69989e4c567ea57da536b8d06aae412a55437e2b710656487b1a4244de204c",
+    "after_sha256": "9828fcbfef4d169ed7fe1b5e63448d172aa4c44dfdc5056710ee9330cd1c1bf4"
+  },
+  {
+    "path": "docs/agent_harness_showcase.html",
+    "reason": "Wrap long source paths in the current-evidence panel.",
+    "before_sha256": "fc2197ed6009bcf51fe3dd7316ae4e72996a71e35a157d2c93612a2906e9bf07",
+    "after_sha256": "52d664f09d3c4e6f063f595f22202104b309592a40090538c5d6b6b8e1946d23"
+  },
+  {
+    "path": "docs/fyp_showcase_world.html",
+    "reason": "Wrap long source paths in the current-evidence panel.",
+    "before_sha256": "3d62c2b9835fa27578b22cc4c33e0c9585c74f206f35ee2e16323d91b5b096c9",
+    "after_sha256": "979bd4406c7a513f42a8919f954f8f9fa6a51e749b7774e8e8bb44e0e703f331"
+  },
+  {
+    "path": "docs/statistics_summary.html",
+    "reason": "Wrap long source paths in the current-evidence panel.",
+    "before_sha256": "f82a84942e00073b67aee4e4c7c117dcbc7f6f07ede7e632260d67f028024bd2",
+    "after_sha256": "9a552ab64d67d6056dc55cafd5220aa6b2cc6fdac7cbd09669eda4e41b72e7dd"
+  },
+  {
+    "path": "docs/fyp_showcase.html",
+    "reason": "Wrap long source paths in the current-evidence panel.",
+    "before_sha256": "3253a98a1cb5a0ec5e904d1d5cefc3230651a9c8462768bef3fcf887dee612d1",
+    "after_sha256": "927e3357232cdcad4d62ae3bd5a6e1f53c02aeaff5f73051656b1bb2abea64ef"
+  },
+  {
+    "path": "configs/report_versions.yaml",
+    "reason": "Register preserved historical source for the supporting meetup Word companion.",
+    "before_sha256": "35761a9484baec7cbb204cdfd289caac3a9f70b832300c71a2b7eafa80f70db0",
+    "after_sha256": "09ec2a53376b8e500d76a29f4dbb6fa4fb614deeee387ea62de86aeb25f3813b"
+  },
+  {
+    "path": "scripts/build_agentic_report.js",
+    "reason": "Add October context to the June workflow companion, label historical counts and correct repository privacy.",
+    "before_sha256": "1d5443968601068b97a5ce9791466f5f6d0faa92b8f1082ec57eaf7d1f8e8763",
+    "after_sha256": "4e171e61ed89903ecc49c7f9b496a3a51ca16fd85182afe80399823e8690d1b9"
+  },
+  {
+    "path": "scripts/build_fyp_explainer_deck.js",
+    "reason": "Scope the safety headline to the studied setting.",
+    "before_sha256": "989e4e02afabc12b0ffd55db7bafa4ec5667dbb9f51a7d5be3547cfb26acfd1b",
+    "after_sha256": "cb030c61e8d47216b3e444bca214ee4409b9874530e4ee0ec2d944a8ba8c3484"
+  },
+  {
+    "path": "scripts/build_agent_harness_architecture_doc.py",
+    "reason": "Distinguish historical architecture date from the regenerated October context.",
+    "before_sha256": "1295b75d4923e13dfa21ccab837b834b7a497a9d5e75664e42abe3f7cbb6f118",
+    "after_sha256": "d3397049b235f7f75d203ff0e9c59754ae5084d475092a37670fdeee55d13380"
+  },
+  {
+    "path": "scripts/build_viva_deck.py",
+    "reason": "Remove an unverified claim about when reviewers discovered limitations.",
+    "before_sha256": "4efc90b90dfc2d87fb8f870d18fb36d2cd3173c87b70848a50bc74ab35e8dbe7",
+    "after_sha256": "87f4197e36ce0ca563b6370f8307e7be114e4397a0a41882b0c1c256c175aa6e"
+  },
+  {
+    "path": "docs/PROJECT_LOG.md",
+    "reason": "Record the scoped non-report sweep and reconcile superseded current task headings without rewriting historical outcomes.",
+    "before_sha256": "44ff470624dd1cdd7951e68cc503cb7da5bb34713ca21dcae9325ad5ffb41cbe",
+    "after_sha256": "2a5036ccecd393c7e3a0a2c48613a2193ec266464fb4f21cf4a41452f82471f0"
+  },
+  {
+    "path": ".gitignore",
+    "reason": "Keep the new supporting-document builder local-only under D94.",
+    "before_sha256": "fb15a6657f31fe6a6f0f6f4affce007841143447a6ba5723df1c3b347f1f8c9f",
+    "after_sha256": "0b1d39e9a3b6361507a4cade1b60d10fa23421fdf0b1124728c5c2d9eec31644"
+  },
+  {
+    "path": "docs/PROJECT_LOG.md",
+    "reason": "Record the local-only ignore rule for the new companion builder.",
+    "before_sha256": "2a5036ccecd393c7e3a0a2c48613a2193ec266464fb4f21cf4a41452f82471f0",
+    "after_sha256": "39a43851dd5e3c4b50f1abc3eeb42e1af8a1c6ad59562d07535e590629ae833b"
+  },
+  {
+    "path": "docs/HANDOFF.md",
+    "reason": "Regenerated current metadata view from its source; no report content rebuild.",
+    "before_sha256": null,
+    "after_sha256": "3c2d5470f2e78c4532433b8978aacffe7c004cca49122bc6dd12bf3b2b959459"
+  },
+  {
+    "path": "docs/AGENT_DASHBOARD.md",
+    "reason": "Regenerated current metadata view from its source; no report content rebuild.",
+    "before_sha256": null,
+    "after_sha256": "3c6d03270e22791a4cc800f9d4e910f88385eff09a4f935f5fd9cedbda1a30a9"
+  },
+  {
+    "path": "docs/REPORT_VERSIONS.md",
+    "reason": "Regenerated current metadata view from its source; no report content rebuild.",
+    "before_sha256": null,
+    "after_sha256": "c65005c7139f4f9a39e03ef5170841d9a907409d91b2d856114dac0d76940dc5"
+  },
+  {
+    "path": "docs/report_versions/inventory.json",
+    "reason": "Regenerated current metadata view from its source; no report content rebuild.",
+    "before_sha256": null,
+    "after_sha256": "030a1359d14e606951d2c5a996eab4ebcf611eed36e93d60dae25c95462383ea"
+  },
+  {
+    "path": "docs/PROJECT_LOG.md",
+    "reason": "Record completed verification and final sweep timestamp.",
+    "before_sha256": "39a43851dd5e3c4b50f1abc3eeb42e1af8a1c6ad59562d07535e590629ae833b",
+    "after_sha256": "64b56dd1cd1169b11cea855a57ebec617f10aff3b8336f5132c0ae1239371c09"
+  },
+  {
+    "path": "docs/HANDOFF.md",
+    "reason": "Regenerate supporting status view from the final project log.",
+    "after_sha256": "23c512000f5e422dfe9219a2bca129dd97ffad1f85b075a315e7eb695e6fe9a3"
+  },
+  {
+    "path": "docs/AGENT_DASHBOARD.md",
+    "reason": "Regenerate supporting status view from the final project log.",
+    "after_sha256": "58aeb55e9bdfd024aa45c52eb5d252951f74082ad576da7f5b1b4d6426748d9b"
+  },
+  {
+    "path": "docs/Codex_Meetup_Agent_Harness_Report.html",
+    "reason": "Remove added overlay and CSS; retain original stylesheet and inline content corrections.",
+    "before_sha256": "81b5c35ebd30d535c0f3b75ec25e3519e072050cfca74de7f84752f933b2a2d3",
+    "after_sha256": "182106fcae9b53851ed7fedb2b1b07c057e754d109212f347e75a88da550d003"
+  },
+  {
+    "path": "docs/agent_harness_showcase.html",
+    "reason": "Remove added overlay and CSS; retain original stylesheet and inline content corrections.",
+    "before_sha256": "52d664f09d3c4e6f063f595f22202104b309592a40090538c5d6b6b8e1946d23",
+    "after_sha256": "c269c61afe89b353dcac8f6d4f310be8e03f87a9ce2c2ccb1b36f70ea0c36c0a"
+  },
+  {
+    "path": "docs/agentic_ai_report.html",
+    "reason": "Remove added overlay and CSS; retain original stylesheet and inline content corrections.",
+    "before_sha256": "5c48df27e12e269f0cf063524d8db906c3bdc031bb49127ec99cd8a2d1daedbb",
+    "after_sha256": "bfe4d45d356597c7dd2cb2327e8f6037c6bc85fdd7472560956c18a876c13775"
+  },
+  {
+    "path": "docs/fyp-report-defense-deck-2026-07.html",
+    "reason": "Remove added overlay and CSS; retain original stylesheet and inline content corrections.",
+    "before_sha256": "3a143c5da52691c9a78d8185afd5dfe68b648508e0c40d739307912a765f9f78",
+    "after_sha256": "acd015040420d0f22a837b7fb20722bcdd3c21b246b27759b3f52d5d30d11334"
+  },
+  {
+    "path": "docs/fyp_architecture.html",
+    "reason": "Remove added overlay and CSS; retain original stylesheet and inline content corrections.",
+    "before_sha256": "2637d52e2812c07f93e2aaf44c557978a77025e2b498813429483b29871a0ce6",
+    "after_sha256": "2d564acc479ca1565a70d78151a3f3ef4afe4544aa46544005933b9a6217427c"
+  },
+  {
+    "path": "docs/fyp_showcase.html",
+    "reason": "Remove added overlay and CSS; retain original stylesheet and inline content corrections.",
+    "before_sha256": "927e3357232cdcad4d62ae3bd5a6e1f53c02aeaff5f73051656b1bb2abea64ef",
+    "after_sha256": "979a3db8b41a829cbe9d8af51f23304a760f3fee05b9ec956fa918aec6161f9c"
+  },
+  {
+    "path": "docs/fyp_showcase_3d.html",
+    "reason": "Remove added overlay and CSS; retain original stylesheet and inline content corrections.",
+    "before_sha256": "6413a3cf9e9ec639d917c5d28e061376d08b6caff678be441cc08af99c6c5b3e",
+    "after_sha256": "03aaad8443de77b4447eca1416eb120b383f5ceabdd1780b73b6d7411e5e9805"
+  },
+  {
+    "path": "docs/fyp_showcase_bluemarble.html",
+    "reason": "Remove added overlay and CSS; retain original stylesheet and inline content corrections.",
+    "before_sha256": "9a81cc5c0f66de3776aa6b6b50e07004ffa136960c3485a034cbaaec7f1a3332",
+    "after_sha256": "415849f8a4ad49bca41d0f8ca96939b210ff3b572722fcd73f027d6ed933a6e9"
+  },
+  {
+    "path": "docs/fyp_showcase_earth.html",
+    "reason": "Remove added overlay and CSS; retain original stylesheet and inline content corrections.",
+    "before_sha256": "99e174ba428b0065d073aa684b70eb928c5a10fbc0d909cdf7047c2d016e5c38",
+    "after_sha256": "1a9ff645f5bd154543a2935e0ee79ab15eab036fa6bd670f572f32fc5a73a97c"
+  },
+  {
+    "path": "docs/fyp_showcase_latentspace.html",
+    "reason": "Remove added overlay and CSS; retain original stylesheet and inline content corrections.",
+    "before_sha256": "b8038a6374c715e9328d7dca0e3e9ef5e77d8b241b74affb8161099196ef0f87",
+    "after_sha256": "c22810f2a49c29422fcd451a9720c041ffbdd8c767e711b12d490d56655f6939"
+  },
+  {
+    "path": "docs/fyp_showcase_v2.html",
+    "reason": "Remove added overlay and CSS; retain original stylesheet and inline content corrections.",
+    "before_sha256": "6565314c2d20ec2a22e1edfa2b31b42b4a62d0a80b5fe9a829779ca8fec846dc",
+    "after_sha256": "ce64b6d73580b53ecf14038dae4a93339aa81f84315657d5f192e338ac75bdf0"
+  },
+  {
+    "path": "docs/fyp_showcase_world.html",
+    "reason": "Remove added overlay and CSS; retain original stylesheet and inline content corrections.",
+    "before_sha256": "979bd4406c7a513f42a8919f954f8f9fa6a51e749b7774e8e8bb44e0e703f331",
+    "after_sha256": "83e7c459ff50ab116d7d2971917c2d19aa01a3a462ea60e91d8b6334c372d90f"
+  },
+  {
+    "path": "docs/fyp_showcase_world3d.html",
+    "reason": "Remove added overlay and CSS; retain original stylesheet and inline content corrections.",
+    "before_sha256": "0a7aa10070d33c15a9cbb21d31d743a213f959838f61826984eaced1cfc7084b",
+    "after_sha256": "63b6d4cbc82fd542502f5ca1803d9888e56ff391ea055372eb693ca1ccaedc19"
+  },
+  {
+    "path": "docs/fyp_status_2026-07.html",
+    "reason": "Remove added overlay and CSS; retain original stylesheet and inline content corrections.",
+    "before_sha256": "9954efad36a89714fa6597fba73e1ef9eeea18d694f6d84c8655eca127e124d6",
+    "after_sha256": "61390373ed11b152c76fc44bcf4926d42ea2b5370303a84f620ae359668af6b5"
+  },
+  {
+    "path": "docs/fyp_status_2026-07_v2.html",
+    "reason": "Remove added overlay and CSS; retain original stylesheet and inline content corrections.",
+    "before_sha256": "3c89b08d38bced52ee05c93f32a93b8500bee662fc90e42ecbbf91c00096037f",
+    "after_sha256": "0f831628a8452c404b526afa0b408f79c8a2a069574f9ed6f3694a2dd45878fe"
+  },
+  {
+    "path": "docs/project_field_guide.html",
+    "reason": "Remove added overlay and CSS; retain original stylesheet and inline content corrections.",
+    "before_sha256": "752b96f39cbe636ad7737fc22eb00090da588c74d643e7713fc8e20755b2cb66",
+    "after_sha256": "96ae4f4439479e26f2d5f285dff4607bc6c6857e23fea81c8eef76021c447626"
+  },
+  {
+    "path": "docs/statistics_explainer.html",
+    "reason": "Remove added overlay and CSS; retain original stylesheet and inline content corrections.",
+    "before_sha256": "9828fcbfef4d169ed7fe1b5e63448d172aa4c44dfdc5056710ee9330cd1c1bf4",
+    "after_sha256": "cd3e3331d8fddc9361f2cf7377b4ee04a830c0c67464c152a66eb7cf525e4e98"
+  },
+  {
+    "path": "docs/statistics_summary.html",
+    "reason": "Remove added overlay and CSS; retain original stylesheet and inline content corrections.",
+    "before_sha256": "9a552ab64d67d6056dc55cafd5220aa6b2cc6fdac7cbd09669eda4e41b72e7dd",
+    "after_sha256": "fa06de875186f80d1d2af4eab20c27202837fcf3199f83c3fb8d84fb0f85b20f"
+  },
+  {
+    "path": "docs/Codex_Meetup_Agent_Harness_Report.html",
+    "reason": "Update wording in the existing snapshot banner without adding design elements.",
+    "before_sha256": "182106fcae9b53851ed7fedb2b1b07c057e754d109212f347e75a88da550d003",
+    "after_sha256": "525f4c9a2fad31900ab27a246576e959f4361d70a4b9876f38ac2d2e8db4f9d3"
+  },
+  {
+    "path": "docs/agent_harness_showcase.html",
+    "reason": "Update wording in the existing snapshot banner without adding design elements.",
+    "before_sha256": "c269c61afe89b353dcac8f6d4f310be8e03f87a9ce2c2ccb1b36f70ea0c36c0a",
+    "after_sha256": "65a316cf167cf8f8fdc500e23e33ca0001ab8cd49a34c09aa4880a2b153cccd6"
+  },
+  {
+    "path": "docs/agentic_ai_report.html",
+    "reason": "Update wording in the existing snapshot banner without adding design elements.",
+    "before_sha256": "bfe4d45d356597c7dd2cb2327e8f6037c6bc85fdd7472560956c18a876c13775",
+    "after_sha256": "f3eeba7d574908dbc0effc50ee96d9fb28a14a3ddf56205804b59dd30b8eb09b"
+  },
+  {
+    "path": "docs/fyp_architecture.html",
+    "reason": "Update wording in the existing snapshot banner without adding design elements.",
+    "before_sha256": "2d564acc479ca1565a70d78151a3f3ef4afe4544aa46544005933b9a6217427c",
+    "after_sha256": "95015243f8052f3144991742788f1a265e99e1c408187aee184d9ac664909272"
+  },
+  {
+    "path": "docs/fyp_showcase_v2.html",
+    "reason": "Update wording in the existing snapshot banner without adding design elements.",
+    "before_sha256": "ce64b6d73580b53ecf14038dae4a93339aa81f84315657d5f192e338ac75bdf0",
+    "after_sha256": "51c6072b3d6a4df55b098396e1fb8b5b39e39b8220bbed1877794c3a0baf5468"
+  },
+  {
+    "path": "scripts/build_agent_harness_architecture_doc.py",
+    "reason": "Restore original guide callout inventory; update the existing introductory text and footer only.",
+    "before_sha256": "d3397049b235f7f75d203ff0e9c59754ae5084d475092a37670fdeee55d13380",
+    "after_sha256": "9753cd2790f6a8a5b100d36587284c51f12568edabf229a6efc7c9a7e09d7058"
+  },
+  {
+    "path": "scripts/build_agentic_report.js",
+    "reason": "Restore original workflow section/page inventory; update the existing cover note and executive-summary paragraph.",
+    "before_sha256": "4e171e61ed89903ecc49c7f9b496a3a51ca16fd85182afe80399823e8690d1b9",
+    "after_sha256": "1046ca9c50bded74a02559905105dc380d632012305ae4b2f357d1ade0611dfb"
+  },
+  {
+    "path": "docs/project_field_guide.html",
+    "reason": "Retain original inline emphasis/tag inventory while correcting task status.",
+    "before_sha256": "96ae4f4439479e26f2d5f285dff4607bc6c6857e23fea81c8eef76021c447626",
+    "after_sha256": "4f5b086e096a60d8d75f904409e7db0c70e9de78e4c988a7416e85938e3e279a"
+  },
+  {
+    "path": "scripts/build_agentic_report.js",
+    "reason": "Retain the primary-family and post-hoc disclosures inside the existing executive-summary paragraph.",
+    "before_sha256": "1046ca9c50bded74a02559905105dc380d632012305ae4b2f357d1ade0611dfb",
+    "after_sha256": "a706d623f38a855f53577dad90ec2f37ed44e74f973717b23c376f31f90eb2b1"
+  },
+  {
+    "path": "scripts/build_codex_meetup_doc.py",
+    "reason": "Content-only correction: preserve original design or refresh supporting metadata views.",
+    "after_sha256": "7a3bf549ee56170a60937e9cad78df018125d8c15d58d965d0d6b0210a5d2f4b"
+  },
+  {
+    "path": "docs/Codex_Meetup_Agent_Harness_Report.docx",
+    "reason": "Content-only correction: preserve original design or refresh supporting metadata views.",
+    "after_sha256": "0c8781722807922705829b50b8aa12fa4217a23676bdbb7c6d15912c53d77fc3"
+  },
+  {
+    "path": "docs/Agentic_AI_Workflow_Report_2026-06-26.docx",
+    "reason": "Content-only correction: preserve original design or refresh supporting metadata views.",
+    "after_sha256": "96f1e9ecaca6f412e3732ceb9145bad8690e1136bc1e622721572b5ac34ce3df"
+  },
+  {
+    "path": "docs/FYP_Agent_Harness_Architecture_Guide_2026-06-09.docx",
+    "reason": "Content-only correction: preserve original design or refresh supporting metadata views.",
+    "after_sha256": "3a1dd4414c6b6d23e4f141865eb0f86eb3caca47e975097453359327ddb52841"
+  },
+  {
+    "path": "docs/REPORT_VERSIONS.md",
+    "reason": "Content-only correction: preserve original design or refresh supporting metadata views.",
+    "after_sha256": "c65005c7139f4f9a39e03ef5170841d9a907409d91b2d856114dac0d76940dc5"
+  },
+  {
+    "path": "docs/report_versions/inventory.json",
+    "reason": "Content-only correction: preserve original design or refresh supporting metadata views.",
+    "after_sha256": "59a6b29b23c3f8e81f2599fde4e473a529d363971f2d73c27cf1f12554cb8a5b"
+  },
+  {
+    "path": "docs/HANDOFF.md",
+    "reason": "Content-only correction: preserve original design or refresh supporting metadata views.",
+    "after_sha256": "77c2d6dcfe2faa7b2be0c2e4c52303295b788cee6e3266661d6882d86c5a35da"
+  },
+  {
+    "path": "docs/AGENT_DASHBOARD.md",
+    "reason": "Content-only correction: preserve original design or refresh supporting metadata views.",
+    "after_sha256": "b03d7edf9be965500e43cbfcc92bf317aec22aabc6a27cf039ed9b70454c5d83"
+  },
+  {
+    "path": "docs/PROJECT_LOG.md",
+    "reason": "Content-only correction: preserve original design or refresh supporting metadata views.",
+    "after_sha256": "be2bf91cc97ff1390271913dc2ebc39aad2afb941c1cf53b3827a9b9f469ed1a"
+  }
+]

@@ -548,7 +548,7 @@ def build_inventory(registry: dict, problems: list[str]) -> dict:
         "generated": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "generator": "scripts/report_tools/report_version_diff.py",
         "registry": "configs/report_versions.yaml",
-        "note": "Rendered docx are gitignored local artifacts (D60); builders are tracked.",
+        "note": "Reports and prose builders are local-only (D94); metadata inventories docs/ and submission/.",
         "documents": [],
         "edges": [],
         "chain_notes": [],
@@ -564,10 +564,12 @@ def build_inventory(registry: dict, problems: list[str]) -> dict:
     for v in registry.get("standalone_documents", []):
         entry = _document_entry(v, "(standalone)", seen, problems, light=True, aliases=aliases)
         inv["documents"].append(entry)
-    # disk coverage: every docx under docs/ must be registered; exactly once as an
+    # Disk coverage: every docx under docs/ or submission/ must be registered; exactly once as an
     # owner, plus optionally any number of role-tagged (`alias`) reuses such as a
     # canonical base doubling as the `base` member of a humanized pair.
-    disk = [p for p in (ROOT / "docs").rglob("*.docx") if not TRANSIENT_RE.match(p.name)]
+    disk = [p for directory in ("docs", "submission")
+            for p in (ROOT / directory).rglob("*.docx")
+            if not TRANSIENT_RE.match(p.name)]
     for p in sorted(disk):
         rp = str(p.relative_to(ROOT))
         owner = seen.get(rp) or aliases.get(rp)

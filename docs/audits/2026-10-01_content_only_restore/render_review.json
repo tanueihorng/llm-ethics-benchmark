@@ -1,0 +1,434 @@
+[
+  {
+    "document": "guide",
+    "page": 1,
+    "render_sha256": "268d181dcc55c0fafa0cd258c7f1b18b89c79d36ea8bdc2659919c55d602e805",
+    "compared_previous_page": 1,
+    "body_pixels_identical_above_93_percent_height": false,
+    "changed_body_reviewed_full_size": true,
+    "notes": "Footer page fields excluded from pixel equality. Full Word formatting/field structure independently matches the original design baseline."
+  },
+  {
+    "document": "guide",
+    "page": 2,
+    "render_sha256": "0e3ed814da2c1d87ca9522d60ad424d03bb998702c886a2219e4f2915342a456",
+    "compared_previous_page": 2,
+    "body_pixels_identical_above_93_percent_height": true,
+    "changed_body_reviewed_full_size": false,
+    "notes": "Footer page fields excluded from pixel equality. Full Word formatting/field structure independently matches the original design baseline."
+  },
+  {
+    "document": "guide",
+    "page": 3,
+    "render_sha256": "988fb40060c8c5b57a502627f4066e81074f7df1aeac04d614660058069dc031",
+    "compared_previous_page": 3,
+    "body_pixels_identical_above_93_percent_height": true,
+    "changed_body_reviewed_full_size": false,
+    "notes": "Footer page fields excluded from pixel equality. Full Word formatting/field structure independently matches the original design baseline."
+  },
+  {
+    "document": "guide",
+    "page": 4,
+    "render_sha256": "f5804240018de40d070feac57085c55bf8280bbe4369f3f1dac3a0748258a980",
+    "compared_previous_page": 4,
+    "body_pixels_identical_above_93_percent_height": false,
+    "changed_body_reviewed_full_size": true,
+    "notes": "Footer page fields excluded from pixel equality. Full Word formatting/field structure independently matches the original design baseline."
+  },
+  {
+    "document": "guide",
+    "page": 5,
+    "render_sha256": "6710d64815f7abc74226d1baa1204c6682214455b4fdf20195a7e716b87ae4b4",
+    "compared_previous_page": 5,
+    "body_pixels_identical_above_93_percent_height": false,
+    "changed_body_reviewed_full_size": true,
+    "notes": "Footer page fields excluded from pixel equality. Full Word formatting/field structure independently matches the original design baseline."
+  },
+  {
+    "document": "guide",
+    "page": 6,
+    "render_sha256": "ddfd4993392cc04bc5b6b5e959186e781b9af77d997134739fb9c6c5c71db4cb",
+    "compared_previous_page": 6,
+    "body_pixels_identical_above_93_percent_height": true,
+    "changed_body_reviewed_full_size": false,
+    "notes": "Footer page fields excluded from pixel equality. Full Word formatting/field structure independently matches the original design baseline."
+  },
+  {
+    "document": "guide",
+    "page": 7,
+    "render_sha256": "a51d6c3571fcfb0c36619c95e3f64e88df5a37a0dd418275f831e775d034127d",
+    "compared_previous_page": 7,
+    "body_pixels_identical_above_93_percent_height": true,
+    "changed_body_reviewed_full_size": false,
+    "notes": "Footer page fields excluded from pixel equality. Full Word formatting/field structure independently matches the original design baseline."
+  },
+  {
+    "document": "guide",
+    "page": 8,
+    "render_sha256": "3ea73834e1114442e3984ed52100c96b35fc474ce76c2ac1e3e158088425a483",
+    "compared_previous_page": 8,
+    "body_pixels_identical_above_93_percent_height": true,
+    "changed_body_reviewed_full_size": false,
+    "notes": "Footer page fields excluded from pixel equality. Full Word formatting/field structure independently matches the original design baseline."
+  },
+  {
+    "document": "guide",
+    "page": 9,
+    "render_sha256": "741a5ae57dd7fa240694fbeb456e12bab8a0d5872c363f985a05c66b5a7dd87a",
+    "compared_previous_page": 9,
+    "body_pixels_identical_above_93_percent_height": false,
+    "changed_body_reviewed_full_size": true,
+    "notes": "Footer page fields excluded from pixel equality. Full Word formatting/field structure independently matches the original design baseline."
+  },
+  {
+    "document": "guide",
+    "page": 10,
+    "render_sha256": "bcf10ce03d27e19824000add6985d1499fcda4002f860a27e0f92df47ce07c02",
+    "compared_previous_page": 10,
+    "body_pixels_identical_above_93_percent_height": false,
+    "changed_body_reviewed_full_size": true,
+    "notes": "Footer page fields excluded from pixel equality. Full Word formatting/field structure independently matches the original design baseline."
+  },
+  {
+    "document": "workflow",
+    "page": 1,
+    "render_sha256": "23ce7a8d54ca24e297ebf77f5d9a944fdd9477ae285cc9c3ab0b045ce8c99cf5",
+    "compared_previous_page": 2,
+    "body_pixels_identical_above_93_percent_height": false,
+    "changed_body_reviewed_full_size": true,
+    "notes": "Footer page fields excluded from pixel equality. Full Word formatting/field structure independently matches the original design baseline."
+  },
+  {
+    "document": "workflow",
+    "page": 2,
+    "render_sha256": "1829fa0b88cb8279d5b273b513904c3b3a84b29c329fd83e707757d8c16207f4",
+    "compared_previous_page": 3,
+    "body_pixels_identical_above_93_percent_height": true,
+    "changed_body_reviewed_full_size": false,
+    "notes": "Footer page fields excluded from pixel equality. Full Word formatting/field structure independently matches the original design baseline."
+  },
+  {
+    "document": "workflow",
+    "page": 3,
+    "render_sha256": "15194e83a18c72e0c857795ef8b89e5bf126fd25fad09efaf4a71f4da38a31fc",
+    "compared_previous_page": 4,
+    "body_pixels_identical_above_93_percent_height": false,
+    "changed_body_reviewed_full_size": true,
+    "notes": "Footer page fields excluded from pixel equality. Full Word formatting/field structure independently matches the original design baseline."
+  },
+  {
+    "document": "workflow",
+    "page": 4,
+    "render_sha256": "ddc580b3bcd80fd6ba51c6bb32942097d8ae64fb101f8158dba6dfb0ba0d4596",
+    "compared_previous_page": 5,
+    "body_pixels_identical_above_93_percent_height": true,
+    "changed_body_reviewed_full_size": false,
+    "notes": "Footer page fields excluded from pixel equality. Full Word formatting/field structure independently matches the original design baseline."
+  },
+  {
+    "document": "workflow",
+    "page": 5,
+    "render_sha256": "f22f90b22b3f2c5b91ff1298a6460715304ad77bf9771df71613ca295db0bb77",
+    "compared_previous_page": 6,
+    "body_pixels_identical_above_93_percent_height": true,
+    "changed_body_reviewed_full_size": false,
+    "notes": "Footer page fields excluded from pixel equality. Full Word formatting/field structure independently matches the original design baseline."
+  },
+  {
+    "document": "workflow",
+    "page": 6,
+    "render_sha256": "2ce6525549d472ba114c3a5e63ca57f0867f65c92fc1de48efd366b87f50869c",
+    "compared_previous_page": 7,
+    "body_pixels_identical_above_93_percent_height": true,
+    "changed_body_reviewed_full_size": false,
+    "notes": "Footer page fields excluded from pixel equality. Full Word formatting/field structure independently matches the original design baseline."
+  },
+  {
+    "document": "workflow",
+    "page": 7,
+    "render_sha256": "1c186210f67ac399b31e7a64104d445ce5733a7d469a35015d0a48fc96ddcdb3",
+    "compared_previous_page": 8,
+    "body_pixels_identical_above_93_percent_height": true,
+    "changed_body_reviewed_full_size": false,
+    "notes": "Footer page fields excluded from pixel equality. Full Word formatting/field structure independently matches the original design baseline."
+  },
+  {
+    "document": "workflow",
+    "page": 8,
+    "render_sha256": "439a170ba61417043a2d9367ebdfa3126baae756b914238b4cf95ec9fdf174b2",
+    "compared_previous_page": 9,
+    "body_pixels_identical_above_93_percent_height": true,
+    "changed_body_reviewed_full_size": false,
+    "notes": "Footer page fields excluded from pixel equality. Full Word formatting/field structure independently matches the original design baseline."
+  },
+  {
+    "document": "workflow",
+    "page": 9,
+    "render_sha256": "cdaa91cf81a58c74f622bdb1b59165d11de221051148d10f29a30680ed9fef40",
+    "compared_previous_page": 10,
+    "body_pixels_identical_above_93_percent_height": true,
+    "changed_body_reviewed_full_size": false,
+    "notes": "Footer page fields excluded from pixel equality. Full Word formatting/field structure independently matches the original design baseline."
+  },
+  {
+    "document": "workflow",
+    "page": 10,
+    "render_sha256": "51562a37e6ea650b08ed3b12c43eb79c6b5f4e58090f3c503076eb579771dc31",
+    "compared_previous_page": 11,
+    "body_pixels_identical_above_93_percent_height": true,
+    "changed_body_reviewed_full_size": false,
+    "notes": "Footer page fields excluded from pixel equality. Full Word formatting/field structure independently matches the original design baseline."
+  },
+  {
+    "document": "workflow",
+    "page": 11,
+    "render_sha256": "9c1a261f1b23e2714385118139128322d44d0f1fa80cedbf2a74af975dd73389",
+    "compared_previous_page": 12,
+    "body_pixels_identical_above_93_percent_height": true,
+    "changed_body_reviewed_full_size": false,
+    "notes": "Footer page fields excluded from pixel equality. Full Word formatting/field structure independently matches the original design baseline."
+  },
+  {
+    "document": "workflow",
+    "page": 12,
+    "render_sha256": "3011e794f6ea1c0b81bb552b7a3edf21d92153390ef37fd1eb3f241f2fc015ad",
+    "compared_previous_page": 13,
+    "body_pixels_identical_above_93_percent_height": true,
+    "changed_body_reviewed_full_size": false,
+    "notes": "Footer page fields excluded from pixel equality. Full Word formatting/field structure independently matches the original design baseline."
+  },
+  {
+    "document": "workflow",
+    "page": 13,
+    "render_sha256": "dc3973b0ca25293546945bfd0b422ffea08901fe6b03808a63f93024cd76fed1",
+    "compared_previous_page": 14,
+    "body_pixels_identical_above_93_percent_height": true,
+    "changed_body_reviewed_full_size": false,
+    "notes": "Footer page fields excluded from pixel equality. Full Word formatting/field structure independently matches the original design baseline."
+  },
+  {
+    "document": "workflow",
+    "page": 14,
+    "render_sha256": "dfe301097d65a09a8721c6f62126160c48a57dbaae43ff559a0c9a652c462141",
+    "compared_previous_page": 15,
+    "body_pixels_identical_above_93_percent_height": true,
+    "changed_body_reviewed_full_size": false,
+    "notes": "Footer page fields excluded from pixel equality. Full Word formatting/field structure independently matches the original design baseline."
+  },
+  {
+    "document": "workflow",
+    "page": 15,
+    "render_sha256": "2ff3544801873fe42e7d85cb654c152c72206c69f7d64ab86b073f67b48e2bda",
+    "compared_previous_page": 16,
+    "body_pixels_identical_above_93_percent_height": true,
+    "changed_body_reviewed_full_size": false,
+    "notes": "Footer page fields excluded from pixel equality. Full Word formatting/field structure independently matches the original design baseline."
+  },
+  {
+    "document": "workflow",
+    "page": 16,
+    "render_sha256": "77c0053348a3c14234281a359d7eee729fcff28071d02917faec246384ea1187",
+    "compared_previous_page": 17,
+    "body_pixels_identical_above_93_percent_height": true,
+    "changed_body_reviewed_full_size": false,
+    "notes": "Footer page fields excluded from pixel equality. Full Word formatting/field structure independently matches the original design baseline."
+  },
+  {
+    "document": "workflow",
+    "page": 17,
+    "render_sha256": "c8a755afe7b503910b9066a5a2f83cee7c1ce81a69abcd7bcd16984f170c40d6",
+    "compared_previous_page": 18,
+    "body_pixels_identical_above_93_percent_height": true,
+    "changed_body_reviewed_full_size": false,
+    "notes": "Footer page fields excluded from pixel equality. Full Word formatting/field structure independently matches the original design baseline."
+  },
+  {
+    "document": "workflow",
+    "page": 18,
+    "render_sha256": "0b1cfa43c17f1dae288bbcd289d5db4fca68c989e6e4215782d3902537d23d7a",
+    "compared_previous_page": 19,
+    "body_pixels_identical_above_93_percent_height": true,
+    "changed_body_reviewed_full_size": false,
+    "notes": "Footer page fields excluded from pixel equality. Full Word formatting/field structure independently matches the original design baseline."
+  },
+  {
+    "document": "meetup",
+    "page": 1,
+    "render_sha256": "96aa5b12a1e74f32b6a28751c9251f30c51fcaef28fc66f1af9ef1dd241e806a",
+    "compared_previous_page": 2,
+    "body_pixels_identical_above_93_percent_height": false,
+    "changed_body_reviewed_full_size": true,
+    "notes": "Footer page fields excluded from pixel equality. Full Word formatting/field structure independently matches the original design baseline."
+  },
+  {
+    "document": "meetup",
+    "page": 2,
+    "render_sha256": "74b38646ba8d0401a2279a3c0c610515026b4d214d9ceedf9ce90c0cdc75e6cd",
+    "compared_previous_page": 3,
+    "body_pixels_identical_above_93_percent_height": true,
+    "changed_body_reviewed_full_size": false,
+    "notes": "Footer page fields excluded from pixel equality. Full Word formatting/field structure independently matches the original design baseline."
+  },
+  {
+    "document": "meetup",
+    "page": 3,
+    "render_sha256": "5b7f8042319799a4f2fb5e6a3b34ac9adc38ad89f57d9eeb8a625b66a72819db",
+    "compared_previous_page": 4,
+    "body_pixels_identical_above_93_percent_height": true,
+    "changed_body_reviewed_full_size": false,
+    "notes": "Footer page fields excluded from pixel equality. Full Word formatting/field structure independently matches the original design baseline."
+  },
+  {
+    "document": "meetup",
+    "page": 4,
+    "render_sha256": "feb31a621940334198136a8a08f8878d1492bd127db0fe015e8cc9b8436a5f1e",
+    "compared_previous_page": 5,
+    "body_pixels_identical_above_93_percent_height": true,
+    "changed_body_reviewed_full_size": false,
+    "notes": "Footer page fields excluded from pixel equality. Full Word formatting/field structure independently matches the original design baseline."
+  },
+  {
+    "document": "meetup",
+    "page": 5,
+    "render_sha256": "0ebb8bf9d43f528d0c2ed7d8a4d895d9bb332b02693aa7ca7c127b9caf370eab",
+    "compared_previous_page": 6,
+    "body_pixels_identical_above_93_percent_height": true,
+    "changed_body_reviewed_full_size": false,
+    "notes": "Footer page fields excluded from pixel equality. Full Word formatting/field structure independently matches the original design baseline."
+  },
+  {
+    "document": "meetup",
+    "page": 6,
+    "render_sha256": "4acbe8cb50126735b7448f03332fb029f596467b74f49c3301a312939fc9ea74",
+    "compared_previous_page": 7,
+    "body_pixels_identical_above_93_percent_height": true,
+    "changed_body_reviewed_full_size": false,
+    "notes": "Footer page fields excluded from pixel equality. Full Word formatting/field structure independently matches the original design baseline."
+  },
+  {
+    "document": "meetup",
+    "page": 7,
+    "render_sha256": "0afb74dde052e560b1ffb341f63ef4b6462e18210baa9c2dd1afe81f768e8221",
+    "compared_previous_page": 8,
+    "body_pixels_identical_above_93_percent_height": true,
+    "changed_body_reviewed_full_size": false,
+    "notes": "Footer page fields excluded from pixel equality. Full Word formatting/field structure independently matches the original design baseline."
+  },
+  {
+    "document": "meetup",
+    "page": 8,
+    "render_sha256": "e0de164c789b6996d98e840e9b0d0abf268c8c1beaf50c0b51828fa0efc247d9",
+    "compared_previous_page": 9,
+    "body_pixels_identical_above_93_percent_height": true,
+    "changed_body_reviewed_full_size": false,
+    "notes": "Footer page fields excluded from pixel equality. Full Word formatting/field structure independently matches the original design baseline."
+  },
+  {
+    "document": "meetup",
+    "page": 9,
+    "render_sha256": "25213e14c3923df327d660ba12814e5cbb3f542a5d2ae29f9acc98b1e67980aa",
+    "compared_previous_page": 10,
+    "body_pixels_identical_above_93_percent_height": true,
+    "changed_body_reviewed_full_size": false,
+    "notes": "Footer page fields excluded from pixel equality. Full Word formatting/field structure independently matches the original design baseline."
+  },
+  {
+    "document": "meetup",
+    "page": 10,
+    "render_sha256": "5c792f9ff06858c3e89f5c3c7e743ee3a07e1b6240a9c92400e432e3ac7abea0",
+    "compared_previous_page": 11,
+    "body_pixels_identical_above_93_percent_height": true,
+    "changed_body_reviewed_full_size": false,
+    "notes": "Footer page fields excluded from pixel equality. Full Word formatting/field structure independently matches the original design baseline."
+  },
+  {
+    "document": "meetup",
+    "page": 11,
+    "render_sha256": "a0b6ed796a48c746674f77c72cefc4225606f60feaf9f6d7961a5abf9586b03a",
+    "compared_previous_page": 12,
+    "body_pixels_identical_above_93_percent_height": true,
+    "changed_body_reviewed_full_size": false,
+    "notes": "Footer page fields excluded from pixel equality. Full Word formatting/field structure independently matches the original design baseline."
+  },
+  {
+    "document": "meetup",
+    "page": 12,
+    "render_sha256": "dc3cfb907e36a2bef826455f5c3661b4441d25a9280de0a71a6da05acf25e32c",
+    "compared_previous_page": 13,
+    "body_pixels_identical_above_93_percent_height": true,
+    "changed_body_reviewed_full_size": false,
+    "notes": "Footer page fields excluded from pixel equality. Full Word formatting/field structure independently matches the original design baseline."
+  },
+  {
+    "document": "meetup",
+    "page": 13,
+    "render_sha256": "5913761d8d643f3fa6007a801e4dbe6291f4bd9537bcbea491c34c4d122f6c3e",
+    "compared_previous_page": 14,
+    "body_pixels_identical_above_93_percent_height": true,
+    "changed_body_reviewed_full_size": false,
+    "notes": "Footer page fields excluded from pixel equality. Full Word formatting/field structure independently matches the original design baseline."
+  },
+  {
+    "document": "meetup",
+    "page": 14,
+    "render_sha256": "369a888d5229502cb760bd13f8001b6358e5410899b1883f5013f64a38be3e1e",
+    "compared_previous_page": 15,
+    "body_pixels_identical_above_93_percent_height": true,
+    "changed_body_reviewed_full_size": false,
+    "notes": "Footer page fields excluded from pixel equality. Full Word formatting/field structure independently matches the original design baseline."
+  },
+  {
+    "document": "meetup",
+    "page": 15,
+    "render_sha256": "d371b3d89511538692f6835af00319753d9a59d429ecbfaabc74df11add1b175",
+    "compared_previous_page": 16,
+    "body_pixels_identical_above_93_percent_height": true,
+    "changed_body_reviewed_full_size": false,
+    "notes": "Footer page fields excluded from pixel equality. Full Word formatting/field structure independently matches the original design baseline."
+  },
+  {
+    "document": "meetup",
+    "page": 16,
+    "render_sha256": "d8532da7bbba597ec7b91a708c9d0cb38b66a172b05506515c637eaecbf8f5fd",
+    "compared_previous_page": 17,
+    "body_pixels_identical_above_93_percent_height": true,
+    "changed_body_reviewed_full_size": false,
+    "notes": "Footer page fields excluded from pixel equality. Full Word formatting/field structure independently matches the original design baseline."
+  },
+  {
+    "document": "meetup",
+    "page": 17,
+    "render_sha256": "826c8a0c0d78fdd0494d720c1874a45e40648342f045b700af6d80e3b27a2d1c",
+    "compared_previous_page": 18,
+    "body_pixels_identical_above_93_percent_height": true,
+    "changed_body_reviewed_full_size": false,
+    "notes": "Footer page fields excluded from pixel equality. Full Word formatting/field structure independently matches the original design baseline."
+  },
+  {
+    "document": "meetup",
+    "page": 18,
+    "render_sha256": "ae0473754ae0e30c30fd678b61395224b561b6722976cc6800d3e9e74d68d3e1",
+    "compared_previous_page": 19,
+    "body_pixels_identical_above_93_percent_height": true,
+    "changed_body_reviewed_full_size": false,
+    "notes": "Footer page fields excluded from pixel equality. Full Word formatting/field structure independently matches the original design baseline."
+  },
+  {
+    "document": "meetup",
+    "page": 19,
+    "render_sha256": "a8d79fd628b1841e9608f0452f6f396e1f2b44555d67331fa86c2ce04d88f119",
+    "compared_previous_page": 20,
+    "body_pixels_identical_above_93_percent_height": true,
+    "changed_body_reviewed_full_size": false,
+    "notes": "Footer page fields excluded from pixel equality. Full Word formatting/field structure independently matches the original design baseline."
+  },
+  {
+    "document": "meetup",
+    "page": 20,
+    "render_sha256": "3b5c216d8121b36c760ef3ca838e79b00948e64134c115092191f31e15bd200c",
+    "compared_previous_page": 21,
+    "body_pixels_identical_above_93_percent_height": true,
+    "changed_body_reviewed_full_size": false,
+    "notes": "Footer page fields excluded from pixel equality. Full Word formatting/field structure independently matches the original design baseline."
+  }
+]
