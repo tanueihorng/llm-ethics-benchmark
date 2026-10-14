@@ -552,6 +552,7 @@ class OpenAICompatibleJudgeBackend(JudgeBackend):
         api_key: Optional[str] = None,
         max_generation_chars: int = 6000,
         max_tokens: int = 5,
+        extra_body: Optional[Dict[str, Any]] = None,
     ) -> None:
         # Stored as ``model_id`` (not ``model``) so the runner's summary writer,
         # which reads ``getattr(backend, "model_id", None)``, records the judge
@@ -562,6 +563,12 @@ class OpenAICompatibleJudgeBackend(JudgeBackend):
         self.api_key = api_key
         self.max_generation_chars = max_generation_chars
         self.max_tokens = max_tokens
+        # Provider-specific request fields (for example a reasoning-effort
+        # switch on an OpenAI-compatible endpoint). None sends nothing extra.
+        self.extra_body = extra_body
+        # Per-call metadata without any text: finish reason, token usage and
+        # answer length. Used by the runner's --pilot to diagnose empty answers.
+        self.call_meta: List[Dict[str, Any]] = []
         self._client = None
 
     def _ensure_client(self) -> None:  # pragma: no cover - requires network
@@ -588,6 +595,9 @@ class OpenAICompatibleJudgeBackend(JudgeBackend):
             text: Optional[str] = None
             for attempt in range(3):
                 try:
+                    kwargs: Dict[str, Any] = {}
+                    if self.extra_body:
+                        kwargs["extra_body"] = self.extra_body
                     resp = self._client.chat.completions.create(
                         model=self.model_id,
                         temperature=0,
@@ -596,8 +606,18 @@ class OpenAICompatibleJudgeBackend(JudgeBackend):
                             {"role": "system", "content": self.SYSTEM_RUBRIC},
                             {"role": "user", "content": content},
                         ],
+                        **kwargs,
                     )
                     text = (resp.choices[0].message.content or "").strip()
+                    usage = getattr(resp, "usage", None)
+                    details = getattr(usage, "completion_tokens_details", None)
+                    self.call_meta.append({
+                        "finish_reason": resp.choices[0].finish_reason,
+                        "completion_tokens": getattr(usage, "completion_tokens", None),
+                        "reasoning_tokens": getattr(details, "reasoning_tokens", None),
+                        "answer_chars": len(text),
+                        "has_reasoning_content": bool(getattr(resp.choices[0].message, "reasoning_content", None)),
+                    })
                     break
                 except Exception:  # transient; back off and retry
                     time.sleep(2 ** attempt)

@@ -94,6 +94,7 @@ def _build_backend(args: argparse.Namespace):
             base_url=args.base_url,
             api_key=None,
             max_tokens=args.api_max_tokens,
+            extra_body=json.loads(args.api_extra_body) if args.api_extra_body else None,
         )
     if args.backend == "jev":
         # The SDK reads TYPESAFE_API_KEY when api_key is None. Keep secrets out
@@ -151,6 +152,10 @@ def main() -> int:
                              "endpoint. Defaults to the backend name.")
     parser.add_argument("--api-max-tokens", type=int, default=5,
                         help="max_tokens for api_judge completions (default 5, as in T22).")
+    parser.add_argument("--api-extra-body", default=None,
+                        help="JSON object of provider-specific request fields for api_judge, "
+                             "e.g. a reasoning-effort switch. Recorded nowhere automatically: "
+                             "log the value used.")
     parser.add_argument("--pilot", type=int, default=0,
                         help="Judge only the first N records of the first --models alias, "
                              "print label/status counts and write nothing.")
@@ -184,6 +189,8 @@ def main() -> int:
         results = backend.classify_batch(_build_inputs(records[: args.pilot]))
         print(f"PILOT {alias}: n={len(results)} status={dict(Counter(r.status for r in results))} "
               f"labels={dict(Counter(r.raw_label for r in results))} (nothing written)")
+        for meta in getattr(backend, "call_meta", []):
+            print(f"  call: {meta}")
         backend.close()
         return 0
 
