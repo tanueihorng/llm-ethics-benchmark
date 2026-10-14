@@ -1,0 +1,317 @@
+{
+  "status": "post hoc, descriptive; not prespecified (PREFILL_PREREG \u00a711 follow-up)",
+  "short_words_cutoff": 50,
+  "refusal_wording": "study keyword list (ethical_benchmark.benchmarks.utils), explicit refusals only",
+  "pairs": [
+    {
+      "pair_id": "qwen_2b",
+      "n": 200,
+      "length": {
+        "fp16_median_words": 332.5,
+        "nf4_median_words": 319.5,
+        "median_paired_diff_words": -2.5,
+        "wilcoxon_p": 0.048541752887979045
+      },
+      "near_cap": {
+        "fp16_rate": 0.755,
+        "nf4_rate": 0.69,
+        "only_nf4": 6,
+        "only_fp16": 19,
+        "p_mcnemar": 0.01463329792022705
+      },
+      "refusal_wording": {
+        "fp16_rate": 0.06,
+        "nf4_rate": 0.115,
+        "only_nf4": 17,
+        "only_fp16": 6,
+        "p_mcnemar": 0.03468966484069824
+      },
+      "harmful_fp16_only": {
+        "n": 21,
+        "fp16_median_words": 317.0,
+        "nf4_median_words": 303.0,
+        "median_paired_diff_words": 9.0,
+        "nf4_reply_type": {
+          "refusal_wording": 5,
+          "short_no_refusal_wording": 0,
+          "long_no_refusal_wording": 16
+        },
+        "fp16_reply_type": {
+          "refusal_wording": 0,
+          "short_no_refusal_wording": 0,
+          "long_no_refusal_wording": 21
+        }
+      },
+      "harmful_nf4_only": {
+        "n": 23,
+        "fp16_median_words": 334.0,
+        "nf4_median_words": 340.0,
+        "median_paired_diff_words": -1.0,
+        "nf4_reply_type": {
+          "refusal_wording": 2,
+          "short_no_refusal_wording": 0,
+          "long_no_refusal_wording": 21
+        },
+        "fp16_reply_type": {
+          "refusal_wording": 0,
+          "short_no_refusal_wording": 0,
+          "long_no_refusal_wording": 23
+        }
+      },
+      "harmful_both": {
+        "n": 103,
+        "fp16_median_words": 340.0,
+        "nf4_median_words": 323.0,
+        "median_paired_diff_words": -4.0
+      }
+    },
+    {
+      "pair_id": "qwen_4b",
+      "n": 200,
+      "length": {
+        "fp16_median_words": 331.5,
+        "nf4_median_words": 333.0,
+        "median_paired_diff_words": 0.0,
+        "wilcoxon_p": 0.4717185898253413
+      },
+      "near_cap": {
+        "fp16_rate": 0.625,
+        "nf4_rate": 0.66,
+        "only_nf4": 26,
+        "only_fp16": 19,
+        "p_mcnemar": 0.3712980344710104
+      },
+      "refusal_wording": {
+        "fp16_rate": 0.135,
+        "nf4_rate": 0.235,
+        "only_nf4": 36,
+        "only_fp16": 16,
+        "p_mcnemar": 0.0077874363057435225
+      },
+      "harmful_fp16_only": {
+        "n": 38,
+        "fp16_median_words": 375.0,
+        "nf4_median_words": 286.0,
+        "median_paired_diff_words": -38.5,
+        "nf4_reply_type": {
+          "refusal_wording": 12,
+          "short_no_refusal_wording": 0,
+          "long_no_refusal_wording": 26
+        },
+        "fp16_reply_type": {
+          "refusal_wording": 2,
+          "short_no_refusal_wording": 0,
+          "long_no_refusal_wording": 36
+        }
+      },
+      "harmful_nf4_only": {
+        "n": 19,
+        "fp16_median_words": 147.0,
+        "nf4_median_words": 340.0,
+        "median_paired_diff_words": 131.0,
+        "nf4_reply_type": {
+          "refusal_wording": 4,
+          "short_no_refusal_wording": 0,
+          "long_no_refusal_wording": 15
+        },
+        "fp16_reply_type": {
+          "refusal_wording": 8,
+          "short_no_refusal_wording": 0,
+          "long_no_refusal_wording": 11
+        }
+      },
+      "harmful_both": {
+        "n": 66,
+        "fp16_median_words": 335.0,
+        "nf4_median_words": 330.0,
+        "median_paired_diff_words": -3.0
+      }
+    },
+    {
+      "pair_id": "llama_3_2_3b",
+      "n": 200,
+      "length": {
+        "fp16_median_words": 348.5,
+        "nf4_median_words": 345.5,
+        "median_paired_diff_words": -5.0,
+        "wilcoxon_p": 0.11307811564607062
+      },
+      "near_cap": {
+        "fp16_rate": 0.62,
+        "nf4_rate": 0.57,
+        "only_nf4": 19,
+        "only_fp16": 29,
+        "p_mcnemar": 0.19341265286193732
+      },
+      "refusal_wording": {
+        "fp16_rate": 0.17,
+        "nf4_rate": 0.16,
+        "only_nf4": 18,
+        "only_fp16": 20,
+        "p_mcnemar": 0.8714146793645341
+      },
+      "harmful_fp16_only": {
+        "n": 10,
+        "fp16_median_words": 361.5,
+        "nf4_median_words": 315.0,
+        "median_paired_diff_words": -35.0,
+        "nf4_reply_type": {
+          "refusal_wording": 3,
+          "short_no_refusal_wording": 0,
+          "long_no_refusal_wording": 7
+        },
+        "fp16_reply_type": {
+          "refusal_wording": 4,
+          "short_no_refusal_wording": 0,
+          "long_no_refusal_wording": 6
+        }
+      },
+      "harmful_nf4_only": {
+        "n": 20,
+        "fp16_median_words": 334.0,
+        "nf4_median_words": 357.5,
+        "median_paired_diff_words": 36.0,
+        "nf4_reply_type": {
+          "refusal_wording": 3,
+          "short_no_refusal_wording": 0,
+          "long_no_refusal_wording": 17
+        },
+        "fp16_reply_type": {
+          "refusal_wording": 5,
+          "short_no_refusal_wording": 0,
+          "long_no_refusal_wording": 15
+        }
+      },
+      "harmful_both": {
+        "n": 139,
+        "fp16_median_words": 365.0,
+        "nf4_median_words": 354.0,
+        "median_paired_diff_words": -4.0
+      }
+    },
+    {
+      "pair_id": "mistral_7b",
+      "n": 200,
+      "length": {
+        "fp16_median_words": 321.0,
+        "nf4_median_words": 316.0,
+        "median_paired_diff_words": -1.0,
+        "wilcoxon_p": 0.5497634357921151
+      },
+      "near_cap": {
+        "fp16_rate": 0.59,
+        "nf4_rate": 0.575,
+        "only_nf4": 22,
+        "only_fp16": 25,
+        "p_mcnemar": 0.7708669945730264
+      },
+      "refusal_wording": {
+        "fp16_rate": 0.025,
+        "nf4_rate": 0.01,
+        "only_nf4": 2,
+        "only_fp16": 5,
+        "p_mcnemar": 0.453125
+      },
+      "harmful_fp16_only": {
+        "n": 14,
+        "fp16_median_words": 318.5,
+        "nf4_median_words": 251.5,
+        "median_paired_diff_words": -42.5,
+        "nf4_reply_type": {
+          "refusal_wording": 0,
+          "short_no_refusal_wording": 0,
+          "long_no_refusal_wording": 14
+        },
+        "fp16_reply_type": {
+          "refusal_wording": 1,
+          "short_no_refusal_wording": 0,
+          "long_no_refusal_wording": 13
+        }
+      },
+      "harmful_nf4_only": {
+        "n": 12,
+        "fp16_median_words": 349.0,
+        "nf4_median_words": 346.0,
+        "median_paired_diff_words": 9.0,
+        "nf4_reply_type": {
+          "refusal_wording": 0,
+          "short_no_refusal_wording": 0,
+          "long_no_refusal_wording": 12
+        },
+        "fp16_reply_type": {
+          "refusal_wording": 0,
+          "short_no_refusal_wording": 0,
+          "long_no_refusal_wording": 12
+        }
+      },
+      "harmful_both": {
+        "n": 136,
+        "fp16_median_words": 321.0,
+        "nf4_median_words": 317.5,
+        "median_paired_diff_words": -1.0
+      }
+    },
+    {
+      "pair_id": "phi4_mini",
+      "n": 200,
+      "length": {
+        "fp16_median_words": 395.0,
+        "nf4_median_words": 389.5,
+        "median_paired_diff_words": -5.0,
+        "wilcoxon_p": 0.025502784239009122
+      },
+      "near_cap": {
+        "fp16_rate": 0.875,
+        "nf4_rate": 0.89,
+        "only_nf4": 18,
+        "only_fp16": 15,
+        "p_mcnemar": 0.7283324808813632
+      },
+      "refusal_wording": {
+        "fp16_rate": 0.31,
+        "nf4_rate": 0.25,
+        "only_nf4": 25,
+        "only_fp16": 37,
+        "p_mcnemar": 0.16188140552559765
+      },
+      "harmful_fp16_only": {
+        "n": 45,
+        "fp16_median_words": 389.0,
+        "nf4_median_words": 399.0,
+        "median_paired_diff_words": 9.0,
+        "nf4_reply_type": {
+          "refusal_wording": 19,
+          "short_no_refusal_wording": 0,
+          "long_no_refusal_wording": 26
+        },
+        "fp16_reply_type": {
+          "refusal_wording": 13,
+          "short_no_refusal_wording": 0,
+          "long_no_refusal_wording": 32
+        }
+      },
+      "harmful_nf4_only": {
+        "n": 12,
+        "fp16_median_words": 398.0,
+        "nf4_median_words": 399.0,
+        "median_paired_diff_words": -18.0,
+        "nf4_reply_type": {
+          "refusal_wording": 1,
+          "short_no_refusal_wording": 0,
+          "long_no_refusal_wording": 11
+        },
+        "fp16_reply_type": {
+          "refusal_wording": 6,
+          "short_no_refusal_wording": 0,
+          "long_no_refusal_wording": 6
+        }
+      },
+      "harmful_both": {
+        "n": 108,
+        "fp16_median_words": 386.0,
+        "nf4_median_words": 384.0,
+        "median_paired_diff_words": -4.5
+      }
+    }
+  ]
+}
