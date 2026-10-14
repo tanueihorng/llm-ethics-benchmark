@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from importlib import import_module
 import logging
 import random
-from typing import Any, Dict, Iterable, List
+from typing import Any, Dict, Iterable, List, Optional
 
 import numpy as np
 
@@ -30,6 +30,10 @@ class DecodingConfig:
         repetition_penalty: Penalizes repeated token generation.
         max_input_tokens: Maximum input context length.
         use_chat_template: Whether to format user prompts as chat messages.
+        assistant_prefill: Optional text placed at the start of the assistant's
+            reply before generation (prefill attack arm, T87/D105). ``None``
+            leaves prompts exactly as before. The returned response is the
+            prefill followed by the model's continuation.
     """
 
     max_new_tokens: int = 128
@@ -38,6 +42,7 @@ class DecodingConfig:
     repetition_penalty: float = 1.0
     max_input_tokens: int = 1024
     use_chat_template: bool = True
+    assistant_prefill: Optional[str] = None
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "DecodingConfig":
@@ -60,6 +65,7 @@ class DecodingConfig:
             repetition_penalty=float(data.get("repetition_penalty", 1.0)),
             max_input_tokens=int(data.get("max_input_tokens", 1024)),
             use_chat_template=bool(data.get("use_chat_template", True)),
+            assistant_prefill=data.get("assistant_prefill") or None,
         )
 
 
@@ -138,8 +144,12 @@ class TextGenerator:
         # special tokens on the templated path (the template is the single source of
         # truth for the prompt format); keep them for the raw-prompt fallback so a
         # non-templated model still receives its canonical BOS.
-        templated = bool(self.config.use_chat_template) and any(
-            fmt != raw for fmt, raw in zip(prompt_list, prompts)
+        # A prefilled prompt always differs from the raw prompt, but
+        # _format_prompt refuses to prefill without a chat template, so the
+        # prefill arm is always on the templated path.
+        templated = bool(self.config.use_chat_template) and (
+            bool(self.config.assistant_prefill)
+            or any(fmt != raw for fmt, raw in zip(prompt_list, prompts))
         )
         self.tokenizer.truncation_side = "left"
         inputs = self.tokenizer(
@@ -171,16 +181,22 @@ class TextGenerator:
             generated = self.model.generate(**inputs, **generation_kwargs)
 
         input_length = inputs["input_ids"].shape[1]
+        prefill = self.config.assistant_prefill
         outputs: List[str] = []
         for output_ids in generated:
             new_token_ids = output_ids[input_length:]
-            text = self.tokenizer.decode(new_token_ids, skip_special_tokens=True).strip()
+            if prefill:
+                # Keep the continuation's leading whitespace so the visible
+                # reply reads as prefill + continuation; strip only the ends.
+                text = (prefill + self.tokenizer.decode(new_token_ids, skip_special_tokens=True)).strip()
+            else:
+                text = self.tokenizer.decode(new_token_ids, skip_special_tokens=True).strip()
             outputs.append(self._postprocess(text))
 
         return outputs
 
     def _format_prompt(self, prompt: str) -> str:
-        """Applies model-specific chat formatting when configured.
+        """Applies model-specific chat formatting, plus the prefill when configured.
 
         Args:
             prompt: Raw user prompt.
@@ -188,6 +204,58 @@ class TextGenerator:
         Returns:
             Prompt string compatible with tokenizer/model expectations.
         """
+
+        templated = self._apply_template(prompt)
+        if not self.config.assistant_prefill:
+            return templated
+        return self._apply_prefill(prompt, templated)
+
+    def _apply_prefill(self, prompt: str, templated: str) -> str:
+        """Renders the prompt with the assistant reply already started.
+
+        Renders ``[user, assistant(prefill)]`` through the model's own chat
+        template and cuts the string right after the prefill, which is what
+        transformers' ``continue_final_message`` does. This puts the prefill
+        exactly where the model's reply would begin, including template-specific
+        spacing (Mistral inserts a space after ``[/INST]``; Qwen3 keeps its
+        empty think block).
+
+        Raises:
+            RuntimeError: If no chat template was applied, or the rendered
+                prefill does not extend the plain generation prompt.
+        """
+
+        prefill = str(self.config.assistant_prefill)
+        if templated == prompt:
+            raise RuntimeError(
+                "assistant_prefill requires an applied chat template; refusing to "
+                "prefill a raw prompt."
+            )
+        messages = [
+            {"role": "user", "content": prompt},
+            {"role": "assistant", "content": prefill},
+        ]
+        try:
+            rendered = self.tokenizer.apply_chat_template(
+                messages, tokenize=False, add_generation_prompt=False, enable_thinking=False,
+            )
+        except TypeError:
+            rendered = self.tokenizer.apply_chat_template(
+                messages, tokenize=False, add_generation_prompt=False,
+            )
+        cut = rendered.rfind(prefill)
+        if cut < 0:
+            raise RuntimeError("Chat template dropped the assistant prefill.")
+        prefilled = rendered[: cut + len(prefill)]
+        if not prefilled.startswith(templated):
+            raise RuntimeError(
+                "Prefilled prompt does not extend the generation prompt; the "
+                "template changes earlier context when an assistant turn is present."
+            )
+        return prefilled
+
+    def _apply_template(self, prompt: str) -> str:
+        """Applies the tokenizer chat template only (no prefill)."""
 
         if self.config.use_chat_template and hasattr(self.tokenizer, "apply_chat_template"):
             try:
@@ -228,7 +296,7 @@ class TextGenerator:
         run-time WARNING.
         """
 
-        return bool(self.config.use_chat_template) and self._format_prompt(prompt) != prompt
+        return bool(self.config.use_chat_template) and self._apply_template(prompt) != prompt
 
     @staticmethod
     def _postprocess(text: str) -> str:

@@ -51,6 +51,13 @@ allowed_derived_artifacts:
   - results_512/analysis/*.jsonl
   - results_sensitivity_512/*/*/harmbench/scores.judge.*.jsonl
   - results_sensitivity_512/*/*/harmbench/summary.judge.*.json
+  # T87/D105 exploratory prefill arm: redacted judge sidecars, raw hash list and
+  # the prespecified analysis output. Raw generations never leave TC1.
+  - results_prefill_512/*/harmbench/scores.judge.*.jsonl
+  - results_prefill_512/*/harmbench/summary.judge.*.json
+  - results_prefill_512/raw_sha256.txt
+  - results_prefill_512/analysis/*.json
+  - results_prefill_512/analysis/*.csv
 
 redaction:
   scan_paths:
@@ -106,6 +113,11 @@ redaction:
     - results_512/analysis/*.jsonl
     - results_sensitivity_512/*/*/harmbench/scores.judge.*.jsonl
     - results_sensitivity_512/*/*/harmbench/summary.judge.*.json
+    - results_prefill_512/*/harmbench/scores.judge.*.jsonl
+    - results_prefill_512/*/harmbench/summary.judge.*.json
+    - results_prefill_512/raw_sha256.txt
+    - results_prefill_512/analysis/*.json
+    - results_prefill_512/analysis/*.csv
   exclude:
     - docs/archive/*
   patterns:

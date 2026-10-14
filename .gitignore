@@ -40,6 +40,17 @@ results_512/slurm_logs*/
 # SLURM logs for any cluster variant (slurm_logs, slurm_logs_tc1, ...)
 results/slurm_logs*/
 
+# T87/D105 prefill arm: raw generations + summaries hold harmful text and stay on
+# TC1 (never copied back). Redacted judge sidecars, the raw sha256 list and
+# results_prefill_512/analysis/* are the only trackable files. The .gitkeep makes
+# `git pull` create the SLURM log directory, which sbatch needs before a job starts.
+results_prefill_512/**/raw.jsonl
+results_prefill_512/**/summary.json
+results_prefill_512/**/summary.csv
+results_prefill_512/summary/
+results_prefill_512/slurm_logs_tc1/*
+!results_prefill_512/slurm_logs_tc1/.gitkeep
+
 # Generated SLURM artifacts
 slurm/*.json
 slurm/jobs*/manifest.json

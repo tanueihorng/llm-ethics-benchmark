@@ -28,6 +28,8 @@ class DecodingSchema(BaseModel):
         repetition_penalty: Repetition penalty factor.
         max_input_tokens: Input truncation length.
         use_chat_template: Whether to apply tokenizer chat templates.
+        assistant_prefill: Optional start of the assistant reply (prefill arm,
+            T87/D105). Omit for ordinary generation.
     """
 
     max_new_tokens: int = Field(default=128, ge=1)
@@ -36,6 +38,7 @@ class DecodingSchema(BaseModel):
     repetition_penalty: float = Field(default=1.0, ge=0.0)
     max_input_tokens: int = Field(default=1024, ge=1)
     use_chat_template: bool = Field(default=True)
+    assistant_prefill: Optional[str] = Field(default=None, min_length=1)
 
 
 class ModelEntry(BaseModel):

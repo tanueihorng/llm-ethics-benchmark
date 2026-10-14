@@ -108,6 +108,7 @@ surfaces:
   - {id: user_guide, path: docs/USER_GUIDE.md, lifecycle: current-reference, profiles: []}
   - {id: xstest_gold_prereg, path: docs/XSTEST_GOLD_PREREG.md, lifecycle: preregistration, profiles: []}
   - {id: xstest_judge_prereg, path: docs/XSTEST_JUDGE_PREREG.md, lifecycle: preregistration, profiles: []}
+  - {id: prefill_prereg, path: docs/PREFILL_PREREG.md, lifecycle: preregistration, profiles: []}
   - {id: vi_family_note, path: docs/VALIDATION_INFORMED_FAMILY_NOTE.md, lifecycle: preregistration, profiles: []}
   - {id: datasets_doc, path: docs/datasets.md, lifecycle: current-reference, profiles: []}
   # Narrative archive of the 43 Claude Code sessions, written 2026-08-11 before an
