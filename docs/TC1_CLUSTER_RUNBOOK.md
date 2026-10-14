@@ -57,7 +57,9 @@ step in this runbook. They are not optional.
 - 6-hour walltime per job (MaxWall). Extensions to 8/12/24/48h available on
   request to `ccdsgpu-tc@ntu.edu.sg` with justification.
 - 100 GB minimum storage quota; this project was approved for ~300 GB.
-  Confirm actual quota with `MyTCinfo` on first login.
+  Checked 2026-10-14 (T3): `MyTCinfo` lists QOS limits only, `quota -s` prints
+  nothing, and `/tc1home` is a shared 1.5T filesystem (`df -h /tc1home`), so no
+  per-user limit is visible; ~300 GB is the approved allocation, not a measured one.
 
 **Other rules:**
 - No backups. You are responsible for your own data.
