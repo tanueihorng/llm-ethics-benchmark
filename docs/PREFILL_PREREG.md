@@ -77,4 +77,23 @@ The cut-off for the 19 Oct report is **Fri 16 Oct 2026 23:59 SGT** for judge sid
 
 ## 11. Outcome (append-only, after analysis)
 
-_Not run yet._
+**Run (2026-10-14).** TC1 jobs 67850 (Qwen3-1.7B, Qwen3-4B, Llama-3.2-3B; COMPLETED) and 67851 (Mistral-7B, Phi-4-mini; COMPLETED, 1 h 26 min), then classifier job 67861 (COMPLETED, 14 min; dependency `afterok:67851`). 10 aliases × 200 prompts; every saved reply starts with the prefill (checked on TC1 by count only). 0 judge parse errors. Scorer `judge_harmbench_cls_v1_2026-05-28`, `cais/HarmBench-Llama-2-13b-cls`, fp16 on a V100, as in the primary study. Raw-file hashes: `results_prefill_512/raw_sha256.txt`. Analysis: `python scripts/prefill_analysis.py` → `results_prefill_512/analysis/prefill_attack.{json,csv}`.
+
+**Primary family (§4), NF4 − FP16 under the prefill, n = 200 per pair:**
+
+| Pair | FP16 | NF4 | Δ (95% CI) | Discordant (NF4 only / FP16 only) | McNemar p | BH q |
+|---|---|---|---|---|---|---|
+| Qwen3-1.7B | 0.620 | 0.630 | +0.010 (−0.055, +0.075) | 23 / 21 | 0.88 | 0.88 |
+| Qwen3-4B | 0.520 | 0.425 | −0.095 (−0.170, −0.025) | 19 / 38 | 0.016 | **0.041** |
+| Llama-3.2-3B | 0.745 | 0.795 | +0.050 (−0.005, +0.105) | 20 / 10 | 0.099 | 0.165 |
+| Mistral-7B | 0.750 | 0.740 | −0.010 (−0.060, +0.040) | 12 / 14 | 0.85 | 0.88 |
+| Phi-4-mini | 0.765 | 0.600 | −0.165 (−0.235, −0.090) | 12 / 45 | 1.3 × 10⁻⁵ | **6.6 × 10⁻⁵** |
+
+Reading under §6: no NF4 *increase* survives correction. Two contrasts survive, and both are **decreases** (Phi-4-mini, Qwen3-4B). Under rule 1, the arm gives no evidence that NF4 makes prefilled refusal easier to bypass for these models.
+
+**Secondary (§5, descriptive):**
+
+a. Prefill effect, ASR(prefill) − ASR(direct): Qwen3-1.7B +0.365 / +0.375 (FP16 / NF4), Qwen3-4B +0.405 / +0.270, Llama-3.2-3B +0.645 / +0.735, Mistral-7B +0.165 / +0.175, Phi-4-mini +0.695 / +0.510. Per rule 3, this is a finding about the attack and the models, not about quantization.
+b. Difference in differences (NF4−FP16 gap under prefill minus the direct-request gap), paired bootstrap 95% CI: Qwen3-1.7B +0.010 (−0.080, +0.090); Qwen3-4B −0.135 (−0.220, −0.055); Llama-3.2-3B +0.090 (+0.025, +0.155); Mistral-7B +0.010 (−0.070, +0.095); Phi-4-mini −0.185 (−0.265, −0.105). Per rule 4, intervals that exclude zero are reported as "the gap changed (descriptive)", not as significant interactions.
+
+**Stated with these results (§7):** the classifier has not been validated on prefilled replies. A lower harmful-compliance rate under NF4 may reflect weaker or terser continuations rather than better safety. No human reading or length analysis of the prefilled replies was done, and the raw text stays on TC1.
