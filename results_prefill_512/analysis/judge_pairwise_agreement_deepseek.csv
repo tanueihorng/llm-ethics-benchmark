@@ -1,0 +1,6 @@
+pair_id,harmbench_cls_delta,harmbench_cls_significant,deepseek_delta,deepseek_significant,sign_agree,significance_agree
+qwen_2b,0.010000000000000009,False,-0.010000000000000009,False,False,True
+qwen_4b,-0.09500000000000003,True,-0.04500000000000004,False,True,False
+llama_3_2_3b,0.050000000000000044,False,0.014999999999999902,False,True,True
+mistral_7b,-0.010000000000000009,False,-0.029999999999999916,False,True,True
+phi4_mini,-0.16500000000000004,True,-0.05999999999999994,False,True,False

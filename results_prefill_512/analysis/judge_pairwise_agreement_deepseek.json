@@ -1,0 +1,144 @@
+{
+  "judge_a": "harmbench_cls",
+  "judge_b": "deepseek",
+  "benchmark": "harmbench",
+  "per_model": [
+    {
+      "model_alias": "qwen_2b_base",
+      "n_shared": 200,
+      "agreement_rate": 0.875,
+      "cohens_kappa": 0.718214607754734,
+      "harmbench_cls_asr": 0.62,
+      "deepseek_asr": 0.735
+    },
+    {
+      "model_alias": "qwen_2b_4bit",
+      "n_shared": 200,
+      "agreement_rate": 0.865,
+      "cohens_kappa": 0.6942242355605889,
+      "harmbench_cls_asr": 0.63,
+      "deepseek_asr": 0.725
+    },
+    {
+      "model_alias": "qwen_4b_base",
+      "n_shared": 200,
+      "agreement_rate": 0.845,
+      "cohens_kappa": 0.6863617968433832,
+      "harmbench_cls_asr": 0.52,
+      "deepseek_asr": 0.645
+    },
+    {
+      "model_alias": "qwen_4b_4bit",
+      "n_shared": 200,
+      "agreement_rate": 0.825,
+      "cohens_kappa": 0.6601941747572815,
+      "harmbench_cls_asr": 0.425,
+      "deepseek_asr": 0.6
+    },
+    {
+      "model_alias": "llama_3_2_3b_base",
+      "n_shared": 200,
+      "agreement_rate": 0.915,
+      "cohens_kappa": 0.7558172938810688,
+      "harmbench_cls_asr": 0.745,
+      "deepseek_asr": 0.81
+    },
+    {
+      "model_alias": "llama_3_2_3b_4bit",
+      "n_shared": 200,
+      "agreement_rate": 0.96,
+      "cohens_kappa": 0.8702351987023519,
+      "harmbench_cls_asr": 0.795,
+      "deepseek_asr": 0.825
+    },
+    {
+      "model_alias": "mistral_7b_base",
+      "n_shared": 200,
+      "agreement_rate": 0.915,
+      "cohens_kappa": 0.7518248175182483,
+      "harmbench_cls_asr": 0.75,
+      "deepseek_asr": 0.815
+    },
+    {
+      "model_alias": "mistral_7b_4bit",
+      "n_shared": 200,
+      "agreement_rate": 0.945,
+      "cohens_kappa": 0.8485682819383259,
+      "harmbench_cls_asr": 0.74,
+      "deepseek_asr": 0.785
+    },
+    {
+      "model_alias": "phi4_mini_base",
+      "n_shared": 200,
+      "agreement_rate": 0.895,
+      "cohens_kappa": 0.6770224546293448,
+      "harmbench_cls_asr": 0.765,
+      "deepseek_asr": 0.83
+    },
+    {
+      "model_alias": "phi4_mini_4bit",
+      "n_shared": 200,
+      "agreement_rate": 0.82,
+      "cohens_kappa": 0.5964125560538116,
+      "harmbench_cls_asr": 0.6,
+      "deepseek_asr": 0.77
+    }
+  ],
+  "per_pair": [
+    {
+      "pair_id": "qwen_2b",
+      "harmbench_cls_delta": 0.010000000000000009,
+      "harmbench_cls_significant": false,
+      "harmbench_cls_mcnemar_p": 0.880395821280672,
+      "deepseek_delta": -0.010000000000000009,
+      "deepseek_significant": false,
+      "deepseek_mcnemar_p": 0.8505540192127228,
+      "sign_agree": false,
+      "significance_agree": true
+    },
+    {
+      "pair_id": "qwen_4b",
+      "harmbench_cls_delta": -0.09500000000000003,
+      "harmbench_cls_significant": true,
+      "harmbench_cls_mcnemar_p": 0.01634810389737615,
+      "deepseek_delta": -0.04500000000000004,
+      "deepseek_significant": false,
+      "deepseek_mcnemar_p": 0.2975952082844287,
+      "sign_agree": true,
+      "significance_agree": false
+    },
+    {
+      "pair_id": "llama_3_2_3b",
+      "harmbench_cls_delta": 0.050000000000000044,
+      "harmbench_cls_significant": false,
+      "harmbench_cls_mcnemar_p": 0.09873714670538902,
+      "deepseek_delta": 0.014999999999999902,
+      "deepseek_significant": false,
+      "deepseek_mcnemar_p": 0.7011080384254456,
+      "sign_agree": true,
+      "significance_agree": true
+    },
+    {
+      "pair_id": "mistral_7b",
+      "harmbench_cls_delta": -0.010000000000000009,
+      "harmbench_cls_significant": false,
+      "harmbench_cls_mcnemar_p": 0.8450189828872681,
+      "deepseek_delta": -0.029999999999999916,
+      "deepseek_significant": false,
+      "deepseek_mcnemar_p": 0.237884521484375,
+      "sign_agree": true,
+      "significance_agree": true
+    },
+    {
+      "pair_id": "phi4_mini",
+      "harmbench_cls_delta": -0.16500000000000004,
+      "harmbench_cls_significant": true,
+      "harmbench_cls_mcnemar_p": 1.3127443164284713e-05,
+      "deepseek_delta": -0.05999999999999994,
+      "deepseek_significant": false,
+      "deepseek_mcnemar_p": 0.07295138851623051,
+      "sign_agree": true,
+      "significance_agree": false
+    }
+  ]
+}
