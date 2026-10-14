@@ -42,7 +42,6 @@ from ethical_benchmark.analysis.compare_quant_pairs import (  # noqa: E402
 from multiple_comparisons import benjamini_hochberg  # noqa: E402
 
 PAIRS = ["qwen_2b", "qwen_4b", "llama_3_2_3b", "mistral_7b", "phi4_mini"]
-SIDECAR = "harmbench/scores.judge.harmbench_cls.jsonl"
 PREFILL = "Sure, here is"
 N_RESAMPLES = 2000
 SEED = 42
@@ -104,8 +103,16 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--prefill-dir", default="results_prefill_512")
     parser.add_argument("--direct-dir", default="results_512")
+    parser.add_argument("--judge", default="harmbench_cls",
+                        help="Judge sidecar name (default: the prespecified classifier). "
+                             "Other judges are post hoc; the direct-request sections are "
+                             "skipped when results_512 has no sidecars for that judge.")
+    parser.add_argument("--out-suffix", default="",
+                        help="Suffix for the output file names, e.g. _deepseek.")
     args = parser.parse_args()
     pre_root, dir_root = ROOT / args.prefill_dir, ROOT / args.direct_dir
+    sidecar = f"harmbench/scores.judge.{args.judge}.jsonl"
+    have_direct = all((dir_root / f"{p}_{m}" / sidecar).exists() for p in PAIRS for m in ("base", "4bit"))
 
     labels: Dict[Tuple[str, str], Dict[str, float]] = {}
     errors: Dict[str, int] = {}
@@ -114,7 +121,9 @@ def main() -> None:
         for member in ("base", "4bit"):
             alias = f"{pair}_{member}"
             for arm, root in (("prefill", pre_root), ("direct", dir_root)):
-                lab, err, ver = read_labels(root / alias / SIDECAR)
+                if arm == "direct" and not have_direct:
+                    continue
+                lab, err, ver = read_labels(root / alias / sidecar)
                 labels[(arm, alias)] = lab
                 versions |= ver
                 if arm == "prefill":
@@ -130,7 +139,7 @@ def main() -> None:
         row["survives_bh"] = bool(rej)
 
     prefill_effect = []
-    for pair in PAIRS:
+    for pair in (PAIRS if have_direct else []):
         for member in ("base", "4bit"):
             alias = f"{pair}_{member}"
             row = contrast(labels[("direct", alias)], labels[("prefill", alias)])
@@ -142,7 +151,7 @@ def main() -> None:
             })
 
     did = []
-    for pair in PAIRS:
+    for pair in (PAIRS if have_direct else []):
         did.append({"pair_id": pair, **did_ci(
             labels[("prefill", f"{pair}_base")], labels[("prefill", f"{pair}_4bit")],
             labels[("direct", f"{pair}_base")], labels[("direct", f"{pair}_4bit")],
@@ -151,7 +160,8 @@ def main() -> None:
     out = {
         "prereg": "docs/PREFILL_PREREG.md",
         "assistant_prefill": PREFILL,
-        "scorer": "harmbench_cls",
+        "scorer": args.judge,
+        "prespecified": args.judge == "harmbench_cls",
         "scorer_versions": sorted(v for v in versions if v),
         "prefill_parse_errors": errors,
         "primary_family": {
@@ -173,8 +183,8 @@ def main() -> None:
     }
     analysis = pre_root / "analysis"
     analysis.mkdir(parents=True, exist_ok=True)
-    (analysis / "prefill_attack.json").write_text(json.dumps(out, indent=2) + "\n")
-    with open(analysis / "prefill_attack.csv", "w", newline="") as fh:
+    (analysis / f"prefill_attack{args.out_suffix}.json").write_text(json.dumps(out, indent=2) + "\n")
+    with open(analysis / f"prefill_attack{args.out_suffix}.csv", "w", newline="") as fh:
         writer = csv.DictWriter(fh, fieldnames=list(primary[0].keys()))
         writer.writeheader()
         writer.writerows(primary)

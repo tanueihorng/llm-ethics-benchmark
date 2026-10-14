@@ -93,6 +93,7 @@ def _build_backend(args: argparse.Namespace):
             model=model_id,
             base_url=args.base_url,
             api_key=None,
+            max_tokens=args.api_max_tokens,
         )
     if args.backend == "jev":
         # The SDK reads TYPESAFE_API_KEY when api_key is None. Keep secrets out
@@ -144,6 +145,15 @@ def main() -> int:
     parser.add_argument("--acknowledge-external-egress", action="store_true",
                         help="Required for Jev: confirms that saved behavior and generation "
                              "text will be sent transiently to TypeSafe.")
+    parser.add_argument("--judge-name", default=None,
+                        help="Sidecar name override (scores.judge.<name>.jsonl), e.g. "
+                             "'deepseek' for an api_judge run against a non-OpenAI "
+                             "endpoint. Defaults to the backend name.")
+    parser.add_argument("--api-max-tokens", type=int, default=5,
+                        help="max_tokens for api_judge completions (default 5, as in T22).")
+    parser.add_argument("--pilot", type=int, default=0,
+                        help="Judge only the first N records of the first --models alias, "
+                             "print label/status counts and write nothing.")
     parser.add_argument("--skip-complete", action="store_true",
                         help="Skip an alias when both target sidecars already exist and its "
                              "summary reports full coverage with zero errors. Useful for "
@@ -162,6 +172,20 @@ def main() -> int:
 
     results_dir = Path(args.results_dir).resolve()
     backend = _build_backend(args)
+    judge_name = args.judge_name or backend.name
+
+    if args.pilot > 0:
+        from collections import Counter
+
+        from ethical_benchmark.judges.validation import _build_inputs, _read_raw_records
+
+        alias = args.models[0]
+        records = _read_raw_records(results_dir / alias / args.benchmark / "raw.jsonl")
+        results = backend.classify_batch(_build_inputs(records[: args.pilot]))
+        print(f"PILOT {alias}: n={len(results)} status={dict(Counter(r.status for r in results))} "
+              f"labels={dict(Counter(r.raw_label for r in results))} (nothing written)")
+        backend.close()
+        return 0
 
     print("=" * 72)
     resolved_model_id = getattr(backend, "model_id", None) or getattr(backend, "model", args.model_id)
@@ -174,8 +198,8 @@ def main() -> int:
     try:
         for alias in args.models:
             run_dir = results_dir / alias / args.benchmark
-            scores_path = run_dir / f"scores.judge.{backend.name}.jsonl"
-            summary_path = run_dir / f"summary.judge.{backend.name}.json"
+            scores_path = run_dir / f"scores.judge.{judge_name}.jsonl"
+            summary_path = run_dir / f"summary.judge.{judge_name}.json"
             if args.skip_complete and scores_path.exists() and summary_path.exists():
                 try:
                     prior = json.loads(summary_path.read_text(encoding="utf-8"))
@@ -190,7 +214,7 @@ def main() -> int:
                     print(f"{alias:<22} {n:>5} {'skip':>10} {0:>10}")
                     continue
             summary = run_judge_validation(
-                results_dir, alias, args.benchmark, backend, judge_name=backend.name
+                results_dir, alias, args.benchmark, backend, judge_name=judge_name
             )
             m = summary["metrics"]
             asr = m["attack_success_rate"]

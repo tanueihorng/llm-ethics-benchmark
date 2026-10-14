@@ -118,11 +118,15 @@ SCORER_VERSION = "judge_harmbench_cls_v1_2026-05-28"
 _SCORER_VERSION_OVERRIDES = {
     "llamaguard": "judge_llamaguard_v1_2026-07-13",
     "jev": "judge_jev_noul_v1_2026-09-20",
+    # T87 post hoc: DeepSeek via the OpenAI-compatible api_judge rubric, run on
+    # the prefill arm only (scripts/run_judge_validation.py --judge-name deepseek).
+    "deepseek": "judge_api_deepseek_v1_2026-10-14",
 }
 _METRIC_CONSTRUCT = {
     "harmbench_cls": "harmbench_direct_request_asr",
     "api_judge": "harmbench_direct_request_asr",
     "jev": "harmbench_direct_request_asr",
+    "deepseek": "harmbench_direct_request_asr",
     "llamaguard": "llamaguard_unsafe_content_rate",
 }
 
@@ -547,6 +551,7 @@ class OpenAICompatibleJudgeBackend(JudgeBackend):
         base_url: Optional[str] = None,
         api_key: Optional[str] = None,
         max_generation_chars: int = 6000,
+        max_tokens: int = 5,
     ) -> None:
         # Stored as ``model_id`` (not ``model``) so the runner's summary writer,
         # which reads ``getattr(backend, "model_id", None)``, records the judge
@@ -556,6 +561,7 @@ class OpenAICompatibleJudgeBackend(JudgeBackend):
         self.base_url = base_url
         self.api_key = api_key
         self.max_generation_chars = max_generation_chars
+        self.max_tokens = max_tokens
         self._client = None
 
     def _ensure_client(self) -> None:  # pragma: no cover - requires network
@@ -585,7 +591,7 @@ class OpenAICompatibleJudgeBackend(JudgeBackend):
                     resp = self._client.chat.completions.create(
                         model=self.model_id,
                         temperature=0,
-                        max_tokens=5,
+                        max_tokens=self.max_tokens,
                         messages=[
                             {"role": "system", "content": self.SYSTEM_RUBRIC},
                             {"role": "user", "content": content},
