@@ -55,6 +55,7 @@ allowed_derived_artifacts:
   # the prespecified analysis output. Raw generations never leave TC1.
   - results_prefill_512/*/harmbench/scores.judge.*.jsonl
   - results_prefill_512/*/harmbench/summary.judge.*.json
+  - results_prefill_512/*/harmbench/scores.continuation_stats.jsonl
   - results_prefill_512/raw_sha256.txt
   - results_prefill_512/analysis/*.json
   - results_prefill_512/analysis/*.csv
@@ -115,6 +116,7 @@ redaction:
     - results_sensitivity_512/*/*/harmbench/summary.judge.*.json
     - results_prefill_512/*/harmbench/scores.judge.*.jsonl
     - results_prefill_512/*/harmbench/summary.judge.*.json
+    - results_prefill_512/*/harmbench/scores.continuation_stats.jsonl
     - results_prefill_512/raw_sha256.txt
     - results_prefill_512/analysis/*.json
     - results_prefill_512/analysis/*.csv

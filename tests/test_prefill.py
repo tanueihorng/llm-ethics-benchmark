@@ -200,7 +200,9 @@ class TestPrefillConfig:
 
     def test_sbatch_files_write_only_to_the_prefill_tree(self) -> None:
         jobs = sorted((ROOT / "slurm" / "jobs_tc1_prefill_512").glob("*.sbatch"))
-        assert [j.name for j in jobs] == ["judge_prefill_512.sbatch", "prefill_gen_a.sbatch", "prefill_gen_b.sbatch"]
+        assert [j.name for j in jobs] == [
+            "continuation_stats.sbatch", "judge_prefill_512.sbatch", "prefill_gen_a.sbatch", "prefill_gen_b.sbatch",
+        ]
         aliases = set()
         for job in jobs:
             text = job.read_text()
