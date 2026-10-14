@@ -15,6 +15,10 @@ immutable_artifacts:
   - results_512/*/*/summary.json
   - results_sensitivity_512/*/*/*/raw.jsonl
   - results_sensitivity_512/*/*/*/summary.json
+  # T87/D105 prefill arm (copied from TC1 2026-10-14, verified against
+  # results_prefill_512/raw_sha256.txt; prereg deviation D2).
+  - results_prefill_512/*/*/raw.jsonl
+  - results_prefill_512/*/*/summary.json
 
 immutable_exclude:
   - results/analysis/*
