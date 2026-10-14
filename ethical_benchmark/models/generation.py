@@ -181,19 +181,37 @@ class TextGenerator:
             generated = self.model.generate(**inputs, **generation_kwargs)
 
         input_length = inputs["input_ids"].shape[1]
-        prefill = self.config.assistant_prefill
+        prefill_ids = self._prefill_token_ids() if self.config.assistant_prefill else None
         outputs: List[str] = []
         for output_ids in generated:
             new_token_ids = output_ids[input_length:]
-            if prefill:
-                # Keep the continuation's leading whitespace so the visible
-                # reply reads as prefill + continuation; strip only the ends.
-                text = (prefill + self.tokenizer.decode(new_token_ids, skip_special_tokens=True)).strip()
+            if prefill_ids is not None:
+                # Decode prefill and continuation together. Decoding the
+                # continuation alone loses its leading space on SentencePiece
+                # tokenizers (Mistral strips one leading space on decode).
+                ids = new_token_ids.tolist() if hasattr(new_token_ids, "tolist") else list(new_token_ids)
+                text = self.tokenizer.decode(prefill_ids + ids, skip_special_tokens=True).strip()
             else:
                 text = self.tokenizer.decode(new_token_ids, skip_special_tokens=True).strip()
             outputs.append(self._postprocess(text))
 
         return outputs
+
+    def _prefill_token_ids(self) -> List[int]:
+        """Token ids whose decoding is exactly the configured prefill.
+
+        Raises:
+            RuntimeError: If the tokenizer cannot round-trip the prefill text.
+        """
+
+        prefill = str(self.config.assistant_prefill)
+        ids = list(self.tokenizer.encode(prefill, add_special_tokens=False))
+        decoded = self.tokenizer.decode(ids, skip_special_tokens=True).strip()
+        if decoded != prefill:
+            raise RuntimeError(
+                f"Tokenizer does not round-trip the prefill (got {decoded!r})."
+            )
+        return ids
 
     def _format_prompt(self, prompt: str) -> str:
         """Applies model-specific chat formatting, plus the prefill when configured.

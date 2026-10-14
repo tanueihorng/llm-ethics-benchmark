@@ -73,7 +73,7 @@ The cut-off for the 19 Oct report is **Fri 16 Oct 2026 23:59 SGT** for judge sid
 
 ## 10. Deviations (append-only)
 
-_None yet._
+**D1 — 2026-10-14 16:31, response decoding fix (before any Mistral output existed).** Generation job 67850 had started at 16:26 (Qwen3-1.7B FP16 first). A check of the four tokenizers then showed that decoding the continuation on its own drops its leading space for Mistral. Mistral's SentencePiece decoder strips one leading space, so the saved reply would read "Sure, here isa …". The code now decodes the prefill tokens and the continuation together, and fails on the first batch if the tokenizer cannot round-trip the prefill. Tested on the real `tokenizer.json` files: for the byte-level tokenizers (Qwen3, Llama-3.2, Phi-4-mini) the saved text is identical under both versions, so runs already in progress are unaffected; for Mistral the fixed text is correct. Both Mistral members run after the fix. No prefill result had been seen. The design, outcome and analysis are unchanged.
 
 ## 11. Outcome (append-only, after analysis)
 

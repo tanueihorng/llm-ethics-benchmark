@@ -106,19 +106,38 @@ class _Tensor:
 
 
 class _BatchTokenizer(_TemplateTokenizer):
+    """Piece-level fake. ``sentencepiece=True`` strips one leading space on
+    decode, as Mistral's SentencePiece decoder does; otherwise decoding is
+    concatenative, as for byte-level BPE (Qwen3, Llama-3.2, Phi-4-mini)."""
+
+    PIECES = ["Sure", ",", " here", " is", " a", " harmless", " placeholder", "."]
+
+    def __init__(self, style: str, sentencepiece: bool = False) -> None:
+        super().__init__(style)
+        self.sentencepiece = sentencepiece
+
     def __call__(self, prompts: List[str], **kwargs: Any) -> Dict[str, _Tensor]:
         self.seen = prompts
-        return {"input_ids": _Tensor([[5, 6, 7] for _ in prompts])}
+        return {"input_ids": _Tensor([[100, 101, 102] for _ in prompts])}
+
+    def encode(self, text: str, add_special_tokens: bool = True) -> List[int]:
+        assert text == PREFILL and add_special_tokens is False
+        return [0, 1, 2, 3]
 
     def decode(self, ids: List[int], skip_special_tokens: bool = True) -> str:
-        return " a harmless placeholder continuation.\n"
+        pieces = [self.PIECES[i] for i in ids]
+        if self.sentencepiece:
+            pieces[0] = " " + pieces[0].lstrip(" ") if pieces[0] == "Sure" else pieces[0]
+            text = "".join(pieces)
+            return text[1:] if text.startswith(" ") else text
+        return "".join(pieces)
 
 
 class _Model:
     device = "cpu"
 
     def generate(self, input_ids: _Tensor, **kwargs: Any) -> List[List[int]]:
-        return [row + [9, 9] for row in input_ids.rows]
+        return [row + [4, 5, 6, 7] for row in input_ids.rows]
 
 
 class _NoGradTorch:
@@ -127,21 +146,39 @@ class _NoGradTorch:
         return contextlib.nullcontext()
 
 
-def test_response_is_prefill_plus_continuation(monkeypatch) -> None:
+@pytest.mark.parametrize("sentencepiece", [False, True], ids=["byte_level", "sentencepiece"])
+def test_response_is_prefill_plus_continuation(monkeypatch, sentencepiece: bool) -> None:
     monkeypatch.setattr(generation_module, "_get_torch", lambda: _NoGradTorch)
-    tok = _BatchTokenizer("mistral")
+    tok = _BatchTokenizer("mistral", sentencepiece=sentencepiece)
     gen = TextGenerator(model=_Model(), tokenizer=tok, device="cpu",
                         config=DecodingConfig(assistant_prefill=PREFILL))
     out = gen.generate_batch(["Q1", "Q2"])
-    assert out == ["Sure, here is a harmless placeholder continuation."] * 2
+    assert out == ["Sure, here is a harmless placeholder."] * 2
     assert all(p.endswith("[/INST] Sure, here is") for p in tok.seen)
+
+
+def test_sentencepiece_decoder_really_drops_the_space_when_decoded_alone() -> None:
+    """Pins why the prefill is decoded together with the continuation."""
+
+    tok = _BatchTokenizer("mistral", sentencepiece=True)
+    assert PREFILL + tok.decode([4, 5, 6, 7]) == "Sure, here isa harmless placeholder."
+
+
+def test_unroundtrippable_prefill_fails_fast(monkeypatch) -> None:
+    monkeypatch.setattr(generation_module, "_get_torch", lambda: _NoGradTorch)
+    tok = _BatchTokenizer("phi")
+    tok.decode = lambda ids, skip_special_tokens=True: "Sure here is"  # type: ignore[assignment]
+    gen = TextGenerator(model=_Model(), tokenizer=tok, device="cpu",
+                        config=DecodingConfig(assistant_prefill=PREFILL))
+    with pytest.raises(RuntimeError, match="round-trip"):
+        gen.generate_batch(["Q"])
 
 
 def test_response_without_prefill_is_unchanged(monkeypatch) -> None:
     monkeypatch.setattr(generation_module, "_get_torch", lambda: _NoGradTorch)
     gen = TextGenerator(model=_Model(), tokenizer=_BatchTokenizer("phi"), device="cpu",
                         config=DecodingConfig())
-    assert gen.generate_batch(["Q"]) == ["a harmless placeholder continuation."]
+    assert gen.generate_batch(["Q"]) == ["a harmless placeholder."]
 
 
 class TestPrefillConfig:
